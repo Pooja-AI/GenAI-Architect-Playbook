@@ -3,162 +3,164 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const SingleAgentArchitectureQuestion = 
+[
+  {
+    id: "production-grade-single-agent",
+    category: "Single-Agent Architecture",
+    title: "Design a production-grade single AI agent.",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Design an enterprise-ready single AI agent covering LLM integration, prompt management, tool calling, memory, state management, guardrails, security, observability, error handling, scalability, cost optimization, and deployment.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "enterprise-agent-components",
+    category: "Single-Agent Architecture",
+    title: "What components would you include in an enterprise agent?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Identify the core components of an enterprise AI agent, including model layer, prompt management, tools, memory, state, planning, orchestration, guardrails, authentication, authorization, observability, evaluation, and persistence.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agent-external-api-interaction",
+    category: "Agentic AI Tools",
+    title: "How does an agent interact with external APIs?",
+    difficulty: "Intermediate",
+    time: "~15 min",
+    description:
+      "Understand how an agent uses tool or function calling to interact with external REST APIs and enterprise services, including request construction, authentication, validation, response processing, error handling, and security.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "agent-multiple-tool-selection",
+    category: "Agentic AI Tools",
+    title: "How does an agent select between multiple tools?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent selects the appropriate tool from multiple available tools using tool descriptions, schemas, task intent, context, routing logic, permissions, and model reasoning.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "tool-failure-handling",
+    category: "Agentic AI Reliability",
+    title: "How do you handle tool failures?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to handle failed tool invocations using error classification, retries, fallback tools, timeouts, circuit breakers, graceful degradation, validation, logging, and human escalation.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "agent-retry-implementation",
+    category: "Agentic AI Reliability",
+    title: "How do you implement retries?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to design reliable retry mechanisms for agent and tool execution using retry policies, exponential backoff, jitter, maximum attempts, retryable versus non-retryable errors, and idempotency.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agent-timeout-implementation",
+    category: "Agentic AI Reliability",
+    title: "How do you implement timeouts?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to implement timeouts for LLM calls, tool calls, API requests, and agent workflows to prevent stalled executions and protect system resources.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agent-state-across-interactions",
+    category: "Agentic AI State Management",
+    title: "How do you maintain state across agent interactions?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to maintain conversation state, task state, tool results, execution history, user context, and intermediate data across multiple agent interactions and workflow executions.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "human-in-the-loop-agent",
+    category: "Agentic AI Governance",
+    title: "How do you implement human-in-the-loop?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to introduce human approval or intervention into agent workflows for high-risk, sensitive, ambiguous, or irreversible actions while supporting interruption, review, approval, rejection, and workflow resumption.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "long-running-agent-tasks",
+    category: "Agentic AI Architecture",
+    title: "How do you handle long-running agent tasks?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Design strategies for long-running agent workflows using asynchronous execution, task identifiers, durable state, checkpoints, queues, background workers, status tracking, callbacks, retries, and workflow recovery.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "persist-agent-state",
+    category: "Agentic AI State Management",
+    title: "How do you persist agent state?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to persist agent execution state, conversation history, checkpoints, task progress, and intermediate results using appropriate databases, durable storage, checkpointing mechanisms, and state-management strategies.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "unauthorized-tool-execution",
+    category: "Agentic AI Security",
+    title: "How do you prevent unauthorized tool execution?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to secure agent tool execution using authentication, authorization, RBAC, ABAC, least privilege, policy enforcement, tool-level permissions, input validation, approval workflows, and audit controls.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-
-
+  {
+    id: "audit-agent-actions",
+    category: "Agentic AI Security",
+    title: "How do you audit agent actions?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to create an auditable trail of agent decisions, LLM calls, tool invocations, API requests, user approvals, responses, failures, timestamps, identities, and correlation IDs for enterprise governance and compliance.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +647,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: SingleAgentArchitectureQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +686,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    SingleAgentArchitectureQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +728,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={SingleAgentArchitectureQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

@@ -3,162 +3,188 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const EnterpriseAgentArchitectureQuestion = 
+[
+  {
+    id: "enterprise-agentic-ai-platform",
+    category: "Enterprise Agentic AI Architecture",
+    title: "Design an enterprise Agentic AI platform.",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design an end-to-end enterprise Agentic AI platform covering agent orchestration, LLMs, RAG, tools, MCP, A2A, memory, security, governance, observability, evaluation, deployment, scalability, and cost management.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "cloud-scalable-agentic-platform",
+    category: "Cloud Architecture",
+    title: "How would you make it cloud scalable?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand how to horizontally scale agent services, model inference, retrieval, tool execution, queues, databases, and supporting infrastructure across cloud environments.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "secure-agentic-platform",
+    category: "Agentic AI Security",
+    title: "How would you secure it?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design security across identity, authentication, authorization, network isolation, data protection, prompt injection defense, tool security, secrets, encryption, governance, and auditing.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "agentic-multi-tenancy",
+    category: "Enterprise Architecture",
+    title: "How would you implement multi-tenancy?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design tenant isolation across agents, data, vector stores, memory, databases, tools, APIs, configuration, identity, usage limits, and observability while supporting secure resource sharing.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "agentic-rbac",
+    category: "Security and Governance",
+    title: "How would you implement RBAC?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how role-based access control can restrict users, agents, tools, APIs, data sources, and administrative operations according to enterprise roles and permissions.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "agentic-secrets-management",
+    category: "Security and Governance",
+    title: "How would you manage secrets?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand enterprise secrets management for API keys, database credentials, tokens, certificates, and service identities using centralized secret stores, rotation, access policies, and workload identity.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agentic-observability",
+    category: "Agentic AI Operations",
+    title: "How would you implement observability?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design end-to-end observability for agents, LLMs, tools, RAG, MCP, A2A, workflows, infrastructure, and business outcomes using logs, metrics, traces, correlation IDs, and agent execution telemetry.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agentic-audit-logging",
+    category: "Security and Governance",
+    title: "How would you implement audit logging?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Design immutable audit trails for user requests, agent decisions, tool invocations, API calls, data access, approvals, model usage, failures, and security events.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "agentic-cost-tracking",
+    category: "Agentic AI FinOps",
+    title: "How would you implement cost tracking?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Track and attribute costs across users, tenants, agents, models, tokens, tools, retrieval, infrastructure, and workflows to support budgeting, optimization, and chargeback.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "agentic-rate-limiting",
+    category: "Enterprise Architecture",
+    title: "How would you implement rate limiting?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Design rate limiting across users, tenants, agents, APIs, models, and tools using quotas, token budgets, request limits, concurrency controls, throttling, and distributed rate-limit mechanisms.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agentic-model-fallback",
+    category: "LLM Architecture",
+    title: "How would you implement model fallback?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Design model fallback strategies for outages, rate limits, latency, capacity constraints, or quality issues using primary and secondary models, routing policies, health checks, and graceful degradation.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "agentic-disaster-recovery",
+    category: "Enterprise Architecture",
+    title: "How would you implement disaster recovery?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design disaster recovery for an Agentic AI platform covering state, databases, vector stores, memory, configurations, model dependencies, infrastructure, backups, failover, RPO, RTO, and regional recovery.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "100k-agent-requests",
+    category: "Scalability",
+    title: "How would you handle 100,000 agent requests/day?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design a scalable architecture capable of handling approximately 100,000 daily agent requests using horizontal scaling, asynchronous processing, queues, caching, model routing, database scaling, rate limiting, and observability.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "agentic-high-availability",
+    category: "Enterprise Architecture",
+    title: "How would you design for high availability?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design highly available Agentic AI infrastructure using multiple instances, availability zones, load balancing, health checks, redundancy, failover, resilient dependencies, model fallback, and disaster recovery.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "long-running-agent-platform",
+    category: "Agentic AI Architecture",
+    title: "How would you handle long-running agents?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design durable execution for long-running agent tasks using asynchronous workflows, queues, workers, checkpoints, persistent state, task IDs, status tracking, retries, timeouts, callbacks, and recovery mechanisms.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +671,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: EnterpriseAgentArchitectureQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +710,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    EnterpriseAgentArchitectureQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +752,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={EnterpriseAgentArchitectureQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

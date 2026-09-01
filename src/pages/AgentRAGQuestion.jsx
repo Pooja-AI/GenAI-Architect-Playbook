@@ -3,162 +3,176 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgentRAGQuestion = 
+[
+  {
+    id: "why-agentic-ai-with-rag",
+    category: "Agentic RAG",
+    title: "Why combine Agentic AI with RAG?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand why combining agents with Retrieval-Augmented Generation enables dynamic retrieval, tool selection, iterative research, multi-source reasoning, and context-aware knowledge access.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "agentic-rag-vs-traditional-rag",
+    category: "Agentic RAG",
+    title: "Agentic RAG vs traditional RAG?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Compare traditional RAG with Agentic RAG across query planning, retrieval decisions, tool selection, iterative retrieval, source selection, reasoning, validation, and workflow control.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "what-is-agentic-rag",
+    category: "Agentic RAG",
+    title: "What is Agentic RAG?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand Agentic RAG as a retrieval architecture where an AI agent dynamically plans, selects knowledge sources, performs retrieval, evaluates results, and iteratively gathers information before generating an answer.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "agent-decides-when-to-retrieve",
+    category: "Agentic RAG",
+    title: "How does an agent decide when to retrieve?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent determines whether retrieval is necessary based on user intent, available context, confidence, knowledge requirements, freshness requirements, and task complexity.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "agent-knowledge-source-selection",
+    category: "Agentic RAG",
+    title: "How does an agent decide which knowledge source to query?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand knowledge-source routing based on query intent, metadata, source capabilities, domain ownership, data freshness, access permissions, and retrieval strategy.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "multiple-vector-databases",
+    category: "Agentic RAG",
+    title: "Can an agent use multiple vector databases?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent can work with multiple vector databases or knowledge stores and how routing, federation, metadata, security, and result aggregation can be implemented.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agentic-query-routing",
+    category: "Agentic RAG",
+    title: "How do you implement query routing?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand query-routing architectures that classify incoming questions and route them to the appropriate vector store, SQL database, API, knowledge source, or specialized retrieval agent.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "irrelevant-retrieval",
+    category: "Agentic RAG",
+    title: "How do you handle irrelevant retrieval?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to detect and recover from irrelevant retrieved documents using relevance scoring, reranking, filtering, query rewriting, alternative retrieval strategies, and iterative search.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "evaluate-agentic-rag",
+    category: "Agentic RAG Evaluation",
+    title: "How do you evaluate Agentic RAG?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to evaluate Agentic RAG across retrieval relevance, context precision, context recall, groundedness, answer correctness, citation quality, tool selection, task success, latency, and cost.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "agentic-rag-hallucination-prevention",
+    category: "Agentic RAG Reliability",
+    title: "How do you prevent hallucinations?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand techniques for reducing hallucinations in Agentic RAG using grounded generation, retrieval validation, source attribution, confidence thresholds, answer verification, guardrails, and refusal strategies.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "conflicting-documents",
+    category: "Agentic RAG",
+    title: "How do you handle conflicting documents?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to identify and resolve conflicting information using source authority, document versioning, timestamps, metadata, confidence scoring, cross-source verification, and human escalation.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "rag-metadata-filtering",
+    category: "Agentic RAG",
+    title: "How do you implement metadata filtering?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how metadata such as tenant, department, document type, date, access level, product, geography, and version can be used to restrict and improve retrieval.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "rag-hybrid-search",
+    category: "Agentic RAG",
+    title: "How do you implement hybrid search?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how lexical and semantic retrieval can be combined using keyword search and vector search, followed by result fusion or reranking to improve retrieval quality.",
+    concept: "",
+    code: ""
+  },
 
-
+  {
+    id: "sql-vs-vector-search",
+    category: "Agentic RAG",
+    title: "When would you use SQL instead of vector search?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand when structured SQL queries are preferable to vector search for exact filtering, aggregations, joins, transactional data, numerical analysis, reporting, and deterministic business queries.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +659,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgentRAGQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +698,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgentRAGQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +740,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgentRAGQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

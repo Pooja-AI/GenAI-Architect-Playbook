@@ -3,162 +3,152 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const A2AQuestion = 
+[
+  {
+    id: "what-is-a2a",
+    category: "Agentic AI Protocols",
+    title: "What is A2A?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the Agent2Agent (A2A) protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "why-agent-to-agent-communication",
+    category: "Agentic AI Protocols",
+    title: "Why do agents need agent-to-agent communication?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand why distributed AI agents need standardized communication for task delegation, collaboration, capability sharing, interoperability, and independent execution.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "a2a-vs-mcp",
+    category: "Agentic AI Protocols",
+    title: "How is A2A different from MCP?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the architectural differences between A2A and MCP, including agent-to-agent collaboration versus agent-to-tool, resource, and context integration.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "how-agents-communicate",
+    category: "Agentic AI Protocols",
+    title: "How do two agents communicate?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how two independent agents exchange tasks, messages, context, status, and results using agent communication protocols and structured message formats.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "what-is-agent-card",
+    category: "Agentic AI Protocols",
+    title: "What is an Agent Card?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the purpose of an Agent Card, how it describes an agent's identity, capabilities, skills, supported communication methods, and endpoint information.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "agent-discovery-a2a",
+    category: "Agentic AI Protocols",
+    title: "How does an agent discover another agent?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand agent discovery mechanisms using Agent Cards, registries, service discovery, capability metadata, and endpoint information in distributed A2A systems.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "a2a-agent-authentication",
+    category: "Agentic AI Security",
+    title: "How do you authenticate agents?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand authentication mechanisms for agent-to-agent communication, including identity verification, OAuth, tokens, certificates, workload identity, and enterprise security controls.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "a2a-asynchronous-communication",
+    category: "Agentic AI Protocols",
+    title: "How do you handle asynchronous agent communication?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to design asynchronous A2A interactions for long-running tasks using task identifiers, callbacks, event notifications, message queues, polling, and status tracking.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "a2a-agent-failures",
+    category: "Multi-Agent Reliability",
+    title: "How do you handle agent failures?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand failure-handling strategies for A2A systems, including retries, timeouts, circuit breakers, fallback agents, task recovery, idempotency, dead-letter handling, and graceful degradation.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "a2a-agent-capabilities",
+    category: "Agentic AI Architecture",
+    title: "How do you manage agent capabilities?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how agent capabilities and skills are defined, advertised, discovered, versioned, governed, and matched against incoming tasks in an enterprise multi-agent ecosystem.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "enterprise-a2a-architecture",
+    category: "Agentic AI Architecture",
+    title: "How would you design an enterprise A2A architecture?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Design an enterprise-grade A2A architecture covering agent discovery, Agent Cards, authentication, authorization, communication, orchestration, asynchronous tasks, observability, security, scalability, and failure handling.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "mcp-and-a2a-together",
+    category: "Agentic AI Protocols",
+    title: "Can MCP and A2A be used together?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how MCP and A2A can coexist in an enterprise Agentic AI architecture, where A2A enables agent-to-agent collaboration and MCP enables agents to access tools, resources, and external systems.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +635,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: A2AQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +674,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    A2AQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +716,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={A2AQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

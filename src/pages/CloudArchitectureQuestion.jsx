@@ -3,162 +3,128 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const CloudArchitectureQuestion = 
+[
+  {
+    id: "deploy-agentic-ai-azure",
+    category: "Cloud Agentic AI",
+    title: "How would you deploy Agentic AI on Azure?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design an enterprise Agentic AI deployment on Azure covering Azure OpenAI, Azure AI Foundry, Azure AI Search, agent orchestration, MCP, A2A, Azure Kubernetes Service, identity, networking, monitoring, security, and CI/CD.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "deploy-agentic-ai-aws",
+    category: "Cloud Agentic AI",
+    title: "How would you deploy it on AWS?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design an enterprise Agentic AI deployment on AWS using Amazon Bedrock, knowledge and retrieval services, agent orchestration, EKS, IAM, VPC networking, observability, security, persistence, and CI/CD.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "azure-openai-vs-bedrock",
+    category: "Cloud AI Platforms",
+    title: "Azure OpenAI vs Amazon Bedrock?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Compare Azure OpenAI and Amazon Bedrock across model ecosystem, enterprise integration, security, networking, identity, RAG, agent capabilities, observability, governance, pricing, and multi-model architecture.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "azure-ai-foundry-vs-bedrock",
+    category: "Cloud AI Platforms",
+    title: "Azure AI Foundry vs Bedrock?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Compare Azure AI Foundry and Amazon Bedrock as enterprise AI platforms across model access, agent development, evaluation, RAG, orchestration, governance, monitoring, deployment, and cloud ecosystem integration.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "secure-llm-apis",
+    category: "Cloud AI Security",
+    title: "How would you secure LLM APIs?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design secure LLM API access using identity and access management, API gateways, managed identities, OAuth, private endpoints, network controls, secret management, rate limiting, encryption, logging, and policy enforcement.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "private-networking-agentic-ai",
+    category: "Cloud Security",
+    title: "How would you implement private networking?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design private enterprise connectivity for LLMs, agents, databases, vector stores, APIs, and tools using private endpoints, VPC/VNet isolation, DNS, firewalls, service endpoints, ingress/egress controls, and zero-trust principles.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "enterprise-rag-cloud",
+    category: "Enterprise RAG",
+    title: "How would you implement enterprise RAG?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design enterprise RAG covering data ingestion, document processing, chunking, embeddings, vector and keyword search, hybrid retrieval, metadata filtering, security trimming, reranking, query routing, evaluation, monitoring, and governance.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agents-kubernetes",
+    category: "Cloud Native Agentic AI",
+    title: "How would you integrate agents with Kubernetes?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design Kubernetes-based agent deployment using containers, services, ingress, configuration, secrets, workload identity, horizontal scaling, job processing, queues, health checks, observability, and resilient agent execution.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "agentic-autoscaling",
+    category: "Cloud Native Agentic AI",
+    title: "How would you implement autoscaling?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design autoscaling for agent workloads using CPU and memory metrics, request rates, queue depth, concurrency, latency, custom metrics, horizontal pod autoscaling, cluster scaling, and workload-specific scaling policies.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
-
-  concept: "",
-
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "cross-cloud-agentic-ai",
+    category: "Cloud Architecture",
+    title: "How would you design cross-cloud Agentic AI?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design a cloud-agnostic Agentic AI architecture spanning Azure and AWS using abstraction layers, multiple LLM providers, unified agent orchestration, MCP, A2A, federated RAG, identity, networking, observability, cost controls, disaster recovery, and model fallback.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +611,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: CloudArchitectureQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +650,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    CloudArchitectureQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +692,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={CloudArchitectureQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

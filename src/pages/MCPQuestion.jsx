@@ -3,162 +3,212 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const MCPQuestion = 
+[
+  {
+    id: "what-is-mcp",
+    category: "MCP",
+    title: "What is MCP?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the Model Context Protocol (MCP), its purpose, architecture, core components, and how it standardizes connections between AI applications and external tools, resources, and services.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "why-mcp",
+    category: "MCP",
+    title: "Why do we need MCP?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand why MCP is needed to standardize how AI applications discover and interact with external tools, data sources, resources, and enterprise systems.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "mcp-problem",
+    category: "MCP",
+    title: "What problem does MCP solve?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the integration and interoperability problems MCP addresses, including fragmented tool integrations, duplicated connectors, inconsistent interfaces, and tight coupling between AI applications and external systems.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "mcp-client-server",
+    category: "MCP Architecture",
+    title: "What are MCP clients and servers?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the roles of MCP hosts, clients, and servers and how they interact to establish connections, discover capabilities, and exchange requests and results.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "mcp-tools",
+    category: "MCP",
+    title: "What are MCP tools?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand MCP tools as executable capabilities exposed by MCP servers that allow AI applications to perform actions such as querying systems, calling APIs, modifying data, or triggering business operations.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "mcp-resources",
+    category: "MCP",
+    title: "What are MCP resources?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand MCP resources as contextual data exposed by MCP servers, including documents, files, database information, application data, and other information that AI applications can retrieve.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "mcp-prompts",
+    category: "MCP",
+    title: "What are MCP prompts?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand MCP prompts as reusable prompt templates or interaction patterns exposed by MCP servers to help clients and AI applications use domain-specific instructions consistently.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "mcp-tool-discovery",
+    category: "MCP",
+    title: "How does an agent discover MCP tools?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how MCP clients connect to servers, discover available capabilities and tool schemas, and make those capabilities available to an AI agent for decision-making.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "mcp-tool-invocation",
+    category: "MCP",
+    title: "How does an agent invoke an MCP tool?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the lifecycle of an MCP tool invocation, including tool selection, structured arguments, request transmission, server-side execution, validation, response handling, and error processing.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "mcp-vs-rest-api",
+    category: "MCP Architecture",
+    title: "MCP vs REST API?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Compare MCP and REST APIs in terms of purpose, discovery, standardization, tool schemas, resources, transport, interoperability, integration patterns, and appropriate enterprise use cases.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "mcp-vs-function-calling",
+    category: "MCP Architecture",
+    title: "MCP vs function calling?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the difference between MCP as a standardized protocol for connecting AI applications with external capabilities and function calling as a model capability for generating structured requests to invoke functions.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "mcp-vs-plugins",
+    category: "MCP Architecture",
+    title: "MCP vs plugins?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Compare MCP with traditional plugin architectures in terms of interoperability, standardized discovery, tool definitions, portability, client-server separation, and ecosystem integration.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "mcp-security",
+    category: "MCP Security",
+    title: "How do you secure MCP?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand MCP security controls including authentication, authorization, least privilege, input validation, output validation, secret management, network security, auditing, and tool-level access policies.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "mcp-auth-authorization",
+    category: "MCP Security",
+    title: "How do you implement authentication/authorization for MCP?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to authenticate MCP clients and authorize tool and resource access using identity providers, OAuth, tokens, workload identity, RBAC, ABAC, scopes, and policy enforcement.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "enterprise-mcp-server",
+    category: "MCP Architecture",
+    title: "How would you build an enterprise MCP server?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Design an enterprise-grade MCP server covering tool and resource design, authentication, authorization, validation, secrets management, scalability, observability, rate limiting, error handling, versioning, and deployment.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "mcp-server-failures",
+    category: "MCP Reliability",
+    title: "How do you handle MCP server failures?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand strategies for handling MCP server failures using timeouts, retries, circuit breakers, health checks, fallback mechanisms, graceful degradation, error classification, and observability.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "dangerous-mcp-tools",
+    category: "MCP Security",
+    title: "How do you prevent an agent from calling dangerous MCP tools?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to control dangerous MCP tool execution using least privilege, tool-level authorization, policy engines, allowlists, deny lists, input validation, human approval, sandboxing, and audit controls.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +695,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: MCPQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +734,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    MCPQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +776,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={MCPQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

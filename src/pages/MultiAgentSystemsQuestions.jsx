@@ -3,162 +3,236 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const MultiAgentSystemsQuestion = 
+[
+  {
+    id: "what-is-multi-agent-system",
+    category: "Multi-Agent Architecture",
+    title: "What is a multi-agent system?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the concept of multi-agent systems, how multiple specialized AI agents collaborate, communicate, coordinate, and execute tasks toward a common or distributed goal.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "multi-agent-vs-single-agent",
+    category: "Multi-Agent Architecture",
+    title: "Why would you choose multi-agent architecture over a single agent?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand when multi-agent architecture provides advantages over a single agent through specialization, separation of responsibilities, scalability, parallel execution, security boundaries, and independent development.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "multi-agent-patterns",
+    category: "Multi-Agent Architecture",
+    title: "What are the different multi-agent patterns?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand common multi-agent patterns including hierarchical, supervisor, peer-to-peer, sequential, parallel, pipeline, debate, swarm, and event-driven architectures.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "hierarchical-multi-agent",
+    category: "Multi-Agent Architecture",
+    title: "What is hierarchical multi-agent architecture?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand hierarchical agent architectures where higher-level agents coordinate or delegate work to lower-level specialized agents through structured layers of responsibility.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "supervisor-architecture",
+    category: "Multi-Agent Architecture",
+    title: "What is supervisor architecture?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the supervisor pattern where a central supervisor agent manages multiple specialized agents, determines task routing, coordinates execution, and aggregates results.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "peer-to-peer-agent-communication",
+    category: "Multi-Agent Architecture",
+    title: "What is peer-to-peer agent communication?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand decentralized agent collaboration where agents communicate directly with one another without relying on a single centralized coordinator.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "sequential-agent-orchestration",
+    category: "Multi-Agent Architecture",
+    title: "What is sequential agent orchestration?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand sequential agent execution where one agent completes its task and passes its output to the next agent in a predefined or dynamically controlled sequence.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "parallel-agent-execution",
+    category: "Multi-Agent Architecture",
+    title: "What is parallel agent execution?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand how multiple agents execute tasks concurrently to reduce latency, improve throughput, and independently process decomposed subtasks before results are aggregated.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "coordinator-agent",
+    category: "Multi-Agent Architecture",
+    title: "What is a coordinator agent?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the role of a coordinator agent in managing task decomposition, routing, delegation, execution control, result aggregation, and overall multi-agent workflow coordination.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "worker-agent",
+    category: "Multi-Agent Architecture",
+    title: "What is a worker agent?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the role of specialized worker agents that execute well-defined tasks using specific tools, knowledge, models, or business capabilities within a larger agentic workflow.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "delegator-agent",
+    category: "Multi-Agent Architecture",
+    title: "What is a delegator agent?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the role of a delegator agent in decomposing domain-level tasks and assigning subtasks to specialized worker agents while coordinating their execution and results.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "coordinator-agent-routing",
+    category: "Multi-Agent Orchestration",
+    title: "How does a coordinator decide which agent should execute a task?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how coordinators perform task routing using intent classification, agent capabilities, metadata, policies, context, tool availability, rules, and LLM-based decision-making.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "agent-communication-methods",
+    category: "Multi-Agent Communication",
+    title: "How do agents communicate with each other?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand synchronous and asynchronous agent communication using protocols, APIs, messaging systems, event streams, structured messages, task identifiers, and standardized agent-to-agent protocols.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "multi-agent-shared-state",
+    category: "Multi-Agent State Management",
+    title: "How do you manage shared state?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how shared state is maintained across multiple agents using centralized state stores, distributed databases, checkpoints, event logs, shared context, and controlled state transitions.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "prevent-agent-duplicate-work",
+    category: "Multi-Agent Orchestration",
+    title: "How do you prevent agents from duplicating work?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand mechanisms for preventing duplicate agent execution using task ownership, unique task IDs, state tracking, distributed locks, capability boundaries, idempotency, and centralized coordination.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "conflicting-agent-outputs",
+    category: "Multi-Agent Reliability",
+    title: "How do you handle conflicting outputs from agents?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to resolve conflicting agent outputs using validation, confidence scoring, evaluator agents, source verification, consensus mechanisms, ranking, and human escalation.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "multi-agent-failure-handling",
+    category: "Multi-Agent Reliability",
+    title: "How do you handle one agent failure?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand failure recovery in multi-agent systems using retries, timeouts, fallback agents, circuit breakers, task reassignment, checkpoint recovery, graceful degradation, and error propagation.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "multi-agent-monitoring",
+    category: "Multi-Agent Observability",
+    title: "How do you monitor a multi-agent system?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand end-to-end monitoring of agents, including distributed tracing, agent execution, LLM calls, tool calls, latency, token usage, failures, task outcomes, and business-level metrics.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "multi-agent-cost-control",
+    category: "Multi-Agent Cost Optimization",
+    title: "How do you control multi-agent cost?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand strategies for controlling multi-agent costs through model selection, routing, token optimization, caching, execution limits, parallelism control, tool optimization, and agent-level cost monitoring.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +719,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: MultiAgentSystemsQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +758,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    MultiAgentSystemsQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +800,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={MultiAgentSystemsQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

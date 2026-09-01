@@ -3,162 +3,128 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgenticScenarioBasedQuestion = 
+[
+  {
+    id: "scenario-repeated-tool-calls",
+    category: "Agentic AI Troubleshooting",
+    title: "Your agent keeps calling the same tool repeatedly. How would you fix it?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Diagnose repeated tool execution using loop detection, state tracking, iteration limits, tool-result validation, termination conditions, idempotency, retry policies, prompt improvements, and workflow-level controls.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "scenario-agent-incorrect-information",
+    category: "Multi-Agent Reliability",
+    title: "Agent A gives incorrect information to Agent B. How do you detect and prevent this?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design mechanisms for validating inter-agent information using source attribution, schema validation, confidence scoring, groundedness checks, evaluator agents, independent verification, provenance tracking, and trust policies.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "scenario-50-tools-selection",
+    category: "Agent Tool Management",
+    title: "Your agent has access to 50 tools. Tool selection accuracy is poor. What would you do?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Improve tool selection using tool categorization, hierarchical routing, tool metadata, capability-based discovery, semantic tool retrieval, tool descriptions, constrained tool lists, specialized agents, and tool-selection evaluation.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "scenario-agent-cost-optimization",
+    category: "Agentic AI FinOps",
+    title: "Your agent costs $2 per request. Business wants it below $0.20. How do you optimize it?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Reduce agent cost through model routing, smaller models, prompt optimization, context reduction, caching, retrieval optimization, fewer agent iterations, reduced tool calls, batching, token limits, and cost-aware execution policies.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "scenario-agent-latency",
+    category: "Agentic AI Performance",
+    title: "Agent latency is 20 seconds. Business requires less than 5 seconds. What would you change?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Troubleshoot end-to-end latency by tracing LLM calls, retrieval, tool execution, agent loops, network calls, and orchestration, then optimize through parallel execution, streaming, caching, faster models, reduced context, and asynchronous processing.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "scenario-rag-incorrect-documents",
+    category: "Agentic RAG Troubleshooting",
+    title: "Your RAG agent retrieves incorrect documents. How do you troubleshoot?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Troubleshoot retrieval quality across ingestion, document parsing, chunking, embeddings, metadata, indexing, query transformation, vector search, hybrid search, filtering, reranking, and retrieval evaluation.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "scenario-confidential-hr-information",
+    category: "Agentic AI Security",
+    title: "An employee tries to get confidential HR information through an agent. How do you prevent it?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Design authorization and data protection controls using identity-aware access, RBAC or ABAC, document-level security, metadata filtering, tenant isolation, data classification, retrieval authorization, DLP, output filtering, and audit logging.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "scenario-dangerous-mcp-delete-tool",
+    category: "MCP Security",
+    title: "An MCP tool can delete records. How do you safely expose it to an agent?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Secure destructive MCP operations using least privilege, explicit authorization, scoped permissions, allowlists, input validation, dry-run mode, confirmation workflows, human approval, idempotency, audit logging, and rollback or recovery mechanisms.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "scenario-worker-agent-down",
+    category: "Multi-Agent Reliability",
+    title: "One worker agent goes down in a multi-agent system. What happens?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design failure handling using health checks, timeouts, retries, circuit breakers, task reassignment, fallback agents, queues, checkpointing, state recovery, graceful degradation, and coordinator-level failure management.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
-
-  concept: "",
-
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "scenario-conflicting-agent-answers",
+    category: "Multi-Agent Decision Making",
+    title: "Two agents produce conflicting answers. Which answer should the coordinator choose?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design conflict-resolution strategies using source authority, confidence scores, evidence quality, agent specialization, independent verification, evaluator agents, voting, deterministic business rules, recency, and human escalation for high-risk decisions.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +611,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgenticScenarioBasedQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +650,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgenticScenarioBasedQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +692,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgenticScenarioBasedQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

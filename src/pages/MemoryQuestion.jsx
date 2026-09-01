@@ -3,162 +3,116 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const MemoryQuestion = 
+[
+  {
+    id: "agent-memory",
+    category: "Agent Memory",
+    title: "What is agent memory?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand agent memory as the mechanism used to retain and retrieve relevant information across interactions, tasks, or sessions so an agent can maintain context and continuity.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "short-term-vs-long-term-memory",
+    category: "Agent Memory",
+    title: "Short-term vs long-term memory?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the difference between short-term memory used during an active conversation or workflow and long-term memory persisted across sessions or tasks.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "conversation-vs-semantic-memory",
+    category: "Agent Memory",
+    title: "Conversation memory vs semantic memory?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the difference between conversational history used to preserve interaction context and semantic memory used to store and retrieve meaningful facts, knowledge, or learned information.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "persistent-agent-memory",
+    category: "Agent Memory",
+    title: "How would you implement persistent memory?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to design persistent agent memory using databases, vector stores, structured storage, embeddings, metadata, retrieval mechanisms, retention policies, and memory lifecycle management.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "agent-memory-storage",
+    category: "Agent Memory",
+    title: "Where would you store agent memory?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Evaluate relational databases, document stores, vector databases, caches, object storage, and specialized memory systems for storing different types of agent memory.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "relevant-memory-retrieval",
+    category: "Agent Memory",
+    title: "How do you retrieve relevant memories?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand memory retrieval using semantic similarity, embeddings, metadata filtering, recency, relevance scoring, hybrid search, reranking, and contextual retrieval.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "stale-memory-prevention",
+    category: "Agent Memory",
+    title: "How do you prevent stale memories?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand memory freshness strategies including timestamps, expiration policies, confidence scores, versioning, revalidation, recency weighting, memory updates, and deletion.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "memory-security",
+    category: "Agent Memory Security",
+    title: "How do you handle memory security?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to protect agent memory using encryption, authentication, authorization, tenant isolation, access policies, data classification, masking, auditing, retention controls, and secure deletion.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
-
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
-
-  concept: "",
-
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "cross-user-memory-leakage",
+    category: "Agent Memory Security",
+    title: "How do you prevent cross-user memory leakage?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to enforce strict user and tenant isolation using identity-aware memory keys, access control, metadata filters, namespace isolation, authorization checks, encryption boundaries, and retrieval validation.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +599,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: MemoryQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +638,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    MemoryQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +680,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={MemoryQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

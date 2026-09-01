@@ -3,162 +3,236 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const LangraphQuestion = 
+[
+  {
+    id: "what-is-langgraph",
+    category: "LangGraph",
+    title: "What is LangGraph?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand LangGraph as a framework for building stateful, multi-step, and controllable agent workflows using graphs, nodes, edges, state, persistence, and human-in-the-loop capabilities.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "langgraph-vs-langchain-agents",
+    category: "LangGraph",
+    title: "Why LangGraph instead of LangChain agents?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand why LangGraph may be selected over traditional LangChain agents for complex workflows requiring explicit orchestration, state management, conditional routing, loops, persistence, and production control.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "langgraph-graph",
+    category: "LangGraph",
+    title: "What is a graph in LangGraph?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand how LangGraph represents an agent workflow as a graph containing nodes, edges, state transitions, and execution paths.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "langgraph-nodes",
+    category: "LangGraph",
+    title: "What are nodes?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand nodes as executable units in LangGraph that perform operations such as calling an LLM, invoking tools, processing data, executing agents, or modifying state.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "langgraph-edges",
+    category: "LangGraph",
+    title: "What are edges?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand edges as connections between LangGraph nodes that define how execution moves from one step to another.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "langgraph-conditional-edges",
+    category: "LangGraph",
+    title: "What are conditional edges?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand how conditional edges dynamically route execution to different nodes based on the current state, model output, business rules, or execution results.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "langgraph-state",
+    category: "LangGraph",
+    title: "What is state in LangGraph?",
+    difficulty: "Intermediate",
+    time: "~15 min",
+    description:
+      "Understand LangGraph state as the shared data structure that carries conversation context, task information, tool results, intermediate outputs, and execution information between nodes.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "langgraph-state-persistence",
+    category: "LangGraph",
+    title: "How do you persist state?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how LangGraph state can be persisted using checkpointing and external storage so workflows can resume, recover, and maintain continuity across executions.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "langgraph-checkpoints",
+    category: "LangGraph",
+    title: "How do you implement checkpoints?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand checkpointing in LangGraph, including saving execution state at workflow boundaries to support persistence, recovery, debugging, human approval, and resumable execution.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "langgraph-human-approval",
+    category: "LangGraph",
+    title: "How do you implement human approval?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how LangGraph workflows can pause before sensitive actions, request human approval, persist execution state, and resume or terminate based on the human decision.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "langgraph-loops",
+    category: "LangGraph",
+    title: "How do you implement loops?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how LangGraph supports cyclic workflows where execution can return to previous nodes based on conditions until a defined completion or termination criterion is reached.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "langgraph-retries",
+    category: "LangGraph",
+    title: "How do you implement retries?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand retry strategies for LangGraph node execution, including retry policies, retryable errors, maximum attempts, backoff, and handling transient versus permanent failures.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "langgraph-parallel-execution",
+    category: "LangGraph",
+    title: "How do you implement parallel execution?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how LangGraph can execute independent branches concurrently and later merge their results to improve throughput and reduce end-to-end latency.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "langgraph-error-handling",
+    category: "LangGraph",
+    title: "How do you handle errors in LangGraph?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand error handling in LangGraph using retries, exception handling, fallback paths, conditional routing, checkpoints, recovery, graceful termination, and error propagation.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "langgraph-hierarchical-agents",
+    category: "LangGraph",
+    title: "How do you build hierarchical agents using LangGraph?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to implement hierarchical multi-agent architectures in LangGraph, such as Coordinator → Delegator → Worker, using subgraphs, routing, shared state, and controlled execution.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "langgraph-supervisor-agent",
+    category: "LangGraph",
+    title: "How do you implement a supervisor agent?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to design a supervisor agent in LangGraph that analyzes tasks, selects specialized agents, routes execution, manages state, and aggregates results.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "langgraph-infinite-loops",
+    category: "LangGraph",
+    title: "How do you prevent infinite loops?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to prevent uncontrolled cyclic execution using termination conditions, recursion limits, iteration counters, state tracking, validation, timeouts, and explicit end states.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "langgraph-observability-debugging",
+    category: "LangGraph",
+    title: "How do you observe and debug LangGraph execution?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to trace LangGraph execution, inspect state transitions, monitor nodes and tool calls, identify failures, analyze latency and token usage, and debug complex agent workflows.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "langgraph-production-deployment",
+    category: "LangGraph",
+    title: "How do you deploy LangGraph into production?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand production deployment of LangGraph applications, including API services, containerization, cloud infrastructure, persistence, scaling, authentication, observability, secrets management, reliability, and CI/CD.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +719,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: LangraphQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +758,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    LangraphQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +800,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={LangraphQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

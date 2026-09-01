@@ -3,162 +3,308 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgenticOwnProjectQuestion = 
+[
+  {
+    id: "project-architecture-end-to-end",
+    category: "Project Deep Dive",
+    title: "Explain your architecture end-to-end.",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Explain the complete enterprise Agentic AI architecture from user request and API gateway through authentication, coordinator, delegators, worker agents, LangGraph orchestration, RAG, MCP, A2A, enterprise systems, state management, observability, security, and final response.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "project-why-langgraph",
+    category: "Project Deep Dive",
+    title: "Why did you choose LangGraph?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain why LangGraph was selected for the project, including explicit workflow control, state management, conditional routing, loops, checkpointing, human-in-the-loop, retries, persistence, and hierarchical multi-agent orchestration.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "project-why-hierarchical-agents",
+    category: "Project Architecture",
+    title: "Why hierarchical agents?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain why hierarchical multi-agent architecture was preferred for complex enterprise workloads, including separation of responsibilities, scalability, specialization, controlled autonomy, routing, maintainability, and fault isolation.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "project-coordinator-delegator-worker",
+    category: "Project Architecture",
+    title: "Why coordinator + delegator + worker architecture?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain the responsibilities and architectural benefits of Coordinator, Delegator, and Worker layers, including task decomposition, domain routing, specialization, execution isolation, scalability, and governance.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "project-single-agent-vs-multi-agent",
+    category: "Project Architecture",
+    title: "Why not use a single agent?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Compare a single-agent architecture with the hierarchical multi-agent design in terms of complexity, specialization, tool management, scalability, reliability, observability, security boundaries, and maintenance.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "project-coordinator-delegator-selection",
+    category: "Project Orchestration",
+    title: "How does the coordinator select a delegator?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain how the coordinator analyzes user intent, task type, required capabilities, metadata, policies, and routing rules to select the appropriate domain delegator.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "project-delegator-worker-selection",
+    category: "Project Orchestration",
+    title: "How do delegators select workers?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain how delegators select specialized workers based on capabilities, task requirements, tool access, workload, policies, confidence, and execution context.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "project-worker-results",
+    category: "Multi-Agent Communication",
+    title: "How do workers communicate results?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Explain how worker agents return structured results, status, evidence, errors, metadata, and artifacts to delegators and coordinators using shared state or agent-to-agent communication patterns.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "project-state-management",
+    category: "Agent State",
+    title: "Where is state maintained?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain where conversational state, workflow state, intermediate results, tool outputs, memory, checkpoints, and execution metadata are maintained and how state persistence supports recovery and resumability.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "project-rag-implementation",
+    category: "RAG Architecture",
+    title: "How is RAG implemented?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Explain the end-to-end RAG pipeline including ingestion, parsing, chunking, embeddings, indexing, metadata, access control, query transformation, retrieval, reranking, context construction, grounded generation, and evaluation.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "project-mcp-usage",
+    category: "MCP",
+    title: "Where did you use MCP?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain where MCP was used to standardize agent access to enterprise tools, APIs, databases, applications, or resources and how MCP servers were integrated into the agent architecture.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "project-a2a-usage",
+    category: "A2A",
+    title: "Where did you use A2A?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain where A2A was used for agent-to-agent collaboration, task delegation, capability discovery, communication, result exchange, and distributed agent execution.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "project-mcp-and-a2a",
+    category: "Agentic Architecture",
+    title: "Why use both MCP and A2A?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain why MCP and A2A solve different integration problems and how they complement each other: MCP for agent-to-tool and resource access, and A2A for agent-to-agent collaboration.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "project-failure-handling",
+    category: "Reliability",
+    title: "How do you handle failures?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain failure handling across agents, tools, MCP servers, A2A communication, databases, vector stores, and LLM providers using retries, timeouts, circuit breakers, fallbacks, checkpoints, recovery, and graceful degradation.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "project-hallucination-handling",
+    category: "AI Reliability",
+    title: "How do you handle hallucination?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain hallucination prevention using grounded RAG, source validation, structured outputs, confidence thresholds, tool verification, evaluator mechanisms, guardrails, citations, and refusal or escalation strategies.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-security",
+    category: "Security",
+    title: "How do you secure the system?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Explain enterprise security across authentication, authorization, RBAC, identity propagation, data protection, prompt injection defense, tool permissions, secrets management, network isolation, encryption, PII protection, and auditing.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-agent-evaluation",
+    category: "Evaluation",
+    title: "How do you evaluate agents?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain agent evaluation using task success, tool-call accuracy, groundedness, faithfulness, relevance, hallucination rate, latency, cost, safety, regression testing, and business-specific evaluation metrics.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-monitoring",
+    category: "Observability",
+    title: "How do you monitor the system?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain end-to-end observability across agent execution, LangGraph nodes, LLM calls, tokens, tool calls, RAG retrieval, MCP, A2A, latency, failures, cost, user activity, and business KPIs.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-cost-control",
+    category: "FinOps",
+    title: "How do you control cost?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Explain cost controls including model routing, smaller models, prompt optimization, context reduction, caching, token limits, reduced agent iterations, tool optimization, quotas, and per-tenant cost tracking.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-llm-unavailable",
+    category: "Reliability",
+    title: "What happens if the LLM is unavailable?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Explain resilience to LLM outages using health checks, timeouts, retries, circuit breakers, alternate models or providers, fallback routing, queues, degraded modes, and recovery mechanisms.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-mcp-server-failure",
+    category: "MCP Reliability",
+    title: "What happens if an MCP server fails?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Explain how the agent detects MCP server failure and handles it using health checks, timeouts, retries, circuit breakers, fallback tools, alternative MCP servers, task reassignment, and graceful degradation.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-scale-architecture",
+    category: "Scalability",
+    title: "How would you scale this architecture?",
+    difficulty: "Expert",
+    time: "~25 min",
+    description:
+      "Explain how to horizontally scale coordinators, delegators, workers, RAG services, MCP servers, A2A communication, databases, queues, and model access using autoscaling, caching, asynchronous execution, and load balancing.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-hardest-technical-problem",
+    category: "Project Deep Dive",
+    title: "What was the hardest technical problem?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Prepare to explain the most challenging technical problem encountered during implementation, including the root cause, investigation, architectural trade-offs, solution, implementation details, measurable outcome, and lessons learned.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-redesign",
+    category: "Project Deep Dive",
+    title: "What would you change if you redesigned it?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Evaluate the existing architecture critically and identify improvements in agent orchestration, model routing, RAG, MCP, A2A, security, scalability, observability, evaluation, cost, and operational maturity.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "project-business-value",
+    category: "Project Deep Dive",
+    title: "What business value did the solution provide?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Explain the measurable business impact of the Agentic AI solution, including productivity improvement, automation, reduced resolution time, knowledge accessibility, operational efficiency, cost savings, accuracy, and user experience.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +791,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgenticOwnProjectQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +830,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgenticOwnProjectQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +872,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgenticOwnProjectQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

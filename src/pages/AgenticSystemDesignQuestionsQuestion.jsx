@@ -3,162 +3,128 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgenticSystemDesignQuestion = 
+[
+  {
+    id: "enterprise-ai-assistant",
+    category: "Agentic AI System Design",
+    title: "Design an enterprise AI assistant that can access documents, databases, APIs and enterprise applications.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design an enterprise AI assistant capable of securely accessing unstructured documents, structured databases, REST APIs, enterprise applications, and business systems using RAG, tools, MCP, agent orchestration, identity, authorization, guardrails, observability, and audit logging.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "multi-agent-customer-support",
+    category: "Multi-Agent System Design",
+    title: "Design a multi-agent customer support platform.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design a customer support platform using specialized agents for intent detection, knowledge retrieval, order management, billing, troubleshooting, escalation, and human handoff with orchestration, shared state, security, observability, and failure recovery.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agentic-rag-100k-employees",
+    category: "Agentic RAG System Design",
+    title: "Design an Agentic RAG platform for 100,000 employees.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design a highly scalable enterprise Agentic RAG platform supporting 100,000 employees with secure document ingestion, hybrid retrieval, metadata filtering, query routing, tenant and access isolation, evaluation, caching, autoscaling, observability, and cost optimization.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "hierarchical-langgraph-system",
+    category: "LangGraph System Design",
+    title: "Design a hierarchical multi-agent system using LangGraph.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design a hierarchical LangGraph architecture using Coordinator → Delegator → Worker agents with state management, conditional routing, subgraphs, parallel execution, retries, checkpoints, human approval, failure handling, observability, and termination controls.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "mcp-enterprise-tool-ecosystem",
+    category: "MCP System Design",
+    title: "Design an MCP-based enterprise tool ecosystem.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design an enterprise MCP ecosystem where agents securely discover and use standardized tools and resources across databases, APIs, SaaS platforms, internal applications, and enterprise services with authentication, authorization, governance, versioning, observability, and tool-level security.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "a2a-multi-agent-ecosystem",
+    category: "A2A System Design",
+    title: "Design an A2A-based multi-agent ecosystem.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design a distributed ecosystem of specialized agents communicating through A2A with agent discovery, Agent Cards, capability management, authentication, authorization, synchronous and asynchronous communication, task lifecycle management, failure recovery, and observability.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "healthcare-secure-ai-agent",
+    category: "Industry Agentic AI",
+    title: "Design a healthcare AI agent with strict security and compliance requirements.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design a healthcare AI agent with strong privacy and compliance controls covering sensitive data protection, identity, authorization, auditability, encryption, secure RAG, PII/PHI protection, human approval, guardrails, model governance, monitoring, and disaster recovery.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "autonomous-it-incident-agent",
+    category: "Autonomous Agents",
+    title: "Design an agent that can autonomously resolve IT incidents.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design an autonomous IT operations agent capable of detecting incidents, analyzing logs and metrics, diagnosing root causes, querying enterprise systems, executing approved remediation actions, validating recovery, escalating to humans, and maintaining a complete audit trail.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "financial-document-analysis-agent",
+    category: "Industry Agentic AI",
+    title: "Design an agentic financial document analysis system.",
+    difficulty: "Expert",
+    time: "~30 min",
+    description:
+      "Design an agentic system for analyzing financial documents using document ingestion, OCR, multimodal processing, structured extraction, RAG, validation agents, calculation tools, source attribution, security, auditability, human review, and compliance controls.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
-
-  concept: "",
-
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "multi-cloud-agentic-platform",
+    category: "Enterprise Agentic AI Architecture",
+    title: "Design a production-grade Agentic AI platform supporting Azure and AWS.",
+    difficulty: "Expert",
+    time: "~40 min",
+    description:
+      "Design a production-grade multi-cloud Agentic AI platform supporting Azure and AWS with cloud abstraction, Azure OpenAI, Amazon Bedrock, LangGraph, MCP, A2A, enterprise RAG, multi-tenancy, identity, private networking, observability, evaluation, cost management, model fallback, autoscaling, high availability, and disaster recovery.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +611,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgenticSystemDesignQuestions.length,
           },
           {
             label: "Patterns",
@@ -684,7 +650,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgenticSystemDesignQuestions[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +692,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgenticSystemDesignQuestions}
             selected={selected}
             onSelect={setSelected}
             category={category}

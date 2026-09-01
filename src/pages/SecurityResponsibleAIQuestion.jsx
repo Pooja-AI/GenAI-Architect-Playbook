@@ -3,162 +3,176 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const SecurityResponsibleAIQuestion = 
+[
+  {
+    id: "agentic-ai-security-risks",
+    category: "Agentic AI Security",
+    title: "What security risks exist in Agentic AI?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand major Agentic AI security risks including prompt injection, indirect prompt injection, tool abuse, excessive agency, data leakage, data exfiltration, identity compromise, insecure integrations, memory poisoning, and unauthorized actions.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "prompt-injection",
+    category: "Agentic AI Security",
+    title: "What is prompt injection?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand prompt injection attacks where malicious or conflicting instructions attempt to manipulate an LLM or agent into ignoring intended instructions or performing unintended actions.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "indirect-prompt-injection",
+    category: "Agentic AI Security",
+    title: "What is indirect prompt injection?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand indirect prompt injection attacks where malicious instructions are embedded in external content such as documents, websites, emails, databases, or retrieved knowledge that an agent processes.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "prevent-prompt-injection",
+    category: "Agentic AI Security",
+    title: "How do you prevent prompt injection?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand layered defenses against prompt injection using input validation, content isolation, instruction hierarchy, tool permissions, least privilege, output validation, sandboxing, monitoring, and human approval.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "tool-poisoning",
+    category: "Agentic AI Security",
+    title: "What is tool poisoning?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand tool poisoning attacks where malicious or compromised tool metadata, descriptions, schemas, or implementations influence an agent into making unsafe or unintended tool calls.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "data-exfiltration",
+    category: "Agentic AI Security",
+    title: "What is data exfiltration?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand data exfiltration in Agentic AI systems, including unauthorized transfer of sensitive enterprise information through tools, APIs, prompts, outputs, memory, logs, or external services.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "protect-sensitive-enterprise-data",
+    category: "Agentic AI Security",
+    title: "How do you protect sensitive enterprise data?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design enterprise data protection using classification, encryption, access control, tenant isolation, data masking, tokenization, DLP, least privilege, secure retrieval, network controls, and audit logging.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agent-level-authorization",
+    category: "Agentic AI Security",
+    title: "How do you implement authorization at the agent level?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Understand how to control which users, applications, or other agents can invoke specific agents using identity, RBAC, ABAC, scopes, policies, tenant context, and least-privilege access.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "tool-level-authorization",
+    category: "Agentic AI Security",
+    title: "How do you implement authorization at the tool level?",
+    difficulty: "Expert",
+    time: "~15 min",
+    description:
+      "Understand how to enforce permissions for individual tools using identity-aware policies, RBAC, ABAC, scopes, allowlists, resource-level permissions, approval requirements, and least privilege.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "prevent-unauthorized-agent-actions",
+    category: "Agentic AI Security",
+    title: "How do you prevent an agent from executing unauthorized actions?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design controls to prevent unauthorized agent actions using policy enforcement points, tool authorization, identity propagation, input validation, action allowlists, sandboxing, human approval, and runtime monitoring.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "pii-protection-agentic-ai",
+    category: "Agentic AI Security",
+    title: "How do you implement PII protection?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand PII protection throughout the Agentic AI lifecycle using detection, masking, redaction, tokenization, encryption, access control, secure logging, retention policies, and output filtering.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "agentic-content-filtering",
+    category: "Agentic AI Security",
+    title: "How do you implement content filtering?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand input and output content filtering for detecting unsafe, malicious, sensitive, or policy-violating content using classifiers, rules, moderation services, guardrails, and policy engines.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "human-approval-high-risk",
+    category: "Agentic AI Governance",
+    title: "How do you implement human approval for high-risk actions?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design human-in-the-loop controls where high-risk actions are paused for explicit approval based on risk classification, business policies, financial impact, data sensitivity, and reversibility.",
+    concept: "",
+    code: ""
+  },
 
-
+  {
+    id: "audit-agent-decisions",
+    category: "Agentic AI Governance",
+    title: "How do you audit agent decisions?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design an auditable trail for agent decisions including user identity, agent identity, prompts, model version, retrieved context, tool calls, decisions, approvals, outputs, timestamps, correlation IDs, and policy events.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +659,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: SecurityResponsibleAIQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +698,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    SecurityResponsibleAIQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +740,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={SecurityResponsibleAIQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

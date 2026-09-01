@@ -3,162 +3,152 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const PlanningReasoningQuestion = 
+[
+  {
+    id: "task-decomposition",
+    category: "Agentic AI Planning",
+    title: "What is task decomposition?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand task decomposition as the process of breaking a complex goal into smaller, manageable subtasks that can be executed independently or in a defined sequence.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "agent-complex-task-decomposition",
+    category: "Agentic AI Planning",
+    title: "How does an agent break a complex task into subtasks?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent analyzes the goal, identifies dependencies, determines required capabilities and tools, creates subtasks, and establishes an execution strategy.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "planning-vs-execution",
+    category: "Agentic AI Planning",
+    title: "What is planning vs execution?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the distinction between planning, which determines what should be done and in what order, and execution, which performs the planned actions and processes their results.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "dynamic-planning",
+    category: "Agentic AI Planning",
+    title: "What is dynamic planning?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand dynamic planning where an agent continuously adapts or regenerates its plan based on new information, tool results, failures, changing conditions, or intermediate observations.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "react",
+    category: "Agentic AI Reasoning",
+    title: "What is ReAct?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the ReAct pattern, where an agent combines reasoning and action iteratively by selecting actions or tools, observing their results, and using those observations to determine the next step.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "plan-and-execute",
+    category: "Agentic AI Planning",
+    title: "What is Plan-and-Execute?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the Plan-and-Execute architecture where an agent first creates a structured plan and then executes the plan through one or more agents, tools, or workflow steps.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "agent-reflection",
+    category: "Agentic AI Reasoning",
+    title: "What is reflection?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand reflection as a mechanism where an agent evaluates intermediate or final results, identifies weaknesses or errors, and uses the evaluation to improve its subsequent actions or output.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agent-self-correction",
+    category: "Agentic AI Reasoning",
+    title: "What is self-correction?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent detects mistakes in its reasoning, tool usage, retrieved information, or generated output and modifies its approach to produce a better result.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "evaluator-optimizer",
+    category: "Agentic AI Architecture",
+    title: "What is evaluator-optimizer architecture?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the evaluator-optimizer pattern where one component generates an output and another evaluates it against defined criteria, with feedback used to iteratively improve the result.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "prevent-excessive-reasoning",
+    category: "Agentic AI Optimization",
+    title: "How do you prevent excessive reasoning?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to control unnecessary planning, repeated tool calls, excessive agent iterations, and over-complex reasoning using task boundaries, iteration limits, routing rules, model selection, and termination criteria.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "control-agent-autonomy",
+    category: "Agentic AI Governance",
+    title: "How do you control agent autonomy?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to control agent autonomy using permissions, tool restrictions, policy enforcement, human approval, risk-based controls, execution limits, budgets, sandboxing, and predefined autonomy levels.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
-
-  code: ""
-},
-
-
+  {
+    id: "planning-vs-react-vs-plan-execute",
+    category: "Agentic AI Planning",
+    title: "How do ReAct, Plan-and-Execute, and dynamic planning differ?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Compare ReAct, Plan-and-Execute, and dynamic planning in terms of planning strategy, adaptability, latency, tool usage, execution control, reliability, and appropriate enterprise use cases.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +635,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: PlanningReasoningQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +674,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    PlanningReasoningQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +716,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={PlanningReasoningQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

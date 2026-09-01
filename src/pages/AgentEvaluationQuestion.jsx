@@ -3,162 +3,188 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgentEvaluationQuestion = 
+[
+  {
+    id: "evaluate-ai-agent",
+    category: "Agent Evaluation",
+    title: "How do you evaluate an AI agent?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand a comprehensive agent evaluation framework covering task success, reasoning quality, tool usage, groundedness, safety, reliability, latency, cost, and business outcomes.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "evaluate-tool-selection",
+    category: "Agent Evaluation",
+    title: "How do you evaluate tool selection?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to measure whether an agent selected the correct tool, including tool-selection accuracy, precision, recall, argument correctness, unnecessary tool calls, and execution outcomes.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "evaluate-task-completion",
+    category: "Agent Evaluation",
+    title: "How do you evaluate task completion?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to determine whether an agent successfully completed a task using predefined success criteria, expected outcomes, business rules, validators, and human or automated evaluation.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "measure-hallucination",
+    category: "Agent Evaluation",
+    title: "How do you measure hallucination?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand methods for detecting and measuring hallucinations by comparing generated claims against trusted sources, retrieved context, structured ground truth, and evaluation criteria.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "groundedness",
+    category: "Agent Evaluation",
+    title: "What is groundedness?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand groundedness as the degree to which an agent's generated response is supported by the provided context, retrieved information, tool results, or authoritative sources.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "faithfulness",
+    category: "Agent Evaluation",
+    title: "What is faithfulness?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand faithfulness as whether the claims made in a generated response are consistent with and supported by the information available to the model.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "relevance",
+    category: "Agent Evaluation",
+    title: "What is relevance?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand relevance as the degree to which retrieved information, tool outputs, and final responses directly address the user's task or question.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "tool-call-accuracy",
+    category: "Agent Evaluation",
+    title: "What is tool-call accuracy?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand tool-call accuracy as the degree to which an agent selects the correct tool and provides valid, complete, and appropriate arguments for the intended operation.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "task-success-rate",
+    category: "Agent Evaluation",
+    title: "What is task success rate?",
+    difficulty: "Advanced",
+    time: "~10 min",
+    description:
+      "Understand task success rate as the percentage of agent tasks that satisfy predefined completion criteria and produce the expected business or functional outcome.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "evaluate-multi-agent-systems",
+    category: "Multi-Agent Evaluation",
+    title: "How do you evaluate multi-agent systems?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Evaluate multi-agent systems across individual agent performance, routing accuracy, delegation quality, inter-agent communication, collaboration efficiency, duplicate work, failure recovery, end-to-end task success, latency, and cost.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "evaluation-dataset",
+    category: "Agent Evaluation",
+    title: "How do you create an evaluation dataset?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand how to build representative evaluation datasets containing real-world scenarios, expected outcomes, edge cases, adversarial inputs, tool-use cases, ground-truth answers, and evaluation criteria.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "offline-vs-online-evaluation",
+    category: "Agent Evaluation",
+    title: "Offline vs online evaluation?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Compare offline evaluation using curated datasets and repeatable test runs with online evaluation using production traffic, real user interactions, monitoring signals, feedback, and live quality metrics.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "agent-regression-testing",
+    category: "Agent Evaluation",
+    title: "How do you perform regression testing for agents?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand agent regression testing using golden datasets, deterministic test cases where possible, tool mocks, prompt and model version comparisons, automated evaluation, threshold checks, and CI/CD quality gates.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "agent-cost-evaluation",
+    category: "Agent Evaluation",
+    title: "How do you evaluate agent cost?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Measure agent cost across input and output tokens, model calls, tool invocations, retrieval operations, infrastructure, retries, agent iterations, and end-to-end cost per successful task.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "agent-latency-evaluation",
+    category: "Agent Evaluation",
+    title: "How do you evaluate latency?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand latency measurement across request processing, first-token latency, model inference, tool execution, retrieval, agent orchestration, inter-agent communication, and total task completion time.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +671,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgentEvaluationQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +710,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgentEvaluationQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +752,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgentEvaluationQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

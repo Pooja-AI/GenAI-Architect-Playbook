@@ -3,162 +3,236 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const AgenticAIFundamentalsQuestion = 
+[
+  {
+    id: "what-is-agentic-ai",
+    category: "Agentic AI Fundamentals",
+    title: "What is Agentic AI?",
+    difficulty: "Beginner",
+    time: "~10 min",
+    description:
+      "Understand the concept of Agentic AI, its characteristics, autonomy, reasoning, planning, tool usage, decision-making, and how agents execute tasks toward a defined goal.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "agentic-ai-vs-traditional-genai",
+    category: "Agentic AI Fundamentals",
+    title: "How is Agentic AI different from traditional GenAI?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the key differences between traditional Generative AI and Agentic AI across autonomy, planning, tool usage, memory, decision-making, execution, and multi-step task completion.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "what-is-ai-agent",
+    category: "Agentic AI Fundamentals",
+    title: "What is an AI agent?",
+    difficulty: "Beginner",
+    time: "~10 min",
+    description:
+      "Understand what an AI agent is, how it perceives context, reasons about goals, selects actions, invokes tools, observes results, and iteratively works toward task completion.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "core-components-ai-agent",
+    category: "Agentic AI Fundamentals",
+    title: "What are the core components of an AI agent?",
+    difficulty: "Intermediate",
+    time: "~15 min",
+    description:
+      "Understand the major components of an AI agent, including model, instructions, memory, state, tools, planning, reasoning, execution, observation, guardrails, and orchestration.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "agent-vs-llm",
+    category: "Agentic AI Fundamentals",
+    title: "What is the difference between an agent and an LLM?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the distinction between an LLM as a reasoning and language-generation model and an agent as a system that uses an LLM with tools, memory, state, planning, and execution capabilities.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "agent-vs-workflow",
+    category: "Agentic AI Fundamentals",
+    title: "What is the difference between an agent and a workflow?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the differences between agent-driven dynamic decision-making and deterministic workflows, including control flow, autonomy, predictability, and execution behavior.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "autonomous-agent",
+    category: "Agentic AI Fundamentals",
+    title: "What is an autonomous agent?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand autonomous agents, their ability to independently plan, make decisions, use tools, observe outcomes, and continue execution with limited human intervention.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "agentic-workflow",
+    category: "Agentic AI Fundamentals",
+    title: "What is an agentic workflow?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand agentic workflows where LLM-driven decisions dynamically determine the next action, tool, agent, or execution path based on the current state and task requirements.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "react-pattern",
+    category: "Agentic AI Reasoning",
+    title: "What is the ReAct pattern?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the ReAct reasoning pattern and how agents combine reasoning and actions to interact with tools, observe results, and iteratively solve complex tasks.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "agent-tool-selection",
+    category: "Agentic AI Tools",
+    title: "How does an agent decide which tool to use?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how agents select tools based on task requirements, tool descriptions, schemas, context, permissions, model reasoning, routing logic, and execution policies.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "tool-function-calling",
+    category: "Agentic AI Tools",
+    title: "What is tool calling/function calling?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand how LLMs generate structured tool-call requests that applications or agents execute against external APIs, databases, services, and enterprise systems.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "planning-agentic-ai",
+    category: "Agentic AI Reasoning",
+    title: "What is planning in Agentic AI?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how agents decompose complex goals into subtasks, determine execution order, select tools or agents, adapt plans, and track progress toward task completion.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "reflection-self-reflection",
+    category: "Agentic AI Reasoning",
+    title: "What is reflection/self-reflection?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how an agent evaluates its own intermediate or final output, identifies errors or weaknesses, and revises its approach to improve task performance.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "agent-memory",
+    category: "Agentic AI Fundamentals",
+    title: "What is memory in an agent?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand how agent memory stores and retrieves relevant information across interactions or tasks to provide continuity, personalization, and contextual awareness.",
+    concept: "",
+    code: ""
+  },
 
+  {
+    id: "short-term-vs-long-term-memory",
+    category: "Agentic AI Memory",
+    title: "What is the difference between short-term and long-term memory?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the differences between short-term conversational or execution context and long-term persistent memory used across sessions and tasks.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "agent-state-management",
+    category: "Agentic AI Architecture",
+    title: "What is state management in agents?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how agent state represents the current execution context, task progress, tool results, messages, decisions, and intermediate information throughout an agent workflow.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "agent-execution-loop",
+    category: "Agentic AI Architecture",
+    title: "What is the agent execution loop?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand the iterative agent execution cycle of receiving a goal, reasoning, planning, selecting an action or tool, executing it, observing the result, and determining whether to continue or terminate.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "agent-hallucination-causes",
+    category: "Agentic AI Reliability",
+    title: "What causes an agent to hallucinate?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand the causes of agent hallucination, including unreliable model outputs, insufficient context, poor retrieval, incorrect tool usage, ambiguous instructions, and flawed reasoning or planning.",
+    concept: "",
+    code: ""
+  },
+
+  {
+    id: "prevent-agent-infinite-loop",
+    category: "Agentic AI Reliability",
+    title: "How do you prevent an agent from getting into an infinite loop?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand techniques for preventing infinite agent execution using maximum iteration limits, termination conditions, state tracking, duplicate-action detection, timeouts, retries, circuit breakers, and human escalation.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +719,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: AgenticAIFundamentalsQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +758,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    AgenticAIFundamentalsQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +800,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={AgenticAIFundamentalsQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}

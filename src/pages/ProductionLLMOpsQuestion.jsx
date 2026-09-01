@@ -3,162 +3,176 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 
-const GenAIQuestion = [
-    
-{
-  id: "websockets",
-  category: "Communication Protocols",
-  title: "WebSockets",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.",
+const ProductionLLMOpsQuestion = 
+[
+  {
+    id: "deploy-agents-production",
+    category: "Agentic AI Production",
+    title: "How do you deploy agents into production?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand production deployment of AI agents using containerization, APIs, orchestration, CI/CD, configuration management, security, observability, autoscaling, persistence, and reliability controls.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "websockets",
-    "real-time",
-    "communication",
-    "streaming",
-    "full duplex",
-    "networking"
-  ],
+  {
+    id: "version-prompts",
+    category: "LLMOps",
+    title: "How do you version prompts?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand enterprise prompt versioning using source control, prompt registries, metadata, version identifiers, evaluation results, approval workflows, environment promotion, and rollback.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "version-agent-workflows",
+    category: "Agentic AI Production",
+    title: "How do you version agent workflows?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand how to version agent graphs, nodes, routing logic, tools, prompts, policies, dependencies, and configuration so workflow changes are traceable, testable, deployable, and reversible.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Establish Connection",
-      icon: "🤝",
-      detail: "The client initiates a WebSocket handshake to establish a persistent connection with the server."
-    },
-    {
-      label: "Maintain Connection",
-      icon: "🔗",
-      detail: "A continuous bidirectional communication channel remains open between the client and server."
-    },
-    {
-      label: "Exchange Messages",
-      icon: "💬",
-      detail: "Both the client and server can send and receive messages independently in real time."
-    },
-    {
-      label: "Process Events",
-      icon: "⚡",
-      detail: "Incoming messages are processed immediately, enabling live updates and event-driven communication."
-    },
-    {
-      label: "Close Connection",
-      icon: "✅",
-      detail: "The connection is gracefully closed after communication is complete or when either side disconnects."
-    }
-  ],
+  {
+    id: "monitor-agents",
+    category: "Agentic AI Observability",
+    title: "How do you monitor agents?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design agent monitoring across availability, task success, failures, tool usage, model performance, token consumption, latency, retries, loops, safety events, and business KPIs.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "event-streaming",
-  category: "Communication Protocols",
-  title: "Event Streaming",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.",
+  {
+    id: "trace-agent-execution",
+    category: "Agentic AI Observability",
+    title: "How do you trace agent execution?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand distributed tracing for agent workflows, including user requests, agent transitions, LLM calls, tool calls, retrieval operations, MCP calls, A2A communication, retries, and final responses.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "event streaming",
-    "events",
-    "kafka",
-    "real-time",
-    "communication",
-    "pub-sub"
-  ],
+  {
+    id: "monitor-token-usage",
+    category: "LLMOps",
+    title: "How do you monitor token usage?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Track input and output tokens by user, tenant, agent, workflow, model, request, and tool execution to identify unexpected consumption and support cost optimization.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "monitor-agent-latency",
+    category: "Agentic AI Observability",
+    title: "How do you monitor latency?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Measure end-to-end agent latency and break it down across LLM inference, first-token latency, retrieval, tool execution, MCP calls, A2A communication, orchestration, and downstream services.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Generate Event",
-      icon: "📢",
-      detail: "A producer creates an event whenever an important business action or system activity occurs."
-    },
-    {
-      label: "Publish Event",
-      icon: "📤",
-      detail: "The event is published to an event broker such as Kafka, Pulsar, or Event Hubs."
-    },
-    {
-      label: "Distribute Events",
-      icon: "📡",
-      detail: "The broker distributes the event to all subscribed consumers in real time."
-    },
-    {
-      label: "Process Event",
-      icon: "⚙️",
-      detail: "Consumers independently process the event and perform their respective tasks."
-    },
-    {
-      label: "Trigger Workflows",
-      icon: "✅",
-      detail: "Processed events initiate downstream actions, analytics, notifications, or AI workflows."
-    }
-  ],
+  {
+    id: "prompt-regression-testing",
+    category: "LLMOps",
+    title: "How do you perform prompt regression testing?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand how to compare prompt versions against golden datasets using automated quality, groundedness, safety, task-success, latency, and cost thresholds before promoting changes to production.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
-{
-  id: "message-queues",
-  category: "Communication Protocols",
-  title: "Message Queues",
-  difficulty: "Intermediate",
-  time: "~20 min",
-  description:
-    "Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.",
+  {
+    id: "rollback-agent",
+    category: "Agentic AI Production",
+    title: "How do you roll back an agent?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Understand safe rollback strategies for agent versions, prompts, workflows, models, tools, and configurations using immutable artifacts, deployment versioning, feature flags, canary releases, and automated rollback.",
+    concept: "",
+    code: ""
+  },
 
-  tags: [
-    "message queue",
-    "rabbitmq",
-    "sqs",
-    "asynchronous",
-    "messaging",
-    "communication"
-  ],
+  {
+    id: "production-model-fallback",
+    category: "LLMOps",
+    title: "How do you implement model fallback?",
+    difficulty: "Advanced",
+    time: "~15 min",
+    description:
+      "Design model fallback using primary and secondary LLM providers, health checks, timeout detection, rate-limit handling, quality policies, routing logic, and graceful degradation.",
+    concept: "",
+    code: ""
+  },
 
-  concept: "",
+  {
+    id: "multiple-llm-providers",
+    category: "LLMOps",
+    title: "How do you manage multiple LLM providers?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Understand multi-provider LLM architecture using abstraction layers, model registries, routing policies, provider-specific adapters, credentials, observability, cost controls, evaluation, and fallback strategies.",
+    concept: "",
+    code: ""
+  },
 
-  steps: [
-    {
-      label: "Produce Message",
-      icon: "📤",
-      detail: "A producer creates a task or event and places it into the message queue."
-    },
-    {
-      label: "Store Message",
-      icon: "📦",
-      detail: "The message queue safely stores the message until a consumer is ready to process it."
-    },
-    {
-      label: "Consume Message",
-      icon: "📥",
-      detail: "A consumer retrieves the message from the queue and begins processing the assigned task."
-    },
-    {
-      label: "Acknowledge Processing",
-      icon: "✔️",
-      detail: "After successful execution, the consumer sends an acknowledgment to remove the message from the queue."
-    },
-    {
-      label: "Complete Workflow",
-      icon: "✅",
-      detail: "The processed result is delivered to downstream services or returned to the AI agent for further actions."
-    }
-  ],
+  {
+    id: "reduce-llm-cost",
+    category: "LLMOps and FinOps",
+    title: "How do you reduce LLM cost?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand LLM cost optimization through model routing, smaller models, prompt optimization, caching, context reduction, batching, token controls, retrieval optimization, reduced iterations, and avoiding unnecessary tool calls.",
+    concept: "",
+    code: ""
+  },
 
-  code: ""
-},
+  {
+    id: "reduce-agent-latency",
+    category: "Agentic AI Performance",
+    title: "How do you reduce latency?",
+    difficulty: "Advanced",
+    time: "~20 min",
+    description:
+      "Understand latency optimization through parallel execution, streaming, model selection, caching, prompt reduction, retrieval optimization, connection reuse, asynchronous processing, and minimizing unnecessary agent iterations.",
+    concept: "",
+    code: ""
+  },
 
-
+  {
+    id: "model-outages",
+    category: "LLMOps Reliability",
+    title: "How do you handle model outages?",
+    difficulty: "Expert",
+    time: "~20 min",
+    description:
+      "Design resilient LLM infrastructure using provider health checks, automatic failover, circuit breakers, retries with backoff, alternate models, queueing, degraded modes, observability, and incident recovery.",
+    concept: "",
+    code: ""
+  }
 ];
-
 const CATEGORIES = ["All", "Advanced"];
 
 const DIFFICULTIES = {
@@ -645,7 +659,7 @@ function Header() {
         {[
           {
             label: "Questions",
-            value: GenAIQuestion.length,
+            value: ProductionLLMOpsQuestion.length,
           },
           {
             label: "Patterns",
@@ -684,7 +698,7 @@ function Header() {
 
 export default function App() {
   const [selected, setSelected] = useState(
-    GenAIQuestion[0]
+    ProductionLLMOpsQuestion[0]
   );
 
   const [category, setCategory] = useState("All");
@@ -726,7 +740,7 @@ export default function App() {
           }}
         >
           <Sidebar
-            recipes={GenAIQuestion}
+            recipes={ProductionLLMOpsQuestion}
             selected={selected}
             onSelect={setSelected}
             category={category}
