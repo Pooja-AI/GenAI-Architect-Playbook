@@ -1,14 +1,106 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+// ================================
+// LangGraph / Agentic AI Docs
+// ================================
+
+import A2AProblemSolved from "../assets/docs/a2a-problem-solved.md?raw";
+import A2AVsRest from "../assets/docs/a2a-vs-rest.md?raw";
+import A2AWithoutLangGraph from "../assets/docs/a2a-without-langgraph.md?raw";
+
+import AgentCircularDependency from "../assets/docs/agent-circular-dependency.md?raw";
+import AgentCommunication from "../assets/docs/agent-communication.md?raw";
+import AgentCountDecision from "../assets/docs/agent-count-decision.md?raw";
+import AgentDiscovery from "../assets/docs/agent-discovery.md?raw";
+import AgentObservability from "../assets/docs/agent-observability.md?raw";
+
+import AgenticCost from "../assets/docs/agentic-cost.md?raw";
+import AgenticLatency from "../assets/docs/agentic-latency.md?raw";
+import AgenticOverengineering from "../assets/docs/agentic-overengineering.md?raw";
+import BiggestAgenticLimitation from "../assets/docs/biggest-agentic-limitation.md?raw";
+
+import BuildOwnAgentFramework from "../assets/docs/build-own-agent-framework.md?raw";
+
+import ConflictingAgentResults from "../assets/docs/conflicting-agent-results.md?raw";
+
+
+// ================================
+// Coordinator / Delegator / Worker
+// ================================
+
+import CoordinatorDelegatorWorker from "../assets/docs/coordinator-delegator-worker.md?raw";
+import CoordinatorRouting from "../assets/docs/coordinator-routing.md?raw";
+import CoordinatorWorkerDirect from "../assets/docs/coordinator-worker-direct.md?raw";
+import CoordinatorWrongRouting from "../assets/docs/coordinator-wrong-routing.md?raw";
+
+import CrossAgentState from "../assets/docs/cross-agent-state.md?raw";
+import DelegatorWorkerSelection from "../assets/docs/delegator-worker-selection.md?raw";
+
+
+// ================================
+// Framework Comparisons
+// ================================
+
+import FrameworkAlternatives from "../assets/docs/framework-alternatives.md?raw";
+
+import LanggraphLimitations from "../assets/docs/langgraph-limitations.md?raw";
+import LanggraphTradeoffs from "../assets/docs/langgraph-tradeoffs.md?raw";
+
+import LanggraphVSautogen from "../assets/docs/langgraph-vs-autogen.md?raw";
+import LanggraphVScrewai from "../assets/docs/langgraph-vs-crewai.md?raw";
+import LanggraphVSopenaiagents from "../assets/docs/langgraph-vs-openai-agents-sdk.md?raw";
+import LanggraphVSsemantickernel from "../assets/docs/langgraph-vs-semantic-kernel.md?raw";
+
+import LanggraphWithoutA2A from "../assets/docs/langgraph-without-a2a.md?raw";
+
+
+// ================================
+// Hierarchical / Multi-Agent
+// ================================
+
+import HierarchicalVsPeerToPeer from "../assets/docs/hierarchical-vs-peer-to-peer.md?raw";
+import HierarchicalVsSupervisor from "../assets/docs/hierarchical-vs-supervisor.md?raw";
+
+import JustifyAgenticComplexity from "../assets/docs/justify-agentic-complexity.md?raw";
+
+import MultipleAgentLayers from "../assets/docs/multiple-agent-layers.md?raw";
+
+import MultiAgentTradeoffs from "../assets/docs/multi-agent-tradeoffs.md?raw";
+import MultiAgentVsSingleAgent from "../assets/docs/multi-agent-vs-single-agent.md?raw";
+
+import SingleLLMVsMultiAgent from "../assets/docs/single-llm-vs-multi-agent.md?raw";
+
+
+// ================================
+// LangGraph + A2A / MCP
+// ================================
+
+import LanggraphA2ACombination from "../assets/docs/langgraph-a2a-combination.md?raw";
+
+import MCPA2ATogether from "../assets/docs/mcp-a2a-together.md?raw";
+
+
+// ================================
+// Architecture Decisions
+// ================================
+
+import RedesignAgenticArchitecture from "../assets/docs/redesign-agentic-architecture.md?raw";
+import SimplifyAgenticArchitecture from "../assets/docs/simplify-agentic-architecture.md?raw";
+
+
+// ================================
+// When / Why Questions
+// ================================
+
+import WhenNotA2A from "../assets/docs/when-not-a2a.md?raw";
+import WhenNotLanggraph from "../assets/docs/when-not-langgraph.md?raw";
+
+import WhyA2A from "../assets/docs/why-a2a.md?raw";
+import WhyAgenticFramework from "../assets/docs/why-agentic-framework.md?raw";
+import WhyHierarchicalAgents from "../assets/docs/why-hierarchical-agents.md?raw";
 
 import WhyLanggraph from "../assets/docs/whychooselanggraph.md?raw";
-import LanggraphVScrewai from "../assets/docs/langgraph-vs-crewai.md?raw";
-import LanggraphVSautogen from "../assets/docs/langgraph-vs-autogen.md?raw";
-import LanggraphVSsemantickernel from "../assets/docs/langgraph-vs-semantic-kernel.md?raw";
-import LanggraphVSopenaiagents from "../assets/docs/langgraph-vs-openai-agents-sdk.md?raw";
-import LanggraphLimitations from "../assets/docs/langgraph-limitations.md?raw";
-import WhyAgenticFramework from "../assets/docs/why-agentic-framework.md?raw";
 
 const AgentTopQuestion = [
 
@@ -136,7 +228,7 @@ const AgentTopQuestion = [
   description:
     "Understand scenarios where LangGraph may be unnecessary or introduce excessive complexity, and how to determine when a simpler LLM chain, deterministic workflow, traditional orchestration framework, or another Agentic AI framework is a better architectural choice.",
 
-  concept: "",
+  concept: WhenNotLanggraph,
 
   code: ""
 },
@@ -149,7 +241,7 @@ const AgentTopQuestion = [
   description:
     "Evaluate the architectural, engineering, operational, and business trade-offs between adopting an existing Agentic AI framework and building a custom orchestration framework for enterprise applications.",
 
-  concept: "",
+  concept: BuildOwnAgentFramework,
 
   code: ""
 },
@@ -162,7 +254,7 @@ const AgentTopQuestion = [
   description:
     "Understand the architectural reasons for using Agent-to-Agent (A2A) communication to enable interoperability, capability discovery, task delegation, and communication between independently deployed AI agents in an enterprise multi-agent system.",
 
-  concept: "",
+  concept: WhyA2A,
 
   code: ""
 },
@@ -175,7 +267,7 @@ const AgentTopQuestion = [
   description:
     "Understand the architectural differences between A2A and traditional REST APIs and the factors involved in choosing A2A for interoperable agent-to-agent communication, including agent capabilities, discovery, task delegation, asynchronous interactions, and loose coupling.",
 
-  concept: "",
+  concept: A2AVsRest,
 
   code: ""
 },
@@ -200,7 +292,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand why LangGraph and A2A can serve different architectural responsibilities, with LangGraph handling agent orchestration and workflow control while A2A enables communication and interoperability between agents.",
-    concept: "",
+    concept: LanggraphA2ACombination,
     code: ""
   },
 
@@ -212,7 +304,7 @@ const AgentTopQuestion = [
     time: "~10 min",
     description:
       "Understand whether LangGraph can independently orchestrate agents and workflows without using A2A, and identify scenarios where A2A may or may not be required.",
-    concept: "",
+    concept: LanggraphWithoutA2A,
     code: ""
   },
 
@@ -236,7 +328,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how MCP and A2A solve different integration problems and how they can work together in an enterprise multi-agent architecture.",
-    concept: "",
+    concept: MCPA2ATogether,
     code: ""
   },
 
@@ -248,7 +340,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Identify scenarios where A2A introduces unnecessary complexity and where direct function calls, REST APIs, messaging systems, or internal orchestration may be more appropriate.",
-    concept: "",
+    concept: WhenNotA2A,
     code: ""
   },
 
@@ -260,7 +352,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand the architectural, functional, scalability, governance, and maintainability reasons for selecting a multi-agent architecture over a single general-purpose agent.",
-    concept: "",
+    concept: MultiAgentVsSingleAgent,
     code: ""
   },
 
@@ -272,7 +364,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand the reasons for using hierarchical agent orchestration with Coordinator, Delegator, and Worker layers and how this structure supports separation of responsibilities, routing, scalability, and governance.",
-    concept: "",
+    concept: CoordinatorDelegatorWorker,
     code: ""
   },
 
@@ -284,7 +376,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Evaluate the trade-offs between direct Coordinator-to-Worker routing and introducing Delegator agents for domain-level decomposition and specialized orchestration.",
-    concept: "",
+    concept: CoordinatorWorkerDirect,
     code: ""
   },
 
@@ -296,7 +388,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand when multiple layers of agent orchestration are justified and how hierarchical decomposition can improve scalability, specialization, governance, and maintainability.",
-    concept: "",
+    concept: MultipleAgentLayers,
     code: ""
   },
 
@@ -308,7 +400,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how to determine the appropriate number of agents based on business domains, responsibilities, tools, autonomy boundaries, complexity, latency, cost, and maintainability.",
-    concept: "",
+    concept: AgentCountDecision,
     code: ""
   },
 
@@ -332,7 +424,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand why hierarchical orchestration can be preferred for complex enterprise workloads requiring centralized coordination, domain-level delegation, specialized workers, and controlled execution.",
-    concept: "",
+    concept: WhyHierarchicalAgents,
     code: ""
   },
 
@@ -344,7 +436,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Compare hierarchical Coordinator → Delegator → Worker architecture with supervisor-based agent orchestration and evaluate their differences in routing, responsibility, scalability, and control.",
-    concept: "",
+    concept: HierarchicalVsSupervisor,
     code: ""
   },
 
@@ -356,7 +448,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Compare hierarchical orchestration with decentralized peer-to-peer agent communication and evaluate the trade-offs in control, coordination, routing, observability, and scalability.",
-    concept: "",
+    concept: HierarchicalVsPeerToPeer,
     code: ""
   },
 
@@ -368,7 +460,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Evaluate the benefits and drawbacks of multi-agent architecture across latency, cost, complexity, reliability, observability, scalability, communication overhead, and maintenance.",
-    concept: "",
+    concept: MultiAgentTradeoffs,
     code: ""
   },
 
@@ -380,7 +472,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Evaluate whether the selected agentic architecture is justified by business and technical requirements and how to defend architectural complexity with measurable value.",
-    concept: "",
+    concept: AgenticOverengineering,
     code: ""
   },
 
@@ -404,7 +496,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how to evaluate alternative Agentic AI frameworks such as LangChain, CrewAI, AutoGen, Semantic Kernel, and OpenAI Agents SDK before making an architectural decision.",
-    concept: "",
+    concept: FrameworkAlternatives,
     code: ""
   },
 
@@ -428,7 +520,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Evaluate an existing Agentic AI architecture retrospectively and identify improvements in orchestration, communication, state management, security, scalability, observability, cost, and reliability.",
-    concept: "",
+    concept: RedesignAgenticArchitecture,
     code: ""
   },
 
@@ -440,7 +532,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Assess which components of an enterprise Agentic AI architecture are essential versus optional and determine how to simplify the system while preserving core business capabilities.",
-    concept: "",
+    concept: SimplifyAgenticArchitecture,
     code: ""
   },
 
@@ -452,7 +544,7 @@ const AgentTopQuestion = [
     time: "~10 min",
     description:
       "Identify and explain the most significant technical or operational limitation in a production multi-agent architecture and describe how it could be mitigated.",
-    concept: "",
+    concept: BiggestAgenticLimitation,
     code: ""
   },
 
@@ -464,7 +556,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Analyze how multiple agents, LLM calls, tool calls, retrieval, and inter-agent communication affect end-to-end latency and how the architecture can be optimized.",
-    concept: "",
+    concept: AgenticLatency,
     code: ""
   },
 
@@ -476,7 +568,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Analyze the cost implications of multi-agent execution, model calls, tool calls, retrieval, communication, and infrastructure and identify strategies for controlling cost.",
-    concept: "",
+    concept: AgenticCost,
     code: ""
   },
 
@@ -488,7 +580,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how to justify multi-agent architectural complexity through measurable business value, specialization, scalability, governance, reliability, and operational benefits.",
-    concept: "",
+    concept: JustifyAgenticComplexity,
     code: ""
   },
 
@@ -500,7 +592,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand the routing mechanisms used by a Coordinator to identify the appropriate Delegator based on user intent, agent capabilities, context, policies, and task requirements.",
-    concept: "",
+    concept: CoordinatorRouting,
     code: ""
   },
 
@@ -512,7 +604,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how Delegator agents select Workers based on capabilities, task requirements, availability, policies, and execution context.",
-    concept: "",
+    concept: DelegatorWorkerSelection,
     code: ""
   },
 
@@ -524,7 +616,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand agent discovery mechanisms, capability advertisement, agent registries, Agent Cards, service discovery, and dynamic selection of agents in distributed multi-agent systems.",
-    concept: "",
+    concept: AgentDiscovery,
     code: ""
   },
 
@@ -536,7 +628,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand the communication mechanisms between agents, including protocols, message formats, synchronous and asynchronous communication, task delegation, and result exchange.",
-    concept: "",
+    concept: AgentCommunication,
     code: ""
   },
 
@@ -548,7 +640,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how shared context, execution state, conversation state, checkpoints, and persistent state are managed across Coordinator, Delegator, and Worker agents.",
-    concept: "",
+    concept: CrossAgentState,
     code: ""
   },
 
@@ -572,7 +664,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how to detect, prevent, recover from, and monitor incorrect routing decisions made by a Coordinator in a multi-agent architecture.",
-    concept: "",
+    concept: CoordinatorRouting,
     code: ""
   },
 
@@ -584,7 +676,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand strategies for resolving conflicting outputs from multiple agents using validation, confidence scoring, evaluator agents, source verification, consensus, and human escalation.",
-    concept: "",
+    concept: ConflictingAgentResults,
     code: ""
   },
 
@@ -608,7 +700,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand end-to-end observability for multi-agent systems, including distributed tracing, agent execution logs, tool calls, LLM calls, latency, token usage, failures, and business-level outcomes.",
-    concept: "",
+    concept: AgentObservability,
     code: ""
   },
     
