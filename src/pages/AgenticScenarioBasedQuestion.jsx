@@ -2,6 +2,21 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import Scenario50ToolsSelection from "../assets/docs/scenario/scenario-50-tools-selection.md?raw";
+import ScenarioAgentCostOptimization from "../assets/docs/scenario/scenario-agent-cost-optimization.md?raw";
+import ScenarioAgentIncorrectInformation from "../assets/docs/scenario/scenario-agent-incorrect-information.md?raw";
+import ScenarioAgentLatency from "../assets/docs/scenario/scenario-agent-latency.md?raw";
+import ScenarioConfidentialHRInformation from "../assets/docs/scenario/scenario-confidential-hr-information.md?raw";
+import ScenarioConflictingAgentAnswers from "../assets/docs/scenario/scenario-conflicting-agent-answers.md?raw";
+import ScenarioDangerousMCPDeleteTool from "../assets/docs/scenario/scenario-dangerous-mcp-delete-tool.md?raw";
+import ScenarioMultiagentCloudMigration from "../assets/docs/scenario/scenario-multiagent-cloud-migration.md?raw";
+import ScenarioCWDMulticloudDesign from "../assets/docs/scenario/scenario-cwd-multicloud-design.md?raw";
+import ScenarioRAGIncorrectDocuments from "../assets/docs/scenario/scenario-rag-incorrect-documents.md?raw";
+import ScenarioRepeatedToolCalls from "../assets/docs/scenario/scenario-repeated-tool-calls.md?raw";
+import ScenarioWorkerAgentDown from "../assets/docs/scenario/scenario-worker-agent-down.md?raw";
+import CWD from "../assets/docs/scenario/CWD.md?raw";
+
+
 
 const AgenticScenarioBasedQuestion = 
 [
@@ -13,7 +28,7 @@ const AgenticScenarioBasedQuestion =
     time: "~20 min",
     description:
       "Diagnose repeated tool execution using loop detection, state tracking, iteration limits, tool-result validation, termination conditions, idempotency, retry policies, prompt improvements, and workflow-level controls.",
-    concept: "",
+    concept: ScenarioRepeatedToolCalls,
     code: ""
   },
 
@@ -25,7 +40,7 @@ const AgenticScenarioBasedQuestion =
     time: "~20 min",
     description:
       "Design mechanisms for validating inter-agent information using source attribution, schema validation, confidence scoring, groundedness checks, evaluator agents, independent verification, provenance tracking, and trust policies.",
-    concept: "",
+    concept: ScenarioAgentIncorrectInformation,
     code: ""
   },
 
@@ -37,7 +52,7 @@ const AgenticScenarioBasedQuestion =
     time: "~20 min",
     description:
       "Improve tool selection using tool categorization, hierarchical routing, tool metadata, capability-based discovery, semantic tool retrieval, tool descriptions, constrained tool lists, specialized agents, and tool-selection evaluation.",
-    concept: "",
+    concept: Scenario50ToolsSelection,
     code: ""
   },
 
@@ -49,7 +64,7 @@ const AgenticScenarioBasedQuestion =
     time: "~25 min",
     description:
       "Reduce agent cost through model routing, smaller models, prompt optimization, context reduction, caching, retrieval optimization, fewer agent iterations, reduced tool calls, batching, token limits, and cost-aware execution policies.",
-    concept: "",
+    concept: ScenarioAgentCostOptimization,
     code: ""
   },
 
@@ -61,7 +76,7 @@ const AgenticScenarioBasedQuestion =
     time: "~25 min",
     description:
       "Troubleshoot end-to-end latency by tracing LLM calls, retrieval, tool execution, agent loops, network calls, and orchestration, then optimize through parallel execution, streaming, caching, faster models, reduced context, and asynchronous processing.",
-    concept: "",
+    concept: ScenarioAgentLatency,
     code: ""
   },
 
@@ -73,7 +88,7 @@ const AgenticScenarioBasedQuestion =
     time: "~25 min",
     description:
       "Troubleshoot retrieval quality across ingestion, document parsing, chunking, embeddings, metadata, indexing, query transformation, vector search, hybrid search, filtering, reranking, and retrieval evaluation.",
-    concept: "",
+    concept: ScenarioRAGIncorrectDocuments,
     code: ""
   },
 
@@ -85,7 +100,7 @@ const AgenticScenarioBasedQuestion =
     time: "~25 min",
     description:
       "Design authorization and data protection controls using identity-aware access, RBAC or ABAC, document-level security, metadata filtering, tenant isolation, data classification, retrieval authorization, DLP, output filtering, and audit logging.",
-    concept: "",
+    concept: ScenarioConfidentialHRInformation,
     code: ""
   },
 
@@ -97,7 +112,7 @@ const AgenticScenarioBasedQuestion =
     time: "~25 min",
     description:
       "Secure destructive MCP operations using least privilege, explicit authorization, scoped permissions, allowlists, input validation, dry-run mode, confirmation workflows, human approval, idempotency, audit logging, and rollback or recovery mechanisms.",
-    concept: "",
+    concept: ScenarioDangerousMCPDeleteTool,
     code: ""
   },
 
@@ -109,7 +124,7 @@ const AgenticScenarioBasedQuestion =
     time: "~20 min",
     description:
       "Design failure handling using health checks, timeouts, retries, circuit breakers, task reassignment, fallback agents, queues, checkpointing, state recovery, graceful degradation, and coordinator-level failure management.",
-    concept: "",
+    concept: ScenarioWorkerAgentDown,
     code: ""
   },
 
@@ -121,9 +136,44 @@ const AgenticScenarioBasedQuestion =
     time: "~20 min",
     description:
       "Design conflict-resolution strategies using source authority, confidence scores, evidence quality, agent specialization, independent verification, evaluator agents, voting, deterministic business rules, recency, and human escalation for high-risk decisions.",
-    concept: "",
+    concept: ScenarioConflictingAgentAnswers,
     code: ""
-  }
+  },
+
+{
+  id: "scenario-multiagent-cloud-migration",
+  category: "Multi-Agent Decision Making",
+  title: "Migrating a multi-agent system between cloud-native environments — what breaks first?",
+  difficulty: "Expert",
+  time: "~20 min",
+  description:
+    "Design a migration strategy for moving a multi-agent system across cloud-native environments (e.g., Kubernetes clusters, cloud providers, or regions): containerizing agent workers, moving secrets/config via K8s ConfigMaps/Secrets or a vault, re-pointing service meshes and API gateways, migrating vector DBs and agent memory stores, and validating that autoscaling and networking policies don't throttle agent-to-agent calls post-migration.",
+  concept: ScenarioMultiagentCloudMigration,
+  code: ""
+},
+
+{
+  id: "scenario-cwd-multicloud-design",
+  category: "Multi-Agent Decision Making",
+  title: "How would you design container workload deployment (CWD) for multi-cloud?",
+  difficulty: "Expert",
+  time: "~20 min",
+  description:
+    "Design a container workload deployment strategy for a multi-agent system spanning multiple cloud providers: a common container runtime/orchestration layer (e.g., Kubernetes) abstracted from provider-specific services, a unified CI/CD pipeline that builds once and deploys everywhere, cluster federation or GitOps (e.g., ArgoCD/Flux) for syncing manifests across clouds, provider-agnostic secrets/config management, cross-cloud service discovery for agent-to-agent calls, and failover/traffic-routing rules when one cloud's region degrades.",
+  concept: ScenarioCWDMulticloudDesign,
+  code: ""
+},
+{
+  id: "CWD",
+  category: "Multi-Agent Decision Making",
+  title: "CWD Design",
+  difficulty: "Expert",
+  time: "~20 min",
+  description:
+    "Design a container workload deployment strategy for a multi-agent system spanning multiple cloud providers: a common container runtime/orchestration layer (e.g., Kubernetes) abstracted from provider-specific services, a unified CI/CD pipeline that builds once and deploys everywhere, cluster federation or GitOps (e.g., ArgoCD/Flux) for syncing manifests across clouds, provider-agnostic secrets/config management, cross-cloud service discovery for agent-to-agent calls, and failover/traffic-routing rules when one cloud's region degrades.",
+  concept: CWD,
+  code: ""
+}
 ];
 const CATEGORIES = ["All", "Advanced"];
 
