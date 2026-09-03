@@ -23,6 +23,7 @@ import BiggestAgenticLimitation from "../assets/docs/biggest-agentic-limitation.
 import BuildOwnAgentFramework from "../assets/docs/build-own-agent-framework.md?raw";
 
 import ConflictingAgentResults from "../assets/docs/conflicting-agent-results.md?raw";
+import AgentBoundaries from "../assets/docs/agent-boundaries.md?raw";
 
 
 // ================================
@@ -53,6 +54,8 @@ import LanggraphVSopenaiagents from "../assets/docs/langgraph-vs-openai-agents-s
 import LanggraphVSsemantickernel from "../assets/docs/langgraph-vs-semantic-kernel.md?raw";
 
 import LanggraphWithoutA2A from "../assets/docs/langgraph-without-a2a.md?raw";
+
+import WorkerFailure from "../assets/docs/worker-failure.md?raw";
 
 
 // ================================
@@ -280,7 +283,7 @@ const AgentTopQuestion = [
   description:
     "Explain the specific architectural problem A2A addressed in a multi-agent enterprise system, including agent interoperability, capability discovery, task delegation, loose coupling, and communication between independently developed and deployed agents.",
 
-  concept: "",
+  concept: A2AProblemSolved,
 
   code: ""
 },
@@ -316,7 +319,7 @@ const AgentTopQuestion = [
     time: "~10 min",
     description:
       "Understand whether A2A is independent of a specific agent orchestration framework and how agents can communicate through A2A while using different internal frameworks or implementations.",
-    concept: "",
+    concept: A2AWithoutLangGraph,
     code: ""
   },
 
@@ -412,7 +415,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand how to establish clear agent responsibilities, capabilities, tool ownership, permissions, input/output contracts, and boundaries in an enterprise multi-agent system.",
-    concept: "",
+    concept: AgentBoundaries,
     code: ""
   },
 
@@ -484,7 +487,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand the limitations of using a single general-purpose LLM for complex enterprise workloads and when specialized agents provide advantages in responsibility isolation, permissions, tools, scalability, and governance.",
-    concept: "",
+    concept: SingleLLMVsMultiAgent,
     code: ""
   },
 
@@ -508,7 +511,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Evaluate the trade-offs introduced by LangGraph, including workflow flexibility, state management, development complexity, observability, framework dependency, and operational overhead.",
-    concept: "",
+    concept: LanggraphTradeoffs,
     code: ""
   },
 
@@ -652,7 +655,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand failure-handling strategies for Worker agents, including retries, timeouts, fallback agents, circuit breakers, task reassignment, compensation, and graceful degradation.",
-    concept: "",
+    concept: WorkerFailure,
     code: ""
   },
 
@@ -688,7 +691,7 @@ const AgentTopQuestion = [
     time: "~15 min",
     description:
       "Understand techniques for preventing circular delegation and infinite communication loops using execution limits, state tracking, correlation IDs, routing policies, and termination conditions.",
-    concept: "",
+    concept: AgentCircularDependency,
     code: ""
   },
 

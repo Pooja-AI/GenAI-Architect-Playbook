@@ -2,6 +2,19 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import WhatIsA2A from "../assets/docs/A2A/what-is-a2a.md?raw";
+import WhyAgentToAgentCommunication from "../assets/docs/A2A/why-agent-to-agent-communication.md?raw";
+import A2AVsMCP from "../assets/docs/A2A/a2a-vs-mcp.md?raw";
+import HowAgentsCommunicate from "../assets/docs/A2A/how-agents-communicate.md?raw";  
+import WhatIsAgentCard from "../assets/docs/A2A/what-is-agent-card.md?raw";
+import AgentDiscoveryA2A from "../assets/docs/A2A/agent-discovery-a2a.md?raw";
+import A2AAgentAuthentication from "../assets/docs/A2A/a2a-agent-authentication.md?raw";
+import A2AAsynchronousCommunication from "../assets/docs/A2A/a2a-asynchronous-communication.md?raw";
+import A2AAgentFailures from "../assets/docs/A2A/a2a-agent-failures.md?raw";
+import A2AAgentCapabilities from "../assets/docs/A2A/a2a-agent-capabilities.md?raw";
+import EnterpriseA2AArchitecture from "../assets/docs/A2A/enterprise-a2a-architecture.md?raw";
+import MCPAndA2ATogether from "../assets/docs/A2A/mcp-and-a2a-together.md?raw";
+
 
 const A2AQuestion = 
 [
@@ -13,7 +26,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand the Agent2Agent (A2A) protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.",
-    concept: "",
+    concept: WhatIsA2A,
     code: ""
   },
 
@@ -25,7 +38,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand why distributed AI agents need standardized communication for task delegation, collaboration, capability sharing, interoperability, and independent execution.",
-    concept: "",
+    concept: WhyAgentToAgentCommunication,
     code: ""
   },
 
@@ -37,7 +50,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand the architectural differences between A2A and MCP, including agent-to-agent collaboration versus agent-to-tool, resource, and context integration.",
-    concept: "",
+    concept: A2AVsMCP,
     code: ""
   },
 
@@ -49,7 +62,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand how two independent agents exchange tasks, messages, context, status, and results using agent communication protocols and structured message formats.",
-    concept: "",
+    concept: HowAgentsCommunicate,
     code: ""
   },
 
@@ -61,7 +74,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand the purpose of an Agent Card, how it describes an agent's identity, capabilities, skills, supported communication methods, and endpoint information.",
-    concept: "",
+    concept: WhatIsAgentCard,
     code: ""
   },
 
@@ -73,7 +86,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand agent discovery mechanisms using Agent Cards, registries, service discovery, capability metadata, and endpoint information in distributed A2A systems.",
-    concept: "",
+    concept: AgentDiscoveryA2A,
     code: ""
   },
 
@@ -85,7 +98,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand authentication mechanisms for agent-to-agent communication, including identity verification, OAuth, tokens, certificates, workload identity, and enterprise security controls.",
-    concept: "",
+    concept: A2AAgentAuthentication,
     code: ""
   },
 
@@ -97,7 +110,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand how to design asynchronous A2A interactions for long-running tasks using task identifiers, callbacks, event notifications, message queues, polling, and status tracking.",
-    concept: "",
+    concept: A2AAsynchronousCommunication,
     code: ""
   },
 
@@ -109,7 +122,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand failure-handling strategies for A2A systems, including retries, timeouts, circuit breakers, fallback agents, task recovery, idempotency, dead-letter handling, and graceful degradation.",
-    concept: "",
+    concept: A2AAgentFailures,
     code: ""
   },
 
@@ -121,7 +134,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand how agent capabilities and skills are defined, advertised, discovered, versioned, governed, and matched against incoming tasks in an enterprise multi-agent ecosystem.",
-    concept: "",
+    concept: A2AAgentCapabilities,
     code: ""
   },
 
@@ -133,7 +146,7 @@ const A2AQuestion =
     time: "~20 min",
     description:
       "Design an enterprise-grade A2A architecture covering agent discovery, Agent Cards, authentication, authorization, communication, orchestration, asynchronous tasks, observability, security, scalability, and failure handling.",
-    concept: "",
+    concept: EnterpriseA2AArchitecture,
     code: ""
   },
 
@@ -145,7 +158,7 @@ const A2AQuestion =
     time: "~15 min",
     description:
       "Understand how MCP and A2A can coexist in an enterprise Agentic AI architecture, where A2A enables agent-to-agent collaboration and MCP enables agents to access tools, resources, and external systems.",
-    concept: "",
+    concept: MCPAndA2ATogether,
     code: ""
   }
 ];
