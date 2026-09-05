@@ -3,9 +3,26 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
   const location = useLocation();
+
+  // =====================================================
+  // POOJA SUNKARA
+  // =====================================================
+
+  const poojaTopics = [
+    {
+      name: "About Me",
+      path: "/about",
+    },
+    
+  ];
+
+  // =====================================================
+  // AGENTIC AI
+  // KEEPING YOUR EXISTING TOPICS SAME
+  // =====================================================
 
   const agenticAITopics = [
     {
@@ -86,14 +103,91 @@ function Navbar() {
     },
   ];
 
-  // Close when clicking outside
+  // =====================================================
+  // CWD PROJECT
+  // =====================================================
+
+  // CWD PROJECT
+const cwdTopics = [
+  { name: "01. Project Overview", path: "/cwd-project-overview" },
+
+  { name: "02. CWD Architecture", path: "/cwd-architecture" },
+
+  { name: "03. Coordinator Agent", path: "/cwd-coordinator" },
+
+  { name: "04. Delegator Agents", path: "/cwd-delegator" },
+
+  { name: "05. Worker Agents", path: "/cwd-workers" },
+
+  { name: "06. CWD Orchestration Flow", path: "/cwd-orchestration" },
+
+  { name: "07. LangGraph", path: "/cwd-langgraph" },
+
+  { name: "08. MCP", path: "/cwd-mcp" },
+
+  { name: "09. A2A Communication", path: "/cwd-a2a" },
+
+  { name: "10. Agent Registry", path: "/cwd-agent-registry" },
+
+  { name: "11. Prompt Registry", path: "/cwd-prompt-registry" },
+
+  { name: "12. RAG Architecture", path: "/cwd-rag" },
+
+  { name: "13. Memory & State Management", path: "/cwd-memory" },
+
+  { name: "14. Enterprise Data Integration", path: "/cwd-data-integration" },
+
+  { name: "15. Security & Governance", path: "/cwd-security" },
+
+  { name: "16. Observability", path: "/cwd-observability" },
+
+  { name: "17. Messaging Architecture", path: "/cwd-messaging" },
+
+  { name: "18. Enterprise Gateway", path: "/cwd-gateway" },
+
+  { name: "19. Infrastructure & Cloud", path: "/cwd-cloud" },
+
+  { name: "20. End-to-End CWD Scenario", path: "/cwd-cbd-scenario" },
+
+  { name: "21. CWD State & Execution Model", path: "/cwd-execution-model" },
+
+  { name: "22. Reliability & Failure Handling", path: "/cwd-reliability" },
+
+  { name: "23. Agent Evaluation", path: "/cwd-evaluation" },
+
+  { name: "24. LLMOps / MLOps", path: "/cwd-llmops" },
+
+  { name: "25. Architecture Decisions & Trade-offs", path: "/cwd-decisions" },
+
+  { name: "26. Challenges & Solutions", path: "/cwd-challenges" },
+
+  { name: "27. Current State vs Future State", path: "/cwd-current-future-state" },
+
+  { name: "28. Interview Preparation", path: "/cwd-interview" },
+];
+  // =====================================================
+  // CODING & AI
+  // FEW TOPICS FOR NOW
+  // =====================================================
+
+  const codingTopics = [
+    {
+      name: "Python",
+      path: "/python",
+    },
+  ];
+
+  // =====================================================
+  // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+  // =====================================================
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target)
       ) {
-        setIsOpen(false);
+        setOpenDropdown(null);
       }
     };
 
@@ -107,11 +201,14 @@ function Navbar() {
     };
   }, []);
 
-  // Close when pressing Escape
+  // =====================================================
+  // CLOSE DROPDOWN WITH ESCAPE
+  // =====================================================
+
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        setOpenDropdown(null);
       }
     };
 
@@ -125,21 +222,86 @@ function Navbar() {
     };
   }, []);
 
-  // Automatically close whenever route changes
+  // =====================================================
+  // CLOSE DROPDOWN WHEN ROUTE CHANGES
+  // =====================================================
+
   useEffect(() => {
-    setIsOpen(false);
+    setOpenDropdown(null);
   }, [location.pathname]);
 
-  const handleTopicClick = () => {
-    setIsOpen(false);
+  // =====================================================
+  // TOGGLE DROPDOWN
+  // =====================================================
+
+  const toggleDropdown = (dropdownName) => {
+    setOpenDropdown((previous) =>
+      previous === dropdownName
+        ? null
+        : dropdownName
+    );
   };
+
+  // =====================================================
+  // CLOSE AFTER CLICKING TOPIC
+  // =====================================================
+
+  const handleTopicClick = () => {
+    setOpenDropdown(null);
+  };
+
+  // =====================================================
+  // REUSABLE DROPDOWN
+  // =====================================================
+
+  const Dropdown = ({ name, topics }) => {
+    const isOpen = openDropdown === name;
+
+    return (
+      <div className="dropdown">
+        <button
+          type="button"
+          className={`dropdown-btn ${
+            isOpen ? "open" : ""
+          }`}
+          onClick={() => toggleDropdown(name)}
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+        >
+          {name}
+
+          <span className="arrow">
+            {isOpen ? "▲" : "▼"}
+          </span>
+        </button>
+
+        {isOpen && (
+          <div className="dropdown-content">
+            {topics.map((topic) => (
+              <Link
+                key={topic.path}
+                to={topic.path}
+                onClick={handleTopicClick}
+              >
+                {topic.name}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // =====================================================
+  // NAVBAR
+  // =====================================================
 
   return (
     <nav className="navbar">
 
-      {/* =========================
+      {/* =================================================
           LOGO
-      ========================= */}
+      ================================================= */}
 
       <div className="logo">
         <Link to="/" className="logo-link">
@@ -151,6 +313,7 @@ function Navbar() {
           />
 
           <div className="logo-text">
+
             <span className="logo-white">
               IntelliCatalyst
             </span>
@@ -158,93 +321,56 @@ function Navbar() {
             <span className="logo-blue">
               AI Labs
             </span>
+
           </div>
 
         </Link>
       </div>
 
-
-      {/* =========================
+      {/* =================================================
           NAVIGATION
-      ========================= */}
+      ================================================= */}
 
-      <div className="menu">
+      <div
+        className="menu"
+        ref={dropdownRef}
+      >
 
-        {/* HOME */}
+        {/* =================================================
+            POOJA SUNKARA
+        ================================================= */}
 
-        <Link
-          to="/"
-          onClick={() => setIsOpen(false)}
-        >
-          Home
-        </Link>
+        <Dropdown
+          name="Pooja Sunkara"
+          topics={poojaTopics}
+        />
 
+        {/* =================================================
+            AGENTIC AI
+        ================================================= */}
 
-        {/* =========================
-            AGENTIC AI DROPDOWN
-        ========================= */}
+        <Dropdown
+          name="AgenticAI"
+          topics={agenticAITopics}
+        />
 
-        <div
-          className="dropdown"
-          ref={dropdownRef}
-        >
+        {/* =================================================
+            CWD PROJECT
+        ================================================= */}
 
-          <button
-            type="button"
-            className={`dropdown-btn ${
-              isOpen ? "open" : ""
-            }`}
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-expanded={isOpen}
-            aria-haspopup="true"
-          >
-            AgenticAI
+        <Dropdown
+          name="CWD Project"
+          topics={cwdTopics}
+        />
 
-            <span className="arrow">
-              ▼
-            </span>
-          </button>
+        {/* =================================================
+            CODING & AI
+        ================================================= */}
 
-
-          {/* DROPDOWN */}
-
-          {isOpen && (
-            <div className="dropdown-content">
-
-              {agenticAITopics.map((topic) => (
-                <Link
-                  key={topic.path}
-                  to={topic.path}
-                  onClick={handleTopicClick}
-                >
-                  {topic.name}
-                </Link>
-              ))}
-
-            </div>
-          )}
-
-        </div>
-
-
-        {/* BOOKS */}
-
-        <Link
-          to="/books"
-          onClick={() => setIsOpen(false)}
-        >
-          Books
-        </Link>
-
-
-        {/* ABOUT */}
-
-        <Link
-          to="/about"
-          onClick={() => setIsOpen(false)}
-        >
-          About
-        </Link>
+        <Dropdown
+          name="Coding & AI"
+          topics={codingTopics}
+        />
 
       </div>
 
