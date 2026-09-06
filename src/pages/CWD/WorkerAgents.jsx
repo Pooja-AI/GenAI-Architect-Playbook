@@ -3,6 +3,17 @@ import CookbookApp from "../../components/CookbookApp";
 // =====================================================
 // 05. WORKER AGENTS
 // =====================================================
+import WhatIsWorker from "../../assets/CWD/docs/what-is-worker.md?raw";
+import WorkerResponsibilities from "../../assets/CWD/docs/worker-responsibilities.md?raw";
+import AtomicTaskExecution from "../../assets/CWD/docs/atomic-task-execution.md?raw";
+import WorkerToolCalling from "../../assets/CWD/docs/worker-tool-calling.md?raw";
+import WorkerDataRetrieval from "../../assets/CWD/docs/worker-data-retrieval.md?raw"; 
+import WorkerAPIIntegration from "../../assets/CWD/docs/worker-api-integration.md?raw";
+import ArtifactGeneration from "../../assets/CWD/docs/artifact-generation.md?raw";
+import WorkerOutputValidation from "../../assets/CWD/docs/worker-output-validation.md?raw";
+import WorkerErrorHandling from "../../assets/CWD/docs/worker-error-handling.md?raw";
+import WorkerPool from "../../assets/CWD/docs/worker-pool.md?raw";
+// import WorkerInterviewQuestions from "../../assets/CWD/docs/worker-interview-questions.md?raw";
 
 const WorkerAgents = [
   {
@@ -22,7 +33,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand the role of a Worker Agent as a specialized execution component responsible for performing a well-defined business or technical task delegated by the Delegator.",
-        concept: "",
+        concept: WhatIsWorker,
         code: "",
       },
 
@@ -34,7 +45,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand Worker responsibilities including task execution, tool selection, data retrieval, business logic, validation, error handling, and returning structured results to the Delegator.",
-        concept: "",
+        concept: WorkerResponsibilities,
         code: "",
       },
 
@@ -46,7 +57,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers execute focused atomic tasks with clear inputs, defined responsibilities, controlled tool access, deterministic processing where possible, and structured outputs.",
-        concept: "",
+        concept: AtomicTaskExecution,
         code: "",
       },
 
@@ -58,7 +69,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers discover and invoke authorized enterprise tools through mechanisms such as MCP while enforcing tool permissions, input validation, and execution policies.",
-        concept: "",
+        concept: WorkerToolCalling,
         code: "",
       },
 
@@ -70,7 +81,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers retrieve governed enterprise information using RAG, search services, databases, APIs, and other authorized data sources while respecting user entitlements.",
-        concept: "",
+        concept: WorkerDataRetrieval,
         code: "",
       },
 
@@ -82,7 +93,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers securely interact with enterprise APIs and microservices for retrieving information, executing business operations, and integrating with downstream systems.",
-        concept: "",
+        concept: WorkerAPIIntegration,
         code: "",
       },
 
@@ -94,7 +105,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers generate structured artifacts such as customer briefings, reports, summaries, documents, recommendations, and other business outputs.",
-        concept: "",
+        concept: ArtifactGeneration,
         code: "",
       },
 
@@ -106,7 +117,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Worker outputs are validated for schema correctness, completeness, business rules, authorization, data quality, and grounding before being returned to the Delegator.",
-        concept: "",
+        concept: WorkerOutputValidation,
         code: "",
       },
 
@@ -118,7 +129,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand how Workers detect transient and permanent failures, apply retry and timeout policies, capture errors, and return controlled failure information for Delegator-level recovery.",
-        concept: "",
+        concept: WorkerErrorHandling,
         code: "",
       },
 
@@ -130,7 +141,7 @@ const WorkerAgents = [
         time: "~10 min",
         description:
           "Understand Worker pooling, horizontal scaling, workload distribution, concurrency, health management, capacity planning, and dynamic Worker selection for reliable enterprise execution.",
-        concept: "",
+        concept: WorkerPool,
         code: "",
       },
 
