@@ -1,5 +1,17 @@
 import CookbookApp from "../../components/CookbookApp";
 
+import CWDAgentRegistry from "../../assets/CWD/docs/cwd-agent-registry.md?raw";
+import WhyAgentRegistry from "../../assets/CWD/docs/why-agent-registry.md?raw";
+import AgentDiscovery from "../../assets/CWD/docs/agent-discovery.md?raw";
+import AgentMetadata from "../../assets/CWD/docs/agent-metadata.md?raw"; 
+import AgentCapabilities from "../../assets/CWD/docs/agent-capabilities.md?raw";
+import DomainOwnership from "../../assets/CWD/docs/domain-ownership.md?raw";
+import SupportedTools from "../../assets/CWD/docs/supported-tools.md?raw";  
+import AgentAccessScope from "../../assets/CWD/docs/agent-access-scope.md?raw";
+import AgentHealthMetadata from "../../assets/CWD/docs/agent-health-metadata.md?raw";
+import DynamicAgentRouting from "../../assets/CWD/docs/dynamic-agent-routing.md?raw";
+// import AgentRegistryInterview from "../../assets/CWD/docs/agent-registry-interview.md?raw";  
+
 const AgentRegistry = [
   // =====================================================
   // AGENT REGISTRY
@@ -13,7 +25,7 @@ const AgentRegistry = [
     time: "~50 min",
     description:
       "Understand centralized agent registration, discovery, metadata, capabilities, ownership, health, access control, and dynamic routing.",
-
+concept: CWDAgentRegistry,
   },
       {
         id: "why-agent-registry",
@@ -23,7 +35,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand why an enterprise multi-agent platform requires a centralized Agent Registry for managing and discovering agents.",
-        concept: "",
+        concept: WhyAgentRegistry,
         code: "",
       },
 
@@ -35,7 +47,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how agents discover other available agents based on capabilities, domains, and availability.",
-        concept: "",
+        concept: AgentDiscovery,
         code: "",
       },
 
@@ -47,7 +59,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand the metadata maintained for registered agents, including identity, endpoint, version, owner, capabilities, and status.",
-        concept: "",
+        concept: AgentMetadata,
         code: "",
       },
 
@@ -59,7 +71,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how agent capabilities are defined, registered, exposed, and used for intelligent agent selection.",
-        concept: "",
+        concept: AgentCapabilities,
         code: "",
       },
 
@@ -71,7 +83,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how business domains and responsibilities are mapped to specific agents and agent owners.",
-        concept: "",
+        concept: DomainOwnership,
         code: "",
       },
 
@@ -83,7 +95,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how tools, APIs, MCP servers, and external capabilities supported by each agent are registered.",
-        concept: "",
+        concept: SupportedTools,
         code: "",
       },
 
@@ -95,7 +107,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how authentication, authorization, roles, permissions, and access scopes are associated with registered agents.",
-        concept: "",
+        concept: AgentAccessScope,
         code: "",
       },
 
@@ -107,7 +119,7 @@ const AgentRegistry = [
         time: "~10 min",
         description:
           "Understand how agent health, availability, readiness, version, and operational status are tracked in the registry.",
-        concept: "",
+        concept: AgentHealthMetadata,
         code: "",
       },
 
@@ -119,7 +131,7 @@ const AgentRegistry = [
         time: "~15 min",
         description:
           "Understand how registry information is used to dynamically select and route requests to the most appropriate available agent.",
-        concept: "",
+        concept: DynamicAgentRouting,
         code: "",
       },
    

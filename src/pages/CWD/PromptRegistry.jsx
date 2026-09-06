@@ -1,5 +1,16 @@
 import CookbookApp from "../../components/CookbookApp";
 
+import CWDPromptRegistry from "../../assets/CWD/docs/cwd-prompt-registry.md?raw";
+import WhyPromptRegistry from "../../assets/CWD/docs/why-prompt-registry.md?raw";
+import PromptVersioning from "../../assets/CWD/docs/prompt-versioning.md?raw";
+import PromptMetadata from "../../assets/CWD/docs/prompt-metadata.md?raw";
+import PromptApproval from "../../assets/CWD/docs/prompt-approval.md?raw";
+import PromptClassification from "../../assets/CWD/docs/prompt-classification.md?raw";
+import PromptRBAC from "../../assets/CWD/docs/prompt-rbac.md?raw";
+import PromptLifecycle from "../../assets/CWD/docs/prompt-lifecycle.md?raw";
+import PromptGovernance from "../../assets/CWD/docs/prompt-governance.md?raw";
+// import PromptRegistryInterview from "../../assets/CWD/docs/prompt-registry-interview.md?raw";
+
 const PromptRegistry = [
   // =====================================================
   // 11. PROMPT REGISTRY
@@ -13,7 +24,7 @@ const PromptRegistry = [
     time: "~45 min",
     description:
       "Understand enterprise prompt management through a centralized Prompt Registry, including prompt creation, versioning, metadata, classification, approval, access control, lifecycle management, testing, deployment, rollback, and governance.",
-
+concept: CWDPromptRegistry,
   },
       {
         id: "why-prompt-registry",
@@ -23,7 +34,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand why enterprise AI platforms require centralized prompt management instead of storing prompts directly inside application code, including consistency, reuse, traceability, testing, controlled changes, and governance.",
-        concept: "",
+        concept: WhyPromptRegistry,
         code: "",
       },
 
@@ -35,7 +46,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand how prompt versions are created, tracked, compared, tested, promoted, and rolled back so changes to production prompts remain controlled, traceable, and reproducible.",
-        concept: "",
+        concept: PromptVersioning,
         code: "",
       },
 
@@ -47,7 +58,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand metadata associated with enterprise prompts, including prompt name, version, owner, purpose, model compatibility, variables, environment, domain, status, evaluation results, approval information, and usage history.",
-        concept: "",
+        concept: PromptMetadata,
         code: "",
       },
 
@@ -59,7 +70,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand production prompt approval workflows, including authoring, validation, evaluation, security review, business approval, deployment gates, audit trails, and controlled promotion from development to production.",
-        concept: "",
+        concept: PromptApproval,
         code: "",
       },
 
@@ -71,7 +82,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand how prompts can be classified based on purpose, domain, sensitivity, risk level, model usage, business criticality, and allowed capabilities to apply appropriate testing, approval, and governance policies.",
-        concept: "",
+        concept: PromptClassification,
         code: "",
       },
 
@@ -83,7 +94,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand role-based access control for prompt management, including who can create, view, modify, approve, publish, deploy, rollback, or retire prompts and how access is restricted based on roles and responsibilities.",
-        concept: "",
+        concept: PromptRBAC,
         code: "",
       },
 
@@ -95,7 +106,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand the complete enterprise prompt lifecycle from design and development through testing, evaluation, approval, registration, deployment, monitoring, version updates, rollback, deprecation, and retirement.",
-        concept: "",
+        concept: PromptLifecycle,
         code: "",
       },
 
@@ -107,7 +118,7 @@ const PromptRegistry = [
         time: "~10 min",
         description:
           "Understand governance controls for enterprise prompts, including ownership, approval policies, auditability, security reviews, sensitive-data protection, prompt injection defenses, evaluation requirements, change management, compliance, and production controls.",
-        concept: "",
+        concept: PromptGovernance,
         code: "",
       },
     
