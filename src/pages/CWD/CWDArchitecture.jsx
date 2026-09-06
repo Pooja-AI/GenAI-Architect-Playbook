@@ -1,4 +1,5 @@
 import CookbookApp from "../../components/CookbookApp";
+import CWDArchitectureN from "../../assets/CWD/docs/cwd-architecture.md?raw";
 import CWDArchitectureOverview from "../../assets/CWD/docs/cwd-architecture-overview.md?raw";
 import CWDHighLevelArchitecture from "../../assets/CWD/docs/cwd-high-level-architecture.md?raw";
 import CWDArchitectureLayers from "../../assets/CWD/docs/cwd-architecture-layers.md?raw";
@@ -6,7 +7,6 @@ import CWDComponentArchitecture from "../../assets/CWD/docs/cwd-component-archit
 import CWDLogicalArchitecture from "../../assets/CWD/docs/cwd-logical-architecture.md?raw";
 import CWDDeploymentArchitecture from "../../assets/CWD/docs/cwd-deployment-architecture.md?raw";
 import CWDEndToEndArchitectureFlow from "../../assets/CWD/docs/cwd-end-to-end-architecture-flow.md?raw";  
-import CWDArchitecture from "../../assets/CWD/docs/cwd-architecture.md?raw";
 const CWDArchitecture = [
   // =====================================================
   // CWD ARCHITECTURE
@@ -20,7 +20,7 @@ const CWDArchitecture = [
     time: "~60 min",
     description:
       "Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.",
-    concept: CWDArchitecture,
+    concept: CWDArchitectureN,
     code: "",
   },
       {
