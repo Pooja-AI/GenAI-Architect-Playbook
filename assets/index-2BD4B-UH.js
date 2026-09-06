@@ -65675,4 +65675,29338 @@ FINAL BUSINESS RESPONSE\r
 USER\r
 \`\`\`\r
 \r
-**This is the core runtime flow that turns CWD from an AI orchestration framework into a production enterprise AI execution platform.**`,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var qg=[{id:`cwd-coordinator`,category:`Coordinator Agent`,title:`Coordinator Agent`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the role of the Coordinator Agent as the central orchestration, planning, coordination, and governance component of the CWD architecture.`},{id:`what-is-coordinator`,category:`Coordinator Agent`,title:`What is Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the purpose, role, responsibilities, and architectural position of the Coordinator Agent in the CWD platform.`,concept:``,code:``},{id:`coordinator-responsibilities`,category:`Coordinator Agent`,title:`Coordinator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities handled by the Coordinator, including request orchestration, planning, delegation, state management, and result coordination.`,concept:``,code:``},{id:`request-understanding`,category:`Coordinator Agent`,title:`Request Understanding`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets incoming user requests, identifies required actions, and determines the appropriate execution path.`,concept:``,code:``},{id:`intent-classification`,category:`Coordinator Agent`,title:`Intent Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user intent is identified, classified, and mapped to the appropriate business domain, workflow, or downstream agent.`,concept:``,code:``},{id:`coordinator-planning`,category:`Coordinator Agent`,title:`Planning`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how the Coordinator creates an execution plan, determines task dependencies, identifies required agents, and controls workflow execution.`,concept:``,code:``},{id:`delegator-selection`,category:`Coordinator Agent`,title:`Delegator Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator determines when to invoke the Delegator and how the appropriate Delegator is selected for downstream task execution.`,concept:``,code:``},{id:`task-creation`,category:`Coordinator Agent`,title:`Task Creation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator creates structured tasks, maintains task context, and passes execution requests to downstream agents.`,concept:``,code:``},{id:`result-aggregation`,category:`Coordinator Agent`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator collects, validates, combines, and synthesizes results returned by multiple agents or workers.`,concept:``,code:``},{id:`coordinator-retry-recovery`,category:`Coordinator Agent`,title:`Retry & Recovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator handles agent failures, timeouts, retries, fallback strategies, partial failures, and recovery workflows.`,concept:``,code:``},{id:`global-governance`,category:`Coordinator Agent`,title:`Global Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how centralized governance, security policies, authorization, guardrails, compliance, and policy enforcement are handled by the Coordinator.`,concept:``,code:``},{id:`coordinator-interview-questions`,category:`Coordinator Agent`,title:`Coordinator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions related to Coordinator Agent implementation and orchestration.`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Coordinator Agent Cookbook`,subtitle:`Orchestration, planning, delegation and governance`,icon:`🎯`,patternLabel:`Topics`})}var Yg=[{id:`cwd-delegator`,category:`Delegator Agents`,title:`Delegator Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Delegator layer responsible for domain-level task decomposition, domain routing, Worker selection, execution control, and communication between the Coordinator and specialized Worker agents.`},{id:`what-is-delegator`,category:`Delegator Agents`,title:`What is a Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand what a Delegator Agent is, where it fits in the CWD architecture, and how it acts as the domain-level orchestration layer between the Coordinator and specialized Workers.`,concept:``,code:``},{id:`why-delegator-required`,category:`Delegator Agents`,title:`Why Delegator is Required`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a dedicated Delegator layer is required between the Coordinator and Workers, including separation of responsibilities, domain isolation, scalability, maintainability, and more efficient task routing.`,concept:``,code:``},{id:`delegator-responsibilities`,category:`Delegator Agents`,title:`Delegator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the core responsibilities of a Delegator, including domain identification, task decomposition, Worker discovery and selection, execution coordination, policy enforcement, failure handling, and result management.`,concept:``,code:``},{id:`domain-based-routing`,category:`Delegator Agents`,title:`Domain-Based Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators identify the appropriate business or technical domain and route incoming tasks to the correct domain-specific Worker agents and capabilities.`,concept:``,code:``},{id:`delegator-task-decomposition`,category:`Delegator Agents`,title:`Task Decomposition`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Delegators decompose complex domain-level tasks into smaller, well-defined, atomic Worker tasks while preserving dependencies, context, execution order, and required inputs and outputs.`,concept:``,code:``},{id:`worker-selection`,category:`Delegator Agents`,title:`Worker Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator selects the most appropriate Worker based on capabilities, domain ownership, tool access, availability, health, permissions, workload, and task requirements.`,concept:``,code:``},{id:`worker-pool-management`,category:`Delegator Agents`,title:`Worker Pool Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers are organized, monitored, scaled, and managed within a domain, including load distribution, Worker availability, health status, concurrency, and capacity management.`,concept:``,code:``},{id:`domain-guardrails`,category:`Delegator Agents`,title:`Domain Guardrails`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators enforce domain-specific policies, authorization boundaries, data-access restrictions, allowed capabilities, tool restrictions, validation rules, and other governance controls.`,concept:``,code:``},{id:`delegator-worker-communication`,category:`Delegator Agents`,title:`Delegator-to-Worker Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators communicate with Workers, transfer task context and execution metadata, invoke Worker capabilities, track responses, handle failures, and manage asynchronous or synchronous execution.`,concept:``,code:``},{id:`multiple-delegator-architecture`,category:`Delegator Agents`,title:`Multiple Delegator Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how multiple domain-specific Delegators can operate within an enterprise CWD architecture, including cross-domain coordination, routing, isolation, scalability, shared governance, and interaction with the central Coordinator.`,concept:``,code:``},{id:`delegator-interview-questions`,category:`Delegator Agents`,title:`Delegator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions covering Delegator responsibilities, domain routing, task decomposition, Worker selection, scalability, guardrails, failures, and Coordinator–Delegator–Worker interactions.`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Delegator Agents Cookbook`,subtitle:`Domain routing, task decomposition, Worker selection and execution`,icon:`🧭`,patternLabel:`Topics`})}var Zg=[{id:`cwd-workers`,category:`Worker Agents`,title:`Worker Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand specialized Worker Agents in CWD that execute focused business tasks using enterprise data, APIs, tools, RAG, and governed services while returning validated results to the Delegator.`},{id:`what-is-worker`,category:`Worker Agents`,title:`What is a Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the role of a Worker Agent as a specialized execution component responsible for performing a well-defined business or technical task delegated by the Delegator.`,concept:``,code:``},{id:`worker-responsibilities`,category:`Worker Agents`,title:`Worker Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker responsibilities including task execution, tool selection, data retrieval, business logic, validation, error handling, and returning structured results to the Delegator.`,concept:``,code:``},{id:`atomic-task-execution`,category:`Worker Agents`,title:`Atomic Task Execution`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers execute focused atomic tasks with clear inputs, defined responsibilities, controlled tool access, deterministic processing where possible, and structured outputs.`,concept:``,code:``},{id:`worker-tool-calling`,category:`Worker Agents`,title:`Tool Calling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers discover and invoke authorized enterprise tools through mechanisms such as MCP while enforcing tool permissions, input validation, and execution policies.`,concept:``,code:``},{id:`worker-data-retrieval`,category:`Worker Agents`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers retrieve governed enterprise information using RAG, search services, databases, APIs, and other authorized data sources while respecting user entitlements.`,concept:``,code:``},{id:`worker-api-integration`,category:`Worker Agents`,title:`API Integration`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers securely interact with enterprise APIs and microservices for retrieving information, executing business operations, and integrating with downstream systems.`,concept:``,code:``},{id:`artifact-generation`,category:`Worker Agents`,title:`Artifact Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers generate structured artifacts such as customer briefings, reports, summaries, documents, recommendations, and other business outputs.`,concept:``,code:``},{id:`worker-output-validation`,category:`Worker Agents`,title:`Output Validation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker outputs are validated for schema correctness, completeness, business rules, authorization, data quality, and grounding before being returned to the Delegator.`,concept:``,code:``},{id:`worker-error-handling`,category:`Worker Agents`,title:`Error Handling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers detect transient and permanent failures, apply retry and timeout policies, capture errors, and return controlled failure information for Delegator-level recovery.`,concept:``,code:``},{id:`worker-pool`,category:`Worker Agents`,title:`Worker Pool`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker pooling, horizontal scaling, workload distribution, concurrency, health management, capacity planning, and dynamic Worker selection for reliable enterprise execution.`,concept:``,code:``},{id:`worker-interview-questions`,category:`Worker Agents`,title:`Worker Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture and scenario-based interview questions covering Worker responsibilities, task boundaries, tool calling, RAG, security, scalability, failure handling, and Delegator-to-Worker communication.`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Worker Agents Cookbook`,subtitle:`Atomic execution, tools, enterprise data, validation and scalability`,icon:`⚙️`,patternLabel:`Topics`})}var $g=[{id:`cwd-orchestration`,category:`CWD Orchestration`,title:`CWD Orchestration Flow`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the complete request orchestration flow across the CWD platform, from user request and gateway validation through Coordinator, Delegator, Worker execution, data access, result aggregation, and final response.`},{id:`cwd-user-request`,category:`CWD Orchestration`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request enters the CWD platform and how the request is captured, validated, and prepared for downstream processing.`,concept:``,code:``},{id:`cwd-gateway`,category:`CWD Orchestration`,title:`Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway handles request routing, authentication, validation, security checks, and controlled entry into the agentic platform.`,concept:``,code:``},{id:`cwd-entitlement-check`,category:`CWD Orchestration`,title:`Entitlement Check`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user identity, authorization, roles, permissions, and entitlements are validated before allowing access to agents, tools, and enterprise data.`,concept:``,code:``},{id:`cwd-coordinator-flow`,category:`CWD Orchestration`,title:`Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the request, determines intent, creates an execution plan, manages workflow state, and controls downstream orchestration.`,concept:``,code:``},{id:`cwd-delegator-flow`,category:`CWD Orchestration`,title:`Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator decomposes tasks, identifies the appropriate domain or Worker agents, and routes tasks for execution.`,concept:``,code:``},{id:`cwd-worker-flow`,category:`CWD Orchestration`,title:`Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how specialized Worker agents execute assigned tasks using domain logic, LLM capabilities, tools, APIs, and enterprise data.`,concept:``,code:``},{id:`cwd-data-sources`,category:`CWD Orchestration`,title:`Data Sources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access enterprise data sources through retrieval systems, APIs, MCP tools, databases, and other connected services.`,concept:``,code:``},{id:`cwd-result-aggregation`,category:`CWD Orchestration`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how results from multiple Workers, tools, and data sources are collected, validated, combined, and returned to the Coordinator.`,concept:``,code:``},{id:`cwd-final-response`,category:`CWD Orchestration`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator synthesizes the completed workflow results into a final response and returns it securely to the user.`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`CWD Orchestration Cookbook`,subtitle:`Request flow, coordination, delegation, execution and response`,icon:`🔄`,patternLabel:`Topics`})}var t_=[{id:`cwd-langgraph`,category:`LangGraph`,title:`LangGraph`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how LangGraph is used within CWD to implement stateful, controllable, and resilient agent orchestration, including graph-based workflows, state management, conditional routing, checkpointing, retries, human-in-the-loop execution, and Coordinator–Delegator–Worker coordination.`},{id:`why-langgraph-cwd`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why LangGraph is used for CWD orchestration, including stateful execution, explicit workflow control, conditional routing, persistence, retries, recovery, human-in-the-loop workflows, and complex multi-agent coordination.`,concept:``,code:``},{id:`stategraph`,category:`LangGraph`,title:`StateGraph`,difficulty:`Advanced`,time:`~15 min`,description:`Understand StateGraph as the foundation for defining state-driven agent workflows, including shared state, graph structure, node execution, transitions, workflow lifecycle, and how CWD maintains execution context across agents.`,concept:``,code:``},{id:`langgraph-nodes`,category:`LangGraph`,title:`Nodes`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how LangGraph nodes represent individual units of work such as request processing, planning, Coordinator logic, Delegator routing, Worker execution, retrieval, tool invocation, validation, and response generation.`,concept:``,code:``},{id:`langgraph-edges`,category:`LangGraph`,title:`Edges`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how edges connect LangGraph nodes and control workflow progression, including sequential execution, transitions between agents, completion paths, failure paths, and routing to downstream processing stages.`,concept:``,code:``},{id:`conditional-routing`,category:`LangGraph`,title:`Conditional Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how conditional routing dynamically selects the next workflow path based on state, user intent, task status, agent decisions, Worker availability, tool results, validation outcomes, or failure conditions.`,concept:``,code:``},{id:`langgraph-state-management`,category:`LangGraph`,title:`State Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state is created, updated, and propagated across the CWD workflow, including request context, task information, agent results, tool outputs, intermediate data, errors, status, and final response state.`,concept:``,code:``},{id:`langgraph-checkpointing`,category:`LangGraph`,title:`Checkpointing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how checkpointing persists workflow state so long-running or interrupted CWD executions can resume from a known point, supporting recovery, debugging, state persistence, and reliable agent execution.`,concept:``,code:``},{id:`langgraph-retry`,category:`LangGraph`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retry mechanisms handle transient failures in CWD workflows, including failed agent execution, temporary service failures, tool errors, LLM failures, retry policies, backoff strategies, and recovery decisions.`,concept:``,code:``},{id:`langgraph-human-loop`,category:`LangGraph`,title:`Human-in-the-Loop`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how human approval or intervention can be introduced into CWD workflows for high-risk operations, sensitive decisions, exception handling, validation, approval gates, and controlled continuation of agent execution.`,concept:``,code:``},{id:`langgraph-in-cwd`,category:`LangGraph`,title:`LangGraph in CWD`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the specific role of LangGraph in the CWD architecture, including how it manages workflow state and coordinates the Coordinator, Delegator, and Worker execution lifecycle while supporting conditional routing, retries, persistence, recovery, and controlled agent execution.`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`LangGraph Cookbook`,subtitle:`Stateful orchestration, routing, persistence and agent workflows`,icon:`🕸️`,patternLabel:`Topics`})}var r_=[{id:`cwd-mcp`,category:`MCP`,title:`MCP`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Model Context Protocol (MCP) and how CWD uses it as a standardized integration layer for connecting AI agents with enterprise tools, resources, context, and external services in a secure and governed manner.`},{id:`what-is-mcp-cwd`,category:`MCP`,title:`What is MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Model Context Protocol, its purpose, core concepts, protocol semantics, communication model, and how it standardizes the interaction between AI applications, agents, and external capabilities.`,concept:``,code:``},{id:`why-mcp-cwd`,category:`MCP`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why MCP is used within CWD to avoid point-to-point integrations, standardize tool access, improve reusability, simplify agent integration, and provide a governed interface to enterprise capabilities.`,concept:``,code:``},{id:`mcp-architecture-cwd`,category:`MCP`,title:`MCP Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the MCP architecture, including MCP hosts, clients, servers, tools, resources, prompts, protocol messages, transports, and how these components interact to provide standardized context and capability access.`,concept:``,code:``},{id:`mcp-server`,category:`MCP`,title:`MCP Server`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities of an MCP Server, including exposing tools and resources, validating requests, executing approved operations, enforcing security policies, handling errors, and returning structured results to MCP clients.`,concept:``,code:``},{id:`mcp-tools`,category:`MCP`,title:`MCP Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise capabilities are exposed as MCP tools, including tool discovery, input schemas, invocation, validation, execution, structured outputs, error handling, authorization, and controlled access to APIs and business services.`,concept:``,code:``},{id:`mcp-resources`,category:`MCP`,title:`MCP Resources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand MCP resources as a standardized mechanism for providing contextual information to agents, including documents, application data, knowledge content, metadata, and other read-oriented enterprise information.`,concept:``,code:``},{id:`mcp-context`,category:`MCP`,title:`MCP Context`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MCP enables standardized access to relevant context and capabilities, including how clients discover available resources and tools and provide the appropriate information to an AI application or agent.`,concept:``,code:``},{id:`worker-mcp`,category:`MCP`,title:`Worker + MCP`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD Worker agents use MCP to discover and invoke domain-specific enterprise tools and access approved resources, while the Worker remains focused on domain reasoning and task execution.`,concept:``,code:``},{id:`mcp-security`,category:`MCP`,title:`MCP Security`,difficulty:`Advanced`,time:`~15 min`,description:`Understand enterprise MCP security, including authentication, authorization, identity propagation, tool-level permissions, input validation, secrets management, network controls, data protection, auditing, rate limiting, and preventing unsafe tool execution.`,concept:``,code:``},{id:`mcp-interview`,category:`MCP`,title:`MCP Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for MCP architecture and enterprise interview questions covering MCP clients and servers, tools, resources, prompts, discovery, invocation, transports, security, authorization, enterprise integration, MCP versus REST APIs, and MCP versus function calling.`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`MCP Cookbook`,subtitle:`Protocol, tools, resources, context, Worker integration and security`,icon:`🔗`,patternLabel:`Topics`})}var a_=[{id:`cwd-a2a`,category:`CWD Project`,title:`A2A Communication`,difficulty:`Advanced`,time:`~60 min`,description:`Understand agent-to-agent communication and how independent CWD agents exchange tasks and results.`},{id:`what-is-a2a`,category:`A2A Communication`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the Agent2Agent protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.`,concept:``,code:``},{id:`why-agent-to-agent`,category:`A2A Communication`,title:`Why Agent-to-Agent Communication?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why independent agents require standardized communication.`,concept:``,code:``},{id:`coordinator-delegator-a2a`,category:`A2A Communication`,title:`Coordinator → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand communication between Coordinator and Delegator agents.`,concept:``,code:``},{id:`delegator-worker-a2a`,category:`A2A Communication`,title:`Delegator → Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand task communication between Delegators and Workers.`,concept:``,code:``},{id:`worker-delegator-a2a`,category:`A2A Communication`,title:`Worker → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers return execution results to Delegators.`,concept:``,code:``},{id:`delegator-coordinator-a2a`,category:`A2A Communication`,title:`Delegator → Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators return results to the Coordinator.`,concept:``,code:``},{id:`a2a-message-structure`,category:`A2A Communication`,title:`Message Structure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the structure and metadata of agent communication messages.`,concept:``,code:``},{id:`a2a-correlation-ids`,category:`A2A Communication`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand correlation IDs for distributed agent execution tracking.`,concept:``,code:``},{id:`a2a-kafka`,category:`A2A Communication`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Kafka can support asynchronous agent communication.`,concept:``,code:``},{id:`a2a-service-bus`,category:`A2A Communication`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Service Bus based messaging between agents.`,concept:``,code:``},{id:`a2a-async-communication`,category:`A2A Communication`,title:`Async Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand asynchronous agent communication and long-running tasks.`,concept:``,code:``},{id:`a2a-interview`,category:`A2A Communication`,title:`A2A Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for A2A architecture and scenario-based interview questions.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`A2A Communication Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var s_=[{id:`cwd-agent-registry`,category:`Agent Registry`,title:`Agent Registry`,difficulty:`Advanced`,time:`~50 min`,description:`Understand centralized agent registration, discovery, metadata, capabilities, ownership, health, access control, and dynamic routing.`},{id:`why-agent-registry`,category:`Agent Registry`,title:`Why Agent Registry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why an enterprise multi-agent platform requires a centralized Agent Registry for managing and discovering agents.`,concept:``,code:``},{id:`agent-discovery`,category:`Agent Registry`,title:`Agent Discovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agents discover other available agents based on capabilities, domains, and availability.`,concept:``,code:``},{id:`agent-metadata`,category:`Agent Registry`,title:`Agent Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the metadata maintained for registered agents, including identity, endpoint, version, owner, capabilities, and status.`,concept:``,code:``},{id:`agent-capabilities`,category:`Agent Registry`,title:`Agent Capabilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent capabilities are defined, registered, exposed, and used for intelligent agent selection.`,concept:``,code:``},{id:`domain-ownership`,category:`Agent Registry`,title:`Domain Ownership`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how business domains and responsibilities are mapped to specific agents and agent owners.`,concept:``,code:``},{id:`supported-tools`,category:`Agent Registry`,title:`Supported Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tools, APIs, MCP servers, and external capabilities supported by each agent are registered.`,concept:``,code:``},{id:`agent-access-scope`,category:`Agent Registry`,title:`Access Scope`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authentication, authorization, roles, permissions, and access scopes are associated with registered agents.`,concept:``,code:``},{id:`agent-health-metadata`,category:`Agent Registry`,title:`Health Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent health, availability, readiness, version, and operational status are tracked in the registry.`,concept:``,code:``},{id:`dynamic-agent-routing`,category:`Agent Registry`,title:`Dynamic Agent Routing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how registry information is used to dynamically select and route requests to the most appropriate available agent.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Agent Registry Cookbook`,subtitle:`Discovery, capabilities, governance and dynamic routing`,icon:`🗂️`,patternLabel:`Topics`})}var l_=[{id:`cwd-prompt-registry`,category:`Prompt Registry`,title:`Prompt Registry`,difficulty:`Advanced`,time:`~45 min`,description:`Understand enterprise prompt management through a centralized Prompt Registry, including prompt creation, versioning, metadata, classification, approval, access control, lifecycle management, testing, deployment, rollback, and governance.`},{id:`why-prompt-registry`,category:`Prompt Registry`,title:`Why Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why enterprise AI platforms require centralized prompt management instead of storing prompts directly inside application code, including consistency, reuse, traceability, testing, controlled changes, and governance.`,concept:``,code:``},{id:`prompt-versioning`,category:`Prompt Registry`,title:`Prompt Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompt versions are created, tracked, compared, tested, promoted, and rolled back so changes to production prompts remain controlled, traceable, and reproducible.`,concept:``,code:``},{id:`prompt-metadata`,category:`Prompt Registry`,title:`Prompt Metadata`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand metadata associated with enterprise prompts, including prompt name, version, owner, purpose, model compatibility, variables, environment, domain, status, evaluation results, approval information, and usage history.`,concept:``,code:``},{id:`prompt-approval`,category:`Prompt Registry`,title:`Prompt Approval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production prompt approval workflows, including authoring, validation, evaluation, security review, business approval, deployment gates, audit trails, and controlled promotion from development to production.`,concept:``,code:``},{id:`prompt-classification`,category:`Prompt Registry`,title:`Prompt Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompts can be classified based on purpose, domain, sensitivity, risk level, model usage, business criticality, and allowed capabilities to apply appropriate testing, approval, and governance policies.`,concept:``,code:``},{id:`prompt-rbac`,category:`Prompt Registry`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for prompt management, including who can create, view, modify, approve, publish, deploy, rollback, or retire prompts and how access is restricted based on roles and responsibilities.`,concept:``,code:``},{id:`prompt-lifecycle`,category:`Prompt Registry`,title:`Prompt Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete enterprise prompt lifecycle from design and development through testing, evaluation, approval, registration, deployment, monitoring, version updates, rollback, deprecation, and retirement.`,concept:``,code:``},{id:`prompt-governance`,category:`Prompt Registry`,title:`Prompt Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance controls for enterprise prompts, including ownership, approval policies, auditability, security reviews, sensitive-data protection, prompt injection defenses, evaluation requirements, change management, compliance, and production controls.`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Prompt Registry Cookbook`,subtitle:`Prompt versioning, metadata, approval, RBAC, lifecycle and governance`,icon:`📝`,patternLabel:`Topics`})}var d_=[{id:`cwd-rag`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end Retrieval-Augmented Generation architecture used by CWD for secure enterprise knowledge retrieval, contextual grounding, and accurate LLM responses.`},{id:`why-rag`,category:`RAG Architecture`,title:`Why RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why RAG is required to ground LLM responses in enterprise-specific, current, and governed knowledge instead of relying only on model knowledge.`,concept:``,code:``},{id:`rag-architecture`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the end-to-end RAG flow including ingestion, document processing, chunking, embeddings, indexing, retrieval, context construction, LLM generation, and response grounding.`,concept:``,code:``},{id:`rag-data-ingestion`,category:`RAG Architecture`,title:`Data Ingestion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise documents and knowledge from systems such as SharePoint, enterprise applications, databases, and other governed sources are ingested into the RAG pipeline.`,concept:``,code:``},{id:`rag-chunking`,category:`RAG Architecture`,title:`Chunking`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand document chunking strategies, chunk size, overlap, semantic boundaries, and how chunking decisions affect retrieval quality and LLM context.`,concept:``,code:``},{id:`rag-embeddings`,category:`RAG Architecture`,title:`Embeddings`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how documents and queries are converted into vector representations to enable semantic similarity search and knowledge retrieval.`,concept:``,code:``},{id:`azure-ai-search`,category:`RAG Architecture`,title:`Azure AI Search`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Azure AI Search as the enterprise retrieval layer for vector search, keyword search, hybrid retrieval, indexing, filtering, and semantic ranking.`,concept:``,code:``},{id:`rag-metadata`,category:`RAG Architecture`,title:`Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how document metadata such as source, domain, owner, document type, timestamp, classification, and business attributes improves filtering, ranking, and governance.`,concept:``,code:``},{id:`rag-acl-filtering`,category:`RAG Architecture`,title:`ACL Filtering`,difficulty:`Advanced`,time:`~15 min`,description:`Understand entitlement-aware retrieval and ACL filtering so users can retrieve only the enterprise information they are authorized to access.`,concept:``,code:``},{id:`intent-based-retrieval`,category:`RAG Architecture`,title:`Intent-Based Retrieval`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how user intent, domain, query type, and task context influence retrieval strategy, search filters, ranking, and the selection of relevant enterprise knowledge.`,concept:``,code:``},{id:`context-building`,category:`RAG Architecture`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved chunks are filtered, ranked, deduplicated, and assembled into a high-quality context window for the LLM.`,concept:``,code:``},{id:`rag-cwd-flow`,category:`RAG Architecture`,title:`RAG + CWD Flow`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how RAG integrates with the CWD workflow across the Gateway, Coordinator, Delegator, specialized Workers, enterprise data sources, retrieval layer, context building, and final response generation.`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`RAG Architecture Cookbook`,subtitle:`Enterprise retrieval, grounding, security and CWD integration`,icon:`🔎`,patternLabel:`Topics`})}var p_=[{id:`cwd-memory`,category:`Memory & State Management`,title:`Memory & State Management`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD manages conversational memory, persistent memory, execution state, session context, task state, and context propagation across Coordinator, Delegator, and Worker agents throughout the execution lifecycle.`},{id:`short-term-memory`,category:`Memory & State`,title:`Short-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand short-term memory used to maintain the current conversation and active execution context, including recent messages, intermediate results, tool outputs, agent decisions, and information required during the current workflow.`,concept:``,code:``},{id:`long-term-memory`,category:`Memory & State`,title:`Long-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand persistent memory that can be retained across conversations or tasks, including user preferences, historical interactions, approved business context, and other information that can improve future agent interactions while respecting governance policies.`,concept:``,code:``},{id:`redis-memory`,category:`Memory & State`,title:`Redis`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Redis can provide low-latency storage for session information, temporary execution state, caching, conversation context, distributed locks, task coordination, and short-lived agent state.`,concept:``,code:``},{id:`vector-db-memory`,category:`Memory & State`,title:`Vector DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how vector databases can support semantic memory by storing embeddings of relevant conversations, knowledge, or historical information and retrieving semantically similar context when required by an agent.`,concept:``,code:``},{id:`cosmos-db`,category:`Memory & State`,title:`Cosmos DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Cosmos DB can be used for persistent application and execution data, including session metadata, task information, workflow state, execution history, agent results, and other durable state required by distributed CWD services.`,concept:``,code:``},{id:`session-state`,category:`Memory & State`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand the session-level state representing the overall user interaction, including identity context, conversation history, session metadata, active workflows, and references to tasks and executions associated with the session.`,concept:``,code:``},{id:`task-state`,category:`Memory & State`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand task-level state representing the objective being executed, including task inputs, required capabilities, assigned agents, dependencies, status, intermediate results, errors, and completion information.`,concept:``,code:``},{id:`run-state`,category:`Memory & State`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand run-level state representing a specific execution attempt for a task, including execution status, timestamps, participating agents, retries, intermediate outputs, failures, and final completion state.`,concept:``,code:``},{id:`turn-state`,category:`Memory & State`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand conversation-turn state representing an individual user request and corresponding agent response, including messages, context, decisions, tool interactions, and the results generated during that conversational turn.`,concept:``,code:``},{id:`step-state`,category:`Memory & State`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand step-level state representing individual execution actions such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`context-propagation`,category:`Memory & State`,title:`Context Propagation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how relevant context is propagated across the Coordinator, Delegator, and Worker agents while controlling what information is shared, preserving execution metadata, maintaining security boundaries, and avoiding unnecessary context growth.`,concept:``,code:``},{id:`state-lifecycle`,category:`Memory & State`,title:`State Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete lifecycle of CWD execution state from creation and initialization through updates, persistence, propagation, retries, completion, failure handling, cleanup, archival, and eventual expiration.`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Memory & State Management Cookbook`,subtitle:`Memory, persistence, execution state and context propagation`,icon:`🧠`,patternLabel:`Topics`})}var h_=[{id:`cwd-data-integration`,category:`Enterprise Data Integration`,title:`Enterprise Data Integration`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD securely connects Coordinator, Delegator, and Worker agents to enterprise applications, structured and unstructured data sources, external services, and governed connectors while enforcing authorization, data-access policies, and security controls.`},{id:`snowflake`,category:`Enterprise Data Integration`,title:`Snowflake`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Snowflake for governed access to enterprise analytics data, including secure querying, authorization, data filtering, and using business data as context for agent workflows.`,concept:``,code:``},{id:`salesforce`,category:`Enterprise Data Integration`,title:`Salesforce`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access Salesforce customer, account, opportunity, and activity information through approved APIs or tools while respecting user permissions and enterprise data-access policies.`,concept:``,code:``},{id:`oracle`,category:`Enterprise Data Integration`,title:`Oracle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Oracle enterprise systems and databases to retrieve governed business data, execute approved queries or operations, and expose relevant information to authorized agents.`,concept:``,code:``},{id:`sharepoint`,category:`Enterprise Data Integration`,title:`SharePoint`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with SharePoint documents, sites, and knowledge repositories for enterprise search and RAG, including document retrieval, indexing, metadata filtering, permissions, and source attribution.`,concept:``,code:``},{id:`outlook-m365`,category:`Enterprise Data Integration`,title:`Outlook / M365`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD can integrate with Microsoft 365 and Outlook services to access approved emails, calendars, documents, and collaboration data while enforcing identity, authorization, privacy, and data-access boundaries.`,concept:``,code:``},{id:`hr-systems`,category:`Enterprise Data Integration`,title:`HR Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with HR systems through governed interfaces while protecting sensitive employee information, enforcing role-based access, limiting data exposure, and ensuring agents only access authorized information.`,concept:``,code:``},{id:`finance-systems`,category:`Enterprise Data Integration`,title:`Finance Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD connects to enterprise finance systems for approved financial data retrieval and business workflows while enforcing authorization, data classification, auditability, and strict access controls.`,concept:``,code:``},{id:`marketing-data`,category:`Enterprise Data Integration`,title:`Marketing Data`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how marketing data from campaigns, customer insights, product information, and analytics platforms can be integrated into CWD workflows and made available to authorized domain Workers.`,concept:``,code:``},{id:`web-search`,category:`Enterprise Data Integration`,title:`Web Search`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how controlled external web search can complement enterprise knowledge by retrieving current public information while applying approved domains, query restrictions, source validation, security policies, and hallucination controls.`,concept:``,code:``},{id:`governed-connectors`,category:`Enterprise Data Integration`,title:`Governed Connectors`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how governed connectors provide a standardized and secure integration layer between CWD agents and enterprise systems, including authentication, authorization, secrets management, tool permissions, data filtering, auditing, rate limiting, and policy enforcement.`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Enterprise Data Integration Cookbook`,subtitle:`Enterprise systems, governed connectors, data access and secure integration`,icon:`🔌`,patternLabel:`Topics`})}var __=[{id:`cwd-security`,category:`Security & Governance`,title:`Security & Governance`,difficulty:`Advanced`,time:`~60 min`,description:`Understand enterprise security and governance for CWD, including identity, authentication, authorization, agent and tool access, data protection, threat prevention, auditing, and compliance.`},{id:`zero-trust`,category:`Security & Governance`,title:`Zero Trust`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Zero Trust principles are applied to CWD by continuously validating identity, device or workload context, permissions, and access to agents, tools, data, and services.`,concept:``,code:``},{id:`entitlement-first-execution`,category:`Security & Governance`,title:`Entitlement-First Execution`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why user entitlement and authorization must be validated before Coordinator, Delegator, Worker, MCP tool, or enterprise data-source execution.`,concept:``,code:``},{id:`cwd-rbac`,category:`Security & Governance`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for managing permissions across users, agents, administrators, tools, data sources, prompts, and platform operations.`,concept:``,code:``},{id:`entra-id`,category:`Security & Governance`,title:`Entra ID / Azure AD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise identity management using Microsoft Entra ID for user authentication, application identities, groups, roles, access policies, and token-based authorization.`,concept:``,code:``},{id:`managed-identity`,category:`Security & Governance`,title:`Managed Identity`,difficulty:`Advanced`,time:`~10 min`,description:`Understand passwordless service-to-service authentication using managed identities so CWD components can securely access Azure resources without storing credentials in application code.`,concept:``,code:``},{id:`key-vault`,category:`Security & Governance`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized management of secrets, keys, certificates, and sensitive configuration using Azure Key Vault with controlled application access.`,concept:``,code:``},{id:`least-privilege`,category:`Security & Governance`,title:`Least Privilege`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD applies least-privilege access so each agent, Worker, MCP tool, service, and user receives only the permissions required for its specific responsibilities.`,concept:``,code:``},{id:`dlp`,category:`Security & Governance`,title:`DLP`,difficulty:`Advanced`,time:`~10 min`,description:`Understand data-loss prevention controls for detecting, restricting, and monitoring sensitive information flowing through prompts, retrieved context, agent outputs, tools, and enterprise integrations.`,concept:``,code:``},{id:`data-redaction`,category:`Security & Governance`,title:`Data Redaction`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how sensitive information such as PII, credentials, confidential business data, and regulated content can be detected and redacted before logging, retrieval, or LLM processing.`,concept:``,code:``},{id:`data-classification`,category:`Security & Governance`,title:`Data Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data classification based on sensitivity, business impact, confidentiality, and regulatory requirements, and how classification influences retrieval and access policies.`,concept:``,code:``},{id:`audit-logging`,category:`Security & Governance`,title:`Audit Logging`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD captures auditable records of authentication, authorization, agent execution, tool calls, data access, configuration changes, approvals, and security events.`,concept:``,code:``},{id:`security-threat-modeling`,category:`Security & Governance`,title:`Security Threat Modeling`,difficulty:`Advanced`,time:`~15 min`,description:`Understand threat modeling for agentic systems, including prompt injection, tool misuse, privilege escalation, data exfiltration, insecure agent communication, compromised dependencies, and unauthorized data access.`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:``,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:``,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:``,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:``,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:``,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:``,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:``,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:``,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:``,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:``,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:``,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`},{id:`agent-evaluation-strategy`,category:`Agent Evaluation`,title:`Agent Evaluation Strategy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the overall evaluation strategy.`,concept:``,code:``},{id:`golden-test-suites`,category:`Agent Evaluation`,title:`Golden Test Suites`,difficulty:`Advanced`,time:`~10 min`,description:`Understand golden datasets and test cases.`,concept:``,code:``},{id:`agent-accuracy`,category:`Agent Evaluation`,title:`Accuracy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand accuracy measurement.`,concept:``,code:``},{id:`agent-consistency`,category:`Agent Evaluation`,title:`Consistency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand consistency evaluation.`,concept:``,code:``},{id:`agent-latency`,category:`Agent Evaluation`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency measurement.`,concept:``,code:``},{id:`token-usage`,category:`Agent Evaluation`,title:`Token Usage`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand token consumption.`,concept:``,code:``},{id:`agent-cost`,category:`Agent Evaluation`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost measurement.`,concept:``,code:``},{id:`tool-success-rate`,category:`Agent Evaluation`,title:`Tool Success Rate`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tool execution success metrics.`,concept:``,code:``},{id:`regression-testing`,category:`Agent Evaluation`,title:`Regression Testing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand regression testing for agents and prompts.`,concept:``,code:``},{id:`ab-evaluation`,category:`Agent Evaluation`,title:`A/B Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand comparison of different agent or prompt versions.`,concept:``,code:``}];function P_(){return(0,M.jsx)($,{data:N_,title:`Agent Evaluation Cookbook`,subtitle:`Quality, reliability, latency and cost`,icon:`📊`,patternLabel:`Topics`})}var F_=[{id:`cwd-llmops`,category:`LLMOps / MLOps`,title:`LLMOps / MLOps`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end production lifecycle for models, prompts, agents, datasets, evaluations, experiments, deployments, monitoring, versioning, and governance required to operate CWD reliably at enterprise scale.`},{id:`model-management`,category:`LLMOps / MLOps`,title:`Model Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how AI and ML models are managed throughout their lifecycle, including model selection, registration, validation, deployment, retirement, performance tracking, and managing multiple model versions across environments.`,concept:``,code:``},{id:`prompt-management`,category:`LLMOps / MLOps`,title:`Prompt Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how production prompts are designed, stored, tested, versioned, evaluated, deployed, and rolled back, including prompt templates, variables, model-specific configurations, and controlled prompt changes.`,concept:``,code:``},{id:`llmops-evaluation`,category:`LLMOps / MLOps`,title:`Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI evaluation pipelines for measuring response quality, correctness, groundedness, relevance, safety, latency, and task success across models, prompts, RAG pipelines, and agent workflows.`,concept:``,code:``},{id:`experiment-tracking`,category:`LLMOps / MLOps`,title:`Experiment Tracking`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how experiments are tracked across models, prompts, datasets, parameters, evaluation results, and configurations so teams can reproduce experiments and compare different AI approaches systematically.`,concept:``,code:``},{id:`llmops-mlflow`,category:`LLMOps / MLOps`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle management, evaluation, artifact management, model versioning, and operational workflows across traditional ML and GenAI applications.`,concept:``,code:``},{id:`cicd`,category:`LLMOps / MLOps`,title:`CI/CD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CI/CD pipelines automate testing, validation, security checks, packaging, infrastructure changes, and controlled promotion of AI application and agent changes across development, test, staging, and production environments.`,concept:``,code:``},{id:`ai-deployment`,category:`LLMOps / MLOps`,title:`Deployment`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production deployment strategies for AI applications and agents, including containerized deployment, blue-green releases, canary deployments, rollback strategies, environment configuration, scaling, and zero-downtime releases.`,concept:``,code:``},{id:`llmops-monitoring`,category:`LLMOps / MLOps`,title:`Monitoring`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI application monitoring across infrastructure, agents, LLM calls, prompts, RAG retrieval, tools, latency, token usage, cost, errors, throughput, quality, and user experience.`,concept:``,code:``},{id:`ai-versioning`,category:`LLMOps / MLOps`,title:`Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand version control for models, prompts, agents, workflows, tools, datasets, configurations, evaluation criteria, and infrastructure so production behavior can be reproduced, audited, and rolled back.`,concept:``,code:``},{id:`ai-governance`,category:`LLMOps / MLOps`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance throughout the AI lifecycle, including security, responsible AI, access control, data governance, model approval, evaluation gates, auditability, compliance, risk management, monitoring, and controlled production releases.`,concept:``,code:``}];function I_(){return(0,M.jsx)($,{data:F_,title:`LLMOps / MLOps Cookbook`,subtitle:`Models, prompts, evaluation, deployment, monitoring and governance`,icon:`⚙️`,patternLabel:`Topics`})}var L_=[{id:`cwd-decisions`,category:`Architecture Decisions`,title:`Architecture Decisions & Trade-offs`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the key architectural decisions, rationale, alternatives, and trade-offs behind the CWD enterprise multi-agent architecture.`},{id:`why-cwd`,category:`Architecture Decisions`,title:`Why CWD?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why CWD was selected as the enterprise architecture approach for building a scalable, modular, and governed multi-agent platform.`,concept:``,code:``},{id:`why-coordinator`,category:`Architecture Decisions`,title:`Why Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a Coordinator layer is required to manage request orchestration, workflow execution, and communication between agents.`,concept:``,code:``},{id:`why-delegator`,category:`Architecture Decisions`,title:`Why Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the architectural rationale for the Delegator layer and how it selects the appropriate specialized worker or agent.`,concept:``,code:``},{id:`why-workers`,category:`Architecture Decisions`,title:`Why Workers?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why specialized Worker agents are used to isolate domain responsibilities and execute specific business tasks.`,concept:``,code:``},{id:`why-langgraph`,category:`Architecture Decisions`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the decision to use LangGraph for stateful workflows, agent orchestration, branching, retries, and multi-agent coordination.`,concept:``,code:``},{id:`why-mcp`,category:`Architecture Decisions`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using MCP to standardize how agents discover and interact with enterprise tools, APIs, and data sources.`,concept:``,code:``},{id:`why-a2a`,category:`Architecture Decisions`,title:`Why A2A?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for agent-to-agent communication and how independent agents collaborate, delegate tasks, and exchange results.`,concept:``,code:``},{id:`why-kafka`,category:`Architecture Decisions`,title:`Why Kafka?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand when and why Kafka is used for event-driven communication, asynchronous processing, scalability, and reliable event streaming.`,concept:``,code:``},{id:`why-service-bus`,category:`Architecture Decisions`,title:`Why Service Bus?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using Azure Service Bus for reliable asynchronous messaging, decoupling, retries, and enterprise integration.`,concept:``,code:``},{id:`why-redis`,category:`Architecture Decisions`,title:`Why Redis?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why Redis is used for low-latency state access, caching, session management, and temporary agent state.`,concept:``,code:``},{id:`why-azure-ai-search`,category:`Architecture Decisions`,title:`Why Azure AI Search?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for Azure AI Search in enterprise document indexing, hybrid search, vector retrieval, metadata filtering, and RAG workflows.`,concept:``,code:``},{id:`build-vs-buy`,category:`Architecture Decisions`,title:`Build vs Buy Decisions`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how architecture components are evaluated using cost, scalability, security, maintainability, integration, and time-to-market considerations.`,concept:``,code:``}];function R_(){return(0,M.jsx)($,{data:L_,title:`Architecture Decisions Cookbook`,subtitle:`Architectural rationale, alternatives and trade-offs`,icon:`🏗️`,patternLabel:`Topics`})}var z_=[{id:`cwd-challenges`,category:`Challenges & Solutions`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the major challenges encountered while designing, implementing, scaling, securing, and operating the CWD enterprise multi-agent platform.`},{id:`challenge-scalability`,category:`Challenges & Solutions`,title:`Scalability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand scalability challenges in multi-agent systems and how horizontal scaling, stateless services, asynchronous processing, and workload distribution can address them.`,concept:``,code:``},{id:`challenge-agent-coordination`,category:`Challenges & Solutions`,title:`Agent Coordination`,difficulty:`Advanced`,time:`~10 min`,description:`Understand challenges in coordinating multiple agents, including task delegation, execution ordering, dependencies, communication, and state synchronization.`,concept:``,code:``},{id:`challenge-context`,category:`Challenges & Solutions`,title:`Context Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand context propagation, context-window limitations, state management, context compression, and maintaining relevant information across multiple agents.`,concept:``,code:``},{id:`challenge-security`,category:`Challenges & Solutions`,title:`Security`,difficulty:`Advanced`,time:`~10 min`,description:`Understand security challenges in agentic systems, including authentication, authorization, tool access, prompt injection, data protection, and agent identity.`,concept:``,code:``},{id:`challenge-data-access`,category:`Challenges & Solutions`,title:`Data Access`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data-access challenges involving permissions, data isolation, heterogeneous sources, secure retrieval, and controlled agent access.`,concept:``,code:``},{id:`challenge-observability`,category:`Challenges & Solutions`,title:`Observability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand observability challenges across agents, tools, workflows, and LLM calls, including tracing, logging, metrics, evaluation, and troubleshooting.`,concept:``,code:``},{id:`challenge-agent-failures`,category:`Challenges & Solutions`,title:`Agent Failures`,difficulty:`Advanced`,time:`~10 min`,description:`Understand common agent failure scenarios and recovery strategies such as retries, timeouts, fallbacks, circuit breakers, error handling, and human escalation.`,concept:``,code:``},{id:`challenge-cost`,category:`Challenges & Solutions`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost challenges and techniques such as model selection, token optimization, caching, batching, and controlling unnecessary agent execution.`,concept:``,code:``},{id:`challenge-latency`,category:`Challenges & Solutions`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency challenges in multi-agent execution and techniques such as parallel execution, asynchronous processing, caching, model optimization, and reducing unnecessary tool calls.`,concept:``,code:``},{id:`challenge-governance`,category:`Challenges & Solutions`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise AI governance challenges including responsible AI, auditability, access control, model governance, data governance, compliance, and human oversight.`,concept:``,code:``}];function B_(){return(0,M.jsx)($,{data:z_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var V_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function H_(){return(0,M.jsx)($,{data:V_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var U_=[{id:`cwd-interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function W_(){return(0,M.jsx)($,{data:U_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var G_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function K_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:G_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function q_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(K_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(Vm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Vh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Cg,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(S_,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(w_,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(E_,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(O_,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(A_,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(M_,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(P_,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(I_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(R_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(B_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(H_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(W_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(q_,{})}));
+**This is the core runtime flow that turns CWD from an AI orchestration framework into a production enterprise AI execution platform.**`,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var qg=[{id:`cwd-coordinator`,category:`Coordinator Agent`,title:`Coordinator Agent`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the role of the Coordinator Agent as the central orchestration, planning, coordination, and governance component of the CWD architecture.`,concept:`Markdown\r
+\r
+\`\`\`\`\r
+# What is the Coordinator?\r
+\r
+## 1. Definition\r
+\r
+The **Coordinator is the enterprise-level orchestration component of CWD**.\r
+\r
+It is responsible for understanding the user's business request, creating an execution plan, identifying the required agents, coordinating their work, and returning the final business outcome.\r
+\r
+The Coordinator is the **central control point of the CWD execution lifecycle**.\r
+\r
+> **The Coordinator decides what needs to happen and coordinates how the complete request should be fulfilled.**\r
+\r
+---\r
+\r
+## 2. Position in CWD\r
+\r
+\`\`\`text\r
+                    BUSINESS USER\r
+                         │\r
+                         ▼\r
+                    API Gateway\r
+                         │\r
+                         ▼\r
+                 ┌──────────────┐\r
+                 │ Coordinator  │\r
+                 │              │\r
+                 │ Enterprise   │\r
+                 │ Orchestration│\r
+                 └──────┬───────┘\r
+                        │\r
+             ┌──────────┼──────────┐\r
+             ▼          ▼          ▼\r
+        Delegator   Delegator   Delegator\r
+          Sales      Finance    Supply Chain\r
+             │          │          │\r
+             ▼          ▼          ▼\r
+          Workers    Workers    Workers\r
+             │          │          │\r
+             └──────────┼──────────┘\r
+                        ▼\r
+                 Enterprise Systems\r
+                        │\r
+                        ▼\r
+                 Results / Outcome\r
+                        │\r
+                        ▼\r
+                   Coordinator\r
+                        │\r
+                        ▼\r
+                       User\r
+\`\`\`\`\r
+\r
+The Coordinator sits above the Delegators and Workers.\r
+\r
+# 3. Business Responsibility\r
+\r
+The Coordinator converts a business request into a coordinated enterprise workflow.\r
+\r
+### Example\r
+\r
+User request:\r
+\r
+> "Create a customer briefing using the latest sales information, customer history, and relevant business documents."\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`\r
+1. Understand the requested business outcome\r
+2. Identify the required business capabilities\r
+3. Determine which domains are involved\r
+4. Create the execution plan\r
+5. Route tasks to the appropriate Delegators\r
+6. Coordinate the execution\r
+7. Collect and validate results\r
+8. Produce the final response\r
+\`\`\`\r
+\r
+The Coordinator does not need to know the internal implementation of every Worker.\r
+\r
+# 4. Core Responsibilities\r
+\r
+## 4.1 Intent Understanding\r
+\r
+The Coordinator identifies what the user actually wants.\r
+\r
+\`\`\`\r
+User Request\r
+     │\r
+     ▼\r
+Coordinator\r
+     │\r
+     ▼\r
+Business Intent\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+"Show me the latest customer information"\r
+              ↓\r
+Intent: Retrieve customer information\r
+\`\`\`\r
+\r
+## 4.2 Request Classification\r
+\r
+The Coordinator identifies the type and domain of the request.\r
+\r
+\`\`\`\r
+Request\r
+   │\r
+   ▼\r
+Classification\r
+   │\r
+   ├── Sales\r
+   ├── Finance\r
+   ├── Supply Chain\r
+   ├── HR\r
+   ├── Quality\r
+   └── Other Business Domain\r
+\`\`\`\r
+\r
+A request may involve more than one domain.\r
+\r
+## 4.3 Planning\r
+\r
+The Coordinator creates a plan for completing the request.\r
+\r
+\`\`\`\r
+Business Request\r
+       │\r
+       ▼\r
+Execution Plan\r
+       │\r
+       ├── Task 1\r
+       ├── Task 2\r
+       ├── Task 3\r
+       └── Task 4\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Customer Briefing\r
+       │\r
+       ├── Retrieve customer profile\r
+       ├── Retrieve sales opportunities\r
+       ├── Retrieve customer history\r
+       └── Retrieve relevant knowledge\r
+\`\`\`\r
+\r
+## 4.4 Agent Discovery\r
+\r
+The Coordinator identifies which Delegator or agent can fulfill the required capability.\r
+\r
+\`\`\`\r
+Coordinator\r
+     │\r
+     ▼\r
+Agent Registry\r
+     │\r
+     ▼\r
+Capability Matching\r
+     │\r
+     ▼\r
+Selected Delegator\r
+\`\`\`\r
+\r
+This allows CWD to support a growing ecosystem of agents without hard-coded routing for every request.\r
+\r
+## 4.5 Routing\r
+\r
+The Coordinator routes tasks to the appropriate Delegators.\r
+\r
+\`\`\`\r
+Coordinator\r
+     │\r
+     ├── Sales Task ───────► Sales Delegator\r
+     │\r
+     ├── Finance Task ─────► Finance Delegator\r
+     │\r
+     └── Knowledge Task ───► Knowledge Agent\r
+\`\`\`\r
+\r
+Routing is based on:\r
+\r
+* Business intent\r
+\r
+* Required capability\r
+\r
+* Domain\r
+\r
+* Agent availability\r
+\r
+* Execution context\r
+\r
+* Applicable policies\r
+\r
+## 4.6 Execution Coordination\r
+\r
+The Coordinator manages the overall workflow.\r
+\r
+It determines whether tasks should execute:\r
+\r
+### Sequentially\r
+\r
+\`\`\`\r
+Task 1\r
+  ↓\r
+Task 2\r
+  ↓\r
+Task 3\r
+\`\`\`\r
+\r
+### In parallel\r
+\r
+\`\`\`\r
+             Coordinator\r
+                  │\r
+        ┌─────────┼─────────┐\r
+        ▼         ▼         ▼\r
+      Task 1    Task 2    Task 3\r
+        │         │         │\r
+        └─────────┼─────────┘\r
+                  ▼\r
+              Aggregate\r
+\`\`\`\r
+\r
+Parallel execution is useful when tasks are independent.\r
+\r
+## 4.7 Context Propagation\r
+\r
+The Coordinator ensures that the required execution context is carried across agents.\r
+\r
+\`\`\`\r
+Coordinator\r
+     │\r
+     ▼\r
+Delegator\r
+     │\r
+     ▼\r
+Worker\r
+\`\`\`\r
+\r
+Typical context includes:\r
+\r
+\`\`\`\r
+Session ID\r
+Task ID\r
+Run ID\r
+Turn ID\r
+Step ID\r
+Correlation ID\r
+User Context\r
+Execution Metadata\r
+\`\`\`\r
+\r
+This allows every component to understand which business request it belongs to.\r
+\r
+## 4.8 Result Aggregation\r
+\r
+The Coordinator collects results from multiple Delegators or Workers.\r
+\r
+\`\`\`\r
+Sales Result ────────┐\r
+Finance Result ──────┤\r
+Knowledge Result ────┤\r
+                     ▼\r
+                Coordinator\r
+                     │\r
+                     ▼\r
+              Combined Result\r
+\`\`\`\r
+\r
+It is responsible for producing a coherent enterprise-level outcome.\r
+\r
+## 4.9 Error Handling and Recovery\r
+\r
+The Coordinator manages failures at the workflow level.\r
+\r
+\`\`\`\r
+Coordinator\r
+     │\r
+     ▼\r
+Delegator\r
+     │\r
+     ▼\r
+Worker\r
+     │\r
+     X\r
+   Failure\r
+     │\r
+     ▼\r
+Coordinator\r
+     │\r
+     ├── Retry\r
+     ├── Re-route\r
+     ├── Continue with Partial Result\r
+     └── Return Controlled Error\r
+\`\`\`\r
+\r
+The Coordinator should prevent a failure in one task from unnecessarily failing the entire business request.\r
+\r
+## 4.10 Final Response Generation\r
+\r
+After collecting results, the Coordinator prepares the final business response.\r
+\r
+\`\`\`\r
+Worker Results\r
+      │\r
+      ▼\r
+Delegator Results\r
+      │\r
+      ▼\r
+Coordinator\r
+      │\r
+      ▼\r
+Result Aggregation\r
+      │\r
+      ▼\r
+Response Synthesis\r
+      │\r
+      ▼\r
+Final Business Outcome\r
+\`\`\`\r
+\r
+The response may be:\r
+\r
+* A business answer\r
+\r
+* A report\r
+\r
+* A recommendation\r
+\r
+* A generated document\r
+\r
+* A structured result\r
+\r
+* A workflow completion message\r
+\r
+# 5. Coordinator and LLM\r
+\r
+The Coordinator can use an LLM for enterprise-level reasoning.\r
+\r
+\`\`\`\r
+                 Coordinator\r
+                      │\r
+                      ▼\r
+                     LLM\r
+                      │\r
+          ┌───────────┼───────────┐\r
+          ▼           ▼           ▼\r
+       Intent      Planning     Routing\r
+       Analysis                 Decision\r
+\`\`\`\r
+\r
+### Important distinction\r
+\r
+\`\`\`\r
+LLM\r
+ ↓\r
+Understands, reasons and recommends\r
+\r
+Coordinator\r
+ ↓\r
+Controls and coordinates execution\r
+\r
+Worker / Tool\r
+ ↓\r
+Performs the actual business operation\r
+\`\`\`\r
+\r
+The LLM does not replace the Coordinator.\r
+\r
+The Coordinator provides the controlled execution structure around the LLM.\r
+\r
+# 6. Coordinator vs Delegator vs Worker\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Main Question\r
+\r
+|\r
+\r
+Responsibility\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+What needs to happen?\r
+\r
+|\r
+\r
+Enterprise-level planning and orchestration\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Which domain should handle it?\r
+\r
+|\r
+\r
+Domain-level task decomposition and routing\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+How should the task be executed?\r
+\r
+|\r
+\r
+Specialized task execution\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+How should the agent reason?\r
+\r
+|\r
+\r
+Intelligence and decision support\r
+\r
+|\r
+|\r
+\r
+Tool / API\r
+\r
+|\r
+\r
+How is the enterprise action performed?\r
+\r
+|\r
+\r
+Controlled system interaction\r
+\r
+|\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User:\r
+"Create a customer briefing."\r
+\r
+Coordinator:\r
+"Which business capabilities are required?"\r
+\r
+Delegator:\r
+"Which Sales Workers should execute the domain tasks?"\r
+\r
+Worker:\r
+"Retrieve the customer opportunities from Salesforce."\r
+\r
+Tool:\r
+"Execute the Salesforce API request."\r
+\`\`\`\r
+\r
+# 7. Coordinator Execution Flow\r
+\r
+\`\`\`\r
+┌─────────────────────┐\r
+│    User Request     │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│    Coordinator      │\r
+│                     │\r
+│ Intent Understanding│\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Request Planning    │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Agent Discovery     │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Task Routing        │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Delegator Execution │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Result Aggregation  │\r
+└──────────┬──────────┘\r
+           │\r
+           ▼\r
+┌─────────────────────┐\r
+│ Final Response      │\r
+└─────────────────────┘\r
+\`\`\`\r
+\r
+# 8. Coordinator Responsibilities in Production CWD\r
+\r
+In the production CWD platform, the Coordinator is responsible for controlling the complete execution lifecycle.\r
+\r
+### Production responsibilities\r
+\r
+* Receive authorized requests\r
+\r
+* Maintain execution context\r
+\r
+* Understand business intent\r
+\r
+* Create execution plans\r
+\r
+* Discover available agents\r
+\r
+* Route tasks to Delegators\r
+\r
+* Coordinate multiple agents\r
+\r
+* Support parallel and sequential execution\r
+\r
+* Manage execution dependencies\r
+\r
+* Handle failures and retries\r
+\r
+* Aggregate results\r
+\r
+* Apply workflow-level governance\r
+\r
+* Produce the final response\r
+\r
+* Maintain end-to-end traceability\r
+\r
+# 9. What the Coordinator Does Not Do\r
+\r
+The Coordinator should not become responsible for every business operation.\r
+\r
+It should not:\r
+\r
+* Directly query enterprise databases\r
+\r
+* Contain every domain's business logic\r
+\r
+* Replace all Delegators\r
+\r
+* Replace specialized Workers\r
+\r
+* Store unrestricted enterprise data\r
+\r
+* Bypass authorization\r
+\r
+* Execute uncontrolled tools\r
+\r
+* Hard-code every agent's implementation\r
+\r
+Instead:\r
+\r
+\`\`\`\r
+Coordinator\r
+    │\r
+    ▼\r
+Delegator\r
+    │\r
+    ▼\r
+Worker\r
+    │\r
+    ▼\r
+Approved Tool\r
+    │\r
+    ▼\r
+Enterprise System\r
+\`\`\`\r
+\r
+This separation keeps the platform maintainable and scalable.\r
+\r
+# 10. Coordinator as the Control Plane\r
+\r
+The Coordinator is the control plane of CWD.\r
+\r
+\`\`\`\r
+                    CONTROL PLANE\r
+┌──────────────────────────────────────────────────────┐\r
+│                                                      │\r
+│ Coordinator                                          │\r
+│                                                      │\r
+│ Intent                                               │\r
+│ Planning                                             │\r
+│ Routing                                              │\r
+│ Execution Coordination                               │\r
+│ Context Propagation                                  │\r
+│ Result Aggregation                                   │\r
+│ Error Handling                                       │\r
+│                                                      │\r
+└──────────────────────────┬───────────────────────────┘\r
+                           │\r
+                           ▼\r
+                    EXECUTION PLANE\r
+┌──────────────────────────────────────────────────────┐\r
+│                                                      │\r
+│ Delegators                                           │\r
+│ Workers                                              │\r
+│ Tools                                                │\r
+│ Enterprise Systems                                   │\r
+│                                                      │\r
+└──────────────────────────────────────────────────────┘\r
+\`\`\`\r
+\r
+The Coordinator controls what should execute, while the execution plane performs the actual work.\r
+\r
+# 11. Business Value of the Coordinator\r
+\r
+The Coordinator provides the following business value:\r
+\r
+* Faster execution by coordinating multiple tasks\r
+\r
+* Consistent workflows across business domains\r
+\r
+* Reduced manual coordination between systems and agents\r
+\r
+* Reusable orchestration for multiple use cases\r
+\r
+* Controlled enterprise AI execution\r
+\r
+* Improved reliability through retries and recovery\r
+\r
+* Better traceability across the complete request\r
+\r
+* Scalable agent onboarding through discovery and routing\r
+\r
+# 12. Final Definition\r
+\r
+> The Coordinator is the enterprise-level orchestration component of CWD that transforms an authorized business request into a coordinated execution plan, discovers and routes work to the appropriate Delegators, manages the execution lifecycle, aggregates results, handles failures, and returns the final governed business outcome.\r
+\r
+### In one line\r
+\r
+\`\`\`\r
+Coordinator = Understand + Plan + Route + Coordinate + Aggregate\r
+\`\`\`\r
+\r
+### Architect's perspective\r
+\r
+> The Coordinator is not the agent that performs every task. It is the component that makes multiple specialized agents operate as one coherent enterprise AI system.\r
+`},{id:`what-is-coordinator`,category:`Coordinator Agent`,title:`What is Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the purpose, role, responsibilities, and architectural position of the Coordinator Agent in the CWD platform.`,concept:`I’ll structure this as a production-oriented Coordinator service, not just a single Python class. The implementation will cover the Coordinator’s responsibilities, A2A communication, LangGraph workflow, Agent Registry, Prompt Registry, Redis state, enterprise tool boundaries, security hooks, and observability.\r
+\r
+One important distinction: the Coordinator should orchestrate the workflow, not directly query enterprise systems or execute unrestricted tools. Those operations belong behind Delegators, Workers, and governed adapters.\r
+\r
+\r
+## Source-aligned implementation decisions\r
+\r
+The CWD architecture calls for a Coordinator that performs intent classification, planning/routing, aggregation, retries, and governance. It also identifies A2A as the communication layer between Coordinator, Delegators, and Workers; Kafka for event streaming; Service Bus for reliable command delivery; Redis for short-term state; Azure AI Search for long-term semantic recall; and MLflow3/App Insights for observability.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+The code below implements those responsibilities as a working reference architecture. It does not pretend to implement proprietary CWD services that were not exposed in the source material. In particular, the exact production A2A wire protocol, Agent Registry API, Prompt Registry API, policy-engine API, and OFA SDK contracts are not available here, so those are isolated behind replaceable interfaces.\r
+\r
+LangGraph is used for the Coordinator workflow because its \`StateGraph\` models shared state, nodes, and transitions, and must be compiled before execution.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://reference.langchain.com\\&sz=32)\r
+\r
+LangChain Reference\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://docs.langchain.com\\&sz=32)\r
+\r
+Docs by LangChain\r
+\r
+### What this implementation includes\r
+\r
+\`\`\`\r
+FastAPI\r
+    ↓\r
+Entra ID / gateway security hook\r
+    ↓\r
+Coordinator\r
+    ├── LangGraph workflow\r
+    ├── LLM intent classification and planning\r
+    ├── Agent Registry discovery\r
+    ├── Prompt Registry retrieval\r
+    ├── Policy / entitlement hook\r
+    ├── A2A task submission\r
+    ├── Service Bus / Kafka abstraction\r
+    ├── Redis state\r
+    ├── Result aggregation\r
+    ├── Retry / timeout / failure handling\r
+    └── MLflow / App Insights observability hooks\r
+\`\`\`\r
+\r
+Important: the code is designed so that the Coordinator can run locally with mock implementations, while production adapters can be connected to the actual CWD services. It is not a claim that the complete production platform can be deployed by copying these files unchanged.\r
+\r
+## 1. Project Structure\r
+\r
+\`\`\`\r
+cwd-coordinator/\r
+│\r
+├── app/\r
+│   ├── __init__.py\r
+│   ├── main.py\r
+│   ├── config.py\r
+│   ├── schemas.py\r
+│   ├── state.py\r
+│   ├── dependencies.py\r
+│   ├── graph.py\r
+│   ├── coordinator.py\r
+│   │\r
+│   ├── prompts/\r
+│   │   ├── __init__.py\r
+│   │   └── coordinator_prompt.py\r
+│   │\r
+│   ├── services/\r
+│   │   ├── __init__.py\r
+│   │   ├── llm_service.py\r
+│   │   ├── agent_registry.py\r
+│   │   ├── prompt_registry.py\r
+│   │   ├── policy_service.py\r
+│   │   ├── memory_service.py\r
+│   │   ├── a2a_client.py\r
+│   │   ├── messaging.py\r
+│   │   └── observability.py\r
+│   │\r
+│   └── adapters/\r
+│       ├── __init__.py\r
+│       ├── mock_agent_registry.py\r
+│       └── mock_a2a_client.py\r
+│\r
+├── requirements.txt\r
+└── .env.example\r
+\`\`\`\r
+\r
+## 2. Dependencies\r
+\r
+### \`requirements.txt\`\r
+\r
+\`\`\`\r
+fastapi\r
+uvicorn[standard]\r
+pydantic\r
+pydantic-settings\r
+\r
+langgraph\r
+langchain-core\r
+langchain-openai\r
+\r
+redis\r
+httpx\r
+\r
+azure-identity\r
+\r
+mlflow\r
+python-json-logger\r
+\`\`\`\r
+\r
+Kafka and Azure Service Bus clients should be added when the actual messaging adapter is selected. The Coordinator should depend on a messaging interface rather than hard-coding one transport.\r
+\r
+### \`.env.example\`\r
+\r
+env\r
+\r
+\`\`\`\r
+APP_NAME=CWD Coordinator\r
+ENVIRONMENT=development\r
+\r
+AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/\r
+AZURE_OPENAI_API_KEY=\r
+AZURE_OPENAI_API_VERSION=2024-10-21\r
+AZURE_OPENAI_DEPLOYMENT=gpt-4o\r
+\r
+REDIS_URL=redis://localhost:6379/0\r
+\r
+AGENT_REGISTRY_URL=http://localhost:8001\r
+PROMPT_REGISTRY_URL=http://localhost:8002\r
+POLICY_SERVICE_URL=http://localhost:8003\r
+\r
+A2A_TRANSPORT=http\r
+A2A_TIMEOUT_SECONDS=60\r
+\r
+MLFLOW_TRACKING_URI=http://localhost:5000\r
+\`\`\`\r
+\r
+## 3. Configuration\r
+\r
+### \`app/config.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from functools import lru_cache\r
+\r
+from pydantic_settings import BaseSettings, SettingsConfigDict\r
+\r
+\r
+class Settings(BaseSettings):\r
+    app_name: str = "CWD Coordinator"\r
+    environment: str = "development"\r
+\r
+    azure_openai_endpoint: str\r
+    azure_openai_api_key: str\r
+    azure_openai_api_version: str = "2024-10-21"\r
+    azure_openai_deployment: str\r
+\r
+    redis_url: str = "redis://localhost:6379/0"\r
+\r
+    agent_registry_url: str\r
+    prompt_registry_url: str\r
+    policy_service_url: str\r
+\r
+    a2a_transport: str = "http"\r
+    a2a_timeout_seconds: float = 60.0\r
+\r
+    mlflow_tracking_uri: str | None = None\r
+\r
+    model_config = SettingsConfigDict(\r
+        env_file=".env",\r
+        extra="ignore",\r
+    )\r
+\r
+\r
+@lru_cache\r
+def get_settings() -> Settings:\r
+    return Settings()\r
+\`\`\`\r
+\r
+Explanation: This centralizes environment-specific configuration. Dev, UAT, and production should use different configuration values and private service endpoints. Secrets should be supplied through the approved secret-management mechanism rather than committed to source code.\r
+\r
+## 4. Request and Response Models\r
+\r
+### \`app/schemas.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any, Literal\r
+\r
+from pydantic import BaseModel, Field\r
+\r
+\r
+class CoordinatorRequest(BaseModel):\r
+    user_id: str\r
+    session_id: str\r
+    message: str\r
+\r
+    channel: str = "api"\r
+    tenant_id: str | None = None\r
+    correlation_id: str | None = None\r
+\r
+    user_roles: list[str] = Field(default_factory=list)\r
+    metadata: dict[str, Any] = Field(default_factory=dict)\r
+\r
+\r
+class IntentResult(BaseModel):\r
+    domain: Literal[\r
+        "sales",\r
+        "finance",\r
+        "supply_chain",\r
+        "hr",\r
+        "commercial_services",\r
+        "general",\r
+        "unknown",\r
+    ]\r
+\r
+    intent: str\r
+    confidence: float = Field(ge=0.0, le=1.0)\r
+    requires_multiple_agents: bool = False\r
+    tasks: list[str] = Field(default_factory=list)\r
+\r
+\r
+class ExecutionPlan(BaseModel):\r
+    domain: str\r
+    delegator_id: str\r
+    tasks: list[str]\r
+    parallel_execution: bool = False\r
+    priority: Literal["low", "normal", "high"] = "normal"\r
+\r
+\r
+class A2AContext(BaseModel):\r
+    session_id: str\r
+    task_id: str\r
+    run_id: str\r
+    turn_id: str\r
+    step_id: str\r
+    correlation_id: str\r
+\r
+    user_id: str\r
+    source_agent: str\r
+    target_agent: str\r
+\r
+    user_roles: list[str] = Field(default_factory=list)\r
+\r
+\r
+class A2ATaskRequest(BaseModel):\r
+    message_id: str\r
+    task_type: str\r
+    context: A2AContext\r
+\r
+    instruction: str\r
+    input_data: dict[str, Any] = Field(default_factory=dict)\r
+\r
+    priority: Literal["low", "normal", "high"] = "normal"\r
+    requires_approval: bool = False\r
+\r
+\r
+class A2ATaskResponse(BaseModel):\r
+    message_id: str\r
+    task_id: str\r
+    correlation_id: str\r
+\r
+    status: Literal[\r
+        "accepted",\r
+        "working",\r
+        "completed",\r
+        "failed",\r
+        "requires_approval",\r
+    ]\r
+\r
+    result: dict[str, Any] = Field(default_factory=dict)\r
+    errors: list[str] = Field(default_factory=list)\r
+\r
+\r
+class CoordinatorResponse(BaseModel):\r
+    correlation_id: str\r
+    session_id: str\r
+\r
+    status: Literal[\r
+        "completed",\r
+        "failed",\r
+        "requires_clarification",\r
+        "requires_approval",\r
+        "working",\r
+    ]\r
+\r
+    answer: str | None = None\r
+    domain: str | None = None\r
+\r
+    execution_plan: ExecutionPlan | None = None\r
+    task_id: str | None = None\r
+\r
+    errors: list[str] = Field(default_factory=list)\r
+    metadata: dict[str, Any] = Field(default_factory=dict)\r
+\`\`\`\r
+\r
+Explanation: These models define the contract between the API, Coordinator, and A2A layer. The context carries the execution hierarchy required for traceability. The architecture identifies the hierarchy as Session → Task → Run → Turn → Step, with correlated logs and traces.\r
+\r
+COG-AIOPSPlatformMemo-230526-0418-212.pdf\r
+\r
+## 5. Coordinator State\r
+\r
+### \`app/state.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any, TypedDict\r
+\r
+\r
+class CoordinatorState(TypedDict, total=False):\r
+    user_id: str\r
+    session_id: str\r
+    message: str\r
+    channel: str\r
+    tenant_id: str | None\r
+\r
+    task_id: str\r
+    run_id: str\r
+    turn_id: str\r
+    step_id: str\r
+    correlation_id: str\r
+\r
+    user_roles: list[str]\r
+\r
+    domain: str\r
+    intent: str\r
+    confidence: float\r
+    requires_multiple_agents: bool\r
+    tasks: list[str]\r
+\r
+    delegator_id: str\r
+    delegator_endpoint: str\r
+    delegator_capabilities: list[str]\r
+\r
+    execution_plan: dict[str, Any]\r
+\r
+    a2a_message_id: str\r
+    a2a_status: str\r
+    delegator_result: dict[str, Any]\r
+\r
+    final_answer: str\r
+    status: str\r
+    errors: list[str]\r
+\`\`\`\r
+\r
+Explanation: LangGraph nodes read the current state and return updates. The Coordinator does not need to pass dozens of parameters between functions; the state is the shared execution context.\r
+\r
+## 6. Coordinator Prompt\r
+\r
+### \`app/prompts/coordinator_prompt.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+COORDINATOR_SYSTEM_PROMPT = """\r
+You are the enterprise Coordinator for the CWD platform.\r
+\r
+Your responsibilities:\r
+1. Understand the user's request.\r
+2. Identify the business domain.\r
+3. Determine whether multiple agents are required.\r
+4. Create a high-level execution plan.\r
+5. Select the appropriate domain Delegator.\r
+6. Never directly access enterprise databases or APIs.\r
+7. Never bypass authorization or data governance.\r
+8. Never invent enterprise data.\r
+9. Return only valid JSON.\r
+\r
+Available domains:\r
+- sales\r
+- finance\r
+- supply_chain\r
+- hr\r
+- commercial_services\r
+- general\r
+- unknown\r
+\r
+Return:\r
+{\r
+  "domain": "sales",\r
+  "intent": "customer briefing",\r
+  "confidence": 0.95,\r
+  "requires_multiple_agents": true,\r
+  "tasks": [\r
+    "Retrieve customer information",\r
+    "Retrieve sales opportunity information",\r
+    "Generate customer briefing"\r
+  ]\r
+}\r
+"""\r
+\`\`\`\r
+\r
+Explanation: The LLM performs reasoning, but the Coordinator remains responsible for enforcing the execution boundary. The architecture explicitly separates LLM reasoning from deterministic worker execution and prohibits direct data access from the LLM.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 7. LLM Service\r
+\r
+### \`app/services/llm_service.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import json\r
+from typing import Any\r
+\r
+from langchain_core.messages import HumanMessage, SystemMessage\r
+from langchain_openai import AzureChatOpenAI\r
+\r
+from app.config import get_settings\r
+from app.prompts.coordinator_prompt import (\r
+    COORDINATOR_SYSTEM_PROMPT,\r
+)\r
+from app.schemas import IntentResult\r
+\r
+\r
+class LLMService:\r
+    def __init__(self):\r
+        settings = get_settings()\r
+\r
+        self.llm = AzureChatOpenAI(\r
+            azure_endpoint=settings.azure_openai_endpoint,\r
+            api_key=settings.azure_openai_api_key,\r
+            api_version=settings.azure_openai_api_version,\r
+            azure_deployment=settings.azure_openai_deployment,\r
+            temperature=0,\r
+        )\r
+\r
+    async def classify(\r
+        self,\r
+        message: str,\r
+    ) -> IntentResult:\r
+\r
+        response = await self.llm.ainvoke(\r
+            [\r
+                SystemMessage(\r
+                    content=COORDINATOR_SYSTEM_PROMPT\r
+                ),\r
+                HumanMessage(content=message),\r
+            ]\r
+        )\r
+\r
+        content = response.content\r
+\r
+        if isinstance(content, list):\r
+            content = "".join(\r
+                item.get("text", "")\r
+                for item in content\r
+                if isinstance(item, dict)\r
+            )\r
+\r
+        return IntentResult.model_validate(\r
+            json.loads(content)\r
+        )\r
+\`\`\`\r
+\r
+Explanation: \`temperature=0\` makes the classification more repeatable. The production architecture also recommends pinning prompts, models, and tool versions where possible, and evaluating outputs against golden tests.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 8. Agent Registry\r
+\r
+### \`app/services/agent_registry.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any\r
+\r
+import httpx\r
+\r
+from app.config import get_settings\r
+\r
+\r
+class AgentRegistryClient:\r
+    def __init__(self):\r
+        self.settings = get_settings()\r
+\r
+    async def discover_delegator(\r
+        self,\r
+        domain: str,\r
+        user_roles: list[str],\r
+    ) -> dict[str, Any]:\r
+\r
+        async with httpx.AsyncClient(timeout=10.0) as client:\r
+            response = await client.get(\r
+                f"{self.settings.agent_registry_url}/agents",\r
+                params={\r
+                    "type": "delegator",\r
+                    "domain": domain,\r
+                },\r
+                headers={\r
+                    "X-User-Roles": ",".join(user_roles),\r
+                },\r
+            )\r
+\r
+            response.raise_for_status()\r
+\r
+            agents = response.json()\r
+\r
+        healthy_agents = [\r
+            agent\r
+            for agent in agents\r
+            if agent.get("status") == "healthy"\r
+        ]\r
+\r
+        if not healthy_agents:\r
+            raise ValueError(\r
+                f"No healthy Delegator available for {domain}"\r
+            )\r
+\r
+        return healthy_agents[0]\r
+\`\`\`\r
+\r
+Explanation: The Coordinator discovers the Delegator rather than hard-coding every business domain. The architecture assigns the Agent Registry responsibility for discovering agents, capabilities, URLs, and health metadata.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 9. Prompt Registry\r
+\r
+### \`app/services/prompt_registry.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any\r
+\r
+import httpx\r
+\r
+from app.config import get_settings\r
+\r
+\r
+class PromptRegistryClient:\r
+    def __init__(self):\r
+        self.settings = get_settings()\r
+\r
+    async def get_prompt(\r
+        self,\r
+        prompt_name: str,\r
+        tags: list[str] | None = None,\r
+    ) -> dict[str, Any]:\r
+\r
+        async with httpx.AsyncClient(timeout=10.0) as client:\r
+            response = await client.get(\r
+                f"{self.settings.prompt_registry_url}/prompts",\r
+                params={\r
+                    "name": prompt_name,\r
+                    "tags": ",".join(tags or []),\r
+                },\r
+            )\r
+\r
+            response.raise_for_status()\r
+\r
+            return response.json()\r
+\`\`\`\r
+\r
+Explanation: The Prompt Registry is a separate service so prompts can be versioned, governed, approved, deprecated, and consumed by Coordinator, Delegators, and Workers.\r
+\r
+COG-AIOPSPlatformMemo-230526-0418-212.pdf\r
+\r
+## 10. Policy / Entitlement Service\r
+\r
+### \`app/services/policy_service.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import httpx\r
+\r
+from app.config import get_settings\r
+\r
+\r
+class PolicyService:\r
+    def __init__(self):\r
+        self.settings = get_settings()\r
+\r
+    async def authorize(\r
+        self,\r
+        *,\r
+        user_id: str,\r
+        user_roles: list[str],\r
+        domain: str,\r
+        intent: str,\r
+    ) -> bool:\r
+\r
+        async with httpx.AsyncClient(timeout=10.0) as client:\r
+            response = await client.post(\r
+                f"{self.settings.policy_service_url}/authorize",\r
+                json={\r
+                    "user_id": user_id,\r
+                    "user_roles": user_roles,\r
+                    "domain": domain,\r
+                    "intent": intent,\r
+                },\r
+            )\r
+\r
+            response.raise_for_status()\r
+\r
+            return bool(response.json().get("allowed", False))\r
+\`\`\`\r
+\r
+Explanation: Authorization must happen before data access and again inside the orchestration policy boundary. This service is intentionally an adapter because the actual CWD policy engine/OFA contract was not provided.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 11. Redis Memory\r
+\r
+### \`app/services/memory_service.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import json\r
+from typing import Any\r
+\r
+from redis.asyncio import Redis\r
+\r
+from app.config import get_settings\r
+\r
+\r
+class MemoryService:\r
+    def __init__(self):\r
+        settings = get_settings()\r
+\r
+        self.redis = Redis.from_url(\r
+            settings.redis_url,\r
+            decode_responses=True,\r
+        )\r
+\r
+    async def save_session(\r
+        self,\r
+        session_id: str,\r
+        state: dict[str, Any],\r
+    ) -> None:\r
+\r
+        await self.redis.set(\r
+            f"cwd:session:{session_id}",\r
+            json.dumps(state),\r
+            ex=3600,\r
+        )\r
+\r
+    async def get_session(\r
+        self,\r
+        session_id: str,\r
+    ) -> dict[str, Any] | None:\r
+\r
+        value = await self.redis.get(\r
+            f"cwd:session:{session_id}"\r
+        )\r
+\r
+        if value is None:\r
+            return None\r
+\r
+        return json.loads(value)\r
+\`\`\`\r
+\r
+Explanation: Redis stores active workflow state and short-term context. Long-term semantic recall belongs in the approved vector/RAG layer, not in this short-term session cache.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 12. A2A Client\r
+\r
+### \`app/services/a2a_client.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import httpx\r
+\r
+from app.config import get_settings\r
+from app.schemas import (\r
+    A2ATaskRequest,\r
+    A2ATaskResponse,\r
+)\r
+\r
+\r
+class A2AClient:\r
+    def __init__(self):\r
+        settings = get_settings()\r
+        self.timeout = settings.a2a_timeout_seconds\r
+\r
+    async def send_task(\r
+        self,\r
+        endpoint: str,\r
+        task: A2ATaskRequest,\r
+    ) -> A2ATaskResponse:\r
+\r
+        async with httpx.AsyncClient(\r
+            timeout=self.timeout\r
+        ) as client:\r
+\r
+            response = await client.post(\r
+                f"{endpoint}/a2a/tasks",\r
+                json=task.model_dump(),\r
+                headers={\r
+                    "X-Correlation-ID": (\r
+                        task.context.correlation_id\r
+                    ),\r
+                    "X-Source-Agent": (\r
+                        task.context.source_agent\r
+                    ),\r
+                    "X-Target-Agent": (\r
+                        task.context.target_agent\r
+                    ),\r
+                },\r
+            )\r
+\r
+            response.raise_for_status()\r
+\r
+            return A2ATaskResponse.model_validate(\r
+                response.json()\r
+            )\r
+\`\`\`\r
+\r
+Explanation: This is the actual A2A boundary. The Coordinator sends a structured task to a Delegator. It does not directly call Salesforce, Snowflake, or other enterprise systems. The architecture identifies A2A as the reliable communication mechanism between Coordinator, Delegators, and Workers.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 13. A2A Task Factory\r
+\r
+### \`app/services/a2a_factory.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import uuid\r
+from typing import Any\r
+\r
+from app.schemas import A2AContext, A2ATaskRequest\r
+\r
+\r
+def create_a2a_task(\r
+    *,\r
+    state: dict[str, Any],\r
+    target_agent: str,\r
+    task_type: str,\r
+    instruction: str,\r
+    input_data: dict[str, Any],\r
+) -> A2ATaskRequest:\r
+\r
+    context = A2AContext(\r
+        session_id=state["session_id"],\r
+        task_id=state["task_id"],\r
+        run_id=state["run_id"],\r
+        turn_id=state["turn_id"],\r
+        step_id=state["step_id"],\r
+        correlation_id=state["correlation_id"],\r
+        user_id=state["user_id"],\r
+        source_agent="cwd-coordinator",\r
+        target_agent=target_agent,\r
+        user_roles=state.get("user_roles", []),\r
+    )\r
+\r
+    return A2ATaskRequest(\r
+        message_id=str(uuid.uuid4()),\r
+        task_type=task_type,\r
+        context=context,\r
+        instruction=instruction,\r
+        input_data=input_data,\r
+    )\r
+\`\`\`\r
+\r
+Explanation: The factory ensures every A2A request carries the same execution context. This prevents individual nodes from accidentally omitting correlation or task identifiers.\r
+\r
+## 14. Messaging Abstraction\r
+\r
+### \`app/services/messaging.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any, Protocol\r
+\r
+\r
+class MessagingService(Protocol):\r
+\r
+    async def publish(\r
+        self,\r
+        topic: str,\r
+        message: dict[str, Any],\r
+    ) -> None:\r
+        ...\r
+\r
+    async def send_command(\r
+        self,\r
+        queue: str,\r
+        message: dict[str, Any],\r
+    ) -> None:\r
+        ...\r
+\`\`\`\r
+\r
+Explanation: The architecture distinguishes Kafka for high-throughput event streaming and Service Bus for reliable command delivery. The Coordinator should use an adapter so the business workflow is independent of the transport.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 15. Observability\r
+\r
+### \`app/services/observability.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import logging\r
+from contextlib import asynccontextmanager\r
+from typing import Any\r
+\r
+logger = logging.getLogger("cwd.coordinator")\r
+\r
+\r
+class ObservabilityService:\r
+\r
+    def log_event(\r
+        self,\r
+        event: str,\r
+        *,\r
+        state: dict[str, Any],\r
+        **fields: Any,\r
+    ) -> None:\r
+\r
+        logger.info(\r
+            event,\r
+            extra={\r
+                "event": event,\r
+                "session_id": state.get("session_id"),\r
+                "task_id": state.get("task_id"),\r
+                "run_id": state.get("run_id"),\r
+                "turn_id": state.get("turn_id"),\r
+                "step_id": state.get("step_id"),\r
+                "correlation_id": state.get("correlation_id"),\r
+                **fields,\r
+            },\r
+        )\r
+\r
+    @asynccontextmanager\r
+    async def trace_step(\r
+        self,\r
+        step_name: str,\r
+        state: dict[str, Any],\r
+    ):\r
+        self.log_event(\r
+            "step_started",\r
+            state=state,\r
+            step_name=step_name,\r
+        )\r
+\r
+        try:\r
+            yield\r
+        except Exception as exc:\r
+            self.log_event(\r
+                "step_failed",\r
+                state=state,\r
+                step_name=step_name,\r
+                error_type=type(exc).__name__,\r
+            )\r
+            raise\r
+        else:\r
+            self.log_event(\r
+                "step_completed",\r
+                state=state,\r
+                step_name=step_name,\r
+            )\r
+\`\`\`\r
+\r
+Explanation: This is the application-level observability hook. The actual production adapter should emit MLflow3 traces and artifacts, App Insights telemetry, and Log Analytics records according to the platform’s logging policy.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 16. Complete Coordinator Class\r
+\r
+### \`app/coordinator.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import uuid\r
+from typing import Any\r
+\r
+from app.schemas import ExecutionPlan\r
+from app.services.a2a_client import A2AClient\r
+from app.services.a2a_factory import create_a2a_task\r
+from app.services.agent_registry import AgentRegistryClient\r
+from app.services.llm_service import LLMService\r
+from app.services.memory_service import MemoryService\r
+from app.services.observability import ObservabilityService\r
+from app.services.policy_service import PolicyService\r
+from app.services.prompt_registry import PromptRegistryClient\r
+from app.state import CoordinatorState\r
+\r
+\r
+class Coordinator:\r
+    """\r
+    Enterprise-level CWD Coordinator.\r
+\r
+    The Coordinator:\r
+    - understands the request\r
+    - creates a high-level plan\r
+    - discovers the correct Delegator\r
+    - authorizes the workflow\r
+    - submits A2A tasks\r
+    - aggregates Delegator results\r
+    - persists execution state\r
+    - emits observability events\r
+    """\r
+\r
+    def __init__(\r
+        self,\r
+        llm_service: LLMService,\r
+        agent_registry: AgentRegistryClient,\r
+        prompt_registry: PromptRegistryClient,\r
+        policy_service: PolicyService,\r
+        a2a_client: A2AClient,\r
+        memory_service: MemoryService,\r
+        observability: ObservabilityService,\r
+    ):\r
+        self.llm_service = llm_service\r
+        self.agent_registry = agent_registry\r
+        self.prompt_registry = prompt_registry\r
+        self.policy_service = policy_service\r
+        self.a2a_client = a2a_client\r
+        self.memory_service = memory_service\r
+        self.observability = observability\r
+\r
+    async def validate_request(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        if not state.get("message", "").strip():\r
+            raise ValueError("Message cannot be empty")\r
+\r
+        if not state.get("user_id"):\r
+            raise PermissionError("User identity is required")\r
+\r
+        if not state.get("session_id"):\r
+            raise ValueError("Session ID is required")\r
+\r
+        return {\r
+            "status": "validated",\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def classify_request(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        result = await self.llm_service.classify(\r
+            state["message"]\r
+        )\r
+\r
+        return {\r
+            "domain": result.domain,\r
+            "intent": result.intent,\r
+            "confidence": result.confidence,\r
+            "requires_multiple_agents": (\r
+                result.requires_multiple_agents\r
+            ),\r
+            "tasks": result.tasks,\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def authorize_request(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        allowed = await self.policy_service.authorize(\r
+            user_id=state["user_id"],\r
+            user_roles=state.get("user_roles", []),\r
+            domain=state["domain"],\r
+            intent=state["intent"],\r
+        )\r
+\r
+        if not allowed:\r
+            raise PermissionError(\r
+                "User is not authorized for this workflow"\r
+            )\r
+\r
+        return {\r
+            "status": "authorized",\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def discover_delegator(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        agent = await self.agent_registry.discover_delegator(\r
+            domain=state["domain"],\r
+            user_roles=state.get("user_roles", []),\r
+        )\r
+\r
+        return {\r
+            "delegator_id": agent["agent_id"],\r
+            "delegator_endpoint": agent["endpoint"],\r
+            "delegator_capabilities": agent.get(\r
+                "capabilities", []\r
+            ),\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def create_plan(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        plan = ExecutionPlan(\r
+            domain=state["domain"],\r
+            delegator_id=state["delegator_id"],\r
+            tasks=state.get("tasks", []),\r
+            parallel_execution=(\r
+                state.get("requires_multiple_agents", False)\r
+            ),\r
+        )\r
+\r
+        return {\r
+            "execution_plan": plan.model_dump(),\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def submit_a2a_task(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        task = create_a2a_task(\r
+            state=state,\r
+            target_agent=state["delegator_id"],\r
+            task_type=state["intent"],\r
+            instruction=state["message"],\r
+            input_data={\r
+                "domain": state["domain"],\r
+                "tasks": state.get("tasks", []),\r
+                "execution_plan": state.get(\r
+                    "execution_plan", {}\r
+                ),\r
+                "metadata": {\r
+                    "channel": state.get("channel"),\r
+                    "source": "cwd-coordinator",\r
+                },\r
+            },\r
+        )\r
+\r
+        response = await self.a2a_client.send_task(\r
+            endpoint=state["delegator_endpoint"],\r
+            task=task,\r
+        )\r
+\r
+        return {\r
+            "a2a_message_id": response.message_id,\r
+            "a2a_status": response.status,\r
+            "delegator_result": response.result,\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def aggregate_result(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        a2a_status = state.get("a2a_status")\r
+\r
+        if a2a_status == "requires_approval":\r
+            return {\r
+                "status": "requires_approval",\r
+                "final_answer": (\r
+                    "This workflow requires approval "\r
+                    "before it can continue."\r
+                ),\r
+            }\r
+\r
+        if a2a_status in {"accepted", "working"}:\r
+            return {\r
+                "status": "working",\r
+                "final_answer": (\r
+                    "Your request is being processed."\r
+                ),\r
+            }\r
+\r
+        if a2a_status == "failed":\r
+            return {\r
+                "status": "failed",\r
+                "final_answer": (\r
+                    "The requested workflow could not "\r
+                    "be completed."\r
+                ),\r
+                "errors": state.get("errors", []),\r
+            }\r
+\r
+        result = state.get("delegator_result", {})\r
+\r
+        return {\r
+            "status": "completed",\r
+            "final_answer": result.get(\r
+                "answer",\r
+                "The request was completed successfully.",\r
+            ),\r
+        }\r
+\r
+    async def save_state(\r
+        self,\r
+        state: CoordinatorState,\r
+    ) -> dict[str, Any]:\r
+\r
+        await self.memory_service.save_session(\r
+            session_id=state["session_id"],\r
+            state=dict(state),\r
+        )\r
+\r
+        return {\r
+            "step_id": str(uuid.uuid4()),\r
+        }\r
+\r
+    async def run(\r
+        self,\r
+        request: dict[str, Any],\r
+    ) -> CoordinatorState:\r
+\r
+        state: CoordinatorState = {\r
+            "user_id": request["user_id"],\r
+            "session_id": request["session_id"],\r
+            "message": request["message"],\r
+            "channel": request.get("channel", "api"),\r
+            "tenant_id": request.get("tenant_id"),\r
+            "correlation_id": (\r
+                request.get("correlation_id")\r
+                or str(uuid.uuid4())\r
+            ),\r
+            "task_id": str(uuid.uuid4()),\r
+            "run_id": str(uuid.uuid4()),\r
+            "turn_id": str(uuid.uuid4()),\r
+            "step_id": str(uuid.uuid4()),\r
+            "user_roles": request.get("user_roles", []),\r
+            "status": "started",\r
+            "errors": [],\r
+        }\r
+\r
+        try:\r
+            self.observability.log_event(\r
+                "coordinator_started",\r
+                state=state,\r
+            )\r
+\r
+            result = await self.graph.ainvoke(state)\r
+\r
+            self.observability.log_event(\r
+                "coordinator_completed",\r
+                state=result,\r
+                status=result.get("status"),\r
+            )\r
+\r
+            return result\r
+\r
+        except Exception as exc:\r
+            state["status"] = "failed"\r
+            state["errors"] = [str(exc)]\r
+            state["final_answer"] = (\r
+                "An error occurred while processing your request."\r
+            )\r
+\r
+            self.observability.log_event(\r
+                "coordinator_failed",\r
+                state=state,\r
+                error_type=type(exc).__name__,\r
+            )\r
+\r
+            await self.memory_service.save_session(\r
+                session_id=state["session_id"],\r
+                state=dict(state),\r
+            )\r
+\r
+            return state\r
+\`\`\`\r
+\r
+Explanation: The Coordinator is deliberately not calling enterprise tools. It validates, classifies, authorizes, discovers, plans, submits an A2A task, and aggregates the response. The Delegator is responsible for domain routing and Worker management.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 17. LangGraph Workflow\r
+\r
+### \`app/graph.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from typing import Any\r
+\r
+from langgraph.graph import END, START, StateGraph\r
+\r
+from app.coordinator import Coordinator\r
+from app.state import CoordinatorState\r
+\r
+\r
+def build_coordinator_graph(\r
+    coordinator: Coordinator,\r
+):\r
+\r
+    builder = StateGraph(CoordinatorState)\r
+\r
+    builder.add_node(\r
+        "validate_request",\r
+        coordinator.validate_request,\r
+    )\r
+\r
+    builder.add_node(\r
+        "classify_request",\r
+        coordinator.classify_request,\r
+    )\r
+\r
+    builder.add_node(\r
+        "authorize_request",\r
+        coordinator.authorize_request,\r
+    )\r
+\r
+    builder.add_node(\r
+        "discover_delegator",\r
+        coordinator.discover_delegator,\r
+    )\r
+\r
+    builder.add_node(\r
+        "create_plan",\r
+        coordinator.create_plan,\r
+    )\r
+\r
+    builder.add_node(\r
+        "submit_a2a_task",\r
+        coordinator.submit_a2a_task,\r
+    )\r
+\r
+    builder.add_node(\r
+        "aggregate_result",\r
+        coordinator.aggregate_result,\r
+    )\r
+\r
+    builder.add_node(\r
+        "save_state",\r
+        coordinator.save_state,\r
+    )\r
+\r
+    builder.add_edge(\r
+        START,\r
+        "validate_request",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "validate_request",\r
+        "classify_request",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "classify_request",\r
+        "authorize_request",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "authorize_request",\r
+        "discover_delegator",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "discover_delegator",\r
+        "create_plan",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "create_plan",\r
+        "submit_a2a_task",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "submit_a2a_task",\r
+        "aggregate_result",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "aggregate_result",\r
+        "save_state",\r
+    )\r
+\r
+    builder.add_edge(\r
+        "save_state",\r
+        END,\r
+    )\r
+\r
+    return builder.compile()\r
+\`\`\`\r
+\r
+Explanation: Each node returns a partial state update. The compiled graph is the executable Coordinator workflow. This is the correct LangGraph pattern for a stateful, multi-step workflow.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://reference.langchain.com\\&sz=32)\r
+\r
+LangChain Reference\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://docs.langchain.com\\&sz=32)\r
+\r
+Docs by LangChain\r
+\r
+## 18. Dependency Wiring\r
+\r
+### \`app/dependencies.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from app.coordinator import Coordinator\r
+from app.graph import build_coordinator_graph\r
+\r
+from app.services.a2a_client import A2AClient\r
+from app.services.agent_registry import AgentRegistryClient\r
+from app.services.llm_service import LLMService\r
+from app.services.memory_service import MemoryService\r
+from app.services.observability import ObservabilityService\r
+from app.services.policy_service import PolicyService\r
+from app.services.prompt_registry import PromptRegistryClient\r
+\r
+\r
+def create_coordinator() -> Coordinator:\r
+\r
+    coordinator = Coordinator(\r
+        llm_service=LLMService(),\r
+        agent_registry=AgentRegistryClient(),\r
+        prompt_registry=PromptRegistryClient(),\r
+        policy_service=PolicyService(),\r
+        a2a_client=A2AClient(),\r
+        memory_service=MemoryService(),\r
+        observability=ObservabilityService(),\r
+    )\r
+\r
+    coordinator.graph = build_coordinator_graph(\r
+        coordinator\r
+    )\r
+\r
+    return coordinator\r
+\`\`\`\r
+\r
+Explanation: Dependency injection keeps the Coordinator testable. For unit tests, replace the real LLM, registry, policy, A2A, Redis, and observability services with mocks.\r
+\r
+## 19. FastAPI API\r
+\r
+### \`app/main.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from fastapi import FastAPI, HTTPException\r
+\r
+from app.dependencies import create_coordinator\r
+from app.schemas import (\r
+    CoordinatorRequest,\r
+    CoordinatorResponse,\r
+)\r
+\r
+app = FastAPI(\r
+    title="CWD Coordinator API",\r
+    version="1.0.0",\r
+)\r
+\r
+coordinator = create_coordinator()\r
+\r
+\r
+@app.get("/health")\r
+async def health():\r
+    return {\r
+        "service": "cwd-coordinator",\r
+        "status": "healthy",\r
+    }\r
+\r
+\r
+@app.post(\r
+    "/api/v1/coordinator/execute",\r
+    response_model=CoordinatorResponse,\r
+)\r
+async def execute_coordinator(\r
+    request: CoordinatorRequest,\r
+):\r
+\r
+    result = await coordinator.run(\r
+        request.model_dump()\r
+    )\r
+\r
+    return CoordinatorResponse(\r
+        correlation_id=result["correlation_id"],\r
+        session_id=result["session_id"],\r
+        status=result["status"],\r
+        answer=result.get("final_answer"),\r
+        domain=result.get("domain"),\r
+        execution_plan=result.get("execution_plan"),\r
+        task_id=result.get("task_id"),\r
+        errors=result.get("errors", []),\r
+        metadata={\r
+            "intent": result.get("intent"),\r
+            "delegator_id": result.get(\r
+                "delegator_id"\r
+            ),\r
+            "a2a_status": result.get(\r
+                "a2a_status"\r
+            ),\r
+        },\r
+    )\r
+\`\`\`\r
+\r
+Explanation: The API is the entry point for Teams, React, or another approved gateway. In production, authentication and request validation should happen at the gateway and be enforced again inside orchestration policies.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 20. Example Request\r
+\r
+http\r
+\r
+\`\`\`\r
+POST /api/v1/coordinator/execute\r
+Content-Type: application/json\r
+\`\`\`\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "user_id": "user-123",\r
+  "session_id": "session-456",\r
+  "message": "Create a customer briefing for customer ABC",\r
+  "channel": "teams",\r
+  "user_roles": [\r
+    "sales_user"\r
+  ],\r
+  "metadata": {\r
+    "customer_id": "ABC"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+### Coordinator → Sales Delegator A2A message\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "message_id": "msg-123",\r
+  "task_type": "customer_briefing",\r
+  "context": {\r
+    "session_id": "session-456",\r
+    "task_id": "task-789",\r
+    "run_id": "run-101",\r
+    "turn_id": "turn-102",\r
+    "step_id": "step-103",\r
+    "correlation_id": "corr-104",\r
+    "user_id": "user-123",\r
+    "source_agent": "cwd-coordinator",\r
+    "target_agent": "sales-delegator",\r
+    "user_roles": [\r
+      "sales_user"\r
+    ]\r
+  },\r
+  "instruction": "Create a customer briefing for customer ABC",\r
+  "input_data": {\r
+    "domain": "sales",\r
+    "tasks": [\r
+      "Retrieve customer information",\r
+      "Retrieve sales opportunity information",\r
+      "Generate customer briefing"\r
+    ]\r
+  },\r
+  "priority": "normal",\r
+  "requires_approval": false\r
+}\r
+\`\`\`\r
+\r
+## 21. Delegator A2A Endpoint\r
+\r
+The Delegator must expose a compatible A2A endpoint. The following is a minimal example of the contract, not the complete Sales Delegator implementation.\r
+\r
+### \`sales_delegator/main.py\`\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+from fastapi import FastAPI\r
+\r
+from app.schemas import (\r
+    A2ATaskRequest,\r
+    A2ATaskResponse,\r
+)\r
+\r
+app = FastAPI(\r
+    title="Sales Delegator A2A API"\r
+)\r
+\r
+\r
+@app.post(\r
+    "/a2a/tasks",\r
+    response_model=A2ATaskResponse,\r
+)\r
+async def receive_a2a_task(\r
+    request: A2ATaskRequest,\r
+):\r
+\r
+    result = await execute_sales_workflow(\r
+        request\r
+    )\r
+\r
+    return A2ATaskResponse(\r
+        message_id=request.message_id,\r
+        task_id=request.context.task_id,\r
+        correlation_id=request.context.correlation_id,\r
+        status="completed",\r
+        result=result,\r
+    )\r
+\r
+\r
+async def execute_sales_workflow(\r
+    request: A2ATaskRequest,\r
+) -> dict:\r
+\r
+    # The Sales Delegator decomposes the task.\r
+    # It invokes specialized Workers through A2A.\r
+    # Workers use MCP or approved enterprise adapters.\r
+\r
+    return {\r
+        "answer": (\r
+            "Customer briefing generated successfully."\r
+        ),\r
+        "worker_results": [],\r
+    }\r
+\`\`\`\r
+\r
+Explanation: The Coordinator should not know how Sales decomposes the task. The Delegator owns that domain workflow and can independently scale its Worker pool.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 22. End-to-End Execution\r
+\r
+\`\`\`\r
+User\r
+  |\r
+  v\r
+Gateway\r
+  |\r
+  v\r
+Coordinator\r
+  |\r
+  ├── Validate request\r
+  ├── Classify intent\r
+  ├── Authorize workflow\r
+  ├── Discover Sales Delegator\r
+  ├── Create execution plan\r
+  |\r
+  ├── A2A task submission\r
+  |       |\r
+  |       v\r
+  |   Sales Delegator\r
+  |       |\r
+  |       ├── A2A → Customer Profile Worker\r
+  |       ├── A2A → Opportunity Worker\r
+  |       └── A2A → Interaction Worker\r
+  |               |\r
+  |               └── MCP / governed API\r
+  |                       |\r
+  |                       v\r
+  |               Enterprise Systems\r
+  |\r
+  ├── Receive A2A result\r
+  ├── Aggregate result\r
+  ├── Save Redis state\r
+  └── Return response\r
+\`\`\`\r
+\r
+The architecture’s Customer Briefing example follows this same pattern: Coordinator validates entitlement, selects Sales Delegator, routes to the CBD Worker, retrieves approved data from enterprise systems, consolidates results, and returns the response with tracing and auditability.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 23. What Each Component Does\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Code responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+\`main.py\`\r
+\r
+|\r
+\r
+API entry point\r
+\r
+|\r
+|\r
+\r
+\`schemas.py\`\r
+\r
+|\r
+\r
+Request, response, and A2A contracts\r
+\r
+|\r
+|\r
+\r
+\`state.py\`\r
+\r
+|\r
+\r
+Shared LangGraph execution state\r
+\r
+|\r
+|\r
+\r
+\`coordinator.py\`\r
+\r
+|\r
+\r
+Business orchestration logic\r
+\r
+|\r
+|\r
+\r
+\`graph.py\`\r
+\r
+|\r
+\r
+Workflow transitions\r
+\r
+|\r
+|\r
+\r
+\`llm_service.py\`\r
+\r
+|\r
+\r
+Intent classification and planning intelligence\r
+\r
+|\r
+|\r
+\r
+\`agent_registry.py\`\r
+\r
+|\r
+\r
+Delegator discovery\r
+\r
+|\r
+|\r
+\r
+\`prompt_registry.py\`\r
+\r
+|\r
+\r
+Versioned prompt retrieval\r
+\r
+|\r
+|\r
+\r
+\`policy_service.py\`\r
+\r
+|\r
+\r
+Entitlement and policy authorization\r
+\r
+|\r
+|\r
+\r
+\`a2a_client.py\`\r
+\r
+|\r
+\r
+Agent-to-agent task communication\r
+\r
+|\r
+|\r
+\r
+\`a2a_factory.py\`\r
+\r
+|\r
+\r
+Context and message construction\r
+\r
+|\r
+|\r
+\r
+\`memory_service.py\`\r
+\r
+|\r
+\r
+Redis session state\r
+\r
+|\r
+|\r
+\r
+\`messaging.py\`\r
+\r
+|\r
+\r
+Kafka / Service Bus abstraction\r
+\r
+|\r
+|\r
+\r
+\`observability.py\`\r
+\r
+|\r
+\r
+Correlated logs and tracing hooks\r
+\r
+|\r
+\r
+## 24. What Is Still Required for Production CWD\r
+\r
+The code above provides the Coordinator core, but the following production capabilities must be connected to the actual platform services:\r
+\r
+### Security\r
+\r
+* Entra ID token validation.\r
+\r
+* Managed identities.\r
+\r
+* Key Vault secret and certificate retrieval.\r
+\r
+* Domain-level RBAC and data entitlements.\r
+\r
+* Private endpoints and network isolation.\r
+\r
+* DLP and output redaction.\r
+\r
+* A2A authentication and replay protection.\r
+\r
+### A2A reliability\r
+\r
+* Actual CWD A2A protocol/schema.\r
+\r
+* TLS or secure internal gRPC/HTTP.\r
+\r
+* Task status and result callbacks.\r
+\r
+* Idempotency keys.\r
+\r
+* Retry and timeout policies.\r
+\r
+* Dead-letter handling.\r
+\r
+* Kafka feedback topics or Service Bus command queues.\r
+\r
+* Backpressure and priority lanes.\r
+\r
+### Data and RAG\r
+\r
+* Azure AI Search retrieval.\r
+\r
+* ACL-aware filtering.\r
+\r
+* Redis short-term context.\r
+\r
+* Long-term vector memory.\r
+\r
+* Governed MCP tools and enterprise adapters.\r
+\r
+### Observability\r
+\r
+* MLflow3 runs and artifacts.\r
+\r
+* App Insights metrics and traces.\r
+\r
+* Log Analytics dashboards.\r
+\r
+* Token and cost tracking.\r
+\r
+* Tool I/O capture where approved.\r
+\r
+* Golden tests and agent scorecards.\r
+\r
+These are not optional architectural details: the CWD design identifies them as platform components or governance requirements.\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+COG-ArchitectureReviewforAIOPSPlatform-230526-0424-216.pdf\r
+\r
+## 25. Final Architecture Statement\r
+\r
+\`\`\`\r
+Coordinator\r
+    = Understand\r
+    + Plan\r
+    + Authorize\r
+    + Discover\r
+    + Route\r
+    + Coordinate\r
+    + Aggregate\r
+\r
+A2A\r
+    = Communicate\r
+    + Delegate\r
+    + Propagate Context\r
+    + Track Task Status\r
+\r
+Delegator\r
+    = Decompose\r
+    + Select Workers\r
+    + Manage Domain Workflow\r
+\r
+Worker\r
+    = Execute\r
+    + Validate\r
+    + Produce Results\r
+\r
+MCP\r
+    = Governed Tool and Data Access\r
+\`\`\`\r
+\r
+The Coordinator code is therefore the orchestration control plane of CWD. A2A is introduced at the Coordinator → Delegator boundary, and the same contract can be used by Delegators to communicate with Workers. LangGraph controls the workflow; the LLM provides reasoning; registries provide governed discovery; Redis maintains short-term state; and Workers perform the actual enterprise operations through approved tools.\r
+\r
+\r
+### Two corrections before you run this code\r
+\r
+1. Add the missing factory file shown in the project structure:\r
+\r
+   \`app/services/a2a_factory.py\`\r
+\r
+   The implementation imports it from \`app.services.a2a_factory\`. Without that file, the application will fail during import.\r
+\r
+2. The \`Coordinator\` class should initialize \`self.graph\` explicitly. Replace the constructor ending with:\r
+\r
+   Python\r
+\r
+   Run\r
+\r
+   \`\`\`\r
+   self.observability = observability\r
+   self.graph = None\r
+   \`\`\`\r
+\r
+   The dependency wiring then assigns the compiled graph:\r
+\r
+   Python\r
+\r
+   Run\r
+\r
+   \`\`\`\r
+   coordinator.graph = build_coordinator_graph(coordinator)\r
+   \`\`\`\r
+\r
+   This is intentional: the graph is built after the Coordinator's dependencies are available.\r
+\r
+### One more production clarification\r
+\r
+The current code uses synchronous A2A over HTTP for the initial implementation. It does not yet implement the full asynchronous Kafka/Service Bus task lifecycle, and it does not yet implement actual MLflow3 tracing or Entra ID token validation. Those should be added through the corresponding production adapters rather than simulated inside the Coordinator.\r
+\r
+The source architecture explicitly calls for A2A routing keys, idempotency checks, backpressure/priority lanes, and Kafka or Service Bus messaging, so those are the next implementation areas—not additional LLM logic.\r
+\r
+COG-AIOPSPlatformMemo-230526-0418-212.pdf\r
+\r
+If you want to continue from this code, the next useful step is to implement the actual CWD A2A Gateway + Service Bus/Kafka adapter, followed by the Sales Delegator and Worker code that consumes this Coordinator task.\r
+`,code:``},{id:`coordinator-responsibilities`,category:`Coordinator Agent`,title:`Coordinator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities handled by the Coordinator, including request orchestration, planning, delegation, state management, and result coordination.`,concept:`Markdown\r
+\r
+\`\`\`\`\r
+# Coordinator Responsibilities in CWD\r
+\r
+The **Coordinator** is the enterprise-level control component of CWD. Its responsibility is to understand a business request, determine how it should be fulfilled, coordinate the required agents, and return a governed result.\r
+\r
+The Coordinator does not perform every business operation itself. It manages the execution of the overall workflow.\r
+\r
+## 1. Understand the User Request\r
+\r
+The Coordinator receives a request from Teams, React, or another approved channel.\r
+\r
+### Example\r
+\r
+\`\`\`text\r
+"Create a customer briefing for customer ABC"\r
+\`\`\`\`\r
+\r
+The Coordinator identifies:\r
+\r
+* What the user wants.\r
+\r
+* Which business domain is involved.\r
+\r
+* Whether the request requires one or multiple agents.\r
+\r
+* Whether additional information or clarification is needed.\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Understand Intent\r
+    ↓\r
+Identify Business Domain\r
+\`\`\`\r
+\r
+The LLM may assist with understanding the request, but the Coordinator owns the orchestration decision.\r
+\r
+## 2. Classify the Request\r
+\r
+The Coordinator determines the business domain and request type.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request: Create a customer briefing\r
+\r
+Domain: Sales\r
+Intent: Customer briefing\r
+\`\`\`\r
+\r
+Other examples:\r
+\r
+|\r
+User request\r
+\r
+|\r
+\r
+Domain\r
+\r
+|\r
+\r
+Intent\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Create a customer briefing\r
+\r
+|\r
+\r
+Sales\r
+\r
+|\r
+\r
+Customer briefing\r
+\r
+|\r
+|\r
+\r
+Explain a financial variance\r
+\r
+|\r
+\r
+Finance\r
+\r
+|\r
+\r
+Financial analysis\r
+\r
+|\r
+|\r
+\r
+Check an employee policy\r
+\r
+|\r
+\r
+HR\r
+\r
+|\r
+\r
+Policy information\r
+\r
+|\r
+|\r
+\r
+Analyze supply demand\r
+\r
+|\r
+\r
+Supply Chain\r
+\r
+|\r
+\r
+Demand analysis\r
+\r
+|\r
+|\r
+\r
+Summarize a business report\r
+\r
+|\r
+\r
+Business Analysis\r
+\r
+|\r
+\r
+Report summarization\r
+\r
+|\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Request\r
+    ↓\r
+Intent Classification\r
+    ↓\r
+Domain Identification\r
+\`\`\`\r
+\r
+The classification determines which Delegator should handle the request.\r
+\r
+## 3. Validate the Request\r
+\r
+Before execution, the Coordinator validates the request.\r
+\r
+### Validation includes\r
+\r
+* Required user identity.\r
+\r
+* Valid session.\r
+\r
+* Non-empty request.\r
+\r
+* Valid request structure.\r
+\r
+* Supported domain or intent.\r
+\r
+* Required input information.\r
+\r
+* Request size and format.\r
+\r
+* Correlation and execution identifiers.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User ID: Required\r
+Session ID: Required\r
+Message: Required\r
+Correlation ID: Generated if missing\r
+\`\`\`\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Validate Request\r
+    ↓\r
+Continue only if valid\r
+\`\`\`\r
+\r
+Invalid requests should be rejected or returned for clarification rather than sent to downstream agents.\r
+\r
+## 4. Enforce Authorization and Governance\r
+\r
+The Coordinator ensures that the workflow is authorized before execution.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Is the user authorized for Sales data?\r
+    ↓\r
+Yes → Continue\r
+No  → Reject\r
+\`\`\`\r
+\r
+Authorization may involve:\r
+\r
+* User identity.\r
+\r
+* User roles.\r
+\r
+* Business domain.\r
+\r
+* Data entitlements.\r
+\r
+* Requested operation.\r
+\r
+* Data classification.\r
+\r
+* Approval requirements.\r
+\r
+* Policy restrictions.\r
+\r
+The Coordinator should not assume that a user is authorized merely because the request reached the API.\r
+\r
+### Important principle\r
+\r
+\`\`\`\r
+Authentication = Who is the user?\r
+\r
+Authorization = What is the user allowed to do?\r
+\`\`\`\r
+\r
+The Coordinator enforces the workflow-level authorization boundary. Delegators, Workers, and enterprise systems must still enforce their own access controls.\r
+\r
+## 5. Create the Execution Plan\r
+\r
+The Coordinator determines the high-level steps required to fulfill the request.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request:\r
+Create a customer briefing\r
+\`\`\`\r
+\r
+### Execution plan\r
+\r
+\`\`\`\r
+1. Retrieve customer information\r
+2. Retrieve sales opportunity information\r
+3. Retrieve recent interactions\r
+4. Generate customer briefing\r
+\`\`\`\r
+\r
+The Coordinator decides:\r
+\r
+* Which tasks are required.\r
+\r
+* Which tasks can run in parallel.\r
+\r
+* Which tasks depend on earlier results.\r
+\r
+* Which Delegator should execute the workflow.\r
+\r
+* Whether the request is synchronous or asynchronous.\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Understand\r
+    ↓\r
+Plan\r
+    ↓\r
+Execute\r
+\`\`\`\r
+\r
+The Coordinator creates the high-level plan. The Delegator creates the detailed domain-specific Worker plan.\r
+\r
+## 6. Discover the Appropriate Delegator\r
+\r
+The Coordinator uses the Agent Registry to identify the appropriate Delegator.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Intent: Customer briefing\r
+Domain: Sales\r
+    ↓\r
+Agent Registry\r
+    ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The Coordinator should not hard-code every Delegator endpoint.\r
+\r
+### Registry information may include\r
+\r
+* Agent ID.\r
+\r
+* Agent type.\r
+\r
+* Business domain.\r
+\r
+* Capabilities.\r
+\r
+* Endpoint.\r
+\r
+* Health status.\r
+\r
+* Supported task types.\r
+\r
+* Version metadata.\r
+\r
+* Availability.\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Request\r
+    ↓\r
+Agent Registry\r
+    ↓\r
+Select Healthy and Authorized Delegator\r
+\`\`\`\r
+\r
+This allows new domain agents to be added without changing the Coordinator's core routing logic.\r
+\r
+## 7. Route the Task Through A2A\r
+\r
+This is one of the most important Coordinator responsibilities.\r
+\r
+The Coordinator sends the planned task to the selected Delegator using A2A.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Coordinator\r
+    |\r
+    | A2A Task\r
+    v\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The Coordinator sends:\r
+\r
+* Task type.\r
+\r
+* User instruction.\r
+\r
+* Execution plan.\r
+\r
+* Session context.\r
+\r
+* Task ID.\r
+\r
+* Run ID.\r
+\r
+* Correlation ID.\r
+\r
+* User identity and relevant authorization context.\r
+\r
+* Required metadata.\r
+\r
+### Example A2A task\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "task_type": "customer_briefing",\r
+  "instruction": "Create a customer briefing for customer ABC",\r
+  "target_agent": "sales-delegator",\r
+  "context": {\r
+    "session_id": "session-123",\r
+    "task_id": "task-456",\r
+    "run_id": "run-789",\r
+    "correlation_id": "corr-001"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+A2A\r
+    ↓\r
+Delegator\r
+\`\`\`\r
+\r
+A2A is the communication mechanism. The Coordinator remains responsible for deciding what task should be sent.\r
+\r
+## 8. Coordinate Multiple Agents\r
+\r
+The Coordinator manages workflows that require multiple Delegators or agent results.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User:\r
+"Prepare a customer briefing with sales, finance, and support information."\r
+\`\`\`\r
+\r
+### Coordinator workflow\r
+\r
+\`\`\`\r
+                    Coordinator\r
+                         |\r
+          +--------------+--------------+\r
+          |              |              |\r
+          v              v              v\r
+    Sales Delegator  Finance Delegator  Support Delegator\r
+          |              |              |\r
+          v              v              v\r
+       Results        Results        Results\r
+          |              |              |\r
+          +--------------+--------------+\r
+                         |\r
+                         v\r
+                  Coordinator\r
+                         |\r
+                         v\r
+                  Final Briefing\r
+\`\`\`\r
+\r
+The Coordinator may execute independent tasks in parallel and wait for the required results.\r
+\r
+### Responsibility\r
+\r
+* Coordinate multiple Delegators.\r
+\r
+* Track task completion.\r
+\r
+* Manage dependencies.\r
+\r
+* Correlate results.\r
+\r
+* Handle partial failures.\r
+\r
+* Decide whether the workflow can continue.\r
+\r
+## 9. Manage Context and State\r
+\r
+The Coordinator maintains the execution context throughout the workflow.\r
+\r
+### Context hierarchy\r
+\r
+\`\`\`\r
+Session\r
+    ↓\r
+Task\r
+    ↓\r
+Run\r
+    ↓\r
+Turn\r
+    ↓\r
+Step\r
+\`\`\`\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Session: Entire conversation\r
+Task: Create customer briefing\r
+Run: One execution attempt\r
+Turn: Current user request\r
+Step: Retrieve customer profile\r
+\`\`\`\r
+\r
+The Coordinator propagates the required context to downstream agents.\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Coordinator Context\r
+    ↓\r
+A2A Context\r
+    ↓\r
+Delegator Context\r
+    ↓\r
+Worker Context\r
+\`\`\`\r
+\r
+This enables:\r
+\r
+* End-to-end tracing.\r
+\r
+* Session continuity.\r
+\r
+* Task tracking.\r
+\r
+* Result correlation.\r
+\r
+* Auditability.\r
+\r
+* Failure recovery.\r
+\r
+## 10. Manage Execution Status\r
+\r
+The Coordinator tracks the status of the workflow.\r
+\r
+### Example statuses\r
+\r
+\`\`\`\r
+received\r
+validated\r
+authorized\r
+planning\r
+routed\r
+working\r
+completed\r
+failed\r
+requires_approval\r
+requires_clarification\r
+\`\`\`\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request Received\r
+    ↓\r
+Planning\r
+    ↓\r
+A2A Task Submitted\r
+    ↓\r
+Working\r
+    ↓\r
+Completed\r
+\`\`\`\r
+\r
+For long-running workflows, the Coordinator may return:\r
+\r
+\`\`\`\r
+"Your request is being processed."\r
+\`\`\`\r
+\r
+The result can be delivered later through the approved asynchronous communication mechanism.\r
+\r
+## 11. Handle Errors and Recovery\r
+\r
+The Coordinator is responsible for workflow-level error handling.\r
+\r
+### Example failure\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+Sales Delegator\r
+    ↓\r
+Customer Profile Worker\r
+    ↓\r
+Salesforce API\r
+    ↓\r
+Failure\r
+\`\`\`\r
+\r
+The Coordinator determines whether to:\r
+\r
+* Retry the task.\r
+\r
+* Route to another healthy agent.\r
+\r
+* Continue with partial results.\r
+\r
+* Request clarification.\r
+\r
+* Request approval.\r
+\r
+* Return a controlled failure.\r
+\r
+* Escalate the issue.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Salesforce unavailable\r
+    ↓\r
+Retry according to policy\r
+    ↓\r
+If still unavailable\r
+    ↓\r
+Return controlled error\r
+\`\`\`\r
+\r
+The Coordinator should not blindly retry every failure. Retry behavior must respect timeout, idempotency, and business impact.\r
+\r
+## 12. Aggregate Results\r
+\r
+The Coordinator combines results received from Delegators.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Sales Result\r
+    +\r
+Finance Result\r
+    +\r
+Support Result\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Combined Business Context\r
+\`\`\`\r
+\r
+The Coordinator may use an LLM to synthesize the final response, but it must not invent missing enterprise information.\r
+\r
+### Responsibility\r
+\r
+* Validate result completeness.\r
+\r
+* Identify failed or missing tasks.\r
+\r
+* Combine successful results.\r
+\r
+* Preserve source and task context.\r
+\r
+* Apply response governance.\r
+\r
+* Generate the final user-facing answer.\r
+\r
+## 13. Apply Final Response Governance\r
+\r
+Before returning the result, the Coordinator applies the required response controls.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Delegator Results\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Response Validation\r
+    ↓\r
+DLP / Redaction / Policy Check\r
+    ↓\r
+User Response\r
+\`\`\`\r
+\r
+This may include:\r
+\r
+* Sensitive-data filtering.\r
+\r
+* Output validation.\r
+\r
+* Restricted-content handling.\r
+\r
+* Approval enforcement.\r
+\r
+* Response formatting.\r
+\r
+* Audit logging.\r
+\r
+The Coordinator should not expose raw internal errors, unrestricted tool output, or unauthorized data to the user.\r
+\r
+## 14. Persist Execution State\r
+\r
+The Coordinator saves the relevant session and workflow state.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Coordinator\r
+    |\r
+    +--> Redis\r
+    |\r
+    +--> Execution State\r
+    |\r
+    +--> Session Context\r
+    |\r
+    +--> Task Status\r
+\`\`\`\r
+\r
+Redis is suitable for short-term active workflow state. Long-term knowledge retrieval and semantic memory belong in the approved RAG and vector-storage layers.\r
+\r
+### Responsibility\r
+\r
+* Save session state.\r
+\r
+* Save task status.\r
+\r
+* Preserve correlation identifiers.\r
+\r
+* Support continuation of long-running workflows.\r
+\r
+* Support recovery where applicable.\r
+\r
+## 15. Provide Observability\r
+\r
+The Coordinator must make the entire workflow traceable.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request\r
+    ↓\r
+Coordinator\r
+    ↓\r
+A2A\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker\r
+    ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+Every stage should be correlated using identifiers such as:\r
+\r
+\`\`\`\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+### Metrics may include\r
+\r
+* Request count.\r
+\r
+* Workflow latency.\r
+\r
+* A2A latency.\r
+\r
+* Task success rate.\r
+\r
+* Failure rate.\r
+\r
+* Retry count.\r
+\r
+* Token usage.\r
+\r
+* Model cost.\r
+\r
+* Tool execution time.\r
+\r
+* Agent availability.\r
+\r
+* Partial-result rate.\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+MLflow3 / App Insights / Log Analytics\r
+\`\`\`\r
+\r
+The Coordinator should emit structured logs and traces without exposing restricted data.\r
+\r
+## 16. Manage Long-Running Workflows\r
+\r
+Not every enterprise request completes immediately.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User:\r
+"Generate a large customer briefing using multiple enterprise systems."\r
+\`\`\`\r
+\r
+The Coordinator may:\r
+\r
+\`\`\`\r
+1. Validate request.\r
+2. Create task.\r
+3. Submit A2A task.\r
+4. Return working status.\r
+5. Track task execution.\r
+6. Receive completion event.\r
+7. Aggregate results.\r
+8. Notify the user.\r
+\`\`\`\r
+\r
+### Responsibility\r
+\r
+\`\`\`\r
+Submit Task\r
+    ↓\r
+Track Task\r
+    ↓\r
+Receive Result\r
+    ↓\r
+Return Final Response\r
+\`\`\`\r
+\r
+This is where A2A, Service Bus, and event-driven execution become important.\r
+\r
+## 17. Maintain Separation of Responsibilities\r
+\r
+The Coordinator should not become a monolithic business application.\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+Enterprise workflow orchestration\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Domain workflow orchestration\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+Specialized business execution\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+Reasoning and decision support\r
+\r
+|\r
+|\r
+\r
+A2A\r
+\r
+|\r
+\r
+Agent-to-agent communication\r
+\r
+|\r
+|\r
+\r
+MCP\r
+\r
+|\r
+\r
+Governed tool and data access\r
+\r
+|\r
+|\r
+\r
+Agent Registry\r
+\r
+|\r
+\r
+Agent discovery\r
+\r
+|\r
+|\r
+\r
+Prompt Registry\r
+\r
+|\r
+\r
+Prompt lifecycle\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Short-term state\r
+\r
+|\r
+|\r
+\r
+Azure AI Search\r
+\r
+|\r
+\r
+Knowledge retrieval\r
+\r
+|\r
+|\r
+\r
+Policy Service\r
+\r
+|\r
+\r
+Authorization and governance\r
+\r
+|\r
+|\r
+\r
+Observability\r
+\r
+|\r
+\r
+Tracing and monitoring\r
+\r
+|\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Coordinator\r
+    |\r
+    | "Which agent should handle this?"\r
+    v\r
+Agent Registry\r
+    |\r
+    | "Sales Delegator"\r
+    v\r
+A2A\r
+    |\r
+    v\r
+Sales Delegator\r
+    |\r
+    | "Which Workers are needed?"\r
+    v\r
+Workers\r
+    |\r
+    | "Execute approved operations"\r
+    v\r
+MCP / Enterprise APIs\r
+\`\`\`\r
+\r
+## 18. Complete Responsibility Flow\r
+\r
+\`\`\`\r
+1. Receive user request\r
+        ↓\r
+2. Validate request\r
+        ↓\r
+3. Authenticate / verify context\r
+        ↓\r
+4. Classify intent and domain\r
+        ↓\r
+5. Check authorization\r
+        ↓\r
+6. Create execution plan\r
+        ↓\r
+7. Discover Delegator\r
+        ↓\r
+8. Submit A2A task\r
+        ↓\r
+9. Coordinate execution\r
+        ↓\r
+10. Track task status\r
+        ↓\r
+11. Handle errors and retries\r
+        ↓\r
+12. Receive Delegator results\r
+        ↓\r
+13. Aggregate results\r
+        ↓\r
+14. Apply response governance\r
+        ↓\r
+15. Persist execution state\r
+        ↓\r
+16. Emit observability\r
+        ↓\r
+17. Return final response\r
+\`\`\`\r
+\r
+## 19. Coordinator vs Delegator vs Worker\r
+\r
+|\r
+Responsibility\r
+\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Worker\r
+\r
+|\r
+| --- | --- | --- | --- |\r
+|\r
+\r
+Understand enterprise request\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+Domain-specific\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Identify business domain\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+Within domain\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Create high-level plan\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Create domain task plan\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Discover Delegator\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Select Workers\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Communicate through A2A\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+Yes, when applicable\r
+\r
+|\r
+|\r
+\r
+Execute business operation\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+Coordinates\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+|\r
+\r
+Access enterprise tools\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+Through Workers\r
+\r
+|\r
+\r
+Through approved tools\r
+\r
+|\r
+|\r
+\r
+Aggregate domain results\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Aggregate enterprise results\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+Manage overall workflow\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+Domain workflow\r
+\r
+|\r
+\r
+Task execution\r
+\r
+|\r
+|\r
+\r
+Return final user response\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+\r
+## 20. Final Definition\r
+\r
+\`\`\`\r
+Coordinator =\r
+    Understand\r
+    + Validate\r
+    + Authorize\r
+    + Classify\r
+    + Plan\r
+    + Discover\r
+    + Route\r
+    + Coordinate\r
+    + Track\r
+    + Recover\r
+    + Aggregate\r
+    + Govern\r
+    + Observe\r
+\`\`\`\r
+\r
+In CWD, the Coordinator is the enterprise control plane that makes multiple specialized agents operate as one coherent business system. It decides what needs to happen, sends tasks through A2A, manages execution, and returns a governed result—while Delegators and Workers perform the domain-specific operations.\r
+\r
+\r
+### Responsibility mapped to the Coordinator code\r
+\r
+|\r
+Responsibility\r
+\r
+|\r
+\r
+Method in the implementation\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Validate request\r
+\r
+|\r
+\r
+\`validate_request()\`\r
+\r
+|\r
+|\r
+\r
+Classify intent\r
+\r
+|\r
+\r
+\`classify_request()\`\r
+\r
+|\r
+|\r
+\r
+Enforce authorization\r
+\r
+|\r
+\r
+\`authorize_request()\`\r
+\r
+|\r
+|\r
+\r
+Discover Delegator\r
+\r
+|\r
+\r
+\`discover_delegator()\`\r
+\r
+|\r
+|\r
+\r
+Create execution plan\r
+\r
+|\r
+\r
+\`create_plan()\`\r
+\r
+|\r
+|\r
+\r
+Send A2A task\r
+\r
+|\r
+\r
+\`submit_a2a_task()\`\r
+\r
+|\r
+|\r
+\r
+Aggregate results\r
+\r
+|\r
+\r
+\`aggregate_result()\`\r
+\r
+|\r
+|\r
+\r
+Persist state\r
+\r
+|\r
+\r
+\`save_state()\`\r
+\r
+|\r
+|\r
+\r
+Execute complete workflow\r
+\r
+|\r
+\r
+\`run()\`\r
+\r
+|\r
+\r
+The LangGraph workflow connects these methods in the correct order:\r
+\r
+\`\`\`\r
+validate_request\r
+      ↓\r
+classify_request\r
+      ↓\r
+authorize_request\r
+      ↓\r
+discover_delegator\r
+      ↓\r
+create_plan\r
+      ↓\r
+submit_a2a_task\r
+      ↓\r
+aggregate_result\r
+      ↓\r
+save_state\r
+\`\`\`\r
+\r
+This is the core Coordinator responsibility flow for CWD.\r
+`,code:``},{id:`request-understanding`,category:`Coordinator Agent`,title:`Request Understanding`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets incoming user requests, identifies required actions, and determines the appropriate execution path.`,concept:`Markdown\r
+\r
+\`\`\`\`\r
+# How the Coordinator Interprets User Requests and Determines the Execution Path\r
+\r
+## 1. Overview\r
+\r
+The Coordinator is the **enterprise-level decision and orchestration component** of CWD.\r
+\r
+Its responsibility is to convert an incoming user request into a governed execution plan and then route that plan to the appropriate Delegator, Worker, tools, or enterprise systems.\r
+\r
+The Coordinator does not simply forward the user's message to an LLM. It performs a controlled sequence of activities:\r
+\r
+> **Understand → Classify → Identify actions → Validate → Authorize → Plan → Discover → Route → Coordinate → Aggregate → Respond**\r
+\r
+The LLM provides reasoning and interpretation, while the Coordinator controls execution, security, state, and routing.\r
+\r
+---\r
+\r
+## 2. Incoming User Request\r
+\r
+A request may arrive through:\r
+\r
+- Microsoft Teams\r
+- Microsoft 365\r
+- React-based application\r
+- Enterprise chat interface\r
+- API integration\r
+\r
+### Example request\r
+\r
+> "Prepare a customer briefing for customer ABC using the latest sales information, open opportunities, and recent customer interactions."\r
+\r
+The request is not a single database query. It may require:\r
+\r
+1. Identifying the customer.\r
+2. Retrieving sales information.\r
+3. Retrieving open opportunities.\r
+4. Retrieving recent customer interactions.\r
+5. Combining the results.\r
+6. Generating a customer briefing.\r
+7. Applying data-access and response-governance rules.\r
+\r
+The Coordinator must determine that this is a **multi-step business workflow**.\r
+\r
+---\r
+\r
+## 3. Step 1: Receive and Normalize the Request\r
+\r
+The Gateway first receives the request and passes a normalized request to the Coordinator.\r
+\r
+### Example normalized request\r
+\r
+\`\`\`json\r
+{\r
+  "user_id": "user-123",\r
+  "session_id": "session-456",\r
+  "message_id": "message-789",\r
+  "channel": "teams",\r
+  "message": "Prepare a customer briefing for customer ABC",\r
+  "tenant_id": "onsemi",\r
+  "roles": ["sales-user"],\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\`\r
+\r
+The Coordinator creates or propagates execution identifiers such as:\r
+\r
+\`\`\`\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+These identifiers allow the platform to trace the request from the user interface through every agent, tool, and enterprise system.\r
+\r
+## 4. Step 2: Understand the User's Intent\r
+\r
+The Coordinator uses an LLM to interpret the meaning of the request.\r
+\r
+The LLM analyzes:\r
+\r
+* What the user wants\r
+\r
+* The business objective\r
+\r
+* Important entities\r
+\r
+* Required information\r
+\r
+* Expected output\r
+\r
+* Whether the request requires action or only information\r
+\r
+* Whether multiple capabilities are involved\r
+\r
+* Whether clarification is required\r
+\r
+### Example interpretation\r
+\r
+User request:\r
+\r
+> "Prepare a customer briefing for customer ABC."\r
+\r
+Interpreted intent:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "entity": {\r
+    "type": "customer",\r
+    "value": "ABC"\r
+  },\r
+  "output_type": "business_document",\r
+  "requires_multiple_actions": true,\r
+  "requires_enterprise_data": true\r
+}\r
+\`\`\`\r
+\r
+The LLM interprets the request, but the Coordinator remains responsible for deciding whether the interpretation is valid and what happens next.\r
+\r
+## 5. Step 3: Identify the Required Actions\r
+\r
+After understanding the intent, the Coordinator determines the actions needed to fulfill the request.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Create customer briefing\r
+        │\r
+        ├── Identify customer\r
+        ├── Retrieve sales information\r
+        ├── Retrieve open opportunities\r
+        ├── Retrieve customer interactions\r
+        ├── Consolidate results\r
+        ├── Generate briefing\r
+        └── Return governed response\r
+\`\`\`\r
+\r
+The Coordinator converts the user's natural-language request into a structured task plan.\r
+\r
+### Example action plan\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "actions": [\r
+    {\r
+      "action": "retrieve_customer_profile",\r
+      "source": "customer_system"\r
+    },\r
+    {\r
+      "action": "retrieve_sales_opportunities",\r
+      "source": "sales_system"\r
+    },\r
+    {\r
+      "action": "retrieve_recent_interactions",\r
+      "source": "customer_interaction_system"\r
+    },\r
+    {\r
+      "action": "generate_customer_briefing",\r
+      "source": "briefing_worker"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The actions are logical business actions, not necessarily direct API calls. The appropriate Delegator and Workers determine how those actions are executed.\r
+\r
+## 6. Step 4: Determine Whether Clarification Is Required\r
+\r
+The Coordinator checks whether the request contains enough information to proceed.\r
+\r
+### Example\r
+\r
+> "Prepare a customer briefing."\r
+\r
+The Coordinator may need to ask:\r
+\r
+* Which customer?\r
+\r
+* What time period should be covered?\r
+\r
+* What type of briefing is required?\r
+\r
+* Is the briefing intended for an internal or external audience?\r
+\r
+### Clarification decision\r
+\r
+\`\`\`\r
+Is the request sufficiently complete?\r
+        │\r
+        ├── No → Ask a clarification question\r
+        │\r
+        └── Yes → Continue execution\r
+\`\`\`\r
+\r
+This prevents the platform from executing an incorrect or ambiguous workflow.\r
+\r
+## 7. Step 5: Validate the Request\r
+\r
+Before execution, the Coordinator validates the request against platform rules.\r
+\r
+Validation may include:\r
+\r
+* Required fields\r
+\r
+* Supported request type\r
+\r
+* Valid customer or business entity\r
+\r
+* Input format\r
+\r
+* Request size\r
+\r
+* Allowed channel\r
+\r
+* Duplicate or repeated request detection\r
+\r
+* Prompt-injection and unsafe-input checks\r
+\r
+* Whether the requested operation is supported\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request: Create customer briefing\r
+Customer: ABC\r
+Required information: Present\r
+Supported workflow: Yes\r
+Input validation: Passed\r
+\`\`\`\r
+\r
+If validation fails, the Coordinator returns a controlled error or requests additional information.\r
+\r
+## 8. Step 6: Enforce Authorization and Governance\r
+\r
+The Coordinator must determine whether the user is allowed to perform the requested operation and access the required data.\r
+\r
+Authorization is checked before enterprise data is retrieved.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+User request\r
+    │\r
+    ▼\r
+Identify required data\r
+    │\r
+    ▼\r
+Check user entitlement\r
+    │\r
+    ├── Not authorized → Deny or restrict request\r
+    │\r
+    └── Authorized → Continue\r
+\`\`\`\r
+\r
+The Coordinator may evaluate:\r
+\r
+* User identity\r
+\r
+* Entra ID roles and groups\r
+\r
+* Domain permissions\r
+\r
+* Data classification\r
+\r
+* Customer or account restrictions\r
+\r
+* Required Snowflake roles\r
+\r
+* Delegator and Worker permissions\r
+\r
+* Tool-level access policies\r
+\r
+* Output restrictions\r
+\r
+### Important principle\r
+\r
+> The LLM must never decide independently that a user is authorized to access enterprise data.\r
+\r
+The Coordinator and governed policy services enforce authorization. The LLM can help interpret the request, but it cannot bypass security controls.\r
+\r
+## 9. Step 7: Classify the Request and Identify the Business Domain\r
+\r
+The Coordinator determines which business domain owns the request.\r
+\r
+### Example classification\r
+\r
+|\r
+Request\r
+\r
+|\r
+\r
+Domain\r
+\r
+|\r
+\r
+Likely Delegator\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Create customer briefing\r
+\r
+|\r
+\r
+Sales\r
+\r
+|\r
+\r
+Sales Delegator\r
+\r
+|\r
+|\r
+\r
+Analyze quarterly revenue\r
+\r
+|\r
+\r
+Finance / Business Analysis\r
+\r
+|\r
+\r
+Finance or Business Analyst Delegator\r
+\r
+|\r
+|\r
+\r
+Schedule a customer meeting\r
+\r
+|\r
+\r
+Calendar\r
+\r
+|\r
+\r
+Calendar Delegator\r
+\r
+|\r
+|\r
+\r
+Summarize supplier performance\r
+\r
+|\r
+\r
+Supply Chain\r
+\r
+|\r
+\r
+Supply Chain Delegator\r
+\r
+|\r
+|\r
+\r
+Retrieve employee policy information\r
+\r
+|\r
+\r
+HR\r
+\r
+|\r
+\r
+HR Delegator\r
+\r
+|\r
+|\r
+\r
+Investigate product quality issue\r
+\r
+|\r
+\r
+Quality\r
+\r
+|\r
+\r
+Quality Delegator\r
+\r
+|\r
+\r
+### Example\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "delegator_capability": "customer_briefing",\r
+  "confidence": 0.96\r
+}\r
+\`\`\`\r
+\r
+The Coordinator does not need to hard-code every Delegator. It can use the Agent Registry to discover agents based on capabilities, policies, health, and availability.\r
+\r
+## 10. Step 8: Discover the Appropriate Delegator\r
+\r
+The Coordinator queries the Agent Registry to identify the appropriate domain agent.\r
+\r
+### Example registry lookup\r
+\r
+\`\`\`\r
+Required capability:\r
+    customer_briefing\r
+\r
+Domain:\r
+    sales\r
+\r
+Required operation:\r
+    retrieve_and_generate\r
+\r
+Security requirements:\r
+    internal_sales_data\r
+\`\`\`\r
+\r
+### Registry response\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "agent_id": "sales-delegator",\r
+  "agent_type": "delegator",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "customer_briefing",\r
+    "opportunity_analysis",\r
+    "customer_summary"\r
+  ],\r
+  "endpoint": "https://sales-delegator.internal",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator evaluates:\r
+\r
+* Agent capability\r
+\r
+* Agent health\r
+\r
+* Supported operations\r
+\r
+* Security requirements\r
+\r
+* Version\r
+\r
+* Endpoint\r
+\r
+* Availability\r
+\r
+* Domain ownership\r
+\r
+The registry enables dynamic discovery instead of requiring the Coordinator to contain every business-specific routing rule.\r
+\r
+## 11. Step 9: Select the Execution Pattern\r
+\r
+The Coordinator determines how the request should be executed.\r
+\r
+### Common execution patterns\r
+\r
+#### A. Direct Delegator execution\r
+\r
+Used when one domain agent can complete the request.\r
+\r
+\`\`\`\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Sales Delegator\r
+  ↓\r
+Worker\r
+  ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+#### B. Sequential execution\r
+\r
+Used when one action depends on the result of another.\r
+\r
+\`\`\`\r
+Retrieve customer\r
+      ↓\r
+Retrieve opportunities\r
+      ↓\r
+Generate briefing\r
+\`\`\`\r
+\r
+#### C. Parallel execution\r
+\r
+Used when multiple actions can run independently.\r
+\r
+\`\`\`\r
+                 ┌── Retrieve sales data ──────┐\r
+Coordinator ─────┼── Retrieve opportunities ───┼── Aggregate\r
+                 └── Retrieve interactions ────┘\r
+\`\`\`\r
+\r
+#### D. Multi-domain execution\r
+\r
+Used when the request requires multiple Delegators.\r
+\r
+\`\`\`\r
+Coordinator\r
+    │\r
+    ├── Sales Delegator\r
+    ├── Finance Delegator\r
+    └── Customer Experience Delegator\r
+            │\r
+            ▼\r
+       Consolidated result\r
+\`\`\`\r
+\r
+#### E. Human-in-the-loop execution\r
+\r
+Used when the operation requires approval or confirmation.\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+Prepare proposed action\r
+    ↓\r
+Request user approval\r
+    ↓\r
+Execute approved action\r
+\`\`\`\r
+\r
+## 12. Step 10: Create the Execution Plan\r
+\r
+The Coordinator creates a structured plan containing:\r
+\r
+* Selected Delegator\r
+\r
+* Required actions\r
+\r
+* Execution order\r
+\r
+* Parallelization opportunities\r
+\r
+* Required context\r
+\r
+* Required tools\r
+\r
+* Authorization requirements\r
+\r
+* Timeout and retry policy\r
+\r
+* Expected output\r
+\r
+* Correlation identifiers\r
+\r
+### Example execution plan\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "task_id": "task-001",\r
+  "intent": "create_customer_briefing",\r
+  "delegator": "sales-delegator",\r
+  "execution_mode": "parallel_then_aggregate",\r
+  "steps": [\r
+    {\r
+      "step_id": "step-001",\r
+      "action": "retrieve_customer_profile",\r
+      "worker": "customer-profile-worker"\r
+    },\r
+    {\r
+      "step_id": "step-002",\r
+      "action": "retrieve_sales_opportunities",\r
+      "worker": "opportunity-worker"\r
+    },\r
+    {\r
+      "step_id": "step-003",\r
+      "action": "retrieve_recent_interactions",\r
+      "worker": "interaction-worker"\r
+    },\r
+    {\r
+      "step_id": "step-004",\r
+      "action": "generate_customer_briefing",\r
+      "worker": "briefing-generation-worker",\r
+      "depends_on": [\r
+        "step-001",\r
+        "step-002",\r
+        "step-003"\r
+      ]\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The Coordinator determines the high-level plan. The Delegator manages the domain-specific execution details.\r
+\r
+## 13. Step 11: Route the Task Through A2A\r
+\r
+Once the execution plan is ready, the Coordinator sends the task to the selected Delegator through the A2A boundary.\r
+\r
+### Example A2A request\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "message_id": "msg-001",\r
+  "task_id": "task-001",\r
+  "source_agent": "cwd-coordinator",\r
+  "target_agent": "sales-delegator",\r
+  "task_type": "create_customer_briefing",\r
+  "intent": "create_customer_briefing",\r
+  "context": {\r
+    "session_id": "session-456",\r
+    "run_id": "run-001",\r
+    "turn_id": "turn-001",\r
+    "correlation_id": "corr-001"\r
+  },\r
+  "payload": {\r
+    "customer": "ABC",\r
+    "requested_output": "customer briefing"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The A2A Gateway or A2A client is responsible for controlled agent-to-agent communication.\r
+\r
+It can enforce:\r
+\r
+* Agent identity\r
+\r
+* Authentication\r
+\r
+* Authorization\r
+\r
+* Message validation\r
+\r
+* Correlation propagation\r
+\r
+* Idempotency\r
+\r
+* Retry and timeout handling\r
+\r
+* Task status tracking\r
+\r
+* Error handling\r
+\r
+### Important distinction\r
+\r
+\`\`\`\r
+Coordinator\r
+    └── Uses A2A to communicate with Delegators\r
+\r
+Delegator\r
+    └── Uses MCP/tools/APIs to access enterprise systems\r
+\`\`\`\r
+\r
+A2A is for agent-to-agent communication. MCP and governed tools are used for agent-to-system execution.\r
+\r
+## 14. Step 12: Delegator Determines Detailed Worker Execution\r
+\r
+The Delegator receives the task and performs domain-specific decomposition.\r
+\r
+For the customer briefing example:\r
+\r
+\`\`\`\r
+Sales Delegator\r
+    │\r
+    ├── Customer Profile Worker\r
+    ├── Opportunity Worker\r
+    ├── Interaction Worker\r
+    └── Briefing Generation Worker\r
+\`\`\`\r
+\r
+The Delegator decides:\r
+\r
+* Which Workers are required\r
+\r
+* Which Workers can execute in parallel\r
+\r
+* Which Worker depends on another result\r
+\r
+* Which domain policies apply\r
+\r
+* Which data sources are permitted\r
+\r
+* How domain results should be combined\r
+\r
+The Coordinator does not need to know every internal Worker implementation.\r
+\r
+## 15. Step 13: Workers Execute the Required Actions\r
+\r
+Workers perform the actual business operations.\r
+\r
+A Worker may:\r
+\r
+* Call a governed MCP tool\r
+\r
+* Invoke an enterprise API\r
+\r
+* Query an approved data adapter\r
+\r
+* Retrieve documents through Azure AI Search\r
+\r
+* Perform calculations\r
+\r
+* Generate an artifact\r
+\r
+* Validate or transform results\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Opportunity Worker\r
+    ↓\r
+MCP / governed tool\r
+    ↓\r
+Salesforce or approved sales data adapter\r
+    ↓\r
+Opportunity results\r
+\`\`\`\r
+\r
+The Worker uses its own least-privilege identity and is not allowed to access systems outside its approved permissions.\r
+\r
+### Separation of responsibilities\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+Enterprise intent, planning, routing, coordination\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Domain decomposition and Worker management\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+Specific task execution\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+Reasoning and interpretation\r
+\r
+|\r
+|\r
+\r
+MCP/tool\r
+\r
+|\r
+\r
+Controlled system interaction\r
+\r
+|\r
+|\r
+\r
+Enterprise system\r
+\r
+|\r
+\r
+Source of business data or action\r
+\r
+|\r
+\r
+## 16. Step 14: Use RAG and Memory When Required\r
+\r
+The Coordinator determines whether the request requires:\r
+\r
+* Enterprise knowledge retrieval\r
+\r
+* Historical conversation context\r
+\r
+* Previous task state\r
+\r
+* User preferences\r
+\r
+* Domain-specific documents\r
+\r
+* Business policies\r
+\r
+### Example\r
+\r
+For a customer briefing, the system may retrieve:\r
+\r
+* Customer-related documents\r
+\r
+* Sales notes\r
+\r
+* Account information\r
+\r
+* Approved customer history\r
+\r
+* Relevant business policies\r
+\r
+The retrieval process must apply:\r
+\r
+* User authorization\r
+\r
+* Data classification\r
+\r
+* ACL filtering\r
+\r
+* Intent-based filtering\r
+\r
+* Metadata filtering\r
+\r
+* Redaction rules\r
+\r
+The Coordinator may pass the retrieval requirements to the Delegator, while the Worker performs the actual governed retrieval.\r
+\r
+## 17. Step 15: Track Execution State\r
+\r
+The Coordinator maintains the execution state throughout the workflow.\r
+\r
+### State hierarchy\r
+\r
+\`\`\`\r
+Session\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Turn\r
+   ↓\r
+Step\r
+   ↓\r
+LLM / Tool execution\r
+\`\`\`\r
+\r
+The state may include:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "status": "running",\r
+  "current_step": "retrieve_sales_opportunities",\r
+  "completed_steps": [\r
+    "retrieve_customer_profile"\r
+  ],\r
+  "pending_steps": [\r
+    "retrieve_recent_interactions"\r
+  ],\r
+  "errors": [],\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+State management supports:\r
+\r
+* Long-running workflows\r
+\r
+* Retry and recovery\r
+\r
+* Task status tracking\r
+\r
+* Context propagation\r
+\r
+* Partial results\r
+\r
+* Failure diagnosis\r
+\r
+* Conversation continuity\r
+\r
+## 18. Step 16: Handle Errors and Recovery\r
+\r
+The Coordinator monitors the execution path and determines what to do when a step fails.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Opportunity Worker fails\r
+        │\r
+        ▼\r
+Coordinator receives failure\r
+        │\r
+        ├── Retry the task\r
+        ├── Route to an alternative capability\r
+        ├── Continue with partial results\r
+        ├── Request user clarification\r
+        └── Stop and return a controlled error\r
+\`\`\`\r
+\r
+The decision depends on:\r
+\r
+* Error type\r
+\r
+* Retry policy\r
+\r
+* Task criticality\r
+\r
+* Whether the failed step is mandatory\r
+\r
+* Availability of alternative agents\r
+\r
+* Data completeness\r
+\r
+* Business impact\r
+\r
+### Example response\r
+\r
+> "The customer profile and recent interactions were retrieved, but the opportunity system is temporarily unavailable. The briefing can be generated with partial information or retried."\r
+\r
+The Coordinator should not silently hide failures or present incomplete results as complete.\r
+\r
+## 19. Step 17: Aggregate and Validate Results\r
+\r
+After the Delegator completes its work, the Coordinator receives the result through A2A.\r
+\r
+### Example result\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "task_id": "task-001",\r
+  "status": "completed",\r
+  "result": {\r
+    "customer_profile": {},\r
+    "opportunities": [],\r
+    "recent_interactions": [],\r
+    "briefing": "..."\r
+  },\r
+  "completed_steps": [\r
+    "retrieve_customer_profile",\r
+    "retrieve_sales_opportunities",\r
+    "retrieve_recent_interactions",\r
+    "generate_customer_briefing"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The Coordinator validates:\r
+\r
+* Whether the task completed successfully\r
+\r
+* Whether mandatory steps were completed\r
+\r
+* Whether the result matches the requested output\r
+\r
+* Whether errors or partial results exist\r
+\r
+* Whether the response contains restricted information\r
+\r
+* Whether additional synthesis is required\r
+\r
+## 20. Step 18: Generate the Final Response\r
+\r
+The Coordinator may use an LLM to synthesize the final result into a user-friendly response.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Raw Worker Results\r
+        ↓\r
+Delegator Aggregation\r
+        ↓\r
+Coordinator Validation\r
+        ↓\r
+LLM Response Synthesis\r
+        ↓\r
+Response Governance\r
+        ↓\r
+User\r
+\`\`\`\r
+\r
+The final response may include:\r
+\r
+* Customer summary\r
+\r
+* Key opportunities\r
+\r
+* Recent interactions\r
+\r
+* Important risks\r
+\r
+* Recommended next steps\r
+\r
+* Generated briefing document\r
+\r
+The LLM should generate the response from the approved execution results and context, not invent missing business information.\r
+\r
+## 21. Step 19: Apply Final Response Governance\r
+\r
+Before returning the response, the Coordinator or response-governance layer checks:\r
+\r
+* Data classification\r
+\r
+* Sensitive information\r
+\r
+* DLP rules\r
+\r
+* Output redaction\r
+\r
+* User entitlement\r
+\r
+* Approved response format\r
+\r
+* Whether restricted data can be shown in the current channel\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Generated response\r
+        ↓\r
+DLP / response policy check\r
+        │\r
+        ├── Passed → Return to user\r
+        │\r
+        └── Restricted → Redact, restrict, or deny\r
+\`\`\`\r
+\r
+This ensures that authorization is enforced not only during retrieval, but also before information is returned to the user.\r
+\r
+## 22. Complete Execution Flow\r
+\r
+\`\`\`\r
+User Request\r
+    │\r
+    ▼\r
+Teams / M365 / React UI\r
+    │\r
+    ▼\r
+API / Integration Gateway\r
+    │\r
+    ├── Authentication\r
+    ├── Request validation\r
+    ├── Session and correlation IDs\r
+    └── Initial authorization\r
+    │\r
+    ▼\r
+Coordinator\r
+    │\r
+    ├── Understand intent\r
+    ├── Identify entities\r
+    ├── Identify required actions\r
+    ├── Check clarification requirements\r
+    ├── Validate request\r
+    ├── Enforce authorization\r
+    ├── Classify business domain\r
+    ├── Discover Delegator\r
+    ├── Create execution plan\r
+    └── Select execution pattern\r
+    │\r
+    ▼\r
+A2A Gateway\r
+    │\r
+    ▼\r
+Domain Delegator\r
+    │\r
+    ├── Decompose domain task\r
+    ├── Select Workers\r
+    ├── Apply domain policies\r
+    └── Coordinate Worker execution\r
+    │\r
+    ▼\r
+Workers\r
+    │\r
+    ├── MCP / governed tools\r
+    ├── RAG / Azure AI Search\r
+    ├── Enterprise APIs\r
+    ├── Business data adapters\r
+    └── Calculations / artifact generation\r
+    │\r
+    ▼\r
+Enterprise Systems\r
+    │\r
+    ├── Salesforce\r
+    ├── Snowflake\r
+    ├── Oracle\r
+    ├── SharePoint / M365\r
+    └── Other approved systems\r
+    │\r
+    ▼\r
+Worker Results\r
+    │\r
+    ▼\r
+Delegator Aggregation\r
+    │\r
+    ▼\r
+A2A Response\r
+    │\r
+    ▼\r
+Coordinator\r
+    │\r
+    ├── Validate results\r
+    ├── Handle errors or partial results\r
+    ├── Aggregate multi-agent results\r
+    ├── Generate final response\r
+    ├── Apply response governance\r
+    └── Persist execution state\r
+    │\r
+    ▼\r
+API / Integration Gateway\r
+    │\r
+    ▼\r
+User Response\r
+\`\`\`\r
+\r
+## 23. How the Coordinator Chooses the Execution Path\r
+\r
+The Coordinator does not use only one routing rule. It evaluates several factors.\r
+\r
+|\r
+Decision factor\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+User intent\r
+\r
+|\r
+\r
+Create a customer briefing\r
+\r
+|\r
+|\r
+\r
+Business domain\r
+\r
+|\r
+\r
+Sales\r
+\r
+|\r
+|\r
+\r
+Required capabilities\r
+\r
+|\r
+\r
+Customer profile, opportunities, interactions\r
+\r
+|\r
+|\r
+\r
+User authorization\r
+\r
+|\r
+\r
+Sales data access\r
+\r
+|\r
+|\r
+\r
+Data requirements\r
+\r
+|\r
+\r
+Salesforce, Snowflake, SharePoint\r
+\r
+|\r
+|\r
+\r
+Task dependencies\r
+\r
+|\r
+\r
+Briefing depends on retrieved information\r
+\r
+|\r
+|\r
+\r
+Execution mode\r
+\r
+|\r
+\r
+Parallel retrieval followed by aggregation\r
+\r
+|\r
+|\r
+\r
+Agent availability\r
+\r
+|\r
+\r
+Selected Delegator is healthy\r
+\r
+|\r
+|\r
+\r
+Task criticality\r
+\r
+|\r
+\r
+Whether all steps are mandatory\r
+\r
+|\r
+|\r
+\r
+Output type\r
+\r
+|\r
+\r
+Summary, document, recommendation, or action\r
+\r
+|\r
+|\r
+\r
+Approval requirement\r
+\r
+|\r
+\r
+Whether human confirmation is required\r
+\r
+|\r
+|\r
+\r
+Error policy\r
+\r
+|\r
+\r
+Retry, partial response, or failure\r
+\r
+|\r
+\r
+### Simplified decision logic\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+def determine_execution_path(request):\r
+    intent = interpret_intent(request)\r
+\r
+    if intent.requires_clarification:\r
+        return "ask_user_for_clarification"\r
+\r
+    validate_request(request)\r
+\r
+    authorize_request(request, intent)\r
+\r
+    delegator = discover_delegator(\r
+        domain=intent.domain,\r
+        capability=intent.required_capability\r
+    )\r
+\r
+    plan = create_execution_plan(\r
+        intent=intent,\r
+        delegator=delegator\r
+    )\r
+\r
+    if plan.requires_human_approval:\r
+        return "human_approval"\r
+\r
+    if plan.can_execute_in_parallel:\r
+        return "parallel_execution"\r
+\r
+    if plan.has_dependencies:\r
+        return "sequential_execution"\r
+\r
+    return "direct_delegator_execution"\r
+\`\`\`\r
+\r
+This is a conceptual representation. In the production CWD implementation, these responsibilities are distributed across Coordinator services, LangGraph workflow nodes, Agent Registry, policy services, A2A, and execution components.\r
+\r
+## 24. Role of the LLM in Request Interpretation\r
+\r
+The LLM is used for reasoning tasks such as:\r
+\r
+* Intent classification\r
+\r
+* Entity extraction\r
+\r
+* Action identification\r
+\r
+* Plan generation\r
+\r
+* Ambiguity detection\r
+\r
+* Result interpretation\r
+\r
+* Final response synthesis\r
+\r
+However, the LLM does not independently control the enterprise execution environment.\r
+\r
+### Correct responsibility boundary\r
+\r
+\`\`\`\r
+LLM\r
+    ├── Understands the request\r
+    ├── Suggests intent\r
+    ├── Suggests actions\r
+    └── Suggests a plan\r
+            │\r
+            ▼\r
+Coordinator\r
+    ├── Validates the interpretation\r
+    ├── Applies authorization\r
+    ├── Checks policies\r
+    ├── Selects approved agents\r
+    ├── Controls execution\r
+    ├── Tracks state\r
+    └── Enforces recovery and governance\r
+\`\`\`\r
+\r
+### Key principle\r
+\r
+> The LLM recommends what should happen; the Coordinator controls what is allowed to happen.\r
+\r
+## 25. Example: Different Requests, Different Execution Paths\r
+\r
+### Request A: Simple information request\r
+\r
+> "What is the current status of customer ABC?"\r
+\r
+\`\`\`\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Sales Delegator\r
+  ↓\r
+Customer Profile Worker\r
+  ↓\r
+Approved enterprise data source\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+### Request B: Multi-step briefing\r
+\r
+> "Prepare a customer briefing with sales, opportunities, and interactions."\r
+\r
+\`\`\`\r
+Coordinator\r
+  ↓\r
+Sales Delegator\r
+  ↓\r
+Parallel Workers\r
+  ├── Customer Profile Worker\r
+  ├── Opportunity Worker\r
+  └── Interaction Worker\r
+  ↓\r
+Briefing Generation Worker\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Final response\r
+\`\`\`\r
+\r
+### Request C: Cross-domain analysis\r
+\r
+> "Analyze the revenue impact of delayed customer shipments."\r
+\r
+\`\`\`\r
+Coordinator\r
+    │\r
+    ├── Sales Delegator\r
+    ├── Supply Chain Delegator\r
+    └── Finance Delegator\r
+            │\r
+            ▼\r
+      Result aggregation\r
+            │\r
+            ▼\r
+      Business analysis response\r
+\`\`\`\r
+\r
+### Request D: Action requiring approval\r
+\r
+> "Send a customer communication based on the briefing."\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+Sales / Communication Delegator\r
+    ↓\r
+Prepare draft\r
+    ↓\r
+Human approval\r
+    ↓\r
+Communication Worker\r
+    ↓\r
+Approved email or message tool\r
+\`\`\`\r
+\r
+## 26. How This Is Implemented in CWD\r
+\r
+The Coordinator's interpretation and routing responsibilities are represented through the orchestration workflow:\r
+\r
+\`\`\`\r
+validate_request\r
+      ↓\r
+classify_request\r
+      ↓\r
+authorize_request\r
+      ↓\r
+discover_delegator\r
+      ↓\r
+create_plan\r
+      ↓\r
+submit_a2a_task\r
+      ↓\r
+aggregate_result\r
+      ↓\r
+save_state\r
+\`\`\`\r
+\r
+### Component mapping\r
+\r
+|\r
+Responsibility\r
+\r
+|\r
+\r
+CWD component\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request understanding\r
+\r
+|\r
+\r
+Coordinator + LLM\r
+\r
+|\r
+|\r
+\r
+Intent classification\r
+\r
+|\r
+\r
+Coordinator classification service\r
+\r
+|\r
+|\r
+\r
+Action identification\r
+\r
+|\r
+\r
+Coordinator planning service\r
+\r
+|\r
+|\r
+\r
+Authorization\r
+\r
+|\r
+\r
+Gateway, policy service, Coordinator\r
+\r
+|\r
+|\r
+\r
+Domain routing\r
+\r
+|\r
+\r
+Coordinator + Agent Registry\r
+\r
+|\r
+|\r
+\r
+Detailed task decomposition\r
+\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+|\r
+\r
+Agent-to-agent communication\r
+\r
+|\r
+\r
+A2A Gateway / A2A client\r
+\r
+|\r
+|\r
+\r
+Tool execution\r
+\r
+|\r
+\r
+Workers + MCP / governed tools\r
+\r
+|\r
+|\r
+\r
+Knowledge retrieval\r
+\r
+|\r
+\r
+Azure AI Search / RAG\r
+\r
+|\r
+|\r
+\r
+State management\r
+\r
+|\r
+\r
+Redis, Cosmos DB, execution state\r
+\r
+|\r
+|\r
+\r
+Workflow control\r
+\r
+|\r
+\r
+LangGraph\r
+\r
+|\r
+|\r
+\r
+Error recovery\r
+\r
+|\r
+\r
+Coordinator and Delegator execution policies\r
+\r
+|\r
+|\r
+\r
+Final synthesis\r
+\r
+|\r
+\r
+Coordinator + LLM\r
+\r
+|\r
+|\r
+\r
+Observability\r
+\r
+|\r
+\r
+MLflow3, App Insights, Log Analytics\r
+\r
+|\r
+\r
+## 27. Final Architect Perspective\r
+\r
+The Coordinator acts as the intelligent control plane of CWD.\r
+\r
+It interprets the user's business intent, identifies the required actions, determines which capabilities are needed, validates authorization, selects the appropriate execution pattern, and routes the work to the correct Delegator through A2A.\r
+\r
+The Delegator then manages domain-specific execution, while Workers perform the actual business operations through governed tools and enterprise integrations.\r
+\r
+### Final definition\r
+\r
+> The Coordinator converts an unstructured user request into a secure, traceable, and executable enterprise workflow by combining LLM-based intent understanding with deterministic routing, authorization, planning, state management, and execution control.\r
+\r
+\`\`\`\r
+Coordinator =\r
+    Understand\r
+  + Identify Actions\r
+  + Validate\r
+  + Authorize\r
+  + Classify\r
+  + Plan\r
+  + Discover\r
+  + Route\r
+  + Coordinate\r
+  + Recover\r
+  + Aggregate\r
+  + Govern\r
+  + Observe\r
+\`\`\`\r
+`,code:``},{id:`intent-classification`,category:`Coordinator Agent`,title:`Intent Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user intent is identified, classified, and mapped to the appropriate business domain, workflow, or downstream agent.`,concept:`Markdown\r
+\r
+\`\`\`\`\r
+# How User Intent Is Identified, Classified, and Mapped to the Correct Business Domain or Agent\r
+\r
+## 1. Overview\r
+\r
+In CWD, the Coordinator converts a natural-language user request into a structured business intent and then maps that intent to the appropriate execution path.\r
+\r
+The process is:\r
+\r
+> **User Request → Intent Identification → Intent Classification → Entity Extraction → Action Identification → Domain Mapping → Workflow Selection → Agent Discovery → Execution**\r
+\r
+The LLM helps interpret the request, while the Coordinator applies deterministic validation, authorization, registry lookup, and routing controls.\r
+\r
+---\r
+\r
+## 2. Example User Request\r
+\r
+> "Prepare a customer briefing for customer ABC using the latest sales information, open opportunities, and recent customer interactions."\r
+\r
+The Coordinator must determine:\r
+\r
+- What does the user want?\r
+- Which business domain owns the request?\r
+- What business capabilities are required?\r
+- Which workflow should be executed?\r
+- Which Delegator and Workers are needed?\r
+- What enterprise data may be accessed?\r
+- Is the user authorized?\r
+- Can the request execute sequentially, in parallel, or across multiple domains?\r
+\r
+The request is therefore transformed into a structured representation.\r
+\r
+\`\`\`json\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "entities": {\r
+    "customer": "ABC"\r
+  },\r
+  "actions": [\r
+    "retrieve_customer_profile",\r
+    "retrieve_sales_information",\r
+    "retrieve_open_opportunities",\r
+    "retrieve_recent_interactions",\r
+    "generate_customer_briefing"\r
+  ],\r
+  "workflow": "customer_briefing_workflow",\r
+  "required_capability": "customer_briefing",\r
+  "execution_mode": "parallel_then_aggregate"\r
+}\r
+\`\`\`\`\r
+\r
+## 3. Intent Identification\r
+\r
+### 3.1 What is intent?\r
+\r
+Intent is the business objective behind the user's words.\r
+\r
+For example:\r
+\r
+|\r
+User request\r
+\r
+|\r
+\r
+Identified intent\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+"Show me customer ABC's current status"\r
+\r
+|\r
+\r
+\`retrieve_customer_status\`\r
+\r
+|\r
+|\r
+\r
+"Prepare a customer briefing"\r
+\r
+|\r
+\r
+\`create_customer_briefing\`\r
+\r
+|\r
+|\r
+\r
+"Analyze why revenue declined"\r
+\r
+|\r
+\r
+\`analyze_revenue_decline\`\r
+\r
+|\r
+|\r
+\r
+"Schedule a meeting with the customer"\r
+\r
+|\r
+\r
+\`schedule_customer_meeting\`\r
+\r
+|\r
+|\r
+\r
+"Summarize the latest quality issue"\r
+\r
+|\r
+\r
+\`summarize_quality_issue\`\r
+\r
+|\r
+|\r
+\r
+"Send the approved customer email"\r
+\r
+|\r
+\r
+\`send_customer_communication\`\r
+\r
+|\r
+\r
+The Coordinator does not route based only on keywords such as customer, revenue, or meeting. It identifies the actual business objective.\r
+\r
+### 3.2 LLM-based intent interpretation\r
+\r
+The Coordinator sends the normalized request to the LLM with a controlled prompt.\r
+\r
+\`\`\`\r
+System:\r
+You are the CWD intent classification component.\r
+\r
+Identify:\r
+1. Business intent\r
+2. Business domain\r
+3. Entities\r
+4. Required actions\r
+5. Expected output\r
+6. Whether clarification is required\r
+\r
+Return only the approved structured schema.\r
+\r
+User:\r
+Prepare a customer briefing for customer ABC.\r
+\`\`\`\r
+\r
+The LLM returns a structured interpretation.\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "confidence": 0.96,\r
+  "requires_clarification": false,\r
+  "entities": {\r
+    "customer": "ABC"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator validates this output before using it for routing.\r
+\r
+## 4. Intent Identification Is More Than Classification\r
+\r
+The Coordinator identifies several dimensions of the request.\r
+\r
+### 4.1 Business objective\r
+\r
+What outcome does the user want?\r
+\r
+\`\`\`\r
+Create a customer briefing\r
+\`\`\`\r
+\r
+### 4.2 Request type\r
+\r
+Is the user asking to:\r
+\r
+* Retrieve information?\r
+\r
+* Analyze information?\r
+\r
+* Generate a document?\r
+\r
+* Perform an action?\r
+\r
+* Update a system?\r
+\r
+* Search enterprise knowledge?\r
+\r
+* Execute a multi-step workflow?\r
+\r
+### 4.3 Entities\r
+\r
+Which business objects are involved?\r
+\r
+Examples:\r
+\r
+* Customer\r
+\r
+* Supplier\r
+\r
+* Employee\r
+\r
+* Product\r
+\r
+* Opportunity\r
+\r
+* Invoice\r
+\r
+* Shipment\r
+\r
+* Quality issue\r
+\r
+* Meeting\r
+\r
+* Document\r
+\r
+### 4.4 Constraints\r
+\r
+Examples:\r
+\r
+* Latest information\r
+\r
+* Specific customer\r
+\r
+* Specific date range\r
+\r
+* Internal-only information\r
+\r
+* Particular output format\r
+\r
+* Required approval\r
+\r
+* Restricted business domain\r
+\r
+### 4.5 Expected output\r
+\r
+Examples:\r
+\r
+* Short answer\r
+\r
+* Detailed analysis\r
+\r
+* Business document\r
+\r
+* Recommendation\r
+\r
+* Email draft\r
+\r
+* Executed transaction\r
+\r
+* Status report\r
+\r
+## 5. Entity Extraction\r
+\r
+Entities provide the context required to select the correct workflow.\r
+\r
+### Example\r
+\r
+> "Show the open opportunities for customer ABC in the current quarter."\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "retrieve_open_opportunities",\r
+  "domain": "sales",\r
+  "entities": {\r
+    "customer": "ABC",\r
+    "opportunity_status": "open",\r
+    "period": "current_quarter"\r
+  },\r
+  "output_type": "structured_data"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator may need to resolve:\r
+\r
+* Customer name to a customer ID\r
+\r
+* Product name to a product ID\r
+\r
+* Employee name to an employee record\r
+\r
+* Date phrase to an actual date range\r
+\r
+* Business unit to an organizational identifier\r
+\r
+Entity resolution may use approved enterprise services rather than relying only on the LLM.\r
+\r
+## 6. Action Identification\r
+\r
+After identifying the intent, the Coordinator determines the actions required to fulfill it.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Required actions:\r
+    1. Identify customer\r
+    2. Retrieve customer profile\r
+    3. Retrieve sales information\r
+    4. Retrieve opportunities\r
+    5. Retrieve recent interactions\r
+    6. Generate briefing\r
+    7. Validate final response\r
+\`\`\`\r
+\r
+The Coordinator distinguishes between:\r
+\r
+### Business action\r
+\r
+\`\`\`\r
+Retrieve open opportunities\r
+\`\`\`\r
+\r
+### Technical execution\r
+\r
+\`\`\`\r
+Call an approved Salesforce adapter\r
+\`\`\`\r
+\r
+The Coordinator identifies the business action. The Delegator and Worker determine the technical implementation.\r
+\r
+## 7. Intent Classification\r
+\r
+Intent classification assigns the request to an approved intent category.\r
+\r
+### Example intent taxonomy\r
+\r
+\`\`\`\r
+Sales\r
+├── retrieve_customer_status\r
+├── create_customer_briefing\r
+├── analyze_opportunities\r
+└── generate_sales_summary\r
+\r
+Finance\r
+├── retrieve_revenue\r
+├── analyze_financial_variance\r
+└── generate_finance_report\r
+\r
+Supply Chain\r
+├── retrieve_shipment_status\r
+├── analyze_supplier_performance\r
+└── investigate_delivery_delay\r
+\r
+HR\r
+├── retrieve_employee_policy\r
+├── summarize_hr_document\r
+└── initiate_hr_request\r
+\r
+Calendar\r
+├── find_available_time\r
+├── schedule_meeting\r
+└── cancel_meeting\r
+\r
+Quality\r
+├── retrieve_quality_issue\r
+├── analyze_defect_trend\r
+└── generate_quality_summary\r
+\`\`\`\r
+\r
+The taxonomy should be maintained as a governed platform capability rather than allowing every agent to define incompatible intent names.\r
+\r
+## 8. Classification Uses Multiple Signals\r
+\r
+The Coordinator can combine several signals when identifying the intent.\r
+\r
+|\r
+Signal\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+User message\r
+\r
+|\r
+\r
+"Prepare a customer briefing"\r
+\r
+|\r
+|\r
+\r
+Conversation history\r
+\r
+|\r
+\r
+Previous request identified customer ABC\r
+\r
+|\r
+|\r
+\r
+Extracted entities\r
+\r
+|\r
+\r
+Customer, opportunity, quarter\r
+\r
+|\r
+|\r
+\r
+User role\r
+\r
+|\r
+\r
+Sales user\r
+\r
+|\r
+|\r
+\r
+Requested output\r
+\r
+|\r
+\r
+Business document\r
+\r
+|\r
+|\r
+\r
+Available capabilities\r
+\r
+|\r
+\r
+Customer briefing workflow\r
+\r
+|\r
+|\r
+\r
+Domain metadata\r
+\r
+|\r
+\r
+Sales-related customer data\r
+\r
+|\r
+|\r
+\r
+Registry capabilities\r
+\r
+|\r
+\r
+Sales Delegator supports briefing\r
+\r
+|\r
+|\r
+\r
+Policy requirements\r
+\r
+|\r
+\r
+Internal sales-data access\r
+\r
+|\r
+\r
+The user message is the primary input, but context and platform metadata improve routing accuracy.\r
+\r
+## 9. Conversation Context\r
+\r
+The Coordinator uses session and task context when the current request depends on earlier messages.\r
+\r
+### Example conversation\r
+\r
+User:\r
+\r
+> "Show me customer ABC's open opportunities."\r
+\r
+User:\r
+\r
+> "Now prepare a briefing for the same customer."\r
+\r
+The second request contains an implicit reference:\r
+\r
+\`\`\`\r
+"the same customer" → customer ABC\r
+\`\`\`\r
+\r
+The Coordinator resolves this from the approved session context.\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "current_intent": "create_customer_briefing",\r
+  "resolved_entities": {\r
+    "customer": "ABC"\r
+  },\r
+  "source_context": "previous_turn"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator must not use unrelated or unauthorized conversation history as business context.\r
+\r
+## 10. Confidence and Ambiguity Handling\r
+\r
+The Coordinator evaluates whether the identified intent is sufficiently clear.\r
+\r
+### Example of high confidence\r
+\r
+> "Retrieve open opportunities for customer ABC."\r
+\r
+\`\`\`\r
+Intent: retrieve_open_opportunities\r
+Domain: Sales\r
+Confidence: High\r
+Action: Continue\r
+\`\`\`\r
+\r
+### Example of ambiguous intent\r
+\r
+> "Tell me about ABC."\r
+\r
+Possible meanings:\r
+\r
+* Customer profile\r
+\r
+* Sales opportunities\r
+\r
+* Recent interactions\r
+\r
+* Financial information\r
+\r
+* Customer briefing\r
+\r
+The Coordinator should not guess.\r
+\r
+\`\`\`\r
+Intent confidence: Low\r
+        ↓\r
+Ask clarification\r
+        ↓\r
+"What would you like to know about customer ABC?"\r
+\`\`\`\r
+\r
+### Example of conflicting signals\r
+\r
+> "Prepare a customer briefing and schedule a meeting with the customer."\r
+\r
+This request contains two business objectives:\r
+\r
+\`\`\`\r
+1. Create customer briefing\r
+2. Schedule customer meeting\r
+\`\`\`\r
+\r
+The Coordinator may create a multi-step workflow:\r
+\r
+\`\`\`\r
+Retrieve customer information\r
+        ↓\r
+Generate briefing\r
+        ↓\r
+Prepare meeting details\r
+        ↓\r
+Request approval if required\r
+        ↓\r
+Schedule meeting\r
+\`\`\`\r
+\r
+## 11. Mapping Intent to a Business Domain\r
+\r
+Once the intent is identified, the Coordinator maps it to the business domain that owns the capability.\r
+\r
+### Example mapping\r
+\r
+\`\`\`\r
+Intent: create_customer_briefing\r
+        ↓\r
+Domain: Sales\r
+        ↓\r
+Capability: customer_briefing\r
+        ↓\r
+Delegator: Sales Delegator\r
+\`\`\`\r
+\r
+### Domain mapping table\r
+\r
+|\r
+Intent\r
+\r
+|\r
+\r
+Business domain\r
+\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Create customer briefing\r
+\r
+|\r
+\r
+Sales\r
+\r
+|\r
+\r
+Sales Delegator\r
+\r
+|\r
+|\r
+\r
+Analyze revenue variance\r
+\r
+|\r
+\r
+Finance\r
+\r
+|\r
+\r
+Finance Delegator\r
+\r
+|\r
+|\r
+\r
+Investigate shipment delay\r
+\r
+|\r
+\r
+Supply Chain\r
+\r
+|\r
+\r
+Supply Chain Delegator\r
+\r
+|\r
+|\r
+\r
+Retrieve employee policy\r
+\r
+|\r
+\r
+HR\r
+\r
+|\r
+\r
+HR Delegator\r
+\r
+|\r
+|\r
+\r
+Schedule meeting\r
+\r
+|\r
+\r
+Calendar\r
+\r
+|\r
+\r
+Calendar Delegator\r
+\r
+|\r
+|\r
+\r
+Analyze product defect\r
+\r
+|\r
+\r
+Quality\r
+\r
+|\r
+\r
+Quality Delegator\r
+\r
+|\r
+|\r
+\r
+Analyze customer experience\r
+\r
+|\r
+\r
+Customer Experience\r
+\r
+|\r
+\r
+Customer Experience Delegator\r
+\r
+|\r
+|\r
+\r
+Generate enterprise business analysis\r
+\r
+|\r
+\r
+Business Analysis\r
+\r
+|\r
+\r
+Business Analyst Delegator\r
+\r
+|\r
+\r
+The domain is selected based on the business capability required, not simply the data source.\r
+\r
+For example, a customer briefing may use Salesforce, Snowflake, and SharePoint, but the owning domain is still Sales.\r
+\r
+## 12. Agent Registry-Based Mapping\r
+\r
+The Coordinator should use the Agent Registry to discover the appropriate Delegator.\r
+\r
+### Example registry capability\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "agent_id": "sales-delegator",\r
+  "agent_type": "delegator",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "create_customer_briefing",\r
+    "retrieve_customer_status",\r
+    "analyze_opportunities"\r
+  ],\r
+  "supported_workflows": [\r
+    "customer_briefing_workflow"\r
+  ],\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator searches for an agent that supports the identified capability.\r
+\r
+\`\`\`\r
+Required capability:\r
+    create_customer_briefing\r
+\r
+        ↓\r
+\r
+Agent Registry\r
+\r
+        ↓\r
+\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The registry can also provide:\r
+\r
+* Endpoint\r
+\r
+* Version\r
+\r
+* Health status\r
+\r
+* Supported operations\r
+\r
+* Security metadata\r
+\r
+* Input and output schema\r
+\r
+* Ownership information\r
+\r
+* Availability\r
+\r
+* Deployment environment\r
+\r
+## 13. Mapping Intent to a Workflow\r
+\r
+An intent identifies what the user wants.\r
+\r
+A workflow identifies how the request should be fulfilled.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Workflow:\r
+    customer_briefing_workflow\r
+\`\`\`\r
+\r
+The workflow may contain:\r
+\r
+\`\`\`\r
+1. Resolve customer\r
+2. Retrieve customer profile\r
+3. Retrieve opportunities\r
+4. Retrieve recent interactions\r
+5. Consolidate information\r
+6. Generate briefing\r
+7. Validate and return result\r
+\`\`\`\r
+\r
+### Intent-to-workflow mapping\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "workflow": {\r
+    "workflow_id": "customer_briefing_workflow",\r
+    "execution_mode": "parallel_then_aggregate",\r
+    "required_capabilities": [\r
+      "customer_profile",\r
+      "opportunity_analysis",\r
+      "customer_interactions",\r
+      "briefing_generation"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The workflow definition may be maintained by the domain team or registered as a reusable platform capability.\r
+\r
+## 14. Mapping Workflow to Downstream Agents\r
+\r
+After selecting the workflow, the Coordinator determines which downstream agent should receive the task.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Intent\r
+  ↓\r
+Business Domain\r
+  ↓\r
+Workflow\r
+  ↓\r
+Required Capability\r
+  ↓\r
+Agent Registry\r
+  ↓\r
+Delegator\r
+  ↓\r
+Workers\r
+\`\`\`\r
+\r
+For the customer briefing example:\r
+\r
+\`\`\`\r
+create_customer_briefing\r
+        ↓\r
+Sales domain\r
+        ↓\r
+customer_briefing_workflow\r
+        ↓\r
+Sales Delegator\r
+        ↓\r
+Customer Profile Worker\r
+Opportunity Worker\r
+Interaction Worker\r
+Briefing Generation Worker\r
+\`\`\`\r
+\r
+The Coordinator generally routes to the Delegator rather than directly managing every Worker.\r
+\r
+## 15. Why the Coordinator Does Not Directly Select Every Worker\r
+\r
+The Coordinator operates at the enterprise level.\r
+\r
+It knows:\r
+\r
+* The user's intent\r
+\r
+* The business domain\r
+\r
+* The required capability\r
+\r
+* The high-level workflow\r
+\r
+* The execution constraints\r
+\r
+The Delegator knows:\r
+\r
+* Domain-specific task decomposition\r
+\r
+* Available Workers\r
+\r
+* Domain-specific policies\r
+\r
+* Worker dependencies\r
+\r
+* Domain-level fallback options\r
+\r
+### Responsibility separation\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Main responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+Enterprise intent and high-level routing\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Domain workflow and Worker selection\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+Specific business task execution\r
+\r
+|\r
+|\r
+\r
+Agent Registry\r
+\r
+|\r
+\r
+Capability and agent discovery\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+Interpretation and reasoning\r
+\r
+|\r
+|\r
+\r
+A2A\r
+\r
+|\r
+\r
+Agent-to-agent communication\r
+\r
+|\r
+\r
+This separation prevents the Coordinator from becoming a monolithic business-logic component.\r
+\r
+## 16. Multi-Domain Intent Mapping\r
+\r
+Some requests require more than one business domain.\r
+\r
+### Example\r
+\r
+> "Analyze the revenue impact of delayed customer shipments."\r
+\r
+The Coordinator may identify:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "intent": "analyze_revenue_impact_of_delays",\r
+  "domains": [\r
+    "supply_chain",\r
+    "finance",\r
+    "sales"\r
+  ],\r
+  "required_capabilities": [\r
+    "shipment_delay_analysis",\r
+    "revenue_analysis",\r
+    "customer_impact_analysis"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+### Execution path\r
+\r
+\`\`\`\r
+Coordinator\r
+    │\r
+    ├── Supply Chain Delegator\r
+    ├── Finance Delegator\r
+    └── Sales Delegator\r
+            │\r
+            ▼\r
+      Result aggregation\r
+            │\r
+            ▼\r
+      Business analysis response\r
+\`\`\`\r
+\r
+The Coordinator identifies the cross-domain objective and coordinates the separate domain agents.\r
+\r
+## 17. Workflow Selection Rules\r
+\r
+The Coordinator may use a combination of:\r
+\r
+1. Intent classification\r
+\r
+2. Capability matching\r
+\r
+3. Agent Registry metadata\r
+\r
+4. Policy requirements\r
+\r
+5. User authorization\r
+\r
+6. Workflow dependencies\r
+\r
+7. Execution mode\r
+\r
+8. Agent health and availability\r
+\r
+9. Required output type\r
+\r
+10. Human-approval requirements\r
+\r
+### Example decision\r
+\r
+\`\`\`\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Domain:\r
+    Sales\r
+\r
+Required capability:\r
+    customer_briefing\r
+\r
+User authorization:\r
+    Approved\r
+\r
+Agent availability:\r
+    Sales Delegator healthy\r
+\r
+Workflow:\r
+    customer_briefing_workflow\r
+\r
+Execution mode:\r
+    Parallel retrieval followed by aggregation\r
+\r
+Route:\r
+    Coordinator → A2A → Sales Delegator\r
+\`\`\`\r
+\r
+## 18. Example: Complete Intent-to-Agent Mapping\r
+\r
+### User request\r
+\r
+> "Prepare a customer briefing for customer ABC using the latest sales information and recent interactions."\r
+\r
+### Step 1: Identify intent\r
+\r
+\`\`\`\r
+create_customer_briefing\r
+\`\`\`\r
+\r
+### Step 2: Extract entities\r
+\r
+\`\`\`\r
+customer = ABC\r
+time_scope = latest\r
+\`\`\`\r
+\r
+### Step 3: Classify domain\r
+\r
+\`\`\`\r
+Sales\r
+\`\`\`\r
+\r
+### Step 4: Identify actions\r
+\r
+\`\`\`\r
+Retrieve customer profile\r
+Retrieve sales information\r
+Retrieve opportunities\r
+Retrieve recent interactions\r
+Generate briefing\r
+\`\`\`\r
+\r
+### Step 5: Identify required capability\r
+\r
+\`\`\`\r
+customer_briefing\r
+\`\`\`\r
+\r
+### Step 6: Discover agent\r
+\r
+\`\`\`\r
+Sales Delegator\r
+\`\`\`\r
+\r
+### Step 7: Select workflow\r
+\r
+\`\`\`\r
+customer_briefing_workflow\r
+\`\`\`\r
+\r
+### Step 8: Select execution pattern\r
+\r
+\`\`\`\r
+Parallel retrieval → Aggregation → Briefing generation\r
+\`\`\`\r
+\r
+### Step 9: Route through A2A\r
+\r
+\`\`\`\r
+Coordinator → A2A Gateway → Sales Delegator\r
+\`\`\`\r
+\r
+### Step 10: Delegator selects Workers\r
+\r
+\`\`\`\r
+Sales Delegator\r
+    ├── Customer Profile Worker\r
+    ├── Opportunity Worker\r
+    ├── Interaction Worker\r
+    └── Briefing Generation Worker\r
+\`\`\`\r
+\r
+## 19. Conceptual Coordinator Logic\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+def interpret_and_route(request):\r
+    # 1. Understand the user's request\r
+    interpretation = llm.interpret(request.message)\r
+\r
+    # 2. Validate the structured interpretation\r
+    validate_intent_schema(interpretation)\r
+\r
+    # 3. Resolve entities and conversation references\r
+    entities = resolve_entities(\r
+        interpretation.entities,\r
+        request.session_id\r
+    )\r
+\r
+    # 4. Check whether clarification is required\r
+    if interpretation.requires_clarification:\r
+        return ask_for_clarification(interpretation)\r
+\r
+    # 5. Enforce authorization\r
+    authorize(\r
+        user=request.user_id,\r
+        intent=interpretation.intent,\r
+        entities=entities\r
+    )\r
+\r
+    # 6. Identify the required business capability\r
+    capability = capability_catalog.resolve(\r
+        intent=interpretation.intent,\r
+        domain=interpretation.domain\r
+    )\r
+\r
+    # 7. Discover an approved Delegator\r
+    delegator = agent_registry.discover(\r
+        domain=interpretation.domain,\r
+        capability=capability\r
+    )\r
+\r
+    # 8. Select the appropriate workflow\r
+    workflow = workflow_registry.resolve(\r
+        intent=interpretation.intent,\r
+        capability=capability\r
+    )\r
+\r
+    # 9. Build the execution plan\r
+    plan = create_execution_plan(\r
+        intent=interpretation.intent,\r
+        entities=entities,\r
+        workflow=workflow,\r
+        delegator=delegator\r
+    )\r
+\r
+    # 10. Route the task through A2A\r
+    return a2a_client.submit_task(\r
+        target_agent=delegator.agent_id,\r
+        plan=plan\r
+    )\r
+\`\`\`\r
+\r
+This is conceptual logic. In CWD, the responsibilities are implemented through the Coordinator workflow, LLM service, policy service, Agent Registry, workflow planning, A2A, state management, and observability components.\r
+\r
+## 20. How LangGraph Supports This Process\r
+\r
+LangGraph provides the workflow control structure for the Coordinator.\r
+\r
+\`\`\`\r
+validate_request\r
+      ↓\r
+classify_request\r
+      ↓\r
+authorize_request\r
+      ↓\r
+discover_delegator\r
+      ↓\r
+create_plan\r
+      ↓\r
+submit_a2a_task\r
+      ↓\r
+aggregate_result\r
+      ↓\r
+save_state\r
+\`\`\`\r
+\r
+### Node responsibilities\r
+\r
+|\r
+LangGraph node\r
+\r
+|\r
+\r
+Intent-routing responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+\`validate_request\`\r
+\r
+|\r
+\r
+Validate incoming request\r
+\r
+|\r
+|\r
+\r
+\`classify_request\`\r
+\r
+|\r
+\r
+Identify intent, domain, entities, and actions\r
+\r
+|\r
+|\r
+\r
+\`authorize_request\`\r
+\r
+|\r
+\r
+Check access and policy requirements\r
+\r
+|\r
+|\r
+\r
+\`discover_delegator\`\r
+\r
+|\r
+\r
+Find an agent with the required capability\r
+\r
+|\r
+|\r
+\r
+\`create_plan\`\r
+\r
+|\r
+\r
+Select workflow and execution pattern\r
+\r
+|\r
+|\r
+\r
+\`submit_a2a_task\`\r
+\r
+|\r
+\r
+Route task to the Delegator\r
+\r
+|\r
+|\r
+\r
+\`aggregate_result\`\r
+\r
+|\r
+\r
+Combine and validate downstream results\r
+\r
+|\r
+|\r
+\r
+\`save_state\`\r
+\r
+|\r
+\r
+Persist execution state and traceability\r
+\r
+|\r
+\r
+LangGraph controls the sequence and state transitions. The LLM performs interpretation inside the relevant nodes.\r
+\r
+## 21. What Happens When No Suitable Agent Exists?\r
+\r
+The Coordinator should not route to an arbitrary agent.\r
+\r
+Possible outcomes include:\r
+\r
+\`\`\`\r
+No matching capability\r
+        │\r
+        ├── Ask user to clarify\r
+        ├── Return unsupported-request response\r
+        ├── Route to a general business-analysis capability\r
+        ├── Escalate to human support\r
+        └── Record the missing capability for platform improvement\r
+\`\`\`\r
+\r
+Example:\r
+\r
+> "I can identify the request, but no approved agent currently supports this operation."\r
+\r
+This is preferable to sending the request to an agent that does not have the required capability or authorization.\r
+\r
+## 22. Observability of Intent Routing\r
+\r
+The Coordinator should record the intent-routing decision for every request.\r
+\r
+### Example trace\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "correlation_id": "corr-001",\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "confidence": 0.96,\r
+  "workflow": "customer_briefing_workflow",\r
+  "selected_delegator": "sales-delegator",\r
+  "execution_mode": "parallel_then_aggregate",\r
+  "routing_reason": "Matched required customer_briefing capability",\r
+  "status": "routed"\r
+}\r
+\`\`\`\r
+\r
+This supports:\r
+\r
+* Routing accuracy analysis\r
+\r
+* Failed classification diagnosis\r
+\r
+* Agent utilization analysis\r
+\r
+* Workflow performance monitoring\r
+\r
+* Auditability\r
+\r
+* Evaluation and improvement\r
+\r
+* Detection of unsupported requests\r
+\r
+## 23. Important Design Principles\r
+\r
+### 1. Intent is not the same as a keyword\r
+\r
+The Coordinator identifies the business objective, not just matching words.\r
+\r
+### 2. LLM interpretation must be structured\r
+\r
+The LLM should return a validated schema rather than uncontrolled free text.\r
+\r
+### 3. Authorization happens before execution\r
+\r
+Intent classification must not grant access to data or tools.\r
+\r
+### 4. Capability determines routing\r
+\r
+The Coordinator should select an agent based on the required capability and approved registry metadata.\r
+\r
+### 5. Domain ownership is separate from data location\r
+\r
+A workflow may use multiple enterprise systems while still belonging to one business domain.\r
+\r
+### 6. The Coordinator routes to Delegators\r
+\r
+Delegators manage domain-specific Worker selection and execution.\r
+\r
+### 7. Ambiguity must be handled explicitly\r
+\r
+Low-confidence or incomplete requests should trigger clarification rather than guessing.\r
+\r
+### 8. Every routing decision must be traceable\r
+\r
+Intent, domain, workflow, agent, and execution identifiers should be recorded.\r
+\r
+## 24. Final Architecture View\r
+\r
+\`\`\`\r
+User Request\r
+      │\r
+      ▼\r
+Coordinator\r
+      │\r
+      ├── LLM intent interpretation\r
+      ├── Entity extraction\r
+      ├── Action identification\r
+      ├── Intent classification\r
+      ├── Clarification detection\r
+      ├── Request validation\r
+      ├── Authorization\r
+      │\r
+      ▼\r
+Capability Mapping\r
+      │\r
+      ▼\r
+Business Domain Mapping\r
+      │\r
+      ▼\r
+Workflow Selection\r
+      │\r
+      ▼\r
+Agent Registry Discovery\r
+      │\r
+      ▼\r
+Delegator Selection\r
+      │\r
+      ▼\r
+A2A Routing\r
+      │\r
+      ▼\r
+Delegator\r
+      │\r
+      ▼\r
+Workers\r
+      │\r
+      ▼\r
+Enterprise Systems / RAG / Tools\r
+\`\`\`\r
+\r
+## Final Definition\r
+\r
+> The Coordinator identifies user intent by interpreting the request, extracting entities and required actions, classifying the business objective, mapping it to an approved domain capability and workflow, and discovering the appropriate Delegator through the Agent Registry. It then routes the task through A2A while enforcing authorization, execution policies, state management, and traceability.\r
+\r
+\`\`\`\r
+Intent\r
+    → Domain\r
+    → Capability\r
+    → Workflow\r
+    → Delegator\r
+    → Workers\r
+    → Enterprise Execution\r
+\`\`\`\r
+`,code:``},{id:`coordinator-planning`,category:`Coordinator Agent`,title:`Planning`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how the Coordinator creates an execution plan, determines task dependencies, identifies required agents, and controls workflow execution.`,concept:`\`\`\`\`markdown\r
+# Coordinator: Execution Planning, Dependency Management, Agent Selection, and Workflow Control\r
+\r
+## 1. Overview\r
+\r
+Once the CWD Coordinator understands the user's intent, the next major responsibility is to determine:\r
+\r
+1. **What tasks must be performed?**\r
+2. **Which tasks depend on other tasks?**\r
+3. **Which Delegator or Worker can perform each task?**\r
+4. **Which tasks can execute in parallel?**\r
+5. **Which tasks must execute sequentially?**\r
+6. **How should failures and retries be handled?**\r
+7. **How should the complete workflow be tracked until the final response is produced?**\r
+\r
+The Coordinator therefore converts:\r
+\r
+\`\`\`text\r
+User Intent\r
+     ↓\r
+Business Objective\r
+     ↓\r
+Required Actions\r
+     ↓\r
+Execution Plan\r
+     ↓\r
+Task Dependencies\r
+     ↓\r
+Agent Selection\r
+     ↓\r
+Workflow Execution\r
+     ↓\r
+Result Aggregation\r
+     ↓\r
+Final Response\r
+\`\`\`\`\r
+\r
+The most important concept is:\r
+\r
+> **The Coordinator does not perform every business task itself. It creates and controls the execution plan and delegates the actual work to the appropriate agents.**\r
+\r
+---\r
+\r
+# 2. Example Business Request\r
+\r
+Consider this request:\r
+\r
+> "Prepare a customer briefing for customer ABC using the latest sales information, open opportunities, and recent customer interactions."\r
+\r
+The Coordinator has already identified the intent:\r
+\r
+\`\`\`text\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Domain:\r
+    Sales\r
+\r
+Customer:\r
+    ABC\r
+\`\`\`\r
+\r
+But knowing the intent is not enough.\r
+\r
+The Coordinator now needs to determine **how to fulfill the request**.\r
+\r
+---\r
+\r
+# 3. Step 1 — Identify Required Business Actions\r
+\r
+The Coordinator first converts the intent into business-level actions.\r
+\r
+For:\r
+\r
+> Create customer briefing\r
+\r
+The required actions could be:\r
+\r
+\`\`\`text\r
+1. Retrieve customer profile\r
+2. Retrieve sales information\r
+3. Retrieve open opportunities\r
+4. Retrieve recent customer interactions\r
+5. Consolidate the information\r
+6. Generate customer briefing\r
+\`\`\`\r
+\r
+These are **logical business tasks**.\r
+\r
+They are not yet API calls.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Business task:\r
+    Retrieve open opportunities\r
+\r
+Technical implementation:\r
+    Salesforce API / approved data adapter\r
+\`\`\`\r
+\r
+The Coordinator should work at the business workflow level.\r
+\r
+The Worker is responsible for determining the technical execution.\r
+\r
+---\r
+\r
+# 4. Step 2 — Build the Task Graph\r
+\r
+The Coordinator next determines whether tasks are independent or dependent.\r
+\r
+This is one of the most important parts of execution planning.\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+Retrieve Customer Profile\r
+Retrieve Opportunities\r
+Retrieve Interactions\r
+\`\`\`\r
+\r
+These three tasks do not necessarily depend on each other.\r
+\r
+Therefore they can execute in parallel.\r
+\r
+However:\r
+\r
+\`\`\`text\r
+Generate Customer Briefing\r
+\`\`\`\r
+\r
+requires the results of those tasks.\r
+\r
+Therefore it must wait.\r
+\r
+The logical dependency graph becomes:\r
+\r
+\`\`\`text\r
+                  ┌──────────────────────────┐\r
+                  │ Customer Profile Worker  │\r
+                  └────────────┬─────────────┘\r
+                               │\r
+                               │\r
+                  ┌────────────▼─────────────┐\r
+                  │                          │\r
+                  │                          │\r
+                  │  Generate Briefing       │\r
+                  │                          │\r
+                  │                          │\r
+                  └────────────▲─────────────┘\r
+                               │\r
+                  ┌────────────┴─────────────┐\r
+                  │                          │\r
+        ┌─────────┴─────────┐     ┌─────────┴──────────┐\r
+        │ Opportunity Worker │     │ Interaction Worker │\r
+        └───────────────────┘     └────────────────────┘\r
+\`\`\`\r
+\r
+A simpler representation is:\r
+\r
+\`\`\`text\r
+Stage 1\r
+ ├── Customer Profile\r
+ ├── Opportunities\r
+ └── Interactions\r
+          │\r
+          ▼\r
+Stage 2\r
+ └── Generate Customer Briefing\r
+\`\`\`\r
+\r
+---\r
+\r
+# 5. Why Dependency Management Is Important\r
+\r
+Without dependency management, the Coordinator might execute:\r
+\r
+\`\`\`text\r
+Generate Briefing\r
+      ↓\r
+Retrieve Opportunities\r
+\`\`\`\r
+\r
+which is incorrect because the briefing does not yet have the opportunity information.\r
+\r
+The correct execution is:\r
+\r
+\`\`\`text\r
+Retrieve Opportunities\r
+      ↓\r
+Result available\r
+      ↓\r
+Generate Briefing\r
+\`\`\`\r
+\r
+Dependencies therefore determine **when a task is allowed to execute**.\r
+\r
+---\r
+\r
+# 6. Step 3 — Identify Required Capabilities\r
+\r
+The Coordinator should not initially think:\r
+\r
+> "I need \`opportunity-worker-v3\`."\r
+\r
+Instead, it should think:\r
+\r
+> "I need an agent capable of retrieving open opportunities."\r
+\r
+So each task is converted into a required capability.\r
+\r
+Example:\r
+\r
+| Task                      | Required capability            |\r
+| ------------------------- | ------------------------------ |\r
+| Retrieve customer profile | \`retrieve_customer_profile\`    |\r
+| Retrieve opportunities    | \`retrieve_open_opportunities\`  |\r
+| Retrieve interactions     | \`retrieve_recent_interactions\` |\r
+| Generate briefing         | \`generate_customer_briefing\`   |\r
+\r
+This provides loose coupling between the Coordinator and individual agents.\r
+\r
+---\r
+\r
+# 7. Step 4 — Discover the Required Agents\r
+\r
+The Coordinator uses the **Agent Registry** to find agents that support those capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required capability:\r
+    retrieve_open_opportunities\r
+\`\`\`\r
+\r
+Agent Registry:\r
+\r
+\`\`\`text\r
+       Agent Registry\r
+             │\r
+             ▼\r
+    Search capabilities\r
+             │\r
+             ▼\r
+    opportunity-worker\r
+\`\`\`\r
+\r
+The Coordinator does not need to hard-code the endpoint.\r
+\r
+The registry may provide:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "opportunity-worker",\r
+  "agent_type": "worker",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "retrieve_open_opportunities"\r
+  ],\r
+  "endpoint": "https://opportunity-worker.internal",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The same process occurs for the other tasks.\r
+\r
+---\r
+\r
+# 8. Coordinator vs Delegator Agent Selection\r
+\r
+This distinction is extremely important in CWD.\r
+\r
+The Coordinator normally selects the **appropriate Delegator**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The Sales Delegator then determines the detailed Worker execution:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       │\r
+       ├── Customer Profile Worker\r
+       ├── Opportunity Worker\r
+       ├── Interaction Worker\r
+       └── Briefing Worker\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+### Coordinator\r
+\r
+Determines:\r
+\r
+\`\`\`text\r
+Which business domain?\r
+Which Delegator?\r
+Which high-level workflow?\r
+What execution pattern?\r
+\`\`\`\r
+\r
+### Delegator\r
+\r
+Determines:\r
+\r
+\`\`\`text\r
+Which Workers?\r
+Which domain-specific operations?\r
+Which Worker dependencies?\r
+How to execute the domain workflow?\r
+\`\`\`\r
+\r
+This prevents the Coordinator from becoming a giant centralized business-logic component.\r
+\r
+---\r
+\r
+# 9. Step 5 — Select the Execution Pattern\r
+\r
+The Coordinator determines how the workflow should execute.\r
+\r
+There are several common patterns.\r
+\r
+## Pattern 1 — Direct\r
+\r
+Used when a single agent can handle the request.\r
+\r
+\`\`\`text\r
+Coordinator\r
+     ↓\r
+Delegator\r
+     ↓\r
+Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+## Pattern 2 — Sequential\r
+\r
+Used when each task depends on the previous task.\r
+\r
+\`\`\`text\r
+Task A\r
+  ↓\r
+Task B\r
+  ↓\r
+Task C\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Identify customer\r
+      ↓\r
+Retrieve customer contract\r
+      ↓\r
+Analyze contract\r
+\`\`\`\r
+\r
+---\r
+\r
+## Pattern 3 — Parallel\r
+\r
+Used when tasks are independent.\r
+\r
+\`\`\`text\r
+          ┌── Task A ──┐\r
+          │            │\r
+Start ────┼── Task B ──┼── Complete\r
+          │            │\r
+          └── Task C ──┘\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Retrieve sales data\r
+Retrieve opportunity data\r
+Retrieve customer interactions\r
+\`\`\`\r
+\r
+These can execute concurrently.\r
+\r
+---\r
+\r
+## Pattern 4 — Parallel Then Aggregate\r
+\r
+This is common for CWD business workflows.\r
+\r
+\`\`\`text\r
+                 ┌── Customer Profile\r
+                 │\r
+Coordinator ─────┼── Opportunities\r
+                 │\r
+                 └── Interactions\r
+                          │\r
+                          ▼\r
+                     Aggregation\r
+                          │\r
+                          ▼\r
+                    Briefing Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+## Pattern 5 — Multi-Domain\r
+\r
+Some enterprise requests require multiple business domains.\r
+\r
+Example:\r
+\r
+> "Analyze the financial impact of delayed customer shipments."\r
+\r
+The Coordinator may determine:\r
+\r
+\`\`\`text\r
+Supply Chain\r
+Finance\r
+Sales\r
+\`\`\`\r
+\r
+Execution:\r
+\r
+\`\`\`text\r
+                   Coordinator\r
+                       │\r
+          ┌────────────┼────────────┐\r
+          ▼            ▼            ▼\r
+      Supply Chain   Finance       Sales\r
+      Delegator      Delegator     Delegator\r
+          │            │            │\r
+          └────────────┼────────────┘\r
+                       ▼\r
+                   Aggregation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. Step 6 — Create the Execution Plan\r
+\r
+The Coordinator now creates a structured execution plan.\r
+\r
+For our customer briefing example:\r
+\r
+\`\`\`json\r
+{\r
+  "plan_id": "plan-001",\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "workflow": "customer_briefing_workflow",\r
+  "execution_mode": "parallel_then_aggregate",\r
+\r
+  "tasks": [\r
+    {\r
+      "task_id": "task-001",\r
+      "name": "retrieve_customer_profile",\r
+      "agent": "customer-profile-worker",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-002",\r
+      "name": "retrieve_open_opportunities",\r
+      "agent": "opportunity-worker",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-003",\r
+      "name": "retrieve_recent_interactions",\r
+      "agent": "interaction-worker",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-004",\r
+      "name": "generate_customer_briefing",\r
+      "agent": "briefing-worker",\r
+      "dependencies": [\r
+        "task-001",\r
+        "task-002",\r
+        "task-003"\r
+      ]\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+This plan is effectively the **execution blueprint** for the workflow.\r
+\r
+---\r
+\r
+# 11. Understanding the Dependency Graph\r
+\r
+The dependency information means:\r
+\r
+\`\`\`text\r
+task-001\r
+    └── no dependency\r
+        → can execute immediately\r
+\r
+task-002\r
+    └── no dependency\r
+        → can execute immediately\r
+\r
+task-003\r
+    └── no dependency\r
+        → can execute immediately\r
+\r
+task-004\r
+    └── depends on 001, 002, 003\r
+        → must wait\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+READY\r
+ ├── task-001\r
+ ├── task-002\r
+ └── task-003\r
+\r
+WAITING\r
+ └── task-004\r
+\`\`\`\r
+\r
+After the first three complete:\r
+\r
+\`\`\`text\r
+COMPLETED\r
+ ├── task-001\r
+ ├── task-002\r
+ └── task-003\r
+\r
+READY\r
+ └── task-004\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+task-004\r
+    ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Step 7 — Determine Task Readiness\r
+\r
+A task is executable only when all of its dependencies are completed.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+def is_ready(task, completed_tasks):\r
+\r
+    for dependency in task.dependencies:\r
+\r
+        if dependency not in completed_tasks:\r
+            return False\r
+\r
+    return True\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+task-004 dependencies:\r
+\r
+[\r
+    task-001,\r
+    task-002,\r
+    task-003\r
+]\r
+\`\`\`\r
+\r
+If:\r
+\r
+\`\`\`text\r
+completed =\r
+[\r
+    task-001,\r
+    task-002\r
+]\r
+\`\`\`\r
+\r
+then:\r
+\r
+\`\`\`text\r
+task-004 = NOT READY\r
+\`\`\`\r
+\r
+After:\r
+\r
+\`\`\`text\r
+completed =\r
+[\r
+    task-001,\r
+    task-002,\r
+    task-003\r
+]\r
+\`\`\`\r
+\r
+then:\r
+\r
+\`\`\`text\r
+task-004 = READY\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Step 8 — Execute Ready Tasks\r
+\r
+The Coordinator identifies all tasks that are ready.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Ready tasks:\r
+\r
+task-001\r
+task-002\r
+task-003\r
+\`\`\`\r
+\r
+Instead of executing them one by one:\r
+\r
+\`\`\`text\r
+task-001\r
+   ↓\r
+task-002\r
+   ↓\r
+task-003\r
+\`\`\`\r
+\r
+the Coordinator can execute them concurrently:\r
+\r
+\`\`\`text\r
+             ┌── task-001 ──┐\r
+             │              │\r
+Coordinator ─┼── task-002 ──┼── Results\r
+             │              │\r
+             └── task-003 ──┘\r
+\`\`\`\r
+\r
+This reduces total workflow latency.\r
+\r
+---\r
+\r
+# 14. Step 9 — Pass Context Between Tasks\r
+\r
+The Coordinator must maintain execution context.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "session-001",\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+When the downstream Worker executes, these identifiers should continue through the workflow.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    correlation_id = corr-001\r
+          ↓\r
+Sales Delegator\r
+    correlation_id = corr-001\r
+          ↓\r
+Opportunity Worker\r
+    correlation_id = corr-001\r
+          ↓\r
+Salesforce adapter\r
+    correlation_id = corr-001\r
+\`\`\`\r
+\r
+This allows CWD to trace one business request across the complete execution path.\r
+\r
+---\r
+\r
+# 15. Step 10 — Control Workflow State\r
+\r
+The Coordinator should maintain state such as:\r
+\r
+\`\`\`text\r
+task status\r
+agent status\r
+completed tasks\r
+failed tasks\r
+pending tasks\r
+results\r
+errors\r
+retry count\r
+execution timestamps\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "status": "running",\r
+\r
+  "tasks": {\r
+    "task-001": "completed",\r
+    "task-002": "completed",\r
+    "task-003": "running",\r
+    "task-004": "pending"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can therefore determine:\r
+\r
+\`\`\`text\r
+Can task-004 execute?\r
+\`\`\`\r
+\r
+Answer:\r
+\r
+\`\`\`text\r
+No.\r
+task-003 is still running.\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. Step 11 — Handle Failures\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Profile       → SUCCESS\r
+Opportunities          → SUCCESS\r
+Interactions           → FAILED\r
+Briefing               → BLOCKED\r
+\`\`\`\r
+\r
+The Coordinator needs to decide what happens next.\r
+\r
+Possible policies:\r
+\r
+\`\`\`text\r
+Retry\r
+Fallback agent\r
+Continue with partial data\r
+Ask user\r
+Escalate\r
+Fail workflow\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Interaction Worker failed\r
+        ↓\r
+Retry\r
+        ↓\r
+Success\r
+        ↓\r
+Briefing Worker becomes READY\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+Interaction Worker failed\r
+        ↓\r
+Maximum retries reached\r
+        ↓\r
+Partial-result policy\r
+        ↓\r
+Generate briefing without interactions\r
+\`\`\`\r
+\r
+The decision should be policy-driven rather than arbitrary LLM behavior.\r
+\r
+---\r
+\r
+# 17. Step 12 — Aggregate Results\r
+\r
+After the downstream tasks complete:\r
+\r
+\`\`\`text\r
+Customer Profile\r
+Opportunities\r
+Interactions\r
+       │\r
+       ▼\r
+Aggregation\r
+\`\`\`\r
+\r
+The Coordinator or Delegator creates a consolidated context:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_profile": {},\r
+  "opportunities": [],\r
+  "recent_interactions": []\r
+}\r
+\`\`\`\r
+\r
+That context is then passed to the briefing-generation task.\r
+\r
+---\r
+\r
+# 18. Step 13 — Final Workflow Completion\r
+\r
+Once the final task completes:\r
+\r
+\`\`\`text\r
+All required tasks completed\r
+        ↓\r
+Validate result\r
+        ↓\r
+Apply output governance\r
+        ↓\r
+Persist state\r
+        ↓\r
+Return response\r
+\`\`\`\r
+\r
+The final state might be:\r
+\r
+\`\`\`json\r
+{\r
+  "status": "completed",\r
+  "completed_tasks": [\r
+    "task-001",\r
+    "task-002",\r
+    "task-003",\r
+    "task-004"\r
+  ],\r
+  "workflow": "customer_briefing_workflow"\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Complete Logical Flow\r
+\r
+The entire Coordinator planning and execution process is:\r
+\r
+\`\`\`text\r
+                    USER REQUEST\r
+                         │\r
+                         ▼\r
+                 Intent Analysis\r
+                         │\r
+                         ▼\r
+                Required Actions\r
+                         │\r
+                         ▼\r
+                Workflow Selection\r
+                         │\r
+                         ▼\r
+              Dependency Analysis\r
+                         │\r
+                         ▼\r
+                Capability Mapping\r
+                         │\r
+                         ▼\r
+                 Agent Discovery\r
+                         │\r
+                         ▼\r
+                Execution Plan\r
+                         │\r
+                         ▼\r
+               ┌─────────────────┐\r
+               │ Ready Tasks?    │\r
+               └────────┬────────┘\r
+                        │\r
+                 ┌──────┴──────┐\r
+                 │             │\r
+                YES            NO\r
+                 │             │\r
+                 ▼             ▼\r
+          Execute Tasks     Wait / Error\r
+                 │\r
+                 ▼\r
+          Update State\r
+                 │\r
+                 ▼\r
+        Check Dependencies\r
+                 │\r
+                 ▼\r
+          More Tasks?\r
+             │       │\r
+            YES      NO\r
+             │       │\r
+             └───┐   ▼\r
+                 │  Aggregate\r
+                 │    Results\r
+                 │      │\r
+                 │      ▼\r
+                 │  Final Response\r
+                 │\r
+                 └───────────────►\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. How This Maps to LangGraph\r
+\r
+In CWD, LangGraph is useful for representing the Coordinator's stateful workflow.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+validate_request\r
+  ↓\r
+classify_request\r
+  ↓\r
+authorize_request\r
+  ↓\r
+discover_delegator\r
+  ↓\r
+create_plan\r
+  ↓\r
+execute_ready_tasks\r
+  ↓\r
+check_dependencies\r
+  ↓\r
+ ┌───────────────┐\r
+ │ More tasks?   │\r
+ └───────┬───────┘\r
+         │\r
+     YES │\r
+         ▼\r
+ execute_ready_tasks\r
+         │\r
+         ▼\r
+ check_dependencies\r
+         │\r
+         │ NO\r
+         ▼\r
+ aggregate_result\r
+         ↓\r
+ save_state\r
+         ↓\r
+ END\r
+\`\`\`\r
+\r
+LangGraph provides the workflow/state mechanism.\r
+\r
+The Coordinator provides the **business orchestration logic**.\r
+\r
+---\r
+\r
+# 21. Python Implementation\r
+\r
+Below is a simplified but realistic implementation of the planning engine.\r
+\r
+\`\`\`python\r
+from dataclasses import dataclass, field\r
+from enum import Enum\r
+from typing import Any\r
+\r
+\r
+# ============================================================\r
+# Task Status\r
+# ============================================================\r
+\r
+class TaskStatus(str, Enum):\r
+\r
+    PENDING = "pending"\r
+    READY = "ready"\r
+    RUNNING = "running"\r
+    COMPLETED = "completed"\r
+    FAILED = "failed"\r
+    BLOCKED = "blocked"\r
+\r
+\r
+# ============================================================\r
+# Task\r
+# ============================================================\r
+\r
+@dataclass\r
+class Task:\r
+\r
+    task_id: str\r
+\r
+    name: str\r
+\r
+    capability: str\r
+\r
+    agent_id: str\r
+\r
+    dependencies: list[str] = field(\r
+        default_factory=list\r
+    )\r
+\r
+    status: TaskStatus = TaskStatus.PENDING\r
+\r
+    result: Any = None\r
+\r
+    error: str | None = None\r
+\r
+    retry_count: int = 0\r
+\r
+\r
+# ============================================================\r
+# Agent\r
+# ============================================================\r
+\r
+@dataclass\r
+class Agent:\r
+\r
+    agent_id: str\r
+\r
+    agent_type: str\r
+\r
+    domain: str\r
+\r
+    capabilities: list[str]\r
+\r
+    status: str = "healthy"\r
+\r
+\r
+# ============================================================\r
+# Agent Registry\r
+# ============================================================\r
+\r
+class AgentRegistry:\r
+\r
+    def __init__(self):\r
+\r
+        self.agents = [\r
+\r
+            Agent(\r
+                agent_id="sales-delegator",\r
+                agent_type="delegator",\r
+                domain="sales",\r
+                capabilities=[\r
+                    "customer_briefing"\r
+                ]\r
+            ),\r
+\r
+            Agent(\r
+                agent_id="customer-profile-worker",\r
+                agent_type="worker",\r
+                domain="sales",\r
+                capabilities=[\r
+                    "retrieve_customer_profile"\r
+                ]\r
+            ),\r
+\r
+            Agent(\r
+                agent_id="opportunity-worker",\r
+                agent_type="worker",\r
+                domain="sales",\r
+                capabilities=[\r
+                    "retrieve_open_opportunities"\r
+                ]\r
+            ),\r
+\r
+            Agent(\r
+                agent_id="interaction-worker",\r
+                agent_type="worker",\r
+                domain="sales",\r
+                capabilities=[\r
+                    "retrieve_recent_interactions"\r
+                ]\r
+            ),\r
+\r
+            Agent(\r
+                agent_id="briefing-worker",\r
+                agent_type="worker",\r
+                domain="sales",\r
+                capabilities=[\r
+                    "generate_customer_briefing"\r
+                ]\r
+            )\r
+        ]\r
+\r
+    def find_agent(\r
+        self,\r
+        capability: str,\r
+        domain: str\r
+    ) -> Agent | None:\r
+\r
+        for agent in self.agents:\r
+\r
+            if (\r
+                capability in agent.capabilities\r
+                and agent.domain == domain\r
+                and agent.status == "healthy"\r
+            ):\r
+                return agent\r
+\r
+        return None\r
+\r
+\r
+# ============================================================\r
+# Execution Plan\r
+# ============================================================\r
+\r
+@dataclass\r
+class ExecutionPlan:\r
+\r
+    plan_id: str\r
+\r
+    intent: str\r
+\r
+    domain: str\r
+\r
+    workflow_id: str\r
+\r
+    tasks: list[Task]\r
+\r
+    execution_mode: str\r
+\r
+    correlation_id: str\r
+\r
+\r
+# ============================================================\r
+# Coordinator\r
+# ============================================================\r
+\r
+class Coordinator:\r
+\r
+    def __init__(self):\r
+\r
+        self.agent_registry = AgentRegistry()\r
+\r
+    # --------------------------------------------------------\r
+    # Create execution plan\r
+    # --------------------------------------------------------\r
+\r
+    def create_execution_plan(\r
+        self,\r
+        intent: str,\r
+        domain: str,\r
+        workflow_id: str,\r
+        correlation_id: str\r
+    ) -> ExecutionPlan:\r
+\r
+        # -----------------------------------------------\r
+        # Define logical business tasks\r
+        # -----------------------------------------------\r
+\r
+        task_definitions = [\r
+\r
+            {\r
+                "name": "retrieve_customer_profile",\r
+                "capability": "retrieve_customer_profile",\r
+                "dependencies": []\r
+            },\r
+\r
+            {\r
+                "name": "retrieve_open_opportunities",\r
+                "capability": "retrieve_open_opportunities",\r
+                "dependencies": []\r
+            },\r
+\r
+            {\r
+                "name": "retrieve_recent_interactions",\r
+                "capability": "retrieve_recent_interactions",\r
+                "dependencies": []\r
+            },\r
+\r
+            {\r
+                "name": "generate_customer_briefing",\r
+                "capability": "generate_customer_briefing",\r
+                "dependencies": [\r
+                    "retrieve_customer_profile",\r
+                    "retrieve_open_opportunities",\r
+                    "retrieve_recent_interactions"\r
+                ]\r
+            }\r
+        ]\r
+\r
+        tasks = []\r
+\r
+        # -----------------------------------------------\r
+        # Resolve agent for every capability\r
+        # -----------------------------------------------\r
+\r
+        for index, definition in enumerate(\r
+            task_definitions,\r
+            start=1\r
+        ):\r
+\r
+            agent = self.agent_registry.find_agent(\r
+                capability=definition["capability"],\r
+                domain=domain\r
+            )\r
+\r
+            if agent is None:\r
+\r
+                raise RuntimeError(\r
+                    f"No agent found for capability "\r
+                    f"{definition['capability']}"\r
+                )\r
+\r
+            task = Task(\r
+\r
+                task_id=f"task-{index}",\r
+\r
+                name=definition["name"],\r
+\r
+                capability=definition["capability"],\r
+\r
+                agent_id=agent.agent_id,\r
+\r
+                dependencies=definition["dependencies"]\r
+            )\r
+\r
+            tasks.append(task)\r
+\r
+        return ExecutionPlan(\r
+\r
+            plan_id="plan-001",\r
+\r
+            intent=intent,\r
+\r
+            domain=domain,\r
+\r
+            workflow_id=workflow_id,\r
+\r
+            tasks=tasks,\r
+\r
+            execution_mode="parallel_then_aggregate",\r
+\r
+            correlation_id=correlation_id\r
+        )\r
+\r
+    # --------------------------------------------------------\r
+    # Determine ready tasks\r
+    # --------------------------------------------------------\r
+\r
+    def get_ready_tasks(\r
+        self,\r
+        plan: ExecutionPlan\r
+    ) -> list[Task]:\r
+\r
+        completed_tasks = {\r
+            task.name\r
+            for task in plan.tasks\r
+            if task.status == TaskStatus.COMPLETED\r
+        }\r
+\r
+        ready_tasks = []\r
+\r
+        for task in plan.tasks:\r
+\r
+            if task.status != TaskStatus.PENDING:\r
+                continue\r
+\r
+            dependencies_completed = all(\r
+\r
+                dependency in completed_tasks\r
+\r
+                for dependency in task.dependencies\r
+            )\r
+\r
+            if dependencies_completed:\r
+\r
+                task.status = TaskStatus.READY\r
+\r
+                ready_tasks.append(task)\r
+\r
+        return ready_tasks\r
+\r
+    # --------------------------------------------------------\r
+    # Execute a task\r
+    # --------------------------------------------------------\r
+\r
+    def execute_task(\r
+        self,\r
+        task: Task,\r
+        context: dict[str, Any]\r
+    ) -> Any:\r
+\r
+        task.status = TaskStatus.RUNNING\r
+\r
+        print(\r
+            f"Executing {task.name} "\r
+            f"using {task.agent_id}"\r
+        )\r
+\r
+        try:\r
+\r
+            # -------------------------------------------\r
+            # Real implementation would call:\r
+            #\r
+            # A2A\r
+            # MCP\r
+            # API\r
+            # Worker service\r
+            # -------------------------------------------\r
+\r
+            result = {\r
+                "task": task.name,\r
+                "status": "success"\r
+            }\r
+\r
+            task.result = result\r
+\r
+            task.status = TaskStatus.COMPLETED\r
+\r
+            return result\r
+\r
+        except Exception as exc:\r
+\r
+            task.status = TaskStatus.FAILED\r
+\r
+            task.error = str(exc)\r
+\r
+            raise\r
+\r
+    # --------------------------------------------------------\r
+    # Check whether workflow is complete\r
+    # --------------------------------------------------------\r
+\r
+    def is_complete(\r
+        self,\r
+        plan: ExecutionPlan\r
+    ) -> bool:\r
+\r
+        return all(\r
+\r
+            task.status == TaskStatus.COMPLETED\r
+\r
+            for task in plan.tasks\r
+        )\r
+\r
+    # --------------------------------------------------------\r
+    # Execute complete workflow\r
+    # --------------------------------------------------------\r
+\r
+    def execute_plan(\r
+        self,\r
+        plan: ExecutionPlan\r
+    ) -> dict[str, Any]:\r
+\r
+        context = {}\r
+\r
+        while not self.is_complete(plan):\r
+\r
+            ready_tasks = self.get_ready_tasks(plan)\r
+\r
+            if not ready_tasks:\r
+\r
+                failed_tasks = [\r
+\r
+                    task\r
+                    for task in plan.tasks\r
+                    if task.status == TaskStatus.FAILED\r
+                ]\r
+\r
+                if failed_tasks:\r
+\r
+                    raise RuntimeError(\r
+                        "Workflow failed because required "\r
+                        "tasks failed."\r
+                    )\r
+\r
+                raise RuntimeError(\r
+                    "Workflow is blocked by unresolved dependencies."\r
+                )\r
+\r
+            # ------------------------------------------------\r
+            # In production, these independent tasks could\r
+            # execute concurrently.\r
+            # ------------------------------------------------\r
+\r
+            for task in ready_tasks:\r
+\r
+                result = self.execute_task(\r
+                    task,\r
+                    context\r
+                )\r
+\r
+                context[task.name] = result\r
+\r
+        return {\r
+\r
+            "status": "completed",\r
+\r
+            "workflow": plan.workflow_id,\r
+\r
+            "correlation_id": plan.correlation_id,\r
+\r
+            "results": context\r
+        }\r
+\r
+\r
+# ============================================================\r
+# Example\r
+# ============================================================\r
+\r
+if __name__ == "__main__":\r
+\r
+    coordinator = Coordinator()\r
+\r
+    # --------------------------------------------------------\r
+    # Create the plan\r
+    # --------------------------------------------------------\r
+\r
+    plan = coordinator.create_execution_plan(\r
+\r
+        intent="create_customer_briefing",\r
+\r
+        domain="sales",\r
+\r
+        workflow_id="customer_briefing_workflow",\r
+\r
+        correlation_id="corr-001"\r
+    )\r
+\r
+    print("\\nEXECUTION PLAN")\r
+    print("=" * 60)\r
+\r
+    for task in plan.tasks:\r
+\r
+        print(\r
+            f"{task.task_id}: "\r
+            f"{task.name}"\r
+        )\r
+\r
+        print(\r
+            f"  Agent: {task.agent_id}"\r
+        )\r
+\r
+        print(\r
+            f"  Dependencies: {task.dependencies}"\r
+        )\r
+\r
+    # --------------------------------------------------------\r
+    # Execute\r
+    # --------------------------------------------------------\r
+\r
+    print("\\nEXECUTION")\r
+    print("=" * 60)\r
+\r
+    result = coordinator.execute_plan(plan)\r
+\r
+    print("\\nFINAL RESULT")\r
+    print("=" * 60)\r
+\r
+    print(result)\r
+\`\`\`\r
+\r
+---\r
+\r
+# 22. What the Code Is Doing\r
+\r
+The important part is not the Python syntax; it is the orchestration logic.\r
+\r
+## A. Define tasks\r
+\r
+\`\`\`python\r
+task_definitions = [\r
+    {\r
+        "name": "retrieve_customer_profile",\r
+        "capability": "retrieve_customer_profile",\r
+        "dependencies": []\r
+    },\r
+\`\`\`\r
+\r
+This defines the business workflow.\r
+\r
+---\r
+\r
+## B. Identify required agent\r
+\r
+\`\`\`python\r
+agent = self.agent_registry.find_agent(\r
+    capability=definition["capability"],\r
+    domain=domain\r
+)\r
+\`\`\`\r
+\r
+The Coordinator asks:\r
+\r
+> "Which approved agent can perform this capability?"\r
+\r
+It does not randomly select an agent.\r
+\r
+---\r
+\r
+## C. Build dependencies\r
+\r
+\`\`\`python\r
+{\r
+    "name": "generate_customer_briefing",\r
+    "dependencies": [\r
+        "retrieve_customer_profile",\r
+        "retrieve_open_opportunities",\r
+        "retrieve_recent_interactions"\r
+    ]\r
+}\r
+\`\`\`\r
+\r
+This means:\r
+\r
+\`\`\`text\r
+generate_customer_briefing\r
+\`\`\`\r
+\r
+cannot start until:\r
+\r
+\`\`\`text\r
+retrieve_customer_profile\r
+retrieve_open_opportunities\r
+retrieve_recent_interactions\r
+\`\`\`\r
+\r
+are complete.\r
+\r
+---\r
+\r
+## D. Find ready tasks\r
+\r
+\`\`\`python\r
+dependencies_completed = all(\r
+    dependency in completed_tasks\r
+    for dependency in task.dependencies\r
+)\r
+\`\`\`\r
+\r
+The Coordinator checks whether every dependency has completed.\r
+\r
+---\r
+\r
+## E. Execute\r
+\r
+\`\`\`python\r
+result = self.execute_task(\r
+    task,\r
+    context\r
+)\r
+\`\`\`\r
+\r
+In the simplified example, this returns a mock result.\r
+\r
+In production CWD, this is where the Coordinator would invoke the appropriate execution mechanism, such as the A2A interface to a Delegator.\r
+\r
+---\r
+\r
+# 23. Production CWD Execution Boundary\r
+\r
+The important production architecture is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ Creates execution plan\r
+     │\r
+     ▼\r
+Execution Plan\r
+     │\r
+     │\r
+     ▼\r
+A2A Gateway\r
+     │\r
+     ▼\r
+Sales Delegator\r
+     │\r
+     │ Creates domain-specific plan\r
+     ▼\r
+Worker Tasks\r
+     │\r
+     ├───────────────┐\r
+     ▼               ▼\r
+Profile Worker   Opportunity Worker\r
+     │               │\r
+     ▼               ▼\r
+Enterprise       Enterprise\r
+System           System\r
+     │               │\r
+     └───────┬───────┘\r
+             ▼\r
+       Result Aggregation\r
+             │\r
+             ▼\r
+        Coordinator\r
+\`\`\`\r
+\r
+The Coordinator therefore controls the **enterprise-level workflow**, while the Delegator controls the **domain-level workflow**.\r
+\r
+---\r
+\r
+# 24. Recommended Production Responsibility Boundary\r
+\r
+\`\`\`text\r
+                    CWD COORDINATOR\r
+                           │\r
+        ┌──────────────────┼──────────────────┐\r
+        │                  │                  │\r
+     Intent             Planning           Routing\r
+        │                  │                  │\r
+        │                  ├── Tasks          │\r
+        │                  ├── Dependencies   │\r
+        │                  ├── Execution mode │\r
+        │                  └── Context        │\r
+        │                                     │\r
+        └─────────────────────────────────────┘\r
+                           │\r
+                           ▼\r
+                         A2A\r
+                           │\r
+                           ▼\r
+                    DOMAIN DELEGATOR\r
+                           │\r
+                 ┌─────────┼─────────┐\r
+                 ▼         ▼         ▼\r
+               Worker    Worker    Worker\r
+                 │         │         │\r
+                 ▼         ▼         ▼\r
+              Tools      APIs      RAG\r
+                 │         │         │\r
+                 └─────────┼─────────┘\r
+                           ▼\r
+                    Enterprise Data\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Where LangGraph Fits\r
+\r
+For the CWD Coordinator, LangGraph should control the **state transitions and workflow execution**, while the Coordinator services provide the actual business logic.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+LangGraph\r
+   │\r
+   ├── validate_request\r
+   │\r
+   ├── classify_request\r
+   │\r
+   ├── authorize_request\r
+   │\r
+   ├── discover_delegator\r
+   │\r
+   ├── create_plan\r
+   │\r
+   ├── execute / submit A2A\r
+   │\r
+   ├── monitor result\r
+   │\r
+   ├── retry / recover\r
+   │\r
+   ├── aggregate_result\r
+   │\r
+   └── save_state\r
+\`\`\`\r
+\r
+So:\r
+\r
+> **LangGraph = workflow/state orchestration mechanism**\r
+\r
+and:\r
+\r
+> **Coordinator = CWD business orchestration logic**\r
+\r
+---\r
+\r
+# 26. Final Logical Explanation\r
+\r
+The complete reasoning is:\r
+\r
+\`\`\`text\r
+1. Understand the user request\r
+          ↓\r
+2. Identify the business intent\r
+          ↓\r
+3. Determine required business actions\r
+          ↓\r
+4. Map actions to capabilities\r
+          ↓\r
+5. Identify the appropriate business domain\r
+          ↓\r
+6. Select the appropriate workflow\r
+          ↓\r
+7. Analyze task dependencies\r
+          ↓\r
+8. Identify which tasks can run in parallel\r
+          ↓\r
+9. Discover approved agents\r
+          ↓\r
+10. Build the execution plan\r
+          ↓\r
+11. Route the plan through A2A\r
+          ↓\r
+12. Execute ready tasks\r
+          ↓\r
+13. Monitor task state\r
+          ↓\r
+14. Handle failures/retries\r
+          ↓\r
+15. Re-evaluate dependencies\r
+          ↓\r
+16. Execute newly-ready tasks\r
+          ↓\r
+17. Aggregate results\r
+          ↓\r
+18. Validate and govern the result\r
+          ↓\r
+19. Return the final response\r
+\`\`\`\r
+\r
+## Final Architect Definition\r
+\r
+> **The Coordinator is the control plane that transforms user intent into an executable workflow. It creates the execution plan, decomposes the business objective into tasks, establishes dependencies, maps tasks to required capabilities and approved agents, determines the appropriate execution pattern, controls state transitions, handles failures and retries, and coordinates result aggregation until the workflow is complete.**\r
+\r
+The key separation in CWD is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    = Enterprise workflow planning + control\r
+\r
+Delegator\r
+    = Domain workflow planning + control\r
+\r
+Worker\r
+    = Task execution\r
+\r
+LLM\r
+    = Reasoning and interpretation\r
+\r
+A2A\r
+    = Agent-to-agent communication\r
+\r
+MCP / Tools\r
+    = Controlled enterprise-system execution\r
+\r
+Agent Registry\r
+    = Agent capability discovery\r
+\r
+LangGraph\r
+    = Stateful workflow execution\r
+\`\`\`\r
+\r
+This separation is what allows CWD to scale from a single business agent to a **production enterprise multi-agent platform** without putting all business logic inside the Coordinator.\r
+\r
+\`\`\`\r
+\`\`\`\r
+`,code:``},{id:`delegator-selection`,category:`Coordinator Agent`,title:`Delegator Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator determines when to invoke the Delegator and how the appropriate Delegator is selected for downstream task execution.`,concept:`# How the Coordinator Determines When to Invoke a Delegator\r
+\r
+## 1. Overview\r
+\r
+In the CWD architecture, the **Coordinator is responsible for deciding whether an incoming user request requires downstream agent execution** and, if execution is required, **which Delegator should handle the business-domain work**.\r
+\r
+The Coordinator does not automatically invoke a Delegator for every request.\r
+\r
+Instead, it evaluates the request through a controlled decision process:\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Understand Intent\r
+     |\r
+     v\r
+Identify Required Action\r
+     |\r
+     v\r
+Does the request require downstream execution?\r
+     |\r
+   +---+---+\r
+   |       |\r
+  No      Yes\r
+   |       |\r
+   v       v\r
+Respond   Identify Business Domain\r
+Directly       |\r
+               v\r
+        Discover Delegator\r
+               |\r
+               v\r
+        Validate Capability\r
+               |\r
+               v\r
+        Authorize Execution\r
+               |\r
+               v\r
+        Create Execution Plan\r
+               |\r
+               v\r
+        Invoke Delegator via A2A\r
+\`\`\`\r
+\r
+The key architectural principle is:\r
+\r
+> **The LLM determines what the user is asking for; the Coordinator determines whether execution is required and controls the allowed execution path.**\r
+\r
+---\r
+\r
+# 2. When Does the Coordinator Invoke a Delegator?\r
+\r
+The Coordinator first determines the **nature of the request**.\r
+\r
+A request generally falls into one of four categories.\r
+\r
+| Request Type                     | Example                                                    | Delegator Required? |\r
+| -------------------------------- | ---------------------------------------------------------- | ------------------: |\r
+| Simple conversation              | "Hello"                                                    |                  No |\r
+| Knowledge/response only          | "What is CWD?"                                             |          Usually No |\r
+| Enterprise information retrieval | "Show me the latest customer revenue"                      |                 Yes |\r
+| Business workflow/action         | "Create a customer briefing from Salesforce and Snowflake" |                 Yes |\r
+\r
+The important distinction is:\r
+\r
+\`\`\`text\r
+Question that can be answered from conversation\r
+                |\r
+                v\r
+          No Delegator\r
+\r
+Business request requiring\r
+enterprise data / tools / workflow\r
+                |\r
+                v\r
+           Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. The Coordinator Evaluates the User Intent\r
+\r
+The first step is to understand the user's actual business intent.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User:\r
+"Prepare a customer briefing for ABC Corporation."\r
+\`\`\`\r
+\r
+The Coordinator does not simply classify this as:\r
+\r
+\`\`\`text\r
+customer briefing\r
+\`\`\`\r
+\r
+It interprets the request into structured information:\r
+\r
+\`\`\`json\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "entities": {\r
+    "customer": "ABC Corporation"\r
+  },\r
+  "request_type": "business_workflow",\r
+  "requires_enterprise_data": true,\r
+  "requires_agent_execution": true,\r
+  "expected_output": "customer briefing document"\r
+}\r
+\`\`\`\r
+\r
+This structured interpretation becomes the input to the routing decision.\r
+\r
+---\r
+\r
+# 4. Determine Whether Execution Is Required\r
+\r
+The Coordinator evaluates several signals.\r
+\r
+## 4.1 Does the request require enterprise data?\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+"Get the latest revenue for customer ABC."\r
+\`\`\`\r
+\r
+The answer may require:\r
+\r
+\`\`\`text\r
+Salesforce\r
+Snowflake\r
+Oracle\r
+Customer data\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Enterprise Data Required\r
+        |\r
+        v\r
+Delegator likely required\r
+\`\`\`\r
+\r
+---\r
+\r
+## 4.2 Does the request require a tool or API?\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+"Create a Salesforce opportunity for this customer."\r
+\`\`\`\r
+\r
+The Coordinator identifies:\r
+\r
+\`\`\`text\r
+Action = Create Opportunity\r
+System = Salesforce\r
+\`\`\`\r
+\r
+This cannot be completed through conversation alone.\r
+\r
+Therefore the Coordinator routes the request downstream.\r
+\r
+---\r
+\r
+## 4.3 Does the request require multiple steps?\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+"Prepare a customer briefing using sales data,\r
+recent interactions, open opportunities and\r
+recent customer activity."\r
+\`\`\`\r
+\r
+The Coordinator recognizes multiple activities:\r
+\r
+\`\`\`text\r
+1. Retrieve customer profile\r
+2. Retrieve opportunities\r
+3. Retrieve recent interactions\r
+4. Retrieve customer activity\r
+5. Generate briefing\r
+\`\`\`\r
+\r
+This is a workflow rather than a simple response.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      |\r
+      v\r
+Sales Delegator\r
+      |\r
+      +--> Worker: Customer Profile\r
+      |\r
+      +--> Worker: Opportunities\r
+      |\r
+      +--> Worker: Interactions\r
+      |\r
+      +--> Worker: Activity\r
+      |\r
+      +--> Worker: Briefing Generation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 5. Determine the Business Domain\r
+\r
+Once the Coordinator determines that downstream execution is required, it identifies the appropriate **business domain**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+"Create a customer briefing"\r
+              |\r
+              v\r
+          Sales Domain\r
+\`\`\`\r
+\r
+Another request:\r
+\r
+\`\`\`text\r
+"Analyze supplier delivery performance"\r
+              |\r
+              v\r
+      Supply Chain Domain\r
+\`\`\`\r
+\r
+Another:\r
+\r
+\`\`\`text\r
+"Summarize employee policy information"\r
+              |\r
+              v\r
+           HR Domain\r
+\`\`\`\r
+\r
+The Coordinator therefore establishes:\r
+\r
+\`\`\`text\r
+User Intent\r
+     |\r
+     v\r
+Business Domain\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. How the Appropriate Delegator Is Selected\r
+\r
+The Coordinator should **not hard-code Delegator selection**.\r
+\r
+Instead, the production architecture uses the **Agent Registry** as the source of available agent capabilities.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+                    Agent Registry\r
+                         |\r
+       +-----------------+------------------+\r
+       |                 |                  |\r
+       v                 v                  v\r
+ Sales Delegator   Finance Delegator   HR Delegator\r
+       |                 |                  |\r
+   capabilities      capabilities      capabilities\r
+   domain            domain            domain\r
+   endpoint          endpoint          endpoint\r
+   status             status            status\r
+\`\`\`\r
+\r
+The Coordinator queries the registry using the identified business intent/domain/capability.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Intent:\r
+create_customer_briefing\r
+\r
+Domain:\r
+Sales\r
+\r
+Required capability:\r
+customer_briefing\r
+\`\`\`\r
+\r
+The registry may return:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "sales-delegator",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "customer_briefing",\r
+    "opportunity_analysis",\r
+    "customer_activity"\r
+  ],\r
+  "endpoint": "...",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator then selects this Delegator.\r
+\r
+---\r
+\r
+# 7. Delegator Selection Is Capability-Based\r
+\r
+The important point is that the Coordinator should not think:\r
+\r
+\`\`\`python\r
+if domain == "sales":\r
+    delegator = "sales_delegator"\r
+\`\`\`\r
+\r
+That approach creates tight coupling.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Intent\r
+  |\r
+  v\r
+Required Capability\r
+  |\r
+  v\r
+Agent Registry\r
+  |\r
+  v\r
+Find agents supporting capability\r
+  |\r
+  v\r
+Validate agent\r
+  |\r
+  v\r
+Select Delegator\r
+\`\`\`\r
+\r
+This allows the platform to evolve.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Today:\r
+\r
+Sales Request\r
+      |\r
+      v\r
+Sales Delegator\r
+\`\`\`\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+Sales Request\r
+      |\r
+      v\r
+Agent Registry\r
+      |\r
+      +--> Sales Delegator A\r
+      |\r
+      +--> Sales Delegator B\r
+      |\r
+      +--> Specialized Customer Intelligence Agent\r
+\`\`\`\r
+\r
+The Coordinator can dynamically discover the appropriate execution capability.\r
+\r
+---\r
+\r
+# 8. What Criteria Does the Coordinator Use?\r
+\r
+Delegator selection can consider multiple attributes.\r
+\r
+### 8.1 Domain\r
+\r
+\`\`\`text\r
+Sales\r
+Finance\r
+HR\r
+Supply Chain\r
+Commercial Services\r
+Customer Experience\r
+\`\`\`\r
+\r
+### 8.2 Capability\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+customer_briefing\r
+opportunity_analysis\r
+financial_analysis\r
+supplier_analysis\r
+\`\`\`\r
+\r
+### 8.3 Agent Status\r
+\r
+The Coordinator should not route work to an unhealthy or unavailable agent.\r
+\r
+\`\`\`text\r
+Agent Registry\r
+     |\r
+     +--> healthy\r
+     +--> unhealthy\r
+     +--> unavailable\r
+\`\`\`\r
+\r
+### 8.4 Authorization\r
+\r
+The user must be authorized to perform the requested operation.\r
+\r
+\`\`\`text\r
+User\r
+ |\r
+ v\r
+Coordinator\r
+ |\r
+ v\r
+Authorization / Policy\r
+ |\r
+ +---- Not Allowed ---> Stop\r
+ |\r
+ v\r
+Allowed\r
+ |\r
+ v\r
+Delegator\r
+\`\`\`\r
+\r
+### 8.5 Capability Match\r
+\r
+The Delegator must actually support the requested capability.\r
+\r
+### 8.6 Execution Constraints\r
+\r
+The Coordinator may also consider:\r
+\r
+\`\`\`text\r
+Priority\r
+Task type\r
+Execution mode\r
+Required data\r
+Required tools\r
+Timeout\r
+Business policy\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Authorization Happens Before Delegator Execution\r
+\r
+One of the most important CWD principles is:\r
+\r
+> **The Coordinator must not invoke downstream business execution simply because the LLM decided that a Delegator exists.**\r
+\r
+The execution path should include authorization.\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Intent Identification\r
+     |\r
+     v\r
+Domain Identification\r
+     |\r
+     v\r
+Authorization\r
+     |\r
+     +---- Denied\r
+     |      |\r
+     |      v\r
+     |    Stop\r
+     |\r
+     v\r
+Capability Discovery\r
+     |\r
+     v\r
+Delegator Selection\r
+     |\r
+     v\r
+A2A Invocation\r
+\`\`\`\r
+\r
+This prevents the LLM from becoming an authorization mechanism.\r
+\r
+---\r
+\r
+# 10. Coordinator vs LLM in Delegator Selection\r
+\r
+This distinction is critical.\r
+\r
+### LLM\r
+\r
+The LLM helps determine:\r
+\r
+\`\`\`text\r
+"What is the user asking for?"\r
+"What business domain does it relate to?"\r
+"What capabilities appear necessary?"\r
+"What workflow may be appropriate?"\r
+\`\`\`\r
+\r
+### Coordinator\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+"Is this execution allowed?"\r
+"Which registered agent supports the capability?"\r
+"Is that agent available?"\r
+"How should the request be routed?"\r
+"How should execution be tracked?"\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+LLM\r
+ |\r
+ | understands / recommends\r
+ v\r
+Coordinator\r
+ |\r
+ | validates / authorizes / selects\r
+ v\r
+Agent Registry\r
+ |\r
+ | discovers\r
+ v\r
+Delegator\r
+\`\`\`\r
+\r
+The LLM does **not** directly call a Delegator.\r
+\r
+---\r
+\r
+# 11. How the Coordinator Determines the Execution Path\r
+\r
+After selecting a Delegator, the Coordinator determines how the task should be executed.\r
+\r
+For example:\r
+\r
+### Simple workflow\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     v\r
+Sales Delegator\r
+     |\r
+     v\r
+Worker\r
+\`\`\`\r
+\r
+### Sequential workflow\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     v\r
+Sales Delegator\r
+     |\r
+     v\r
+Worker A\r
+     |\r
+     v\r
+Worker B\r
+     |\r
+     v\r
+Worker C\r
+\`\`\`\r
+\r
+### Parallel workflow\r
+\r
+\`\`\`text\r
+                 +--> Worker A\r
+                 |\r
+Coordinator --> Delegator --> Worker B\r
+                 |\r
+                 +--> Worker C\r
+\`\`\`\r
+\r
+### Parallel + aggregation\r
+\r
+\`\`\`text\r
+                 +--> Salesforce Worker\r
+                 |\r
+Coordinator --> Sales Delegator\r
+                 |\r
+                 +--> Snowflake Worker\r
+                 |\r
+                 +--> SharePoint Worker\r
+                         |\r
+                         v\r
+                    Aggregation\r
+                         |\r
+                         v\r
+                    Final Result\r
+\`\`\`\r
+\r
+The Coordinator determines the **high-level execution strategy**, while the Delegator manages domain-specific decomposition and worker execution.\r
+\r
+---\r
+\r
+# 12. Coordinator-to-Delegator Invocation Through A2A\r
+\r
+Once the Coordinator has selected the Delegator, it does not directly invoke a Worker.\r
+\r
+The production boundary is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      |\r
+      v\r
+A2A\r
+      |\r
+      v\r
+Delegator\r
+      |\r
+      v\r
+Workers\r
+\`\`\`\r
+\r
+The Coordinator creates an A2A task containing information such as:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-123",\r
+  "run_id": "run-456",\r
+  "correlation_id": "corr-789",\r
+  "source_agent": "cwd-coordinator",\r
+  "target_agent": "sales-delegator",\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "context": {\r
+    "customer": "ABC Corporation"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The A2A layer then handles communication with the target Delegator.\r
+\r
+---\r
+\r
+# 13. Complete Decision Flow\r
+\r
+The overall decision process is:\r
+\r
+\`\`\`text\r
+                    User Request\r
+                         |\r
+                         v\r
+                +------------------+\r
+                | Coordinator      |\r
+                | receives request |\r
+                +--------+---------+\r
+                         |\r
+                         v\r
+                 Understand Intent\r
+                         |\r
+                         v\r
+                 Identify Actions\r
+                         |\r
+                         v\r
+              Is execution required?\r
+                    /          \\\r
+                  No            Yes\r
+                  |              |\r
+                  v              v\r
+             Generate      Identify Domain\r
+              Response            |\r
+                                   v\r
+                           Identify Capability\r
+                                   |\r
+                                   v\r
+                            Authorization\r
+                              /       \\\r
+                           Denied     Allowed\r
+                             |           |\r
+                             v           v\r
+                           Stop    Query Agent Registry\r
+                                         |\r
+                                         v\r
+                                Find Matching Delegator\r
+                                         |\r
+                                         v\r
+                                  Validate Availability\r
+                                         |\r
+                                         v\r
+                                  Create Plan\r
+                                         |\r
+                                         v\r
+                                  Create A2A Task\r
+                                         |\r
+                                         v\r
+                              Invoke Delegator\r
+                                         |\r
+                                         v\r
+                                  Delegator\r
+                                         |\r
+                                         v\r
+                                     Workers\r
+                                         |\r
+                                         v\r
+                                  Result\r
+                                         |\r
+                                         v\r
+                                  Coordinator\r
+                                         |\r
+                                         v\r
+                                Aggregate / Validate\r
+                                         |\r
+                                         v\r
+                                  Final Response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 14. Example: Customer Briefing Request\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+"Create a briefing for customer ABC using\r
+their current opportunities, revenue and recent\r
+interactions."\r
+\`\`\`\r
+\r
+### Step 1 — Intent\r
+\r
+\`\`\`text\r
+Intent = create_customer_briefing\r
+\`\`\`\r
+\r
+### Step 2 — Domain\r
+\r
+\`\`\`text\r
+Domain = Sales\r
+\`\`\`\r
+\r
+### Step 3 — Required capabilities\r
+\r
+\`\`\`text\r
+customer_profile\r
+opportunity_analysis\r
+revenue_analysis\r
+customer_interactions\r
+briefing_generation\r
+\`\`\`\r
+\r
+### Step 4 — Execution requirement\r
+\r
+\`\`\`text\r
+Enterprise data required = Yes\r
+Multiple operations = Yes\r
+Business workflow = Yes\r
+\r
+Therefore:\r
+Delegator required = Yes\r
+\`\`\`\r
+\r
+### Step 5 — Authorization\r
+\r
+\`\`\`text\r
+User\r
+  |\r
+  v\r
+Policy / Entitlement Check\r
+  |\r
+  v\r
+Allowed\r
+\`\`\`\r
+\r
+### Step 6 — Agent Registry\r
+\r
+\`\`\`text\r
+Search:\r
+\r
+domain = sales\r
+capability = customer_briefing\r
+\`\`\`\r
+\r
+Result:\r
+\r
+\`\`\`text\r
+sales-delegator\r
+\`\`\`\r
+\r
+### Step 7 — Execution Plan\r
+\r
+\`\`\`text\r
+retrieve_customer_profile\r
+        |\r
+retrieve_opportunities\r
+        |\r
+retrieve_revenue\r
+        |\r
+retrieve_interactions\r
+        |\r
+        +---------+\r
+                  |\r
+                  v\r
+        generate_customer_briefing\r
+\`\`\`\r
+\r
+### Step 8 — A2A\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | A2A Task\r
+     v\r
+Sales Delegator\r
+\`\`\`\r
+\r
+### Step 9 — Delegator Execution\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      +--> Customer Worker\r
+      |\r
+      +--> Opportunity Worker\r
+      |\r
+      +--> Revenue Worker\r
+      |\r
+      +--> Interaction Worker\r
+      |\r
+      +--> Briefing Worker\r
+\`\`\`\r
+\r
+### Step 10 — Result\r
+\r
+\`\`\`text\r
+Workers\r
+   |\r
+   v\r
+Sales Delegator\r
+   |\r
+   v\r
+Coordinator\r
+   |\r
+   v\r
+Final Customer Briefing\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. What Happens If No Delegator Is Found?\r
+\r
+The Coordinator should not blindly execute the request.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Intent:\r
+specialized_supply_chain_forecast\r
+\r
+Agent Registry:\r
+No matching capability\r
+\`\`\`\r
+\r
+The Coordinator should return a controlled outcome:\r
+\r
+\`\`\`text\r
+No supported execution capability was found.\r
+\`\`\`\r
+\r
+It should not:\r
+\r
+\`\`\`text\r
+LLM -> arbitrary API\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+LLM -> unknown agent\r
+\`\`\`\r
+\r
+This preserves governance and prevents uncontrolled execution.\r
+\r
+---\r
+\r
+# 16. What If Multiple Delegators Match?\r
+\r
+The registry may return multiple candidates.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Capability:\r
+customer_analysis\r
+\r
+Candidates:\r
+\r
+Sales Delegator A\r
+Sales Delegator B\r
+Customer Intelligence Agent\r
+\`\`\`\r
+\r
+The Coordinator can apply selection rules such as:\r
+\r
+\`\`\`text\r
+1. Capability match\r
+2. Domain match\r
+3. Authorization\r
+4. Agent health\r
+5. Availability\r
+6. Execution policy\r
+7. Priority\r
+8. Routing policy\r
+\`\`\`\r
+\r
+Then select the appropriate agent.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+candidates = registry.find(\r
+    domain="sales",\r
+    capability="customer_analysis"\r
+)\r
+\r
+authorized = policy.filter(candidates)\r
+\r
+healthy = health.filter(authorized)\r
+\r
+delegator = routing.select(healthy)\r
+\`\`\`\r
+\r
+The exact production implementation can vary, but the architectural responsibility remains with the Coordinator/platform routing layer.\r
+\r
+---\r
+\r
+# 17. How LangGraph Fits Into This\r
+\r
+LangGraph controls the **workflow state transitions** inside the Coordinator.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+validate_request\r
+       |\r
+       v\r
+classify_request\r
+       |\r
+       v\r
+authorize_request\r
+       |\r
+       v\r
+discover_delegator\r
+       |\r
+       v\r
+create_plan\r
+       |\r
+       v\r
+submit_a2a_task\r
+       |\r
+       v\r
+aggregate_result\r
+       |\r
+       v\r
+save_state\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`text\r
+LangGraph\r
+   |\r
+   | controls state/workflow transitions\r
+   v\r
+Coordinator\r
+   |\r
+   | decides business execution path\r
+   v\r
+A2A\r
+   |\r
+   v\r
+Delegator\r
+\`\`\`\r
+\r
+LangGraph does not replace the Agent Registry or A2A.\r
+\r
+---\r
+\r
+# 18. Coordinator and Delegator Responsibility Boundary\r
+\r
+This separation is important for CWD.\r
+\r
+| Responsibility                          | Coordinator |                       Delegator |\r
+| --------------------------------------- | ----------: | ------------------------------: |\r
+| Understand user intent                  |         Yes |                              No |\r
+| Enterprise-level routing                |         Yes |                              No |\r
+| Determine whether execution is required |         Yes |                              No |\r
+| Select business domain                  |         Yes |                 Domain-specific |\r
+| Discover Delegator                      |         Yes |                              No |\r
+| Enterprise authorization                |         Yes |                   Domain policy |\r
+| Create high-level execution plan        |         Yes |                              No |\r
+| A2A invocation                          |         Yes | Yes, when calling another agent |\r
+| Domain task decomposition               |          No |                             Yes |\r
+| Select Workers                          |          No |                             Yes |\r
+| Execute business tools                  |          No |                 Through Workers |\r
+| Aggregate domain results                |          No |                             Yes |\r
+| Final response orchestration            |         Yes |                              No |\r
+\r
+The boundary can be summarized as:\r
+\r
+\`\`\`text\r
+Coordinator\r
+= "Which business capability should handle this request?"\r
+\r
+Delegator\r
+= "How should my domain handle this business task?"\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Production-Level Control Model\r
+\r
+The complete CWD control model is therefore:\r
+\r
+\`\`\`text\r
+                 USER\r
+                  |\r
+                  v\r
+             COORDINATOR\r
+                  |\r
+       +----------+----------+\r
+       |          |          |\r
+       v          v          v\r
+    Intent     Policy     Context\r
+       |          |          |\r
+       +----------+----------+\r
+                  |\r
+                  v\r
+          Execution Required?\r
+                  |\r
+                  v\r
+          Capability Discovery\r
+                  |\r
+                  v\r
+           AGENT REGISTRY\r
+                  |\r
+                  v\r
+         DELEGATOR SELECTION\r
+                  |\r
+                  v\r
+               A2A\r
+                  |\r
+                  v\r
+             DELEGATOR\r
+                  |\r
+                  v\r
+              WORKERS\r
+                  |\r
+                  v\r
+        MCP / Tools / APIs\r
+                  |\r
+                  v\r
+        Enterprise Systems\r
+\`\`\`\r
+\r
+Observability, security, correlation IDs, state management and governance operate across this entire flow.\r
+\r
+---\r
+\r
+# 20. Key Architectural Principle\r
+\r
+The most important distinction is:\r
+\r
+\`\`\`text\r
+LLM\r
+  |\r
+  | understands intent\r
+  v\r
+Coordinator\r
+  |\r
+  | determines execution requirement\r
+  | validates authorization\r
+  | identifies capability\r
+  | discovers appropriate agent\r
+  | creates execution plan\r
+  | controls workflow\r
+  v\r
+A2A\r
+  |\r
+  v\r
+Delegator\r
+  |\r
+  | decomposes domain task\r
+  v\r
+Workers\r
+  |\r
+  v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **The Coordinator invokes a Delegator when the user's intent requires a governed downstream business capability, enterprise data, tool execution, or multi-step workflow. The appropriate Delegator is selected by matching the required business domain and capability against the registered agent metadata, followed by authorization, availability and routing-policy checks. The selected Delegator is then invoked through the A2A boundary and takes responsibility for domain-level task decomposition and Worker execution.**\r
+\r
+## One-Line Definition\r
+\r
+\`\`\`text\r
+Coordinator = Decide WHEN to execute + Decide WHERE to execute + Control HOW execution proceeds\r
+\`\`\`\r
+\r
+And specifically for Delegators:\r
+\r
+\`\`\`text\r
+User Intent\r
+    ↓\r
+Execution Required?\r
+    ↓\r
+Business Domain\r
+    ↓\r
+Required Capability\r
+    ↓\r
+Authorization\r
+    ↓\r
+Agent Registry\r
+    ↓\r
+Delegator Selection\r
+    ↓\r
+A2A Invocation\r
+    ↓\r
+Delegator Execution\r
+\`\`\`\r
+`,code:``},{id:`task-creation`,category:`Coordinator Agent`,title:`Task Creation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator creates structured tasks, maintains task context, and passes execution requests to downstream agents.`,concept:`# How the Coordinator Creates Structured Tasks, Maintains Context, and Passes Execution Requests to Downstream Agents\r
+\r
+## 1. Overview\r
+\r
+In CWD, the Coordinator converts a user's natural-language request into a **structured, executable task**.\r
+\r
+The Coordinator performs three important functions:\r
+\r
+1. **Creates structured tasks** from the interpreted user intent.\r
+2. **Maintains execution context** throughout the task lifecycle.\r
+3. **Passes the execution request to the appropriate downstream Delegator through A2A.**\r
+\r
+The overall flow is:\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Coordinator\r
+     |\r
+     +--> Understand Intent\r
+     |\r
+     +--> Identify Required Actions\r
+     |\r
+     +--> Create Structured Tasks\r
+     |\r
+     +--> Attach Context\r
+     |\r
+     +--> Build Execution Plan\r
+     |\r
+     v\r
+A2A Request\r
+     |\r
+     v\r
+Delegator\r
+     |\r
+     +--> Decompose Domain Tasks\r
+     |\r
+     +--> Select Workers\r
+     |\r
+     +--> Execute Tools / APIs / RAG\r
+     |\r
+     v\r
+Result\r
+     |\r
+     v\r
+Coordinator\r
+\`\`\`\r
+\r
+The key principle is:\r
+\r
+> **The Coordinator transforms an unstructured user request into a governed execution contract that downstream agents can understand and execute.**\r
+\r
+---\r
+\r
+# 2. From User Request to Structured Task\r
+\r
+Consider a user request:\r
+\r
+\`\`\`text\r
+"Create a customer briefing for ABC Corporation using\r
+current opportunities, revenue, and recent customer interactions."\r
+\`\`\`\r
+\r
+The Coordinator first interprets the request.\r
+\r
+It identifies:\r
+\r
+\`\`\`text\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Domain:\r
+    Sales\r
+\r
+Customer:\r
+    ABC Corporation\r
+\r
+Required information:\r
+    Customer profile\r
+    Opportunities\r
+    Revenue\r
+    Recent interactions\r
+\r
+Expected output:\r
+    Customer briefing\r
+\r
+Execution:\r
+    Multi-step workflow\r
+\`\`\`\r
+\r
+The Coordinator then converts this into structured tasks.\r
+\r
+---\r
+\r
+# 3. Task Structure\r
+\r
+A task should contain enough information for the downstream agent to understand **what needs to be done and under what execution context**.\r
+\r
+A conceptual task structure is:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-001",\r
+  "task_type": "customer_briefing",\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "description": "Create customer briefing for ABC Corporation",\r
+  "priority": "normal",\r
+  "status": "created",\r
+  "dependencies": [],\r
+  "inputs": {\r
+    "customer": "ABC Corporation"\r
+  },\r
+  "expected_output": {\r
+    "type": "customer_briefing"\r
+  },\r
+  "context": {\r
+    "session_id": "session-001",\r
+    "run_id": "run-001",\r
+    "turn_id": "turn-001",\r
+    "correlation_id": "corr-001"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This is very different from simply sending:\r
+\r
+\`\`\`text\r
+"Create a customer briefing."\r
+\`\`\`\r
+\r
+The structured task provides downstream agents with the necessary execution information.\r
+\r
+---\r
+\r
+# 4. Task Decomposition\r
+\r
+The Coordinator may identify multiple logical actions.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+        |\r
+        +--> Retrieve Customer Profile\r
+        |\r
+        +--> Retrieve Opportunities\r
+        |\r
+        +--> Retrieve Revenue\r
+        |\r
+        +--> Retrieve Recent Interactions\r
+        |\r
+        +--> Generate Briefing\r
+\`\`\`\r
+\r
+The tasks can be represented as:\r
+\r
+\`\`\`json\r
+[\r
+  {\r
+    "task_id": "task-101",\r
+    "action": "retrieve_customer_profile"\r
+  },\r
+  {\r
+    "task_id": "task-102",\r
+    "action": "retrieve_opportunities"\r
+  },\r
+  {\r
+    "task_id": "task-103",\r
+    "action": "retrieve_revenue"\r
+  },\r
+  {\r
+    "task_id": "task-104",\r
+    "action": "retrieve_interactions"\r
+  },\r
+  {\r
+    "task_id": "task-105",\r
+    "action": "generate_customer_briefing",\r
+    "dependencies": [\r
+      "task-101",\r
+      "task-102",\r
+      "task-103",\r
+      "task-104"\r
+    ]\r
+  }\r
+]\r
+\`\`\`\r
+\r
+This creates an executable task graph.\r
+\r
+---\r
+\r
+# 5. Task Dependencies\r
+\r
+The Coordinator identifies which tasks can run independently and which tasks depend on previous results.\r
+\r
+For the customer briefing:\r
+\r
+\`\`\`text\r
+                  +--> Customer Profile\r
+                  |\r
+                  +--> Opportunities\r
+                  |\r
+Customer Brief -->+--> Revenue\r
+                  |\r
+                  +--> Interactions\r
+                           |\r
+                           +---------+\r
+                                     |\r
+                                     v\r
+                              Generate Briefing\r
+\`\`\`\r
+\r
+The first four tasks can execute in parallel.\r
+\r
+The final task must wait for their results.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Phase 1:\r
+    Profile\r
+    Opportunities\r
+    Revenue\r
+    Interactions\r
+\r
+Phase 2:\r
+    Briefing Generation\r
+\`\`\`\r
+\r
+The Coordinator stores these relationships in the execution plan.\r
+\r
+---\r
+\r
+# 6. Task Context\r
+\r
+Task context is critical in a multi-agent system.\r
+\r
+A downstream Delegator should know:\r
+\r
+\`\`\`text\r
+Who initiated the request?\r
+What session does it belong to?\r
+What task is being executed?\r
+Which execution attempt is this?\r
+Which conversation turn created it?\r
+Which step is currently executing?\r
+Why was this task created?\r
+What domain does it belong to?\r
+What data is required?\r
+What constraints apply?\r
+\`\`\`\r
+\r
+CWD therefore maintains a hierarchy of execution identifiers:\r
+\r
+\`\`\`text\r
+Session\r
+   |\r
+   +--> Task\r
+          |\r
+          +--> Run\r
+                 |\r
+                 +--> Turn\r
+                        |\r
+                        +--> Step\r
+                               |\r
+                               +--> LLM\r
+                               |\r
+                               +--> Tool\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. CWD Context Hierarchy\r
+\r
+## Session\r
+\r
+Represents the overall conversational or workflow context.\r
+\r
+\`\`\`text\r
+session_id\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+session-abc123\r
+\`\`\`\r
+\r
+A session can contain multiple tasks.\r
+\r
+---\r
+\r
+## Task\r
+\r
+Represents a discrete business objective.\r
+\r
+\`\`\`text\r
+task_id\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+task-customer-briefing-001\r
+\`\`\`\r
+\r
+---\r
+\r
+## Run\r
+\r
+Represents one execution attempt of a task.\r
+\r
+\`\`\`text\r
+run_id\r
+\`\`\`\r
+\r
+For example, if the task fails and is retried:\r
+\r
+\`\`\`text\r
+Task\r
+ |\r
+ +--> Run 1 --> Failed\r
+ |\r
+ +--> Run 2 --> Successful\r
+\`\`\`\r
+\r
+The task remains the same while the execution run changes.\r
+\r
+---\r
+\r
+## Turn\r
+\r
+Represents the logical conversational interaction that triggered the work.\r
+\r
+\`\`\`text\r
+turn_id\r
+\`\`\`\r
+\r
+---\r
+\r
+## Step\r
+\r
+Represents an individual operation within the workflow.\r
+\r
+\`\`\`text\r
+step_id\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+step-retrieve-opportunities\r
+\`\`\`\r
+\r
+---\r
+\r
+# 8. Correlation ID\r
+\r
+The \`correlation_id\` connects the entire execution across CWD components.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+correlation_id = corr-12345\r
+\`\`\`\r
+\r
+The same correlation ID can appear in:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   +--> A2A\r
+   |\r
+   +--> Delegator\r
+   |\r
+   +--> Worker\r
+   |\r
+   +--> MCP\r
+   |\r
+   +--> Enterprise API\r
+   |\r
+   +--> Observability\r
+\`\`\`\r
+\r
+This allows the platform team to trace one business request across multiple agents and systems.\r
+\r
+---\r
+\r
+# 9. Context Propagation\r
+\r
+When the Coordinator invokes a Delegator, it should propagate the relevant execution context.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator Context\r
+        |\r
+        v\r
+     A2A Task\r
+        |\r
+        v\r
+Delegator Context\r
+        |\r
+        v\r
+Worker Context\r
+        |\r
+        v\r
+Tool/API Context\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "session-001",\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "turn_id": "turn-001",\r
+  "step_id": "step-001",\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+The downstream agent can therefore associate its work with the original request.\r
+\r
+---\r
+\r
+# 10. Business Context vs Execution Context\r
+\r
+It is useful to distinguish two types of context.\r
+\r
+### Business Context\r
+\r
+Describes what the business request is about.\r
+\r
+\`\`\`json\r
+{\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "customer": "ABC Corporation",\r
+  "requested_output": "customer briefing"\r
+}\r
+\`\`\`\r
+\r
+### Execution Context\r
+\r
+Describes how the request is being executed.\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "session-001",\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "correlation_id": "corr-001",\r
+  "source_agent": "cwd-coordinator",\r
+  "target_agent": "sales-delegator"\r
+}\r
+\`\`\`\r
+\r
+Together:\r
+\r
+\`\`\`text\r
+Business Context\r
+       +\r
+Execution Context\r
+       |\r
+       v\r
+Structured Execution Request\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Execution Plan\r
+\r
+The Coordinator combines tasks, dependencies, context, and routing information into an execution plan.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "plan_id": "plan-001",\r
+  "intent": "create_customer_briefing",\r
+  "domain": "sales",\r
+  "execution_mode": "parallel_then_aggregate",\r
+\r
+  "tasks": [\r
+    {\r
+      "task_id": "task-101",\r
+      "action": "retrieve_customer_profile",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-102",\r
+      "action": "retrieve_opportunities",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-103",\r
+      "action": "retrieve_revenue",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-104",\r
+      "action": "retrieve_interactions",\r
+      "dependencies": []\r
+    },\r
+    {\r
+      "task_id": "task-105",\r
+      "action": "generate_customer_briefing",\r
+      "dependencies": [\r
+        "task-101",\r
+        "task-102",\r
+        "task-103",\r
+        "task-104"\r
+      ]\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+This plan represents the Coordinator's understanding of the workflow.\r
+\r
+---\r
+\r
+# 12. Selecting the Downstream Agent\r
+\r
+After creating the task, the Coordinator determines which Delegator can execute it.\r
+\r
+The process is:\r
+\r
+\`\`\`text\r
+Structured Task\r
+      |\r
+      v\r
+Required Capability\r
+      |\r
+      v\r
+Business Domain\r
+      |\r
+      v\r
+Agent Registry\r
+      |\r
+      v\r
+Matching Delegator\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Capability:\r
+customer_briefing\r
+\r
+Domain:\r
+sales\r
+\r
+Agent Registry\r
+       |\r
+       v\r
+sales-delegator\r
+\`\`\`\r
+\r
+The Coordinator does not need to know the internal implementation of the Sales Delegator.\r
+\r
+It only needs to know that the registered agent provides the required capability.\r
+\r
+---\r
+\r
+# 13. Preparing the A2A Execution Request\r
+\r
+The Coordinator then creates an A2A request.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "message_type": "task_request",\r
+\r
+  "task": {\r
+    "task_id": "task-001",\r
+    "task_type": "customer_briefing",\r
+    "intent": "create_customer_briefing",\r
+    "domain": "sales"\r
+  },\r
+\r
+  "source_agent": {\r
+    "agent_id": "cwd-coordinator"\r
+  },\r
+\r
+  "target_agent": {\r
+    "agent_id": "sales-delegator"\r
+  },\r
+\r
+  "context": {\r
+    "session_id": "session-001",\r
+    "run_id": "run-001",\r
+    "turn_id": "turn-001",\r
+    "correlation_id": "corr-001"\r
+  },\r
+\r
+  "input": {\r
+    "customer": "ABC Corporation"\r
+  },\r
+\r
+  "execution": {\r
+    "priority": "normal",\r
+    "timeout_seconds": 300\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This becomes the contract between the Coordinator and Delegator.\r
+\r
+---\r
+\r
+# 14. Passing the Request Through A2A\r
+\r
+The communication path is:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                     |\r
+                     |\r
+             Create A2A Task\r
+                     |\r
+                     v\r
+                A2A Gateway\r
+                     |\r
+              Agent Registry\r
+                     |\r
+              Authentication\r
+                     |\r
+              Authorization\r
+                     |\r
+              Context Propagation\r
+                     |\r
+                     v\r
+             Sales Delegator\r
+\`\`\`\r
+\r
+The Coordinator therefore does not directly call internal Worker implementations.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     v\r
+    A2A\r
+     |\r
+     v\r
+Delegator\r
+     |\r
+     v\r
+Workers\r
+\`\`\`\r
+\r
+This maintains a clean agent boundary.\r
+\r
+---\r
+\r
+# 15. What the Delegator Receives\r
+\r
+The Delegator receives enough information to understand the requested business operation.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Target Agent:\r
+    sales-delegator\r
+\r
+Intent:\r
+    create_customer_briefing\r
+\r
+Domain:\r
+    sales\r
+\r
+Customer:\r
+    ABC Corporation\r
+\r
+Required Capabilities:\r
+    customer_profile\r
+    opportunities\r
+    revenue\r
+    interactions\r
+    briefing_generation\r
+\r
+Execution Context:\r
+    session_id\r
+    task_id\r
+    run_id\r
+    turn_id\r
+    correlation_id\r
+\`\`\`\r
+\r
+The Delegator can then perform domain-level decomposition.\r
+\r
+---\r
+\r
+# 16. Coordinator Does Not Send Every Worker Task\r
+\r
+This is an important responsibility boundary.\r
+\r
+The Coordinator should generally send:\r
+\r
+\`\`\`text\r
+"Create customer briefing for ABC."\r
+\`\`\`\r
+\r
+to:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+\`\`\`\r
+\r
+rather than directly sending:\r
+\r
+\`\`\`text\r
+Retrieve Salesforce opportunity\r
+Retrieve Snowflake revenue\r
+Retrieve SharePoint interactions\r
+Generate briefing\r
+\`\`\`\r
+\r
+The Delegator owns domain-specific execution.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   | High-level business task\r
+   v\r
+Sales Delegator\r
+   |\r
+   | Domain decomposition\r
+   +--> Customer Worker\r
+   +--> Opportunity Worker\r
+   +--> Revenue Worker\r
+   +--> Interaction Worker\r
+   +--> Briefing Worker\r
+\`\`\`\r
+\r
+This prevents the Coordinator from becoming a giant business-logic component.\r
+\r
+---\r
+\r
+# 17. Delegator Creates Domain-Level Tasks\r
+\r
+The Delegator can take the Coordinator's task and create its own internal execution plan.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator Task\r
+        |\r
+        v\r
+Sales Delegator\r
+        |\r
+        +--> retrieve_customer\r
+        |\r
+        +--> retrieve_opportunities\r
+        |\r
+        +--> retrieve_revenue\r
+        |\r
+        +--> retrieve_interactions\r
+        |\r
+        +--> generate_briefing\r
+\`\`\`\r
+\r
+The responsibility split becomes:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | Enterprise-level planning\r
+    v\r
+Delegator\r
+    |\r
+    | Domain-level planning\r
+    v\r
+Workers\r
+    |\r
+    | Task execution\r
+    v\r
+Tools / APIs / Data\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. Context Is Preserved Across the Agent Hierarchy\r
+\r
+The original context should remain traceable.\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     | correlation_id = C123\r
+     v\r
+Coordinator\r
+     |\r
+     | correlation_id = C123\r
+     v\r
+Sales Delegator\r
+     |\r
+     | correlation_id = C123\r
+     v\r
+Opportunity Worker\r
+     |\r
+     | correlation_id = C123\r
+     v\r
+Salesforce\r
+\`\`\`\r
+\r
+This allows the platform to answer:\r
+\r
+\`\`\`text\r
+Which user initiated this?\r
+Which task was executed?\r
+Which Delegator handled it?\r
+Which Worker executed it?\r
+Which tool was called?\r
+What data was accessed?\r
+What happened when execution failed?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. State Management\r
+\r
+The Coordinator should maintain execution state throughout the workflow.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+CREATED\r
+   |\r
+   v\r
+VALIDATED\r
+   |\r
+   v\r
+AUTHORIZED\r
+   |\r
+   v\r
+PLANNED\r
+   |\r
+   v\r
+DELEGATOR_SELECTED\r
+   |\r
+   v\r
+SUBMITTED\r
+   |\r
+   v\r
+RUNNING\r
+   |\r
+   v\r
+COMPLETED\r
+\`\`\`\r
+\r
+Failure states can also be represented:\r
+\r
+\`\`\`text\r
+RUNNING\r
+   |\r
+   +--> FAILED\r
+          |\r
+          +--> RETRY\r
+          |\r
+          +--> COMPENSATE\r
+          |\r
+          +--> ESCALATE\r
+\`\`\`\r
+\r
+This state can be maintained using the CWD state/memory architecture, with Redis and other persistent state mechanisms as appropriate.\r
+\r
+---\r
+\r
+# 20. Handling Long-Running Tasks\r
+\r
+Not every Delegator task will complete immediately.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Generate large customer analysis\r
+\`\`\`\r
+\r
+may require several downstream operations.\r
+\r
+The Coordinator can submit the task and track its status:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | submit task\r
+     v\r
+Delegator\r
+     |\r
+     | RUNNING\r
+     v\r
+Workers\r
+\`\`\`\r
+\r
+The task may transition through:\r
+\r
+\`\`\`text\r
+SUBMITTED\r
+    |\r
+    v\r
+RUNNING\r
+    |\r
+    v\r
+PARTIALLY_COMPLETED\r
+    |\r
+    v\r
+COMPLETED\r
+\`\`\`\r
+\r
+The Coordinator can use task identifiers to correlate the eventual result with the original request.\r
+\r
+---\r
+\r
+# 21. Error Handling\r
+\r
+Suppose the Sales Delegator fails.\r
+\r
+The A2A response might contain:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-001",\r
+  "status": "failed",\r
+  "error": {\r
+    "code": "SALES_AGENT_UNAVAILABLE",\r
+    "message": "Sales Delegator unavailable"\r
+  },\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can then decide:\r
+\r
+\`\`\`text\r
+Delegator failure\r
+       |\r
+       +--> Retry\r
+       |\r
+       +--> Select alternate registered agent\r
+       |\r
+       +--> Resume\r
+       |\r
+       +--> Escalate\r
+       |\r
+       +--> Return controlled failure\r
+\`\`\`\r
+\r
+The correct behavior depends on policy and workflow type.\r
+\r
+---\r
+\r
+# 22. Result Propagation\r
+\r
+The downstream result follows the reverse path.\r
+\r
+\`\`\`text\r
+Enterprise Systems\r
+       |\r
+       v\r
+Workers\r
+       |\r
+       v\r
+Delegator\r
+       |\r
+       v\r
+A2A\r
+       |\r
+       v\r
+Coordinator\r
+       |\r
+       v\r
+Aggregation\r
+       |\r
+       v\r
+Response Governance\r
+       |\r
+       v\r
+User\r
+\`\`\`\r
+\r
+The result remains associated with:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+correlation_id\r
+\`\`\`\r
+\r
+This allows the Coordinator to determine which result belongs to which execution.\r
+\r
+---\r
+\r
+# 23. Context Should Not Mean Sending Everything Everywhere\r
+\r
+Context propagation does **not** mean passing the entire conversation history or all enterprise data to every agent.\r
+\r
+The Coordinator should propagate **relevant and authorized context**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      |\r
+      +--> Required task context\r
+      |\r
+      +--> Required business parameters\r
+      |\r
+      +--> Authorization context\r
+      |\r
+      +--> Correlation identifiers\r
+      |\r
+      +--> Relevant prior results\r
+      |\r
+      v\r
+Delegator\r
+\`\`\`\r
+\r
+Sensitive information should be minimized and controlled according to data governance and policy.\r
+\r
+The principle is:\r
+\r
+> **Propagate the minimum context required for the downstream agent to perform its authorized task.**\r
+\r
+---\r
+\r
+# 24. Where LLM Fits\r
+\r
+The LLM participates primarily in the reasoning portion.\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+LLM\r
+     |\r
+     | Interpret\r
+     | Identify intent\r
+     | Identify actions\r
+     v\r
+Coordinator\r
+     |\r
+     | Validate\r
+     | Authorize\r
+     | Structure\r
+     | Route\r
+     | Control\r
+     v\r
+A2A\r
+     |\r
+     v\r
+Delegator\r
+\`\`\`\r
+\r
+The LLM should not directly construct an uncontrolled network request to a Delegator.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+LLM recommendation\r
+        |\r
+        v\r
+Coordinator validation\r
+        |\r
+        v\r
+Structured task\r
+        |\r
+        v\r
+A2A execution\r
+\`\`\`\r
+\r
+This preserves governance.\r
+\r
+---\r
+\r
+# 25. Where LangGraph Fits\r
+\r
+LangGraph can represent the Coordinator's execution state.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+validate\r
+   |\r
+   v\r
+interpret\r
+   |\r
+   v\r
+authorize\r
+   |\r
+   v\r
+create_tasks\r
+   |\r
+   v\r
+discover_delegator\r
+   |\r
+   v\r
+create_a2a_request\r
+   |\r
+   v\r
+submit\r
+   |\r
+   v\r
+wait / monitor\r
+   |\r
+   v\r
+aggregate\r
+   |\r
+   v\r
+complete\r
+\`\`\`\r
+\r
+The separation is:\r
+\r
+\`\`\`text\r
+LLM\r
+= Reasoning\r
+\r
+LangGraph\r
+= Workflow state transitions\r
+\r
+Coordinator\r
+= Enterprise orchestration decisions\r
+\r
+Agent Registry\r
+= Agent discovery\r
+\r
+A2A\r
+= Agent-to-agent communication\r
+\r
+Delegator\r
+= Domain orchestration\r
+\r
+Worker\r
+= Task execution\r
+\r
+MCP / APIs\r
+= Tool/system interaction\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Conceptual Python Model\r
+\r
+A simplified representation of the Coordinator's task creation can look like this:\r
+\r
+\`\`\`python\r
+from pydantic import BaseModel, Field\r
+from typing import Any, List\r
+from uuid import uuid4\r
+\r
+\r
+class ExecutionContext(BaseModel):\r
+    session_id: str\r
+    task_id: str\r
+    run_id: str\r
+    turn_id: str\r
+    correlation_id: str\r
+\r
+\r
+class StructuredTask(BaseModel):\r
+    task_id: str\r
+    task_type: str\r
+    intent: str\r
+    domain: str\r
+    description: str\r
+    inputs: dict[str, Any]\r
+    dependencies: List[str] = Field(default_factory=list)\r
+    context: ExecutionContext\r
+\r
+\r
+class Coordinator:\r
+\r
+    def create_task(\r
+        self,\r
+        intent: str,\r
+        domain: str,\r
+        description: str,\r
+        inputs: dict[str, Any],\r
+        session_id: str,\r
+        turn_id: str\r
+    ) -> StructuredTask:\r
+\r
+        task_id = f"task-{uuid4().hex[:8]}"\r
+        run_id = f"run-{uuid4().hex[:8]}"\r
+        correlation_id = f"corr-{uuid4().hex[:8]}"\r
+\r
+        context = ExecutionContext(\r
+            session_id=session_id,\r
+            task_id=task_id,\r
+            run_id=run_id,\r
+            turn_id=turn_id,\r
+            correlation_id=correlation_id\r
+        )\r
+\r
+        return StructuredTask(\r
+            task_id=task_id,\r
+            task_type=intent,\r
+            intent=intent,\r
+            domain=domain,\r
+            description=description,\r
+            inputs=inputs,\r
+            context=context\r
+        )\r
+\`\`\`\r
+\r
+The important part is not the UUID implementation.\r
+\r
+The architectural point is that the Coordinator creates a **structured task object containing business intent plus execution context**.\r
+\r
+---\r
+\r
+# 27. Conceptual A2A Request Creation\r
+\r
+After creating the task:\r
+\r
+\`\`\`python\r
+def create_a2a_request(task: StructuredTask, delegator_id: str):\r
+\r
+    return {\r
+        "message_type": "task_request",\r
+\r
+        "source_agent": "cwd-coordinator",\r
+\r
+        "target_agent": delegator_id,\r
+\r
+        "task": {\r
+            "task_id": task.task_id,\r
+            "task_type": task.task_type,\r
+            "intent": task.intent,\r
+            "domain": task.domain,\r
+            "description": task.description,\r
+            "inputs": task.inputs,\r
+            "dependencies": task.dependencies\r
+        },\r
+\r
+        "context": {\r
+            "session_id": task.context.session_id,\r
+            "task_id": task.context.task_id,\r
+            "run_id": task.context.run_id,\r
+            "turn_id": task.context.turn_id,\r
+            "correlation_id": task.context.correlation_id\r
+        }\r
+    }\r
+\`\`\`\r
+\r
+The A2A client then sends this request to the selected Delegator.\r
+\r
+---\r
+\r
+# 28. Complete CWD Flow\r
+\r
+Putting everything together:\r
+\r
+\`\`\`text\r
+                    USER\r
+                      |\r
+                      v\r
+              Natural Language\r
+                      |\r
+                      v\r
+                COORDINATOR\r
+                      |\r
+          +-----------+-----------+\r
+          |           |           |\r
+          v           v           v\r
+       Intent      Policy      Context\r
+          |           |           |\r
+          +-----------+-----------+\r
+                      |\r
+                      v\r
+              Execution Required\r
+                      |\r
+                      v\r
+             Identify Capability\r
+                      |\r
+                      v\r
+                AGENT REGISTRY\r
+                      |\r
+                      v\r
+             Select Delegator\r
+                      |\r
+                      v\r
+              Create Task Graph\r
+                      |\r
+                      v\r
+             Attach Execution Context\r
+                      |\r
+                      v\r
+              Create A2A Request\r
+                      |\r
+                      v\r
+                     A2A\r
+                      |\r
+                      v\r
+               DOMAIN DELEGATOR\r
+                      |\r
+              +-------+-------+\r
+              |       |       |\r
+              v       v       v\r
+           Worker  Worker  Worker\r
+              |       |       |\r
+              +-------+-------+\r
+                      |\r
+                      v\r
+               Tools / APIs\r
+                      |\r
+                      v\r
+             Enterprise Systems\r
+                      |\r
+                      v\r
+                  Results\r
+                      |\r
+                      v\r
+                 Delegator\r
+                      |\r
+                      v\r
+                     A2A\r
+                      |\r
+                      v\r
+                Coordinator\r
+                      |\r
+                      v\r
+             Aggregate Results\r
+                      |\r
+                      v\r
+             Validate / Govern\r
+                      |\r
+                      v\r
+                  Response\r
+                      |\r
+                      v\r
+                    USER\r
+\`\`\`\r
+\r
+---\r
+\r
+# 29. Responsibility Summary\r
+\r
+| Activity                           | Coordinator |                  Delegator |\r
+| ---------------------------------- | ----------: | -------------------------: |\r
+| Understand user request            |         Yes |                         No |\r
+| Identify intent                    |         Yes |                         No |\r
+| Determine execution requirement    |         Yes |                         No |\r
+| Identify business domain           |         Yes |                         No |\r
+| Identify required capability       |         Yes | Domain-specific refinement |\r
+| Create enterprise task             |         Yes |                         No |\r
+| Maintain execution context         |         Yes |           Propagate/extend |\r
+| Build high-level task dependencies |         Yes |  Domain-level dependencies |\r
+| Discover Delegator                 |         Yes |                         No |\r
+| Create A2A request                 |         Yes |                   Receives |\r
+| Invoke downstream agent            |         Yes |           Yes, when needed |\r
+| Decompose domain task              |          No |                        Yes |\r
+| Select Workers                     |          No |                        Yes |\r
+| Execute tools                      |          No |            Through Workers |\r
+| Aggregate domain results           |          No |                        Yes |\r
+| Aggregate enterprise workflow      |         Yes |                         No |\r
+| Final response                     |         Yes |                         No |\r
+\r
+---\r
+\r
+# 30. Final Architecture Definition\r
+\r
+The Coordinator acts as the **enterprise execution controller**.\r
+\r
+Its process is:\r
+\r
+\`\`\`text\r
+Understand\r
+   ↓\r
+Structure\r
+   ↓\r
+Create Tasks\r
+   ↓\r
+Attach Context\r
+   ↓\r
+Determine Dependencies\r
+   ↓\r
+Discover Agent\r
+   ↓\r
+Authorize\r
+   ↓\r
+Create A2A Request\r
+   ↓\r
+Invoke Delegator\r
+   ↓\r
+Track Execution\r
+   ↓\r
+Receive Results\r
+   ↓\r
+Aggregate\r
+   ↓\r
+Govern\r
+   ↓\r
+Respond\r
+\`\`\`\r
+\r
+The most important architectural distinction is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | Creates WHAT needs to be accomplished\r
+    | Maintains WHY and CONTEXT\r
+    | Controls WHERE it is executed\r
+    |\r
+    v\r
+Delegator\r
+    |\r
+    | Determines HOW the business domain accomplishes it\r
+    |\r
+    v\r
+Workers\r
+    |\r
+    | Perform the actual operations\r
+    |\r
+    v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+## Key Principle\r
+\r
+> **The Coordinator does not simply forward a user's message to another agent. It transforms the request into a structured execution task, attaches the required business and execution context, establishes dependencies and routing information, and sends a governed A2A execution request to the selected Delegator.**\r
+\r
+This is what makes the Coordinator the **control plane of CWD**, while Delegators and Workers form the downstream **execution plane**.\r
+`,code:``},{id:`result-aggregation`,category:`Coordinator Agent`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator collects, validates, combines, and synthesizes results returned by multiple agents or workers.`,concept:`# How the Coordinator Collects, Validates, Combines, and Synthesizes Results\r
+\r
+## 1. Overview\r
+\r
+In CWD, the Coordinator is responsible not only for sending tasks to downstream agents, but also for **bringing their results back together into one reliable enterprise response**.\r
+\r
+When a business request requires multiple Delegators, Workers, tools, or enterprise systems, the Coordinator must determine:\r
+\r
+* Which results have been received\r
+* Which task produced each result\r
+* Whether the result is valid\r
+* Whether all required tasks completed\r
+* Whether results are consistent\r
+* How results should be combined\r
+* Whether additional execution is required\r
+* How the final response should be synthesized\r
+\r
+The overall flow is:\r
+\r
+\`\`\`text\r
+                    User Request\r
+                         |\r
+                         v\r
+                    Coordinator\r
+                         |\r
+                  Execution Plan\r
+                         |\r
+              +----------+----------+\r
+              |          |          |\r
+              v          v          v\r
+          Delegator A Delegator B Worker C\r
+              |          |          |\r
+              v          v          v\r
+           Result A    Result B    Result C\r
+              |          |          |\r
+              +----------+----------+\r
+                         |\r
+                         v\r
+                Result Collection\r
+                         |\r
+                         v\r
+                  Result Validation\r
+                         |\r
+                         v\r
+                Result Correlation\r
+                         |\r
+                         v\r
+                Result Aggregation\r
+                         |\r
+                         v\r
+                 Conflict Analysis\r
+                         |\r
+                         v\r
+                  LLM Synthesis\r
+                         |\r
+                         v\r
+              Final Response Validation\r
+                         |\r
+                         v\r
+                       User\r
+\`\`\`\r
+\r
+The key principle is:\r
+\r
+> **The Coordinator does not blindly concatenate agent responses. It collects, validates, correlates, aggregates, and then synthesizes the results into a coherent final business response.**\r
+\r
+---\r
+\r
+# 2. Why Result Aggregation Is Required\r
+\r
+Consider a request:\r
+\r
+\`\`\`text\r
+"Create a customer briefing for ABC Corporation."\r
+\`\`\`\r
+\r
+The Coordinator may have generated the following tasks:\r
+\r
+\`\`\`text\r
+Task 1 → Customer Profile\r
+Task 2 → Open Opportunities\r
+Task 3 → Revenue\r
+Task 4 → Recent Interactions\r
+Task 5 → Generate Briefing\r
+\`\`\`\r
+\r
+The first four tasks could execute independently:\r
+\r
+\`\`\`text\r
+                  Coordinator\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+ Customer Worker   Opportunity     Revenue\r
+        |            Worker          Worker\r
+        |              |              |\r
+        v              v              v\r
+    Profile       Opportunities     Revenue\r
+\r
+                       +\r
+                 Interaction\r
+                    Worker\r
+                       |\r
+                       v\r
+                  Interactions\r
+\`\`\`\r
+\r
+The Coordinator must bring these results together before generating the final briefing.\r
+\r
+---\r
+\r
+# 3. Result Lifecycle\r
+\r
+Every downstream result should follow a controlled lifecycle:\r
+\r
+\`\`\`text\r
+Task Submitted\r
+      |\r
+      v\r
+Task Running\r
+      |\r
+      v\r
+Result Received\r
+      |\r
+      v\r
+Result Correlated\r
+      |\r
+      v\r
+Result Validated\r
+      |\r
+      v\r
+Result Normalized\r
+      |\r
+      v\r
+Result Aggregated\r
+      |\r
+      v\r
+Conflict / Completeness Check\r
+      |\r
+      v\r
+LLM Synthesis\r
+      |\r
+      v\r
+Final Validation\r
+      |\r
+      v\r
+Final Response\r
+\`\`\`\r
+\r
+This provides a clear separation between:\r
+\r
+\`\`\`text\r
+Collection\r
+Validation\r
+Aggregation\r
+Synthesis\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Collecting Results\r
+\r
+The Coordinator receives results from downstream agents through the execution mechanism used by CWD, such as A2A and associated messaging patterns.\r
+\r
+A result should contain execution metadata.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-102",\r
+  "run_id": "run-001",\r
+  "correlation_id": "corr-123",\r
+  "source_agent": "sales-delegator",\r
+  "status": "completed",\r
+  "result": {\r
+    "customer": "ABC Corporation",\r
+    "open_opportunities": 4\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator uses:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+correlation_id\r
+\`\`\`\r
+\r
+to determine exactly where the result belongs.\r
+\r
+---\r
+\r
+# 5. Correlation of Results\r
+\r
+Suppose several workers return results:\r
+\r
+\`\`\`text\r
+Result A → task-101\r
+Result B → task-102\r
+Result C → task-103\r
+Result D → task-104\r
+\`\`\`\r
+\r
+The Coordinator maintains a mapping:\r
+\r
+\`\`\`text\r
+Execution Plan\r
+      |\r
+      +--> task-101 → Customer Profile\r
+      |\r
+      +--> task-102 → Opportunities\r
+      |\r
+      +--> task-103 → Revenue\r
+      |\r
+      +--> task-104 → Interactions\r
+\`\`\`\r
+\r
+When a result arrives:\r
+\r
+\`\`\`text\r
+Incoming Result\r
+      |\r
+      v\r
+Read task_id\r
+      |\r
+      v\r
+Find corresponding task\r
+      |\r
+      v\r
+Update task state\r
+      |\r
+      v\r
+Store result\r
+\`\`\`\r
+\r
+This prevents results from different tasks or executions from being mixed.\r
+\r
+---\r
+\r
+# 6. Result State\r
+\r
+The Coordinator should maintain task execution status.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+task-101 → COMPLETED\r
+task-102 → COMPLETED\r
+task-103 → FAILED\r
+task-104 → COMPLETED\r
+\`\`\`\r
+\r
+The Coordinator can therefore determine:\r
+\r
+\`\`\`text\r
+Required tasks = 4\r
+Completed = 3\r
+Failed = 1\r
+\`\`\`\r
+\r
+It should not immediately generate a final answer without considering the failed task.\r
+\r
+---\r
+\r
+# 7. Result Validation\r
+\r
+A downstream agent returning a successful HTTP/A2A response does not necessarily mean that the **business result is valid**.\r
+\r
+The Coordinator can perform multiple validation checks.\r
+\r
+### 7.1 Structural validation\r
+\r
+Does the response conform to the expected schema?\r
+\r
+\`\`\`json\r
+{\r
+  "customer": "...",\r
+  "revenue": 0,\r
+  "currency": "USD"\r
+}\r
+\`\`\`\r
+\r
+If the expected field is missing:\r
+\r
+\`\`\`text\r
+revenue = missing\r
+\`\`\`\r
+\r
+the result is incomplete.\r
+\r
+---\r
+\r
+### 7.2 Status validation\r
+\r
+\`\`\`text\r
+COMPLETED\r
+FAILED\r
+PARTIAL\r
+TIMEOUT\r
+CANCELLED\r
+\`\`\`\r
+\r
+Only appropriate states should contribute to final synthesis.\r
+\r
+---\r
+\r
+### 7.3 Business validation\r
+\r
+The Coordinator may validate basic business constraints.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue cannot be negative\r
+Customer identifier must match requested customer\r
+Currency must be known\r
+Required reporting period must exist\r
+\`\`\`\r
+\r
+Domain-specific validation can also remain within the Delegator/Worker.\r
+\r
+---\r
+\r
+### 7.4 Authorization validation\r
+\r
+The Coordinator must ensure that the returned data is permitted to flow back to the user.\r
+\r
+The execution being authorized does not automatically mean every returned field can be exposed.\r
+\r
+\`\`\`text\r
+Agent Result\r
+     |\r
+     v\r
+Data Governance / Policy\r
+     |\r
+     +---- Restricted ---> Redact\r
+     |\r
+     v\r
+Approved Result\r
+\`\`\`\r
+\r
+---\r
+\r
+# 8. Result Normalization\r
+\r
+Different agents may return information in different formats.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Worker:\r
+revenue = "$12.5M"\r
+\r
+Finance Worker:\r
+revenue = 12500000\r
+\r
+Analytics Worker:\r
+revenue = 12.5\r
+unit = "million USD"\r
+\`\`\`\r
+\r
+The Coordinator should normalize results before aggregation.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Agent Results\r
+      |\r
+      v\r
+Normalization\r
+      |\r
+      v\r
+Common Result Model\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "metric": "revenue",\r
+  "value": 12500000,\r
+  "currency": "USD",\r
+  "period": "FY2026"\r
+}\r
+\`\`\`\r
+\r
+This makes downstream aggregation more reliable.\r
+\r
+---\r
+\r
+# 9. Result Aggregation\r
+\r
+After validation and normalization, the Coordinator combines the results.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile\r
+       +\r
+Opportunities\r
+       +\r
+Revenue\r
+       +\r
+Interactions\r
+       |\r
+       v\r
+Unified Customer Context\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "customer": {\r
+    "name": "ABC Corporation",\r
+    "profile": {...},\r
+    "revenue": {...},\r
+    "opportunities": [...],\r
+    "interactions": [...]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This aggregated context becomes the input to the synthesis step.\r
+\r
+---\r
+\r
+# 10. Aggregation Is Not the Same as Synthesis\r
+\r
+This distinction is important.\r
+\r
+### Aggregation\r
+\r
+Combines structured information.\r
+\r
+\`\`\`text\r
+Result A\r
+Result B\r
+Result C\r
+      |\r
+      v\r
+Combined Data\r
+\`\`\`\r
+\r
+### Synthesis\r
+\r
+Uses reasoning to turn the combined information into a meaningful business response.\r
+\r
+\`\`\`text\r
+Combined Data\r
+      |\r
+      v\r
+LLM\r
+      |\r
+      v\r
+Business Narrative\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Workers\r
+   |\r
+   v\r
+Raw Results\r
+   |\r
+   v\r
+Coordinator\r
+   |\r
+   +--> Validate\r
+   |\r
+   +--> Normalize\r
+   |\r
+   +--> Aggregate\r
+   |\r
+   v\r
+Structured Context\r
+   |\r
+   v\r
+LLM\r
+   |\r
+   v\r
+Synthesized Response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Example of Aggregation\r
+\r
+Suppose the downstream agents return:\r
+\r
+### Customer Worker\r
+\r
+\`\`\`json\r
+{\r
+  "customer": "ABC Corporation",\r
+  "industry": "Semiconductor",\r
+  "region": "North America"\r
+}\r
+\`\`\`\r
+\r
+### Opportunity Worker\r
+\r
+\`\`\`json\r
+{\r
+  "open_opportunities": 4,\r
+  "pipeline_value": 8200000\r
+}\r
+\`\`\`\r
+\r
+### Revenue Worker\r
+\r
+\`\`\`json\r
+{\r
+  "revenue": 12500000,\r
+  "currency": "USD"\r
+}\r
+\`\`\`\r
+\r
+### Interaction Worker\r
+\r
+\`\`\`json\r
+{\r
+  "recent_interactions": 7,\r
+  "last_interaction": "2026-08-28"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator aggregates them:\r
+\r
+\`\`\`json\r
+{\r
+  "customer": "ABC Corporation",\r
+  "industry": "Semiconductor",\r
+  "region": "North America",\r
+  "revenue": {\r
+    "value": 12500000,\r
+    "currency": "USD"\r
+  },\r
+  "opportunities": {\r
+    "count": 4,\r
+    "pipeline_value": 8200000\r
+  },\r
+  "interactions": {\r
+    "count": 7,\r
+    "last_interaction": "2026-08-28"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Dependency-Aware Result Collection\r
+\r
+The Coordinator must understand task dependencies.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Task A ─────┐\r
+            |\r
+Task B ─────+----> Task D\r
+            |\r
+Task C ─────┘\r
+\`\`\`\r
+\r
+Task D cannot execute until A, B, and C are complete.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+A = completed\r
+B = completed\r
+C = completed\r
+        |\r
+        v\r
+D = READY\r
+\`\`\`\r
+\r
+But:\r
+\r
+\`\`\`text\r
+A = completed\r
+B = failed\r
+C = completed\r
+        |\r
+        v\r
+D = BLOCKED\r
+\`\`\`\r
+\r
+The Coordinator can then decide whether to:\r
+\r
+\`\`\`text\r
+Retry B\r
+Use alternate source\r
+Continue with partial data\r
+Ask for clarification\r
+Fail workflow\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Parallel Result Handling\r
+\r
+CWD can execute independent tasks in parallel.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     +------------------+\r
+     |                  |\r
+     v                  v\r
+Sales Delegator    Finance Delegator\r
+     |                  |\r
+     v                  v\r
+Sales Workers      Finance Workers\r
+     |                  |\r
+     +--------+---------+\r
+              |\r
+              v\r
+        Coordinator\r
+\`\`\`\r
+\r
+Results may arrive at different times:\r
+\r
+\`\`\`text\r
+10:01:01 → Sales result\r
+10:01:03 → Finance result\r
+10:01:05 → Customer result\r
+\`\`\`\r
+\r
+The Coordinator uses task and correlation identifiers to associate each result with the correct execution.\r
+\r
+It does not depend on response arrival order.\r
+\r
+---\r
+\r
+# 14. Partial Results\r
+\r
+A production agentic workflow must handle partial completion.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Profile      → SUCCESS\r
+Opportunities         → SUCCESS\r
+Revenue               → TIMEOUT\r
+Interactions          → SUCCESS\r
+\`\`\`\r
+\r
+The Coordinator determines whether the missing revenue information is:\r
+\r
+\`\`\`text\r
+Critical\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Optional\r
+\`\`\`\r
+\r
+If critical:\r
+\r
+\`\`\`text\r
+Workflow\r
+   |\r
+   v\r
+Retry / Alternate Agent / Escalation\r
+\`\`\`\r
+\r
+If optional:\r
+\r
+\`\`\`text\r
+Workflow\r
+   |\r
+   v\r
+Continue with Partial Result\r
+\`\`\`\r
+\r
+The final response should clearly indicate missing information rather than inventing it.\r
+\r
+---\r
+\r
+# 15. Conflicting Results\r
+\r
+Multiple agents may return different values.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Sales Agent:\r
+Revenue = $12.5M\r
+\r
+Finance Agent:\r
+Revenue = $12.1M\r
+\`\`\`\r
+\r
+The Coordinator should not arbitrarily choose one.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Conflicting Results\r
+        |\r
+        v\r
+Identify Source\r
+        |\r
+        v\r
+Check Timestamp\r
+        |\r
+        v\r
+Check Data Authority\r
+        |\r
+        v\r
+Apply Business Policy\r
+        |\r
+        v\r
+Resolve / Report Conflict\r
+\`\`\`\r
+\r
+For example, Finance may be the authoritative source for financial reporting.\r
+\r
+The Coordinator can then prefer the governed authoritative source.\r
+\r
+---\r
+\r
+# 16. Source Attribution\r
+\r
+Results should retain their source information.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "metric": "revenue",\r
+  "value": 12500000,\r
+  "source": "finance-worker",\r
+  "system": "Snowflake",\r
+  "retrieved_at": "2026-09-05T10:15:00Z"\r
+}\r
+\`\`\`\r
+\r
+This is valuable for:\r
+\r
+* auditability\r
+* traceability\r
+* conflict resolution\r
+* debugging\r
+* business confidence\r
+\r
+The final response can therefore be based on traceable evidence rather than opaque agent output.\r
+\r
+---\r
+\r
+# 17. LLM-Based Synthesis\r
+\r
+Once results are validated and aggregated, the Coordinator can use an LLM to synthesize the final response.\r
+\r
+The LLM receives structured context such as:\r
+\r
+\`\`\`text\r
+Intent:\r
+create_customer_briefing\r
+\r
+Customer:\r
+ABC Corporation\r
+\r
+Validated Results:\r
+- Customer profile\r
+- Revenue\r
+- Opportunities\r
+- Interactions\r
+\r
+Output requirement:\r
+Executive customer briefing\r
+\`\`\`\r
+\r
+The LLM's responsibility is:\r
+\r
+\`\`\`text\r
+Understand validated results\r
+        |\r
+        v\r
+Identify important information\r
+        |\r
+        v\r
+Connect related facts\r
+        |\r
+        v\r
+Generate coherent narrative\r
+\`\`\`\r
+\r
+It should not be responsible for deciding whether the underlying data was authorized or whether an agent was allowed to execute.\r
+\r
+---\r
+\r
+# 18. Synthesis Prompt\r
+\r
+Conceptually, the Coordinator may construct:\r
+\r
+\`\`\`text\r
+You are generating the final response for the user's request.\r
+\r
+User Intent:\r
+Create a customer briefing.\r
+\r
+Validated Data:\r
+{aggregated_results}\r
+\r
+Instructions:\r
+- Use only the validated data.\r
+- Do not invent missing information.\r
+- Clearly indicate incomplete results.\r
+- Preserve important source context.\r
+- Follow the requested output format.\r
+- Do not expose restricted information.\r
+\`\`\`\r
+\r
+The LLM then generates:\r
+\r
+\`\`\`text\r
+Customer Briefing — ABC Corporation\r
+\r
+Customer Overview\r
+ABC Corporation operates in ...\r
+\r
+Revenue\r
+Current revenue is $12.5M.\r
+\r
+Pipeline\r
+There are 4 open opportunities representing\r
+$8.2M in pipeline.\r
+\r
+Recent Engagement\r
+There have been 7 recent interactions, with the\r
+latest interaction occurring on August 28.\r
+\r
+Key Takeaways\r
+...\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Final Response Validation\r
+\r
+The LLM-generated response should still pass through governance.\r
+\r
+The Coordinator can perform:\r
+\r
+\`\`\`text\r
+LLM Response\r
+     |\r
+     v\r
+Output Validation\r
+     |\r
+     +--> Policy Check\r
+     |\r
+     +--> DLP / Redaction\r
+     |\r
+     +--> Sensitive Data Check\r
+     |\r
+     +--> Completeness Check\r
+     |\r
+     v\r
+Approved Response\r
+\`\`\`\r
+\r
+This is important because an LLM can generate content that was not explicitly present in the structured results.\r
+\r
+The system should ensure:\r
+\r
+\`\`\`text\r
+Generated response\r
+        ⊆\r
+Authorized validated context\r
+\`\`\`\r
+\r
+where appropriate.\r
+\r
+---\r
+\r
+# 20. Result Handling With Multiple Delegators\r
+\r
+Consider a cross-domain request:\r
+\r
+\`\`\`text\r
+"Give me an executive view of customer ABC's\r
+sales pipeline and financial exposure."\r
+\`\`\`\r
+\r
+The Coordinator may invoke:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                     |\r
+          +----------+----------+\r
+          |                     |\r
+          v                     v\r
+    Sales Delegator       Finance Delegator\r
+          |                     |\r
+          v                     v\r
+    Sales Workers          Finance Workers\r
+          |                     |\r
+          +----------+----------+\r
+                     |\r
+                     v\r
+                Coordinator\r
+                     |\r
+                     v\r
+               Aggregation\r
+                     |\r
+                     v\r
+                 Synthesis\r
+\`\`\`\r
+\r
+The Coordinator becomes the point where cross-domain results are combined.\r
+\r
+---\r
+\r
+# 21. Maintaining Result Context\r
+\r
+Every result should remain associated with the original execution context.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-103",\r
+  "run_id": "run-001",\r
+  "turn_id": "turn-001",\r
+  "correlation_id": "corr-001",\r
+\r
+  "source_agent": "finance-delegator",\r
+\r
+  "result": {\r
+    "revenue": 12500000\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This allows the Coordinator to distinguish:\r
+\r
+\`\`\`text\r
+Customer ABC / Run 1\r
+\`\`\`\r
+\r
+from:\r
+\r
+\`\`\`text\r
+Customer XYZ / Run 2\r
+\`\`\`\r
+\r
+even when both workflows are executing concurrently.\r
+\r
+---\r
+\r
+# 22. Observability During Result Processing\r
+\r
+Every result-processing step should be observable.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Result Received\r
+      |\r
+      v\r
+result_received\r
+      |\r
+      v\r
+result_validated\r
+      |\r
+      v\r
+result_normalized\r
+      |\r
+      v\r
+result_aggregated\r
+      |\r
+      v\r
+synthesis_started\r
+      |\r
+      v\r
+synthesis_completed\r
+      |\r
+      v\r
+response_validated\r
+\`\`\`\r
+\r
+Useful metadata includes:\r
+\r
+\`\`\`text\r
+correlation_id\r
+task_id\r
+run_id\r
+agent_id\r
+worker_id\r
+status\r
+latency\r
+error\r
+result_size\r
+model\r
+token usage\r
+\`\`\`\r
+\r
+This allows the platform team to diagnose where an execution failed or became slow.\r
+\r
+---\r
+\r
+# 23. Error and Retry Handling\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+        |\r
+        v\r
+TIMEOUT\r
+\`\`\`\r
+\r
+The Coordinator can update:\r
+\r
+\`\`\`text\r
+task-102 = FAILED\r
+\`\`\`\r
+\r
+Then apply the execution policy:\r
+\r
+\`\`\`text\r
+Retry?\r
+   |\r
+   +--> Yes → Retry task\r
+   |\r
+   +--> No\r
+          |\r
+          v\r
+      Alternate Agent?\r
+          |\r
+          +--> Yes → Re-route\r
+          |\r
+          +--> No → Partial Result / Failure\r
+\`\`\`\r
+\r
+The important point is that a failure in one worker should not automatically destroy the entire workflow if the workflow can safely continue.\r
+\r
+---\r
+\r
+# 24. Coordinator's Result Aggregation Responsibilities\r
+\r
+The Coordinator owns the enterprise-level result lifecycle:\r
+\r
+\`\`\`text\r
+1. Receive results\r
+2. Correlate results\r
+3. Track task status\r
+4. Validate structure\r
+5. Validate execution status\r
+6. Apply authorization/data policy\r
+7. Normalize results\r
+8. Detect missing results\r
+9. Detect conflicts\r
+10. Combine results\r
+11. Determine whether workflow can continue\r
+12. Provide validated context to LLM\r
+13. Synthesize final response\r
+14. Validate final response\r
+15. Return response\r
+16. Record execution telemetry\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Delegator's Role in Result Aggregation\r
+\r
+The Delegator also performs aggregation, but at a **domain level**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      +--> Customer Worker\r
+      +--> Opportunity Worker\r
+      +--> Interaction Worker\r
+      |\r
+      v\r
+Sales Domain Result\r
+\`\`\`\r
+\r
+The Delegator may combine these into:\r
+\r
+\`\`\`json\r
+{\r
+  "customer": "ABC Corporation",\r
+  "sales_summary": {\r
+    "opportunities": [...],\r
+    "interactions": [...]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+        |\r
+        v\r
+Coordinator\r
+\`\`\`\r
+\r
+The Coordinator can combine that Sales result with Finance or other domain results.\r
+\r
+---\r
+\r
+# 26. Two-Level Aggregation\r
+\r
+This creates an important CWD pattern:\r
+\r
+\`\`\`text\r
+                    Coordinator\r
+                         |\r
+          +--------------+--------------+\r
+          |                             |\r
+          v                             v\r
+   Sales Delegator              Finance Delegator\r
+          |                             |\r
+     +----+----+                    +---+---+\r
+     |    |    |                    |       |\r
+     v    v    v                    v       v\r
+    W1   W2   W3                   W4      W5\r
+     |    |    |                    |       |\r
+     +----+----+                    +---+---+\r
+          |                             |\r
+          v                             v\r
+   Sales Aggregation             Finance Aggregation\r
+          |                             |\r
+          +--------------+--------------+\r
+                         |\r
+                         v\r
+                  CWD Aggregation\r
+                         |\r
+                         v\r
+                     Synthesis\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Worker Aggregation\r
+        ↓\r
+Delegator Aggregation\r
+        ↓\r
+Coordinator Aggregation\r
+        ↓\r
+Final Synthesis\r
+\`\`\`\r
+\r
+---\r
+\r
+# 27. Conceptual Python Model\r
+\r
+A simplified Coordinator result model could be:\r
+\r
+\`\`\`python\r
+from pydantic import BaseModel, Field\r
+from typing import Any, Dict, List\r
+\r
+\r
+class AgentResult(BaseModel):\r
+    task_id: str\r
+    run_id: str\r
+    correlation_id: str\r
+    source_agent: str\r
+    status: str\r
+    result: Dict[str, Any] = Field(default_factory=dict)\r
+    error: str | None = None\r
+\r
+\r
+class ResultAggregator:\r
+\r
+    def __init__(self):\r
+        self.results: Dict[str, AgentResult] = {}\r
+\r
+    def collect(self, result: AgentResult):\r
+        self.results[result.task_id] = result\r
+\r
+    def validate(self, result: AgentResult) -> bool:\r
+\r
+        if result.status != "completed":\r
+            return False\r
+\r
+        if not result.task_id:\r
+            return False\r
+\r
+        if not result.correlation_id:\r
+            return False\r
+\r
+        return True\r
+\r
+    def get_valid_results(self) -> List[AgentResult]:\r
+\r
+        return [\r
+            result\r
+            for result in self.results.values()\r
+            if self.validate(result)\r
+        ]\r
+\r
+    def aggregate(self) -> Dict[str, Any]:\r
+\r
+        aggregated = {}\r
+\r
+        for result in self.get_valid_results():\r
+            aggregated[result.task_id] = result.result\r
+\r
+        return aggregated\r
+\`\`\`\r
+\r
+This represents the basic pattern:\r
+\r
+\`\`\`text\r
+Collect\r
+   ↓\r
+Validate\r
+   ↓\r
+Store\r
+   ↓\r
+Aggregate\r
+\`\`\`\r
+\r
+A production implementation would additionally handle schema validation, authorization, retries, provenance, conflicts, persistence, event-driven responses and policy enforcement.\r
+\r
+---\r
+\r
+# 28. Conceptual Synthesis Method\r
+\r
+After aggregation:\r
+\r
+\`\`\`python\r
+def synthesize_response(aggregated_context, user_request):\r
+\r
+    prompt = {\r
+        "user_request": user_request,\r
+        "validated_context": aggregated_context,\r
+        "instructions": [\r
+            "Use only validated information",\r
+            "Do not invent missing values",\r
+            "Clearly identify incomplete results",\r
+            "Respect output policy"\r
+        ]\r
+    }\r
+\r
+    return llm.generate(prompt)\r
+\`\`\`\r
+\r
+The important architecture is:\r
+\r
+\`\`\`text\r
+Raw Agent Results\r
+       |\r
+       v\r
+Validation\r
+       |\r
+       v\r
+Structured Aggregated Context\r
+       |\r
+       v\r
+LLM\r
+       |\r
+       v\r
+Final Response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 29. What the Coordinator Must NOT Do\r
+\r
+The Coordinator should not:\r
+\r
+### Blindly trust agent responses\r
+\r
+\`\`\`text\r
+Agent says SUCCESS\r
+       ↓\r
+Automatically send to user\r
+\`\`\`\r
+\r
+### Concatenate responses\r
+\r
+\`\`\`text\r
+Result A + Result B + Result C\r
+\`\`\`\r
+\r
+This can produce inconsistent or confusing output.\r
+\r
+### Allow the LLM to invent missing results\r
+\r
+\`\`\`text\r
+Missing Revenue\r
+      ↓\r
+LLM guesses revenue\r
+\`\`\`\r
+\r
+This is unacceptable for enterprise workflows.\r
+\r
+### Ignore provenance\r
+\r
+The Coordinator should know where important information originated.\r
+\r
+### Bypass policy during synthesis\r
+\r
+The final response must still respect enterprise data governance.\r
+\r
+---\r
+\r
+# 30. Complete End-to-End Example\r
+\r
+User:\r
+\r
+\`\`\`text\r
+"Give me an executive briefing for customer ABC,\r
+including sales pipeline, revenue, and recent interactions."\r
+\`\`\`\r
+\r
+### Step 1 — Coordinator creates tasks\r
+\r
+\`\`\`text\r
+Task A → Sales Pipeline\r
+Task B → Revenue\r
+Task C → Recent Interactions\r
+Task D → Executive Briefing\r
+\`\`\`\r
+\r
+### Step 2 — Tasks execute\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      v\r
+Sales Worker\r
+      |\r
+      v\r
+Pipeline Result\r
+\r
+Finance Delegator\r
+      |\r
+      v\r
+Finance Worker\r
+      |\r
+      v\r
+Revenue Result\r
+\r
+Customer Delegator\r
+      |\r
+      v\r
+Interaction Worker\r
+      |\r
+      v\r
+Interaction Result\r
+\`\`\`\r
+\r
+### Step 3 — Coordinator collects\r
+\r
+\`\`\`text\r
+Pipeline Result\r
+Revenue Result\r
+Interaction Result\r
+\`\`\`\r
+\r
+### Step 4 — Coordinator validates\r
+\r
+\`\`\`text\r
+Pipeline → Valid\r
+Revenue → Valid\r
+Interactions → Valid\r
+\`\`\`\r
+\r
+### Step 5 — Coordinator aggregates\r
+\r
+\`\`\`json\r
+{\r
+  "customer": "ABC Corporation",\r
+  "pipeline": {...},\r
+  "revenue": {...},\r
+  "interactions": {...}\r
+}\r
+\`\`\`\r
+\r
+### Step 6 — Coordinator synthesizes\r
+\r
+\`\`\`text\r
+Aggregated Context\r
+        |\r
+        v\r
+       LLM\r
+        |\r
+        v\r
+Executive Briefing\r
+\`\`\`\r
+\r
+### Step 7 — Final validation\r
+\r
+\`\`\`text\r
+Executive Briefing\r
+        |\r
+        v\r
+Policy / DLP / Output Validation\r
+        |\r
+        v\r
+Approved\r
+\`\`\`\r
+\r
+### Step 8 — Response\r
+\r
+\`\`\`text\r
+User\r
+  ↑\r
+  |\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 31. Final CWD Result Processing Architecture\r
+\r
+The complete pattern is:\r
+\r
+\`\`\`text\r
+                         COORDINATOR\r
+                              |\r
+                    Execution Plan\r
+                              |\r
+              +---------------+---------------+\r
+              |               |               |\r
+              v               v               v\r
+        Delegator A      Delegator B      Delegator C\r
+              |               |               |\r
+           Workers          Workers          Workers\r
+              |               |               |\r
+              v               v               v\r
+          Results A        Results B        Results C\r
+              |               |               |\r
+              +---------------+---------------+\r
+                              |\r
+                              v\r
+                     Result Collection\r
+                              |\r
+                              v\r
+                       Correlation\r
+                              |\r
+                              v\r
+                       Validation\r
+                              |\r
+                              v\r
+                       Normalization\r
+                              |\r
+                              v\r
+                    Completeness Check\r
+                              |\r
+                              v\r
+                     Conflict Detection\r
+                              |\r
+                              v\r
+                       Aggregation\r
+                              |\r
+                              v\r
+                  Structured Context\r
+                              |\r
+                              v\r
+                         LLM Synthesis\r
+                              |\r
+                              v\r
+                    Output Governance\r
+                              |\r
+                              v\r
+                     Final Response\r
+                              |\r
+                              v\r
+                            USER\r
+\`\`\`\r
+\r
+---\r
+\r
+# 32. Responsibility Boundary\r
+\r
+| Activity                      |     Worker |  Delegator | Coordinator |\r
+| ----------------------------- | ---------: | ---------: | ----------: |\r
+| Execute specific task         |        Yes |         No |          No |\r
+| Return task result            |        Yes |        Yes |          No |\r
+| Aggregate worker results      |         No |        Yes |          No |\r
+| Aggregate domain results      |         No |        Yes |          No |\r
+| Collect multi-domain results  |         No |         No |         Yes |\r
+| Correlate results             |      Local |     Domain |  Enterprise |\r
+| Validate task output          |        Yes |        Yes |         Yes |\r
+| Detect missing results        |      Local |     Domain |  Enterprise |\r
+| Detect cross-domain conflicts |         No |    Limited |         Yes |\r
+| Build enterprise context      |         No |     Domain |         Yes |\r
+| Final response synthesis      |         No |         No |         Yes |\r
+| Final response governance     |         No |     Domain |         Yes |\r
+| End-to-end observability      | Contribute | Contribute |  Coordinate |\r
+\r
+---\r
+\r
+# 33. Key Architectural Principle\r
+\r
+The Coordinator follows this pattern:\r
+\r
+\`\`\`text\r
+COLLECT\r
+   ↓\r
+CORRELATE\r
+   ↓\r
+VALIDATE\r
+   ↓\r
+NORMALIZE\r
+   ↓\r
+CHECK COMPLETENESS\r
+   ↓\r
+RESOLVE CONFLICTS\r
+   ↓\r
+AGGREGATE\r
+   ↓\r
+SYNTHESIZE\r
+   ↓\r
+GOVERN\r
+   ↓\r
+RESPOND\r
+\`\`\`\r
+\r
+The most important distinction is:\r
+\r
+\`\`\`text\r
+Worker\r
+= Produces a task result\r
+\r
+Delegator\r
+= Combines results within its business domain\r
+\r
+Coordinator\r
+= Combines results across the enterprise workflow\r
+\r
+LLM\r
+= Synthesizes validated information into a human-readable response\r
+\`\`\`\r
+\r
+## Final Definition\r
+\r
+> **The Coordinator acts as the result-control and synthesis layer of CWD. It collects responses from multiple Delegators and Workers, correlates them using task/run/correlation context, validates their status and content, handles missing or conflicting results, combines validated outputs into a unified execution context, and uses the LLM to synthesize that context into a governed final response.**\r
+\r
+In short:\r
+\r
+\`\`\`text\r
+Coordinator Result Management\r
+=\r
+Collect\r
++ Correlate\r
++ Validate\r
++ Normalize\r
++ Aggregate\r
++ Resolve\r
++ Synthesize\r
++ Govern\r
++ Respond\r
+\`\`\`\r
+`,code:``},{id:`coordinator-retry-recovery`,category:`Coordinator Agent`,title:`Retry & Recovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator handles agent failures, timeouts, retries, fallback strategies, partial failures, and recovery workflows.`,concept:`# How the Coordinator Handles Agent Failures, Timeouts, Retries, Fallbacks, Partial Failures, and Recovery\r
+\r
+## 1. Overview\r
+\r
+In CWD, the Coordinator is responsible for **controlling the reliability of the overall enterprise workflow**.\r
+\r
+A downstream agent can fail for many reasons:\r
+\r
+* Agent unavailable\r
+* Network failure\r
+* A2A communication failure\r
+* Request timeout\r
+* Worker failure\r
+* Enterprise API failure\r
+* Database unavailable\r
+* Rate limiting\r
+* Invalid response\r
+* Partial data\r
+* Authentication/authorization failure\r
+* LLM/model failure\r
+\r
+The Coordinator must prevent one isolated failure from unnecessarily bringing down the entire business workflow.\r
+\r
+The reliability flow is:\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Coordinator\r
+     |\r
+     v\r
+Execution Plan\r
+     |\r
+     v\r
+Delegator / Worker\r
+     |\r
+     +---- Success ------> Result\r
+     |\r
+     +---- Failure ------> Failure Handler\r
+     |\r
+     +---- Timeout ------> Timeout Handler\r
+     |\r
+     +---- Partial ------> Partial Result Handler\r
+                              |\r
+                              v\r
+                         Recovery Policy\r
+                              |\r
+             +----------------+----------------+\r
+             |                |                |\r
+             v                v                v\r
+           Retry           Fallback         Continue\r
+             |                |                |\r
+             +----------------+----------------+\r
+                              |\r
+                              v\r
+                         Coordinator\r
+                              |\r
+                              v\r
+                    Aggregate / Synthesize\r
+                              |\r
+                              v\r
+                            User\r
+\`\`\`\r
+\r
+The key principle is:\r
+\r
+> **The Coordinator does not treat every failure the same. It classifies the failure, evaluates the workflow state and recovery policy, and chooses the safest recovery path.**\r
+\r
+---\r
+\r
+# 2. Coordinator as the Reliability Control Plane\r
+\r
+The Coordinator has two major responsibilities:\r
+\r
+\`\`\`text\r
+Business Orchestration\r
+        +\r
+Execution Reliability\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     +--> Plan\r
+     +--> Route\r
+     +--> Execute\r
+     +--> Monitor\r
+     +--> Detect failure\r
+     +--> Recover\r
+     +--> Re-plan\r
+     +--> Aggregate\r
+\`\`\`\r
+\r
+The Delegator is responsible for domain-level recovery where appropriate, while the Coordinator handles **enterprise workflow-level recovery**.\r
+\r
+---\r
+\r
+# 3. Failure Types\r
+\r
+The Coordinator should distinguish different failure categories.\r
+\r
+| Failure                     | Example               | Typical Response         |\r
+| --------------------------- | --------------------- | ------------------------ |\r
+| Agent unavailable           | Delegator is down     | Fallback / retry         |\r
+| A2A failure                 | Connection failure    | Retry                    |\r
+| Timeout                     | Agent exceeds SLA     | Retry / fallback         |\r
+| Authentication failure      | Token rejected        | Stop / escalate          |\r
+| Authorization failure       | User lacks access     | Stop                     |\r
+| Worker failure              | One Worker crashes    | Retry / partial          |\r
+| Data source failure         | Snowflake unavailable | Retry / alternate source |\r
+| Rate limit                  | API throttling        | Backoff / retry          |\r
+| Invalid response            | Schema mismatch       | Retry / reject           |\r
+| Partial result              | Some tasks completed  | Continue / recover       |\r
+| Critical dependency failure | Required task failed  | Recovery / stop          |\r
+| Non-critical failure        | Optional task failed  | Continue                 |\r
+\r
+The Coordinator therefore needs a **failure classification mechanism** rather than a simple:\r
+\r
+\`\`\`python\r
+except Exception:\r
+    retry()\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Failure Detection\r
+\r
+The Coordinator can detect failures from:\r
+\r
+\`\`\`text\r
+A2A response\r
+HTTP status\r
+Messaging event\r
+Task status\r
+Timeout\r
+Agent heartbeat/health\r
+Worker result\r
+Schema validation\r
+Policy response\r
+Enterprise API response\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-101",\r
+  "status": "failed",\r
+  "error": {\r
+    "code": "SALES_AGENT_UNAVAILABLE",\r
+    "type": "AGENT_UNAVAILABLE",\r
+    "retryable": true\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator evaluates the failure metadata and determines the next action.\r
+\r
+---\r
+\r
+# 5. Failure Classification\r
+\r
+A useful conceptual model is:\r
+\r
+\`\`\`text\r
+Failure\r
+   |\r
+   v\r
+Classify\r
+   |\r
+   +--> Transient\r
+   |\r
+   +--> Permanent\r
+   |\r
+   +--> Authorization\r
+   |\r
+   +--> Data\r
+   |\r
+   +--> Dependency\r
+   |\r
+   +--> Timeout\r
+   |\r
+   +--> Policy\r
+\`\`\`\r
+\r
+### Transient failures\r
+\r
+Examples:\r
+\r
+\`\`\`text\r
+Network interruption\r
+Temporary service unavailable\r
+Rate limiting\r
+Temporary database connection issue\r
+\`\`\`\r
+\r
+These are candidates for retry.\r
+\r
+### Permanent failures\r
+\r
+Examples:\r
+\r
+\`\`\`text\r
+Unsupported capability\r
+Invalid request\r
+Malformed input\r
+Business rule violation\r
+\`\`\`\r
+\r
+These should generally not be retried blindly.\r
+\r
+### Authorization failures\r
+\r
+These should normally stop the affected execution path.\r
+\r
+\`\`\`text\r
+Unauthorized\r
+     |\r
+     v\r
+No retry\r
+     |\r
+     v\r
+Controlled response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Timeout Handling\r
+\r
+A timeout occurs when a downstream operation does not complete within the allowed execution window.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | timeout = 30 sec\r
+     v\r
+Sales Delegator\r
+     |\r
+     | 30 seconds\r
+     X\r
+   TIMEOUT\r
+\`\`\`\r
+\r
+The Coordinator updates task state:\r
+\r
+\`\`\`text\r
+RUNNING\r
+   |\r
+   v\r
+TIMEOUT\r
+\`\`\`\r
+\r
+It then checks the recovery policy.\r
+\r
+\`\`\`text\r
+Timeout\r
+   |\r
+   +--> Retry?\r
+   |\r
+   +--> Alternate agent?\r
+   |\r
+   +--> Continue with partial result?\r
+   |\r
+   +--> Escalate?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. Timeout Should Be Context-Aware\r
+\r
+Not every task should have the same timeout.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Simple lookup\r
+    → 10 seconds\r
+\r
+Business analysis\r
+    → 60 seconds\r
+\r
+Complex multi-agent workflow\r
+    → several minutes\r
+\`\`\`\r
+\r
+Timeout information can therefore be part of the execution task:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-101",\r
+  "timeout_seconds": 60\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can also distinguish:\r
+\r
+\`\`\`text\r
+Task timeout\r
+vs.\r
+Overall workflow timeout\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Overall Workflow\r
+       |\r
+       +--> Task A timeout\r
+       |\r
+       +--> Task B completed\r
+       |\r
+       +--> Task C completed\r
+\`\`\`\r
+\r
+The workflow may still be recoverable.\r
+\r
+---\r
+\r
+# 8. Retry Strategy\r
+\r
+Retries are useful for transient failures.\r
+\r
+A typical pattern is:\r
+\r
+\`\`\`text\r
+Attempt 1\r
+   |\r
+   X Failure\r
+   |\r
+   v\r
+Wait\r
+   |\r
+   v\r
+Attempt 2\r
+   |\r
+   X Failure\r
+   |\r
+   v\r
+Wait\r
+   |\r
+   v\r
+Attempt 3\r
+   |\r
+   +--> Success\r
+   |\r
+   +--> Failure\r
+\`\`\`\r
+\r
+The Coordinator should have a maximum retry limit.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+max_retries = 3\r
+\`\`\`\r
+\r
+This prevents infinite retry loops.\r
+\r
+---\r
+\r
+# 9. Exponential Backoff\r
+\r
+Retries should generally not happen immediately.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Attempt 1 → failure\r
+     |\r
+     wait 1 sec\r
+     |\r
+Attempt 2 → failure\r
+     |\r
+     wait 2 sec\r
+     |\r
+Attempt 3 → failure\r
+     |\r
+     wait 4 sec\r
+     |\r
+Final recovery\r
+\`\`\`\r
+\r
+The exact values depend on the service and workload.\r
+\r
+The purpose is to avoid:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   +--> Retry\r
+   +--> Retry\r
+   +--> Retry\r
+   +--> Retry\r
+   +--> Retry\r
+\`\`\`\r
+\r
+which can amplify an existing outage.\r
+\r
+---\r
+\r
+# 10. Idempotency Is Critical for Retries\r
+\r
+Retries become dangerous when a task performs an action.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Create Salesforce Opportunity\r
+\`\`\`\r
+\r
+If the Coordinator sends the request twice:\r
+\r
+\`\`\`text\r
+Attempt 1 → Opportunity created\r
+Response lost\r
+Attempt 2 → Another opportunity created\r
+\`\`\`\r
+\r
+This creates duplicate business actions.\r
+\r
+Therefore, execution requests should carry an idempotency identifier such as:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+idempotency_key\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-101",\r
+  "run_id": "run-001",\r
+  "idempotency_key": "task-101-run-001"\r
+}\r
+\`\`\`\r
+\r
+The downstream system can recognize that the request is a retry of an existing operation.\r
+\r
+---\r
+\r
+# 11. Retryable vs Non-Retryable Failures\r
+\r
+The Coordinator should distinguish:\r
+\r
+\`\`\`text\r
+Retryable\r
+\`\`\`\r
+\r
+from:\r
+\r
+\`\`\`text\r
+Non-Retryable\r
+\`\`\`\r
+\r
+Example:\r
+\r
+| Failure                       |            Retry? |\r
+| ----------------------------- | ----------------: |\r
+| Network timeout               |               Yes |\r
+| Temporary 503                 |               Yes |\r
+| Rate limit                    | Yes, with backoff |\r
+| Database connection timeout   |               Yes |\r
+| Agent temporarily unavailable |               Yes |\r
+| Invalid request               |                No |\r
+| Authorization denied          |                No |\r
+| Unsupported operation         |                No |\r
+| Data policy violation         |                No |\r
+| Invalid user input            |                No |\r
+\r
+The exact policy should be configurable rather than hard-coded into individual agents.\r
+\r
+---\r
+\r
+# 12. Fallback Strategy\r
+\r
+If retry does not work, the Coordinator can use a fallback strategy.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Primary Delegator\r
+       |\r
+       X\r
+    Failure\r
+       |\r
+       v\r
+Fallback Delegator\r
+       |\r
+       v\r
+Continue Execution\r
+\`\`\`\r
+\r
+The Agent Registry can help identify alternate agents with compatible capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required capability:\r
+customer_analysis\r
+\r
+Primary:\r
+Sales Delegator A\r
+\r
+Fallback:\r
+Sales Delegator B\r
+\`\`\`\r
+\r
+The Coordinator can select the fallback only if:\r
+\r
+\`\`\`text\r
+Capability matches\r
++\r
+Authorization allows\r
++\r
+Agent is healthy\r
++\r
+Routing policy allows\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Fallback Does Not Mean "Try Any Agent"\r
+\r
+This is an important CWD governance rule.\r
+\r
+The Coordinator should **not** do:\r
+\r
+\`\`\`text\r
+Sales Agent failed\r
+      |\r
+      v\r
+Pick random agent\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Primary Agent Failed\r
+       |\r
+       v\r
+Required Capability\r
+       |\r
+       v\r
+Agent Registry\r
+       |\r
+       v\r
+Compatible Candidates\r
+       |\r
+       v\r
+Policy / Authorization\r
+       |\r
+       v\r
+Healthy Candidate\r
+       |\r
+       v\r
+Fallback Agent\r
+\`\`\`\r
+\r
+Fallback must preserve business semantics.\r
+\r
+---\r
+\r
+# 14. Partial Failure\r
+\r
+Partial failure occurs when only some parts of a workflow fail.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Profile      → SUCCESS\r
+Sales Pipeline        → SUCCESS\r
+Revenue               → FAILED\r
+Interactions          → SUCCESS\r
+\`\`\`\r
+\r
+The Coordinator should not automatically fail the entire workflow.\r
+\r
+Instead, it determines whether Revenue is:\r
+\r
+\`\`\`text\r
+Critical\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Optional\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. Critical vs Optional Tasks\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       |\r
+       +--> Customer Profile     REQUIRED\r
+       +--> Opportunities        REQUIRED\r
+       +--> Revenue              REQUIRED\r
+       +--> Interactions         OPTIONAL\r
+\`\`\`\r
+\r
+If Revenue fails:\r
+\r
+\`\`\`text\r
+Revenue = FAILED\r
+       |\r
+       v\r
+Critical Dependency\r
+       |\r
+       v\r
+Recovery Required\r
+\`\`\`\r
+\r
+If Interactions fail:\r
+\r
+\`\`\`text\r
+Interactions = FAILED\r
+       |\r
+       v\r
+Optional Dependency\r
+       |\r
+       v\r
+Continue\r
+\`\`\`\r
+\r
+This distinction should be part of the execution plan.\r
+\r
+---\r
+\r
+# 16. Partial Result Strategy\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Profile       → Success\r
+Pipeline      → Success\r
+Revenue       → Failure\r
+Interactions  → Success\r
+\`\`\`\r
+\r
+The Coordinator may produce:\r
+\r
+\`\`\`text\r
+Status:\r
+PARTIAL_SUCCESS\r
+\`\`\`\r
+\r
+The final response should explicitly indicate:\r
+\r
+\`\`\`text\r
+Customer briefing generated using available data.\r
+\r
+Revenue information could not be retrieved because\r
+the financial data source was unavailable.\r
+\`\`\`\r
+\r
+The LLM must not invent the missing revenue value.\r
+\r
+---\r
+\r
+# 17. Dependency-Aware Recovery\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+Task A ─────┐\r
+            |\r
+Task B ─────+----> Task D\r
+            |\r
+Task C ─────┘\r
+\`\`\`\r
+\r
+If Task B fails:\r
+\r
+\`\`\`text\r
+A = SUCCESS\r
+B = FAILED\r
+C = SUCCESS\r
+D = BLOCKED\r
+\`\`\`\r
+\r
+The Coordinator can attempt:\r
+\r
+\`\`\`text\r
+Retry B\r
+   |\r
+   v\r
+Fallback B\r
+   |\r
+   v\r
+B recovered\r
+   |\r
+   v\r
+D becomes READY\r
+\`\`\`\r
+\r
+This is more efficient than restarting the entire workflow.\r
+\r
+---\r
+\r
+# 18. Recovery Should Be Task-Level Where Possible\r
+\r
+Suppose a workflow has 20 tasks and Task 18 fails.\r
+\r
+A poor implementation would do:\r
+\r
+\`\`\`text\r
+Task 1\r
+Task 2\r
+...\r
+Task 17\r
+Task 18 → FAILED\r
+       |\r
+       v\r
+Restart everything\r
+\`\`\`\r
+\r
+A better approach is:\r
+\r
+\`\`\`text\r
+Task 18 → FAILED\r
+     |\r
+     v\r
+Recover Task 18\r
+     |\r
+     v\r
+Continue Task 19\r
+\`\`\`\r
+\r
+This reduces:\r
+\r
+* Execution cost\r
+* Latency\r
+* Duplicate tool calls\r
+* Duplicate data retrieval\r
+* Risk of repeated side effects\r
+\r
+---\r
+\r
+# 19. Recovery Workflow\r
+\r
+A general CWD recovery workflow is:\r
+\r
+\`\`\`text\r
+                    Task Failure\r
+                         |\r
+                         v\r
+                  Classify Failure\r
+                         |\r
+            +------------+------------+\r
+            |            |            |\r
+            v            v            v\r
+         Retryable    Permanent    Authorization\r
+            |            |            |\r
+            v            v            v\r
+         Retry       Stop/Report    Stop\r
+            |\r
+            v\r
+       Retry Successful?\r
+          /       \\\r
+        Yes        No\r
+        |           |\r
+        v           v\r
+    Continue     Fallback?\r
+                    /   \\\r
+                  Yes    No\r
+                  |       |\r
+                  v       v\r
+               Re-route  Partial/\r
+                  |      Escalate\r
+                  v\r
+               Continue\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Recovery With Multiple Agents\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    +--> Sales Delegator\r
+    |\r
+    +--> Finance Delegator\r
+    |\r
+    +--> Customer Delegator\r
+\`\`\`\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Sales     → SUCCESS\r
+Finance   → TIMEOUT\r
+Customer  → SUCCESS\r
+\`\`\`\r
+\r
+The Coordinator can:\r
+\r
+\`\`\`text\r
+Finance Timeout\r
+      |\r
+      +--> Retry Finance\r
+      |\r
+      +--> Fallback Finance Agent\r
+      |\r
+      +--> Continue with partial result\r
+      |\r
+      +--> Escalate\r
+\`\`\`\r
+\r
+Meanwhile, successful results should remain available.\r
+\r
+The Coordinator does not need to repeat Sales and Customer execution.\r
+\r
+---\r
+\r
+# 21. Compensation and Recovery for Actions\r
+\r
+Read operations are relatively easy to retry.\r
+\r
+Actions are more complicated.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Create Purchase Order\r
+\`\`\`\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Worker\r
+   |\r
+   v\r
+ERP\r
+   |\r
+   v\r
+Purchase Order Created\r
+   |\r
+   X\r
+Response lost\r
+\`\`\`\r
+\r
+The Coordinator cannot safely assume the operation failed.\r
+\r
+Instead, recovery may require:\r
+\r
+\`\`\`text\r
+Check operation status\r
+        |\r
+        v\r
+Determine whether PO already exists\r
+        |\r
+        v\r
+Continue or compensate\r
+\`\`\`\r
+\r
+For workflows containing business side effects, recovery should therefore support:\r
+\r
+\`\`\`text\r
+Idempotency\r
+Status checks\r
+Compensation\r
+Rollback where possible\r
+Human escalation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 22. Human-in-the-Loop Recovery\r
+\r
+Some failures should not be automatically recovered.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Financial transaction failed\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Policy-sensitive action requires approval\r
+\`\`\`\r
+\r
+The Coordinator can transition to:\r
+\r
+\`\`\`text\r
+WAITING_FOR_HUMAN\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Agent Failure\r
+     |\r
+     v\r
+Automatic Recovery Not Safe\r
+     |\r
+     v\r
+Human Approval / Intervention\r
+     |\r
+     v\r
+Resume Workflow\r
+\`\`\`\r
+\r
+This fits naturally with CWD's governed enterprise execution model.\r
+\r
+---\r
+\r
+# 23. Circuit Breaker Pattern\r
+\r
+If an agent repeatedly fails, the Coordinator/platform should avoid continuously routing traffic to it.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Healthy\r
+   |\r
+   v\r
+Failure Threshold Reached\r
+   |\r
+   v\r
+OPEN\r
+   |\r
+   | Do not send new requests\r
+   v\r
+Fallback Agent\r
+   |\r
+   v\r
+Health Recovery\r
+   |\r
+   v\r
+HALF OPEN\r
+   |\r
+   v\r
+Healthy\r
+\`\`\`\r
+\r
+This protects the overall CWD platform from cascading failures.\r
+\r
+---\r
+\r
+# 24. Preventing Cascading Failures\r
+\r
+Imagine:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     +--> Sales Delegator\r
+     |\r
+     +--> Finance Delegator\r
+     |\r
+     +--> HR Delegator\r
+\`\`\`\r
+\r
+If Finance is unavailable, the Coordinator should not allow Finance retries to consume all platform capacity.\r
+\r
+Controls can include:\r
+\r
+\`\`\`text\r
+Timeout\r
+Retry limit\r
+Backoff\r
+Concurrency limit\r
+Circuit breaker\r
+Priority\r
+Queue isolation\r
+Rate limiting\r
+Fallback\r
+\`\`\`\r
+\r
+The objective is:\r
+\r
+> **Failure of one agent should not become failure of the entire CWD platform.**\r
+\r
+---\r
+\r
+# 25. State Management During Recovery\r
+\r
+The Coordinator should persist execution state.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-103",\r
+  "run_id": "run-001",\r
+  "status": "failed",\r
+  "attempt": 2,\r
+  "error_code": "TIMEOUT",\r
+  "recovery_action": "retry",\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+After recovery:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-103",\r
+  "run_id": "run-001",\r
+  "status": "completed",\r
+  "attempt": 3,\r
+  "recovery_action": "retry_success",\r
+  "correlation_id": "corr-001"\r
+}\r
+\`\`\`\r
+\r
+This allows the workflow to resume without losing context.\r
+\r
+---\r
+\r
+# 26. LangGraph and Recovery\r
+\r
+LangGraph is well suited to representing recovery states.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+validate\r
+   |\r
+   v\r
+plan\r
+   |\r
+   v\r
+execute\r
+   |\r
+   +------> success ------> aggregate\r
+   |\r
+   +------> failure\r
+              |\r
+              v\r
+          classify\r
+              |\r
+       +------+------+\r
+       |             |\r
+       v             v\r
+     retry        fallback\r
+       |             |\r
+       +------+------+\r
+              |\r
+              v\r
+           execute\r
+              |\r
+              v\r
+          aggregate\r
+\`\`\`\r
+\r
+The graph maintains the workflow state while the Coordinator applies the enterprise execution policy.\r
+\r
+---\r
+\r
+# 27. Example State Model\r
+\r
+A task can have states such as:\r
+\r
+\`\`\`text\r
+CREATED\r
+   |\r
+VALIDATED\r
+   |\r
+AUTHORIZED\r
+   |\r
+READY\r
+   |\r
+RUNNING\r
+   |\r
++--+-------------------+\r
+|                      |\r
+v                      v\r
+COMPLETED            FAILED\r
+                       |\r
+                       v\r
+                    RETRYING\r
+                       |\r
+              +--------+--------+\r
+              |                 |\r
+              v                 v\r
+          SUCCESS           FALLBACK\r
+                                |\r
+                                v\r
+                             RUNNING\r
+                                |\r
+                                v\r
+                           COMPLETED\r
+\`\`\`\r
+\r
+Additional states:\r
+\r
+\`\`\`text\r
+TIMEOUT\r
+BLOCKED\r
+PARTIAL\r
+CANCELLED\r
+ESCALATED\r
+WAITING_FOR_HUMAN\r
+\`\`\`\r
+\r
+---\r
+\r
+# 28. Example: Customer Briefing Failure\r
+\r
+Request:\r
+\r
+\`\`\`text\r
+"Create customer briefing for ABC."\r
+\`\`\`\r
+\r
+Execution:\r
+\r
+\`\`\`text\r
+Profile       → SUCCESS\r
+Opportunities → SUCCESS\r
+Revenue       → TIMEOUT\r
+Interactions  → SUCCESS\r
+\`\`\`\r
+\r
+Coordinator:\r
+\r
+\`\`\`text\r
+Revenue Timeout\r
+      |\r
+      v\r
+Retry #1\r
+      |\r
+      X\r
+Timeout\r
+      |\r
+      v\r
+Retry #2\r
+      |\r
+      X\r
+Timeout\r
+      |\r
+      v\r
+Check Fallback\r
+      |\r
+      v\r
+Finance Fallback Agent\r
+      |\r
+      v\r
+SUCCESS\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Profile\r
++\r
+Opportunities\r
++\r
+Revenue\r
++\r
+Interactions\r
+       |\r
+       v\r
+Aggregate\r
+       |\r
+       v\r
+LLM Synthesis\r
+       |\r
+       v\r
+Final Briefing\r
+\`\`\`\r
+\r
+The user never needs to know that the first Finance execution timed out unless that operational detail is relevant.\r
+\r
+---\r
+\r
+# 29. Example: Irrecoverable Failure\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      |\r
+      v\r
+Authorization Denied\r
+\`\`\`\r
+\r
+The Coordinator should not retry.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Authorization Denied\r
+        |\r
+        v\r
+Stop Revenue Task\r
+        |\r
+        v\r
+Determine Criticality\r
+        |\r
+        +--> Critical → Workflow blocked/escalated\r
+        |\r
+        +--> Optional → Continue with partial result\r
+\`\`\`\r
+\r
+This prevents retry loops and security violations.\r
+\r
+---\r
+\r
+# 30. Example: Agent Unavailable\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+     |\r
+     X\r
+Unavailable\r
+\`\`\`\r
+\r
+Coordinator:\r
+\r
+\`\`\`text\r
+Agent Registry\r
+     |\r
+     +--> Sales Delegator A → unhealthy\r
+     |\r
+     +--> Sales Delegator B → healthy\r
+\`\`\`\r
+\r
+If policy permits:\r
+\r
+\`\`\`text\r
+Select Sales Delegator B\r
+        |\r
+        v\r
+Create new A2A execution\r
+        |\r
+        v\r
+Continue workflow\r
+\`\`\`\r
+\r
+The fallback agent must still receive the correct task and context.\r
+\r
+---\r
+\r
+# 31. Recovery Must Preserve Context\r
+\r
+When a retry or fallback occurs, the Coordinator should preserve:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+correlation_id\r
+intent\r
+business context\r
+authorization context\r
+dependencies\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Original Task\r
+task_id = task-101\r
+correlation_id = corr-123\r
+\r
+Retry\r
+task_id = task-101\r
+correlation_id = corr-123\r
+attempt = 2\r
+\`\`\`\r
+\r
+This means a retry is still part of the same business execution.\r
+\r
+---\r
+\r
+# 32. Retry vs New Run\r
+\r
+A useful distinction is:\r
+\r
+\`\`\`text\r
+Task\r
+ |\r
+ +--> Run 1\r
+ |\r
+ +--> Run 2\r
+\`\`\`\r
+\r
+The task represents the business objective.\r
+\r
+A run represents an execution attempt.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+Create Customer Briefing\r
+\r
+Run 1:\r
+Sales Agent → timeout\r
+\r
+Run 2:\r
+Sales Agent → success\r
+\`\`\`\r
+\r
+This provides better auditability than creating an entirely new task for every retry.\r
+\r
+---\r
+\r
+# 33. Result Handling After Recovery\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Task A → SUCCESS\r
+Task B → RETRIED → SUCCESS\r
+Task C → SUCCESS\r
+Task D → FALLBACK → SUCCESS\r
+\`\`\`\r
+\r
+The Coordinator can finally determine:\r
+\r
+\`\`\`text\r
+Workflow Status = SUCCESS\r
+\`\`\`\r
+\r
+The final result can contain provenance:\r
+\r
+\`\`\`text\r
+Task B:\r
+completed after retry\r
+\r
+Task D:\r
+completed using fallback agent\r
+\`\`\`\r
+\r
+Operational details can remain in telemetry while the user receives a clean business response.\r
+\r
+---\r
+\r
+# 34. Observability During Failures\r
+\r
+Every failure and recovery event should be observable.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+task_started\r
+     |\r
+task_timeout\r
+     |\r
+retry_started\r
+     |\r
+retry_failed\r
+     |\r
+fallback_selected\r
+     |\r
+fallback_started\r
+     |\r
+fallback_completed\r
+     |\r
+task_completed\r
+\`\`\`\r
+\r
+Useful fields:\r
+\r
+\`\`\`text\r
+correlation_id\r
+task_id\r
+run_id\r
+agent_id\r
+attempt\r
+failure_type\r
+error_code\r
+recovery_action\r
+latency\r
+timestamp\r
+\`\`\`\r
+\r
+This allows operations teams to answer:\r
+\r
+\`\`\`text\r
+Why did the workflow fail?\r
+Which agent failed?\r
+How many retries occurred?\r
+Was fallback used?\r
+How long did recovery take?\r
+Did the final workflow succeed?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 35. Failure Handling Architecture\r
+\r
+The production pattern can be visualized as:\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              |\r
+                        Execution Plan\r
+                              |\r
+                              v\r
+                         A2A Request\r
+                              |\r
+                              v\r
+                         Delegator\r
+                              |\r
+                           Worker\r
+                              |\r
+                              v\r
+                         Execution\r
+                              |\r
+               +--------------+--------------+\r
+               |                             |\r
+            SUCCESS                        FAILURE\r
+               |                             |\r
+               v                             v\r
+            Result                    Failure Classifier\r
+                                             |\r
+                         +-------------------+------------------+\r
+                         |                   |                  |\r
+                         v                   v                  v\r
+                       Retry              Fallback           Stop\r
+                         |                   |                  |\r
+                         v                   v                  v\r
+                      Execute             Execute           Escalate\r
+                         |                   |                  |\r
+                         +---------+---------+------------------+\r
+                                   |\r
+                                   v\r
+                              Result State\r
+                                   |\r
+                                   v\r
+                              Aggregation\r
+                                   |\r
+                                   v\r
+                              Synthesis\r
+                                   |\r
+                                   v\r
+                                Response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 36. Responsibility Boundary\r
+\r
+| Failure / Recovery Activity    |     Worker |          Delegator |      Coordinator |\r
+| ------------------------------ | ---------: | -----------------: | ---------------: |\r
+| Detect local execution failure |        Yes |                Yes |              Yes |\r
+| Retry local operation          |        Yes |                Yes | Policy dependent |\r
+| Worker-level recovery          |        Yes |                Yes |               No |\r
+| Domain-level recovery          |         No |                Yes |               No |\r
+| Detect Delegator failure       |         No |                 No |              Yes |\r
+| A2A retry                      |         No |         Yes/Client |              Yes |\r
+| Agent fallback                 |         No |            Limited |              Yes |\r
+| Cross-domain recovery          |         No |                 No |              Yes |\r
+| Workflow-level retry           |         No |            Limited |              Yes |\r
+| Partial workflow handling      |         No |             Domain |              Yes |\r
+| Dependency recovery            |         No |             Domain |              Yes |\r
+| Final escalation               |         No |           Possible |              Yes |\r
+| Final result synthesis         |         No | Domain aggregation |              Yes |\r
+| End-to-end observability       | Contribute |         Contribute |       Coordinate |\r
+\r
+---\r
+\r
+# 37. Recommended CWD Recovery Policy\r
+\r
+The Coordinator should conceptually follow this sequence:\r
+\r
+\`\`\`text\r
+1. Detect failure\r
+2. Correlate failure to task/run\r
+3. Classify failure\r
+4. Determine whether failure is retryable\r
+5. Check retry count\r
+6. Apply backoff if retrying\r
+7. Preserve idempotency\r
+8. Retry task if safe\r
+9. If retry fails, evaluate fallback\r
+10. Discover compatible fallback agent\r
+11. Validate authorization and capability\r
+12. Execute fallback\r
+13. Re-evaluate dependencies\r
+14. Continue workflow if possible\r
+15. Produce partial result if permitted\r
+16. Escalate when automatic recovery is unsafe\r
+17. Persist recovery state\r
+18. Record telemetry\r
+19. Aggregate recovered results\r
+20. Synthesize final response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 38. Final End-to-End Recovery Example\r
+\r
+\`\`\`text\r
+User Request\r
+      |\r
+      v\r
+Coordinator\r
+      |\r
+      v\r
+Execution Plan\r
+      |\r
+      +-------------------+\r
+      |                   |\r
+      v                   v\r
+Sales Delegator     Finance Delegator\r
+      |                   |\r
+      v                   X\r
+   Success              Timeout\r
+                          |\r
+                          v\r
+                       Retry\r
+                          |\r
+                          X\r
+                       Failure\r
+                          |\r
+                          v\r
+                     Fallback Agent\r
+                          |\r
+                          v\r
+                       Success\r
+                          |\r
+          +---------------+---------------+\r
+          |                               |\r
+          v                               v\r
+    Sales Result                    Finance Result\r
+          |                               |\r
+          +---------------+---------------+\r
+                          |\r
+                          v\r
+                    Result Validation\r
+                          |\r
+                          v\r
+                      Aggregation\r
+                          |\r
+                          v\r
+                     LLM Synthesis\r
+                          |\r
+                          v\r
+                   Output Governance\r
+                          |\r
+                          v\r
+                        User\r
+\`\`\`\r
+\r
+---\r
+\r
+# 39. Final Architecture Definition\r
+\r
+The Coordinator's reliability responsibility can be summarized as:\r
+\r
+\`\`\`text\r
+Detect\r
+  ↓\r
+Classify\r
+  ↓\r
+Decide\r
+  ↓\r
+Retry\r
+  ↓\r
+Fallback\r
+  ↓\r
+Recover\r
+  ↓\r
+Resume\r
+  ↓\r
+Aggregate\r
+  ↓\r
+Respond\r
+\`\`\`\r
+\r
+More precisely:\r
+\r
+\`\`\`text\r
+Coordinator Reliability =\r
+Failure Detection\r
++ Failure Classification\r
++ Timeout Management\r
++ Retry Control\r
++ Idempotency\r
++ Fallback Routing\r
++ Partial Failure Handling\r
++ Dependency Management\r
++ Recovery\r
++ Escalation\r
++ State Persistence\r
++ Observability\r
+\`\`\`\r
+\r
+## Key Principle\r
+\r
+> **The Coordinator is the recovery controller for the CWD enterprise workflow. It determines whether a failure is transient, permanent, recoverable, or security-related; applies retry and timeout policies; selects approved fallback agents when appropriate; preserves task and execution context; handles partial failures without unnecessarily restarting successful work; and resumes or escalates the workflow based on business and governance policy.**\r
+\r
+In short:\r
+\r
+\`\`\`text\r
+Failure\r
+   ↓\r
+Coordinator\r
+   ↓\r
+"Can I safely recover?"\r
+   |\r
+   +--> Retry\r
+   |\r
+   +--> Fallback\r
+   |\r
+   +--> Continue with Partial Result\r
+   |\r
+   +--> Resume\r
+   |\r
+   +--> Human Escalation\r
+   |\r
+   +--> Controlled Failure\r
+\`\`\`\r
+\r
+This makes the Coordinator not just the **routing and orchestration layer**, but also the **reliability and recovery control plane of CWD**.\r
+`,code:``},{id:`global-governance`,category:`Coordinator Agent`,title:`Global Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how centralized governance, security policies, authorization, guardrails, compliance, and policy enforcement are handled by the Coordinator.`,concept:`# Centralized Governance, Security, Authorization, Guardrails, Compliance, and Policy Enforcement in CWD Coordinator\r
+\r
+## 1. Overview\r
+\r
+In CWD, the **Coordinator acts as the central governance and policy enforcement control point** for enterprise AI execution.\r
+\r
+The Coordinator does not allow an LLM, Delegator, or Worker to independently decide whether an operation is permitted.\r
+\r
+Instead, the execution flow follows:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Coordinator\r
+     ↓\r
+Identity Validation\r
+     ↓\r
+Authorization\r
+     ↓\r
+Policy Evaluation\r
+     ↓\r
+Guardrail Validation\r
+     ↓\r
+Execution Decision\r
+     ↓\r
+Delegator / Agent\r
+     ↓\r
+Worker\r
+     ↓\r
+Enterprise Systems\r
+     ↓\r
+Result Validation\r
+     ↓\r
+Final Governance Check\r
+     ↓\r
+User Response\r
+\`\`\`\r
+\r
+The key principle is:\r
+\r
+> **The LLM can recommend an action, but the Coordinator determines whether that action is allowed to execute.**\r
+\r
+---\r
+\r
+# 2. Why Centralized Governance Is Required\r
+\r
+CWD can have:\r
+\r
+* Multiple Delegators\r
+* Multiple Workers\r
+* Multiple LLMs\r
+* Multiple enterprise data sources\r
+* Multiple tools and APIs\r
+* Multiple business domains\r
+* Multiple execution paths\r
+\r
+Without centralized governance, every agent would need to independently implement:\r
+\r
+* Authentication\r
+* Authorization\r
+* Data access rules\r
+* Compliance rules\r
+* PII/DLP controls\r
+* Tool restrictions\r
+* Prompt protection\r
+* Output validation\r
+* Audit logging\r
+\r
+That creates inconsistent security and makes enterprise governance difficult.\r
+\r
+CWD therefore follows a **centralized policy enforcement model**.\r
+\r
+\`\`\`text\r
+                    ┌──────────────────────┐\r
+                    │      Coordinator     │\r
+                    │                      │\r
+User ──────────────►│ Identity             │\r
+                    │ Authorization        │\r
+                    │ Policy               │\r
+                    │ Guardrails           │\r
+                    │ Compliance           │\r
+                    │ Execution Control    │\r
+                    └──────────┬───────────┘\r
+                               │\r
+                ┌──────────────┼──────────────┐\r
+                ↓              ↓              ↓\r
+           Delegator A    Delegator B    Delegator C\r
+                ↓              ↓              ↓\r
+             Workers        Workers        Workers\r
+\`\`\`\r
+\r
+This creates a consistent enterprise control plane.\r
+\r
+---\r
+\r
+# 3. Coordinator as the Governance Control Plane\r
+\r
+The Coordinator has two major responsibilities:\r
+\r
+### Business orchestration\r
+\r
+\`\`\`text\r
+Understand\r
+Plan\r
+Route\r
+Coordinate\r
+Aggregate\r
+\`\`\`\r
+\r
+### Governance orchestration\r
+\r
+\`\`\`text\r
+Authenticate\r
+Authorize\r
+Validate\r
+Enforce\r
+Monitor\r
+Audit\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── Business Control\r
+     │      ├── Intent\r
+     │      ├── Planning\r
+     │      ├── Routing\r
+     │      └── Aggregation\r
+     │\r
+     └── Governance Control\r
+            ├── Authentication\r
+            ├── Authorization\r
+            ├── Policy\r
+            ├── Guardrails\r
+            ├── Compliance\r
+            ├── Data Governance\r
+            └── Audit\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Authentication\r
+\r
+The first security responsibility is establishing **who is making the request**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Teams / M365 / React UI\r
+  ↓\r
+API Gateway\r
+  ↓\r
+Entra ID Authentication\r
+  ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+The Coordinator receives an authenticated identity/context such as:\r
+\r
+\`\`\`text\r
+user_id\r
+tenant_id\r
+roles\r
+groups\r
+claims\r
+channel\r
+session_id\r
+correlation_id\r
+\`\`\`\r
+\r
+The Coordinator should not trust an identity supplied only inside the user message.\r
+\r
+Authentication is established through the enterprise identity layer.\r
+\r
+---\r
+\r
+# 5. Authorization\r
+\r
+Authentication answers:\r
+\r
+> Who are you?\r
+\r
+Authorization answers:\r
+\r
+> What are you allowed to do?\r
+\r
+Before the Coordinator allows downstream execution, it evaluates authorization.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User\r
+  │\r
+  │ "Create customer briefing"\r
+  ↓\r
+Coordinator\r
+  │\r
+  ├── Is user authenticated?\r
+  │\r
+  ├── Does user have Sales access?\r
+  │\r
+  ├── Can user access this customer?\r
+  │\r
+  ├── Can user access required data?\r
+  │\r
+  └── Can user execute requested operation?\r
+  │\r
+  ↓\r
+Authorized?\r
+\`\`\`\r
+\r
+Only then:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      ↓\r
+Sales Delegator\r
+      ↓\r
+CBD Workers\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Authorization Must Happen Before Data Access\r
+\r
+One of the most important CWD principles is:\r
+\r
+> **Entitlement and authorization must be established before accessing enterprise data.**\r
+\r
+For example, suppose the user asks:\r
+\r
+\`\`\`text\r
+"Give me the complete financial information for Customer ABC."\r
+\`\`\`\r
+\r
+The Coordinator should not:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+LLM\r
+ ↓\r
+Snowflake\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Identity\r
+ ↓\r
+Authorization\r
+ ↓\r
+Data entitlement\r
+ ↓\r
+Approved execution\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓\r
+Snowflake\r
+\`\`\`\r
+\r
+This prevents unauthorized data retrieval from being hidden inside an agent workflow.\r
+\r
+---\r
+\r
+# 7. Policy Enforcement\r
+\r
+Authorization is only one part of governance.\r
+\r
+The Coordinator also evaluates **business and platform policies**.\r
+\r
+Examples:\r
+\r
+\`\`\`text\r
+Can this user access this domain?\r
+Can this agent perform this operation?\r
+Can this tool be used?\r
+Can this data classification be accessed?\r
+Can this information be returned?\r
+Can this action be executed automatically?\r
+Is human approval required?\r
+Is this operation allowed in this environment?\r
+\`\`\`\r
+\r
+A policy decision can conceptually look like:\r
+\r
+\`\`\`json\r
+{\r
+  "decision": "ALLOW",\r
+  "user": "user123",\r
+  "domain": "sales",\r
+  "capability": "customer_briefing",\r
+  "data_classification": "internal",\r
+  "action": "read",\r
+  "requires_human_approval": false\r
+}\r
+\`\`\`\r
+\r
+The Coordinator uses this decision to control execution.\r
+\r
+---\r
+\r
+# 8. Policy Decision vs Policy Enforcement\r
+\r
+A useful architectural distinction is:\r
+\r
+### Policy Decision\r
+\r
+Determines:\r
+\r
+\`\`\`text\r
+ALLOW\r
+DENY\r
+REDACT\r
+ESCALATE\r
+REQUIRE_APPROVAL\r
+\`\`\`\r
+\r
+### Policy Enforcement\r
+\r
+Actually prevents or permits the operation.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Policy Engine\r
+      ↓\r
+ALLOW\r
+      ↓\r
+Coordinator\r
+      ↓\r
+A2A\r
+      ↓\r
+Delegator\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Policy Engine\r
+      ↓\r
+DENY\r
+      ↓\r
+Coordinator\r
+      ↓\r
+STOP EXECUTION\r
+\`\`\`\r
+\r
+The Coordinator is therefore the **policy enforcement point in the execution workflow**, while policy definitions/decision services can remain centralized platform services.\r
+\r
+---\r
+\r
+# 9. Guardrails\r
+\r
+Guardrails protect the CWD execution process from unsafe or unauthorized behavior.\r
+\r
+They can be applied at multiple stages.\r
+\r
+## Input Guardrails\r
+\r
+Before processing the request:\r
+\r
+\`\`\`text\r
+User Input\r
+   ↓\r
+Input Validation\r
+   ↓\r
+Prompt Injection Detection\r
+   ↓\r
+Sensitive Information Detection\r
+   ↓\r
+Policy Validation\r
+   ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+Examples:\r
+\r
+* malicious instructions\r
+* prompt injection\r
+* unsupported operations\r
+* restricted requests\r
+* excessive input\r
+* sensitive information\r
+\r
+---\r
+\r
+# 10. Execution Guardrails\r
+\r
+Before invoking a Delegator or Worker, the Coordinator validates:\r
+\r
+\`\`\`text\r
+Requested capability\r
+        ↓\r
+Authorized?\r
+        ↓\r
+Agent allowed?\r
+        ↓\r
+Tool allowed?\r
+        ↓\r
+Data allowed?\r
+        ↓\r
+Execution allowed?\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    ├── Sales capability? ✓\r
+    ├── User authorized? ✓\r
+    ├── Sales Delegator approved? ✓\r
+    ├── Worker capability approved? ✓\r
+    ├── Required data access approved? ✓\r
+    └── Tool permitted? ✓\r
+             ↓\r
+          Execute\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Tool Guardrails\r
+\r
+Workers should not be allowed to invoke arbitrary enterprise systems.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Worker\r
+  ↓\r
+MCP / Approved Tool\r
+  ↓\r
+Policy Validation\r
+  ↓\r
+Enterprise API\r
+\`\`\`\r
+\r
+The Coordinator establishes the approved execution context.\r
+\r
+The Worker should receive only the permissions required for its task.\r
+\r
+This follows:\r
+\r
+> **Least privilege**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Worker\r
+    ↓\r
+Salesforce Customer Read API\r
+\`\`\`\r
+\r
+does not automatically mean:\r
+\r
+\`\`\`text\r
+Sales Worker\r
+    ↓\r
+Finance Database\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Data Governance\r
+\r
+CWD operates across enterprise data sources such as:\r
+\r
+\`\`\`text\r
+Snowflake\r
+Salesforce\r
+Oracle\r
+SharePoint\r
+M365\r
+Enterprise APIs\r
+Azure AI Search\r
+\`\`\`\r
+\r
+The Coordinator must ensure that downstream execution respects data governance.\r
+\r
+Important controls include:\r
+\r
+* Data classification\r
+* Entitlement\r
+* Access control\r
+* Data minimization\r
+* DLP\r
+* Redaction\r
+* Approved retrieval\r
+* Source restrictions\r
+* Data lineage\r
+* Auditability\r
+\r
+---\r
+\r
+# 13. RAG Governance\r
+\r
+The same governance model applies to RAG.\r
+\r
+The Coordinator should not simply ask:\r
+\r
+\`\`\`text\r
+"Search everything."\r
+\`\`\`\r
+\r
+Instead, retrieval should be scoped according to:\r
+\r
+\`\`\`text\r
+User Identity\r
+      +\r
+User Entitlements\r
+      +\r
+Business Domain\r
+      +\r
+Intent\r
+      +\r
+Data Classification\r
+      +\r
+Access Policy\r
+      ↓\r
+Scoped Retrieval\r
+      ↓\r
+Azure AI Search\r
+\`\`\`\r
+\r
+This ensures that retrieval does not become a mechanism for bypassing enterprise authorization.\r
+\r
+---\r
+\r
+# 14. Prompt Governance\r
+\r
+Prompts are also governed assets in CWD.\r
+\r
+The Prompt Registry provides:\r
+\r
+* Version control\r
+* Approved prompts\r
+* Metadata\r
+* Ownership\r
+* RBAC\r
+* Approval workflow\r
+* Auditability\r
+\r
+The Coordinator can retrieve the approved prompt configuration for a specific workflow.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     ↓\r
+Prompt Registry\r
+     ↓\r
+Approved Prompt Version\r
+     ↓\r
+LLM\r
+\`\`\`\r
+\r
+This prevents arbitrary prompt changes from becoming uncontrolled production behavior.\r
+\r
+---\r
+\r
+# 15. LLM Governance\r
+\r
+The Coordinator treats the LLM as an **intelligence component**, not as the security authority.\r
+\r
+For example, the LLM may determine:\r
+\r
+\`\`\`text\r
+Intent = Customer Briefing\r
+Domain = Sales\r
+Actions = Retrieve customer profile + opportunities\r
+\`\`\`\r
+\r
+But the LLM cannot independently decide:\r
+\r
+\`\`\`text\r
+"User is allowed to access this customer."\r
+\`\`\`\r
+\r
+That decision belongs to governed platform logic.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+LLM\r
+ ↓\r
+Recommendation\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Policy Validation\r
+ ↓\r
+Approved / Rejected\r
+\`\`\`\r
+\r
+This is one of the most important architectural controls in CWD.\r
+\r
+---\r
+\r
+# 16. Compliance Enforcement\r
+\r
+The Coordinator supports compliance by ensuring that execution follows enterprise policies.\r
+\r
+Compliance controls can include:\r
+\r
+\`\`\`text\r
+Identity\r
+Authorization\r
+Data access\r
+Data classification\r
+DLP\r
+Prompt governance\r
+Tool governance\r
+Audit logging\r
+Retention\r
+Traceability\r
+\`\`\`\r
+\r
+For every important execution, CWD should be able to establish:\r
+\r
+\`\`\`text\r
+Who?\r
+   ↓\r
+Requested what?\r
+   ↓\r
+Which agent?\r
+   ↓\r
+Which workflow?\r
+   ↓\r
+Which data?\r
+   ↓\r
+Which tools?\r
+   ↓\r
+What policy decision?\r
+   ↓\r
+What happened?\r
+   ↓\r
+What result was returned?\r
+\`\`\`\r
+\r
+This creates an auditable execution chain.\r
+\r
+---\r
+\r
+# 17. Auditability\r
+\r
+Every governed execution should carry consistent identifiers.\r
+\r
+CWD uses a hierarchy such as:\r
+\r
+\`\`\`text\r
+Session\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Turn\r
+   ↓\r
+Step\r
+\`\`\`\r
+\r
+And a correlation identifier connects the execution across services.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+correlation_id = abc-123\r
+task_id        = task-456\r
+run_id         = run-789\r
+step_id        = step-001\r
+\`\`\`\r
+\r
+These identifiers allow security and operations teams to trace:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓\r
+A2A\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓\r
+MCP\r
+ ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. Output Governance\r
+\r
+Governance does not stop after the Worker returns a result.\r
+\r
+The Coordinator performs final validation before returning information to the user.\r
+\r
+\`\`\`text\r
+Worker Result\r
+      ↓\r
+Coordinator\r
+      ↓\r
+Result Validation\r
+      ↓\r
+Authorization Check\r
+      ↓\r
+DLP / Sensitive Data Check\r
+      ↓\r
+Redaction\r
+      ↓\r
+Response Policy\r
+      ↓\r
+User\r
+\`\`\`\r
+\r
+For example, a downstream system may return:\r
+\r
+\`\`\`text\r
+Customer revenue\r
+Customer contact information\r
+Internal sales notes\r
+Restricted financial information\r
+\`\`\`\r
+\r
+The Coordinator determines what can actually be exposed in the final response.\r
+\r
+---\r
+\r
+# 19. Centralized Policy Flow\r
+\r
+The complete governance flow can be represented as:\r
+\r
+\`\`\`text\r
+                    USER\r
+                      │\r
+                      ▼\r
+              ┌───────────────┐\r
+              │ API Gateway   │\r
+              │ Authentication│\r
+              └───────┬───────┘\r
+                      │\r
+                      ▼\r
+              ┌───────────────┐\r
+              │  COORDINATOR  │\r
+              │               │\r
+              │ Intent        │\r
+              │ Authorization │\r
+              │ Policy        │\r
+              │ Guardrails    │\r
+              │ Compliance    │\r
+              │ Routing       │\r
+              └───────┬───────┘\r
+                      │\r
+                Policy Check\r
+                      │\r
+             ┌────────┴────────┐\r
+             │                 │\r
+           DENY              ALLOW\r
+             │                 │\r
+             ▼                 ▼\r
+          STOP             A2A Gateway\r
+                               │\r
+                               ▼\r
+                         DELEGATOR\r
+                               │\r
+                               ▼\r
+                            WORKER\r
+                               │\r
+                         MCP / Tools\r
+                               │\r
+                               ▼\r
+                     Enterprise Systems\r
+                               │\r
+                               ▼\r
+                         Worker Result\r
+                               │\r
+                               ▼\r
+                       Coordinator\r
+                               │\r
+                      Final Governance\r
+                               │\r
+                               ▼\r
+                            USER\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Security Services Around the Coordinator\r
+\r
+The Coordinator does not implement every security capability itself.\r
+\r
+Instead, it integrates with centralized platform services.\r
+\r
+\`\`\`text\r
+                 ┌──────────────────────┐\r
+                 │     Coordinator      │\r
+                 └──────────┬───────────┘\r
+                            │\r
+       ┌────────────────────┼────────────────────┐\r
+       ↓                    ↓                    ↓\r
+ Entra ID / RBAC      Policy Services      Key Vault\r
+       │                    │                    │\r
+ Identity             Authorization          Secrets\r
+       │                    │                    │\r
+       └────────────────────┼────────────────────┘\r
+                            │\r
+                            ↓\r
+                      Agent Execution\r
+\`\`\`\r
+\r
+Other cross-cutting services include:\r
+\r
+\`\`\`text\r
+Azure AI Search\r
+Redis / Cosmos DB\r
+MLflow\r
+Application Insights\r
+Log Analytics\r
+Service Bus / Kafka\r
+Agent Registry\r
+Prompt Registry\r
+\`\`\`\r
+\r
+---\r
+\r
+# 21. Centralized Governance Does Not Mean One Giant Coordinator\r
+\r
+An important architectural distinction is:\r
+\r
+> **Centralized governance does not mean that every business rule must be hard-coded into the Coordinator.**\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── Policy Service\r
+     ├── Agent Registry\r
+     ├── Prompt Registry\r
+     ├── Identity Provider\r
+     ├── Key Vault\r
+     ├── DLP / Security Controls\r
+     └── Observability Platform\r
+\`\`\`\r
+\r
+The Coordinator **orchestrates enforcement**.\r
+\r
+The specialized platform services own their respective policies and controls.\r
+\r
+This keeps CWD modular and maintainable.\r
+\r
+---\r
+\r
+# 22. Governance Across Coordinator → Delegator → Worker\r
+\r
+The enforcement model can be viewed as multiple layers.\r
+\r
+| Layer              | Governance Responsibility                                    |\r
+| ------------------ | ------------------------------------------------------------ |\r
+| Gateway            | Authentication, request validation                           |\r
+| Coordinator        | Enterprise authorization, policy, routing, execution control |\r
+| A2A                | Secure agent communication, identity/context propagation     |\r
+| Delegator          | Domain-level policy and worker authorization                 |\r
+| Worker             | Task-level permissions and controlled tool execution         |\r
+| MCP/Tools          | Tool-level access control                                    |\r
+| Enterprise Systems | Final system-level authorization                             |\r
+| Result Processing  | DLP, redaction, output validation                            |\r
+| Observability      | Audit and compliance evidence                                |\r
+\r
+This provides **defense in depth**.\r
+\r
+---\r
+\r
+# 23. Example: Customer Briefing Request\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+"Create a customer briefing for Customer ABC."\r
+\`\`\`\r
+\r
+### Step 1 — Authentication\r
+\r
+\`\`\`text\r
+User → Gateway → Entra ID\r
+\`\`\`\r
+\r
+User identity is established.\r
+\r
+### Step 2 — Coordinator\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+Intent = Customer Briefing\r
+Domain = Sales\r
+Execution Required = Yes\r
+\`\`\`\r
+\r
+### Step 3 — Authorization\r
+\r
+\`\`\`text\r
+Does user have Sales access?\r
+Does user have Customer ABC access?\r
+Can user execute Customer Briefing?\r
+\`\`\`\r
+\r
+### Step 4 — Policy\r
+\r
+\`\`\`text\r
+Sales Delegator allowed?\r
+Required data sources allowed?\r
+Required tools allowed?\r
+\`\`\`\r
+\r
+### Step 5 — Agent Discovery\r
+\r
+\`\`\`text\r
+Agent Registry\r
+       ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+### Step 6 — A2A\r
+\r
+\`\`\`text\r
+Coordinator\r
+      ↓\r
+A2A\r
+      ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+### Step 7 — Worker Execution\r
+\r
+The Delegator selects Workers:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+Opportunity Worker\r
+Interaction Worker\r
+Revenue Worker\r
+\`\`\`\r
+\r
+### Step 8 — Enterprise Access\r
+\r
+Workers access approved systems:\r
+\r
+\`\`\`text\r
+Salesforce\r
+Snowflake\r
+SharePoint\r
+\`\`\`\r
+\r
+through governed tools/adapters.\r
+\r
+### Step 9 — Results\r
+\r
+\`\`\`text\r
+Workers\r
+   ↓\r
+Delegator\r
+   ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+### Step 10 — Final Governance\r
+\r
+Coordinator validates:\r
+\r
+\`\`\`text\r
+Authorization\r
+Data exposure\r
+DLP\r
+Completeness\r
+Policy\r
+\`\`\`\r
+\r
+### Step 11 — Response\r
+\r
+\`\`\`text\r
+Coordinator\r
+     ↓\r
+Gateway\r
+     ↓\r
+Teams\r
+     ↓\r
+User\r
+\`\`\`\r
+\r
+The complete request is therefore governed from **input to final response**.\r
+\r
+---\r
+\r
+# 24. Failure Scenarios\r
+\r
+Governance must also control failures.\r
+\r
+### Authorization failure\r
+\r
+\`\`\`text\r
+Authorization\r
+      ↓\r
+DENY\r
+      ↓\r
+No Delegator invocation\r
+\`\`\`\r
+\r
+No retry should occur.\r
+\r
+---\r
+\r
+### Policy failure\r
+\r
+\`\`\`text\r
+Policy\r
+  ↓\r
+DENY\r
+  ↓\r
+Execution stopped\r
+\`\`\`\r
+\r
+---\r
+\r
+### Restricted data\r
+\r
+\`\`\`text\r
+Worker Result\r
+      ↓\r
+Sensitive Data Detected\r
+      ↓\r
+Redaction / Block\r
+      ↓\r
+Safe Response\r
+\`\`\`\r
+\r
+---\r
+\r
+### Unauthorized tool\r
+\r
+\`\`\`text\r
+Worker\r
+  ↓\r
+Tool Request\r
+  ↓\r
+Policy\r
+  ↓\r
+DENY\r
+  ↓\r
+Tool Not Executed\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Governance and Observability\r
+\r
+Every policy decision should be observable.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+correlation_id\r
+user/session\r
+intent\r
+domain\r
+agent\r
+capability\r
+policy\r
+decision\r
+timestamp\r
+execution status\r
+\`\`\`\r
+\r
+Example conceptual event:\r
+\r
+\`\`\`json\r
+{\r
+  "event": "policy_decision",\r
+  "correlation_id": "abc-123",\r
+  "domain": "sales",\r
+  "capability": "customer_briefing",\r
+  "decision": "ALLOW",\r
+  "policy": "sales-customer-access",\r
+  "agent": "sales-delegator"\r
+}\r
+\`\`\`\r
+\r
+This supports:\r
+\r
+* Operational monitoring\r
+* Security investigation\r
+* Compliance auditing\r
+* Incident analysis\r
+* AI governance\r
+* Troubleshooting\r
+\r
+---\r
+\r
+# 26. Security Principle\r
+\r
+The most important security principle in CWD is:\r
+\r
+\`\`\`text\r
+LLM ≠ Authority\r
+Agent ≠ Authority\r
+Worker ≠ Authority\r
+\r
+Policy + Identity + Authorization\r
+              ↓\r
+         Governed Execution\r
+\`\`\`\r
+\r
+The LLM can reason about **what should happen**.\r
+\r
+The Coordinator determines **whether it is permitted to happen**.\r
+\r
+---\r
+\r
+# 27. Coordinator Governance Responsibility Matrix\r
+\r
+| Capability        | Coordinator Responsibility                    |\r
+| ----------------- | --------------------------------------------- |\r
+| Authentication    | Consume validated identity from Gateway/Entra |\r
+| Authorization     | Enforce user/task/domain permissions          |\r
+| Policy            | Evaluate execution policies                   |\r
+| Agent Governance  | Select approved agents                        |\r
+| Tool Governance   | Ensure approved execution path                |\r
+| Data Governance   | Enforce entitlement and data restrictions     |\r
+| RAG Governance    | Ensure scoped retrieval                       |\r
+| Prompt Governance | Use approved prompt versions                  |\r
+| Guardrails        | Enforce input, execution, and output controls |\r
+| Compliance        | Ensure policy-compliant execution             |\r
+| Audit             | Propagate IDs and record decisions            |\r
+| DLP               | Validate/redact sensitive output              |\r
+| Human Approval    | Stop/escalate when required                   |\r
+| Result Governance | Validate downstream results                   |\r
+| Recovery          | Prevent unsafe retry/fallback behavior        |\r
+\r
+---\r
+\r
+# 28. Architectural Separation of Responsibilities\r
+\r
+A strong CWD implementation separates responsibilities:\r
+\r
+\`\`\`text\r
+                    ┌─────────────────────────┐\r
+                    │       Coordinator       │\r
+                    │                         │\r
+                    │ Orchestration + Policy  │\r
+                    └────────────┬────────────┘\r
+                                 │\r
+          ┌──────────────────────┼──────────────────────┐\r
+          ↓                      ↓                      ↓\r
+   Identity Layer         Policy Layer          Governance Layer\r
+   Entra ID/RBAC          Authorization          DLP/Compliance\r
+          │                      │                      │\r
+          └──────────────────────┼──────────────────────┘\r
+                                 ↓\r
+                         Agent Execution\r
+\`\`\`\r
+\r
+This prevents security logic from becoming scattered across individual agents.\r
+\r
+---\r
+\r
+# 29. Production Governance Model\r
+\r
+The production CWD governance model can therefore be summarized as:\r
+\r
+\`\`\`text\r
+                    CWD GOVERNANCE\r
+                           │\r
+       ┌───────────────────┼───────────────────┐\r
+       ↓                   ↓                   ↓\r
+    Identity          Authorization        Policies\r
+       │                   │                   │\r
+    Entra ID              RBAC            Business Rules\r
+       │                   │                   │\r
+       └───────────────────┼───────────────────┘\r
+                           ↓\r
+                     COORDINATOR\r
+                           │\r
+       ┌───────────────────┼───────────────────┐\r
+       ↓                   ↓                   ↓\r
+   Guardrails         Agent Governance     Data Governance\r
+       │                   │                   │\r
+       ↓                   ↓                   ↓\r
+    A2A / Agents       Registry          RAG / Enterprise Data\r
+       │                   │                   │\r
+       └───────────────────┼───────────────────┘\r
+                           ↓\r
+                      WORKERS\r
+                           │\r
+                           ↓\r
+                    MCP / Tools\r
+                           │\r
+                           ↓\r
+                Enterprise Systems\r
+                           │\r
+                           ↓\r
+                    Result Validation\r
+                           │\r
+                           ↓\r
+                  Final Governance\r
+                           │\r
+                           ↓\r
+                         USER\r
+\`\`\`\r
+\r
+# 30. Final Architect Definition\r
+\r
+The **Coordinator is the central governance and execution control plane of CWD**.\r
+\r
+It ensures that every agentic workflow follows:\r
+\r
+\`\`\`text\r
+Authenticate\r
+    ↓\r
+Identify\r
+    ↓\r
+Authorize\r
+    ↓\r
+Classify\r
+    ↓\r
+Evaluate Policy\r
+    ↓\r
+Apply Guardrails\r
+    ↓\r
+Select Approved Agent\r
+    ↓\r
+Execute Through Governed Path\r
+    ↓\r
+Monitor and Audit\r
+    ↓\r
+Validate Results\r
+    ↓\r
+Apply Output Governance\r
+    ↓\r
+Respond\r
+\`\`\`\r
+\r
+The core architectural principle is:\r
+\r
+> **CWD centralizes governance at the orchestration layer so that AI agents can reason and collaborate, while identity, authorization, policies, guardrails, compliance, and data-access controls determine what those agents are actually allowed to execute.**\r
+\r
+In one line:\r
+\r
+\`\`\`text\r
+Coordinator Governance =\r
+Identity + Authorization + Policy + Guardrails\r
++ Compliance + Data Governance + Execution Control\r
++ Audit + Output Governance\r
+\`\`\`\r
+\r
+And the most important distinction is:\r
+\r
+\`\`\`text\r
+LLM       → Decides what could be done\r
+Agent     → Performs specialized reasoning\r
+Worker    → Executes the task\r
+Coordinator → Decides what is allowed to happen\r
+Policy    → Defines what is permitted\r
+Security  → Enforces who can access what\r
+Audit     → Records what actually happened\r
+\`\`\`\r
+`,code:``},{id:`coordinator-interview-questions`,category:`Coordinator Agent`,title:`Coordinator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions related to Coordinator Agent implementation and orchestration.`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Coordinator Agent Cookbook`,subtitle:`Orchestration, planning, delegation and governance`,icon:`🎯`,patternLabel:`Topics`})}var Yg=[{id:`cwd-delegator`,category:`Delegator Agents`,title:`Delegator Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Delegator layer responsible for domain-level task decomposition, domain routing, Worker selection, execution control, and communication between the Coordinator and specialized Worker agents.`,concept:`# Delegator Layer in CWD\r
+\r
+## 1. Overview\r
+\r
+The **Delegator** is the **domain-level orchestration layer** in CWD.\r
+\r
+If the **Coordinator** manages the enterprise-level workflow, the **Delegator** manages the workflow **inside a specific business domain**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                    Coordinator\r
+                         │\r
+              ┌──────────┼──────────┐\r
+              ↓          ↓          ↓\r
+           Sales      Finance       HR\r
+         Delegator   Delegator   Delegator\r
+              │\r
+       ┌──────┼──────┐\r
+       ↓      ↓      ↓\r
+    Worker  Worker  Worker\r
+\`\`\`\r
+\r
+The Delegator understands:\r
+\r
+* What the business domain is\r
+* Which Workers are required\r
+* How the domain task should be decomposed\r
+* Which Workers can perform each task\r
+* Which tasks can execute in parallel\r
+* Which tasks depend on other tasks\r
+* How Workers should communicate\r
+* How Worker results should be combined\r
+* When execution should succeed, retry, fail, or escalate\r
+\r
+The key definition is:\r
+\r
+> **Delegator = Domain Routing + Task Decomposition + Worker Selection + Domain Execution Control + Result Coordination**\r
+\r
+---\r
+\r
+# 2. Coordinator vs Delegator\r
+\r
+The most important distinction is the **level of responsibility**.\r
+\r
+| Component   | Responsibility                 |\r
+| ----------- | ------------------------------ |\r
+| Coordinator | Enterprise-level orchestration |\r
+| Delegator   | Domain-level orchestration     |\r
+| Worker      | Task-level execution           |\r
+| LLM         | Reasoning/intelligence         |\r
+| MCP/Tool    | Controlled system interaction  |\r
+| A2A         | Agent-to-agent communication   |\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User:\r
+"Create a complete customer briefing."\r
+\`\`\`\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+Intent = Customer Briefing\r
+Domain = Sales\r
+Execution Required = Yes\r
+Delegator = Sales Delegator\r
+\`\`\`\r
+\r
+The Sales Delegator then determines:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       │\r
+       ├── Customer Profile Worker\r
+       ├── Opportunity Worker\r
+       ├── Revenue Worker\r
+       └── Interaction Worker\r
+\`\`\`\r
+\r
+The Workers execute the actual domain tasks.\r
+\r
+---\r
+\r
+# 3. Where the Delegator Fits\r
+\r
+The CWD execution model is:\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ ▼\r
+Gateway\r
+ │\r
+ ▼\r
+Coordinator\r
+ │\r
+ │  A2A\r
+ ▼\r
+Delegator\r
+ │\r
+ ├── Worker\r
+ ├── Worker\r
+ ├── Worker\r
+ └── Worker\r
+ │\r
+ ▼\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+The Delegator therefore acts as the **bridge between enterprise orchestration and specialized task execution**.\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ Enterprise decision\r
+     ↓\r
+Delegator\r
+     │\r
+     │ Domain decision\r
+     ↓\r
+Workers\r
+     │\r
+     │ Task execution\r
+     ↓\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Why the Delegator Layer Is Required\r
+\r
+Without Delegators, the Coordinator would need to understand every business domain and every Worker.\r
+\r
+That would create a very large and tightly coupled Coordinator.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ ├── Sales logic\r
+ ├── Finance logic\r
+ ├── HR logic\r
+ ├── Supply Chain logic\r
+ ├── Customer Experience logic\r
+ ├── Quality logic\r
+ ├── Email logic\r
+ └── Calendar logic\r
+\`\`\`\r
+\r
+This does not scale.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+                    Coordinator\r
+                         │\r
+        ┌────────────────┼────────────────┐\r
+        ↓                ↓                ↓\r
+     Sales            Finance            HR\r
+   Delegator         Delegator         Delegator\r
+        │                │                │\r
+    Workers           Workers           Workers\r
+\`\`\`\r
+\r
+Each Delegator owns the orchestration logic for its domain.\r
+\r
+This gives CWD:\r
+\r
+* Modularity\r
+* Domain isolation\r
+* Independent development\r
+* Reusable Workers\r
+* Easier scaling\r
+* Better governance\r
+* Reduced Coordinator complexity\r
+\r
+---\r
+\r
+# 5. Delegator Responsibility #1 — Receive Domain Task\r
+\r
+The Coordinator sends a structured execution request to the Delegator.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-123",\r
+  "run_id": "run-456",\r
+  "correlation_id": "corr-789",\r
+  "domain": "sales",\r
+  "intent": "customer_briefing",\r
+  "objective": "Create customer briefing for Customer ABC",\r
+  "priority": "normal"\r
+}\r
+\`\`\`\r
+\r
+The Delegator receives the task through the governed CWD communication path, typically using **A2A**.\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A Task\r
+      ▼\r
+Sales Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Delegator Responsibility #2 — Validate Domain Task\r
+\r
+The Delegator should validate that the received task belongs to its domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Domain = Sales\r
+Intent = Customer Briefing\r
+Capability = Customer Intelligence\r
+\`\`\`\r
+\r
+The Sales Delegator can accept it.\r
+\r
+But if the request is:\r
+\r
+\`\`\`text\r
+Domain = Finance\r
+Capability = Payroll Processing\r
+\`\`\`\r
+\r
+the Sales Delegator should reject it or return a controlled routing error.\r
+\r
+This provides another layer of defense against incorrect routing.\r
+\r
+---\r
+\r
+# 7. Delegator Responsibility #3 — Domain-Level Task Decomposition\r
+\r
+The Coordinator creates the **high-level enterprise task**.\r
+\r
+The Delegator converts that into **domain-specific tasks**.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator Task\r
+\r
+Create customer briefing\r
+\`\`\`\r
+\r
+Sales Delegator decomposes it:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       │\r
+       ├── Retrieve customer profile\r
+       ├── Retrieve open opportunities\r
+       ├── Retrieve revenue information\r
+       ├── Retrieve recent interactions\r
+       └── Generate sales briefing\r
+\`\`\`\r
+\r
+The Delegator understands the business meaning of these domain tasks.\r
+\r
+---\r
+\r
+# 8. Task Dependency Management\r
+\r
+The Delegator determines dependencies between Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile ──────┐\r
+                       │\r
+Opportunities ─────────┤\r
+                       │\r
+Revenue ────────────────┼──► Generate Briefing\r
+                       │\r
+Interactions ──────────┘\r
+\`\`\`\r
+\r
+The first four tasks can execute independently.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Parallel Execution\r
+\r
+Profile Worker ────────┐\r
+Opportunity Worker ────┤\r
+Revenue Worker ──────── ├──► Briefing Worker\r
+Interaction Worker ────┘\r
+\`\`\`\r
+\r
+This improves execution latency.\r
+\r
+---\r
+\r
+# 9. Sequential Dependencies\r
+\r
+Some workflows require sequential execution.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Search\r
+      ↓\r
+Customer Validation\r
+      ↓\r
+Opportunity Retrieval\r
+      ↓\r
+Opportunity Analysis\r
+      ↓\r
+Recommendation\r
+\`\`\`\r
+\r
+The Delegator understands these dependencies and prevents a downstream Worker from executing before its prerequisites are complete.\r
+\r
+---\r
+\r
+# 10. Delegator Responsibility #4 — Worker Selection\r
+\r
+The Delegator determines which Worker has the required capability.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required Capability\r
+        ↓\r
+"Retrieve customer opportunities"\r
+        ↓\r
+Worker Registry\r
+        ↓\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+Worker selection should be capability-based rather than hard-coded wherever possible.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Task\r
+ ↓\r
+Required Capability\r
+ ↓\r
+Worker Registry\r
+ ↓\r
+Candidate Workers\r
+ ↓\r
+Policy\r
+ ↓\r
+Health\r
+ ↓\r
+Availability\r
+ ↓\r
+Selected Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Worker Selection Criteria\r
+\r
+A Delegator can consider:\r
+\r
+\`\`\`text\r
+Domain\r
+Capability\r
+Worker status\r
+Health\r
+Version\r
+Environment\r
+Authorization\r
+Data access\r
+Execution policy\r
+Priority\r
+Latency\r
+Cost\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+Retrieve customer revenue\r
+\r
+Candidate Workers:\r
+ ├── Revenue Worker v1\r
+ ├── Revenue Worker v2\r
+ └── Revenue Worker fallback\r
+\r
+Selection:\r
+ Capability ✓\r
+ Authorization ✓\r
+ Health ✓\r
+ Policy ✓\r
+ Version ✓\r
+        ↓\r
+Revenue Worker v2\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Delegator Responsibility #5 — Execution Control\r
+\r
+The Delegator controls how domain tasks are executed.\r
+\r
+It determines:\r
+\r
+* What executes first\r
+* What executes in parallel\r
+* What depends on another task\r
+* Which Worker receives the task\r
+* How context is passed\r
+* When a task is complete\r
+* When to retry\r
+* When to use fallback\r
+* When to stop execution\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Domain Workflow\r
+      │\r
+      ├── Task A ──────┐\r
+      ├── Task B ──────┤\r
+      ├── Task C ──────┼──► Task D\r
+      └── Task E ──────┘\r
+\`\`\`\r
+\r
+The Delegator controls this domain workflow.\r
+\r
+---\r
+\r
+# 13. Delegator and LLM\r
+\r
+The Delegator can use an LLM for domain reasoning.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    ├── Domain Context\r
+    ├── Task Context\r
+    ├── Business Rules\r
+    └── LLM\r
+          ↓\r
+     Domain Plan\r
+\`\`\`\r
+\r
+The LLM may determine:\r
+\r
+\`\`\`text\r
+"To create the customer briefing, I need customer\r
+profile, opportunities, revenue and interactions."\r
+\`\`\`\r
+\r
+But the LLM does not independently execute those operations.\r
+\r
+The Delegator validates and controls the resulting plan.\r
+\r
+\`\`\`text\r
+LLM\r
+ ↓\r
+Recommended domain plan\r
+ ↓\r
+Delegator\r
+ ↓\r
+Policy / capability / dependency validation\r
+ ↓\r
+Worker execution\r
+\`\`\`\r
+\r
+Again:\r
+\r
+> **LLM provides reasoning; Delegator provides controlled domain execution.**\r
+\r
+---\r
+\r
+# 14. Delegator Responsibility #6 — Worker Communication\r
+\r
+The Delegator communicates execution requests to Workers.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ Task Request\r
+    ▼\r
+Worker\r
+\`\`\`\r
+\r
+The request should carry execution context.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "correlation_id": "corr-001",\r
+  "parent_task_id": "task-customer-briefing",\r
+  "domain": "sales",\r
+  "capability": "customer_profile",\r
+  "input": {\r
+    "customer_id": "ABC"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This allows the Worker execution to remain traceable to the original user request.\r
+\r
+---\r
+\r
+# 15. Delegator → Worker Communication\r
+\r
+The communication pattern is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Delegator\r
+      │\r
+      ├── Worker Request\r
+      │\r
+      ▼\r
+Worker\r
+\`\`\`\r
+\r
+Depending on the CWD implementation, Worker communication can use the platform's approved messaging/API mechanism.\r
+\r
+The important architectural principle is:\r
+\r
+> **The Delegator controls domain execution rather than allowing the Coordinator to directly orchestrate every Worker.**\r
+\r
+---\r
+\r
+# 16. Delegator Context Management\r
+\r
+The Delegator receives context from the Coordinator and enriches it with domain-specific information.\r
+\r
+Context can include:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+user identity context\r
+domain\r
+intent\r
+business entities\r
+authorization context\r
+execution constraints\r
+parent task\r
+\`\`\`\r
+\r
+The Delegator then adds:\r
+\r
+\`\`\`text\r
+domain context\r
+worker capability\r
+domain policies\r
+task dependencies\r
+worker selection information\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`text\r
+Coordinator Context\r
+        +\r
+Domain Context\r
+        ↓\r
+Delegator Execution Context\r
+        ↓\r
+Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. Context Should Be Minimum Necessary\r
+\r
+The Delegator should not blindly pass the entire conversation or all available enterprise data to every Worker.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Original User Request\r
+        ↓\r
+Coordinator\r
+        ↓\r
+Relevant Context\r
+        ↓\r
+Delegator\r
+        ↓\r
+Worker-Specific Context\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+may only need:\r
+\r
+\`\`\`text\r
+customer_id\r
+time_range\r
+authorized sales context\r
+\`\`\`\r
+\r
+It does not need unrelated HR or Finance information.\r
+\r
+This supports:\r
+\r
+* Least privilege\r
+* Data minimization\r
+* Security\r
+* Performance\r
+* Lower token usage\r
+\r
+---\r
+\r
+# 18. Delegator Responsibility #7 — Result Collection\r
+\r
+Workers return results to the Delegator.\r
+\r
+\`\`\`text\r
+Worker A ──────┐\r
+Worker B ──────┤\r
+Worker C ──────┼──► Delegator\r
+Worker D ──────┘\r
+\`\`\`\r
+\r
+The Delegator:\r
+\r
+1. Correlates results\r
+2. Validates responses\r
+3. Checks task completion\r
+4. Detects failures\r
+5. Handles partial results\r
+6. Aggregates domain-level results\r
+7. Returns the domain result to the Coordinator\r
+\r
+---\r
+\r
+# 19. Domain-Level Result Aggregation\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Profile Worker\r
+      ↓\r
+Customer Profile\r
+\r
+Opportunity Worker\r
+      ↓\r
+Open Opportunities\r
+\r
+Revenue Worker\r
+      ↓\r
+Revenue Metrics\r
+\r
+Interaction Worker\r
+      ↓\r
+Recent Interactions\r
+\`\`\`\r
+\r
+The Delegator combines these into:\r
+\r
+\`\`\`text\r
+Sales Domain Result\r
+        │\r
+        ├── Customer Profile\r
+        ├── Opportunities\r
+        ├── Revenue\r
+        └── Interactions\r
+\`\`\`\r
+\r
+The Coordinator then receives the domain-level result.\r
+\r
+\`\`\`text\r
+Workers\r
+   ↓\r
+Delegator\r
+   ↓\r
+Sales Result\r
+   ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Delegator Failure Handling\r
+\r
+The Delegator is also responsible for domain-level execution recovery.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      ↓\r
+Timeout\r
+      ↓\r
+Delegator\r
+      ↓\r
+Retry\r
+      ↓\r
+Still failed?\r
+      │\r
+      ├── Yes → Fallback Worker\r
+      │\r
+      └── No → Continue\r
+\`\`\`\r
+\r
+It can handle:\r
+\r
+* Worker timeout\r
+* Worker unavailable\r
+* Tool failure\r
+* Enterprise API failure\r
+* Retry\r
+* Fallback\r
+* Partial results\r
+* Dependency failure\r
+* Domain-level escalation\r
+\r
+---\r
+\r
+# 21. Critical vs Optional Worker Tasks\r
+\r
+Not every Worker failure should terminate the complete workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+\r
+Customer Profile     → Critical\r
+Opportunities        → Critical\r
+Revenue              → Important\r
+Recent Interactions  → Optional\r
+\`\`\`\r
+\r
+If the Interaction Worker fails:\r
+\r
+\`\`\`text\r
+Profile ✓\r
+Opportunities ✓\r
+Revenue ✓\r
+Interactions ✗\r
+\`\`\`\r
+\r
+The Delegator may still produce:\r
+\r
+\`\`\`text\r
+Partial Sales Briefing\r
+\`\`\`\r
+\r
+But if the Customer Profile Worker fails:\r
+\r
+\`\`\`text\r
+Profile ✗\r
+\`\`\`\r
+\r
+the Delegator may stop the workflow because the core context is missing.\r
+\r
+---\r
+\r
+# 22. Delegator and Policy Enforcement\r
+\r
+The Delegator operates within the governance framework established by CWD.\r
+\r
+Before invoking a Worker, it can validate:\r
+\r
+\`\`\`text\r
+Worker approved?\r
+Capability allowed?\r
+User authorized?\r
+Data access allowed?\r
+Tool allowed?\r
+Execution policy satisfied?\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     ↓\r
+Enterprise Authorization\r
+     ↓\r
+Delegator\r
+     ↓\r
+Domain Policy\r
+     ↓\r
+Worker\r
+\`\`\`\r
+\r
+This provides defense in depth.\r
+\r
+---\r
+\r
+# 23. Delegator and MCP\r
+\r
+The Delegator normally should not directly bypass the Worker abstraction to access enterprise systems.\r
+\r
+The preferred pattern is:\r
+\r
+\`\`\`text\r
+Delegator\r
+     ↓\r
+Worker\r
+     ↓\r
+MCP / Approved Tool\r
+     ↓\r
+Enterprise API\r
+     ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       ↓\r
+Opportunity Worker\r
+       ↓\r
+Salesforce MCP Tool\r
+       ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+This keeps domain orchestration separate from system/tool execution.\r
+\r
+---\r
+\r
+# 24. Delegator and A2A\r
+\r
+A2A is important at the **agent boundary**.\r
+\r
+For the Coordinator:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Delegator\r
+\`\`\`\r
+\r
+For a multi-agent domain architecture, A2A can also be used when a Delegator needs to communicate with another independent specialized agent.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ A2A\r
+    ▼\r
+Sales Delegator\r
+    │\r
+    ├── Worker\r
+    ├── Worker\r
+    │\r
+    └── A2A → Customer Intelligence Agent\r
+\`\`\`\r
+\r
+The exact use should depend on whether the downstream component is actually an independent agent boundary.\r
+\r
+---\r
+\r
+# 25. Delegator and LangGraph\r
+\r
+LangGraph can be used to control the Delegator's domain workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Validate Domain Task\r
+  ↓\r
+Create Domain Plan\r
+  ↓\r
+Select Workers\r
+  ↓\r
+Execute Ready Tasks\r
+  ↓\r
+Check Dependencies\r
+  ↓\r
+Collect Results\r
+  ↓\r
+Retry / Recover\r
+  ↓\r
+Aggregate\r
+  ↓\r
+END\r
+\`\`\`\r
+\r
+The distinction is:\r
+\r
+\`\`\`text\r
+LLM\r
+  → Reasoning\r
+\r
+LangGraph\r
+  → Workflow state and transitions\r
+\r
+Delegator\r
+  → Domain orchestration decisions\r
+\r
+Worker\r
+  → Task execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Complete Delegator Execution Flow\r
+\r
+A production-oriented flow is:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                      │\r
+                      │ A2A Task\r
+                      ▼\r
+              ┌───────────────┐\r
+              │   Delegator   │\r
+              └───────┬───────┘\r
+                      │\r
+              Validate Domain\r
+                      │\r
+                      ▼\r
+             Understand Domain Task\r
+                      │\r
+                      ▼\r
+             Decompose Domain Task\r
+                      │\r
+                      ▼\r
+             Identify Capabilities\r
+                      │\r
+                      ▼\r
+              Discover Workers\r
+                      │\r
+                      ▼\r
+             Check Authorization\r
+                      │\r
+                      ▼\r
+             Build Task Dependency\r
+                  Graph\r
+                      │\r
+            ┌─────────┼─────────┐\r
+            ↓         ↓         ↓\r
+         Worker A  Worker B  Worker C\r
+            │         │         │\r
+            └─────────┼─────────┘\r
+                      ↓\r
+               Collect Results\r
+                      │\r
+                      ▼\r
+              Validate Results\r
+                      │\r
+                ┌─────┴─────┐\r
+                ↓           ↓\r
+             Complete     Failure\r
+                │           │\r
+                │       Retry/Fallback\r
+                │           │\r
+                └─────┬─────┘\r
+                      ↓\r
+             Domain Aggregation\r
+                      │\r
+                      ▼\r
+                 Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 27. Example: Sales Customer Briefing\r
+\r
+Suppose the Coordinator sends:\r
+\r
+\`\`\`text\r
+Task:\r
+Create a customer briefing for Customer ABC.\r
+\`\`\`\r
+\r
+The Sales Delegator receives it.\r
+\r
+### Domain interpretation\r
+\r
+\`\`\`text\r
+Domain = Sales\r
+Workflow = Customer Briefing\r
+\`\`\`\r
+\r
+### Decomposition\r
+\r
+\`\`\`text\r
+Task 1 → Customer Profile\r
+Task 2 → Opportunities\r
+Task 3 → Revenue\r
+Task 4 → Recent Interactions\r
+Task 5 → Generate Briefing\r
+\`\`\`\r
+\r
+### Dependency graph\r
+\r
+\`\`\`text\r
+Task 1 ──────┐\r
+Task 2 ──────┤\r
+Task 3 ──────┼──► Task 5\r
+Task 4 ──────┘\r
+\`\`\`\r
+\r
+### Worker selection\r
+\r
+\`\`\`text\r
+Task 1 → Customer Profile Worker\r
+Task 2 → Opportunity Worker\r
+Task 3 → Revenue Worker\r
+Task 4 → Interaction Worker\r
+Task 5 → Briefing Worker\r
+\`\`\`\r
+\r
+### Execution\r
+\r
+\`\`\`text\r
+Profile Worker ────────┐\r
+Opportunity Worker ────┤\r
+Revenue Worker ─────────┼──► Briefing Worker\r
+Interaction Worker ────┘\r
+\`\`\`\r
+\r
+### Result\r
+\r
+\`\`\`text\r
+Briefing Worker\r
+      ↓\r
+Sales Delegator\r
+      ↓\r
+Domain Result\r
+      ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+The Coordinator does not need to understand the internal details of every Sales Worker.\r
+\r
+That knowledge remains inside the Sales Delegator.\r
+\r
+---\r
+\r
+# 28. Multiple Domain Example\r
+\r
+Consider a request:\r
+\r
+\`\`\`text\r
+"Prepare an executive customer review including\r
+sales, financial and supply-chain information."\r
+\`\`\`\r
+\r
+The Coordinator identifies multiple domains:\r
+\r
+\`\`\`text\r
+                   Coordinator\r
+                        │\r
+        ┌───────────────┼────────────────┐\r
+        ↓               ↓                ↓\r
+      Sales           Finance        Supply Chain\r
+    Delegator        Delegator         Delegator\r
+        │               │                │\r
+     Workers         Workers          Workers\r
+        │               │                │\r
+        └───────────────┼────────────────┘\r
+                        ↓\r
+                    Coordinator\r
+                        ↓\r
+                 Final Synthesis\r
+\`\`\`\r
+\r
+Each Delegator independently manages its domain.\r
+\r
+The Coordinator manages the **enterprise-level orchestration and final aggregation**.\r
+\r
+---\r
+\r
+# 29. Delegator Responsibility Matrix\r
+\r
+| Responsibility                | Delegator |\r
+| ----------------------------- | --------: |\r
+| Receive Coordinator task      |         ✓ |\r
+| Validate domain               |         ✓ |\r
+| Domain interpretation         |         ✓ |\r
+| Domain task decomposition     |         ✓ |\r
+| Identify capabilities         |         ✓ |\r
+| Worker discovery              |         ✓ |\r
+| Worker selection              |         ✓ |\r
+| Dependency management         |         ✓ |\r
+| Parallel execution            |         ✓ |\r
+| Sequential execution          |         ✓ |\r
+| Worker context propagation    |         ✓ |\r
+| Worker invocation             |         ✓ |\r
+| Worker monitoring             |         ✓ |\r
+| Retry/fallback                |         ✓ |\r
+| Partial failure handling      |         ✓ |\r
+| Result validation             |         ✓ |\r
+| Domain result aggregation     |         ✓ |\r
+| Return result to Coordinator  |         ✓ |\r
+| Enterprise-wide routing       |         ✗ |\r
+| Final enterprise response     |         ✗ |\r
+| Direct uncontrolled DB access |         ✗ |\r
+\r
+---\r
+\r
+# 30. Coordinator vs Delegator vs Worker\r
+\r
+The simplest way to understand CWD is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+"What business objective are we fulfilling?"\r
+\r
+Delegator\r
+"How do we fulfill that objective within my domain?"\r
+\r
+Worker\r
+"What specific operation do I execute?"\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator:\r
+"Create customer briefing."\r
+\r
+Delegator:\r
+"To create the Sales briefing, I need\r
+profile, opportunities, revenue and interactions."\r
+\r
+Worker:\r
+"I will retrieve the customer's open opportunities."\r
+\`\`\`\r
+\r
+---\r
+\r
+# 31. Delegator as Domain Control Plane\r
+\r
+The Delegator can be viewed as a **domain-specific control plane**.\r
+\r
+\`\`\`text\r
+Enterprise Control Plane\r
+        │\r
+        ▼\r
+    Coordinator\r
+        │\r
+        ├───────────────┐\r
+        ↓               ↓\r
+Domain Control      Domain Control\r
+   Sales              Finance\r
+ Delegator           Delegator\r
+        │               │\r
+   Workers           Workers\r
+\`\`\`\r
+\r
+This architecture allows each business domain to evolve independently while remaining governed by the common CWD platform.\r
+\r
+---\r
+\r
+# 32. Key Architectural Principles\r
+\r
+### Principle 1 — Coordinator owns enterprise orchestration\r
+\r
+\`\`\`text\r
+Enterprise workflow → Coordinator\r
+\`\`\`\r
+\r
+### Principle 2 — Delegator owns domain orchestration\r
+\r
+\`\`\`text\r
+Domain workflow → Delegator\r
+\`\`\`\r
+\r
+### Principle 3 — Worker owns task execution\r
+\r
+\`\`\`text\r
+Specific operation → Worker\r
+\`\`\`\r
+\r
+### Principle 4 — LLM provides reasoning\r
+\r
+\`\`\`text\r
+Reasoning → LLM\r
+\`\`\`\r
+\r
+### Principle 5 — Tools perform controlled actions\r
+\r
+\`\`\`text\r
+System interaction → MCP / Approved Tools\r
+\`\`\`\r
+\r
+### Principle 6 — A2A connects agent boundaries\r
+\r
+\`\`\`text\r
+Agent ↔ Agent → A2A\r
+\`\`\`\r
+\r
+### Principle 7 — Governance controls execution\r
+\r
+\`\`\`text\r
+Identity + Policy + Authorization\r
+        ↓\r
+Allowed Execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 33. Final Architect Definition\r
+\r
+The **Delegator is the domain-level execution controller within CWD**.\r
+\r
+It receives a high-level task from the Coordinator, understands the domain-specific objective, decomposes the task into executable subtasks, identifies required capabilities, selects appropriate Workers, manages dependencies and parallel execution, propagates context, handles failures and retries, validates Worker results, aggregates domain results, and returns the completed domain outcome to the Coordinator.\r
+\r
+The complete responsibility can be summarized as:\r
+\r
+\`\`\`text\r
+Delegator\r
+=\r
+Receive\r
++\r
+Validate\r
++\r
+Understand Domain\r
++\r
+Decompose\r
++\r
+Select Workers\r
++\r
+Build Dependencies\r
++\r
+Execute\r
++\r
+Manage Context\r
++\r
+Monitor\r
++\r
+Recover\r
++\r
+Aggregate\r
++\r
+Return Result\r
+\`\`\`\r
+\r
+The overall CWD hierarchy is:\r
+\r
+\`\`\`text\r
+                  ┌──────────────────────┐\r
+                  │     COORDINATOR      │\r
+                  │                      │\r
+                  │ Enterprise Control   │\r
+                  └──────────┬───────────┘\r
+                             │\r
+                            A2A\r
+                             │\r
+                             ▼\r
+                  ┌──────────────────────┐\r
+                  │      DELEGATOR       │\r
+                  │                      │\r
+                  │ Domain Control       │\r
+                  │ Task Decomposition   │\r
+                  │ Worker Selection     │\r
+                  │ Execution Control    │\r
+                  └──────────┬───────────┘\r
+                             │\r
+                 ┌───────────┼───────────┐\r
+                 ↓           ↓           ↓\r
+              Worker       Worker      Worker\r
+                 │           │           │\r
+                 └───────────┼───────────┘\r
+                             ↓\r
+                       MCP / Tools\r
+                             ↓\r
+                  Enterprise Systems\r
+\`\`\`\r
+\r
+> **Coordinator decides the enterprise objective and execution path. Delegator decides how that objective is fulfilled within a business domain. Workers perform the specialized operations.**\r
+\r
+This separation is what allows CWD to scale from a few agents to a **large enterprise multi-agent ecosystem without turning the Coordinator into a monolithic workflow engine**.\r
+`},{id:`what-is-delegator`,category:`Delegator Agents`,title:`What is a Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand what a Delegator Agent is, where it fits in the CWD architecture, and how it acts as the domain-level orchestration layer between the Coordinator and specialized Workers.`,concept:`# Delegator Agent in CWD Architecture\r
+\r
+## 1. What Is a Delegator Agent?\r
+\r
+A **Delegator Agent** is a specialized **domain-level orchestration agent** within the CWD architecture.\r
+\r
+Its purpose is to take a high-level task received from the **Coordinator** and determine **how that task should be executed within a specific business domain**.\r
+\r
+The Delegator does not normally perform every individual operation itself. Instead, it:\r
+\r
+* Understands the domain-specific objective\r
+* Decomposes the domain task\r
+* Identifies required capabilities\r
+* Selects appropriate Workers\r
+* Determines task dependencies\r
+* Controls sequential and parallel execution\r
+* Passes the required context to Workers\r
+* Monitors Worker execution\r
+* Handles retries and failures\r
+* Collects and validates Worker results\r
+* Aggregates the domain-level result\r
+* Returns the result to the Coordinator\r
+\r
+In simple terms:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+"What needs to be accomplished?"\r
+    ↓\r
+Delegator\r
+    ↓\r
+"How should this be accomplished within my domain?"\r
+    ↓\r
+Workers\r
+    ↓\r
+"Execute these specific operations."\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Where the Delegator Fits in CWD\r
+\r
+The Delegator sits **between the Coordinator and specialized Workers**.\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │   Gateway   │\r
+                    └──────┬──────┘\r
+                           │\r
+                           ▼\r
+                  ┌─────────────────┐\r
+                  │   COORDINATOR   │\r
+                  │                 │\r
+                  │ Enterprise      │\r
+                  │ Orchestration   │\r
+                  └────────┬────────┘\r
+                           │\r
+                          A2A\r
+                           │\r
+                           ▼\r
+                  ┌─────────────────┐\r
+                  │    DELEGATOR    │\r
+                  │                 │\r
+                  │ Domain          │\r
+                  │ Orchestration   │\r
+                  └────────┬────────┘\r
+                           │\r
+              ┌────────────┼────────────┐\r
+              ▼            ▼            ▼\r
+          Worker A      Worker B     Worker C\r
+              │            │            │\r
+              └────────────┼────────────┘\r
+                           │\r
+                           ▼\r
+                    MCP / Tools\r
+                           │\r
+                           ▼\r
+                 Enterprise Systems\r
+\`\`\`\r
+\r
+This gives CWD a clear three-level execution hierarchy:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ Enterprise-level orchestration\r
+    ▼\r
+Delegator\r
+    │\r
+    │ Domain-level orchestration\r
+    ▼\r
+Worker\r
+    │\r
+    │ Task-level execution\r
+    ▼\r
+Enterprise System / Tool\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. Why the Delegator Layer Exists\r
+\r
+A major purpose of the Delegator is to prevent the Coordinator from becoming a **monolithic enterprise workflow engine**.\r
+\r
+Imagine the Coordinator directly managing every Worker:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ ├── Sales Worker\r
+ ├── Revenue Worker\r
+ ├── Opportunity Worker\r
+ ├── Finance Worker\r
+ ├── Payroll Worker\r
+ ├── Supply Chain Worker\r
+ ├── Inventory Worker\r
+ ├── HR Worker\r
+ ├── Customer Worker\r
+ ├── Quality Worker\r
+ └── ...\r
+\`\`\`\r
+\r
+As the number of enterprise agents increases, the Coordinator becomes increasingly complex.\r
+\r
+Instead, CWD groups Workers by domain:\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              │\r
+        ┌─────────────────────┼─────────────────────┐\r
+        │                     │                     │\r
+        ▼                     ▼                     ▼\r
+   Sales Delegator       Finance Delegator     HR Delegator\r
+        │                     │                     │\r
+   ┌────┼────┐           ┌────┼────┐           ┌────┼────┐\r
+   ↓    ↓    ↓           ↓    ↓    ↓           ↓    ↓    ↓\r
+ Worker Worker Worker   Worker Worker Worker   Worker Worker Worker\r
+\`\`\`\r
+\r
+The Coordinator only needs to know:\r
+\r
+> **Which domain-level Delegator should handle this request?**\r
+\r
+The Delegator knows:\r
+\r
+> **Which Workers are required to fulfill the request?**\r
+\r
+---\r
+\r
+# 4. Delegator as the Domain Control Plane\r
+\r
+The Delegator can be viewed as a **domain-specific control plane**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                    CWD\r
+                     │\r
+              Coordinator\r
+             Enterprise Control\r
+                     │\r
+                     ▼\r
+             Sales Delegator\r
+              Domain Control\r
+                     │\r
+        ┌────────────┼────────────┐\r
+        ▼            ▼            ▼\r
+ Customer Worker  Revenue Worker  Opportunity Worker\r
+\`\`\`\r
+\r
+The Coordinator controls the **enterprise workflow**.\r
+\r
+The Sales Delegator controls the **Sales workflow**.\r
+\r
+The Workers control the **individual operations**.\r
+\r
+---\r
+\r
+# 5. Example\r
+\r
+Suppose the user asks:\r
+\r
+\`\`\`text\r
+"Create a complete customer briefing for Customer ABC."\r
+\`\`\`\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+Intent:\r
+Customer Briefing\r
+\r
+Domain:\r
+Sales\r
+\r
+Execution:\r
+Required\r
+\r
+Delegator:\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The Coordinator sends the task to the Sales Delegator.\r
+\r
+The Sales Delegator then determines:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       │\r
+       ├── Retrieve customer profile\r
+       ├── Retrieve opportunities\r
+       ├── Retrieve revenue\r
+       ├── Retrieve recent interactions\r
+       └── Generate briefing\r
+\`\`\`\r
+\r
+It then maps those tasks to Workers:\r
+\r
+\`\`\`text\r
+Retrieve customer profile\r
+        ↓\r
+Customer Profile Worker\r
+\r
+Retrieve opportunities\r
+        ↓\r
+Opportunity Worker\r
+\r
+Retrieve revenue\r
+        ↓\r
+Revenue Worker\r
+\r
+Retrieve interactions\r
+        ↓\r
+Interaction Worker\r
+\r
+Generate briefing\r
+        ↓\r
+Briefing Worker\r
+\`\`\`\r
+\r
+The Delegator controls the execution.\r
+\r
+---\r
+\r
+# 6. Coordinator vs Delegator\r
+\r
+The distinction is critical.\r
+\r
+| Question                      | Coordinator | Delegator |\r
+| ----------------------------- | ----------- | --------- |\r
+| What is the user's objective? | ✓           |           |\r
+| Which business domain?        | ✓           |           |\r
+| Which Delegator?              | ✓           |           |\r
+| Enterprise-level workflow?    | ✓           |           |\r
+| Domain-level workflow?        |             | ✓         |\r
+| Decompose domain task?        |             | ✓         |\r
+| Which Workers?                |             | ✓         |\r
+| Worker dependencies?          |             | ✓         |\r
+| Parallel Worker execution?    |             | ✓         |\r
+| Worker retries/fallback?      |             | ✓         |\r
+| Domain result aggregation?    |             | ✓         |\r
+| Final enterprise response?    | ✓           |           |\r
+| Enterprise-wide routing?      | ✓           |           |\r
+\r
+A simple mental model is:\r
+\r
+\`\`\`text\r
+Coordinator:\r
+"Where should this request go?"\r
+\r
+Delegator:\r
+"What needs to happen inside this domain?"\r
+\r
+Worker:\r
+"Perform this specific operation."\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. Delegator Receives a Structured Task\r
+\r
+The Coordinator should not send only a natural-language message.\r
+\r
+It should send a structured execution request.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-123",\r
+  "run_id": "run-456",\r
+  "correlation_id": "corr-789",\r
+  "domain": "sales",\r
+  "intent": "customer_briefing",\r
+  "objective": "Create customer briefing for Customer ABC",\r
+  "priority": "normal",\r
+  "context": {\r
+    "customer_id": "ABC"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Delegator uses this information to construct the domain execution plan.\r
+\r
+---\r
+\r
+# 8. Delegator Task Decomposition\r
+\r
+The Delegator converts one high-level domain task into multiple executable tasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Input:\r
+Customer Briefing\r
+\`\`\`\r
+\r
+becomes:\r
+\r
+\`\`\`text\r
+Task 1:\r
+Get customer profile\r
+\r
+Task 2:\r
+Get open opportunities\r
+\r
+Task 3:\r
+Get revenue\r
+\r
+Task 4:\r
+Get recent interactions\r
+\r
+Task 5:\r
+Generate briefing\r
+\`\`\`\r
+\r
+This is **domain-level task decomposition**.\r
+\r
+The Delegator understands the business-specific relationship between these tasks.\r
+\r
+---\r
+\r
+# 9. Task Dependencies\r
+\r
+The Delegator determines which tasks can run independently.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile ──────┐\r
+                       │\r
+Opportunities ─────────┤\r
+                       │\r
+Revenue ────────────────┼──► Generate Briefing\r
+                       │\r
+Interactions ──────────┘\r
+\`\`\`\r
+\r
+The first four tasks can execute in parallel.\r
+\r
+\`\`\`text\r
+        ┌── Profile Worker ────────┐\r
+        │                          │\r
+        ├── Opportunity Worker ────┤\r
+        │                          │\r
+Start ──┼── Revenue Worker ────────┼──► Briefing Worker\r
+        │                          │\r
+        └── Interaction Worker ────┘\r
+\`\`\`\r
+\r
+This reduces overall workflow latency.\r
+\r
+---\r
+\r
+# 10. Sequential Execution\r
+\r
+The Delegator can also enforce sequential dependencies.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Lookup\r
+      ↓\r
+Customer Validation\r
+      ↓\r
+Opportunity Retrieval\r
+      ↓\r
+Opportunity Analysis\r
+      ↓\r
+Recommendation\r
+\`\`\`\r
+\r
+The Delegator prevents downstream execution until prerequisite tasks have completed successfully.\r
+\r
+---\r
+\r
+# 11. Worker Selection\r
+\r
+Once the Delegator has decomposed the task, it determines which Worker should perform each operation.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required capability:\r
+"Retrieve customer opportunities"\r
+\r
+        ↓\r
+\r
+Worker Registry\r
+\r
+        ↓\r
+\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+The selection should preferably be capability-based rather than hard-coded.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Domain Task\r
+     ↓\r
+Required Capability\r
+     ↓\r
+Worker Registry\r
+     ↓\r
+Candidate Workers\r
+     ↓\r
+Policy / Authorization\r
+     ↓\r
+Health / Availability\r
+     ↓\r
+Selected Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Worker Selection Example\r
+\r
+Suppose the Worker Registry contains:\r
+\r
+\`\`\`text\r
+Revenue Worker v1\r
+Revenue Worker v2\r
+Revenue Worker Fallback\r
+\`\`\`\r
+\r
+The Delegator evaluates:\r
+\r
+\`\`\`text\r
+Capability      ✓\r
+Domain          ✓\r
+Authorization   ✓\r
+Policy          ✓\r
+Health          ✓\r
+Availability    ✓\r
+Version         ✓\r
+\`\`\`\r
+\r
+and selects:\r
+\r
+\`\`\`text\r
+Revenue Worker v2\r
+\`\`\`\r
+\r
+This makes Worker selection dynamic and allows Workers to evolve independently.\r
+\r
+---\r
+\r
+# 13. Delegator Controls Execution\r
+\r
+The Delegator is responsible for controlling the domain workflow.\r
+\r
+It determines:\r
+\r
+\`\`\`text\r
+Which task executes first?\r
+Which tasks execute in parallel?\r
+Which tasks depend on others?\r
+Which Worker handles each task?\r
+When is a task complete?\r
+What happens when a Worker fails?\r
+When should a retry occur?\r
+When should a fallback Worker be used?\r
+When should the workflow stop?\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **The Delegator is not simply a router. It is an execution controller.**\r
+\r
+---\r
+\r
+# 14. Delegator and LLM\r
+\r
+The Delegator can use an LLM to reason about domain-specific tasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    ├── Domain Context\r
+    ├── Business Rules\r
+    ├── Task Context\r
+    │\r
+    ▼\r
+   LLM\r
+    │\r
+    ▼\r
+Domain Execution Plan\r
+\`\`\`\r
+\r
+The LLM might determine:\r
+\r
+\`\`\`text\r
+"Customer briefing requires profile,\r
+opportunity, revenue and interaction information."\r
+\`\`\`\r
+\r
+But the LLM should not directly execute those operations.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+LLM\r
+ ↓\r
+Recommended Plan\r
+ ↓\r
+Delegator\r
+ ↓\r
+Validate\r
+ ↓\r
+Authorize\r
+ ↓\r
+Select Workers\r
+ ↓\r
+Execute\r
+\`\`\`\r
+\r
+The architectural principle is:\r
+\r
+> **LLM reasons about the domain; Delegator controls the domain execution.**\r
+\r
+---\r
+\r
+# 15. Delegator and Context\r
+\r
+The Coordinator provides the global execution context.\r
+\r
+The Delegator enriches it with domain-specific context.\r
+\r
+\`\`\`text\r
+Coordinator Context\r
+        +\r
+Sales Domain Context\r
+        ↓\r
+Delegator Context\r
+        ↓\r
+Worker Context\r
+\`\`\`\r
+\r
+Important identifiers should be propagated:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+Additional domain information can include:\r
+\r
+\`\`\`text\r
+domain\r
+intent\r
+business entity\r
+capability\r
+parent task\r
+execution constraints\r
+authorization context\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. Context Propagation to Workers\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-001",\r
+  "run_id": "run-001",\r
+  "correlation_id": "corr-001",\r
+  "parent_task_id": "customer-briefing",\r
+  "domain": "sales",\r
+  "capability": "customer_profile",\r
+  "input": {\r
+    "customer_id": "ABC"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Worker can therefore understand:\r
+\r
+\`\`\`text\r
+Who initiated the execution?\r
+What task am I performing?\r
+Which domain does it belong to?\r
+What is the parent workflow?\r
+What business entity is involved?\r
+How should this execution be traced?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. Least-Privilege Context\r
+\r
+The Delegator should not pass unnecessary information to Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+may need:\r
+\r
+\`\`\`text\r
+customer_id\r
+time_range\r
+authorized sales context\r
+\`\`\`\r
+\r
+It does not necessarily need:\r
+\r
+\`\`\`text\r
+HR information\r
+Finance information\r
+Unrelated conversation history\r
+Unrelated customer data\r
+\`\`\`\r
+\r
+This supports:\r
+\r
+* Least privilege\r
+* Data minimization\r
+* Security\r
+* Lower token consumption\r
+* Better agent isolation\r
+\r
+---\r
+\r
+# 18. Delegator → Worker Communication\r
+\r
+The communication path is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Delegator\r
+      │\r
+      │ Worker Task\r
+      ▼\r
+Worker\r
+\`\`\`\r
+\r
+The Delegator should use the approved CWD execution mechanisms rather than allowing uncontrolled direct calls to enterprise systems.\r
+\r
+A typical Worker execution path is:\r
+\r
+\`\`\`text\r
+Delegator\r
+    ↓\r
+Worker\r
+    ↓\r
+MCP / Approved Tool\r
+    ↓\r
+Enterprise API\r
+    ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      ↓\r
+Opportunity Worker\r
+      ↓\r
+Salesforce Tool\r
+      ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Delegator and A2A\r
+\r
+A2A is primarily relevant at the **agent boundary**.\r
+\r
+The Coordinator communicates with the Delegator:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The A2A message carries information such as:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+correlation_id\r
+source_agent\r
+target_agent\r
+intent\r
+domain\r
+task\r
+context\r
+execution constraints\r
+\`\`\`\r
+\r
+This allows the Delegator to operate as an independent domain agent while remaining part of the CWD execution hierarchy.\r
+\r
+---\r
+\r
+# 20. Delegator and MCP\r
+\r
+A useful separation is:\r
+\r
+\`\`\`text\r
+A2A\r
+Agent ↔ Agent\r
+\r
+MCP\r
+Agent ↔ Tool/System\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+     A2A\r
+      ↓\r
+Delegator\r
+      │\r
+      ↓\r
+Worker\r
+      │\r
+     MCP\r
+      ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+This prevents communication and execution responsibilities from becoming mixed together.\r
+\r
+---\r
+\r
+# 21. Delegator Result Management\r
+\r
+Workers return results to the Delegator.\r
+\r
+\`\`\`text\r
+Worker A ──────┐\r
+Worker B ──────┤\r
+Worker C ──────┼──► Delegator\r
+Worker D ──────┘\r
+\`\`\`\r
+\r
+The Delegator:\r
+\r
+1. Correlates results\r
+2. Validates responses\r
+3. Checks task completion\r
+4. Detects failures\r
+5. Handles partial results\r
+6. Aggregates domain results\r
+7. Returns the domain result to the Coordinator\r
+\r
+---\r
+\r
+# 22. Domain-Level Aggregation\r
+\r
+For the Customer Briefing example:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+        ↓\r
+Customer Profile\r
+\r
+Opportunity Worker\r
+        ↓\r
+Opportunities\r
+\r
+Revenue Worker\r
+        ↓\r
+Revenue\r
+\r
+Interaction Worker\r
+        ↓\r
+Interactions\r
+\`\`\`\r
+\r
+The Delegator produces:\r
+\r
+\`\`\`text\r
+Sales Domain Result\r
+ ├── Customer Profile\r
+ ├── Opportunities\r
+ ├── Revenue\r
+ └── Interactions\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+The Coordinator can combine this with results from other domains if required.\r
+\r
+---\r
+\r
+# 23. Delegator Failure Handling\r
+\r
+The Delegator also controls domain-level recovery.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      ↓\r
+Timeout\r
+      ↓\r
+Delegator\r
+      ↓\r
+Retry\r
+      ↓\r
+Failure?\r
+   ┌──┴──┐\r
+   ↓     ↓\r
+ Yes     No\r
+   ↓      ↓\r
+Fallback Continue\r
+\`\`\`\r
+\r
+Possible actions include:\r
+\r
+\`\`\`text\r
+Retry\r
+Fallback\r
+Skip optional task\r
+Resume dependent workflow\r
+Return partial result\r
+Escalate\r
+Terminate workflow\r
+\`\`\`\r
+\r
+---\r
+\r
+# 24. Critical and Optional Tasks\r
+\r
+The Delegator should understand task criticality.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile     → Critical\r
+Opportunities        → Critical\r
+Revenue              → Important\r
+Interactions         → Optional\r
+\`\`\`\r
+\r
+If the Interaction Worker fails:\r
+\r
+\`\`\`text\r
+Profile ✓\r
+Opportunities ✓\r
+Revenue ✓\r
+Interactions ✗\r
+\`\`\`\r
+\r
+The Delegator can potentially continue.\r
+\r
+But if the Customer Profile Worker fails:\r
+\r
+\`\`\`text\r
+Profile ✗\r
+\`\`\`\r
+\r
+the Delegator may stop the domain workflow because a critical dependency is missing.\r
+\r
+---\r
+\r
+# 25. Delegator Governance\r
+\r
+The Delegator also operates under CWD governance.\r
+\r
+Before invoking a Worker, it can validate:\r
+\r
+\`\`\`text\r
+Worker approved?\r
+        ↓\r
+Capability allowed?\r
+        ↓\r
+User authorized?\r
+        ↓\r
+Data access allowed?\r
+        ↓\r
+Tool permitted?\r
+        ↓\r
+Execution policy satisfied?\r
+        ↓\r
+Execute\r
+\`\`\`\r
+\r
+This creates defense in depth:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓\r
+Enterprise Policy\r
+   ↓\r
+Delegator\r
+   ↓\r
+Domain Policy\r
+   ↓\r
+Worker\r
+   ↓\r
+Tool Policy\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Delegator and LangGraph\r
+\r
+LangGraph can represent the Delegator's domain execution workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Validate Domain Task\r
+  ↓\r
+Create Domain Plan\r
+  ↓\r
+Select Workers\r
+  ↓\r
+Execute Ready Tasks\r
+  ↓\r
+Check Dependencies\r
+  ↓\r
+Collect Results\r
+  ↓\r
+Retry / Recover\r
+  ↓\r
+Aggregate Results\r
+  ↓\r
+Return to Coordinator\r
+  ↓\r
+END\r
+\`\`\`\r
+\r
+The separation remains:\r
+\r
+\`\`\`text\r
+LLM\r
+    → Reasoning\r
+\r
+LangGraph\r
+    → Workflow state/transitions\r
+\r
+Delegator\r
+    → Domain orchestration decisions\r
+\r
+Worker\r
+    → Specialized execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 27. Complete CWD Delegator Flow\r
+\r
+The complete execution model is:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                        Gateway\r
+                           │\r
+                           ▼\r
+                    ┌──────────────┐\r
+                    │ Coordinator  │\r
+                    │              │\r
+                    │ Intent       │\r
+                    │ Domain       │\r
+                    │ Planning     │\r
+                    │ Authorization│\r
+                    └──────┬───────┘\r
+                           │\r
+                          A2A\r
+                           │\r
+                           ▼\r
+                    ┌──────────────┐\r
+                    │  Delegator   │\r
+                    │              │\r
+                    │ Domain       │\r
+                    │ Decomposition│\r
+                    │ Worker       │\r
+                    │ Selection    │\r
+                    │ Execution    │\r
+                    └──────┬───────┘\r
+                           │\r
+                ┌──────────┼──────────┐\r
+                ▼          ▼          ▼\r
+             Worker A   Worker B   Worker C\r
+                │          │          │\r
+                └──────────┼──────────┘\r
+                           │\r
+                           ▼\r
+                     MCP / Tools\r
+                           │\r
+                           ▼\r
+                  Enterprise Systems\r
+                           │\r
+                           ▼\r
+                     Worker Results\r
+                           │\r
+                           ▼\r
+                       Delegator\r
+                           │\r
+                   Domain Aggregation\r
+                           │\r
+                           ▼\r
+                      Coordinator\r
+                           │\r
+                   Enterprise Aggregation\r
+                           │\r
+                           ▼\r
+                          User\r
+\`\`\`\r
+\r
+---\r
+\r
+# 28. Example with Multiple Domains\r
+\r
+Suppose the request is:\r
+\r
+\`\`\`text\r
+"Prepare an executive customer review\r
+with sales, financial and supply-chain information."\r
+\`\`\`\r
+\r
+The Coordinator determines that multiple domains are required:\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              │\r
+          ┌───────────────────┼───────────────────┐\r
+          │                   │                   │\r
+          ▼                   ▼                   ▼\r
+     Sales Delegator     Finance Delegator   Supply Chain\r
+          │                   │                Delegator\r
+      Workers              Workers               │\r
+          │                   │                Workers\r
+          └───────────────────┼───────────────────┘\r
+                              ▼\r
+                         Coordinator\r
+                              │\r
+                        Final Synthesis\r
+                              │\r
+                              ▼\r
+                             User\r
+\`\`\`\r
+\r
+Each Delegator owns its domain-specific workflow.\r
+\r
+The Coordinator remains responsible for the enterprise-level orchestration.\r
+\r
+---\r
+\r
+# 29. Delegator vs Worker\r
+\r
+A common misunderstanding is treating the Delegator as simply another Worker.\r
+\r
+They have different responsibilities.\r
+\r
+### Delegator\r
+\r
+\`\`\`text\r
+Plans\r
+Decomposes\r
+Selects\r
+Coordinates\r
+Controls\r
+Monitors\r
+Aggregates\r
+\`\`\`\r
+\r
+### Worker\r
+\r
+\`\`\`text\r
+Executes\r
+Calls tools\r
+Retrieves data\r
+Performs computation\r
+Generates artifacts\r
+Returns results\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Delegator = "How should the domain workflow execute?"\r
+\r
+Worker = "Perform this specific task."\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. Delegator as an Independent Agent\r
+\r
+A Delegator is an **agent**, but it has a specific architectural role.\r
+\r
+It can have:\r
+\r
+\`\`\`text\r
+LLM\r
+Domain Prompt\r
+Domain Policies\r
+Domain Context\r
+Task Planner\r
+Worker Registry\r
+Execution Engine\r
+State\r
+Tool/Worker Interfaces\r
+Observability\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                 Sales Delegator\r
+                       │\r
+       ┌───────────────┼────────────────┐\r
+       │               │                │\r
+       ▼               ▼                ▼\r
+      LLM          Domain Policy    Worker Registry\r
+       │               │                │\r
+       └───────────────┼────────────────┘\r
+                       ▼\r
+                 Domain Planner\r
+                       │\r
+                       ▼\r
+                Execution Engine\r
+                       │\r
+          ┌────────────┼────────────┐\r
+          ▼            ▼            ▼\r
+       Worker A     Worker B     Worker C\r
+\`\`\`\r
+\r
+This is why the Delegator is more than a simple routing component.\r
+\r
+---\r
+\r
+# 31. Responsibilities at Each CWD Level\r
+\r
+| Level             | Primary Responsibility     |\r
+| ----------------- | -------------------------- |\r
+| Coordinator       | Enterprise orchestration   |\r
+| Delegator         | Domain orchestration       |\r
+| Worker            | Specialized task execution |\r
+| MCP               | Tool/system interaction    |\r
+| Enterprise System | System-of-record operation |\r
+\r
+Another useful representation is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+"What should the enterprise workflow accomplish?"\r
+\r
+        ↓\r
+\r
+Delegator\r
+"How should my business domain accomplish its portion?"\r
+\r
+        ↓\r
+\r
+Worker\r
+"What specific operation should I execute?"\r
+\r
+        ↓\r
+\r
+MCP / Tool\r
+"How do I interact with the target system?"\r
+\r
+        ↓\r
+\r
+Enterprise System\r
+"Perform the actual system operation."\r
+\`\`\`\r
+\r
+---\r
+\r
+# 32. Final Definition\r
+\r
+The **Delegator Agent is the domain-level orchestration layer of CWD**.\r
+\r
+It sits between the enterprise-level **Coordinator** and specialized **Workers**.\r
+\r
+Its primary responsibility is to transform a high-level domain task into a controlled execution workflow by:\r
+\r
+\`\`\`text\r
+Receive\r
+   ↓\r
+Validate\r
+   ↓\r
+Understand Domain Objective\r
+   ↓\r
+Decompose\r
+   ↓\r
+Identify Capabilities\r
+   ↓\r
+Select Workers\r
+   ↓\r
+Determine Dependencies\r
+   ↓\r
+Execute\r
+   ↓\r
+Manage Context\r
+   ↓\r
+Monitor\r
+   ↓\r
+Recover\r
+   ↓\r
+Collect Results\r
+   ↓\r
+Aggregate\r
+   ↓\r
+Return Domain Result\r
+\`\`\`\r
+\r
+The overall CWD model is therefore:\r
+\r
+\`\`\`text\r
+┌─────────────────────────────────────────────┐\r
+│                 COORDINATOR                 │\r
+│                                             │\r
+│ Enterprise-level orchestration              │\r
+│ Intent • Planning • Routing • Governance    │\r
+└──────────────────────┬──────────────────────┘\r
+                       │\r
+                      A2A\r
+                       │\r
+                       ▼\r
+┌─────────────────────────────────────────────┐\r
+│                  DELEGATOR                  │\r
+│                                             │\r
+│ Domain-level orchestration                  │\r
+│ Decomposition • Worker Selection            │\r
+│ Dependencies • Execution • Recovery         │\r
+│ Domain Result Aggregation                   │\r
+└──────────────────────┬──────────────────────┘\r
+                       │\r
+          ┌────────────┼────────────┐\r
+          ▼            ▼            ▼\r
+       Worker       Worker       Worker\r
+          │            │            │\r
+          └────────────┼────────────┘\r
+                       ▼\r
+                 MCP / Tools\r
+                       │\r
+                       ▼\r
+             Enterprise Systems\r
+\`\`\`\r
+\r
+> **Coordinator decides the enterprise execution path. Delegator determines how the business-domain portion of that path is executed. Workers perform the specialized tasks.**\r
+\r
+This separation is fundamental to CWD because it allows the platform to support many business domains and many specialized Workers while keeping enterprise orchestration centralized, domain logic modular, and task execution specialized.\r
+`,code:``},{id:`why-delegator-required`,category:`Delegator Agents`,title:`Why Delegator is Required`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a dedicated Delegator layer is required between the Coordinator and Workers, including separation of responsibilities, domain isolation, scalability, maintainability, and more efficient task routing.`,concept:`# Why a Dedicated Delegator Layer Is Required in CWD\r
+\r
+## 1. Overview\r
+\r
+A dedicated **Delegator layer** is required in CWD because the Coordinator and Workers operate at fundamentally different levels of responsibility.\r
+\r
+The Coordinator is responsible for **enterprise-level orchestration**.\r
+\r
+The Delegator is responsible for **domain-level orchestration**.\r
+\r
+The Worker is responsible for **specialized task execution**.\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Coordinator\r
+     │\r
+     │ Enterprise orchestration\r
+     ↓\r
+Delegator\r
+     │\r
+     │ Domain orchestration\r
+     ↓\r
+Workers\r
+     │\r
+     │ Specialized execution\r
+     ↓\r
+Enterprise Systems / Tools\r
+\`\`\`\r
+\r
+Without the Delegator layer, the Coordinator would need to understand and directly manage every Worker across every business domain.\r
+\r
+That would create a tightly coupled, difficult-to-scale architecture.\r
+\r
+The Delegator provides the necessary **abstraction boundary between enterprise orchestration and domain execution**.\r
+\r
+---\r
+\r
+# 2. The Fundamental Problem\r
+\r
+Consider a request such as:\r
+\r
+\`\`\`text\r
+"Create a complete customer briefing."\r
+\`\`\`\r
+\r
+The Coordinator understands:\r
+\r
+\`\`\`text\r
+Intent:\r
+Customer Briefing\r
+\r
+Domain:\r
+Sales\r
+\r
+Execution:\r
+Required\r
+\`\`\`\r
+\r
+But the Coordinator should not need to understand every Sales Worker:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+Opportunity Worker\r
+Revenue Worker\r
+Interaction Worker\r
+Customer History Worker\r
+Sales Analytics Worker\r
+Briefing Worker\r
+\`\`\`\r
+\r
+If it did, the Coordinator would become responsible for:\r
+\r
+\`\`\`text\r
+Sales logic\r
+Finance logic\r
+HR logic\r
+Supply Chain logic\r
+Quality logic\r
+Customer Experience logic\r
+Email logic\r
+Calendar logic\r
+...\r
+\`\`\`\r
+\r
+That creates a **monolithic Coordinator**.\r
+\r
+The Delegator solves this problem.\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              │\r
+              ┌───────────────┼───────────────┐\r
+              ↓               ↓               ↓\r
+        Sales Delegator  Finance Delegator  HR Delegator\r
+              │               │               │\r
+           Workers         Workers         Workers\r
+\`\`\`\r
+\r
+The Coordinator only needs to know:\r
+\r
+> **Which domain should handle this request?**\r
+\r
+The Delegator knows:\r
+\r
+> **Which Workers should execute the domain task?**\r
+\r
+---\r
+\r
+# 3. Separation of Responsibilities\r
+\r
+This is the most important reason for introducing the Delegator.\r
+\r
+## Without Delegator\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    ├── Understand request\r
+    ├── Classify domain\r
+    ├── Plan enterprise workflow\r
+    ├── Select Workers\r
+    ├── Manage Worker dependencies\r
+    ├── Execute Workers\r
+    ├── Retry Workers\r
+    ├── Handle Worker failures\r
+    ├── Aggregate Worker results\r
+    └── Manage every business domain\r
+\`\`\`\r
+\r
+The Coordinator becomes overloaded.\r
+\r
+## With Delegator\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    ├── Understand request\r
+    ├── Identify domain\r
+    ├── Select Delegator\r
+    ├── Enterprise policy\r
+    └── Enterprise orchestration\r
+             │\r
+             ▼\r
+        Delegator\r
+             │\r
+             ├── Domain decomposition\r
+             ├── Worker selection\r
+             ├── Dependency management\r
+             ├── Domain execution\r
+             ├── Worker recovery\r
+             └── Domain aggregation\r
+                    │\r
+                    ▼\r
+                  Workers\r
+\`\`\`\r
+\r
+This creates clear ownership.\r
+\r
+---\r
+\r
+# 4. Three-Level Responsibility Model\r
+\r
+CWD can therefore be understood as three levels of orchestration/execution.\r
+\r
+\`\`\`text\r
+┌─────────────────────────────────────┐\r
+│           COORDINATOR               │\r
+│                                     │\r
+│ Enterprise orchestration            │\r
+│                                     │\r
+│ "What needs to happen?"             │\r
+└──────────────────┬──────────────────┘\r
+                   │\r
+                   ▼\r
+┌─────────────────────────────────────┐\r
+│            DELEGATOR                │\r
+│                                     │\r
+│ Domain orchestration                │\r
+│                                     │\r
+│ "How should my domain accomplish it?"│\r
+└──────────────────┬──────────────────┘\r
+                   │\r
+                   ▼\r
+┌─────────────────────────────────────┐\r
+│             WORKERS                 │\r
+│                                     │\r
+│ Task execution                      │\r
+│                                     │\r
+│ "Perform this specific operation."  │\r
+└─────────────────────────────────────┘\r
+\`\`\`\r
+\r
+This separation prevents responsibilities from leaking between layers.\r
+\r
+---\r
+\r
+# 5. Domain Isolation\r
+\r
+A major benefit of the Delegator layer is **domain isolation**.\r
+\r
+Each Delegator owns a particular business domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+Finance Delegator\r
+HR Delegator\r
+Supply Chain Delegator\r
+Quality Delegator\r
+Customer Experience Delegator\r
+\`\`\`\r
+\r
+Each domain can have its own Workers.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+ ├── Customer Worker\r
+ ├── Opportunity Worker\r
+ ├── Revenue Worker\r
+ └── Sales Analytics Worker\r
+\r
+Finance Delegator\r
+ ├── Financial Data Worker\r
+ ├── Cost Analysis Worker\r
+ ├── Forecast Worker\r
+ └── Finance Reporting Worker\r
+\`\`\`\r
+\r
+The Sales Delegator does not need to understand Finance Worker internals.\r
+\r
+Likewise, the Finance Delegator does not need to understand Sales Worker internals.\r
+\r
+---\r
+\r
+# 6. Why Domain Isolation Matters\r
+\r
+Domain isolation provides several benefits.\r
+\r
+### Reduced coupling\r
+\r
+Sales changes do not necessarily require changes to Finance.\r
+\r
+### Independent development\r
+\r
+Domain teams can develop and test their Workers independently.\r
+\r
+### Domain-specific policies\r
+\r
+Each Delegator can enforce domain-specific execution rules.\r
+\r
+### Better ownership\r
+\r
+Business domain teams can own their domain workflows.\r
+\r
+### Easier troubleshooting\r
+\r
+A failure can be isolated to:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Sales Delegator\r
+    ↓\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+instead of debugging the entire enterprise agent ecosystem.\r
+\r
+---\r
+\r
+# 7. Scalability\r
+\r
+As CWD grows, the number of Workers can increase significantly.\r
+\r
+Suppose there are:\r
+\r
+\`\`\`text\r
+10 Domains\r
+100 Workers\r
+\`\`\`\r
+\r
+If the Coordinator directly manages all Workers:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ├── Worker 1\r
+   ├── Worker 2\r
+   ├── ...\r
+   └── Worker 100\r
+\`\`\`\r
+\r
+The Coordinator becomes increasingly complex.\r
+\r
+With Delegators:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   │\r
+   ├── Sales Delegator\r
+   ├── Finance Delegator\r
+   ├── HR Delegator\r
+   ├── Supply Chain Delegator\r
+   └── Quality Delegator\r
+            │\r
+            └── Workers\r
+\`\`\`\r
+\r
+The Coordinator manages a smaller number of **domain-level capabilities**, while each Delegator manages its own Worker ecosystem.\r
+\r
+This is much more scalable.\r
+\r
+---\r
+\r
+# 8. Horizontal Scalability\r
+\r
+Delegators also provide independent scaling boundaries.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+     ↓\r
+10 Workers\r
+\`\`\`\r
+\r
+If Sales workload increases, the Sales execution layer can scale independently.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+     ↓\r
+Worker Pool\r
+ ├── Worker Instance 1\r
+ ├── Worker Instance 2\r
+ ├── Worker Instance 3\r
+ └── Worker Instance N\r
+\`\`\`\r
+\r
+Finance does not necessarily need to scale at the same rate.\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+     ↓\r
+Smaller Worker Pool\r
+\`\`\`\r
+\r
+This enables more efficient resource utilization.\r
+\r
+---\r
+\r
+# 9. Maintainability\r
+\r
+Without Delegators, adding a new Worker may require changes to the Coordinator.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Add New Worker\r
+      ↓\r
+Modify Coordinator\r
+      ↓\r
+Modify Routing\r
+      ↓\r
+Modify Workflow\r
+      ↓\r
+Retest Enterprise Orchestration\r
+\`\`\`\r
+\r
+This increases regression risk.\r
+\r
+With Delegators:\r
+\r
+\`\`\`text\r
+Add New Worker\r
+      ↓\r
+Register Worker\r
+      ↓\r
+Update Domain Delegator\r
+      ↓\r
+Test Domain Workflow\r
+\`\`\`\r
+\r
+The impact is much more localized.\r
+\r
+This is a major maintainability advantage.\r
+\r
+---\r
+\r
+# 10. Reduced Coordinator Complexity\r
+\r
+The Coordinator should remain relatively stable even as CWD grows.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Domain Selection\r
+    ↓\r
+Delegator\r
+\`\`\`\r
+\r
+The Coordinator does not need to change every time a new Sales Worker is added.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ↓\r
+Worker Registry\r
+    ↓\r
+New Worker\r
+\`\`\`\r
+\r
+This supports a **plug-in style agent ecosystem**.\r
+\r
+---\r
+\r
+# 11. More Efficient Task Routing\r
+\r
+The Delegator also improves routing efficiency.\r
+\r
+The Coordinator performs **coarse-grained routing**:\r
+\r
+\`\`\`text\r
+User Request\r
+      ↓\r
+Business Domain\r
+      ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The Delegator performs **fine-grained routing**:\r
+\r
+\`\`\`text\r
+Sales Task\r
+      ↓\r
+Required Capability\r
+      ↓\r
+Worker Registry\r
+      ↓\r
+Appropriate Worker\r
+\`\`\`\r
+\r
+Therefore routing happens at two levels:\r
+\r
+\`\`\`text\r
+Level 1\r
+Enterprise Routing\r
+Coordinator → Delegator\r
+\r
+Level 2\r
+Domain Routing\r
+Delegator → Worker\r
+\`\`\`\r
+\r
+This is much more efficient than forcing the Coordinator to search across every Worker in the enterprise.\r
+\r
+---\r
+\r
+# 12. Capability-Based Worker Selection\r
+\r
+The Delegator can select Workers based on capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+Retrieve customer opportunities\r
+\`\`\`\r
+\r
+The Delegator searches for:\r
+\r
+\`\`\`text\r
+Capability = customer-opportunity-read\r
+\`\`\`\r
+\r
+rather than relying on a hard-coded Worker name.\r
+\r
+\`\`\`text\r
+Domain Task\r
+     ↓\r
+Capability\r
+     ↓\r
+Worker Registry\r
+     ↓\r
+Candidate Workers\r
+     ↓\r
+Policy + Health + Availability\r
+     ↓\r
+Selected Worker\r
+\`\`\`\r
+\r
+This allows Workers to be added, replaced, versioned, or scaled without redesigning the Coordinator.\r
+\r
+---\r
+\r
+# 13. Better Task Decomposition\r
+\r
+Task decomposition is inherently domain-specific.\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+"Prepare a customer briefing."\r
+\`\`\`\r
+\r
+The Coordinator knows:\r
+\r
+\`\`\`text\r
+Customer Briefing → Sales\r
+\`\`\`\r
+\r
+But the Sales Delegator knows:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+      │\r
+      ├── Customer Profile\r
+      ├── Opportunities\r
+      ├── Revenue\r
+      ├── Interactions\r
+      └── Briefing Generation\r
+\`\`\`\r
+\r
+This is important because domain knowledge belongs closer to the domain.\r
+\r
+The Delegator therefore becomes the appropriate place for **domain-aware decomposition**.\r
+\r
+---\r
+\r
+# 14. Dependency Management\r
+\r
+The Delegator understands dependencies between domain tasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Profile ────────────┐\r
+                    │\r
+Opportunities ──────┤\r
+                    ├──► Briefing\r
+Revenue ────────────┤\r
+                    │\r
+Interactions ───────┘\r
+\`\`\`\r
+\r
+The Delegator can determine:\r
+\r
+\`\`\`text\r
+Profile       → Parallel\r
+Opportunities → Parallel\r
+Revenue       → Parallel\r
+Interactions  → Parallel\r
+\r
+Briefing      → Depends on all four\r
+\`\`\`\r
+\r
+The Coordinator does not need to know these internal Sales dependencies.\r
+\r
+---\r
+\r
+# 15. Parallel Execution\r
+\r
+A Delegator can execute independent Workers in parallel.\r
+\r
+\`\`\`text\r
+                  Sales Delegator\r
+                        │\r
+            ┌───────────┼───────────┐\r
+            ↓           ↓           ↓\r
+        Profile      Revenue    Opportunity\r
+        Worker       Worker       Worker\r
+            │           │           │\r
+            └───────────┼───────────┘\r
+                        ↓\r
+                  Briefing Worker\r
+\`\`\`\r
+\r
+This reduces latency.\r
+\r
+If tasks are executed sequentially:\r
+\r
+\`\`\`text\r
+T = T1 + T2 + T3 + T4\r
+\`\`\`\r
+\r
+If independent tasks execute in parallel:\r
+\r
+\`\`\`text\r
+T ≈ max(T1, T2, T3, T4)\r
+\`\`\`\r
+\r
+followed by the dependent task.\r
+\r
+The Delegator therefore contributes directly to **execution efficiency**.\r
+\r
+---\r
+\r
+# 16. Better Failure Isolation\r
+\r
+Suppose one Sales Worker fails.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+ ┌────┼────┬────┐\r
+ ↓    ↓    ↓    ↓\r
+ A    B    C    D\r
+      ✗\r
+\`\`\`\r
+\r
+The Delegator can determine whether:\r
+\r
+\`\`\`text\r
+B is critical\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+B is optional\r
+\`\`\`\r
+\r
+If optional:\r
+\r
+\`\`\`text\r
+A ✓\r
+B ✗\r
+C ✓\r
+D ✓\r
+ ↓\r
+Continue\r
+\`\`\`\r
+\r
+If critical:\r
+\r
+\`\`\`text\r
+B ✗\r
+ ↓\r
+Retry\r
+ ↓\r
+Fallback\r
+ ↓\r
+Escalate / Stop\r
+\`\`\`\r
+\r
+This gives the domain workflow its own recovery strategy.\r
+\r
+---\r
+\r
+# 17. Better Failure Containment\r
+\r
+The Delegator also acts as a **failure boundary**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Finance Worker Failure\r
+        ↓\r
+Finance Delegator\r
+        ↓\r
+Recover\r
+\`\`\`\r
+\r
+does not necessarily impact:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+HR Delegator\r
+Supply Chain Delegator\r
+\`\`\`\r
+\r
+This reduces the blast radius of failures.\r
+\r
+---\r
+\r
+# 18. Independent Domain Evolution\r
+\r
+Business domains evolve at different speeds.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales\r
+  → New CRM Worker\r
+\r
+Finance\r
+  → New Forecast Worker\r
+\r
+Supply Chain\r
+  → New Inventory Worker\r
+\`\`\`\r
+\r
+With Delegators, each domain can evolve independently.\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── Sales Delegator → evolves independently\r
+     ├── Finance Delegator → evolves independently\r
+     └── Supply Chain Delegator → evolves independently\r
+\`\`\`\r
+\r
+This is much easier to manage than modifying a single enterprise Coordinator for every domain change.\r
+\r
+---\r
+\r
+# 19. Domain-Specific Policies\r
+\r
+Another reason for the Delegator is that different domains may have different execution rules.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ↓\r
+Sales policies\r
+    ↓\r
+Sales Workers\r
+\`\`\`\r
+\r
+while:\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+    ↓\r
+Finance policies\r
+    ↓\r
+Finance Workers\r
+\`\`\`\r
+\r
+The Coordinator enforces enterprise-wide governance.\r
+\r
+The Delegator can enforce **domain-specific rules**.\r
+\r
+This gives a layered governance model:\r
+\r
+\`\`\`text\r
+Enterprise Policy\r
+       ↓\r
+Coordinator\r
+       ↓\r
+Domain Policy\r
+       ↓\r
+Delegator\r
+       ↓\r
+Worker Policy\r
+       ↓\r
+Tool / Enterprise System\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Security Boundary\r
+\r
+The Delegator also creates an additional execution boundary.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      ↓\r
+Authorized Sales Delegator\r
+      ↓\r
+Authorized Sales Worker\r
+      ↓\r
+Approved Tool\r
+      ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+A Worker does not automatically receive access to every enterprise system.\r
+\r
+The Delegator controls which Worker is appropriate for the requested capability.\r
+\r
+This supports:\r
+\r
+* Least privilege\r
+* Domain isolation\r
+* Controlled execution\r
+* Reduced unauthorized access\r
+* Better auditability\r
+\r
+---\r
+\r
+# 21. Context Management\r
+\r
+The Coordinator establishes the global execution context.\r
+\r
+The Delegator converts that into domain-specific execution context.\r
+\r
+\`\`\`text\r
+Global Context\r
+     ↓\r
+Coordinator\r
+     ↓\r
+Domain Context\r
+     ↓\r
+Delegator\r
+     ↓\r
+Worker Context\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator Context:\r
+session_id\r
+task_id\r
+run_id\r
+correlation_id\r
+user context\r
+intent\r
+domain\r
+\`\`\`\r
+\r
+The Delegator adds:\r
+\r
+\`\`\`text\r
+Sales workflow\r
+customer_id\r
+worker capability\r
+domain task\r
+task dependencies\r
+domain constraints\r
+\`\`\`\r
+\r
+This prevents unnecessary information from being propagated to every Worker.\r
+\r
+---\r
+\r
+# 22. Better Observability\r
+\r
+The Delegator also provides a useful observability boundary.\r
+\r
+Instead of seeing:\r
+\r
+\`\`\`text\r
+Coordinator → 20 Workers\r
+\`\`\`\r
+\r
+operations teams can see:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓\r
+Sales Delegator\r
+   ├── Profile Worker\r
+   ├── Opportunity Worker\r
+   ├── Revenue Worker\r
+   └── Interaction Worker\r
+\`\`\`\r
+\r
+This allows monitoring at multiple levels:\r
+\r
+\`\`\`text\r
+Enterprise\r
+   ↓\r
+Domain\r
+   ↓\r
+Worker\r
+   ↓\r
+Tool\r
+   ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+Metrics can therefore be analyzed by:\r
+\r
+* Domain\r
+* Delegator\r
+* Worker\r
+* Workflow\r
+* Capability\r
+* Task\r
+* Error type\r
+* Latency\r
+\r
+---\r
+\r
+# 23. Better Ownership Model\r
+\r
+The Delegator also supports organizational separation.\r
+\r
+A possible model is:\r
+\r
+\`\`\`text\r
+CWD Platform Team\r
+       ↓\r
+Coordinator / Shared Platform\r
+       │\r
+       ├── Sales Domain Team\r
+       │      ↓\r
+       │   Sales Delegator + Workers\r
+       │\r
+       ├── Finance Domain Team\r
+       │      ↓\r
+       │   Finance Delegator + Workers\r
+       │\r
+       └── Supply Chain Team\r
+              ↓\r
+           Delegator + Workers\r
+\`\`\`\r
+\r
+This enables domain teams to build specialized AI capabilities without modifying the enterprise orchestration core.\r
+\r
+---\r
+\r
+# 24. Preventing a Monolithic Coordinator\r
+\r
+This is perhaps the strongest architectural reason.\r
+\r
+Without Delegators:\r
+\r
+\`\`\`text\r
+                     Coordinator\r
+                          │\r
+       ┌──────────────────┼──────────────────┐\r
+       ↓                  ↓                  ↓\r
+    Sales logic       Finance logic       HR logic\r
+       │                  │                  │\r
+    Workers            Workers            Workers\r
+\`\`\`\r
+\r
+The Coordinator becomes:\r
+\r
+\`\`\`text\r
+Huge\r
+Tightly coupled\r
+Hard to test\r
+Hard to deploy\r
+Hard to govern\r
+Hard to scale\r
+Hard to maintain\r
+\`\`\`\r
+\r
+With Delegators:\r
+\r
+\`\`\`text\r
+                   Coordinator\r
+                        │\r
+          ┌─────────────┼─────────────┐\r
+          ↓             ↓             ↓\r
+       Sales          Finance          HR\r
+      Delegator      Delegator      Delegator\r
+          │             │             │\r
+       Workers        Workers        Workers\r
+\`\`\`\r
+\r
+The Coordinator stays focused on enterprise orchestration.\r
+\r
+---\r
+\r
+# 25. Delegator as an Abstraction Boundary\r
+\r
+The Delegator hides domain complexity from the Coordinator.\r
+\r
+For example, the Coordinator sees:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+Capability:\r
+customer_briefing\r
+\`\`\`\r
+\r
+It does not need to know:\r
+\r
+\`\`\`text\r
+Which Salesforce API?\r
+Which Worker?\r
+Which prompt?\r
+Which domain workflow?\r
+Which dependency?\r
+Which retry policy?\r
+Which domain-specific transformation?\r
+\`\`\`\r
+\r
+Those details remain behind the Delegator boundary.\r
+\r
+This is a classic **separation-of-concerns and abstraction principle**.\r
+\r
+---\r
+\r
+# 26. More Efficient Agent Discovery\r
+\r
+The Coordinator can discover:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+\`\`\`\r
+\r
+from the Agent Registry.\r
+\r
+The Sales Delegator can then discover:\r
+\r
+\`\`\`text\r
+Profile Worker\r
+Opportunity Worker\r
+Revenue Worker\r
+Interaction Worker\r
+\`\`\`\r
+\r
+from the Worker/Agent Registry.\r
+\r
+Therefore discovery becomes hierarchical:\r
+\r
+\`\`\`text\r
+Agent Registry\r
+      │\r
+      ├── Domain Agent\r
+      │      ↓\r
+      │   Worker Registry\r
+      │      ↓\r
+      │   Specialized Worker\r
+      │\r
+      └── Other Domain Agents\r
+\`\`\`\r
+\r
+This reduces the search space for Worker selection.\r
+\r
+---\r
+\r
+# 27. Versioning and Deployment Independence\r
+\r
+Suppose a new version of the Revenue Worker is deployed:\r
+\r
+\`\`\`text\r
+Revenue Worker v1\r
+Revenue Worker v2\r
+\`\`\`\r
+\r
+The Sales Delegator can select the appropriate version based on:\r
+\r
+\`\`\`text\r
+Capability\r
+Version\r
+Health\r
+Policy\r
+Environment\r
+\`\`\`\r
+\r
+The Coordinator does not need to know the internal Worker version.\r
+\r
+This supports independent deployment and evolution.\r
+\r
+---\r
+\r
+# 28. Reusability\r
+\r
+A Worker can be reused by multiple workflows inside the same domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      ↑\r
+      ├── Customer Briefing\r
+      ├── Account Review\r
+      ├── Sales Forecast\r
+      └── Executive Report\r
+\`\`\`\r
+\r
+The Delegator decides when the Worker is appropriate.\r
+\r
+This prevents duplicate implementation of the same capability.\r
+\r
+---\r
+\r
+# 29. Why Not Just Use the Coordinator?\r
+\r
+Because the Coordinator operates at the **enterprise level**.\r
+\r
+If it also manages every domain's detailed execution, it becomes responsible for:\r
+\r
+\`\`\`text\r
+Enterprise orchestration\r
++\r
+Domain orchestration\r
++\r
+Worker orchestration\r
++\r
+Tool orchestration\r
+\`\`\`\r
+\r
+That violates separation of responsibilities.\r
+\r
+CWD instead creates:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Enterprise orchestration\r
+\r
+Delegator\r
+    ↓\r
+Domain orchestration\r
+\r
+Worker\r
+    ↓\r
+Task execution\r
+\r
+Tool\r
+    ↓\r
+System interaction\r
+\`\`\`\r
+\r
+Each layer has a clear purpose.\r
+\r
+---\r
+\r
+# 30. Why Not Let Workers Communicate Directly?\r
+\r
+Allowing Workers to freely coordinate with each other can create another problem:\r
+\r
+\`\`\`text\r
+Worker A\r
+   ↕\r
+Worker B\r
+   ↕\r
+Worker C\r
+   ↕\r
+Worker D\r
+\`\`\`\r
+\r
+This creates a highly connected and difficult-to-control agent network.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+             Delegator\r
+            /    |    \\\r
+           /     |     \\\r
+       Worker  Worker  Worker\r
+\`\`\`\r
+\r
+The Delegator acts as the domain-level control point.\r
+\r
+This makes execution:\r
+\r
+* More predictable\r
+* More observable\r
+* More governable\r
+* Easier to recover\r
+* Easier to audit\r
+\r
+---\r
+\r
+# 31. Overall Benefits\r
+\r
+The dedicated Delegator layer provides:\r
+\r
+| Benefit                        | How Delegator Helps                                      |\r
+| ------------------------------ | -------------------------------------------------------- |\r
+| Separation of responsibilities | Separates enterprise and domain orchestration            |\r
+| Domain isolation               | Keeps business-domain logic contained                    |\r
+| Scalability                    | Allows domains and Worker pools to scale independently   |\r
+| Maintainability                | Reduces Coordinator complexity                           |\r
+| Routing efficiency             | Routes within a smaller domain-specific Worker set       |\r
+| Parallel execution             | Manages independent domain tasks                         |\r
+| Dependency management          | Controls task sequencing                                 |\r
+| Failure isolation              | Contains domain failures                                 |\r
+| Recovery                       | Implements domain-level retry/fallback                   |\r
+| Security                       | Adds domain-level execution boundary                     |\r
+| Governance                     | Applies domain-specific policies                         |\r
+| Context control                | Passes only required domain context                      |\r
+| Observability                  | Provides domain-level monitoring                         |\r
+| Team ownership                 | Enables independent domain teams                         |\r
+| Versioning                     | Allows independent Worker evolution                      |\r
+| Reusability                    | Reuses Workers across domain workflows                   |\r
+| Extensibility                  | New Workers can be added without redesigning Coordinator |\r
+\r
+---\r
+\r
+# 32. The Architectural Principle\r
+\r
+The Delegator exists because **enterprise orchestration and domain orchestration are different problems**.\r
+\r
+\`\`\`text\r
+Enterprise Problem\r
+        ↓\r
+"What business objective is the user asking for?"\r
+        ↓\r
+Coordinator\r
+        ↓\r
+"Which domain should handle it?"\r
+        ↓\r
+Delegator\r
+        ↓\r
+"What domain tasks are required?"\r
+        ↓\r
+"Which Workers can perform them?"\r
+        ↓\r
+Worker Execution\r
+\`\`\`\r
+\r
+This creates a clean hierarchy:\r
+\r
+\`\`\`text\r
+                    CWD\r
+                     │\r
+                     ▼\r
+               Coordinator\r
+          Enterprise Orchestration\r
+                     │\r
+                     ▼\r
+                Delegator\r
+            Domain Orchestration\r
+                     │\r
+                     ▼\r
+                  Worker\r
+             Task Execution\r
+                     │\r
+                     ▼\r
+              MCP / Tools\r
+                     │\r
+                     ▼\r
+          Enterprise Systems\r
+\`\`\`\r
+\r
+---\r
+\r
+# 33. Final Architect View\r
+\r
+The **Delegator layer is required to prevent the Coordinator from becoming a monolithic enterprise agent while keeping domain-specific orchestration close to the business capabilities it controls.**\r
+\r
+The architecture deliberately separates three responsibilities:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    =\r
+Enterprise-level decision and orchestration\r
+\r
+Delegator\r
+    =\r
+Domain-level planning, routing and execution control\r
+\r
+Worker\r
+    =\r
+Specialized task execution\r
+\`\`\`\r
+\r
+The Delegator provides the critical middle layer that enables:\r
+\r
+\`\`\`text\r
+Separation of Concerns\r
+        +\r
+Domain Isolation\r
+        +\r
+Scalability\r
+        +\r
+Maintainability\r
+        +\r
+Efficient Routing\r
+        +\r
+Parallel Execution\r
+        +\r
+Failure Containment\r
+        +\r
+Independent Deployment\r
+        +\r
+Domain Governance\r
+        +\r
+Better Observability\r
+\`\`\`\r
+\r
+The simplest way to explain the necessity of the layer is:\r
+\r
+> **The Coordinator should not know how every business domain works, and Workers should not be responsible for coordinating an entire domain. The Delegator provides the domain-level control boundary that connects enterprise orchestration to specialized execution.**\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+"WHERE should the request go?"\r
+\r
+        ↓\r
+\r
+Delegator\r
+"HOW should this domain fulfill the request?"\r
+\r
+        ↓\r
+\r
+Workers\r
+"WHAT specific operation should I execute?"\r
+\`\`\`\r
+\r
+That separation is what makes CWD a **scalable enterprise multi-agent architecture rather than a collection of directly connected agents**.\r
+`,code:``},{id:`delegator-responsibilities`,category:`Delegator Agents`,title:`Delegator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the core responsibilities of a Delegator, including domain identification, task decomposition, Worker discovery and selection, execution coordination, policy enforcement, failure handling, and result management.`,concept:`# Core Responsibilities of a Delegator Agent\r
+\r
+The **Delegator Agent** is the **domain-level orchestration layer** in the CWD architecture. It sits between the **Coordinator** and specialized **Worker Agents**.\r
+\r
+Its primary responsibility is to take a high-level business task from the Coordinator, understand what needs to be done within its domain, break the work into executable tasks, select the right Workers, coordinate execution, enforce domain policies, handle failures, and return a validated result.\r
+\r
+## 1. Domain Identification\r
+\r
+The Delegator first determines whether the incoming task belongs to its supported business domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | "Create a customer briefing"\r
+     v\r
+Sales Delegator\r
+     |\r
+     +-- Customer information\r
+     +-- Opportunities\r
+     +-- Revenue\r
+     +-- Recent interactions\r
+\`\`\`\r
+\r
+The Delegator validates:\r
+\r
+* Business domain\r
+* Requested capability\r
+* Task type\r
+* Required enterprise data\r
+* Applicable domain policies\r
+* User authorization/context\r
+\r
+The Delegator should **not accept tasks outside its domain**.\r
+\r
+---\r
+\r
+## 2. Task Decomposition\r
+\r
+The Delegator converts the high-level domain task into smaller executable subtasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       |\r
+       +-- Retrieve customer profile\r
+       |\r
+       +-- Retrieve opportunities\r
+       |\r
+       +-- Retrieve revenue information\r
+       |\r
+       +-- Retrieve recent interactions\r
+       |\r
+       +-- Generate customer briefing\r
+\`\`\`\r
+\r
+It determines:\r
+\r
+* What tasks are required\r
+* Which tasks are independent\r
+* Which tasks depend on other tasks\r
+* Which tasks can execute in parallel\r
+* Which tasks must execute sequentially\r
+* What inputs each Worker requires\r
+* What output each Worker must produce\r
+\r
+This allows the Delegator to create a **domain-specific execution plan**.\r
+\r
+---\r
+\r
+## 3. Worker Discovery\r
+\r
+The Delegator does not need to hard-code every Worker.\r
+\r
+Instead, it uses the **Agent Registry** or equivalent capability metadata to discover available Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required Capability\r
+        |\r
+        v\r
+Agent Registry\r
+        |\r
+        +-- Customer Profile Worker\r
+        +-- Opportunity Worker\r
+        +-- Revenue Worker\r
+        +-- Interaction Worker\r
+\`\`\`\r
+\r
+Worker metadata can include:\r
+\r
+* Agent name\r
+* Capability\r
+* Business domain\r
+* Endpoint\r
+* Version\r
+* Health status\r
+* Supported operations\r
+* Authorization requirements\r
+* Data classification\r
+* Priority\r
+\r
+This makes Worker onboarding and replacement easier.\r
+\r
+---\r
+\r
+## 4. Worker Selection\r
+\r
+After discovering candidate Workers, the Delegator selects the most appropriate Worker.\r
+\r
+Selection can consider:\r
+\r
+\`\`\`text\r
+Capability\r
+   +\r
+Domain\r
+   +\r
+Authorization\r
+   +\r
+Health\r
+   +\r
+Availability\r
+   +\r
+Version\r
+   +\r
+Routing Policy\r
+   +\r
+Execution Constraints\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task: Retrieve Salesforce Opportunities\r
+\r
+Candidate Workers\r
+        |\r
+        +-- Salesforce Opportunity Worker\r
+        +-- Generic CRM Worker\r
+        +-- Legacy Opportunity Worker\r
+\r
+                |\r
+                v\r
+\r
+        Policy + Capability\r
+                |\r
+                v\r
+\r
+   Salesforce Opportunity Worker\r
+\`\`\`\r
+\r
+The **LLM may recommend** a Worker, but the Delegator applies the actual routing and policy rules.\r
+\r
+---\r
+\r
+## 5. Execution Coordination\r
+\r
+The Delegator controls how selected Workers execute.\r
+\r
+It determines whether tasks should run:\r
+\r
+### Sequentially\r
+\r
+\`\`\`text\r
+Worker A\r
+   |\r
+   v\r
+Worker B\r
+   |\r
+   v\r
+Worker C\r
+\`\`\`\r
+\r
+### In Parallel\r
+\r
+\`\`\`text\r
+        +-- Worker A\r
+        |\r
+Task ---+-- Worker B\r
+        |\r
+        +-- Worker C\r
+\`\`\`\r
+\r
+### Parallel Then Aggregate\r
+\r
+\`\`\`text\r
+        +-- Customer Worker\r
+        |\r
+        +-- Revenue Worker\r
+        |\r
+        +-- Opportunity Worker\r
+        |\r
+        v\r
+   Delegator Aggregation\r
+\`\`\`\r
+\r
+This is particularly important for enterprise workflows where multiple systems must be queried simultaneously.\r
+\r
+---\r
+\r
+## 6. Context Management\r
+\r
+The Delegator maintains and propagates the execution context required by Workers.\r
+\r
+Typical identifiers include:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+It also passes relevant business context such as:\r
+\r
+\`\`\`text\r
+Customer ID\r
+Account ID\r
+Region\r
+Business Unit\r
+Requested Output\r
+Task Constraints\r
+Authorization Context\r
+\`\`\`\r
+\r
+The Delegator should follow **minimum necessary context**.\r
+\r
+It should not blindly forward the entire conversation or unrestricted enterprise data to every Worker.\r
+\r
+---\r
+\r
+## 7. Policy Enforcement\r
+\r
+The Delegator acts as an important policy enforcement point within the domain.\r
+\r
+Before invoking a Worker, it can validate:\r
+\r
+\`\`\`text\r
+User Authorization\r
+       |\r
+       v\r
+Domain Policy\r
+       |\r
+       v\r
+Worker Capability\r
+       |\r
+       v\r
+Data Access Policy\r
+       |\r
+       v\r
+Execution Allowed?\r
+\`\`\`\r
+\r
+Possible policy outcomes include:\r
+\r
+\`\`\`text\r
+ALLOW\r
+DENY\r
+REDACT\r
+ESCALATE\r
+REQUIRE_APPROVAL\r
+\`\`\`\r
+\r
+For example, if a Worker requests restricted financial information that the user is not entitled to access, the Delegator must prevent execution.\r
+\r
+The LLM should never be allowed to bypass these controls.\r
+\r
+---\r
+\r
+## 8. Worker Communication\r
+\r
+The Delegator communicates with Workers using the approved CWD communication mechanisms.\r
+\r
+For agent-to-agent communication:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+    A2A\r
+     |\r
+Delegator\r
+     |\r
+    A2A\r
+     |\r
+Worker\r
+\`\`\`\r
+\r
+For Worker interaction with enterprise systems:\r
+\r
+\`\`\`text\r
+Worker\r
+   |\r
+  MCP / Tool\r
+   |\r
+   +-- Salesforce\r
+   +-- Snowflake\r
+   +-- Oracle\r
+   +-- SharePoint\r
+   +-- Other APIs\r
+\`\`\`\r
+\r
+The important distinction is:\r
+\r
+\`\`\`text\r
+A2A = Agent ↔ Agent\r
+\r
+MCP / Tools = Agent ↔ Enterprise Capability\r
+\`\`\`\r
+\r
+---\r
+\r
+## 9. Failure Handling\r
+\r
+The Delegator is responsible for managing failures within its domain.\r
+\r
+Typical failures include:\r
+\r
+* Worker unavailable\r
+* Worker timeout\r
+* API failure\r
+* Authentication failure\r
+* Authorization failure\r
+* Invalid Worker response\r
+* Rate limiting\r
+* Partial data\r
+* Dependency failure\r
+\r
+The Delegator determines whether the failure is:\r
+\r
+\`\`\`text\r
+Transient\r
+Permanent\r
+Authorization\r
+Data\r
+Timeout\r
+Dependency\r
+Policy\r
+\`\`\`\r
+\r
+It can then apply the appropriate strategy:\r
+\r
+\`\`\`text\r
+Failure\r
+   |\r
+   +-- Retry\r
+   |\r
+   +-- Fallback Worker\r
+   |\r
+   +-- Continue with Partial Result\r
+   |\r
+   +-- Resume\r
+   |\r
+   +-- Human Escalation\r
+   |\r
+   +-- Controlled Failure\r
+\`\`\`\r
+\r
+Retries must use appropriate idempotency and execution identifiers to avoid duplicate side effects.\r
+\r
+---\r
+\r
+## 10. Dependency Management\r
+\r
+The Delegator maintains task dependencies.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Retrieve Customer\r
+       |\r
+       +----------------+\r
+       |                |\r
+       v                v\r
+Retrieve Revenue   Retrieve Opportunities\r
+       |                |\r
+       +--------+-------+\r
+                |\r
+                v\r
+        Generate Briefing\r
+\`\`\`\r
+\r
+The final briefing cannot be generated until the required upstream information is available.\r
+\r
+The Delegator therefore tracks:\r
+\r
+\`\`\`text\r
+PENDING\r
+READY\r
+RUNNING\r
+COMPLETED\r
+FAILED\r
+RETRYING\r
+SKIPPED\r
+\`\`\`\r
+\r
+This allows the Delegator to control the workflow rather than simply forwarding requests.\r
+\r
+---\r
+\r
+## 11. Result Management\r
+\r
+After Workers complete their tasks, the Delegator collects and validates their results.\r
+\r
+\`\`\`text\r
+Worker A ──┐\r
+Worker B ──┼──> Delegator\r
+Worker C ──┘\r
+               |\r
+               v\r
+        Validate Results\r
+               |\r
+               v\r
+        Normalize Results\r
+               |\r
+               v\r
+        Aggregate Results\r
+\`\`\`\r
+\r
+The Delegator checks:\r
+\r
+* Did the Worker succeed?\r
+* Is the response structurally valid?\r
+* Is required information missing?\r
+* Is the result authorized?\r
+* Are there conflicting results?\r
+* Is the result complete enough for the downstream task?\r
+\r
+It then creates a domain-level result for the Coordinator.\r
+\r
+---\r
+\r
+## 12. Domain-Level Result Aggregation\r
+\r
+The Delegator performs the **first level of aggregation**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Workers\r
+     |\r
+     +-- Customer Profile\r
+     +-- Opportunities\r
+     +-- Revenue\r
+     +-- Interactions\r
+     |\r
+     v\r
+Sales Delegator\r
+     |\r
+     v\r
+Customer Briefing Data\r
+     |\r
+     v\r
+Coordinator\r
+\`\`\`\r
+\r
+The Coordinator can then combine this result with results from other domains.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                Coordinator\r
+                     |\r
+        +------------+-------------+\r
+        |            |             |\r
+        v            v             v\r
+      Sales        Finance      Supply Chain\r
+    Delegator     Delegator      Delegator\r
+        |            |             |\r
+      Workers      Workers       Workers\r
+        |            |             |\r
+        +------------+-------------+\r
+                     |\r
+                     v\r
+             Final Enterprise Result\r
+\`\`\`\r
+\r
+---\r
+\r
+# Delegator Responsibility Summary\r
+\r
+| Responsibility            | Delegator Role                                           |\r
+| ------------------------- | -------------------------------------------------------- |\r
+| Domain identification     | Validate that the task belongs to the domain             |\r
+| Task decomposition        | Break domain task into executable subtasks               |\r
+| Dependency management     | Determine task ordering and dependencies                 |\r
+| Worker discovery          | Find Workers through Agent Registry                      |\r
+| Worker selection          | Select appropriate Worker based on capability and policy |\r
+| Execution coordination    | Control sequential/parallel execution                    |\r
+| Context management        | Propagate required execution and business context        |\r
+| Policy enforcement        | Apply domain authorization and governance rules          |\r
+| Worker communication      | Communicate with Workers using approved protocols        |\r
+| Failure handling          | Retry, fallback, recover, or escalate                    |\r
+| Result validation         | Validate Worker responses                                |\r
+| Result aggregation        | Combine Worker results into a domain result              |\r
+| Observability             | Track execution, failures, latency, and outcomes         |\r
+| Coordinator communication | Return structured results/status to Coordinator          |\r
+\r
+---\r
+\r
+# Delegator in the CWD Execution Model\r
+\r
+The complete responsibility chain is:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           |\r
+                           v\r
+                    +-------------+\r
+                    | Coordinator |\r
+                    +-------------+\r
+                           |\r
+                    Enterprise Intent\r
+                           |\r
+                           | A2A\r
+                           v\r
+                    +-------------+\r
+                    |  Delegator  |\r
+                    +-------------+\r
+                           |\r
+              Domain Task Decomposition\r
+                           |\r
+             +-------------+-------------+\r
+             |             |             |\r
+             v             v             v\r
+         Worker A      Worker B      Worker C\r
+             |             |             |\r
+             v             v             v\r
+          MCP/Tools    MCP/Tools    MCP/Tools\r
+             |             |             |\r
+             v             v             v\r
+        Enterprise Systems / Data\r
+             |             |             |\r
+             +-------------+-------------+\r
+                           |\r
+                           v\r
+                    Worker Results\r
+                           |\r
+                           v\r
+                    +-------------+\r
+                    |  Delegator  |\r
+                    | Aggregation  |\r
+                    +-------------+\r
+                           |\r
+                           v\r
+                    Domain Result\r
+                           |\r
+                           | A2A\r
+                           v\r
+                    +-------------+\r
+                    | Coordinator |\r
+                    +-------------+\r
+                           |\r
+                           v\r
+                    Final Response\r
+\`\`\`\r
+\r
+# Coordinator vs Delegator vs Worker\r
+\r
+The simplest way to understand the separation is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    = Enterprise-level orchestration\r
+\r
+Delegator\r
+    = Domain-level orchestration\r
+\r
+Worker\r
+    = Task-level execution\r
+\`\`\`\r
+\r
+| Layer           | Main Question                                                                  |\r
+| --------------- | ------------------------------------------------------------------------------ |\r
+| **Coordinator** | What does the enterprise request require, and which domain should handle it?   |\r
+| **Delegator**   | How should this domain task be decomposed and which Workers should execute it? |\r
+| **Worker**      | How do I perform this specific operation?                                      |\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User:\r
+"Create a customer briefing including revenue,\r
+opportunities and recent interactions."\r
+\r
+Coordinator:\r
+"Sales domain is required."\r
+\r
+        ↓\r
+\r
+Sales Delegator:\r
+"I need customer, revenue, opportunity\r
+and interaction data."\r
+\r
+        ↓\r
+\r
+Workers:\r
+"Retrieve customer data."\r
+"Retrieve revenue."\r
+"Retrieve opportunities."\r
+"Retrieve interactions."\r
+\r
+        ↓\r
+\r
+Sales Delegator:\r
+"Combine and validate the domain results."\r
+\r
+        ↓\r
+\r
+Coordinator:\r
+"Combine the Sales result and produce\r
+the final enterprise response."\r
+\`\`\`\r
+\r
+# Key Architectural Principle\r
+\r
+The Delegator prevents the Coordinator from becoming a **large monolithic orchestration engine**.\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | Enterprise decisions\r
+    v\r
+Delegator\r
+    |\r
+    | Domain decisions\r
+    v\r
+Workers\r
+    |\r
+    | Task execution\r
+    v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+This separation provides:\r
+\r
+* **Clear responsibility boundaries**\r
+* **Domain isolation**\r
+* **Efficient Worker routing**\r
+* **Independent domain evolution**\r
+* **Better scalability**\r
+* **Failure isolation**\r
+* **Simpler Coordinator design**\r
+* **Reusable Worker capabilities**\r
+* **Domain-specific policy enforcement**\r
+* **Better observability and maintainability**\r
+\r
+## Final Definition\r
+\r
+> **The Delegator is the domain-level orchestration agent that receives a task from the Coordinator, identifies the required domain actions, decomposes the task, discovers and selects appropriate Workers, coordinates their execution, enforces domain policies, handles failures and recovery, manages execution context, validates and aggregates results, and returns a structured domain result to the Coordinator.**\r
+\r
+In one line:\r
+\r
+\`\`\`text\r
+Delegator =\r
+Domain Identification\r
++ Task Decomposition\r
++ Worker Discovery\r
++ Worker Selection\r
++ Execution Coordination\r
++ Policy Enforcement\r
++ Failure Handling\r
++ Result Management\r
+\`\`\`\r
+`,code:``},{id:`domain-based-routing`,category:`Delegator Agents`,title:`Domain-Based Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators identify the appropriate business or technical domain and route incoming tasks to the correct domain-specific Worker agents and capabilities.`,concept:`# How Delegators Identify the Domain and Route Tasks to the Correct Workers\r
+\r
+In the CWD architecture, the **Delegator is responsible for domain-level routing**.\r
+\r
+The Coordinator has already determined the overall business intent and selected the appropriate Delegator. Once the task reaches the Delegator, the Delegator determines:\r
+\r
+1. **What business/technical capability is required?**\r
+2. **Which domain-specific workflow should handle it?**\r
+3. **What subtasks are required?**\r
+4. **Which Worker has the required capability?**\r
+5. **How should the Workers execute the task?**\r
+\r
+The important principle is:\r
+\r
+> **Coordinator selects the domain-level Delegator; Delegator selects the capability and Worker agents within that domain.**\r
+\r
+---\r
+\r
+# 1. Where Domain Routing Happens\r
+\r
+The routing hierarchy in CWD is:\r
+\r
+\`\`\`text\r
+User Request\r
+      |\r
+      v\r
++----------------+\r
+|  Coordinator   |\r
++----------------+\r
+      |\r
+      | Enterprise-level routing\r
+      | "This is a Sales request"\r
+      v\r
++----------------+\r
+| Sales Delegator|\r
++----------------+\r
+      |\r
+      | Domain-level routing\r
+      | "I need customer + revenue + opportunity capabilities"\r
+      v\r
++-----------------------------+\r
+| Worker Discovery / Selection|\r
++-----------------------------+\r
+      |\r
+      +--------+---------+----------+\r
+      |        |         |\r
+      v        v         v\r
+ Customer   Revenue   Opportunity\r
+ Worker     Worker      Worker\r
+\`\`\`\r
+\r
+So there are **two levels of routing**:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Business Domain\r
+    ↓\r
+Delegator\r
+\r
+Delegator\r
+    ↓\r
+Capability\r
+    ↓\r
+Worker\r
+\`\`\`\r
+\r
+This prevents the Coordinator from needing to understand every Worker in the enterprise.\r
+\r
+---\r
+\r
+# 2. Step 1 — Receive the Structured Task\r
+\r
+The Delegator receives a structured task from the Coordinator, normally through the approved agent-to-agent communication path.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-1001",\r
+  "correlation_id": "CORR-5001",\r
+  "domain": "sales",\r
+  "intent": "customer_briefing",\r
+  "description": "Create a customer briefing for ABC Corp",\r
+  "required_capabilities": [\r
+    "customer_profile",\r
+    "opportunity_analysis",\r
+    "revenue_analysis",\r
+    "interaction_history"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The Delegator should not treat this as an arbitrary text request.\r
+\r
+It should convert the request into a **controlled domain execution context**.\r
+\r
+---\r
+\r
+# 3. Step 2 — Validate the Domain\r
+\r
+The Delegator first confirms that the task belongs to its domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    |\r
+    +-- Customer information       ✓\r
+    +-- Opportunities              ✓\r
+    +-- Sales revenue              ✓\r
+    +-- Customer interactions      ✓\r
+    +-- Employee payroll           ✗\r
+\`\`\`\r
+\r
+If the task belongs to another domain, the Delegator should not attempt to execute it.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+"Show me the employee's compensation."\r
+\r
+Sales Delegator\r
+       |\r
+       v\r
+Domain validation\r
+       |\r
+       v\r
+Not Sales capability\r
+       |\r
+       v\r
+Reject / route through approved mechanism\r
+\`\`\`\r
+\r
+This provides **domain isolation**.\r
+\r
+---\r
+\r
+# 4. Step 3 — Identify the Required Capabilities\r
+\r
+The Delegator determines what capabilities are required to complete the task.\r
+\r
+For:\r
+\r
+> "Create a customer briefing for ABC Corp."\r
+\r
+The Delegator may identify:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       |\r
+       +-- Customer Profile\r
+       |\r
+       +-- Opportunity Analysis\r
+       |\r
+       +-- Revenue Analysis\r
+       |\r
+       +-- Interaction History\r
+       |\r
+       +-- Briefing Generation\r
+\`\`\`\r
+\r
+These are **capabilities**, not necessarily Worker names.\r
+\r
+This distinction is important.\r
+\r
+The Delegator should think:\r
+\r
+\`\`\`text\r
+"I need opportunity analysis."\r
+\`\`\`\r
+\r
+rather than:\r
+\r
+\`\`\`text\r
+"I must call OpportunityWorkerV2."\r
+\`\`\`\r
+\r
+The actual Worker can then be discovered dynamically.\r
+\r
+---\r
+\r
+# 5. Step 4 — Use the Agent Registry\r
+\r
+The Delegator uses the **Agent Registry** to discover Workers that provide the required capabilities.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Required Capability\r
+        |\r
+        v\r
+   Agent Registry\r
+        |\r
+        +----------------------+\r
+        |                      |\r
+        v                      v\r
+Opportunity Worker       Revenue Worker\r
+        |                      |\r
+        +---- Capability ------+\r
+\`\`\`\r
+\r
+Worker metadata can contain information such as:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "sales-opportunity-worker",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "opportunity_analysis",\r
+    "pipeline_analysis"\r
+  ],\r
+  "endpoint": "...",\r
+  "version": "2.1",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+Another Worker might advertise:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "sales-revenue-worker",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "revenue_analysis"\r
+  ],\r
+  "endpoint": "...",\r
+  "version": "1.4",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The Delegator uses these capabilities to determine the correct Worker.\r
+\r
+---\r
+\r
+# 6. Step 5 — Match Capability to Worker\r
+\r
+The Delegator performs capability matching.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task\r
+ |\r
+ +-- customer_profile\r
+ +-- opportunity_analysis\r
+ +-- revenue_analysis\r
+ +-- interaction_history\r
+\r
+              |\r
+              v\r
+\r
+        Agent Registry\r
+\r
+              |\r
+      +-------+-------+-------+\r
+      |       |       |       |\r
+      v       v       v       v\r
+ Customer Opportunity Revenue Interaction\r
+ Worker     Worker    Worker     Worker\r
+\`\`\`\r
+\r
+The Worker is selected because it supports the **required capability**, not simply because its name looks relevant.\r
+\r
+This enables capability-based routing.\r
+\r
+---\r
+\r
+# 7. Step 6 — Apply Routing Policies\r
+\r
+Capability matching alone is not enough.\r
+\r
+The Delegator also evaluates routing policies.\r
+\r
+A conceptual decision can be:\r
+\r
+\`\`\`text\r
+Worker Selection\r
+       |\r
+       +-- Domain Match\r
+       +-- Capability Match\r
+       +-- Authorization\r
+       +-- Data Access\r
+       +-- Health\r
+       +-- Availability\r
+       +-- Version\r
+       +-- Policy\r
+       +-- Execution Constraints\r
+       |\r
+       v\r
+Selected Worker\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required Capability:\r
+revenue_analysis\r
+\r
+Candidate Workers:\r
+    Revenue Worker A\r
+    Revenue Worker B\r
+\r
+Evaluation:\r
+\r
+Domain Match          ✓\r
+Capability Match      ✓\r
+User Authorization    ✓\r
+Worker Health         ✓\r
+Data Policy           ✓\r
+Version Policy        ✓\r
+\r
+                    ↓\r
+\r
+Selected Worker\r
+\`\`\`\r
+\r
+This is where the Delegator becomes more than a simple router.\r
+\r
+It is a **governed routing decision point**.\r
+\r
+---\r
+\r
+# 8. Step 7 — Check Authorization Before Execution\r
+\r
+Before the Delegator sends a task to a Worker, authorization and policy checks must be applied.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User Identity\r
+      |\r
+      v\r
+User Roles / Entitlements\r
+      |\r
+      v\r
+Domain Policy\r
+      |\r
+      v\r
+Required Capability\r
+      |\r
+      v\r
+Data Classification\r
+      |\r
+      v\r
+Worker Access\r
+      |\r
+      v\r
+ALLOW / DENY / REDACT / ESCALATE\r
+\`\`\`\r
+\r
+Suppose the Revenue Worker requires access to sensitive financial information.\r
+\r
+The Delegator must verify that the requested execution is permitted.\r
+\r
+\`\`\`text\r
+Revenue Analysis\r
+      |\r
+      v\r
+Authorization Check\r
+      |\r
+   +--+--+\r
+   |     |\r
+ ALLOW  DENY\r
+   |     |\r
+   v     v\r
+Worker  Stop\r
+\`\`\`\r
+\r
+The LLM cannot override this decision.\r
+\r
+---\r
+\r
+# 9. Step 8 — Determine Execution Strategy\r
+\r
+Once Workers are selected, the Delegator determines how they should execute.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       |\r
+       +-- Customer Profile\r
+       |\r
+       +-- Opportunities\r
+       |\r
+       +-- Revenue\r
+       |\r
+       +-- Interactions\r
+\`\`\`\r
+\r
+These tasks may be independent.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+                +-- Customer Worker\r
+                |\r
+                +-- Opportunity Worker\r
+Delegator ------+\r
+                +-- Revenue Worker\r
+                |\r
+                +-- Interaction Worker\r
+\`\`\`\r
+\r
+They can potentially execute in parallel.\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+Opportunity Worker\r
+Revenue Worker\r
+Interaction Worker\r
+        |\r
+        v\r
+Delegator\r
+        |\r
+        v\r
+Aggregate Domain Result\r
+\`\`\`\r
+\r
+If a dependency exists:\r
+\r
+\`\`\`text\r
+Retrieve Customer\r
+       |\r
+       v\r
+Resolve Customer ID\r
+       |\r
+       +------------------+\r
+       |                  |\r
+       v                  v\r
+Opportunity Worker    Revenue Worker\r
+\`\`\`\r
+\r
+The Delegator controls this dependency.\r
+\r
+---\r
+\r
+# 10. Step 9 — Route the Task to the Worker\r
+\r
+After selecting the Worker, the Delegator creates a structured execution request.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-1001",\r
+  "step_id": "STEP-002",\r
+  "correlation_id": "CORR-5001",\r
+  "source_agent": "sales-delegator",\r
+  "target_agent": "sales-opportunity-worker",\r
+  "capability": "opportunity_analysis",\r
+  "input": {\r
+    "customer_id": "ABC123"\r
+  },\r
+  "context": {\r
+    "domain": "sales"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Delegator then invokes the Worker using the approved CWD communication mechanism.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       |\r
+       | A2A / approved agent communication\r
+       v\r
+Opportunity Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Step 10 — Worker Executes the Capability\r
+\r
+The Worker is responsible for the actual operation.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+       |\r
+       v\r
+MCP / Tool\r
+       |\r
+       v\r
+Salesforce\r
+       |\r
+       v\r
+Opportunity Data\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+       |\r
+       v\r
+MCP / Data Tool\r
+       |\r
+       v\r
+Snowflake\r
+       |\r
+       v\r
+Revenue Data\r
+\`\`\`\r
+\r
+The Delegator does **not** need to know the internal implementation of the Worker.\r
+\r
+It only needs to know:\r
+\r
+\`\`\`text\r
+Capability\r
+Input Contract\r
+Output Contract\r
+Worker Identity\r
+Execution Status\r
+\`\`\`\r
+\r
+This is an important abstraction boundary.\r
+\r
+---\r
+\r
+# 12. Step 11 — Monitor Worker Execution\r
+\r
+The Delegator tracks Worker execution using the CWD execution identifiers.\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task: Customer Briefing\r
+        |\r
+        +-- Step 1 → Customer Worker → COMPLETED\r
+        |\r
+        +-- Step 2 → Opportunity Worker → COMPLETED\r
+        |\r
+        +-- Step 3 → Revenue Worker → RUNNING\r
+        |\r
+        +-- Step 4 → Interaction Worker → COMPLETED\r
+\`\`\`\r
+\r
+This allows the Delegator to know exactly where the domain workflow stands.\r
+\r
+---\r
+\r
+# 13. Step 12 — Handle Worker Failure\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      |\r
+      v\r
+Timeout\r
+\`\`\`\r
+\r
+The Delegator evaluates the failure.\r
+\r
+\`\`\`text\r
+Failure\r
+   |\r
+   +-- Retry?\r
+   |\r
+   +-- Fallback Worker?\r
+   |\r
+   +-- Partial Result?\r
+   |\r
+   +-- Escalation?\r
+   |\r
+   +-- Controlled Failure?\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+     |\r
+   Timeout\r
+     |\r
+     v\r
+Retry\r
+     |\r
+   Failed\r
+     |\r
+     v\r
+Fallback Revenue Worker\r
+     |\r
+   Success\r
+\`\`\`\r
+\r
+The Delegator should use the Agent Registry and routing policies to determine whether a fallback Worker is valid.\r
+\r
+---\r
+\r
+# 14. Step 13 — Validate Worker Results\r
+\r
+The Delegator should not blindly trust Worker output.\r
+\r
+It validates:\r
+\r
+\`\`\`text\r
+Worker Result\r
+     |\r
+     +-- Status\r
+     +-- Schema\r
+     +-- Required Fields\r
+     +-- Authorization\r
+     +-- Data Policy\r
+     +-- Completeness\r
+     +-- Error Information\r
+     |\r
+     v\r
+Valid Result\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "worker": "revenue-worker",\r
+  "status": "completed",\r
+  "data": {\r
+    "annual_revenue": 12500000\r
+  },\r
+  "source": "approved-enterprise-source"\r
+}\r
+\`\`\`\r
+\r
+The Delegator can then use this result in domain-level aggregation.\r
+\r
+---\r
+\r
+# 15. Step 14 — Aggregate Domain Results\r
+\r
+After all required Workers finish:\r
+\r
+\`\`\`text\r
+Customer Worker       ──┐\r
+Opportunity Worker     ──┤\r
+Revenue Worker         ──┼──> Sales Delegator\r
+Interaction Worker     ──┤\r
+                         |\r
+                         v\r
+                 Domain Result\r
+\`\`\`\r
+\r
+The Delegator creates a structured domain result.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "domain": "sales",\r
+  "task_id": "TASK-1001",\r
+  "status": "completed",\r
+  "results": {\r
+    "customer_profile": {},\r
+    "opportunities": [],\r
+    "revenue": {},\r
+    "interactions": []\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The result is then returned to the Coordinator.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       |\r
+       | A2A\r
+       v\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. Complete Routing Flow\r
+\r
+The complete Delegator routing process is:\r
+\r
+\`\`\`text\r
+                Coordinator\r
+                     |\r
+                     | Structured Domain Task\r
+                     v\r
+              +-------------+\r
+              |  Delegator  |\r
+              +-------------+\r
+                     |\r
+                     v\r
+             Validate Domain\r
+                     |\r
+                     v\r
+          Understand Domain Task\r
+                     |\r
+                     v\r
+          Identify Capabilities\r
+                     |\r
+                     v\r
+            Decompose Task\r
+                     |\r
+                     v\r
+             Agent Registry\r
+                     |\r
+                     v\r
+           Discover Workers\r
+                     |\r
+                     v\r
+          Capability Matching\r
+                     |\r
+                     v\r
+        Authorization / Policies\r
+                     |\r
+                     v\r
+          Select Best Workers\r
+                     |\r
+                     v\r
+        Determine Dependencies\r
+                     |\r
+                     v\r
+        Sequential / Parallel\r
+                     |\r
+                     v\r
+            Invoke Workers\r
+                     |\r
+                     v\r
+        Monitor Execution\r
+                     |\r
+              +------+------+\r
+              |             |\r
+           Success        Failure\r
+              |             |\r
+              |       Retry/Fallback/\r
+              |       Partial/Escalate\r
+              |             |\r
+              +------+------+\r
+                     |\r
+                     v\r
+           Validate Results\r
+                     |\r
+                     v\r
+          Aggregate Domain Data\r
+                     |\r
+                     v\r
+                Coordinator\r
+\`\`\`\r
+\r
+# 17. Example: Customer Briefing\r
+\r
+Consider this request:\r
+\r
+> **"Create a customer briefing for ABC Corp with revenue, opportunities, and recent interactions."**\r
+\r
+The routing process becomes:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | Business Domain = Sales\r
+     v\r
+Sales Delegator\r
+     |\r
+     +-- Capability: Customer Profile\r
+     |       |\r
+     |       v\r
+     |   Customer Worker\r
+     |\r
+     +-- Capability: Revenue Analysis\r
+     |       |\r
+     |       v\r
+     |   Revenue Worker\r
+     |\r
+     +-- Capability: Opportunity Analysis\r
+     |       |\r
+     |       v\r
+     |   Opportunity Worker\r
+     |\r
+     +-- Capability: Interaction History\r
+             |\r
+             v\r
+         Interaction Worker\r
+\`\`\`\r
+\r
+The Delegator then coordinates:\r
+\r
+\`\`\`text\r
+Customer Worker       ──┐\r
+Revenue Worker          │\r
+Opportunity Worker      ├──> Sales Delegator\r
+Interaction Worker    ──┘\r
+                              |\r
+                              v\r
+                     Validate + Aggregate\r
+                              |\r
+                              v\r
+                         Coordinator\r
+\`\`\`\r
+\r
+The Coordinator can then combine the Sales domain result with other domain results if required and generate the final response.\r
+\r
+---\r
+\r
+# 18. Business Domain vs Technical Capability\r
+\r
+An important distinction in CWD is:\r
+\r
+\`\`\`text\r
+Business Domain\r
+      ↓\r
+Sales\r
+Finance\r
+HR\r
+Supply Chain\r
+Quality\r
+Customer Experience\r
+      ↓\r
+Technical / Business Capabilities\r
+      ↓\r
+Revenue Analysis\r
+Opportunity Analysis\r
+Customer Lookup\r
+Invoice Retrieval\r
+Employee Lookup\r
+Inventory Analysis\r
+\`\`\`\r
+\r
+The **Delegator primarily operates within the business domain**, while Workers expose the detailed capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      +-- Customer Worker\r
+      +-- Opportunity Worker\r
+      +-- Revenue Worker\r
+      +-- Pricing Worker\r
+      +-- Quote Worker\r
+\`\`\`\r
+\r
+This gives the domain a clean orchestration boundary.\r
+\r
+---\r
+\r
+# 19. How the LLM Participates\r
+\r
+The Delegator can use an LLM for domain reasoning.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User Task\r
+    |\r
+    v\r
+Delegator LLM\r
+    |\r
+    | Understand domain task\r
+    | Identify required capabilities\r
+    | Suggest decomposition\r
+    |\r
+    v\r
+Structured Domain Plan\r
+    |\r
+    v\r
+Delegator Policy Engine\r
+    |\r
+    | Validate\r
+    | Authorize\r
+    | Select\r
+    | Enforce\r
+    |\r
+    v\r
+Workers\r
+\`\`\`\r
+\r
+The critical principle is:\r
+\r
+> **The LLM recommends the domain execution strategy; the Delegator controls and enforces the actual execution.**\r
+\r
+The LLM should not directly decide:\r
+\r
+* Which unauthorized Worker can be called\r
+* Which restricted data can be retrieved\r
+* Whether a security policy can be bypassed\r
+* Whether an unregistered Worker can execute\r
+* Whether a restricted enterprise system can be accessed\r
+\r
+Those decisions belong to the controlled CWD execution layer.\r
+\r
+---\r
+\r
+# 20. Coordinator vs Delegator Routing\r
+\r
+The routing responsibility can be summarized as:\r
+\r
+| Decision                          | Coordinator | Delegator    |\r
+| --------------------------------- | ----------- | ------------ |\r
+| Understand overall request        | ✓           |              |\r
+| Identify enterprise intent        | ✓           |              |\r
+| Identify business domain          | ✓           | ✓ Validate   |\r
+| Select Delegator                  | ✓           |              |\r
+| Decompose domain task             |             | ✓            |\r
+| Identify required capabilities    |             | ✓            |\r
+| Discover Workers                  |             | ✓            |\r
+| Select Workers                    |             | ✓            |\r
+| Determine Worker dependencies     |             | ✓            |\r
+| Execute Workers                   |             | ✓ Coordinate |\r
+| Domain policy enforcement         |             | ✓            |\r
+| Worker failure recovery           |             | ✓            |\r
+| Aggregate domain results          |             | ✓            |\r
+| Enterprise-level result synthesis | ✓           |              |\r
+\r
+This creates a clean hierarchy:\r
+\r
+\`\`\`text\r
+                    Coordinator\r
+                         |\r
+                Enterprise Routing\r
+                         |\r
+                         v\r
+                    Delegator\r
+                         |\r
+                   Domain Routing\r
+                         |\r
+                         v\r
+                     Workers\r
+                         |\r
+                  Capability Execution\r
+                         |\r
+                         v\r
+               Enterprise Systems\r
+\`\`\`\r
+\r
+# 21. Why Capability-Based Routing Matters\r
+\r
+A hard-coded approach would look like:\r
+\r
+\`\`\`python\r
+if task == "revenue":\r
+    call_revenue_worker()\r
+elif task == "opportunity":\r
+    call_opportunity_worker()\r
+\`\`\`\r
+\r
+This becomes difficult to maintain as the number of Workers grows.\r
+\r
+A capability-based approach is:\r
+\r
+\`\`\`text\r
+Task\r
+  |\r
+  v\r
+Required Capability\r
+  |\r
+  v\r
+Agent Registry\r
+  |\r
+  v\r
+Available Workers\r
+  |\r
+  v\r
+Policy Evaluation\r
+  |\r
+  v\r
+Selected Worker\r
+\`\`\`\r
+\r
+This allows Workers to be:\r
+\r
+* Added\r
+* Removed\r
+* Replaced\r
+* Versioned\r
+* Scaled\r
+* Disabled\r
+* Moved to different runtime infrastructure\r
+\r
+without requiring major changes to the Delegator.\r
+\r
+---\r
+\r
+# 22. Final Architecture Principle\r
+\r
+The Delegator should **not be a simple forwarding component**.\r
+\r
+It is the **domain intelligence and control layer** responsible for translating a domain objective into governed Worker execution.\r
+\r
+The complete responsibility is:\r
+\r
+\`\`\`text\r
+Delegator\r
+    |\r
+    +-- Identify Domain\r
+    +-- Understand Domain Task\r
+    +-- Identify Capabilities\r
+    +-- Decompose Task\r
+    +-- Discover Workers\r
+    +-- Match Capabilities\r
+    +-- Apply Authorization\r
+    +-- Apply Domain Policies\r
+    +-- Select Workers\r
+    +-- Determine Dependencies\r
+    +-- Coordinate Execution\r
+    +-- Propagate Context\r
+    +-- Monitor Workers\r
+    +-- Handle Failures\r
+    +-- Validate Results\r
+    +-- Aggregate Results\r
+    +-- Return Domain Result\r
+\`\`\`\r
+\r
+## Final Definition\r
+\r
+> **A Delegator identifies the domain-specific meaning of a task, maps that task to required business or technical capabilities, discovers eligible Workers through the Agent Registry, applies authorization and routing policies, selects the appropriate Workers, coordinates their execution and dependencies, handles failures and recovery, validates and aggregates their results, and returns a governed domain-level result to the Coordinator.**\r
+\r
+In one line:\r
+\r
+\`\`\`text\r
+Delegator =\r
+Domain Understanding\r
++ Capability Mapping\r
++ Worker Discovery\r
++ Worker Selection\r
++ Policy Enforcement\r
++ Execution Coordination\r
++ Recovery\r
++ Result Aggregation\r
+\`\`\`\r
+\r
+**Architecturally:**\r
+\r
+\`\`\`text\r
+Coordinator = "Which business domain should handle this?"\r
+\r
+Delegator   = "What capabilities are needed and which Workers should perform them?"\r
+\r
+Worker      = "How do I execute this specific capability?"\r
+\`\`\`\r
+`,code:``},{id:`delegator-task-decomposition`,category:`Delegator Agents`,title:`Task Decomposition`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Delegators decompose complex domain-level tasks into smaller, well-defined, atomic Worker tasks while preserving dependencies, context, execution order, and required inputs and outputs.`,concept:`# How Delegators Decompose Complex Domain Tasks into Atomic Worker Tasks\r
+\r
+In the CWD architecture, the **Delegator is responsible for converting a complex domain-level objective into a structured execution plan made up of smaller, well-defined Worker tasks**.\r
+\r
+The Delegator does not simply split a request into arbitrary pieces. It must preserve:\r
+\r
+* **Task dependencies**\r
+* **Execution order**\r
+* **Business context**\r
+* **Required inputs**\r
+* **Expected outputs**\r
+* **Authorization context**\r
+* **Correlation and execution identifiers**\r
+* **Failure and retry behavior**\r
+\r
+The fundamental transformation is:\r
+\r
+\`\`\`text\r
+Complex Domain Task\r
+        |\r
+        v\r
+Domain Understanding\r
+        |\r
+        v\r
+Task Decomposition\r
+        |\r
+        v\r
+Dependency Analysis\r
+        |\r
+        v\r
+Input / Output Definition\r
+        |\r
+        v\r
+Execution Plan\r
+        |\r
+        v\r
+Atomic Worker Tasks\r
+\`\`\`\r
+\r
+---\r
+\r
+# 1. Start With the Domain-Level Objective\r
+\r
+The Delegator receives a high-level task from the Coordinator.\r
+\r
+For example:\r
+\r
+> "Create a complete customer briefing for ABC Corp including customer information, revenue, open opportunities, and recent interactions."\r
+\r
+The Delegator first understands the **business objective**, rather than immediately creating Worker calls.\r
+\r
+\`\`\`text\r
+Domain Objective\r
+       |\r
+       v\r
+Customer Briefing\r
+       |\r
+       +-- Customer Profile\r
+       +-- Revenue\r
+       +-- Opportunities\r
+       +-- Interactions\r
+       +-- Briefing Preparation\r
+\`\`\`\r
+\r
+The Delegator asks:\r
+\r
+* What information is required?\r
+* What actions are required?\r
+* What capabilities are required?\r
+* Which operations are independent?\r
+* Which operations depend on other operations?\r
+* What information must flow between tasks?\r
+* What final output is expected?\r
+\r
+---\r
+\r
+# 2. Identify the Required Domain Capabilities\r
+\r
+The Delegator maps the domain objective to capabilities.\r
+\r
+For the customer briefing:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       |\r
+       +-- customer_profile\r
+       +-- revenue_analysis\r
+       +-- opportunity_analysis\r
+       +-- interaction_history\r
+       +-- briefing_generation\r
+\`\`\`\r
+\r
+These capabilities become candidates for Worker tasks.\r
+\r
+Importantly, the Delegator identifies **capabilities first**, rather than immediately selecting specific Worker implementations.\r
+\r
+\`\`\`text\r
+Business Requirement\r
+        ↓\r
+Capability\r
+        ↓\r
+Worker Discovery\r
+        ↓\r
+Worker Selection\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. Convert Capabilities Into Atomic Tasks\r
+\r
+The Delegator then creates **atomic Worker tasks**.\r
+\r
+An atomic task should have one clear responsibility.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task 1:\r
+Retrieve customer profile\r
+\r
+Task 2:\r
+Retrieve open opportunities\r
+\r
+Task 3:\r
+Retrieve revenue information\r
+\r
+Task 4:\r
+Retrieve recent interactions\r
+\r
+Task 5:\r
+Generate customer briefing\r
+\`\`\`\r
+\r
+Each Worker should have a well-defined contract.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task\r
+ ├── task_id\r
+ ├── task_type\r
+ ├── capability\r
+ ├── input\r
+ ├── dependencies\r
+ ├── expected_output\r
+ ├── context\r
+ ├── policy\r
+ └── execution metadata\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Define Task Inputs\r
+\r
+Every Worker task must clearly specify what information it requires.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+\r
+Input:\r
+    customer_id\r
+\r
+Output:\r
+    customer_profile\r
+\`\`\`\r
+\r
+Another Worker:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+\r
+Input:\r
+    customer_id\r
+\r
+Output:\r
+    opportunities[]\r
+\`\`\`\r
+\r
+Another:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+\r
+Input:\r
+    customer_id\r
+    time_range\r
+\r
+Output:\r
+    revenue_summary\r
+\`\`\`\r
+\r
+The Delegator therefore knows exactly what must be supplied to each Worker.\r
+\r
+---\r
+\r
+# 5. Define Expected Outputs\r
+\r
+The Delegator also defines what each Worker should return.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+        |\r
+        v\r
+{\r
+    customer_id,\r
+    customer_name,\r
+    industry,\r
+    region,\r
+    status\r
+}\r
+\`\`\`\r
+\r
+Opportunity Worker:\r
+\r
+\`\`\`text\r
+{\r
+    opportunity_id,\r
+    stage,\r
+    amount,\r
+    expected_close_date\r
+}\r
+\`\`\`\r
+\r
+Revenue Worker:\r
+\r
+\`\`\`text\r
+{\r
+    period,\r
+    revenue,\r
+    currency\r
+}\r
+\`\`\`\r
+\r
+This creates a predictable Worker contract.\r
+\r
+The Delegator can then validate whether the Worker returned the expected information.\r
+\r
+---\r
+\r
+# 6. Identify Task Dependencies\r
+\r
+This is one of the most important responsibilities of the Delegator.\r
+\r
+Not every task can execute immediately.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Resolve Customer\r
+       |\r
+       +----------------+\r
+       |                |\r
+       v                v\r
+Retrieve Revenue   Retrieve Opportunities\r
+       |                |\r
+       +--------+-------+\r
+                |\r
+                v\r
+       Generate Briefing\r
+\`\`\`\r
+\r
+The Delegator represents these relationships as dependencies.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Task A\r
+  |\r
+  | produces customer information\r
+  v\r
+Task B\r
+\`\`\`\r
+\r
+If Task B requires the output of Task A, Task B cannot start until Task A completes successfully.\r
+\r
+---\r
+\r
+# 7. Build a Task Dependency Graph\r
+\r
+The Delegator can represent the workflow as a directed graph.\r
+\r
+For the customer briefing:\r
+\r
+\`\`\`text\r
+                 Resolve Customer\r
+                       |\r
+          +------------+------------+\r
+          |            |            |\r
+          v            v            v\r
+     Customer      Revenue      Opportunities\r
+      Profile      Analysis       Analysis\r
+          |            |            |\r
+          |            |            |\r
+          +------------+------------+\r
+                       |\r
+                       v\r
+                Recent Interactions\r
+                       |\r
+                       v\r
+                Generate Briefing\r
+\`\`\`\r
+\r
+Or, if the customer ID is already known:\r
+\r
+\`\`\`text\r
+Customer Profile ────────┐\r
+Revenue Analysis ────────┤\r
+Opportunity Analysis ────┼──> Generate Briefing\r
+Interaction History ─────┘\r
+\`\`\`\r
+\r
+This is a **dependency graph**, not just a list of Worker calls.\r
+\r
+---\r
+\r
+# 8. Determine Execution Order\r
+\r
+Once dependencies are identified, the Delegator determines execution order.\r
+\r
+There are three common patterns.\r
+\r
+## Sequential\r
+\r
+\`\`\`text\r
+Task A\r
+  ↓\r
+Task B\r
+  ↓\r
+Task C\r
+\`\`\`\r
+\r
+Used when:\r
+\r
+\`\`\`text\r
+B depends on A\r
+C depends on B\r
+\`\`\`\r
+\r
+---\r
+\r
+## Parallel\r
+\r
+\`\`\`text\r
+       +-- Task A\r
+       |\r
+Start--+-- Task B\r
+       |\r
+       +-- Task C\r
+\`\`\`\r
+\r
+Used when tasks are independent.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Profile\r
+Revenue\r
+Opportunities\r
+Interactions\r
+\`\`\`\r
+\r
+can potentially be retrieved simultaneously.\r
+\r
+---\r
+\r
+## Parallel Then Aggregate\r
+\r
+\`\`\`text\r
+             +-- Customer Worker\r
+             |\r
+             +-- Revenue Worker\r
+             |\r
+             +-- Opportunity Worker\r
+             |\r
+             +-- Interaction Worker\r
+             |\r
+             v\r
+          Delegator\r
+             |\r
+             v\r
+       Generate Briefing\r
+\`\`\`\r
+\r
+This is common for enterprise data aggregation workflows.\r
+\r
+---\r
+\r
+# 9. Preserve Business Context\r
+\r
+Breaking a task into smaller tasks must not lose the original business context.\r
+\r
+The Delegator propagates the relevant context to every Worker.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Original Request:\r
+\r
+"Create a customer briefing for ABC Corp\r
+for the Q2 business review."\r
+\`\`\`\r
+\r
+The Delegator may preserve:\r
+\r
+\`\`\`text\r
+customer_id = ABC123\r
+customer_name = ABC Corp\r
+period = Q2\r
+business_purpose = business_review\r
+domain = sales\r
+requested_output = customer_briefing\r
+\`\`\`\r
+\r
+Then each Worker receives only the context it needs.\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+    |\r
+    +-- customer_id\r
+    +-- period\r
+    +-- authorization context\r
+\r
+Opportunity Worker\r
+    |\r
+    +-- customer_id\r
+    +-- period\r
+    +-- authorization context\r
+\`\`\`\r
+\r
+This is preferable to sending the entire conversation to every Worker.\r
+\r
+---\r
+\r
+# 10. Preserve Execution Context\r
+\r
+CWD uses execution identifiers to maintain traceability.\r
+\r
+Typical identifiers include:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+The Delegator propagates them into Worker tasks.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   | task_id = T100\r
+   | run_id = R200\r
+   | correlation_id = C300\r
+   v\r
+Sales Delegator\r
+   |\r
+   +-- Worker Task 1\r
+   |     step_id = S001\r
+   |\r
+   +-- Worker Task 2\r
+   |     step_id = S002\r
+   |\r
+   +-- Worker Task 3\r
+         step_id = S003\r
+\`\`\`\r
+\r
+This allows the entire execution to be traced.\r
+\r
+---\r
+\r
+# 11. Preserve Required Inputs and Outputs\r
+\r
+The Delegator maintains the data flow between tasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task A\r
+Input:\r
+    customer_name\r
+\r
+Output:\r
+    customer_id\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Task B\r
+Input:\r
+    customer_id\r
+\`\`\`\r
+\r
+The Delegator knows that:\r
+\r
+\`\`\`text\r
+Task A.output.customer_id\r
+            |\r
+            v\r
+Task B.input.customer_id\r
+\`\`\`\r
+\r
+This creates an explicit **data dependency**.\r
+\r
+---\r
+\r
+# 12. Separate Business Dependencies From Technical Dependencies\r
+\r
+A dependency can exist because of business logic or because of technical execution requirements.\r
+\r
+### Business dependency\r
+\r
+\`\`\`text\r
+Customer Identification\r
+        ↓\r
+Retrieve Customer Data\r
+\`\`\`\r
+\r
+You cannot retrieve information until the customer has been identified.\r
+\r
+### Technical dependency\r
+\r
+\`\`\`text\r
+Authentication\r
+        ↓\r
+Enterprise API Call\r
+\`\`\`\r
+\r
+The Worker cannot access the API until the required authorization context/token is available.\r
+\r
+The Delegator needs to account for both types when constructing the execution plan.\r
+\r
+---\r
+\r
+# 13. Create a Structured Task Contract\r
+\r
+Each Worker task should be represented using a structured contract.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-001",\r
+  "step_id": "STEP-003",\r
+  "capability": "revenue_analysis",\r
+  "domain": "sales",\r
+  "description": "Retrieve customer revenue for Q2",\r
+  "dependencies": [\r
+    "STEP-001"\r
+  ],\r
+  "input": {\r
+    "customer_id": "\${STEP-001.customer_id}",\r
+    "period": "Q2"\r
+  },\r
+  "expected_output": {\r
+    "revenue_summary": "object"\r
+  },\r
+  "context": {\r
+    "session_id": "SESSION-001",\r
+    "run_id": "RUN-001",\r
+    "correlation_id": "CORR-001"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This is much safer than passing arbitrary text between agents.\r
+\r
+---\r
+\r
+# 14. Determine Which Tasks Are Ready\r
+\r
+The Delegator maintains task state.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+PENDING\r
+   ↓\r
+READY\r
+   ↓\r
+RUNNING\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+If a task has dependencies:\r
+\r
+\`\`\`text\r
+Task B\r
+Dependencies:\r
+    Task A\r
+\`\`\`\r
+\r
+then:\r
+\r
+\`\`\`text\r
+Task A = COMPLETED\r
+        |\r
+        v\r
+Task B = READY\r
+\`\`\`\r
+\r
+If Task A has not completed:\r
+\r
+\`\`\`text\r
+Task A = RUNNING\r
+        |\r
+        v\r
+Task B = BLOCKED\r
+\`\`\`\r
+\r
+This allows the Delegator to control execution dynamically.\r
+\r
+---\r
+\r
+# 15. Select Workers After Task Definition\r
+\r
+Once the atomic tasks are defined, the Delegator maps each task to a Worker.\r
+\r
+\`\`\`text\r
+Task\r
+  |\r
+  v\r
+Required Capability\r
+  |\r
+  v\r
+Agent Registry\r
+  |\r
+  v\r
+Candidate Workers\r
+  |\r
+  v\r
+Policy + Health + Authorization\r
+  |\r
+  v\r
+Selected Worker\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Task:\r
+revenue_analysis\r
+\r
+        ↓\r
+\r
+Agent Registry\r
+\r
+        ↓\r
+\r
+Revenue Worker A\r
+Revenue Worker B\r
+\r
+        ↓\r
+\r
+Capability + Policy + Health\r
+\r
+        ↓\r
+\r
+Revenue Worker A\r
+\`\`\`\r
+\r
+This keeps task decomposition separate from Worker implementation.\r
+\r
+---\r
+\r
+# 16. Execute the Task Graph\r
+\r
+The Delegator then controls the actual workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                Start\r
+                  |\r
+                  v\r
+          Resolve Customer\r
+                  |\r
+          +-------+-------+\r
+          |       |       |\r
+          v       v       v\r
+       Profile Revenue Opportunities\r
+          |       |       |\r
+          +-------+-------+\r
+                  |\r
+                  v\r
+            Interactions\r
+                  |\r
+                  v\r
+          Generate Briefing\r
+                  |\r
+                  v\r
+                Done\r
+\`\`\`\r
+\r
+The Delegator determines which tasks can execute at each point.\r
+\r
+---\r
+\r
+# 17. Handle Intermediate Results\r
+\r
+Worker output may become input to downstream tasks.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      |\r
+      v\r
+customer_id\r
+      |\r
+      +------------+\r
+      |            |\r
+      v            v\r
+Revenue Worker   Opportunity Worker\r
+\`\`\`\r
+\r
+The Delegator stores the intermediate result in the appropriate execution state.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+state["results"]["customer_profile"] = customer_result\r
+state["results"]["revenue"] = revenue_result\r
+\`\`\`\r
+\r
+Downstream tasks can then consume the required result.\r
+\r
+---\r
+\r
+# 18. Handle Partial Completion\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Worker       → SUCCESS\r
+Revenue Worker        → SUCCESS\r
+Opportunity Worker    → TIMEOUT\r
+Interaction Worker    → SUCCESS\r
+\`\`\`\r
+\r
+The Delegator does not necessarily fail the entire workflow immediately.\r
+\r
+It evaluates whether the failed task is:\r
+\r
+\`\`\`text\r
+Critical\r
+    or\r
+Optional\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required:\r
+Customer Profile ✓\r
+Revenue ✓\r
+\r
+Optional:\r
+Recent Interactions ✗\r
+\`\`\`\r
+\r
+The Delegator may continue with a partial result if policy permits.\r
+\r
+\`\`\`text\r
+Partial Execution\r
+       |\r
+       v\r
+Validate Completeness\r
+       |\r
+       +-- Sufficient → Continue\r
+       |\r
+       +-- Insufficient → Recovery / Escalation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Handle Task-Level Recovery\r
+\r
+Each atomic Worker task can have its own recovery strategy.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+      |\r
+      v\r
+Timeout\r
+      |\r
+      v\r
+Retry\r
+      |\r
+   Failed\r
+      |\r
+      v\r
+Fallback Worker\r
+      |\r
+   Success\r
+\`\`\`\r
+\r
+The Delegator maintains the rest of the workflow state while recovery occurs.\r
+\r
+This is one reason task decomposition is important: **failure can be isolated to a specific task instead of restarting the entire domain workflow.**\r
+\r
+---\r
+\r
+# 20. Delegator + LangGraph\r
+\r
+In the CWD implementation, LangGraph can represent the Delegator's execution state and transitions.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+START\r
+  |\r
+  v\r
+Validate Domain Task\r
+  |\r
+  v\r
+Decompose Task\r
+  |\r
+  v\r
+Build Dependency Graph\r
+  |\r
+  v\r
+Discover Workers\r
+  |\r
+  v\r
+Select Workers\r
+  |\r
+  v\r
+Execute Ready Tasks\r
+  |\r
+  +--------+\r
+  |        |\r
+  v        v\r
+Success  Failure\r
+  |        |\r
+  |     Recovery\r
+  |        |\r
+  +----+---+\r
+       |\r
+       v\r
+Check Dependencies\r
+       |\r
+       v\r
+More Tasks?\r
+   |       |\r
+  Yes      No\r
+   |       |\r
+   +-------+\r
+           |\r
+           v\r
+     Aggregate Results\r
+           |\r
+           v\r
+          END\r
+\`\`\`\r
+\r
+The important separation is:\r
+\r
+\`\`\`text\r
+Delegator\r
+    = Domain orchestration decisions\r
+\r
+LangGraph\r
+    = Workflow state and transition management\r
+\r
+LLM\r
+    = Reasoning / decomposition assistance\r
+\r
+Agent Registry\r
+    = Worker discovery\r
+\r
+A2A\r
+    = Agent-to-agent communication\r
+\r
+MCP / Tools\r
+    = Worker-to-enterprise-system interaction\r
+\`\`\`\r
+\r
+---\r
+\r
+# 21. Example End-to-End Decomposition\r
+\r
+Consider:\r
+\r
+> **"Prepare a customer briefing for ABC Corp using revenue, opportunities, customer profile, and recent interactions."**\r
+\r
+### Step 1 — Domain Objective\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+\`\`\`\r
+\r
+### Step 2 — Required Capabilities\r
+\r
+\`\`\`text\r
+customer_profile\r
+revenue_analysis\r
+opportunity_analysis\r
+interaction_history\r
+briefing_generation\r
+\`\`\`\r
+\r
+### Step 3 — Atomic Tasks\r
+\r
+\`\`\`text\r
+T1 = Retrieve Customer Profile\r
+T2 = Retrieve Revenue\r
+T3 = Retrieve Opportunities\r
+T4 = Retrieve Interactions\r
+T5 = Generate Briefing\r
+\`\`\`\r
+\r
+### Step 4 — Dependencies\r
+\r
+\`\`\`text\r
+T1 ────────────────┐\r
+T2 ────────────────┤\r
+T3 ────────────────┼──> T5\r
+T4 ────────────────┘\r
+\`\`\`\r
+\r
+### Step 5 — Worker Mapping\r
+\r
+\`\`\`text\r
+T1 → Customer Profile Worker\r
+T2 → Revenue Worker\r
+T3 → Opportunity Worker\r
+T4 → Interaction Worker\r
+T5 → Briefing Worker\r
+\`\`\`\r
+\r
+### Step 6 — Execution\r
+\r
+\`\`\`text\r
+                 Sales Delegator\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+ Customer Worker   Revenue Worker   Opportunity Worker\r
+        |              |              |\r
+        +--------------+--------------+\r
+                       |\r
+                       v\r
+              Interaction Worker\r
+                       |\r
+                       v\r
+                Briefing Worker\r
+\`\`\`\r
+\r
+### Step 7 — Result\r
+\r
+\`\`\`text\r
+Workers\r
+   |\r
+   v\r
+Delegator\r
+   |\r
+   +-- Validate\r
+   +-- Normalize\r
+   +-- Aggregate\r
+   |\r
+   v\r
+Domain Result\r
+   |\r
+   v\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 22. What the Delegator Should NOT Do\r
+\r
+The Delegator should not become another monolithic component.\r
+\r
+It should **not**:\r
+\r
+* Directly query every enterprise database\r
+* Contain implementation logic for every Worker\r
+* Bypass authorization\r
+* Send unrestricted context to Workers\r
+* Hard-code every Worker endpoint\r
+* Allow the LLM to directly execute tools\r
+* Replace the Agent Registry\r
+* Replace A2A\r
+* Replace MCP\r
+* Reimplement Worker business logic\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Delegator\r
+     |\r
+     | Decides\r
+     v\r
+Worker\r
+     |\r
+     | Executes\r
+     v\r
+Enterprise Capability\r
+\`\`\`\r
+\r
+---\r
+\r
+# 23. Responsibility Flow\r
+\r
+The complete decomposition responsibility can be summarized as:\r
+\r
+\`\`\`text\r
+Complex Domain Objective\r
+          |\r
+          v\r
+   Understand Objective\r
+          |\r
+          v\r
+ Identify Required Capabilities\r
+          |\r
+          v\r
+      Decompose\r
+          |\r
+          v\r
+ Create Atomic Worker Tasks\r
+          |\r
+          v\r
+ Identify Dependencies\r
+          |\r
+          v\r
+ Define Inputs / Outputs\r
+          |\r
+          v\r
+ Preserve Context\r
+          |\r
+          v\r
+ Build Execution Graph\r
+          |\r
+          v\r
+ Discover Workers\r
+          |\r
+          v\r
+ Select Workers\r
+          |\r
+          v\r
+ Apply Policies\r
+          |\r
+          v\r
+ Execute Ready Tasks\r
+          |\r
+          v\r
+ Track State\r
+          |\r
+          v\r
+ Handle Failures\r
+          |\r
+          v\r
+ Validate Results\r
+          |\r
+          v\r
+ Aggregate Domain Result\r
+          |\r
+          v\r
+       Coordinator\r
+\`\`\`\r
+\r
+# 24. Coordinator vs Delegator During Decomposition\r
+\r
+The responsibility boundary is important.\r
+\r
+| Activity                      | Coordinator | Delegator |\r
+| ----------------------------- | ----------- | --------- |\r
+| Understand enterprise request | ✓           |           |\r
+| Identify business domain      | ✓           | Validate  |\r
+| Select Delegator              | ✓           |           |\r
+| Understand domain objective   |             | ✓         |\r
+| Identify domain capabilities  |             | ✓         |\r
+| Decompose domain task         |             | ✓         |\r
+| Create atomic Worker tasks    |             | ✓         |\r
+| Identify dependencies         |             | ✓         |\r
+| Define Worker inputs/outputs  |             | ✓         |\r
+| Discover Workers              |             | ✓         |\r
+| Select Workers                |             | ✓         |\r
+| Coordinate Worker execution   |             | ✓         |\r
+| Handle Worker failures        |             | ✓         |\r
+| Aggregate domain results      |             | ✓         |\r
+| Enterprise-level synthesis    | ✓           |           |\r
+\r
+The hierarchy is therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | "Here is the Sales objective."\r
+    v\r
+Sales Delegator\r
+    |\r
+    | "I will turn this objective into executable tasks."\r
+    v\r
+Worker Tasks\r
+    |\r
+    | "I will execute these specific capabilities."\r
+    v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+# Final Definition\r
+\r
+> **The Delegator decomposes a complex domain-level objective into a structured dependency-aware execution plan containing atomic Worker tasks. Each task has a clear capability, input contract, expected output, execution context, dependency relationship, and execution state. The Delegator then discovers and selects appropriate Workers, determines execution order and parallelism, propagates the required context, coordinates execution, handles failures and recovery, and aggregates the resulting outputs into a domain-level result.**\r
+\r
+The key transformation is:\r
+\r
+\`\`\`text\r
+Domain Objective\r
+       ↓\r
+Capabilities\r
+       ↓\r
+Atomic Tasks\r
+       ↓\r
+Dependencies\r
+       ↓\r
+Inputs / Outputs\r
+       ↓\r
+Worker Mapping\r
+       ↓\r
+Execution Graph\r
+       ↓\r
+Controlled Execution\r
+       ↓\r
+Domain Result\r
+\`\`\`\r
+\r
+### The simplest way to remember it\r
+\r
+\`\`\`text\r
+Coordinator:\r
+"What business objective needs to be fulfilled?"\r
+\r
+Delegator:\r
+"How do I break that domain objective into executable tasks?"\r
+\r
+Worker:\r
+"How do I perform this specific task?"\r
+\`\`\`\r
+\r
+**Therefore, the Delegator is the component that transforms a domain objective into a governed, dependency-aware, executable Worker workflow while preserving the context and contracts required for reliable downstream execution.**\r
+`,code:``},{id:`worker-selection`,category:`Delegator Agents`,title:`Worker Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator selects the most appropriate Worker based on capabilities, domain ownership, tool access, availability, health, permissions, workload, and task requirements.`,concept:`# How a Delegator Selects the Most Appropriate Worker\r
+\r
+In the CWD architecture, **Worker selection is a governed capability-matching process**, not simply a lookup by Worker name.\r
+\r
+The Delegator receives a domain task, identifies the required capability, discovers eligible Workers, evaluates their capabilities and runtime conditions, and selects the Worker that can perform the task **correctly, securely, and efficiently**.\r
+\r
+The overall decision is:\r
+\r
+\`\`\`text\r
+Domain Task\r
+     |\r
+     v\r
+Required Capabilities\r
+     |\r
+     v\r
+Worker Discovery\r
+     |\r
+     v\r
+Eligibility Filtering\r
+     |\r
+     +-- Domain Ownership\r
+     +-- Capability\r
+     +-- Tool Access\r
+     +-- Permissions\r
+     +-- Task Requirements\r
+     |\r
+     v\r
+Runtime Evaluation\r
+     |\r
+     +-- Availability\r
+     +-- Health\r
+     +-- Workload\r
+     |\r
+     v\r
+Policy / Routing Decision\r
+     |\r
+     v\r
+Best Eligible Worker\r
+     |\r
+     v\r
+Worker Execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 1. Start With the Task Requirements\r
+\r
+The Delegator first understands exactly what the task requires.\r
+\r
+For example:\r
+\r
+> "Retrieve ABC Corp's open opportunities from Salesforce."\r
+\r
+The task requirements may become:\r
+\r
+\`\`\`text\r
+Domain:\r
+Sales\r
+\r
+Capability:\r
+opportunity_retrieval\r
+\r
+System:\r
+Salesforce\r
+\r
+Operation:\r
+read\r
+\r
+Input:\r
+customer_id\r
+\r
+Required Output:\r
+opportunity_list\r
+\`\`\`\r
+\r
+The Delegator should establish these requirements **before selecting a Worker**.\r
+\r
+---\r
+\r
+# 2. Identify the Required Capability\r
+\r
+The Delegator maps the task to one or more capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+Retrieve customer opportunities\r
+\r
+        ↓\r
+\r
+Required Capability:\r
+opportunity_retrieval\r
+\`\`\`\r
+\r
+Another task might require:\r
+\r
+\`\`\`text\r
+Task:\r
+Calculate customer revenue\r
+\r
+        ↓\r
+\r
+Required Capability:\r
+revenue_analysis\r
+\`\`\`\r
+\r
+The Worker is selected based on its **declared capability**, rather than its name.\r
+\r
+---\r
+\r
+# 3. Check Domain Ownership\r
+\r
+The Delegator first establishes whether a Worker belongs to the appropriate domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      +-- Sales Opportunity Worker       ✓\r
+      +-- Sales Revenue Worker           ✓\r
+      +-- Finance Revenue Worker         ?\r
+      +-- HR Employee Worker             ✗\r
+\`\`\`\r
+\r
+A Worker may technically have a capability that looks relevant, but the Delegator should respect **domain ownership**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Capability:\r
+revenue_analysis\r
+\r
+Possible Workers:\r
+    Sales Revenue Worker\r
+    Finance Revenue Worker\r
+\`\`\`\r
+\r
+The appropriate Worker depends on the business context.\r
+\r
+\`\`\`text\r
+Sales customer revenue\r
+        ↓\r
+Sales Revenue Worker\r
+\r
+Corporate financial reporting\r
+        ↓\r
+Finance Revenue Worker\r
+\`\`\`\r
+\r
+Domain ownership prevents accidental cross-domain routing.\r
+\r
+---\r
+\r
+# 4. Discover Workers Through the Agent Registry\r
+\r
+The Delegator should use the **Agent Registry** as the authoritative source for available Worker metadata.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+                 Agent Registry\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+Worker A           Worker B        Worker C\r
+Sales              Sales           Finance\r
+\`\`\`\r
+\r
+Worker metadata can include:\r
+\r
+\`\`\`json id="6z6j80"\r
+{\r
+  "agent_id": "sales-opportunity-worker",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "opportunity_retrieval",\r
+    "pipeline_analysis"\r
+  ],\r
+  "tools": [\r
+    "salesforce_opportunity_api"\r
+  ],\r
+  "status": "healthy",\r
+  "version": "2.1"\r
+}\r
+\`\`\`\r
+\r
+The Delegator uses this information to create the candidate Worker set.\r
+\r
+---\r
+\r
+# 5. Filter by Capability\r
+\r
+The first major filtering stage is capability matching.\r
+\r
+\`\`\`text\r
+Required:\r
+opportunity_retrieval\r
+\r
+Candidate Workers:\r
+\r
+Worker A\r
+  capability = opportunity_retrieval ✓\r
+\r
+Worker B\r
+  capability = revenue_analysis ✗\r
+\r
+Worker C\r
+  capability = customer_profile ✗\r
+\`\`\`\r
+\r
+Only Workers that actually advertise the required capability should remain candidates.\r
+\r
+\`\`\`text\r
+Task\r
+  |\r
+  v\r
+Required Capability\r
+  |\r
+  v\r
+Agent Registry\r
+  |\r
+  v\r
+Capability-Matched Workers\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Check Tool Access\r
+\r
+Capability matching is still not enough.\r
+\r
+The Worker must have access to the tools or enterprise systems required to perform the capability.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+Retrieve Salesforce Opportunities\r
+\r
+Required:\r
+Salesforce Opportunity API\r
+\`\`\`\r
+\r
+Candidate evaluation:\r
+\r
+\`\`\`text\r
+Worker A\r
+    |\r
+    +-- opportunity_retrieval ✓\r
+    +-- Salesforce access ✓\r
+    +-- Required API permission ✓\r
+    |\r
+    v\r
+Eligible\r
+\`\`\`\r
+\r
+Another Worker:\r
+\r
+\`\`\`text\r
+Worker B\r
+    |\r
+    +-- opportunity_retrieval ✓\r
+    +-- Salesforce access ✗\r
+    |\r
+    v\r
+Not eligible\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **A Worker should only be selected if it has both the required capability and the required execution tools/access.**\r
+\r
+---\r
+\r
+# 7. Check Permissions\r
+\r
+The Delegator also verifies that execution is authorized.\r
+\r
+The decision can involve:\r
+\r
+\`\`\`text\r
+User Identity\r
+      |\r
+      v\r
+User Entitlements\r
+      |\r
+      v\r
+Domain Policy\r
+      |\r
+      v\r
+Worker Permissions\r
+      |\r
+      v\r
+Tool Permissions\r
+      |\r
+      v\r
+Data Access Policy\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User\r
+ |\r
+ +-- Sales role ✓\r
+ +-- Customer ABC access ✓\r
+ +-- Salesforce opportunity access ✓\r
+ |\r
+ v\r
+Worker can execute\r
+\`\`\`\r
+\r
+If authorization fails:\r
+\r
+\`\`\`text\r
+Authorization = DENY\r
+        |\r
+        v\r
+Worker is NOT selected\r
+\`\`\`\r
+\r
+The Delegator should never select a Worker simply because it technically supports the capability.\r
+\r
+---\r
+\r
+# 8. Check Task-Specific Requirements\r
+\r
+Different Workers may provide similar capabilities but support different requirements.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Capability:\r
+customer_revenue\r
+\r
+Task Requirements:\r
+    Region = North America\r
+    Period = Q2\r
+    Currency = USD\r
+    Source = Snowflake\r
+\`\`\`\r
+\r
+Candidate Workers:\r
+\r
+\`\`\`text\r
+Worker A\r
+  ✓ Revenue\r
+  ✓ North America\r
+  ✓ Q2\r
+  ✓ USD\r
+  ✓ Snowflake\r
+\r
+Worker B\r
+  ✓ Revenue\r
+  ✗ North America\r
+  ✓ Q2\r
+  ✓ USD\r
+  ✓ Snowflake\r
+\`\`\`\r
+\r
+Worker A is the better match.\r
+\r
+The Delegator therefore evaluates **task-to-capability compatibility**, not merely capability existence.\r
+\r
+---\r
+\r
+# 9. Check Worker Availability\r
+\r
+A Worker may have the correct capability but currently be unavailable.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Worker A\r
+Capability = correct\r
+Health = healthy\r
+Availability = unavailable\r
+\r
+Worker B\r
+Capability = correct\r
+Health = healthy\r
+Availability = available\r
+\`\`\`\r
+\r
+The Delegator should select Worker B.\r
+\r
+Availability can reflect:\r
+\r
+* Worker enabled/disabled state\r
+* Maintenance\r
+* Deployment status\r
+* Capacity limits\r
+* Routing configuration\r
+* Service availability\r
+\r
+---\r
+\r
+# 10. Check Worker Health\r
+\r
+The Delegator should consider runtime health.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Worker A → Healthy\r
+Worker B → Degraded\r
+Worker C → Unhealthy\r
+\`\`\`\r
+\r
+Even if all three support the capability:\r
+\r
+\`\`\`text\r
+Worker A → Eligible\r
+Worker B → Potentially eligible\r
+Worker C → Exclude\r
+\`\`\`\r
+\r
+Health information can come from:\r
+\r
+* Agent Registry\r
+* Health endpoints\r
+* Runtime telemetry\r
+* Service health information\r
+* Recent execution history\r
+\r
+This prevents routing new work to unhealthy Workers.\r
+\r
+---\r
+\r
+# 11. Check Current Workload\r
+\r
+Suppose two Workers are equally capable:\r
+\r
+\`\`\`text\r
+Worker A\r
+    Active tasks = 2\r
+\r
+Worker B\r
+    Active tasks = 25\r
+\`\`\`\r
+\r
+The Delegator can prefer Worker A if routing policy permits.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Capability Match\r
+       +\r
+Health\r
+       +\r
+Availability\r
+       +\r
+Current Workload\r
+       |\r
+       v\r
+Worker Selection\r
+\`\`\`\r
+\r
+This helps prevent a single Worker instance from becoming a bottleneck.\r
+\r
+---\r
+\r
+# 12. Check Worker Version\r
+\r
+Worker versions can also influence routing.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Opportunity Worker v1\r
+Opportunity Worker v2\r
+\`\`\`\r
+\r
+If the routing policy requires v2:\r
+\r
+\`\`\`text\r
+Required Version = >= 2.0\r
+\r
+v1 → Exclude\r
+v2 → Eligible\r
+\`\`\`\r
+\r
+This supports controlled rollout and version management.\r
+\r
+It also enables scenarios such as:\r
+\r
+\`\`\`text\r
+Production\r
+    |\r
+    +-- Worker v1\r
+    +-- Worker v2\r
+\r
+Routing Policy\r
+    |\r
+    v\r
+90% → v1\r
+10% → v2\r
+\`\`\`\r
+\r
+where such controlled routing is explicitly configured.\r
+\r
+---\r
+\r
+# 13. Build the Eligible Worker Set\r
+\r
+After filtering, the Delegator has a set of eligible Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required Capability:\r
+opportunity_retrieval\r
+\r
+                Agent Registry\r
+                      |\r
+       +--------------+--------------+\r
+       |              |              |\r
+       v              v              v\r
+ Worker A          Worker B        Worker C\r
+ Sales             Sales           Finance\r
+ ✓ Capability      ✓ Capability    ✓ Capability\r
+ ✓ Salesforce      ✗ Salesforce    ✓ Salesforce\r
+ ✓ Healthy         ✓ Healthy       ✓ Healthy\r
+ ✓ Available       ✓ Available     ✓ Available\r
+       |              |              |\r
+       +--------------+              |\r
+              |                      |\r
+              v                      |\r
+        Eligible Workers             |\r
+              |                      |\r
+              +----------------------+\r
+                       |\r
+                       v\r
+                Selection Policy\r
+\`\`\`\r
+\r
+Only eligible Workers participate in the final selection.\r
+\r
+---\r
+\r
+# 14. Rank Eligible Workers\r
+\r
+If multiple Workers are eligible, the Delegator can apply a routing policy or scoring mechanism.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Worker Score =\r
+    Capability Match\r
+  + Domain Match\r
+  + Tool Compatibility\r
+  + Permission Compatibility\r
+  + Health\r
+  + Availability\r
+  + Workload\r
+  + Task Compatibility\r
+  + Routing Priority\r
+\`\`\`\r
+\r
+For example:\r
+\r
+| Factor       | Worker A | Worker B | Worker C |\r
+| ------------ | -------: | -------: | -------: |\r
+| Capability   |        ✓ |        ✓ |        ✓ |\r
+| Domain       |        ✓ |        ✓ |        ✗ |\r
+| Tool Access  |        ✓ |        ✓ |        ✓ |\r
+| Permission   |        ✓ |        ✓ |        ✓ |\r
+| Health       |     High |     High |   Medium |\r
+| Availability |        ✓ |        ✓ |        ✓ |\r
+| Workload     |      Low |     High |      Low |\r
+| Task Fit     |     High |   Medium |      Low |\r
+| Result       | **Best** | Eligible |   Reject |\r
+\r
+The exact scoring mechanism should be defined by CWD routing policy rather than being arbitrarily generated by the LLM.\r
+\r
+---\r
+\r
+# 15. Capability Matching vs Worker Selection\r
+\r
+These are two different decisions.\r
+\r
+### Capability Matching\r
+\r
+Answers:\r
+\r
+> **"Which Workers can perform this operation?"**\r
+\r
+\`\`\`text\r
+Task\r
+ ↓\r
+Capability\r
+ ↓\r
+Candidate Workers\r
+\`\`\`\r
+\r
+### Worker Selection\r
+\r
+Answers:\r
+\r
+> **"Which eligible Worker should perform it now?"**\r
+\r
+\`\`\`text\r
+Candidate Workers\r
+       |\r
+       +-- Permissions\r
+       +-- Tool access\r
+       +-- Health\r
+       +-- Availability\r
+       +-- Workload\r
+       +-- Task fit\r
+       +-- Routing policy\r
+       |\r
+       v\r
+Selected Worker\r
+\`\`\`\r
+\r
+This separation is important for scalable CWD routing.\r
+\r
+---\r
+\r
+# 16. Example: Customer Briefing\r
+\r
+Suppose the Sales Delegator receives:\r
+\r
+> "Create a customer briefing for ABC Corp."\r
+\r
+It determines:\r
+\r
+\`\`\`text\r
+Required Capabilities:\r
+\r
+customer_profile\r
+revenue_analysis\r
+opportunity_analysis\r
+interaction_history\r
+\`\`\`\r
+\r
+Worker discovery:\r
+\r
+\`\`\`text\r
+Customer Profile\r
+       ↓\r
+Customer Profile Worker\r
+\r
+Revenue Analysis\r
+       ↓\r
+Revenue Worker\r
+\r
+Opportunity Analysis\r
+       ↓\r
+Opportunity Worker\r
+\r
+Interaction History\r
+       ↓\r
+Interaction Worker\r
+\`\`\`\r
+\r
+But the Delegator still evaluates each Worker.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Revenue Worker A\r
+    Capability       ✓\r
+    Domain           ✓\r
+    Snowflake access ✓\r
+    Permission       ✓\r
+    Health           ✓\r
+    Availability     ✓\r
+    Workload         Low\r
+\r
+Revenue Worker B\r
+    Capability       ✓\r
+    Domain           ✓\r
+    Snowflake access ✓\r
+    Permission       ✓\r
+    Health           ✓\r
+    Availability     ✓\r
+    Workload         High\r
+\`\`\`\r
+\r
+The Delegator selects:\r
+\r
+\`\`\`text\r
+Revenue Worker A\r
+\`\`\`\r
+\r
+because it is an equally capable but less-loaded eligible Worker.\r
+\r
+---\r
+\r
+# 17. Multi-Worker Selection\r
+\r
+A single domain task can require multiple Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       |\r
+       +-- Customer Profile Worker\r
+       |\r
+       +-- Opportunity Worker\r
+       |\r
+       +-- Revenue Worker\r
+       |\r
+       +-- Interaction Worker\r
+\`\`\`\r
+\r
+The Delegator performs Worker selection **independently for each atomic task**.\r
+\r
+\`\`\`text\r
+Task 1 → Best Customer Worker\r
+Task 2 → Best Opportunity Worker\r
+Task 3 → Best Revenue Worker\r
+Task 4 → Best Interaction Worker\r
+\`\`\`\r
+\r
+This creates the final domain execution plan.\r
+\r
+---\r
+\r
+# 18. Worker Selection Is Dynamic\r
+\r
+Worker selection should not necessarily be permanently fixed.\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+10:00 AM\r
+Revenue Worker A → Healthy\r
+Revenue Worker B → Healthy\r
+\r
+Selected:\r
+Worker A\r
+\`\`\`\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+2:00 PM\r
+Revenue Worker A → High workload\r
+Revenue Worker B → Low workload\r
+\`\`\`\r
+\r
+The Delegator can select:\r
+\r
+\`\`\`text\r
+Worker B\r
+\`\`\`\r
+\r
+provided that policy and capability requirements remain satisfied.\r
+\r
+This allows the CWD platform to adapt to runtime conditions.\r
+\r
+---\r
+\r
+# 19. Worker Selection and Failure Handling\r
+\r
+Worker selection also supports fallback.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Primary Worker\r
+    |\r
+    v\r
+Unavailable\r
+\`\`\`\r
+\r
+The Delegator can query eligible alternatives:\r
+\r
+\`\`\`text\r
+Agent Registry\r
+      |\r
+      +-- Primary Worker\r
+      +-- Secondary Worker\r
+      +-- Fallback Worker\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Primary\r
+   |\r
+Failure\r
+   |\r
+   v\r
+Re-evaluate Eligible Workers\r
+   |\r
+   v\r
+Secondary Worker\r
+\`\`\`\r
+\r
+The Delegator should not blindly switch to any Worker.\r
+\r
+The fallback Worker must still satisfy:\r
+\r
+\`\`\`text\r
+Capability\r
+Domain\r
+Permission\r
+Tool Access\r
+Policy\r
+Health\r
+Availability\r
+Task Requirements\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Role of the LLM in Worker Selection\r
+\r
+The Delegator's LLM can help interpret the task and recommend capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User Request\r
+      |\r
+      v\r
+Delegator LLM\r
+      |\r
+      v\r
+Required Capability:\r
+opportunity_analysis\r
+\`\`\`\r
+\r
+But the LLM should not independently choose an arbitrary Worker endpoint.\r
+\r
+The controlled process is:\r
+\r
+\`\`\`text\r
+LLM\r
+  |\r
+  | Recommend capability\r
+  v\r
+Delegator\r
+  |\r
+  | Query Registry\r
+  v\r
+Candidate Workers\r
+  |\r
+  | Policy / Authorization / Health\r
+  v\r
+Selected Worker\r
+\`\`\`\r
+\r
+The principle is:\r
+\r
+> **LLM proposes; Delegator validates and controls.**\r
+\r
+---\r
+\r
+# 21. Worker Selection Decision Flow\r
+\r
+The complete decision process is:\r
+\r
+\`\`\`text\r
+                Domain Task\r
+                     |\r
+                     v\r
+          Identify Task Requirements\r
+                     |\r
+                     v\r
+           Identify Capabilities\r
+                     |\r
+                     v\r
+              Agent Registry\r
+                     |\r
+                     v\r
+             Candidate Workers\r
+                     |\r
+                     v\r
+              Domain Ownership\r
+                     |\r
+                  Match?\r
+                /       \\\r
+              No         Yes\r
+              |           |\r
+           Reject         v\r
+                    Capability Match\r
+                           |\r
+                           v\r
+                     Tool Access\r
+                           |\r
+                           v\r
+                     Permissions\r
+                           |\r
+                           v\r
+                    Task Compatibility\r
+                           |\r
+                           v\r
+                       Health\r
+                           |\r
+                           v\r
+                    Availability\r
+                           |\r
+                           v\r
+                       Workload\r
+                           |\r
+                           v\r
+                   Routing Policy\r
+                           |\r
+                           v\r
+                    Best Worker\r
+                           |\r
+                           v\r
+                       Execute\r
+\`\`\`\r
+\r
+---\r
+\r
+# 22. Example Worker Selection Algorithm\r
+\r
+Conceptually, the Delegator can implement the decision as:\r
+\r
+\`\`\`python id="g8o3hd"\r
+def select_worker(task, workers, user_context):\r
+\r
+    candidates = []\r
+\r
+    for worker in workers:\r
+\r
+        # 1. Domain ownership\r
+        if worker.domain != task.domain:\r
+            continue\r
+\r
+        # 2. Capability\r
+        if task.capability not in worker.capabilities:\r
+            continue\r
+\r
+        # 3. Required tools\r
+        if not task.required_tools.issubset(worker.tools):\r
+            continue\r
+\r
+        # 4. Authorization\r
+        if not worker.is_authorized(user_context, task):\r
+            continue\r
+\r
+        # 5. Availability\r
+        if not worker.available:\r
+            continue\r
+\r
+        # 6. Health\r
+        if worker.health not in ["healthy", "degraded"]:\r
+            continue\r
+\r
+        # 7. Task requirements\r
+        if not worker.supports(task.requirements):\r
+            continue\r
+\r
+        candidates.append(worker)\r
+\r
+    if not candidates:\r
+        raise RuntimeError(\r
+            "No eligible Worker found"\r
+        )\r
+\r
+    # Routing policy can consider workload,\r
+    # priority, latency, version, etc.\r
+    return min(\r
+        candidates,\r
+        key=lambda worker: worker.current_workload\r
+    )\r
+\`\`\`\r
+\r
+This is a simplified reference implementation. In the production CWD architecture, these decisions should be integrated with the actual **Agent Registry, authorization/policy services, runtime health signals, and routing policies**.\r
+\r
+---\r
+\r
+# 23. Where Each CWD Component Fits\r
+\r
+| CWD Component                    | Worker Selection Responsibility                          |\r
+| -------------------------------- | -------------------------------------------------------- |\r
+| **Coordinator**                  | Selects the appropriate Delegator/domain                 |\r
+| **Delegator**                    | Selects Workers within the domain                        |\r
+| **Agent Registry**               | Provides Worker metadata/capabilities/endpoints          |\r
+| **Policy Service**               | Determines whether execution is permitted                |\r
+| **Entra ID / RBAC**              | Provides identity and authorization context              |\r
+| **Key Vault / Managed Identity** | Supports secure access to protected resources            |\r
+| **LangGraph**                    | Manages workflow state and execution transitions         |\r
+| **A2A**                          | Communicates between Coordinator, Delegator, and Workers |\r
+| **MCP / Tools**                  | Allows Workers to access enterprise capabilities         |\r
+| **Observability**                | Provides health/runtime/workload signals                 |\r
+\r
+---\r
+\r
+# 24. Complete CWD Routing Hierarchy\r
+\r
+The complete routing model becomes:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           |\r
+                           v\r
+                    +-------------+\r
+                    | Coordinator |\r
+                    +-------------+\r
+                           |\r
+                  Business Intent\r
+                           |\r
+                           v\r
+                    Business Domain\r
+                           |\r
+                           v\r
+                    +-------------+\r
+                    |  Delegator  |\r
+                    +-------------+\r
+                           |\r
+                  Domain Objective\r
+                           |\r
+                           v\r
+                  Required Capability\r
+                           |\r
+                           v\r
+                    Agent Registry\r
+                           |\r
+                           v\r
+                  Candidate Workers\r
+                           |\r
+             +-------------+-------------+\r
+             |             |             |\r
+             v             v             v\r
+          Worker A      Worker B      Worker C\r
+             |             |             |\r
+             +-------------+-------------+\r
+                           |\r
+                    Eligibility Filter\r
+                           |\r
+        +------------------+------------------+\r
+        |         |          |        |       |\r
+      Domain   Capability   Tools  Permission Health\r
+        |         |          |        |       |\r
+        +------------------+------------------+\r
+                           |\r
+                    Runtime Evaluation\r
+                           |\r
+                  +--------+--------+\r
+                  |                 |\r
+             Availability       Workload\r
+                  |                 |\r
+                  +--------+--------+\r
+                           |\r
+                           v\r
+                    Routing Policy\r
+                           |\r
+                           v\r
+                  Selected Worker\r
+                           |\r
+                           v\r
+                    Worker Execution\r
+\`\`\`\r
+\r
+# 25. The Key Architectural Principle\r
+\r
+Worker selection is a **two-stage decision**:\r
+\r
+\`\`\`text\r
+Stage 1 — Eligibility\r
+\r
+"Can this Worker perform the task?"\r
+\r
+        ↓\r
+\r
+Stage 2 — Selection\r
+\r
+"Which eligible Worker is the best choice right now?"\r
+\`\`\`\r
+\r
+Eligibility considers:\r
+\r
+\`\`\`text\r
+Domain\r
+Capability\r
+Tool Access\r
+Permissions\r
+Task Requirements\r
+\`\`\`\r
+\r
+Selection considers:\r
+\r
+\`\`\`text\r
+Health\r
+Availability\r
+Workload\r
+Priority\r
+Version\r
+Routing Policy\r
+\`\`\`\r
+\r
+This separation makes Worker routing predictable, secure, and scalable.\r
+\r
+# Final Definition\r
+\r
+> **The Delegator selects the most appropriate Worker by first translating the domain task into required capabilities and task constraints, discovering candidate Workers through the Agent Registry, filtering them based on domain ownership, capability, tool access, permissions, and task requirements, and then evaluating runtime factors such as health, availability, workload, version, and routing policy. The selected Worker is the best eligible Worker that can execute the task securely and efficiently.**\r
+\r
+The complete decision can be remembered as:\r
+\r
+\`\`\`text id="j1l3y9"\r
+Task Requirements\r
+       +\r
+Domain Ownership\r
+       +\r
+Capability\r
+       +\r
+Tool Access\r
+       +\r
+Permissions\r
+       +\r
+Task Fit\r
+       +\r
+Health\r
+       +\r
+Availability\r
+       +\r
+Workload\r
+       +\r
+Routing Policy\r
+       ↓\r
+Most Appropriate Worker\r
+\`\`\`\r
+\r
+And the CWD responsibility boundary is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Selects Delegator\r
+\r
+Delegator\r
+    ↓\r
+Selects Worker\r
+\r
+Worker\r
+    ↓\r
+Executes Capability\r
+\r
+MCP / Tools\r
+    ↓\r
+Access Enterprise System\r
+\`\`\`\r
+\r
+**Therefore, the Delegator is not merely routing to "a Worker that can do the job"; it is making a governed, capability-aware, security-aware, and runtime-aware decision about which Worker should execute the task.**\r
+`,code:``},{id:`worker-pool-management`,category:`Delegator Agents`,title:`Worker Pool Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers are organized, monitored, scaled, and managed within a domain, including load distribution, Worker availability, health status, concurrency, and capacity management.`,concept:`# How Workers Are Organized, Monitored, Scaled, and Managed Within a Domain\r
+\r
+In the CWD architecture, **Workers are the task-execution layer**.\r
+\r
+A Delegator manages a collection of specialized Workers within its business domain. Each Worker is responsible for a well-defined capability, while the Delegator controls **which Worker receives a task, how much work it receives, whether it is healthy and available, and how execution capacity is managed**.\r
+\r
+The overall model is:\r
+\r
+\`\`\`text id="3hx6o8"\r
+                    Domain Delegator\r
+                          |\r
+                    Worker Registry\r
+                          |\r
+        +-----------------+------------------+\r
+        |                 |                  |\r
+        v                 v                  v\r
+   Worker Pool A     Worker Pool B     Worker Pool C\r
+   Customer Data     Revenue           Opportunity\r
+        |                 |                  |\r
+        v                 v                  v\r
+   Enterprise        Enterprise        Enterprise\r
+   Systems           Systems           Systems\r
+\`\`\`\r
+\r
+The Delegator therefore acts as the **domain-level control plane for Worker execution**.\r
+\r
+---\r
+\r
+# 1. Workers Are Organized by Domain and Capability\r
+\r
+Workers are not organized as one large global pool.\r
+\r
+They are logically grouped around business domains and capabilities.\r
+\r
+For example:\r
+\r
+\`\`\`text id="4h3b7k"\r
+Sales Domain\r
+    |\r
+    +-- Customer Profile Workers\r
+    +-- Opportunity Workers\r
+    +-- Revenue Workers\r
+    +-- Pricing Workers\r
+    +-- Quote Workers\r
+    +-- Interaction Workers\r
+\`\`\`\r
+\r
+Another domain:\r
+\r
+\`\`\`text id="8y1v7n"\r
+Finance Domain\r
+    |\r
+    +-- Invoice Workers\r
+    +-- Payment Workers\r
+    +-- Revenue Workers\r
+    +-- Financial Reporting Workers\r
+\`\`\`\r
+\r
+This provides **domain isolation** while allowing each domain to evolve independently.\r
+\r
+---\r
+\r
+# 2. Worker Pools\r
+\r
+For a frequently used capability, there may be multiple instances of the same Worker.\r
+\r
+For example:\r
+\r
+\`\`\`text id="sq8m1f"\r
+Opportunity Capability\r
+        |\r
+        v\r
++-----------------------------+\r
+| Opportunity Worker Pool     |\r
++-----------------------------+\r
+       |       |       |\r
+       v       v       v\r
+    Worker  Worker  Worker\r
+      A       B       C\r
+\`\`\`\r
+\r
+All three Workers may provide the same capability but execute as separate runtime instances.\r
+\r
+This enables:\r
+\r
+* Load distribution\r
+* Horizontal scaling\r
+* Failure isolation\r
+* Higher concurrency\r
+* Better availability\r
+\r
+The Delegator can treat them as a **logical Worker capability pool** rather than requiring business logic to know individual instances.\r
+\r
+---\r
+\r
+# 3. Agent Registry as the Worker Inventory\r
+\r
+The **Agent Registry** provides the Delegator with Worker metadata.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="4l0hwl"\r
+Agent Registry\r
+      |\r
+      +-- Worker ID\r
+      +-- Domain\r
+      +-- Capabilities\r
+      +-- Endpoint\r
+      +-- Version\r
+      +-- Health\r
+      +-- Availability\r
+      +-- Status\r
+      +-- Supported Tools\r
+      +-- Routing Metadata\r
+\`\`\`\r
+\r
+The Delegator uses this information when deciding where to send work.\r
+\r
+For example:\r
+\r
+\`\`\`json id="yzdyja"\r
+{\r
+  "agent_id": "sales-opportunity-worker-01",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "opportunity_retrieval"\r
+  ],\r
+  "status": "healthy",\r
+  "available": true,\r
+  "version": "2.1"\r
+}\r
+\`\`\`\r
+\r
+Another instance:\r
+\r
+\`\`\`json id="0qj9vi"\r
+{\r
+  "agent_id": "sales-opportunity-worker-02",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "opportunity_retrieval"\r
+  ],\r
+  "status": "healthy",\r
+  "available": true,\r
+  "version": "2.1"\r
+}\r
+\`\`\`\r
+\r
+The Delegator can route requests to either eligible instance.\r
+\r
+---\r
+\r
+# 4. Worker Availability\r
+\r
+Worker availability answers:\r
+\r
+> **"Can this Worker accept new work right now?"**\r
+\r
+A Worker can technically support a capability but still be unavailable.\r
+\r
+For example:\r
+\r
+\`\`\`text id="p9pzzr"\r
+Worker A → Available\r
+Worker B → Available\r
+Worker C → Maintenance\r
+Worker D → Disabled\r
+\`\`\`\r
+\r
+The Delegator should exclude unavailable Workers from routing.\r
+\r
+\`\`\`text id="sckhce"\r
+Available Workers\r
+       |\r
+       v\r
+Routing Candidate Pool\r
+\`\`\`\r
+\r
+Availability can change dynamically because of:\r
+\r
+* Deployment\r
+* Maintenance\r
+* Capacity limits\r
+* Service shutdown\r
+* Configuration\r
+* Runtime failures\r
+\r
+---\r
+\r
+# 5. Worker Health\r
+\r
+Health answers:\r
+\r
+> **"Is this Worker functioning correctly?"**\r
+\r
+The platform can monitor Worker health through runtime health information and observability signals.\r
+\r
+Example:\r
+\r
+\`\`\`text id="nplnfu"\r
+Worker A → Healthy\r
+Worker B → Healthy\r
+Worker C → Degraded\r
+Worker D → Unhealthy\r
+\`\`\`\r
+\r
+The Delegator can then apply routing rules such as:\r
+\r
+\`\`\`text id="5z6d8r"\r
+Healthy\r
+   ↓\r
+Preferred\r
+\r
+Degraded\r
+   ↓\r
+Limited / Lower Priority\r
+\r
+Unhealthy\r
+   ↓\r
+Do Not Route\r
+\`\`\`\r
+\r
+This prevents new work from being sent to known unhealthy Workers.\r
+\r
+---\r
+\r
+# 6. Health Is Different From Availability\r
+\r
+These concepts should not be confused.\r
+\r
+| Condition                 | Meaning                                                |\r
+| ------------------------- | ------------------------------------------------------ |\r
+| **Healthy + Available**   | Worker can normally receive work                       |\r
+| **Healthy + Unavailable** | Worker is functioning but not accepting work           |\r
+| **Degraded + Available**  | Worker can accept work but may have reduced capacity   |\r
+| **Unhealthy**             | Worker should generally be removed from normal routing |\r
+\r
+For example:\r
+\r
+\`\`\`text id="7e9x3d"\r
+Worker\r
+   |\r
+   +-- Health = Healthy\r
+   |\r
+   +-- Availability = Available\r
+   |\r
+   +-- Capacity = 80%\r
+   |\r
+   +-- Active Tasks = 4\r
+\`\`\`\r
+\r
+The Delegator combines these signals when making routing decisions.\r
+\r
+---\r
+\r
+# 7. Load Distribution\r
+\r
+When multiple Workers provide the same capability, the Delegator should distribute work across them.\r
+\r
+Example:\r
+\r
+\`\`\`text id="8l8jwx"\r
+                    Opportunity Tasks\r
+                           |\r
+                           v\r
+                  Sales Delegator\r
+                           |\r
+              +------------+------------+\r
+              |            |            |\r
+              v            v            v\r
+          Worker A      Worker B      Worker C\r
+             10%           20%           15%\r
+\`\`\`\r
+\r
+The goal is to avoid:\r
+\r
+\`\`\`text id="8q1rfi"\r
+Worker A → 100 tasks\r
+Worker B → 2 tasks\r
+Worker C → 1 task\r
+\`\`\`\r
+\r
+when all three Workers are capable of handling the workload.\r
+\r
+Load distribution improves:\r
+\r
+* Throughput\r
+* Response time\r
+* Worker utilization\r
+* Availability\r
+* Capacity utilization\r
+\r
+---\r
+\r
+# 8. Workload-Aware Routing\r
+\r
+The Delegator can consider current Worker workload when selecting among eligible Workers.\r
+\r
+For example:\r
+\r
+\`\`\`text id="5o3c9k"\r
+Worker A\r
+Active Tasks = 3\r
+Capacity     = 10\r
+\r
+Worker B\r
+Active Tasks = 9\r
+Capacity     = 10\r
+\r
+Worker C\r
+Active Tasks = 5\r
+Capacity     = 10\r
+\`\`\`\r
+\r
+A new task may preferably be sent to Worker A.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="v2n5lz"\r
+Eligible Workers\r
+       |\r
+       v\r
+Check Current Load\r
+       |\r
+       v\r
+Check Remaining Capacity\r
+       |\r
+       v\r
+Select Suitable Worker\r
+\`\`\`\r
+\r
+This is particularly useful for high-volume domains.\r
+\r
+---\r
+\r
+# 9. Concurrency Management\r
+\r
+Concurrency determines:\r
+\r
+> **"How many tasks can a Worker execute simultaneously?"**\r
+\r
+For example:\r
+\r
+\`\`\`text id="p5yqdr"\r
+Worker A\r
+Maximum Concurrency = 10\r
+\r
+Current:\r
+    Task 1\r
+    Task 2\r
+    Task 3\r
+    Task 4\r
+\r
+Available Capacity = 6\r
+\`\`\`\r
+\r
+If the Worker reaches its configured concurrency limit:\r
+\r
+\`\`\`text id="d83u7w"\r
+Worker A\r
+Concurrency = 10 / 10\r
+        |\r
+        v\r
+No additional execution\r
+\`\`\`\r
+\r
+The Delegator should route new work to another eligible Worker or queue the task.\r
+\r
+---\r
+\r
+# 10. Why Concurrency Limits Matter\r
+\r
+Without concurrency control:\r
+\r
+\`\`\`text id="b8y9tc"\r
+100 incoming tasks\r
+       |\r
+       v\r
+Single Worker\r
+       |\r
+       v\r
+Resource Exhaustion\r
+       |\r
+       +-- High latency\r
+       +-- Timeouts\r
+       +-- Memory pressure\r
+       +-- API throttling\r
+       +-- Failures\r
+\`\`\`\r
+\r
+With controlled concurrency:\r
+\r
+\`\`\`text id="dbdy8a"\r
+100 incoming tasks\r
+       |\r
+       v\r
+Delegator\r
+       |\r
+       +-- Worker A → 10\r
+       +-- Worker B → 10\r
+       +-- Worker C → 10\r
+       +-- Queue    → Remaining\r
+\`\`\`\r
+\r
+This provides controlled execution.\r
+\r
+---\r
+\r
+# 11. Capacity Management\r
+\r
+Worker capacity represents how much work a Worker or Worker pool can safely handle.\r
+\r
+Capacity may depend on:\r
+\r
+* Maximum concurrent tasks\r
+* CPU\r
+* Memory\r
+* External API limits\r
+* Database connection limits\r
+* LLM throughput\r
+* Token limits\r
+* Queue depth\r
+* Business-defined limits\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="5p9thc"\r
+Worker Capacity\r
+      |\r
+      +-- Compute Capacity\r
+      +-- Concurrency Capacity\r
+      +-- API Capacity\r
+      +-- Data Capacity\r
+      +-- LLM Capacity\r
+\`\`\`\r
+\r
+The Delegator should consider these constraints when routing work.\r
+\r
+---\r
+\r
+# 12. Worker Pool Scaling\r
+\r
+When demand increases, the Worker pool can scale horizontally.\r
+\r
+For example:\r
+\r
+\`\`\`text id="3k3fqc"\r
+Normal Load\r
+\r
+Sales Opportunity Worker\r
+        |\r
+        +-- Instance A\r
+        +-- Instance B\r
+\`\`\`\r
+\r
+During high demand:\r
+\r
+\`\`\`text id="l0d1a4"\r
+High Load\r
+\r
+Sales Opportunity Worker Pool\r
+        |\r
+        +-- Instance A\r
+        +-- Instance B\r
+        +-- Instance C\r
+        +-- Instance D\r
+        +-- Instance E\r
+\`\`\`\r
+\r
+When demand falls:\r
+\r
+\`\`\`text id="2dglqk"\r
+Low Load\r
+\r
+Worker Pool\r
+        |\r
+        +-- Instance A\r
+        +-- Instance B\r
+\`\`\`\r
+\r
+This is **horizontal scaling**.\r
+\r
+---\r
+\r
+# 13. Delegator vs Runtime Platform Scaling\r
+\r
+There are two different responsibilities.\r
+\r
+### Delegator\r
+\r
+Determines:\r
+\r
+\`\`\`text id="o8w86k"\r
+"Where should this task go?"\r
+\`\`\`\r
+\r
+### Runtime Platform\r
+\r
+Determines:\r
+\r
+\`\`\`text id="e1pnkr"\r
+"How many Worker instances should exist?"\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text id="l1o6qz"\r
+                    Delegator\r
+                       |\r
+                 Worker Pool\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+     Worker A       Worker B       Worker C\r
+        ^              ^              ^\r
+        |              |              |\r
+        +--------------+--------------+\r
+                       |\r
+                  ACA / AKS\r
+                Scaling Mechanism\r
+\`\`\`\r
+\r
+The Delegator should not manually create containers.\r
+\r
+The infrastructure platform manages runtime scaling based on configured scaling policies.\r
+\r
+---\r
+\r
+# 14. Queue-Based Load Distribution\r
+\r
+For asynchronous or high-volume workloads, messaging can help smooth demand.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="fxz7jc"\r
+Delegator\r
+    |\r
+    v\r
+Service Bus / Kafka\r
+    |\r
+    v\r
+Worker Queue\r
+    |\r
+    +---- Worker A\r
+    +---- Worker B\r
+    +---- Worker C\r
+\`\`\`\r
+\r
+The queue acts as a buffer between incoming demand and Worker capacity.\r
+\r
+This helps when:\r
+\r
+\`\`\`text id="g2bl0y"\r
+Incoming Rate > Processing Rate\r
+\`\`\`\r
+\r
+Instead of immediately overwhelming Workers:\r
+\r
+\`\`\`text id="h3h4f8"\r
+Incoming Tasks\r
+      |\r
+      v\r
+    Queue\r
+      |\r
+      v\r
+Workers consume according to capacity\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. Backpressure\r
+\r
+Backpressure prevents the system from accepting more work than it can safely process.\r
+\r
+For example:\r
+\r
+\`\`\`text id="qz9z1n"\r
+Incoming Load\r
+      |\r
+      v\r
+Worker Pool\r
+      |\r
+      v\r
+Capacity Reached\r
+      |\r
+      +-- Queue\r
+      +-- Throttle\r
+      +-- Reject\r
+      +-- Lower Priority\r
+\`\`\`\r
+\r
+The exact response depends on the task and policy.\r
+\r
+This protects the domain from cascading failures.\r
+\r
+---\r
+\r
+# 16. Priority-Based Workload Management\r
+\r
+Not all tasks necessarily have the same business priority.\r
+\r
+For example:\r
+\r
+\`\`\`text id="q6p2t4"\r
+Priority 1\r
+Customer-facing request\r
+\r
+Priority 2\r
+Business analysis\r
+\r
+Priority 3\r
+Background enrichment\r
+\`\`\`\r
+\r
+The Delegator can route according to priority policies.\r
+\r
+\`\`\`text id="gq5f9h"\r
+Worker Capacity\r
+      |\r
+      +-- High Priority → Execute first\r
+      |\r
+      +-- Normal Priority → Queue\r
+      |\r
+      +-- Low Priority → Execute when capacity exists\r
+\`\`\`\r
+\r
+This becomes particularly useful when Worker capacity is limited.\r
+\r
+---\r
+\r
+# 17. Worker Health + Workload + Capacity\r
+\r
+Worker routing should combine multiple runtime signals.\r
+\r
+For example:\r
+\r
+\`\`\`text id="v7fnzt"\r
+                    Candidate Workers\r
+                           |\r
+          +----------------+----------------+\r
+          |                |                |\r
+          v                v                v\r
+       Worker A         Worker B         Worker C\r
+       Healthy          Healthy          Degraded\r
+       Available        Available        Available\r
+       Load: 20%        Load: 70%        Load: 30%\r
+       Capacity: High   Capacity: Medium  Capacity: Low\r
+          |                |                |\r
+          +----------------+----------------+\r
+                           |\r
+                           v\r
+                    Routing Decision\r
+                           |\r
+                           v\r
+                       Worker A\r
+\`\`\`\r
+\r
+Worker A is preferred because it is healthy, available, and has more available capacity.\r
+\r
+---\r
+\r
+# 18. Worker Registration and Lifecycle\r
+\r
+Workers should follow a managed lifecycle.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="x0fvzo"\r
+Develop\r
+   |\r
+   v\r
+Register\r
+   |\r
+   v\r
+Validate\r
+   |\r
+   v\r
+Deploy\r
+   |\r
+   v\r
+Healthy\r
+   |\r
+   v\r
+Available\r
+   |\r
+   v\r
+Receive Work\r
+   |\r
+   v\r
+Monitor\r
+   |\r
+   +----> Scale\r
+   |\r
+   +----> Degrade\r
+   |\r
+   +----> Recover\r
+   |\r
+   +----> Disable\r
+   |\r
+   v\r
+Retire\r
+\`\`\`\r
+\r
+The Agent Registry provides the logical inventory, while deployment/runtime infrastructure manages the actual Worker instances.\r
+\r
+---\r
+\r
+# 19. Worker Health Monitoring\r
+\r
+Observability should capture Worker execution signals such as:\r
+\r
+\`\`\`text id="y7qf5m"\r
+Worker Health\r
+Worker Availability\r
+Active Tasks\r
+Queue Depth\r
+Execution Latency\r
+Error Rate\r
+Timeout Rate\r
+Success Rate\r
+Resource Utilization\r
+Throughput\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text id="9gcg1z"\r
+Opportunity Worker\r
+\r
+Health        = Healthy\r
+Availability  = Available\r
+Active Tasks  = 7\r
+Concurrency   = 10\r
+Queue Depth   = 2\r
+Success Rate  = 98%\r
+Error Rate    = 2%\r
+Latency       = 1.8 sec\r
+\`\`\`\r
+\r
+These signals help the Delegator and platform determine whether the Worker should continue receiving traffic.\r
+\r
+---\r
+\r
+# 20. Failure Isolation\r
+\r
+Worker pools also provide failure isolation.\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="o4s8g7"\r
+Worker A → Healthy\r
+Worker B → Unhealthy\r
+Worker C → Healthy\r
+\`\`\`\r
+\r
+The Delegator can remove Worker B from routing:\r
+\r
+\`\`\`text id="h4evy4"\r
+Worker Pool\r
+   |\r
+   +-- Worker A ✓\r
+   +-- Worker B ✗\r
+   +-- Worker C ✓\r
+\`\`\`\r
+\r
+The domain remains operational.\r
+\r
+This is much better than having a single Worker instance responsible for an entire capability.\r
+\r
+---\r
+\r
+# 21. Worker Replacement\r
+\r
+Suppose Worker A has a problem:\r
+\r
+\`\`\`text id="5b0d10"\r
+Worker A\r
+   |\r
+Failure\r
+   |\r
+   v\r
+Remove from active routing\r
+   |\r
+   v\r
+Worker B / C continue\r
+\`\`\`\r
+\r
+A new instance can subsequently join:\r
+\r
+\`\`\`text id="u4q5l6"\r
+Worker Pool\r
+   |\r
+   +-- Worker B\r
+   +-- Worker C\r
+   +-- Worker D ← New Instance\r
+\`\`\`\r
+\r
+The Delegator does not need to change its business logic.\r
+\r
+It discovers the eligible Worker through the registry/routing mechanism.\r
+\r
+---\r
+\r
+# 22. Worker-Level Observability\r
+\r
+Every Worker execution should carry the CWD execution identifiers.\r
+\r
+For example:\r
+\r
+\`\`\`text id="j6p7cq"\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+This creates an end-to-end trace:\r
+\r
+\`\`\`text id="7p6ujt"\r
+User\r
+ |\r
+ v\r
+Coordinator\r
+ |\r
+ v\r
+Sales Delegator\r
+ |\r
+ v\r
+Revenue Worker\r
+ |\r
+ v\r
+MCP\r
+ |\r
+ v\r
+Snowflake\r
+\`\`\`\r
+\r
+The same correlation context allows operations teams to answer:\r
+\r
+* Which Worker handled the task?\r
+* How long did it take?\r
+* Did it retry?\r
+* Did it fail?\r
+* Which enterprise system caused the delay?\r
+* How much workload was active?\r
+* Was the Worker overloaded?\r
+\r
+---\r
+\r
+# 23. Worker Management During Execution\r
+\r
+The Delegator continuously manages the domain Worker pool.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text id="b50wzv"\r
+              Domain Delegator\r
+                     |\r
+             Worker Management\r
+                     |\r
+      +--------------+--------------+\r
+      |              |              |\r
+      v              v              v\r
+ Availability      Health        Workload\r
+      |              |              |\r
+      +--------------+--------------+\r
+                     |\r
+                     v\r
+              Routing Decision\r
+                     |\r
+                     v\r
+              Worker Execution\r
+\`\`\`\r
+\r
+The Delegator does not simply select a Worker once and forget about it.\r
+\r
+It manages the **execution lifecycle**.\r
+\r
+---\r
+\r
+# 24. End-to-End Example\r
+\r
+Suppose the Sales Delegator receives 100 opportunity-analysis requests.\r
+\r
+The Worker pool contains:\r
+\r
+\`\`\`text id="y48x8k"\r
+Opportunity Worker Pool\r
+\r
+Worker A\r
+Capacity = 10\r
+Active = 4\r
+Healthy\r
+\r
+Worker B\r
+Capacity = 10\r
+Active = 9\r
+Healthy\r
+\r
+Worker C\r
+Capacity = 10\r
+Active = 10\r
+Healthy\r
+\r
+Worker D\r
+Capacity = 10\r
+Active = 0\r
+Healthy\r
+\`\`\`\r
+\r
+The Delegator evaluates:\r
+\r
+\`\`\`text id="7z6ydc"\r
+Worker A → Eligible\r
+Worker B → Eligible\r
+Worker C → At Capacity\r
+Worker D → Eligible\r
+\`\`\`\r
+\r
+It distributes new work primarily to A and D.\r
+\r
+Meanwhile:\r
+\r
+\`\`\`text id="3o6o9c"\r
+Incoming Tasks\r
+      |\r
+      v\r
+Delegator\r
+      |\r
+      +-- Worker A\r
+      +-- Worker D\r
+      +-- Queue\r
+\`\`\`\r
+\r
+If workload continues increasing, the runtime platform can scale the Worker pool:\r
+\r
+\`\`\`text id="a0q9jw"\r
+Worker Pool\r
+   |\r
+   +-- A\r
+   +-- B\r
+   +-- C\r
+   +-- D\r
+   +-- E\r
+   +-- F\r
+\`\`\`\r
+\r
+The Agent Registry/routing layer can then make the new Workers available for selection.\r
+\r
+---\r
+\r
+# 25. Complete Worker Management Flow\r
+\r
+\`\`\`text id="0xgqcr"\r
+                    Domain Delegator\r
+                           |\r
+                           v\r
+                    Domain Task\r
+                           |\r
+                           v\r
+                 Required Capability\r
+                           |\r
+                           v\r
+                    Agent Registry\r
+                           |\r
+                           v\r
+                    Worker Pool\r
+                           |\r
+          +----------------+----------------+\r
+          |                |                |\r
+          v                v                v\r
+      Capability       Permissions       Task Fit\r
+          |                |                |\r
+          +----------------+----------------+\r
+                           |\r
+                           v\r
+                    Runtime Signals\r
+                           |\r
+          +----------------+----------------+\r
+          |                |                |\r
+          v                v                v\r
+       Health        Availability       Workload\r
+          |                |                |\r
+          +----------------+----------------+\r
+                           |\r
+                           v\r
+                      Capacity\r
+                           |\r
+                           v\r
+                   Routing Policy\r
+                           |\r
+                           v\r
+                 Selected Worker\r
+                           |\r
+                           v\r
+                      Execute\r
+                           |\r
+             +-------------+-------------+\r
+             |                           |\r
+          Success                     Failure\r
+             |                           |\r
+             v                           v\r
+        Result                    Retry / Fallback\r
+             |                           |\r
+             +-------------+-------------+\r
+                           |\r
+                           v\r
+                    Result Management\r
+                           |\r
+                           v\r
+                    Domain Result\r
+                           |\r
+                           v\r
+                      Coordinator\r
+\`\`\`\r
+\r
+# 26. Responsibility Split\r
+\r
+The CWD architecture should maintain a clear responsibility boundary.\r
+\r
+| Responsibility        | Delegator          | Agent Registry | Runtime Platform | Worker |\r
+| --------------------- | ------------------ | -------------- | ---------------- | ------ |\r
+| Domain routing        | ✓                  |                |                  |        |\r
+| Capability matching   | ✓                  | Metadata       |                  |        |\r
+| Worker discovery      | ✓                  | ✓              |                  |        |\r
+| Worker selection      | ✓                  |                |                  |        |\r
+| Permission validation | ✓ / Policy Service |                |                  |        |\r
+| Health information    | Consume            | Metadata       | ✓                | ✓      |\r
+| Availability          | Consume            | Metadata       | ✓                | ✓      |\r
+| Load distribution     | ✓                  |                | ✓                |        |\r
+| Concurrency policy    | ✓                  |                | ✓                | ✓      |\r
+| Horizontal scaling    |                    |                | ✓                |        |\r
+| Task execution        | Coordinate         |                |                  | ✓      |\r
+| Tool/API execution    |                    |                |                  | ✓      |\r
+| Failure handling      | ✓                  |                | ✓                | ✓      |\r
+| Result aggregation    | ✓                  |                |                  | ✓      |\r
+\r
+---\r
+\r
+# 27. Key Architectural Principle\r
+\r
+The Delegator should manage **logical Worker capacity**, while the runtime platform manages **physical Worker instances**.\r
+\r
+\`\`\`text id="crv0as"\r
+                    Delegator\r
+                       |\r
+                Logical Worker Pool\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+    Worker A        Worker B        Worker C\r
+        |              |              |\r
+        +--------------+--------------+\r
+                       |\r
+                       v\r
+                 Runtime Platform\r
+                  ACA / AKS\r
+                       |\r
+                       v\r
+              Scaling / Compute\r
+\`\`\`\r
+\r
+This separation allows CWD to scale without making the Delegator responsible for infrastructure management.\r
+\r
+---\r
+\r
+# 28. Final Definition\r
+\r
+> **Within CWD, Workers are organized into domain-specific capability pools and managed by their Delegator. The Delegator discovers eligible Workers through the Agent Registry, evaluates capability, domain ownership, permissions, tool access, health, availability, workload, concurrency, and task requirements, and routes work to the most appropriate Worker. Worker pools can scale horizontally through the runtime platform, while health monitoring, workload distribution, concurrency limits, queueing, backpressure, and capacity policies prevent overload and maintain reliable execution.**\r
+\r
+The complete model is:\r
+\r
+\`\`\`text id="zll2uo"\r
+Worker Management\r
+      =\r
+Worker Organization\r
++\r
+Discovery\r
++\r
+Health Monitoring\r
++\r
+Availability Management\r
++\r
+Load Distribution\r
++\r
+Concurrency Control\r
++\r
+Capacity Management\r
++\r
+Horizontal Scaling\r
++\r
+Failure Isolation\r
++\r
+Observability\r
+\`\`\`\r
+\r
+And the architectural relationship is:\r
+\r
+\`\`\`text id="1f9b8a"\r
+Coordinator\r
+      |\r
+      | Enterprise orchestration\r
+      v\r
+Delegator\r
+      |\r
+      | Domain Worker management\r
+      v\r
+Worker Pool\r
+      |\r
+      | Capability execution\r
+      v\r
+Workers\r
+      |\r
+      | Tools / MCP\r
+      v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+**In simple terms:**\r
+\r
+> **The Delegator decides which Worker should do the work, while the Worker pool and runtime platform ensure that enough healthy capacity exists to do that work reliably and at scale.**\r
+`,code:``},{id:`domain-guardrails`,category:`Delegator Agents`,title:`Domain Guardrails`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators enforce domain-specific policies, authorization boundaries, data-access restrictions, allowed capabilities, tool restrictions, validation rules, and other governance controls.`,concept:`# Delegator – Domain-Specific Policy, Authorization & Governance\r
+\r
+## 1. What is the Delegator Governance Responsibility?\r
+\r
+In CWD, the **Delegator is the domain-level governance and orchestration boundary** between the enterprise-level Coordinator and specialized Workers.\r
+\r
+The Coordinator determines:\r
+\r
+> **What business objective needs to be fulfilled and which domain should handle it.**\r
+\r
+The Delegator determines:\r
+\r
+> **What is allowed within that domain, which Workers can perform the task, what data they can access, which tools they can use, and under what conditions they can execute.**\r
+\r
+Therefore, the Delegator is not only a routing component.\r
+\r
+It acts as a **domain policy enforcement point**.\r
+\r
+\`\`\`text\r
+                    USER\r
+                      │\r
+                      ▼\r
+                ┌─────────────┐\r
+                │ Coordinator │\r
+                └──────┬──────┘\r
+                       │\r
+                 A2A Request\r
+                       │\r
+                       ▼\r
+              ┌─────────────────┐\r
+              │    Delegator    │\r
+              │                 │\r
+              │ Domain Policy   │\r
+              │ Authorization   │\r
+              │ Capability      │\r
+              │ Data Access     │\r
+              │ Tool Policy     │\r
+              │ Validation      │\r
+              │ Governance      │\r
+              └────────┬────────┘\r
+                       │\r
+             Approved Worker Tasks\r
+                       │\r
+             ┌─────────┼─────────┐\r
+             ▼         ▼         ▼\r
+          Worker A  Worker B  Worker C\r
+             │         │         │\r
+             ▼         ▼         ▼\r
+           Tools     APIs      RAG\r
+             │         │         │\r
+             └─────────┼─────────┘\r
+                       ▼\r
+               Enterprise Systems\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Why Governance Is Required at the Delegator\r
+\r
+A Coordinator-level authorization check alone is not sufficient.\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Sales Delegator\r
+  ↓\r
+Revenue Worker\r
+  ↓\r
+Snowflake\r
+\`\`\`\r
+\r
+The Coordinator may determine:\r
+\r
+\`\`\`text\r
+User is authorized for Sales\r
+\`\`\`\r
+\r
+But that does **not automatically mean**:\r
+\r
+\`\`\`text\r
+User can access every Sales dataset\r
+User can access every Snowflake table\r
+User can execute every Sales capability\r
+User can use every tool\r
+User can access every customer record\r
+User can perform every action\r
+\`\`\`\r
+\r
+The Delegator therefore applies **domain-specific authorization and policy controls**.\r
+\r
+This creates defense in depth.\r
+\r
+---\r
+\r
+# 3. Delegator Governance Model\r
+\r
+The Delegator evaluates every incoming domain task against multiple governance dimensions.\r
+\r
+\`\`\`text\r
+                 Domain Task\r
+                      │\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Domain Validation│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Authorization   │\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Policy Evaluation│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Capability Check│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Data Access     │\r
+             │ Restrictions    │\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Tool Restrictions│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Input Validation│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Worker Selection│\r
+             └────────┬────────┘\r
+                      ▼\r
+             ┌─────────────────┐\r
+             │ Execution       │\r
+             └─────────────────┘\r
+\`\`\`\r
+\r
+The important principle is:\r
+\r
+> **A Worker should execute only after the Delegator has determined that the requested operation is allowed.**\r
+\r
+---\r
+\r
+# 4. Domain Ownership Enforcement\r
+\r
+The first governance check is:\r
+\r
+> **Does this Delegator actually own this task?**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ├── Customer Information\r
+    ├── Opportunity Management\r
+    ├── Revenue Analysis\r
+    └── Sales Reporting\r
+\`\`\`\r
+\r
+A request such as:\r
+\r
+\`\`\`text\r
+"Get the customer's current revenue and open opportunities."\r
+\`\`\`\r
+\r
+is appropriate for the Sales domain.\r
+\r
+But:\r
+\r
+\`\`\`text\r
+"Show me employee salary information."\r
+\`\`\`\r
+\r
+should not be routed to the Sales Delegator.\r
+\r
+The Delegator validates:\r
+\r
+\`\`\`text\r
+requested_domain == delegator.domain\r
+\`\`\`\r
+\r
+If not:\r
+\r
+\`\`\`text\r
+REJECT\r
+\`\`\`\r
+\r
+or route back to the Coordinator for appropriate domain routing.\r
+\r
+---\r
+\r
+# 5. Domain-Specific Authorization\r
+\r
+The Delegator evaluates whether the requesting identity is authorized for the requested domain capability.\r
+\r
+The authorization context may include:\r
+\r
+\`\`\`text\r
+user_id\r
+tenant_id\r
+roles\r
+groups\r
+claims\r
+domain\r
+capability\r
+resource\r
+data_classification\r
+action\r
+channel\r
+session_id\r
+correlation_id\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Sales Delegator\r
+  ↓\r
+Role = Sales Manager\r
+  ↓\r
+Capability = Customer Revenue Analysis\r
+  ↓\r
+Policy Evaluation\r
+  ↓\r
+ALLOW\r
+\`\`\`\r
+\r
+Another user may have:\r
+\r
+\`\`\`text\r
+Role = Sales Representative\r
+Capability = Customer Revenue Analysis\r
+Scope = Assigned Customers\r
+\`\`\`\r
+\r
+The Delegator must not assume that both users have the same access.\r
+\r
+---\r
+\r
+# 6. Data-Access Restrictions\r
+\r
+One of the most important Delegator responsibilities is controlling **what data can be accessed**.\r
+\r
+The Delegator should not simply tell a Worker:\r
+\r
+\`\`\`text\r
+"Get customer data."\r
+\`\`\`\r
+\r
+Instead, the task should contain an authorized data scope.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "domain": "sales",\r
+  "capability": "customer_revenue",\r
+  "data_scope": {\r
+    "customer_ids": ["CUST-123"],\r
+    "classification": "internal",\r
+    "allowed_sources": [\r
+      "snowflake_sales"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Worker then operates within that scope.\r
+\r
+---\r
+\r
+# 7. Data Classification\r
+\r
+Enterprise data may have different classifications.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Public\r
+Internal\r
+Confidential\r
+Restricted\r
+Highly Restricted\r
+\`\`\`\r
+\r
+The Delegator can enforce rules such as:\r
+\r
+\`\`\`text\r
+Sales Representative\r
+        │\r
+        ├── Public        → ALLOW\r
+        ├── Internal      → ALLOW\r
+        ├── Confidential  → CONDITIONAL\r
+        └── Restricted    → DENY\r
+\`\`\`\r
+\r
+This prevents a Worker from retrieving data simply because technically it has access to the underlying system.\r
+\r
+---\r
+\r
+# 8. Allowed Capabilities\r
+\r
+Every Worker should have a defined capability set.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+    capabilities:\r
+      - revenue_lookup\r
+      - revenue_summary\r
+      - revenue_trend\r
+\`\`\`\r
+\r
+Another Worker:\r
+\r
+\`\`\`text\r
+Opportunity Worker\r
+    capabilities:\r
+      - opportunity_lookup\r
+      - opportunity_summary\r
+      - pipeline_analysis\r
+\`\`\`\r
+\r
+The Delegator compares:\r
+\r
+\`\`\`text\r
+Task Requirement\r
+       ↓\r
+Required Capability\r
+       ↓\r
+Worker Capability\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Required:\r
+    revenue_lookup\r
+\r
+Worker:\r
+    revenue_lookup\r
+    revenue_summary\r
+    revenue_trend\r
+\r
+Result:\r
+    ALLOWED\r
+\`\`\`\r
+\r
+If the requested capability is not supported:\r
+\r
+\`\`\`text\r
+Required:\r
+    employee_salary_update\r
+\r
+Sales Worker:\r
+    revenue_lookup\r
+\r
+Result:\r
+    DENIED\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Tool Restrictions\r
+\r
+Workers may have access to multiple tools.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Revenue Worker\r
+    ├── Snowflake Query Tool\r
+    ├── Revenue API\r
+    └── Reporting Tool\r
+\`\`\`\r
+\r
+But the Delegator should not automatically allow all tools.\r
+\r
+It can define:\r
+\r
+\`\`\`text\r
+Capability:\r
+    revenue_lookup\r
+\r
+Allowed tools:\r
+    - Snowflake Revenue Query\r
+    - Revenue API\r
+\r
+Denied:\r
+    - Customer Update API\r
+    - Employee HR API\r
+    - Finance Payment API\r
+\`\`\`\r
+\r
+This follows the principle:\r
+\r
+> **Capability access does not automatically imply unrestricted tool access.**\r
+\r
+---\r
+\r
+# 10. Tool-Level Authorization\r
+\r
+The Delegator can validate:\r
+\r
+\`\`\`text\r
+Can Worker use this tool?\r
+\`\`\`\r
+\r
+before execution.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task\r
+ │\r
+ ▼\r
+Revenue Lookup\r
+ │\r
+ ▼\r
+Required Tool = Snowflake\r
+ │\r
+ ▼\r
+Delegator Policy\r
+ │\r
+ ├── Worker authorized?       YES\r
+ ├── Tool authorized?         YES\r
+ ├── Dataset authorized?      YES\r
+ ├── Data classification?     ALLOWED\r
+ └── Operation allowed?       YES\r
+ │\r
+ ▼\r
+Execute\r
+\`\`\`\r
+\r
+If any critical check fails:\r
+\r
+\`\`\`text\r
+DO NOT EXECUTE\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Input Validation\r
+\r
+Before passing a task to a Worker, the Delegator validates its input.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": "CUST-123",\r
+  "date_range": {\r
+    "from": "2026-01-01",\r
+    "to": "2026-06-30"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+Validation can include:\r
+\r
+\`\`\`text\r
+Required fields\r
+Data types\r
+Allowed values\r
+Date ranges\r
+Customer identifier format\r
+Maximum query scope\r
+Allowed filters\r
+Payload size\r
+Prompt constraints\r
+Policy restrictions\r
+\`\`\`\r
+\r
+Invalid request:\r
+\r
+\`\`\`text\r
+customer_id = "*"\r
+\`\`\`\r
+\r
+could be rejected if unrestricted customer retrieval is not permitted.\r
+\r
+---\r
+\r
+# 12. Output Validation\r
+\r
+Governance does not stop after Worker execution.\r
+\r
+The Delegator validates Worker output before returning it to the Coordinator.\r
+\r
+\`\`\`text\r
+Worker Result\r
+      │\r
+      ▼\r
+Delegator\r
+      │\r
+      ├── Schema validation\r
+      ├── Completeness check\r
+      ├── Data classification\r
+      ├── Sensitive-data check\r
+      ├── Policy validation\r
+      ├── Business-rule validation\r
+      └── Redaction\r
+      │\r
+      ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+For example, if a Worker accidentally returns restricted information:\r
+\r
+\`\`\`text\r
+Worker Result\r
+      ↓\r
+Restricted Field Detected\r
+      ↓\r
+Redaction Policy\r
+      ↓\r
+Restricted field removed\r
+      ↓\r
+Approved result\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Business Validation Rules\r
+\r
+Delegators can enforce domain-specific business rules.\r
+\r
+For example, a Sales Delegator may define:\r
+\r
+\`\`\`text\r
+Customer must exist\r
+Customer must belong to authorized scope\r
+Revenue period must be valid\r
+Opportunity must belong to permitted sales region\r
+Only approved CRM objects can be queried\r
+\`\`\`\r
+\r
+A Finance Delegator could have completely different rules.\r
+\r
+This is one of the key reasons Delegators provide **domain isolation**.\r
+\r
+---\r
+\r
+# 14. Domain-Specific Policy Examples\r
+\r
+Different Delegators can have different policies.\r
+\r
+### Sales Delegator\r
+\r
+\`\`\`text\r
+Allowed:\r
+    Customer profile\r
+    Opportunities\r
+    Revenue\r
+    Pipeline\r
+    Sales activity\r
+\r
+Restricted:\r
+    Employee compensation\r
+    HR information\r
+    Payment transactions\r
+\`\`\`\r
+\r
+### Finance Delegator\r
+\r
+\`\`\`text\r
+Allowed:\r
+    Financial reporting\r
+    Budget analysis\r
+    Revenue reporting\r
+    Cost analysis\r
+\r
+Restricted:\r
+    HR employee records\r
+    Customer authentication information\r
+\`\`\`\r
+\r
+### HR Delegator\r
+\r
+\`\`\`text\r
+Allowed:\r
+    Employee directory\r
+    Workforce analytics\r
+    Organization information\r
+\r
+Restricted:\r
+    Unauthorized compensation data\r
+    Restricted personnel information\r
+\`\`\`\r
+\r
+The Coordinator does not need to contain all these domain-specific rules.\r
+\r
+Each Delegator owns its domain governance.\r
+\r
+---\r
+\r
+# 15. Authorization vs Policy\r
+\r
+These concepts should be separated.\r
+\r
+### Authorization\r
+\r
+Answers:\r
+\r
+> **Is this user/agent allowed to perform this operation?**\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+User → Revenue Analysis\r
+       ↓\r
+       ALLOWED\r
+\`\`\`\r
+\r
+### Policy\r
+\r
+Answers:\r
+\r
+> **Under what conditions can the operation be performed?**\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Revenue Analysis\r
+\r
+Allowed:\r
+    Current fiscal year\r
+\r
+Restricted:\r
+    Historical confidential data\r
+\r
+Maximum:\r
+    100 customers\r
+\r
+Required:\r
+    Sales domain entitlement\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Authorization = Who can do it?\r
+\r
+Policy = Under what conditions can they do it?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. Policy Decision and Policy Enforcement\r
+\r
+The Delegator can use a centralized Policy Service.\r
+\r
+\`\`\`text\r
+                 Delegator\r
+                     │\r
+                     ▼\r
+              Policy Service\r
+                     │\r
+          ┌──────────┼──────────┐\r
+          ▼          ▼          ▼\r
+        ALLOW       DENY      REDACT\r
+\`\`\`\r
+\r
+Possible decisions:\r
+\r
+\`\`\`text\r
+ALLOW\r
+DENY\r
+REDACT\r
+ESCALATE\r
+REQUIRE_APPROVAL\r
+\`\`\`\r
+\r
+The Delegator then enforces the decision.\r
+\r
+This is preferable to embedding hundreds of hard-coded policy rules inside the Delegator.\r
+\r
+---\r
+\r
+# 17. Worker Selection Must Also Be Governed\r
+\r
+Worker selection is not simply:\r
+\r
+\`\`\`python\r
+worker = registry.find("revenue_worker")\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Task\r
+ ↓\r
+Required Capability\r
+ ↓\r
+Candidate Workers\r
+ ↓\r
+Domain Ownership\r
+ ↓\r
+Authorization\r
+ ↓\r
+Tool Access\r
+ ↓\r
+Data Access\r
+ ↓\r
+Health\r
+ ↓\r
+Availability\r
+ ↓\r
+Workload\r
+ ↓\r
+Policy\r
+ ↓\r
+Best Worker\r
+\`\`\`\r
+\r
+This ensures the selected Worker is not only technically capable but also **authorized and policy-compliant**.\r
+\r
+---\r
+\r
+# 18. Agent Registry as a Governance Input\r
+\r
+The Agent Registry can provide metadata such as:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "sales-revenue-worker",\r
+  "domain": "sales",\r
+  "capabilities": [\r
+    "revenue_lookup",\r
+    "revenue_summary"\r
+  ],\r
+  "allowed_tools": [\r
+    "snowflake_revenue_query"\r
+  ],\r
+  "data_domains": [\r
+    "sales_revenue"\r
+  ],\r
+  "classification": "internal",\r
+  "version": "2.1",\r
+  "status": "healthy"\r
+}\r
+\`\`\`\r
+\r
+The Delegator uses this information during Worker selection and governance evaluation.\r
+\r
+---\r
+\r
+# 19. Identity Propagation\r
+\r
+Authorization must follow the request through the entire execution chain.\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ │ Identity\r
+ ▼\r
+Gateway\r
+ │\r
+ │ Auth Context\r
+ ▼\r
+Coordinator\r
+ │\r
+ │ Auth Context\r
+ ▼\r
+Delegator\r
+ │\r
+ │ Authorized Context\r
+ ▼\r
+Worker\r
+ │\r
+ │ Least-Privilege Identity\r
+ ▼\r
+Enterprise System\r
+\`\`\`\r
+\r
+Important identifiers should also propagate:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+This allows both security enforcement and auditability.\r
+\r
+---\r
+\r
+# 20. Least-Privilege Execution\r
+\r
+The Delegator should provide Workers with only what they need.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+    Retrieve revenue for Customer CUST-123\r
+\`\`\`\r
+\r
+Worker should receive:\r
+\r
+\`\`\`text\r
+Customer = CUST-123\r
+Capability = revenue_lookup\r
+Data scope = authorized customer\r
+Tool = approved revenue query\r
+\`\`\`\r
+\r
+It should not receive:\r
+\r
+\`\`\`text\r
+All customer records\r
+All Sales databases\r
+All enterprise tools\r
+All user permissions\r
+\`\`\`\r
+\r
+This follows:\r
+\r
+> **Minimum required capability + minimum required data + minimum required tool access.**\r
+\r
+---\r
+\r
+# 21. Guardrails Around LLM Usage\r
+\r
+Delegators may use an LLM for domain reasoning.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Domain Task\r
+     ↓\r
+LLM\r
+     ↓\r
+"Revenue data is required"\r
+     ↓\r
+Delegator\r
+     ↓\r
+Policy Validation\r
+     ↓\r
+Approved Capability\r
+     ↓\r
+Revenue Worker\r
+\`\`\`\r
+\r
+The LLM does not get to decide:\r
+\r
+\`\`\`text\r
+"I am authorized to query Snowflake."\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+LLM → recommendation\r
+Delegator → policy evaluation\r
+Policy Service → authorization decision\r
+Worker → controlled execution\r
+\`\`\`\r
+\r
+The key principle is:\r
+\r
+> **The LLM can recommend an action, but the Delegator determines whether that action is permitted.**\r
+\r
+---\r
+\r
+# 22. RAG Governance\r
+\r
+Delegators also need to govern domain-specific knowledge retrieval.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       │\r
+       ▼\r
+RAG Request\r
+       │\r
+       ├── Domain = Sales\r
+       ├── User entitlement\r
+       ├── Data classification\r
+       ├── Document ACL\r
+       └── Intent\r
+       │\r
+       ▼\r
+Azure AI Search\r
+       │\r
+       ▼\r
+Authorized Documents\r
+\`\`\`\r
+\r
+The Worker should not perform unrestricted enterprise-wide retrieval.\r
+\r
+Retrieval should be constrained by:\r
+\r
+\`\`\`text\r
+User entitlement\r
+Domain\r
+Document ACL\r
+Data classification\r
+Intent\r
+Business scope\r
+\`\`\`\r
+\r
+---\r
+\r
+# 23. Prompt Governance\r
+\r
+Delegators may also enforce which prompt templates can be used.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       ↓\r
+Prompt Registry\r
+       ↓\r
+sales_customer_summary_v4\r
+       ↓\r
+Approved\r
+       ↓\r
+Worker\r
+\`\`\`\r
+\r
+Rather than allowing a Worker to dynamically use any prompt:\r
+\r
+\`\`\`text\r
+Worker → arbitrary prompt → LLM\r
+\`\`\`\r
+\r
+the platform can enforce:\r
+\r
+\`\`\`text\r
+Domain\r
+Capability\r
+Prompt Version\r
+Approval Status\r
+Model\r
+Data Classification\r
+\`\`\`\r
+\r
+This provides controlled prompt lifecycle management.\r
+\r
+---\r
+\r
+# 24. Execution Governance\r
+\r
+Before executing each Worker task, the Delegator can evaluate:\r
+\r
+\`\`\`text\r
+Is task valid?\r
+       ↓\r
+Is domain correct?\r
+       ↓\r
+Is user authorized?\r
+       ↓\r
+Is capability allowed?\r
+       ↓\r
+Is Worker authorized?\r
+       ↓\r
+Is tool allowed?\r
+       ↓\r
+Is data access allowed?\r
+       ↓\r
+Are inputs valid?\r
+       ↓\r
+Is policy satisfied?\r
+       ↓\r
+Execute\r
+\`\`\`\r
+\r
+This creates a controlled execution boundary.\r
+\r
+---\r
+\r
+# 25. Runtime Governance\r
+\r
+Governance continues during execution.\r
+\r
+The Delegator can monitor:\r
+\r
+\`\`\`text\r
+Worker status\r
+Task status\r
+Execution time\r
+Timeout\r
+Retry count\r
+Tool failures\r
+Policy violations\r
+Data-access failures\r
+Concurrency\r
+Rate limits\r
+Output validation\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Worker executing\r
+       │\r
+       ▼\r
+API rate limit exceeded\r
+       │\r
+       ▼\r
+Delegator\r
+       │\r
+       ├── Retry?\r
+       ├── Alternate Worker?\r
+       ├── Wait?\r
+       └── Fail safely?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Governance During Failover\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Revenue Worker A\r
+       ↓\r
+Unavailable\r
+\`\`\`\r
+\r
+The Delegator should not simply select any available Worker.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Worker A unavailable\r
+       ↓\r
+Agent Registry\r
+       ↓\r
+Find alternative Workers\r
+       ↓\r
+Capability match\r
+       ↓\r
+Domain ownership\r
+       ↓\r
+Authorization\r
+       ↓\r
+Tool access\r
+       ↓\r
+Data access\r
+       ↓\r
+Health\r
+       ↓\r
+Policy\r
+       ↓\r
+Worker B\r
+\`\`\`\r
+\r
+Fallback must remain governed.\r
+\r
+---\r
+\r
+# 27. Human Approval\r
+\r
+Certain domain operations may require human approval.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Task:\r
+    Update customer contract\r
+\`\`\`\r
+\r
+Delegator policy:\r
+\r
+\`\`\`text\r
+Read → automatic\r
+Analysis → automatic\r
+Draft → automatic\r
+Update → approval required\r
+\`\`\`\r
+\r
+Execution becomes:\r
+\r
+\`\`\`text\r
+Delegator\r
+    ↓\r
+Policy\r
+    ↓\r
+REQUIRE_APPROVAL\r
+    ↓\r
+Human Approval\r
+    ↓\r
+Worker\r
+    ↓\r
+Execute\r
+\`\`\`\r
+\r
+This is especially important for high-impact or side-effecting operations.\r
+\r
+---\r
+\r
+# 28. Auditability\r
+\r
+Every governance decision should be traceable.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+correlation_id = CORR-123\r
+\r
+Authorization:\r
+    ALLOW\r
+\r
+Policy:\r
+    SALES-CUSTOMER-READ\r
+\r
+Capability:\r
+    revenue_lookup\r
+\r
+Worker:\r
+    sales-revenue-worker\r
+\r
+Tool:\r
+    snowflake_revenue_query\r
+\r
+Data scope:\r
+    CUST-123\r
+\r
+Result:\r
+    ALLOW\r
+\r
+Timestamp:\r
+    ...\r
+\`\`\`\r
+\r
+This allows security and compliance teams to answer:\r
+\r
+\`\`\`text\r
+Who requested it?\r
+What did they request?\r
+Which domain handled it?\r
+Which Worker executed it?\r
+What data was accessed?\r
+Which tool was used?\r
+What policy allowed it?\r
+What was returned?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 29. Governance and Observability\r
+\r
+Governance events should be part of the same end-to-end trace.\r
+\r
+\`\`\`text\r
+Session\r
+   │\r
+Task\r
+   │\r
+Run\r
+   │\r
+Turn\r
+   │\r
+Step\r
+   │\r
+Policy Decision\r
+   │\r
+Worker\r
+   │\r
+Tool\r
+   │\r
+Enterprise System\r
+\`\`\`\r
+\r
+This allows operational and security monitoring to be correlated.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Correlation ID\r
+      ↓\r
+Coordinator\r
+      ↓\r
+Sales Delegator\r
+      ↓\r
+Authorization Check\r
+      ↓\r
+Policy Check\r
+      ↓\r
+Revenue Worker\r
+      ↓\r
+Snowflake\r
+      ↓\r
+Result Validation\r
+      ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. Delegator Governance Architecture\r
+\r
+A production Delegator can be viewed as:\r
+\r
+\`\`\`text\r
+                  ┌───────────────────────┐\r
+                  │       Coordinator     │\r
+                  └───────────┬───────────┘\r
+                              │\r
+                             A2A\r
+                              │\r
+                              ▼\r
+              ┌─────────────────────────────┐\r
+              │          Delegator          │\r
+              │                             │\r
+              │  Domain Validation          │\r
+              │  Authorization              │\r
+              │  Policy Enforcement         │\r
+              │  Capability Validation      │\r
+              │  Data Access Control        │\r
+              │  Tool Restrictions           │\r
+              │  Input Validation            │\r
+              │  Worker Selection            │\r
+              │  Execution Control           │\r
+              │  Output Validation           │\r
+              │  Recovery                    │\r
+              └──────────────┬──────────────┘\r
+                             │\r
+                 ┌───────────┼───────────┐\r
+                 │           │           │\r
+                 ▼           ▼           ▼\r
+              Worker A    Worker B    Worker C\r
+                 │           │           │\r
+                 ▼           ▼           ▼\r
+               MCP         MCP         MCP\r
+                 │           │           │\r
+                 └───────────┼───────────┘\r
+                             ▼\r
+                    Enterprise Systems\r
+\`\`\`\r
+\r
+Supporting services:\r
+\r
+\`\`\`text\r
+Entra ID / RBAC\r
+       │\r
+       ▼\r
+Policy Service\r
+       │\r
+       ▼\r
+Agent Registry\r
+       │\r
+       ▼\r
+Prompt Registry\r
+       │\r
+       ▼\r
+Key Vault\r
+       │\r
+       ▼\r
+Azure AI Search\r
+       │\r
+       ▼\r
+MLflow / App Insights / Log Analytics\r
+\`\`\`\r
+\r
+---\r
+\r
+# 31. Responsibility Split\r
+\r
+| Responsibility       | Coordinator      | Delegator | Worker          |\r
+| -------------------- | ---------------- | --------- | --------------- |\r
+| Enterprise intent    | Yes              | No        | No              |\r
+| Enterprise routing   | Yes              | No        | No              |\r
+| Domain validation    | No               | Yes       | No              |\r
+| Domain policy        | No               | Yes       | Limited         |\r
+| Domain authorization | Central + domain | Yes       | Enforce locally |\r
+| Capability selection | High-level       | Yes       | No              |\r
+| Worker selection     | No               | Yes       | No              |\r
+| Tool restrictions    | High-level       | Yes       | Yes             |\r
+| Data restrictions    | Central          | Yes       | Yes             |\r
+| Task decomposition   | Enterprise       | Domain    | No              |\r
+| Worker execution     | No               | Controls  | Yes             |\r
+| Input validation     | High-level       | Yes       | Yes             |\r
+| Output validation    | Final            | Domain    | Yes             |\r
+| Recovery             | Enterprise       | Domain    | Local           |\r
+| Audit/trace          | Yes              | Yes       | Yes             |\r
+\r
+---\r
+\r
+# 32. CWD Governance Flow\r
+\r
+The complete production flow becomes:\r
+\r
+\`\`\`text\r
+User Request\r
+     │\r
+     ▼\r
+Gateway Authentication\r
+     │\r
+     ▼\r
+Coordinator Authorization\r
+     │\r
+     ▼\r
+Intent + Domain Identification\r
+     │\r
+     ▼\r
+Delegator Selection\r
+     │\r
+     ▼\r
+A2A\r
+     │\r
+     ▼\r
+Delegator\r
+     │\r
+     ├── Validate Domain\r
+     ├── Validate Authorization\r
+     ├── Evaluate Policy\r
+     ├── Validate Capability\r
+     ├── Validate Data Scope\r
+     ├── Validate Tool Access\r
+     ├── Validate Inputs\r
+     ├── Discover Workers\r
+     ├── Select Authorized Worker\r
+     │\r
+     ▼\r
+Worker Execution\r
+     │\r
+     ├── MCP\r
+     ├── RAG\r
+     ├── API\r
+     └── Enterprise System\r
+     │\r
+     ▼\r
+Worker Result\r
+     │\r
+     ▼\r
+Delegator Validation\r
+     │\r
+     ├── Schema Validation\r
+     ├── Business Validation\r
+     ├── Data Governance\r
+     ├── Redaction\r
+     └── Policy Validation\r
+     │\r
+     ▼\r
+Coordinator\r
+     │\r
+     ▼\r
+Final Response Governance\r
+     │\r
+     ▼\r
+User\r
+\`\`\`\r
+\r
+---\r
+\r
+# 33. Most Important Architectural Principle\r
+\r
+The Delegator should not trust:\r
+\r
+\`\`\`text\r
+User\r
+LLM\r
+Worker\r
+Tool\r
+Agent\r
+\`\`\`\r
+\r
+just because they are part of the CWD platform.\r
+\r
+Every execution request should pass through explicit controls.\r
+\r
+\`\`\`text\r
+Request\r
+   ↓\r
+Identity\r
+   ↓\r
+Authorization\r
+   ↓\r
+Policy\r
+   ↓\r
+Capability\r
+   ↓\r
+Data Scope\r
+   ↓\r
+Tool Scope\r
+   ↓\r
+Worker Selection\r
+   ↓\r
+Execution\r
+   ↓\r
+Output Validation\r
+\`\`\`\r
+\r
+This provides **defense in depth**.\r
+\r
+---\r
+\r
+# 34. Coordinator vs Delegator Governance\r
+\r
+A useful distinction is:\r
+\r
+### Coordinator\r
+\r
+Controls **enterprise-level governance**:\r
+\r
+\`\`\`text\r
+Who is the user?\r
+What are they asking?\r
+Which domain should handle it?\r
+Is execution permitted?\r
+Which Delegator should receive it?\r
+\`\`\`\r
+\r
+### Delegator\r
+\r
+Controls **domain-level governance**:\r
+\r
+\`\`\`text\r
+What can this domain do?\r
+What capabilities are allowed?\r
+Which Workers are permitted?\r
+What data can they access?\r
+Which tools can they use?\r
+What domain policies apply?\r
+What validation is required?\r
+\`\`\`\r
+\r
+### Worker\r
+\r
+Controls **execution-level enforcement**:\r
+\r
+\`\`\`text\r
+Can I execute this specific operation?\r
+Can I use this specific tool?\r
+Can I access this specific resource?\r
+Is the input valid?\r
+Is the output safe?\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    = Enterprise Governance\r
+\r
+Delegator\r
+    = Domain Governance\r
+\r
+Worker\r
+    = Execution Governance\r
+\`\`\`\r
+\r
+---\r
+\r
+# 35. Final Architect View\r
+\r
+The Delegator is the **domain-level policy enforcement and execution-control boundary** in CWD.\r
+\r
+It ensures that domain tasks are not simply routed to Workers, but are executed only when they satisfy:\r
+\r
+\`\`\`text\r
+Domain Ownership\r
+        +\r
+Authorization\r
+        +\r
+Policy\r
+        +\r
+Capability\r
+        +\r
+Data Access\r
+        +\r
+Tool Access\r
+        +\r
+Worker Eligibility\r
+        +\r
+Input Validation\r
+        +\r
+Execution Constraints\r
+        +\r
+Output Validation\r
+\`\`\`\r
+\r
+The overall model is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ Enterprise objective\r
+    ▼\r
+Delegator\r
+    │\r
+    │ Domain policy + governed task\r
+    ▼\r
+Worker\r
+    │\r
+    │ Controlled capability\r
+    ▼\r
+Tool / MCP\r
+    │\r
+    │ Governed access\r
+    ▼\r
+Enterprise System\r
+\`\`\`\r
+\r
+### One-line definition\r
+\r
+> **Delegator = Domain Routing + Domain Authorization + Policy Enforcement + Capability Control + Data/Tool Restrictions + Worker Governance + Execution Control + Validation.**\r
+\r
+The key architectural principle for CWD is:\r
+\r
+> **The Coordinator decides what should happen at the enterprise level; the Delegator determines what is permitted within the business domain; the Worker performs only the specifically authorized operation.**\r
+`,code:``},{id:`delegator-worker-communication`,category:`Delegator Agents`,title:`Delegator-to-Worker Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators communicate with Workers, transfer task context and execution metadata, invoke Worker capabilities, track responses, handle failures, and manage asynchronous or synchronous execution.`,concept:`# Delegator – Worker Communication, Context Transfer & Execution Management\r
+\r
+## 1. Overview\r
+\r
+In CWD, the **Delegator is the communication and execution-control layer between the Coordinator and specialized Workers**.\r
+\r
+The Coordinator sends a domain-level objective to the Delegator.\r
+\r
+The Delegator then:\r
+\r
+1. Understands the domain task\r
+2. Decomposes it into Worker tasks\r
+3. Identifies required capabilities\r
+4. Selects appropriate Workers\r
+5. Builds the Worker execution request\r
+6. Transfers the required context and metadata\r
+7. Invokes the Worker\r
+8. Tracks execution status\r
+9. Collects and validates responses\r
+10. Handles failures and retries\r
+11. Coordinates synchronous or asynchronous execution\r
+12. Aggregates domain results\r
+13. Returns the result to the Coordinator\r
+\r
+The overall pattern is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ Domain Task\r
+     ▼\r
+┌─────────────────┐\r
+│    Delegator    │\r
+│                 │\r
+│ Decompose      │\r
+│ Select Worker  │\r
+│ Build Context  │\r
+│ Invoke         │\r
+│ Track          │\r
+│ Recover        │\r
+│ Aggregate      │\r
+└────────┬────────┘\r
+         │\r
+       A2A / Messaging\r
+         │\r
+    ┌────┼────┬────┐\r
+    ▼    ▼    ▼    ▼\r
+ Worker Worker Worker Worker\r
+    │    │    │    │\r
+    ▼    ▼    ▼    ▼\r
+  MCP   API   RAG  DB\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Delegator–Worker Communication Boundary\r
+\r
+The communication boundary depends on whether the Worker is treated as:\r
+\r
+* a separate agent/service, or\r
+* an internal execution component of the Delegator.\r
+\r
+For CWD, when the Worker is an independent agent/service, the recommended pattern is:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ A2A\r
+    ▼\r
+Worker Agent\r
+\`\`\`\r
+\r
+For Worker-to-tool communication:\r
+\r
+\`\`\`text\r
+Worker\r
+    │\r
+    │ MCP / API / SDK\r
+    ▼\r
+Enterprise Tool / System\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+A2A = Agent-to-Agent communication\r
+\r
+MCP = Agent-to-Tool / System communication\r
+\`\`\`\r
+\r
+The Delegator should not bypass the Worker and directly execute Worker-owned capabilities.\r
+\r
+---\r
+\r
+# 3. Communication Options\r
+\r
+CWD can support both **synchronous** and **asynchronous** Worker execution.\r
+\r
+### Synchronous\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ Request\r
+    ▼\r
+Worker\r
+    │\r
+    │ Response\r
+    ▼\r
+Delegator\r
+\`\`\`\r
+\r
+The Delegator waits for the Worker response.\r
+\r
+Suitable for:\r
+\r
+* Fast queries\r
+* Simple calculations\r
+* Short-running retrieval\r
+* Low-latency operations\r
+* Immediate business responses\r
+\r
+---\r
+\r
+### Asynchronous\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ Task\r
+    ▼\r
+Service Bus / Kafka\r
+    │\r
+    ▼\r
+Worker\r
+    │\r
+    │ Result\r
+    ▼\r
+Service Bus / Callback\r
+    │\r
+    ▼\r
+Delegator\r
+\`\`\`\r
+\r
+The Delegator does not remain blocked while the Worker executes.\r
+\r
+Suitable for:\r
+\r
+* Long-running workflows\r
+* Large data processing\r
+* Document generation\r
+* Batch operations\r
+* Multiple parallel Workers\r
+* External systems with unpredictable latency\r
+\r
+---\r
+\r
+# 4. Worker Task Contract\r
+\r
+The Delegator should never send an unstructured message such as:\r
+\r
+\`\`\`text\r
+"Get customer revenue."\r
+\`\`\`\r
+\r
+Instead, it should create a structured Worker task.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-1001",\r
+  "run_id": "RUN-501",\r
+  "step_id": "STEP-03",\r
+  "correlation_id": "CORR-789",\r
+  "domain": "sales",\r
+  "capability": "revenue_lookup",\r
+  "worker_id": "sales-revenue-worker",\r
+  "objective": "Retrieve revenue for customer CUST-123",\r
+  "input": {\r
+    "customer_id": "CUST-123",\r
+    "period": "FY2026"\r
+  },\r
+  "execution_mode": "synchronous",\r
+  "priority": "normal",\r
+  "timeout_seconds": 30\r
+}\r
+\`\`\`\r
+\r
+This creates a consistent contract between Delegator and Worker.\r
+\r
+---\r
+\r
+# 5. What Context Does the Delegator Transfer?\r
+\r
+The Delegator must transfer enough context for the Worker to understand and execute the task.\r
+\r
+But it should **not blindly pass the entire conversation or all available enterprise data**.\r
+\r
+Context should follow the principle:\r
+\r
+> **Minimum necessary context required to perform the authorized task.**\r
+\r
+---\r
+\r
+# 6. Business Context\r
+\r
+Business context explains **what the task means**.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "domain": "sales",\r
+  "intent": "customer_briefing",\r
+  "customer_id": "CUST-123",\r
+  "requested_period": "FY2026",\r
+  "business_objective": "Prepare customer revenue summary"\r
+}\r
+\`\`\`\r
+\r
+This allows the Worker to understand the business purpose.\r
+\r
+---\r
+\r
+# 7. Execution Context\r
+\r
+Execution context identifies **where the task belongs in the workflow**.\r
+\r
+Typical CWD identifiers include:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+correlation_id\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "SESSION-100",\r
+  "task_id": "TASK-1001",\r
+  "run_id": "RUN-501",\r
+  "turn_id": "TURN-07",\r
+  "step_id": "STEP-03",\r
+  "correlation_id": "CORR-789"\r
+}\r
+\`\`\`\r
+\r
+These identifiers allow the complete execution chain to be traced.\r
+\r
+---\r
+\r
+# 8. Authorization Context\r
+\r
+The Delegator should also propagate the relevant authorization context.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "identity": {\r
+    "user_id": "USER-123",\r
+    "tenant_id": "TENANT-01",\r
+    "roles": [\r
+      "sales_manager"\r
+    ]\r
+  },\r
+  "authorization": {\r
+    "domain": "sales",\r
+    "capability": "revenue_lookup",\r
+    "data_scope": [\r
+      "CUST-123"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Worker can then enforce execution-level authorization rather than trusting the incoming task blindly.\r
+\r
+---\r
+\r
+# 9. Tool and Data Scope\r
+\r
+The Delegator can specify what the Worker is allowed to use.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "allowed_tools": [\r
+    "snowflake_revenue_query"\r
+  ],\r
+  "allowed_data_sources": [\r
+    "sales_revenue"\r
+  ],\r
+  "data_scope": {\r
+    "customer_ids": [\r
+      "CUST-123"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This prevents a Worker from interpreting:\r
+\r
+\`\`\`text\r
+"Retrieve revenue"\r
+\`\`\`\r
+\r
+as permission to query the entire enterprise data estate.\r
+\r
+---\r
+\r
+# 10. Execution Metadata\r
+\r
+Execution metadata helps the Worker and platform understand how the task should be executed.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "execution": {\r
+    "mode": "synchronous",\r
+    "priority": "high",\r
+    "timeout_seconds": 30,\r
+    "max_retries": 2,\r
+    "idempotency_key": "TASK-1001-RUN-501",\r
+    "requested_at": "2026-09-06T17:00:00Z"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This allows the Worker runtime to apply appropriate execution controls.\r
+\r
+---\r
+\r
+# 11. Complete Worker Request\r
+\r
+Conceptually, the Worker request can contain:\r
+\r
+\`\`\`text\r
+WorkerTask\r
+│\r
+├── Identity\r
+│   ├── user_id\r
+│   ├── tenant_id\r
+│   └── roles/claims\r
+│\r
+├── Business Context\r
+│   ├── domain\r
+│   ├── intent\r
+│   ├── objective\r
+│   └── business entities\r
+│\r
+├── Execution Context\r
+│   ├── session_id\r
+│   ├── task_id\r
+│   ├── run_id\r
+│   ├── turn_id\r
+│   ├── step_id\r
+│   └── correlation_id\r
+│\r
+├── Input\r
+│   ├── parameters\r
+│   └── upstream results\r
+│\r
+├── Authorization\r
+│   ├── capability\r
+│   ├── data scope\r
+│   └── policy context\r
+│\r
+├── Tool Scope\r
+│   ├── allowed tools\r
+│   └── allowed data sources\r
+│\r
+└── Execution\r
+    ├── mode\r
+    ├── timeout\r
+    ├── priority\r
+    └── retry policy\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. How the Delegator Invokes a Worker\r
+\r
+After selecting a Worker, the Delegator creates the execution request.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+worker_task = WorkerTask(\r
+    task_id=task.task_id,\r
+    run_id=context.run_id,\r
+    step_id=step.step_id,\r
+    correlation_id=context.correlation_id,\r
+    domain="sales",\r
+    capability="revenue_lookup",\r
+    input={\r
+        "customer_id": "CUST-123",\r
+        "period": "FY2026"\r
+    },\r
+    execution_mode="synchronous"\r
+)\r
+\r
+result = await worker_client.execute(\r
+    worker_id="sales-revenue-worker",\r
+    task=worker_task\r
+)\r
+\`\`\`\r
+\r
+The important point is that:\r
+\r
+\`\`\`text\r
+Delegator\r
+    ↓\r
+Worker Client / A2A\r
+    ↓\r
+Worker\r
+\`\`\`\r
+\r
+rather than:\r
+\r
+\`\`\`text\r
+Delegator\r
+    ↓\r
+Direct Worker Python function\r
+\`\`\`\r
+\r
+when the Worker is an independent agent.\r
+\r
+---\r
+\r
+# 13. A2A Invocation\r
+\r
+If the Worker is an independent agent, the Delegator can invoke it through the CWD A2A layer.\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    ▼\r
+A2A Client\r
+    │\r
+    ▼\r
+A2A Gateway\r
+    │\r
+    ├── Authentication\r
+    ├── Authorization\r
+    ├── Correlation\r
+    ├── Idempotency\r
+    ├── Routing\r
+    └── Policy\r
+    │\r
+    ▼\r
+Worker Agent\r
+\`\`\`\r
+\r
+The Worker receives a standardized task contract rather than a custom message from every Delegator.\r
+\r
+---\r
+\r
+# 14. Agent Registry in Worker Invocation\r
+\r
+The Delegator should discover Workers through the Agent Registry.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Required capability:\r
+    revenue_lookup\r
+\r
+       ↓\r
+\r
+Agent Registry\r
+\r
+       ↓\r
+\r
+Worker A\r
+Worker B\r
+Worker C\r
+\r
+       ↓\r
+\r
+Filter\r
+\r
+Domain\r
+Capability\r
+Authorization\r
+Tool Access\r
+Health\r
+Availability\r
+Workload\r
+Version\r
+\r
+       ↓\r
+\r
+Selected Worker\r
+\`\`\`\r
+\r
+This makes Worker routing dynamic.\r
+\r
+---\r
+\r
+# 15. Synchronous Execution\r
+\r
+For a synchronous operation:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ 1. Send task\r
+    ▼\r
+Worker\r
+    │\r
+    │ 2. Execute\r
+    ▼\r
+Worker Tools\r
+    │\r
+    ▼\r
+Enterprise System\r
+    │\r
+    ▼\r
+Worker\r
+    │\r
+    │ 3. Return result\r
+    ▼\r
+Delegator\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+User:\r
+"Get revenue for customer ABC."\r
+\r
+Coordinator\r
+    ↓\r
+Sales Delegator\r
+    ↓\r
+Revenue Worker\r
+    ↓\r
+Snowflake\r
+    ↓\r
+Revenue Worker\r
+    ↓\r
+Sales Delegator\r
+    ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+If the operation completes in a few seconds, synchronous execution is appropriate.\r
+\r
+---\r
+\r
+# 16. Asynchronous Execution\r
+\r
+For a long-running task:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ Submit Task\r
+    ▼\r
+Message Broker\r
+    │\r
+    ▼\r
+Worker\r
+    │\r
+    │ Processing\r
+    ▼\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+The Delegator receives:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-1001",\r
+  "status": "ACCEPTED"\r
+}\r
+\`\`\`\r
+\r
+It does not need to block.\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+Worker\r
+   │\r
+   │ Result\r
+   ▼\r
+Message Broker\r
+   │\r
+   ▼\r
+Delegator\r
+\`\`\`\r
+\r
+The Delegator correlates the result using:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+correlation_id\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. Service Bus / Kafka\r
+\r
+CWD can use messaging infrastructure for asynchronous execution.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Delegator\r
+     │\r
+     ▼\r
+Service Bus / Kafka\r
+     │\r
+     ├───────────────┐\r
+     ▼               ▼\r
+Worker A          Worker B\r
+     │               │\r
+     ▼               ▼\r
+Result A          Result B\r
+     │               │\r
+     └───────┬───────┘\r
+             ▼\r
+       Message Broker\r
+             │\r
+             ▼\r
+         Delegator\r
+\`\`\`\r
+\r
+This supports:\r
+\r
+* buffering\r
+* asynchronous processing\r
+* parallel execution\r
+* retry\r
+* dead-letter handling\r
+* workload isolation\r
+* backpressure\r
+\r
+---\r
+\r
+# 18. Parallel Worker Execution\r
+\r
+A domain task may require multiple Workers.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+        │\r
+        ▼\r
+Sales Delegator\r
+        │\r
+   ┌────┼────┬────┐\r
+   ▼    ▼    ▼    ▼\r
+Profile Revenue Opportunities Interactions\r
+Worker   Worker     Worker       Worker\r
+   │       │          │            │\r
+   └───────┴──────────┴────────────┘\r
+                   │\r
+                   ▼\r
+            Delegator\r
+\`\`\`\r
+\r
+The Delegator can execute independent tasks in parallel.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+T1 → Customer Profile\r
+T2 → Revenue\r
+T3 → Opportunities\r
+T4 → Interactions\r
+\`\`\`\r
+\r
+These may execute concurrently.\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+T1 + T2 + T3 + T4\r
+           ↓\r
+     Generate Briefing\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Dependency-Aware Execution\r
+\r
+Not every Worker task can execute immediately.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+T1: Resolve Customer\r
+       │\r
+       ├──────────────┐\r
+       ▼              ▼\r
+T2: Revenue      T3: Opportunities\r
+       │              │\r
+       └──────┬───────┘\r
+              ▼\r
+        T4: Customer Brief\r
+\`\`\`\r
+\r
+The Delegator maintains the dependency graph.\r
+\r
+\`\`\`text\r
+T1 = COMPLETED\r
+        ↓\r
+T2 = READY\r
+T3 = READY\r
+        ↓\r
+T2 + T3 = COMPLETED\r
+        ↓\r
+T4 = READY\r
+\`\`\`\r
+\r
+This is where LangGraph can manage domain workflow state and transitions.\r
+\r
+---\r
+\r
+# 20. Tracking Worker Status\r
+\r
+Every Worker task should have a lifecycle.\r
+\r
+\`\`\`text\r
+PENDING\r
+   ↓\r
+READY\r
+   ↓\r
+SUBMITTED\r
+   ↓\r
+RUNNING\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+Failure paths:\r
+\r
+\`\`\`text\r
+RUNNING\r
+   ↓\r
+FAILED\r
+   ↓\r
+RETRYING\r
+   ↓\r
+RUNNING\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+FAILED\r
+   ↓\r
+FALLBACK\r
+   ↓\r
+ALTERNATE WORKER\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+FAILED\r
+   ↓\r
+ESCALATED\r
+\`\`\`\r
+\r
+---\r
+\r
+# 21. Worker Response Contract\r
+\r
+Workers should return structured results.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "TASK-1001",\r
+  "run_id": "RUN-501",\r
+  "step_id": "STEP-03",\r
+  "correlation_id": "CORR-789",\r
+  "worker_id": "sales-revenue-worker",\r
+  "status": "COMPLETED",\r
+  "result": {\r
+    "customer_id": "CUST-123",\r
+    "revenue": 12500000,\r
+    "currency": "USD"\r
+  },\r
+  "metadata": {\r
+    "source": "snowflake",\r
+    "execution_time_ms": 842\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Delegator should never depend on unstructured Worker responses.\r
+\r
+---\r
+\r
+# 22. Response Tracking\r
+\r
+When the response arrives, the Delegator correlates it.\r
+\r
+\`\`\`text\r
+Response\r
+    │\r
+    ├── task_id\r
+    ├── run_id\r
+    ├── step_id\r
+    └── correlation_id\r
+          │\r
+          ▼\r
+Delegator State\r
+\`\`\`\r
+\r
+The Delegator determines:\r
+\r
+\`\`\`text\r
+Which task?\r
+Which run?\r
+Which step?\r
+Which Worker?\r
+Which domain workflow?\r
+Which Coordinator request?\r
+\`\`\`\r
+\r
+This is critical when multiple Workers are running concurrently.\r
+\r
+---\r
+\r
+# 23. Response Validation\r
+\r
+The Delegator validates:\r
+\r
+\`\`\`text\r
+Schema\r
+Status\r
+Required fields\r
+Business rules\r
+Data completeness\r
+Authorization\r
+Data classification\r
+Policy constraints\r
+Provenance\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Worker Result\r
+      ↓\r
+Schema valid?       YES\r
+Required fields?    YES\r
+Authorized data?    YES\r
+Business rules?     YES\r
+Policy compliant?   YES\r
+      ↓\r
+ACCEPT\r
+\`\`\`\r
+\r
+Otherwise:\r
+\r
+\`\`\`text\r
+REJECT / REDACT / RETRY / ESCALATE\r
+\`\`\`\r
+\r
+---\r
+\r
+# 24. Partial Results\r
+\r
+Suppose four Workers are required:\r
+\r
+\`\`\`text\r
+Profile       → SUCCESS\r
+Revenue       → SUCCESS\r
+Opportunity   → SUCCESS\r
+Interactions  → TIMEOUT\r
+\`\`\`\r
+\r
+The Delegator determines whether the failed task is critical.\r
+\r
+\`\`\`text\r
+Interactions = Optional\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+    ↓\r
+Generate with partial data\r
+    ↓\r
+Mark interactions unavailable\r
+\`\`\`\r
+\r
+But if:\r
+\r
+\`\`\`text\r
+Revenue = Critical\r
+\`\`\`\r
+\r
+then the Delegator may stop final aggregation.\r
+\r
+This is domain-specific execution policy.\r
+\r
+---\r
+\r
+# 25. Failure Handling\r
+\r
+The Delegator handles failures at the Worker boundary.\r
+\r
+Common failures:\r
+\r
+\`\`\`text\r
+Worker unavailable\r
+Worker timeout\r
+A2A failure\r
+Message delivery failure\r
+Tool failure\r
+API failure\r
+Database failure\r
+Rate limit\r
+Invalid response\r
+Authorization failure\r
+Policy violation\r
+\`\`\`\r
+\r
+The Delegator classifies the failure.\r
+\r
+\`\`\`text\r
+Failure\r
+  │\r
+  ├── Transient\r
+  │      ↓\r
+  │    Retry\r
+  │\r
+  ├── Timeout\r
+  │      ↓\r
+  │    Retry / Fallback\r
+  │\r
+  ├── Worker unavailable\r
+  │      ↓\r
+  │    Alternate Worker\r
+  │\r
+  ├── Authorization\r
+  │      ↓\r
+  │    Stop\r
+  │\r
+  └── Policy violation\r
+         ↓\r
+       Stop / Escalate\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Retry\r
+\r
+Retries should be controlled.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Attempt 1\r
+   ↓\r
+Timeout\r
+   ↓\r
+Wait\r
+   ↓\r
+Attempt 2\r
+   ↓\r
+Timeout\r
+   ↓\r
+Attempt 3\r
+   ↓\r
+Success\r
+\`\`\`\r
+\r
+Use:\r
+\r
+\`\`\`text\r
+Maximum retry count\r
+Exponential backoff\r
+Timeout policy\r
+Idempotency key\r
+Failure classification\r
+\`\`\`\r
+\r
+The Delegator should never endlessly retry.\r
+\r
+---\r
+\r
+# 27. Idempotency\r
+\r
+For operations that modify enterprise systems, retries can be dangerous.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Create CRM Opportunity\r
+\`\`\`\r
+\r
+If the Worker times out after creating the opportunity, retrying may create a duplicate.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+task_id\r
++\r
+run_id\r
++\r
+idempotency_key\r
+\`\`\`\r
+\r
+should be used to identify the operation.\r
+\r
+The Worker or downstream system can determine:\r
+\r
+\`\`\`text\r
+Already processed?\r
+    ↓\r
+YES → return existing result\r
+NO  → execute\r
+\`\`\`\r
+\r
+---\r
+\r
+# 28. Worker Timeout\r
+\r
+The Delegator should maintain task-specific timeout policies.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Lookup\r
+    timeout = 10 sec\r
+\r
+Revenue Query\r
+    timeout = 30 sec\r
+\r
+Document Generation\r
+    timeout = 5 min\r
+\`\`\`\r
+\r
+A timeout should result in a controlled state transition:\r
+\r
+\`\`\`text\r
+RUNNING\r
+   ↓\r
+TIMEOUT\r
+   ↓\r
+Retry / Fallback / Partial / Escalate\r
+\`\`\`\r
+\r
+---\r
+\r
+# 29. Worker Health Monitoring\r
+\r
+The Delegator can use Agent Registry/runtime health information before selecting a Worker.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Worker A\r
+Health = Healthy\r
+Load = 20%\r
+Queue = Low\r
+\r
+Worker B\r
+Health = Degraded\r
+Load = 90%\r
+Queue = High\r
+\r
+Worker C\r
+Health = Healthy\r
+Load = 40%\r
+Queue = Medium\r
+\`\`\`\r
+\r
+The Delegator should prefer an eligible healthy Worker rather than blindly selecting Worker A every time.\r
+\r
+---\r
+\r
+# 30. Worker Availability vs Health\r
+\r
+These should be treated separately.\r
+\r
+### Health\r
+\r
+Can the Worker technically operate?\r
+\r
+\`\`\`text\r
+Healthy\r
+Degraded\r
+Unhealthy\r
+\`\`\`\r
+\r
+### Availability\r
+\r
+Can the Worker accept another task?\r
+\r
+\`\`\`text\r
+Available\r
+Busy\r
+At Capacity\r
+Unavailable\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Healthy + Available\r
+        ↓\r
+Best candidate\r
+\`\`\`\r
+\r
+while:\r
+\r
+\`\`\`text\r
+Healthy + At Capacity\r
+        ↓\r
+Delay / Queue / Alternate Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 31. Concurrency Control\r
+\r
+The Delegator must avoid overwhelming a Worker.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Worker capacity = 10 concurrent tasks\r
+\r
+Current:\r
+    10 running\r
+\`\`\`\r
+\r
+New task arrives:\r
+\r
+\`\`\`text\r
+New Task\r
+   ↓\r
+Worker at capacity\r
+   ↓\r
+Queue\r
+or\r
+Alternate Worker\r
+\`\`\`\r
+\r
+This prevents cascading failures.\r
+\r
+---\r
+\r
+# 32. Backpressure\r
+\r
+If incoming workload exceeds Worker capacity:\r
+\r
+\`\`\`text\r
+Requests\r
+████████████████████\r
+          ↓\r
+      Delegator\r
+          ↓\r
+     Queue/Buffer\r
+          ↓\r
+       Workers\r
+\`\`\`\r
+\r
+The Delegator can apply:\r
+\r
+\`\`\`text\r
+Priority\r
+Concurrency limits\r
+Queueing\r
+Rate limits\r
+Load shedding\r
+Alternate Worker selection\r
+\`\`\`\r
+\r
+This is particularly important for asynchronous workloads.\r
+\r
+---\r
+\r
+# 33. Synchronous vs Asynchronous Decision\r
+\r
+The Delegator can determine execution mode based on task characteristics.\r
+\r
+| Condition                             | Execution                   |\r
+| ------------------------------------- | --------------------------- |\r
+| Fast operation                        | Synchronous                 |\r
+| Short API call                        | Synchronous                 |\r
+| Simple retrieval                      | Synchronous                 |\r
+| Long-running task                     | Asynchronous                |\r
+| Large document generation             | Asynchronous                |\r
+| Batch processing                      | Asynchronous                |\r
+| Multiple independent Workers          | Often asynchronous/parallel |\r
+| External dependency with long latency | Asynchronous                |\r
+| Human approval required               | Asynchronous                |\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+if task.estimated_duration <= SYNC_THRESHOLD:\r
+    mode = "synchronous"\r
+else:\r
+    mode = "asynchronous"\r
+\`\`\`\r
+\r
+In production, this should be policy-driven rather than hard-coded.\r
+\r
+---\r
+\r
+# 34. Long-Running Task\r
+\r
+For a long-running Worker:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    ├── Submit\r
+    │\r
+    ▼\r
+Worker\r
+    │\r
+    │ status = ACCEPTED\r
+    ▼\r
+Delegator\r
+\`\`\`\r
+\r
+The Delegator can continue other work.\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+Worker\r
+    │\r
+    │ status = COMPLETED\r
+    ▼\r
+Message/Event\r
+    │\r
+    ▼\r
+Delegator\r
+\`\`\`\r
+\r
+The Delegator resumes the domain workflow.\r
+\r
+---\r
+\r
+# 35. State Management\r
+\r
+The Delegator should persist workflow state.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Domain Task\r
+     │\r
+     ▼\r
+Delegator State\r
+     │\r
+     ├── task status\r
+     ├── Worker status\r
+     ├── dependencies\r
+     ├── outputs\r
+     ├── retry count\r
+     ├── errors\r
+     └── execution metadata\r
+\`\`\`\r
+\r
+Redis can support short-term execution state/cache, while durable state mechanisms can be used for longer-running workflows where required.\r
+\r
+---\r
+\r
+# 36. LangGraph Role\r
+\r
+LangGraph can manage the Delegator's domain workflow state.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Validate Task\r
+  ↓\r
+Identify Capabilities\r
+  ↓\r
+Select Workers\r
+  ↓\r
+Create Worker Tasks\r
+  ↓\r
+Execute Parallel Tasks\r
+  ↓\r
+Track Results\r
+  ↓\r
+Retry Failed Tasks\r
+  ↓\r
+Aggregate\r
+  ↓\r
+Validate\r
+  ↓\r
+END\r
+\`\`\`\r
+\r
+The important separation is:\r
+\r
+\`\`\`text\r
+Delegator\r
+    = Domain orchestration decisions\r
+\r
+LangGraph\r
+    = Workflow state + transitions\r
+\r
+A2A\r
+    = Agent communication\r
+\r
+Agent Registry\r
+    = Worker discovery\r
+\r
+MCP\r
+    = Tool/system access\r
+\r
+Policy Service\r
+    = Governance decisions\r
+\`\`\`\r
+\r
+---\r
+\r
+# 37. Complete Delegator–Worker Flow\r
+\r
+A production execution can look like this:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     ▼\r
+Delegator\r
+     │\r
+     ├── Validate domain task\r
+     ├── Validate authorization\r
+     ├── Apply domain policies\r
+     ├── Decompose task\r
+     ├── Determine dependencies\r
+     ├── Identify capabilities\r
+     │\r
+     ▼\r
+Agent Registry\r
+     │\r
+     ├── Find Workers\r
+     ├── Check capability\r
+     ├── Check health\r
+     ├── Check availability\r
+     ├── Check permissions\r
+     └── Check workload\r
+     │\r
+     ▼\r
+Worker Selection\r
+     │\r
+     ▼\r
+Build Worker Task\r
+     │\r
+     ├── Business context\r
+     ├── Execution context\r
+     ├── Authorization context\r
+     ├── Data scope\r
+     ├── Tool scope\r
+     └── Execution metadata\r
+     │\r
+     ▼\r
+A2A / Messaging\r
+     │\r
+     ▼\r
+Worker\r
+     │\r
+     ├── LLM reasoning\r
+     ├── MCP/tool invocation\r
+     ├── RAG retrieval\r
+     └── Enterprise API\r
+     │\r
+     ▼\r
+Worker Result\r
+     │\r
+     ▼\r
+Delegator\r
+     │\r
+     ├── Correlate\r
+     ├── Validate\r
+     ├── Handle failure\r
+     ├── Retry/fallback\r
+     ├── Update state\r
+     └── Aggregate\r
+     │\r
+     ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 38. Example: Customer Briefing\r
+\r
+Suppose the Coordinator sends:\r
+\r
+\`\`\`text\r
+"Prepare a customer briefing for Customer ABC."\r
+\`\`\`\r
+\r
+The Sales Delegator receives the domain task.\r
+\r
+It decomposes:\r
+\r
+\`\`\`text\r
+T1 → Customer Profile\r
+T2 → Revenue\r
+T3 → Opportunities\r
+T4 → Recent Interactions\r
+T5 → Generate Briefing\r
+\`\`\`\r
+\r
+Dependencies:\r
+\r
+\`\`\`text\r
+T1 ─────┐\r
+T2 ─────┤\r
+T3 ─────┼──→ T5\r
+T4 ─────┘\r
+\`\`\`\r
+\r
+The Delegator selects Workers:\r
+\r
+\`\`\`text\r
+T1 → Customer Profile Worker\r
+T2 → Revenue Worker\r
+T3 → Opportunity Worker\r
+T4 → Interaction Worker\r
+T5 → Briefing Worker\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+T1 ──┐\r
+T2 ──┤\r
+T3 ──┼── Parallel\r
+T4 ──┘\r
+       │\r
+       ▼\r
+     Results\r
+       │\r
+       ▼\r
+       T5\r
+       │\r
+       ▼\r
+ Customer Briefing\r
+\`\`\`\r
+\r
+The Delegator validates the results and sends the domain-level result back to the Coordinator.\r
+\r
+---\r
+\r
+# 39. Responsibility Boundary\r
+\r
+| Activity                | Coordinator           | Delegator        | Worker    |\r
+| ----------------------- | --------------------- | ---------------- | --------- |\r
+| Enterprise intent       | Yes                   | No               | No        |\r
+| Domain selection        | Yes                   | Validate         | No        |\r
+| Domain decomposition    | No                    | Yes              | No        |\r
+| Worker selection        | No                    | Yes              | No        |\r
+| Task creation           | High-level            | Yes              | No        |\r
+| Context propagation     | Enterprise            | Domain           | Execution |\r
+| A2A communication       | Coordinator→Delegator | Delegator→Worker | Respond   |\r
+| Tool invocation         | No                    | Controls         | Yes       |\r
+| Enterprise data access  | No                    | Governs          | Executes  |\r
+| Worker execution        | No                    | Controls         | Yes       |\r
+| Status tracking         | Overall               | Domain           | Local     |\r
+| Retry                   | Enterprise            | Domain           | Local     |\r
+| Worker failure recovery | No                    | Yes              | Limited   |\r
+| Result validation       | Final                 | Domain           | Local     |\r
+| Domain aggregation      | No                    | Yes              | No        |\r
+| Final response          | Yes                   | No               | No        |\r
+\r
+---\r
+\r
+# 40. Final Architecture Principle\r
+\r
+The Delegator should be viewed as the **domain execution controller**.\r
+\r
+It does not simply forward messages.\r
+\r
+It manages the complete lifecycle:\r
+\r
+\`\`\`text\r
+Receive\r
+  ↓\r
+Validate\r
+  ↓\r
+Decompose\r
+  ↓\r
+Select\r
+  ↓\r
+Contextualize\r
+  ↓\r
+Invoke\r
+  ↓\r
+Track\r
+  ↓\r
+Recover\r
+  ↓\r
+Validate\r
+  ↓\r
+Aggregate\r
+  ↓\r
+Return\r
+\`\`\`\r
+\r
+The architectural relationship is:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                      │\r
+                Enterprise Task\r
+                      │\r
+                     A2A\r
+                      │\r
+                      ▼\r
+                 Delegator\r
+                      │\r
+       ┌──────────────┼──────────────┐\r
+       │              │              │\r
+       ▼              ▼              ▼\r
+   Worker A        Worker B       Worker C\r
+       │              │              │\r
+       ▼              ▼              ▼\r
+      MCP            API            RAG\r
+       │              │              │\r
+       └──────────────┼──────────────┘\r
+                      ▼\r
+             Enterprise Systems\r
+\`\`\`\r
+\r
+### One-line definition\r
+\r
+> **Delegator = Decompose + Contextualize + Invoke + Track + Recover + Aggregate Worker execution.**\r
+\r
+### Most important CWD principle\r
+\r
+> **The Coordinator controls the enterprise workflow, the Delegator controls domain-level execution, and the Worker performs the authorized capability.**\r
+\r
+This separation allows CWD to support **synchronous execution for low-latency tasks, asynchronous execution for long-running tasks, parallel Worker execution for independent tasks, and dependency-aware recovery for complex domain workflows** while maintaining consistent context, correlation, authorization, observability, and governance across the entire execution chain.\r
+`,code:``},{id:`multiple-delegator-architecture`,category:`Delegator Agents`,title:`Multiple Delegator Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how multiple domain-specific Delegators can operate within an enterprise CWD architecture, including cross-domain coordination, routing, isolation, scalability, shared governance, and interaction with the central Coordinator.`,concept:`# Multiple Domain Delegators in Enterprise CWD Architecture\r
+\r
+## 1. Overview\r
+\r
+In an enterprise CWD architecture, multiple **domain-specific Delegators** operate under a single central **Coordinator**.\r
+\r
+Each Delegator owns the orchestration of a specific business or technical domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                         ┌──────────────────┐\r
+                         │      Users       │\r
+                         │ Teams / M365 / UI│\r
+                         └────────┬─────────┘\r
+                                  │\r
+                                  ▼\r
+                         ┌──────────────────┐\r
+                         │   API Gateway    │\r
+                         └────────┬─────────┘\r
+                                  │\r
+                                  ▼\r
+                    ┌──────────────────────────┐\r
+                    │       Coordinator       │\r
+                    │                          │\r
+                    │ Intent                   │\r
+                    │ Planning                 │\r
+                    │ Enterprise Routing       │\r
+                    │ Cross-Domain Coordination│\r
+                    │ Aggregation              │\r
+                    └────────────┬─────────────┘\r
+                                 │\r
+             ┌───────────────────┼───────────────────┐\r
+             │                   │                   │\r
+            A2A                  A2A                 A2A\r
+             │                   │                   │\r
+             ▼                   ▼                   ▼\r
+      ┌─────────────┐     ┌─────────────┐     ┌─────────────┐\r
+      │    Sales    │     │   Finance   │     │     HR      │\r
+      │  Delegator  │     │  Delegator  │     │  Delegator  │\r
+      └──────┬──────┘     └──────┬──────┘     └──────┬──────┘\r
+             │                   │                   │\r
+        Workers              Workers              Workers\r
+             │                   │                   │\r
+             ▼                   ▼                   ▼\r
+      Sales Systems        Finance Systems       HR Systems\r
+\`\`\`\r
+\r
+Additional Delegators can exist for:\r
+\r
+\`\`\`text\r
+Commercial Services\r
+Supply Chain\r
+Customer Experience\r
+Quality\r
+Business Analysis\r
+Email\r
+Calendar\r
+Marketing\r
+\`\`\`\r
+\r
+The key architectural principle is:\r
+\r
+> **The Coordinator provides enterprise-wide orchestration, while each Delegator provides domain-specific orchestration.**\r
+\r
+---\r
+\r
+# 2. Why Multiple Delegators Are Required\r
+\r
+A large enterprise cannot practically put all domain logic into one Coordinator.\r
+\r
+Consider an enterprise with:\r
+\r
+\`\`\`text\r
+Sales\r
+Finance\r
+HR\r
+Supply Chain\r
+Quality\r
+Customer Experience\r
+Commercial Services\r
+\`\`\`\r
+\r
+Each domain has different:\r
+\r
+* business processes\r
+* terminology\r
+* policies\r
+* data sources\r
+* authorization rules\r
+* capabilities\r
+* Workers\r
+* tools\r
+* workflows\r
+* failure/recovery requirements\r
+\r
+A single Coordinator containing all of this logic would become a **monolithic orchestration component**.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── Sales Delegator\r
+     ├── Finance Delegator\r
+     ├── HR Delegator\r
+     ├── Supply Chain Delegator\r
+     ├── Quality Delegator\r
+     └── Customer Experience Delegator\r
+\`\`\`\r
+\r
+Each domain can evolve independently.\r
+\r
+---\r
+\r
+# 3. Role of the Central Coordinator\r
+\r
+The Coordinator operates at the **enterprise level**.\r
+\r
+Its responsibility is to understand:\r
+\r
+> **What does the user want and which business domains are required?**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User:\r
+\r
+"Prepare a customer business review including\r
+revenue, open opportunities, supply issues,\r
+and recent customer interactions."\r
+\`\`\`\r
+\r
+The Coordinator identifies:\r
+\r
+\`\`\`text\r
+Sales\r
+Finance / Revenue\r
+Supply Chain\r
+Customer Experience\r
+\`\`\`\r
+\r
+It then coordinates the appropriate Delegators.\r
+\r
+\`\`\`text\r
+                       Coordinator\r
+                            │\r
+            ┌───────────────┼───────────────┐\r
+            ▼               ▼               ▼\r
+      Sales Delegator  Supply Chain      CX Delegator\r
+                            Delegator\r
+            │               │               │\r
+          Workers         Workers          Workers\r
+\`\`\`\r
+\r
+The Coordinator does **not** need to know every Worker inside those domains.\r
+\r
+---\r
+\r
+# 4. Role of Each Domain Delegator\r
+\r
+Each Delegator owns its domain.\r
+\r
+For example:\r
+\r
+### Sales Delegator\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    │\r
+    ├── Customer Worker\r
+    ├── Opportunity Worker\r
+    ├── Pipeline Worker\r
+    └── Sales Activity Worker\r
+\`\`\`\r
+\r
+### Finance Delegator\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+    │\r
+    ├── Revenue Worker\r
+    ├── Cost Worker\r
+    ├── Budget Worker\r
+    └── Financial Reporting Worker\r
+\`\`\`\r
+\r
+### Supply Chain Delegator\r
+\r
+\`\`\`text\r
+Supply Chain Delegator\r
+    │\r
+    ├── Inventory Worker\r
+    ├── Shipment Worker\r
+    ├── Supply Risk Worker\r
+    └── Supplier Worker\r
+\`\`\`\r
+\r
+The Delegator understands how to turn a domain objective into domain-specific Worker tasks.\r
+\r
+---\r
+\r
+# 5. Two-Level Orchestration\r
+\r
+Multiple Delegators create a hierarchical orchestration model.\r
+\r
+\`\`\`text\r
+                    Enterprise Objective\r
+                           │\r
+                           ▼\r
+                     Coordinator\r
+                           │\r
+                 Enterprise Planning\r
+                           │\r
+          ┌────────────────┼────────────────┐\r
+          ▼                ▼                ▼\r
+      Sales Domain     Finance Domain   Supply Domain\r
+          │                │                │\r
+          ▼                ▼                ▼\r
+      Delegator         Delegator        Delegator\r
+          │                │                │\r
+          ▼                ▼                ▼\r
+       Workers           Workers          Workers\r
+\`\`\`\r
+\r
+This gives CWD two distinct orchestration levels:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Enterprise-level orchestration\r
+\r
+Delegator\r
+    ↓\r
+Domain-level orchestration\r
+\r
+Worker\r
+    ↓\r
+Task-level execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Domain Routing\r
+\r
+The Coordinator first identifies the business domain.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Intent Analysis\r
+     ↓\r
+Business Objective\r
+     ↓\r
+Required Capability\r
+     ↓\r
+Domain\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+"Analyze open opportunities"\r
+\r
+        ↓\r
+\r
+Domain = Sales\r
+Capability = Opportunity Analysis\r
+\r
+        ↓\r
+\r
+Sales Delegator\r
+\`\`\`\r
+\r
+Another:\r
+\r
+\`\`\`text\r
+"Analyze manufacturing inventory risk"\r
+\r
+        ↓\r
+\r
+Domain = Supply Chain\r
+Capability = Inventory Risk Analysis\r
+\r
+        ↓\r
+\r
+Supply Chain Delegator\r
+\`\`\`\r
+\r
+The routing should preferably use the **Agent Registry** and capability metadata rather than a large hard-coded mapping.\r
+\r
+---\r
+\r
+# 7. Multi-Domain Requests\r
+\r
+The most important advantage of multiple Delegators appears when a request spans multiple domains.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+"Prepare a customer briefing showing:\r
+\r
+- Revenue\r
+- Open opportunities\r
+- Outstanding shipments\r
+- Recent customer interactions"\r
+\`\`\`\r
+\r
+The Coordinator creates an enterprise-level plan:\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              │\r
+              ┌───────────────┼────────────────┐\r
+              ▼               ▼                ▼\r
+         Sales Domain    Supply Chain      Customer\r
+                            Domain         Experience\r
+              │               │                │\r
+              ▼               ▼                ▼\r
+        Sales Delegator  Supply Delegator  CX Delegator\r
+\`\`\`\r
+\r
+Each Delegator independently decomposes its domain task.\r
+\r
+---\r
+\r
+# 8. Cross-Domain Coordination\r
+\r
+Cross-domain coordination is owned primarily by the **Coordinator**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                      │\r
+       ┌──────────────┼──────────────┐\r
+       ▼              ▼              ▼\r
+     Sales          Finance       Supply Chain\r
+  Delegator       Delegator        Delegator\r
+       │              │              │\r
+    Workers        Workers         Workers\r
+       │              │              │\r
+       └──────────────┼──────────────┘\r
+                      ▼\r
+                 Coordinator\r
+                      │\r
+                 Aggregation\r
+                      │\r
+                      ▼\r
+                Final Response\r
+\`\`\`\r
+\r
+The Coordinator combines domain results into one enterprise response.\r
+\r
+---\r
+\r
+# 9. Cross-Domain Dependencies\r
+\r
+Sometimes one domain depends on another.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer\r
+   │\r
+   ▼\r
+Sales Delegator\r
+   │\r
+   ▼\r
+Customer ID\r
+   │\r
+   ├───────────────┐\r
+   ▼               ▼\r
+Finance         Supply Chain\r
+Delegator       Delegator\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+Sales Opportunity\r
+       │\r
+       ▼\r
+Finance\r
+       │\r
+       ▼\r
+Revenue / Margin Analysis\r
+\`\`\`\r
+\r
+The Coordinator manages these **cross-domain dependencies**.\r
+\r
+The individual Delegator manages dependencies **inside its own domain**.\r
+\r
+This is an important separation.\r
+\r
+---\r
+\r
+# 10. Coordinator vs Delegator Dependency Management\r
+\r
+### Enterprise dependency\r
+\r
+\`\`\`text\r
+Sales Result\r
+      ↓\r
+Finance Analysis\r
+      ↓\r
+Final Business Decision\r
+\`\`\`\r
+\r
+Owned by:\r
+\r
+\`\`\`text\r
+Coordinator\r
+\`\`\`\r
+\r
+### Domain dependency\r
+\r
+\`\`\`text\r
+Customer Profile\r
+      ↓\r
+Opportunity Retrieval\r
+      ↓\r
+Opportunity Analysis\r
+\`\`\`\r
+\r
+Owned by:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    = Cross-domain dependencies\r
+\r
+Delegator\r
+    = Intra-domain dependencies\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. A2A Communication\r
+\r
+A2A provides the communication mechanism between independent agents.\r
+\r
+Coordinator → Delegator:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     ▼\r
+Sales Delegator\r
+\`\`\`\r
+\r
+If cross-domain agent collaboration is required:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── A2A → Sales Delegator\r
+     │\r
+     ├── A2A → Finance Delegator\r
+     │\r
+     └── A2A → Supply Chain Delegator\r
+\`\`\`\r
+\r
+The preferred model is for the Coordinator to remain the **enterprise orchestration authority**, rather than allowing uncontrolled peer-to-peer domain communication.\r
+\r
+---\r
+\r
+# 12. Controlled Cross-Delegator Communication\r
+\r
+There may be cases where one Delegator needs information from another domain.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+      │ Requires revenue information\r
+      ▼\r
+Finance Delegator\r
+\`\`\`\r
+\r
+This can be supported through governed A2A communication:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+      │ A2A Request\r
+      ▼\r
+A2A Gateway\r
+      │\r
+      ├── Authentication\r
+      ├── Authorization\r
+      ├── Policy\r
+      ├── Correlation\r
+      └── Audit\r
+      │\r
+      ▼\r
+Finance Delegator\r
+\`\`\`\r
+\r
+However, this interaction should be policy-controlled.\r
+\r
+The existence of A2A does not mean:\r
+\r
+\`\`\`text\r
+Any Delegator\r
+    ↓\r
+Any other Delegator\r
+\`\`\`\r
+\r
+can communicate without restrictions.\r
+\r
+---\r
+\r
+# 13. Domain Isolation\r
+\r
+Each Delegator should have a clear domain boundary.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ├── Sales Workers\r
+    ├── Sales Policies\r
+    ├── Sales Tools\r
+    └── Sales Data\r
+\r
+Finance Delegator\r
+    ├── Finance Workers\r
+    ├── Finance Policies\r
+    ├── Finance Tools\r
+    └── Finance Data\r
+\`\`\`\r
+\r
+This provides:\r
+\r
+* domain isolation\r
+* policy isolation\r
+* data-access isolation\r
+* tool isolation\r
+* deployment isolation\r
+* failure isolation\r
+* team ownership\r
+\r
+---\r
+\r
+# 14. Data Isolation\r
+\r
+A Sales Delegator should not automatically have access to Finance data.\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       │\r
+       ├── Sales data → ALLOW\r
+       └── Restricted Finance data → DENY\r
+\`\`\`\r
+\r
+Similarly:\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+       │\r
+       ├── Finance data → ALLOW\r
+       └── Restricted HR data → DENY\r
+\`\`\`\r
+\r
+Cross-domain access should be explicit and governed.\r
+\r
+---\r
+\r
+# 15. Policy Isolation\r
+\r
+Each Delegator can have domain-specific policies.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ├── Customer access policy\r
+    ├── Opportunity policy\r
+    ├── Sales data policy\r
+    └── CRM tool policy\r
+\`\`\`\r
+\r
+Finance:\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+    ├── Financial data policy\r
+    ├── Revenue policy\r
+    ├── Reporting policy\r
+    └── Finance tool policy\r
+\`\`\`\r
+\r
+The platform can maintain common security policies centrally while allowing domain-specific policies at the Delegator level.\r
+\r
+---\r
+\r
+# 16. Shared Governance\r
+\r
+Domain isolation does **not** mean every Delegator implements security independently.\r
+\r
+CWD should have centralized platform governance.\r
+\r
+Shared controls include:\r
+\r
+\`\`\`text\r
+Entra ID\r
+RBAC\r
+Managed Identity\r
+Key Vault\r
+Policy Services\r
+Agent Registry\r
+Prompt Registry\r
+Audit\r
+Observability\r
+DLP\r
+Data Classification\r
+Correlation IDs\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+                         CWD Governance\r
+                              │\r
+        ┌─────────────────────┼─────────────────────┐\r
+        ▼                     ▼                     ▼\r
+      Sales                Finance                  HR\r
+    Delegator             Delegator             Delegator\r
+        │                     │                     │\r
+     Workers               Workers               Workers\r
+\`\`\`\r
+\r
+This creates:\r
+\r
+> **Centralized governance + decentralized domain execution.**\r
+\r
+---\r
+\r
+# 17. Defense in Depth\r
+\r
+Authorization can occur at multiple layers.\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Gateway\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓\r
+MCP / Tool\r
+ ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+Each layer provides an appropriate control.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Gateway\r
+    → Identity\r
+\r
+Coordinator\r
+    → Enterprise authorization\r
+\r
+Delegator\r
+    → Domain authorization/policy\r
+\r
+Worker\r
+    → Capability/tool enforcement\r
+\r
+Enterprise System\r
+    → Final resource-level authorization\r
+\`\`\`\r
+\r
+This prevents a compromised or incorrectly configured component from automatically bypassing all security controls.\r
+\r
+---\r
+\r
+# 18. Scalability\r
+\r
+Multiple Delegators enable horizontal scalability.\r
+\r
+Suppose Sales receives heavy traffic:\r
+\r
+\`\`\`text\r
+                    Sales Delegator\r
+                          │\r
+                ┌─────────┼─────────┐\r
+                ▼         ▼         ▼\r
+             Instance  Instance  Instance\r
+                1         2         3\r
+\`\`\`\r
+\r
+Finance may have lower traffic:\r
+\r
+\`\`\`text\r
+                   Finance Delegator\r
+                          │\r
+                     Instance 1\r
+\`\`\`\r
+\r
+Therefore, each domain can scale independently.\r
+\r
+\`\`\`text\r
+Sales        → High scale\r
+Finance      → Medium scale\r
+HR           → Low scale\r
+Supply Chain → High scale\r
+\`\`\`\r
+\r
+This avoids scaling the entire CWD platform because one domain has increased demand.\r
+\r
+---\r
+\r
+# 19. Worker Scaling Inside a Delegator\r
+\r
+Delegator scaling and Worker scaling are separate.\r
+\r
+\`\`\`text\r
+              Sales Delegator\r
+                    │\r
+          ┌─────────┼─────────┐\r
+          ▼         ▼         ▼\r
+       Worker A  Worker B  Worker C\r
+        Pool       Pool       Pool\r
+\`\`\`\r
+\r
+The Delegator manages logical execution.\r
+\r
+The runtime platform manages physical instances.\r
+\r
+\`\`\`text\r
+Delegator\r
+    ↓\r
+Logical Worker Selection\r
+\r
+ACA / AKS\r
+    ↓\r
+Physical Worker Scaling\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Failure Isolation\r
+\r
+Multiple Delegators also prevent failures from spreading across domains.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Supply Chain Delegator\r
+       ↓\r
+External supplier API\r
+       ↓\r
+Failure\r
+\`\`\`\r
+\r
+The failure should remain primarily within the Supply Chain domain.\r
+\r
+\`\`\`text\r
+Sales Delegator      → Healthy\r
+Finance Delegator    → Healthy\r
+HR Delegator         → Healthy\r
+Supply Chain         → Degraded\r
+\`\`\`\r
+\r
+The Coordinator can continue executing independent domains.\r
+\r
+This creates **domain-level fault isolation**.\r
+\r
+---\r
+\r
+# 21. Partial Failure Across Domains\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Sales       → SUCCESS\r
+Finance     → SUCCESS\r
+Supply Chain → TIMEOUT\r
+Customer Experience → SUCCESS\r
+\`\`\`\r
+\r
+The Coordinator determines whether Supply Chain is:\r
+\r
+\`\`\`text\r
+Critical\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Optional\r
+\`\`\`\r
+\r
+If optional:\r
+\r
+\`\`\`text\r
+Continue with partial results\r
+\`\`\`\r
+\r
+If critical:\r
+\r
+\`\`\`text\r
+Retry / Fallback / Escalate\r
+\`\`\`\r
+\r
+The Supply Chain Delegator manages recovery within its domain, while the Coordinator manages the enterprise-level decision.\r
+\r
+---\r
+\r
+# 22. Independent Deployment\r
+\r
+Each Delegator can evolve independently.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator v4\r
+Finance Delegator v2\r
+HR Delegator v3\r
+Supply Chain Delegator v5\r
+\`\`\`\r
+\r
+A Sales domain team can deploy a new Worker without modifying the Coordinator.\r
+\r
+The Coordinator continues to interact through standardized contracts:\r
+\r
+\`\`\`text\r
+A2A Task Contract\r
+\`\`\`\r
+\r
+This reduces coupling.\r
+\r
+---\r
+\r
+# 23. Independent Domain Teams\r
+\r
+The architecture also supports organizational scalability.\r
+\r
+\`\`\`text\r
+CWD Platform Team\r
+        │\r
+        ├── Coordinator\r
+        ├── Gateway\r
+        ├── A2A\r
+        ├── Registry\r
+        ├── Governance\r
+        └── Observability\r
+\r
+Domain Teams\r
+        │\r
+        ├── Sales Team\r
+        │      └── Sales Delegator + Workers\r
+        │\r
+        ├── Finance Team\r
+        │      └── Finance Delegator + Workers\r
+        │\r
+        ├── HR Team\r
+        │      └── HR Delegator + Workers\r
+        │\r
+        └── Supply Chain Team\r
+               └── Delegator + Workers\r
+\`\`\`\r
+\r
+This allows enterprise platform ownership and domain ownership to remain separate.\r
+\r
+---\r
+\r
+# 24. Shared Agent Registry\r
+\r
+All Delegators can use the common Agent Registry.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Agent Registry\r
+│\r
+├── Sales Delegator\r
+│     ├── Customer Worker\r
+│     ├── Revenue Worker\r
+│     └── Opportunity Worker\r
+│\r
+├── Finance Delegator\r
+│     ├── Revenue Worker\r
+│     └── Cost Worker\r
+│\r
+└── Supply Chain Delegator\r
+      ├── Inventory Worker\r
+      └── Shipment Worker\r
+\`\`\`\r
+\r
+The Coordinator uses registry metadata to discover Delegators.\r
+\r
+Delegators use the registry to discover Workers.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Agent Registry\r
+    ↓\r
+Delegator\r
+\r
+Delegator\r
+    ↓\r
+Agent Registry\r
+    ↓\r
+Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Capability-Based Routing\r
+\r
+Routing should be capability-driven.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Required capability:\r
+    revenue_analysis\r
+\`\`\`\r
+\r
+The Agent Registry may identify:\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+    capability = revenue_analysis\r
+\`\`\`\r
+\r
+The Coordinator routes accordingly.\r
+\r
+Inside Finance:\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+      ↓\r
+Revenue Analysis Capability\r
+      ↓\r
+Revenue Worker\r
+\`\`\`\r
+\r
+This is more flexible than:\r
+\r
+\`\`\`text\r
+"revenue" → hard-coded agent name\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Common Platform, Domain-Specific Execution\r
+\r
+The architecture can be visualized as:\r
+\r
+\`\`\`text\r
+                 ┌────────────────────────────┐\r
+                 │     CWD Common Platform    │\r
+                 │                            │\r
+                 │ Coordinator                │\r
+                 │ A2A                         │\r
+                 │ Agent Registry              │\r
+                 │ Prompt Registry             │\r
+                 │ Policy                      │\r
+                 │ Identity                    │\r
+                 │ Observability               │\r
+                 │ Memory                      │\r
+                 │ RAG                         │\r
+                 └─────────────┬──────────────┘\r
+                               │\r
+        ┌──────────────────────┼──────────────────────┐\r
+        │                      │                      │\r
+        ▼                      ▼                      ▼\r
+   Sales Domain          Finance Domain        Supply Chain\r
+   Delegator             Delegator             Delegator\r
+        │                      │                      │\r
+     Workers                Workers                Workers\r
+        │                      │                      │\r
+   Sales Systems          Finance Systems       Supply Systems\r
+\`\`\`\r
+\r
+This is the essence of the CWD enterprise architecture.\r
+\r
+---\r
+\r
+# 27. Cross-Domain Customer Briefing Example\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+"Create a complete customer business review."\r
+\`\`\`\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+Required domains:\r
+    Sales\r
+    Finance\r
+    Supply Chain\r
+    Customer Experience\r
+\`\`\`\r
+\r
+It creates:\r
+\r
+\`\`\`text\r
+Enterprise Plan\r
+│\r
+├── Sales Task\r
+├── Finance Task\r
+├── Supply Chain Task\r
+└── Customer Experience Task\r
+\`\`\`\r
+\r
+Each Delegator handles its own domain.\r
+\r
+### Sales\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    ├── Customer Profile\r
+    ├── Opportunities\r
+    └── Pipeline\r
+\`\`\`\r
+\r
+### Finance\r
+\r
+\`\`\`text\r
+Finance Delegator\r
+    ├── Revenue\r
+    ├── Margin\r
+    └── Financial Trend\r
+\`\`\`\r
+\r
+### Supply Chain\r
+\r
+\`\`\`text\r
+Supply Chain Delegator\r
+    ├── Open Orders\r
+    ├── Shipment Status\r
+    └── Supply Risk\r
+\`\`\`\r
+\r
+### Customer Experience\r
+\r
+\`\`\`text\r
+CX Delegator\r
+    ├── Support Cases\r
+    ├── Customer Interactions\r
+    └── Satisfaction\r
+\`\`\`\r
+\r
+Results return:\r
+\r
+\`\`\`text\r
+Sales Result\r
+Finance Result\r
+Supply Result\r
+CX Result\r
+       │\r
+       ▼\r
+Coordinator\r
+       │\r
+       ▼\r
+Cross-Domain Validation\r
+       │\r
+       ▼\r
+LLM Synthesis\r
+       │\r
+       ▼\r
+Customer Business Review\r
+\`\`\`\r
+\r
+---\r
+\r
+# 28. Important Boundary: Who Does What?\r
+\r
+| Responsibility                | Coordinator      | Delegator       | Worker  |\r
+| ----------------------------- | ---------------- | --------------- | ------- |\r
+| Understand enterprise request | Yes              | No              | No      |\r
+| Identify domains              | Yes              | Validate        | No      |\r
+| Cross-domain planning         | Yes              | No              | No      |\r
+| Domain decomposition          | No               | Yes             | No      |\r
+| Worker selection              | No               | Yes             | No      |\r
+| Domain policy                 | Central + domain | Yes             | Enforce |\r
+| Worker execution              | No               | Controls        | Yes     |\r
+| Cross-domain dependency       | Yes              | No              | No      |\r
+| Intra-domain dependency       | No               | Yes             | No      |\r
+| Domain aggregation            | No               | Yes             | No      |\r
+| Enterprise aggregation        | Yes              | No              | No      |\r
+| Cross-domain recovery         | Yes              | Domain recovery | Local   |\r
+| Tool execution                | No               | Controls        | Yes     |\r
+| Enterprise final response     | Yes              | No              | No      |\r
+\r
+---\r
+\r
+# 29. What the Coordinator Should NOT Do\r
+\r
+The Coordinator should not become:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ├── Sales logic\r
+    ├── Finance logic\r
+    ├── HR logic\r
+    ├── Supply Chain logic\r
+    ├── CRM logic\r
+    ├── Financial rules\r
+    ├── HR rules\r
+    └── Every Worker implementation\r
+\`\`\`\r
+\r
+That creates a monolith.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    → Enterprise orchestration\r
+\r
+Sales Delegator\r
+    → Sales orchestration\r
+\r
+Finance Delegator\r
+    → Finance orchestration\r
+\r
+HR Delegator\r
+    → HR orchestration\r
+\r
+Supply Chain Delegator\r
+    → Supply Chain orchestration\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. What Delegators Should NOT Do\r
+\r
+A Delegator should not become another enterprise Coordinator.\r
+\r
+For example, the Sales Delegator should not independently orchestrate:\r
+\r
+\`\`\`text\r
+Finance\r
+HR\r
+Supply Chain\r
+Sales\r
+\`\`\`\r
+\r
+unless a specific governed cross-domain capability requires it.\r
+\r
+Its primary responsibility remains:\r
+\r
+\`\`\`text\r
+Sales Domain\r
+    ↓\r
+Sales Capabilities\r
+    ↓\r
+Sales Workers\r
+\`\`\`\r
+\r
+The central Coordinator remains responsible for enterprise-level coordination.\r
+\r
+---\r
+\r
+# 31. Recommended Enterprise Interaction Pattern\r
+\r
+The preferred CWD pattern is:\r
+\r
+\`\`\`text\r
+                     Coordinator\r
+                          │\r
+              ┌───────────┼───────────┐\r
+              │           │           │\r
+             A2A         A2A         A2A\r
+              │           │           │\r
+              ▼           ▼           ▼\r
+           Sales       Finance      Supply\r
+         Delegator    Delegator    Delegator\r
+              │           │           │\r
+             A2A         A2A         A2A\r
+              │           │           │\r
+              ▼           ▼           ▼\r
+           Workers      Workers      Workers\r
+              │           │           │\r
+             MCP         MCP         MCP\r
+              │           │           │\r
+              ▼           ▼           ▼\r
+          Enterprise Systems\r
+\`\`\`\r
+\r
+With centralized:\r
+\r
+\`\`\`text\r
+Identity\r
+Authorization\r
+Policy\r
+Agent Registry\r
+Prompt Registry\r
+Observability\r
+Audit\r
+Security\r
+\`\`\`\r
+\r
+---\r
+\r
+# 32. Enterprise CWD Operating Model\r
+\r
+The architecture effectively creates three levels:\r
+\r
+\`\`\`text\r
+┌──────────────────────────────────────────────┐\r
+│             ENTERPRISE LEVEL                 │\r
+│                                              │\r
+│              Coordinator                    │\r
+│     Intent / Planning / Cross-Domain         │\r
+└──────────────────────┬───────────────────────┘\r
+                       │\r
+       ┌───────────────┼────────────────┐\r
+       ▼               ▼                ▼\r
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐\r
+│ Sales       │ │ Finance     │ │ Supply Chain│\r
+│ Delegator   │ │ Delegator   │ │ Delegator   │\r
+└──────┬──────┘ └──────┬──────┘ └──────┬──────┘\r
+       │               │                │\r
+       ▼               ▼                ▼\r
+   Workers         Workers          Workers\r
+       │               │                │\r
+       ▼               ▼                ▼\r
+   Systems          Systems           Systems\r
+\`\`\`\r
+\r
+This is a **hierarchical multi-agent architecture**.\r
+\r
+---\r
+\r
+# 33. Key Benefits\r
+\r
+### 1. Domain Isolation\r
+\r
+Each domain owns its own workflows and policies.\r
+\r
+### 2. Scalability\r
+\r
+Domains can scale independently.\r
+\r
+### 3. Maintainability\r
+\r
+Domain complexity stays inside the domain.\r
+\r
+### 4. Fault Isolation\r
+\r
+A failure in one domain does not automatically bring down other domains.\r
+\r
+### 5. Independent Deployment\r
+\r
+Delegators and Workers can evolve independently.\r
+\r
+### 6. Reusability\r
+\r
+The same CWD platform services can support every domain.\r
+\r
+### 7. Centralized Governance\r
+\r
+Security, identity, audit, policy and observability remain standardized.\r
+\r
+### 8. Cross-Domain Intelligence\r
+\r
+The Coordinator can combine capabilities from multiple business domains.\r
+\r
+### 9. Team Independence\r
+\r
+Domain teams can own and evolve their own agents.\r
+\r
+### 10. Enterprise AI Scalability\r
+\r
+New domains can be onboarded without redesigning the Coordinator.\r
+\r
+---\r
+\r
+# 34. Adding a New Domain\r
+\r
+Suppose onsemi introduces a new **Quality Delegator**.\r
+\r
+The platform does not need a new orchestration architecture.\r
+\r
+The new domain provides:\r
+\r
+\`\`\`text\r
+Quality Delegator\r
+    │\r
+    ├── Quality Inspection Worker\r
+    ├── Quality Analytics Worker\r
+    ├── Quality Incident Worker\r
+    └── Quality Reporting Worker\r
+\`\`\`\r
+\r
+It registers its capabilities:\r
+\r
+\`\`\`text\r
+Agent Registry\r
+    ↓\r
+Quality Delegator\r
+    ↓\r
+Quality capabilities\r
+    ↓\r
+Quality Workers\r
+\`\`\`\r
+\r
+The Coordinator can then discover it dynamically.\r
+\r
+This is a major advantage of registry-based routing.\r
+\r
+---\r
+\r
+# 35. Final Enterprise Architecture\r
+\r
+The complete model is:\r
+\r
+\`\`\`text\r
+                         USERS\r
+                           │\r
+                           ▼\r
+                     API / Gateway\r
+                           │\r
+                           ▼\r
+                  ┌─────────────────┐\r
+                  │   COORDINATOR   │\r
+                  │                 │\r
+                  │ Intent          │\r
+                  │ Planning        │\r
+                  │ Domain Routing  │\r
+                  │ Cross-Domain    │\r
+                  │ Coordination    │\r
+                  │ Aggregation     │\r
+                  └────────┬────────┘\r
+                           │\r
+               ┌───────────┼───────────┐\r
+               │           │           │\r
+              A2A          A2A         A2A\r
+               │           │           │\r
+               ▼           ▼           ▼\r
+        ┌────────────┐ ┌────────────┐ ┌────────────┐\r
+        │   SALES    │ │  FINANCE   │ │   SUPPLY   │\r
+        │ DELEGATOR  │ │ DELEGATOR  │ │  DELEGATOR │\r
+        └─────┬──────┘ └─────┬──────┘ └─────┬──────┘\r
+              │              │              │\r
+         ┌────┼────┐    ┌────┼────┐    ┌────┼────┐\r
+         ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼    ▼\r
+       Workers       Workers       Workers\r
+         │              │              │\r
+        MCP            MCP            MCP\r
+         │              │              │\r
+         ▼              ▼              ▼\r
+       CRM          Finance DB     Supply Systems\r
+\`\`\`\r
+\r
+Cross-cutting across all domains:\r
+\r
+\`\`\`text\r
+Identity\r
+Authorization\r
+Policy\r
+Data Governance\r
+DLP\r
+Agent Registry\r
+Prompt Registry\r
+Memory\r
+RAG\r
+A2A\r
+Observability\r
+Audit\r
+Security\r
+\`\`\`\r
+\r
+---\r
+\r
+# 36. Final Architect View\r
+\r
+Multiple Delegators transform CWD from a simple multi-agent application into an **enterprise-scale hierarchical agent platform**.\r
+\r
+The responsibility hierarchy is:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ Enterprise objective\r
+    │ Cross-domain planning\r
+    │ Domain routing\r
+    │ Cross-domain dependencies\r
+    │ Enterprise aggregation\r
+    ▼\r
+Delegator\r
+    │\r
+    │ Domain objective\r
+    │ Domain decomposition\r
+    │ Domain policies\r
+    │ Worker selection\r
+    │ Intra-domain dependencies\r
+    │ Worker execution control\r
+    ▼\r
+Worker\r
+    │\r
+    │ Specific capability\r
+    │ Tool execution\r
+    │ Data retrieval\r
+    │ Business operation\r
+    ▼\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+The most important principle is:\r
+\r
+> **The Coordinator provides centralized enterprise orchestration, while Delegators provide decentralized domain orchestration. Shared platform governance keeps all domains secure, observable, and compliant.**\r
+\r
+### One-line definition\r
+\r
+> **Multiple Delegators = Domain Isolation + Independent Execution + Shared Governance + Cross-Domain Coordination + Enterprise Scalability.**\r
+\r
+### CWD architectural model\r
+\r
+\`\`\`text\r
+                 ENTERPRISE ORCHESTRATION\r
+                        Coordinator\r
+                             │\r
+                ┌────────────┼────────────┐\r
+                ▼            ▼            ▼\r
+             Domain A     Domain B     Domain C\r
+             Delegator    Delegator    Delegator\r
+                │            │            │\r
+             Workers      Workers      Workers\r
+                │            │            │\r
+             Tools        Tools        Tools\r
+                │            │            │\r
+             Systems      Systems      Systems\r
+\`\`\`\r
+\r
+This gives CWD the architectural balance of **central control with decentralized domain intelligence**: the Coordinator maintains the enterprise view, while each Delegator can specialize, scale, evolve, and govern its own domain without turning the overall platform into a monolithic agent.\r
+`,code:``},{id:`delegator-interview-questions`,category:`Delegator Agents`,title:`Delegator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions covering Delegator responsibilities, domain routing, task decomposition, Worker selection, scalability, guardrails, failures, and Coordinator–Delegator–Worker interactions.`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Delegator Agents Cookbook`,subtitle:`Domain routing, task decomposition, Worker selection and execution`,icon:`🧭`,patternLabel:`Topics`})}var Zg=[{id:`cwd-workers`,category:`Worker Agents`,title:`Worker Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand specialized Worker Agents in CWD that execute focused business tasks using enterprise data, APIs, tools, RAG, and governed services while returning validated results to the Delegator.`},{id:`what-is-worker`,category:`Worker Agents`,title:`What is a Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the role of a Worker Agent as a specialized execution component responsible for performing a well-defined business or technical task delegated by the Delegator.`,concept:``,code:``},{id:`worker-responsibilities`,category:`Worker Agents`,title:`Worker Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker responsibilities including task execution, tool selection, data retrieval, business logic, validation, error handling, and returning structured results to the Delegator.`,concept:``,code:``},{id:`atomic-task-execution`,category:`Worker Agents`,title:`Atomic Task Execution`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers execute focused atomic tasks with clear inputs, defined responsibilities, controlled tool access, deterministic processing where possible, and structured outputs.`,concept:``,code:``},{id:`worker-tool-calling`,category:`Worker Agents`,title:`Tool Calling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers discover and invoke authorized enterprise tools through mechanisms such as MCP while enforcing tool permissions, input validation, and execution policies.`,concept:``,code:``},{id:`worker-data-retrieval`,category:`Worker Agents`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers retrieve governed enterprise information using RAG, search services, databases, APIs, and other authorized data sources while respecting user entitlements.`,concept:``,code:``},{id:`worker-api-integration`,category:`Worker Agents`,title:`API Integration`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers securely interact with enterprise APIs and microservices for retrieving information, executing business operations, and integrating with downstream systems.`,concept:``,code:``},{id:`artifact-generation`,category:`Worker Agents`,title:`Artifact Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers generate structured artifacts such as customer briefings, reports, summaries, documents, recommendations, and other business outputs.`,concept:``,code:``},{id:`worker-output-validation`,category:`Worker Agents`,title:`Output Validation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker outputs are validated for schema correctness, completeness, business rules, authorization, data quality, and grounding before being returned to the Delegator.`,concept:``,code:``},{id:`worker-error-handling`,category:`Worker Agents`,title:`Error Handling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers detect transient and permanent failures, apply retry and timeout policies, capture errors, and return controlled failure information for Delegator-level recovery.`,concept:``,code:``},{id:`worker-pool`,category:`Worker Agents`,title:`Worker Pool`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker pooling, horizontal scaling, workload distribution, concurrency, health management, capacity planning, and dynamic Worker selection for reliable enterprise execution.`,concept:``,code:``},{id:`worker-interview-questions`,category:`Worker Agents`,title:`Worker Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture and scenario-based interview questions covering Worker responsibilities, task boundaries, tool calling, RAG, security, scalability, failure handling, and Delegator-to-Worker communication.`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Worker Agents Cookbook`,subtitle:`Atomic execution, tools, enterprise data, validation and scalability`,icon:`⚙️`,patternLabel:`Topics`})}var $g=[{id:`cwd-orchestration`,category:`CWD Orchestration`,title:`CWD Orchestration Flow`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the complete request orchestration flow across the CWD platform, from user request and gateway validation through Coordinator, Delegator, Worker execution, data access, result aggregation, and final response.`},{id:`cwd-user-request`,category:`CWD Orchestration`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request enters the CWD platform and how the request is captured, validated, and prepared for downstream processing.`,concept:``,code:``},{id:`cwd-gateway`,category:`CWD Orchestration`,title:`Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway handles request routing, authentication, validation, security checks, and controlled entry into the agentic platform.`,concept:``,code:``},{id:`cwd-entitlement-check`,category:`CWD Orchestration`,title:`Entitlement Check`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user identity, authorization, roles, permissions, and entitlements are validated before allowing access to agents, tools, and enterprise data.`,concept:``,code:``},{id:`cwd-coordinator-flow`,category:`CWD Orchestration`,title:`Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the request, determines intent, creates an execution plan, manages workflow state, and controls downstream orchestration.`,concept:``,code:``},{id:`cwd-delegator-flow`,category:`CWD Orchestration`,title:`Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator decomposes tasks, identifies the appropriate domain or Worker agents, and routes tasks for execution.`,concept:``,code:``},{id:`cwd-worker-flow`,category:`CWD Orchestration`,title:`Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how specialized Worker agents execute assigned tasks using domain logic, LLM capabilities, tools, APIs, and enterprise data.`,concept:``,code:``},{id:`cwd-data-sources`,category:`CWD Orchestration`,title:`Data Sources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access enterprise data sources through retrieval systems, APIs, MCP tools, databases, and other connected services.`,concept:``,code:``},{id:`cwd-result-aggregation`,category:`CWD Orchestration`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how results from multiple Workers, tools, and data sources are collected, validated, combined, and returned to the Coordinator.`,concept:``,code:``},{id:`cwd-final-response`,category:`CWD Orchestration`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator synthesizes the completed workflow results into a final response and returns it securely to the user.`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`CWD Orchestration Cookbook`,subtitle:`Request flow, coordination, delegation, execution and response`,icon:`🔄`,patternLabel:`Topics`})}var t_=[{id:`cwd-langgraph`,category:`LangGraph`,title:`LangGraph`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how LangGraph is used within CWD to implement stateful, controllable, and resilient agent orchestration, including graph-based workflows, state management, conditional routing, checkpointing, retries, human-in-the-loop execution, and Coordinator–Delegator–Worker coordination.`},{id:`why-langgraph-cwd`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why LangGraph is used for CWD orchestration, including stateful execution, explicit workflow control, conditional routing, persistence, retries, recovery, human-in-the-loop workflows, and complex multi-agent coordination.`,concept:``,code:``},{id:`stategraph`,category:`LangGraph`,title:`StateGraph`,difficulty:`Advanced`,time:`~15 min`,description:`Understand StateGraph as the foundation for defining state-driven agent workflows, including shared state, graph structure, node execution, transitions, workflow lifecycle, and how CWD maintains execution context across agents.`,concept:``,code:``},{id:`langgraph-nodes`,category:`LangGraph`,title:`Nodes`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how LangGraph nodes represent individual units of work such as request processing, planning, Coordinator logic, Delegator routing, Worker execution, retrieval, tool invocation, validation, and response generation.`,concept:``,code:``},{id:`langgraph-edges`,category:`LangGraph`,title:`Edges`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how edges connect LangGraph nodes and control workflow progression, including sequential execution, transitions between agents, completion paths, failure paths, and routing to downstream processing stages.`,concept:``,code:``},{id:`conditional-routing`,category:`LangGraph`,title:`Conditional Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how conditional routing dynamically selects the next workflow path based on state, user intent, task status, agent decisions, Worker availability, tool results, validation outcomes, or failure conditions.`,concept:``,code:``},{id:`langgraph-state-management`,category:`LangGraph`,title:`State Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state is created, updated, and propagated across the CWD workflow, including request context, task information, agent results, tool outputs, intermediate data, errors, status, and final response state.`,concept:``,code:``},{id:`langgraph-checkpointing`,category:`LangGraph`,title:`Checkpointing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how checkpointing persists workflow state so long-running or interrupted CWD executions can resume from a known point, supporting recovery, debugging, state persistence, and reliable agent execution.`,concept:``,code:``},{id:`langgraph-retry`,category:`LangGraph`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retry mechanisms handle transient failures in CWD workflows, including failed agent execution, temporary service failures, tool errors, LLM failures, retry policies, backoff strategies, and recovery decisions.`,concept:``,code:``},{id:`langgraph-human-loop`,category:`LangGraph`,title:`Human-in-the-Loop`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how human approval or intervention can be introduced into CWD workflows for high-risk operations, sensitive decisions, exception handling, validation, approval gates, and controlled continuation of agent execution.`,concept:``,code:``},{id:`langgraph-in-cwd`,category:`LangGraph`,title:`LangGraph in CWD`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the specific role of LangGraph in the CWD architecture, including how it manages workflow state and coordinates the Coordinator, Delegator, and Worker execution lifecycle while supporting conditional routing, retries, persistence, recovery, and controlled agent execution.`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`LangGraph Cookbook`,subtitle:`Stateful orchestration, routing, persistence and agent workflows`,icon:`🕸️`,patternLabel:`Topics`})}var r_=[{id:`cwd-mcp`,category:`MCP`,title:`MCP`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Model Context Protocol (MCP) and how CWD uses it as a standardized integration layer for connecting AI agents with enterprise tools, resources, context, and external services in a secure and governed manner.`},{id:`what-is-mcp-cwd`,category:`MCP`,title:`What is MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Model Context Protocol, its purpose, core concepts, protocol semantics, communication model, and how it standardizes the interaction between AI applications, agents, and external capabilities.`,concept:``,code:``},{id:`why-mcp-cwd`,category:`MCP`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why MCP is used within CWD to avoid point-to-point integrations, standardize tool access, improve reusability, simplify agent integration, and provide a governed interface to enterprise capabilities.`,concept:``,code:``},{id:`mcp-architecture-cwd`,category:`MCP`,title:`MCP Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the MCP architecture, including MCP hosts, clients, servers, tools, resources, prompts, protocol messages, transports, and how these components interact to provide standardized context and capability access.`,concept:``,code:``},{id:`mcp-server`,category:`MCP`,title:`MCP Server`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities of an MCP Server, including exposing tools and resources, validating requests, executing approved operations, enforcing security policies, handling errors, and returning structured results to MCP clients.`,concept:``,code:``},{id:`mcp-tools`,category:`MCP`,title:`MCP Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise capabilities are exposed as MCP tools, including tool discovery, input schemas, invocation, validation, execution, structured outputs, error handling, authorization, and controlled access to APIs and business services.`,concept:``,code:``},{id:`mcp-resources`,category:`MCP`,title:`MCP Resources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand MCP resources as a standardized mechanism for providing contextual information to agents, including documents, application data, knowledge content, metadata, and other read-oriented enterprise information.`,concept:``,code:``},{id:`mcp-context`,category:`MCP`,title:`MCP Context`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MCP enables standardized access to relevant context and capabilities, including how clients discover available resources and tools and provide the appropriate information to an AI application or agent.`,concept:``,code:``},{id:`worker-mcp`,category:`MCP`,title:`Worker + MCP`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD Worker agents use MCP to discover and invoke domain-specific enterprise tools and access approved resources, while the Worker remains focused on domain reasoning and task execution.`,concept:``,code:``},{id:`mcp-security`,category:`MCP`,title:`MCP Security`,difficulty:`Advanced`,time:`~15 min`,description:`Understand enterprise MCP security, including authentication, authorization, identity propagation, tool-level permissions, input validation, secrets management, network controls, data protection, auditing, rate limiting, and preventing unsafe tool execution.`,concept:``,code:``},{id:`mcp-interview`,category:`MCP`,title:`MCP Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for MCP architecture and enterprise interview questions covering MCP clients and servers, tools, resources, prompts, discovery, invocation, transports, security, authorization, enterprise integration, MCP versus REST APIs, and MCP versus function calling.`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`MCP Cookbook`,subtitle:`Protocol, tools, resources, context, Worker integration and security`,icon:`🔗`,patternLabel:`Topics`})}var a_=[{id:`cwd-a2a`,category:`CWD Project`,title:`A2A Communication`,difficulty:`Advanced`,time:`~60 min`,description:`Understand agent-to-agent communication and how independent CWD agents exchange tasks and results.`},{id:`what-is-a2a`,category:`A2A Communication`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the Agent2Agent protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.`,concept:``,code:``},{id:`why-agent-to-agent`,category:`A2A Communication`,title:`Why Agent-to-Agent Communication?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why independent agents require standardized communication.`,concept:``,code:``},{id:`coordinator-delegator-a2a`,category:`A2A Communication`,title:`Coordinator → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand communication between Coordinator and Delegator agents.`,concept:``,code:``},{id:`delegator-worker-a2a`,category:`A2A Communication`,title:`Delegator → Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand task communication between Delegators and Workers.`,concept:``,code:``},{id:`worker-delegator-a2a`,category:`A2A Communication`,title:`Worker → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers return execution results to Delegators.`,concept:``,code:``},{id:`delegator-coordinator-a2a`,category:`A2A Communication`,title:`Delegator → Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators return results to the Coordinator.`,concept:``,code:``},{id:`a2a-message-structure`,category:`A2A Communication`,title:`Message Structure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the structure and metadata of agent communication messages.`,concept:``,code:``},{id:`a2a-correlation-ids`,category:`A2A Communication`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand correlation IDs for distributed agent execution tracking.`,concept:``,code:``},{id:`a2a-kafka`,category:`A2A Communication`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Kafka can support asynchronous agent communication.`,concept:``,code:``},{id:`a2a-service-bus`,category:`A2A Communication`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Service Bus based messaging between agents.`,concept:``,code:``},{id:`a2a-async-communication`,category:`A2A Communication`,title:`Async Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand asynchronous agent communication and long-running tasks.`,concept:``,code:``},{id:`a2a-interview`,category:`A2A Communication`,title:`A2A Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for A2A architecture and scenario-based interview questions.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`A2A Communication Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var s_=[{id:`cwd-agent-registry`,category:`Agent Registry`,title:`Agent Registry`,difficulty:`Advanced`,time:`~50 min`,description:`Understand centralized agent registration, discovery, metadata, capabilities, ownership, health, access control, and dynamic routing.`},{id:`why-agent-registry`,category:`Agent Registry`,title:`Why Agent Registry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why an enterprise multi-agent platform requires a centralized Agent Registry for managing and discovering agents.`,concept:``,code:``},{id:`agent-discovery`,category:`Agent Registry`,title:`Agent Discovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agents discover other available agents based on capabilities, domains, and availability.`,concept:``,code:``},{id:`agent-metadata`,category:`Agent Registry`,title:`Agent Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the metadata maintained for registered agents, including identity, endpoint, version, owner, capabilities, and status.`,concept:``,code:``},{id:`agent-capabilities`,category:`Agent Registry`,title:`Agent Capabilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent capabilities are defined, registered, exposed, and used for intelligent agent selection.`,concept:``,code:``},{id:`domain-ownership`,category:`Agent Registry`,title:`Domain Ownership`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how business domains and responsibilities are mapped to specific agents and agent owners.`,concept:``,code:``},{id:`supported-tools`,category:`Agent Registry`,title:`Supported Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tools, APIs, MCP servers, and external capabilities supported by each agent are registered.`,concept:``,code:``},{id:`agent-access-scope`,category:`Agent Registry`,title:`Access Scope`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authentication, authorization, roles, permissions, and access scopes are associated with registered agents.`,concept:``,code:``},{id:`agent-health-metadata`,category:`Agent Registry`,title:`Health Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent health, availability, readiness, version, and operational status are tracked in the registry.`,concept:``,code:``},{id:`dynamic-agent-routing`,category:`Agent Registry`,title:`Dynamic Agent Routing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how registry information is used to dynamically select and route requests to the most appropriate available agent.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Agent Registry Cookbook`,subtitle:`Discovery, capabilities, governance and dynamic routing`,icon:`🗂️`,patternLabel:`Topics`})}var l_=[{id:`cwd-prompt-registry`,category:`Prompt Registry`,title:`Prompt Registry`,difficulty:`Advanced`,time:`~45 min`,description:`Understand enterprise prompt management through a centralized Prompt Registry, including prompt creation, versioning, metadata, classification, approval, access control, lifecycle management, testing, deployment, rollback, and governance.`},{id:`why-prompt-registry`,category:`Prompt Registry`,title:`Why Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why enterprise AI platforms require centralized prompt management instead of storing prompts directly inside application code, including consistency, reuse, traceability, testing, controlled changes, and governance.`,concept:``,code:``},{id:`prompt-versioning`,category:`Prompt Registry`,title:`Prompt Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompt versions are created, tracked, compared, tested, promoted, and rolled back so changes to production prompts remain controlled, traceable, and reproducible.`,concept:``,code:``},{id:`prompt-metadata`,category:`Prompt Registry`,title:`Prompt Metadata`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand metadata associated with enterprise prompts, including prompt name, version, owner, purpose, model compatibility, variables, environment, domain, status, evaluation results, approval information, and usage history.`,concept:``,code:``},{id:`prompt-approval`,category:`Prompt Registry`,title:`Prompt Approval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production prompt approval workflows, including authoring, validation, evaluation, security review, business approval, deployment gates, audit trails, and controlled promotion from development to production.`,concept:``,code:``},{id:`prompt-classification`,category:`Prompt Registry`,title:`Prompt Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompts can be classified based on purpose, domain, sensitivity, risk level, model usage, business criticality, and allowed capabilities to apply appropriate testing, approval, and governance policies.`,concept:``,code:``},{id:`prompt-rbac`,category:`Prompt Registry`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for prompt management, including who can create, view, modify, approve, publish, deploy, rollback, or retire prompts and how access is restricted based on roles and responsibilities.`,concept:``,code:``},{id:`prompt-lifecycle`,category:`Prompt Registry`,title:`Prompt Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete enterprise prompt lifecycle from design and development through testing, evaluation, approval, registration, deployment, monitoring, version updates, rollback, deprecation, and retirement.`,concept:``,code:``},{id:`prompt-governance`,category:`Prompt Registry`,title:`Prompt Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance controls for enterprise prompts, including ownership, approval policies, auditability, security reviews, sensitive-data protection, prompt injection defenses, evaluation requirements, change management, compliance, and production controls.`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Prompt Registry Cookbook`,subtitle:`Prompt versioning, metadata, approval, RBAC, lifecycle and governance`,icon:`📝`,patternLabel:`Topics`})}var d_=[{id:`cwd-rag`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end Retrieval-Augmented Generation architecture used by CWD for secure enterprise knowledge retrieval, contextual grounding, and accurate LLM responses.`},{id:`why-rag`,category:`RAG Architecture`,title:`Why RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why RAG is required to ground LLM responses in enterprise-specific, current, and governed knowledge instead of relying only on model knowledge.`,concept:``,code:``},{id:`rag-architecture`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the end-to-end RAG flow including ingestion, document processing, chunking, embeddings, indexing, retrieval, context construction, LLM generation, and response grounding.`,concept:``,code:``},{id:`rag-data-ingestion`,category:`RAG Architecture`,title:`Data Ingestion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise documents and knowledge from systems such as SharePoint, enterprise applications, databases, and other governed sources are ingested into the RAG pipeline.`,concept:``,code:``},{id:`rag-chunking`,category:`RAG Architecture`,title:`Chunking`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand document chunking strategies, chunk size, overlap, semantic boundaries, and how chunking decisions affect retrieval quality and LLM context.`,concept:``,code:``},{id:`rag-embeddings`,category:`RAG Architecture`,title:`Embeddings`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how documents and queries are converted into vector representations to enable semantic similarity search and knowledge retrieval.`,concept:``,code:``},{id:`azure-ai-search`,category:`RAG Architecture`,title:`Azure AI Search`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Azure AI Search as the enterprise retrieval layer for vector search, keyword search, hybrid retrieval, indexing, filtering, and semantic ranking.`,concept:``,code:``},{id:`rag-metadata`,category:`RAG Architecture`,title:`Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how document metadata such as source, domain, owner, document type, timestamp, classification, and business attributes improves filtering, ranking, and governance.`,concept:``,code:``},{id:`rag-acl-filtering`,category:`RAG Architecture`,title:`ACL Filtering`,difficulty:`Advanced`,time:`~15 min`,description:`Understand entitlement-aware retrieval and ACL filtering so users can retrieve only the enterprise information they are authorized to access.`,concept:``,code:``},{id:`intent-based-retrieval`,category:`RAG Architecture`,title:`Intent-Based Retrieval`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how user intent, domain, query type, and task context influence retrieval strategy, search filters, ranking, and the selection of relevant enterprise knowledge.`,concept:``,code:``},{id:`context-building`,category:`RAG Architecture`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved chunks are filtered, ranked, deduplicated, and assembled into a high-quality context window for the LLM.`,concept:``,code:``},{id:`rag-cwd-flow`,category:`RAG Architecture`,title:`RAG + CWD Flow`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how RAG integrates with the CWD workflow across the Gateway, Coordinator, Delegator, specialized Workers, enterprise data sources, retrieval layer, context building, and final response generation.`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`RAG Architecture Cookbook`,subtitle:`Enterprise retrieval, grounding, security and CWD integration`,icon:`🔎`,patternLabel:`Topics`})}var p_=[{id:`cwd-memory`,category:`Memory & State Management`,title:`Memory & State Management`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD manages conversational memory, persistent memory, execution state, session context, task state, and context propagation across Coordinator, Delegator, and Worker agents throughout the execution lifecycle.`},{id:`short-term-memory`,category:`Memory & State`,title:`Short-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand short-term memory used to maintain the current conversation and active execution context, including recent messages, intermediate results, tool outputs, agent decisions, and information required during the current workflow.`,concept:``,code:``},{id:`long-term-memory`,category:`Memory & State`,title:`Long-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand persistent memory that can be retained across conversations or tasks, including user preferences, historical interactions, approved business context, and other information that can improve future agent interactions while respecting governance policies.`,concept:``,code:``},{id:`redis-memory`,category:`Memory & State`,title:`Redis`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Redis can provide low-latency storage for session information, temporary execution state, caching, conversation context, distributed locks, task coordination, and short-lived agent state.`,concept:``,code:``},{id:`vector-db-memory`,category:`Memory & State`,title:`Vector DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how vector databases can support semantic memory by storing embeddings of relevant conversations, knowledge, or historical information and retrieving semantically similar context when required by an agent.`,concept:``,code:``},{id:`cosmos-db`,category:`Memory & State`,title:`Cosmos DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Cosmos DB can be used for persistent application and execution data, including session metadata, task information, workflow state, execution history, agent results, and other durable state required by distributed CWD services.`,concept:``,code:``},{id:`session-state`,category:`Memory & State`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand the session-level state representing the overall user interaction, including identity context, conversation history, session metadata, active workflows, and references to tasks and executions associated with the session.`,concept:``,code:``},{id:`task-state`,category:`Memory & State`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand task-level state representing the objective being executed, including task inputs, required capabilities, assigned agents, dependencies, status, intermediate results, errors, and completion information.`,concept:``,code:``},{id:`run-state`,category:`Memory & State`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand run-level state representing a specific execution attempt for a task, including execution status, timestamps, participating agents, retries, intermediate outputs, failures, and final completion state.`,concept:``,code:``},{id:`turn-state`,category:`Memory & State`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand conversation-turn state representing an individual user request and corresponding agent response, including messages, context, decisions, tool interactions, and the results generated during that conversational turn.`,concept:``,code:``},{id:`step-state`,category:`Memory & State`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand step-level state representing individual execution actions such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`context-propagation`,category:`Memory & State`,title:`Context Propagation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how relevant context is propagated across the Coordinator, Delegator, and Worker agents while controlling what information is shared, preserving execution metadata, maintaining security boundaries, and avoiding unnecessary context growth.`,concept:``,code:``},{id:`state-lifecycle`,category:`Memory & State`,title:`State Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete lifecycle of CWD execution state from creation and initialization through updates, persistence, propagation, retries, completion, failure handling, cleanup, archival, and eventual expiration.`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Memory & State Management Cookbook`,subtitle:`Memory, persistence, execution state and context propagation`,icon:`🧠`,patternLabel:`Topics`})}var h_=[{id:`cwd-data-integration`,category:`Enterprise Data Integration`,title:`Enterprise Data Integration`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD securely connects Coordinator, Delegator, and Worker agents to enterprise applications, structured and unstructured data sources, external services, and governed connectors while enforcing authorization, data-access policies, and security controls.`},{id:`snowflake`,category:`Enterprise Data Integration`,title:`Snowflake`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Snowflake for governed access to enterprise analytics data, including secure querying, authorization, data filtering, and using business data as context for agent workflows.`,concept:``,code:``},{id:`salesforce`,category:`Enterprise Data Integration`,title:`Salesforce`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access Salesforce customer, account, opportunity, and activity information through approved APIs or tools while respecting user permissions and enterprise data-access policies.`,concept:``,code:``},{id:`oracle`,category:`Enterprise Data Integration`,title:`Oracle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Oracle enterprise systems and databases to retrieve governed business data, execute approved queries or operations, and expose relevant information to authorized agents.`,concept:``,code:``},{id:`sharepoint`,category:`Enterprise Data Integration`,title:`SharePoint`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with SharePoint documents, sites, and knowledge repositories for enterprise search and RAG, including document retrieval, indexing, metadata filtering, permissions, and source attribution.`,concept:``,code:``},{id:`outlook-m365`,category:`Enterprise Data Integration`,title:`Outlook / M365`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD can integrate with Microsoft 365 and Outlook services to access approved emails, calendars, documents, and collaboration data while enforcing identity, authorization, privacy, and data-access boundaries.`,concept:``,code:``},{id:`hr-systems`,category:`Enterprise Data Integration`,title:`HR Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with HR systems through governed interfaces while protecting sensitive employee information, enforcing role-based access, limiting data exposure, and ensuring agents only access authorized information.`,concept:``,code:``},{id:`finance-systems`,category:`Enterprise Data Integration`,title:`Finance Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD connects to enterprise finance systems for approved financial data retrieval and business workflows while enforcing authorization, data classification, auditability, and strict access controls.`,concept:``,code:``},{id:`marketing-data`,category:`Enterprise Data Integration`,title:`Marketing Data`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how marketing data from campaigns, customer insights, product information, and analytics platforms can be integrated into CWD workflows and made available to authorized domain Workers.`,concept:``,code:``},{id:`web-search`,category:`Enterprise Data Integration`,title:`Web Search`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how controlled external web search can complement enterprise knowledge by retrieving current public information while applying approved domains, query restrictions, source validation, security policies, and hallucination controls.`,concept:``,code:``},{id:`governed-connectors`,category:`Enterprise Data Integration`,title:`Governed Connectors`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how governed connectors provide a standardized and secure integration layer between CWD agents and enterprise systems, including authentication, authorization, secrets management, tool permissions, data filtering, auditing, rate limiting, and policy enforcement.`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Enterprise Data Integration Cookbook`,subtitle:`Enterprise systems, governed connectors, data access and secure integration`,icon:`🔌`,patternLabel:`Topics`})}var __=[{id:`cwd-security`,category:`Security & Governance`,title:`Security & Governance`,difficulty:`Advanced`,time:`~60 min`,description:`Understand enterprise security and governance for CWD, including identity, authentication, authorization, agent and tool access, data protection, threat prevention, auditing, and compliance.`},{id:`zero-trust`,category:`Security & Governance`,title:`Zero Trust`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Zero Trust principles are applied to CWD by continuously validating identity, device or workload context, permissions, and access to agents, tools, data, and services.`,concept:``,code:``},{id:`entitlement-first-execution`,category:`Security & Governance`,title:`Entitlement-First Execution`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why user entitlement and authorization must be validated before Coordinator, Delegator, Worker, MCP tool, or enterprise data-source execution.`,concept:``,code:``},{id:`cwd-rbac`,category:`Security & Governance`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for managing permissions across users, agents, administrators, tools, data sources, prompts, and platform operations.`,concept:``,code:``},{id:`entra-id`,category:`Security & Governance`,title:`Entra ID / Azure AD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise identity management using Microsoft Entra ID for user authentication, application identities, groups, roles, access policies, and token-based authorization.`,concept:``,code:``},{id:`managed-identity`,category:`Security & Governance`,title:`Managed Identity`,difficulty:`Advanced`,time:`~10 min`,description:`Understand passwordless service-to-service authentication using managed identities so CWD components can securely access Azure resources without storing credentials in application code.`,concept:``,code:``},{id:`key-vault`,category:`Security & Governance`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized management of secrets, keys, certificates, and sensitive configuration using Azure Key Vault with controlled application access.`,concept:``,code:``},{id:`least-privilege`,category:`Security & Governance`,title:`Least Privilege`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD applies least-privilege access so each agent, Worker, MCP tool, service, and user receives only the permissions required for its specific responsibilities.`,concept:``,code:``},{id:`dlp`,category:`Security & Governance`,title:`DLP`,difficulty:`Advanced`,time:`~10 min`,description:`Understand data-loss prevention controls for detecting, restricting, and monitoring sensitive information flowing through prompts, retrieved context, agent outputs, tools, and enterprise integrations.`,concept:``,code:``},{id:`data-redaction`,category:`Security & Governance`,title:`Data Redaction`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how sensitive information such as PII, credentials, confidential business data, and regulated content can be detected and redacted before logging, retrieval, or LLM processing.`,concept:``,code:``},{id:`data-classification`,category:`Security & Governance`,title:`Data Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data classification based on sensitivity, business impact, confidentiality, and regulatory requirements, and how classification influences retrieval and access policies.`,concept:``,code:``},{id:`audit-logging`,category:`Security & Governance`,title:`Audit Logging`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD captures auditable records of authentication, authorization, agent execution, tool calls, data access, configuration changes, approvals, and security events.`,concept:``,code:``},{id:`security-threat-modeling`,category:`Security & Governance`,title:`Security Threat Modeling`,difficulty:`Advanced`,time:`~15 min`,description:`Understand threat modeling for agentic systems, including prompt injection, tool misuse, privilege escalation, data exfiltration, insecure agent communication, compromised dependencies, and unauthorized data access.`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:``,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:``,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:``,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:``,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:``,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:``,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:``,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:``,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:``,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:``,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:``,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`},{id:`agent-evaluation-strategy`,category:`Agent Evaluation`,title:`Agent Evaluation Strategy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the overall evaluation strategy.`,concept:``,code:``},{id:`golden-test-suites`,category:`Agent Evaluation`,title:`Golden Test Suites`,difficulty:`Advanced`,time:`~10 min`,description:`Understand golden datasets and test cases.`,concept:``,code:``},{id:`agent-accuracy`,category:`Agent Evaluation`,title:`Accuracy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand accuracy measurement.`,concept:``,code:``},{id:`agent-consistency`,category:`Agent Evaluation`,title:`Consistency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand consistency evaluation.`,concept:``,code:``},{id:`agent-latency`,category:`Agent Evaluation`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency measurement.`,concept:``,code:``},{id:`token-usage`,category:`Agent Evaluation`,title:`Token Usage`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand token consumption.`,concept:``,code:``},{id:`agent-cost`,category:`Agent Evaluation`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost measurement.`,concept:``,code:``},{id:`tool-success-rate`,category:`Agent Evaluation`,title:`Tool Success Rate`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tool execution success metrics.`,concept:``,code:``},{id:`regression-testing`,category:`Agent Evaluation`,title:`Regression Testing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand regression testing for agents and prompts.`,concept:``,code:``},{id:`ab-evaluation`,category:`Agent Evaluation`,title:`A/B Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand comparison of different agent or prompt versions.`,concept:``,code:``}];function P_(){return(0,M.jsx)($,{data:N_,title:`Agent Evaluation Cookbook`,subtitle:`Quality, reliability, latency and cost`,icon:`📊`,patternLabel:`Topics`})}var F_=[{id:`cwd-llmops`,category:`LLMOps / MLOps`,title:`LLMOps / MLOps`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end production lifecycle for models, prompts, agents, datasets, evaluations, experiments, deployments, monitoring, versioning, and governance required to operate CWD reliably at enterprise scale.`},{id:`model-management`,category:`LLMOps / MLOps`,title:`Model Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how AI and ML models are managed throughout their lifecycle, including model selection, registration, validation, deployment, retirement, performance tracking, and managing multiple model versions across environments.`,concept:``,code:``},{id:`prompt-management`,category:`LLMOps / MLOps`,title:`Prompt Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how production prompts are designed, stored, tested, versioned, evaluated, deployed, and rolled back, including prompt templates, variables, model-specific configurations, and controlled prompt changes.`,concept:``,code:``},{id:`llmops-evaluation`,category:`LLMOps / MLOps`,title:`Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI evaluation pipelines for measuring response quality, correctness, groundedness, relevance, safety, latency, and task success across models, prompts, RAG pipelines, and agent workflows.`,concept:``,code:``},{id:`experiment-tracking`,category:`LLMOps / MLOps`,title:`Experiment Tracking`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how experiments are tracked across models, prompts, datasets, parameters, evaluation results, and configurations so teams can reproduce experiments and compare different AI approaches systematically.`,concept:``,code:``},{id:`llmops-mlflow`,category:`LLMOps / MLOps`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle management, evaluation, artifact management, model versioning, and operational workflows across traditional ML and GenAI applications.`,concept:``,code:``},{id:`cicd`,category:`LLMOps / MLOps`,title:`CI/CD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CI/CD pipelines automate testing, validation, security checks, packaging, infrastructure changes, and controlled promotion of AI application and agent changes across development, test, staging, and production environments.`,concept:``,code:``},{id:`ai-deployment`,category:`LLMOps / MLOps`,title:`Deployment`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production deployment strategies for AI applications and agents, including containerized deployment, blue-green releases, canary deployments, rollback strategies, environment configuration, scaling, and zero-downtime releases.`,concept:``,code:``},{id:`llmops-monitoring`,category:`LLMOps / MLOps`,title:`Monitoring`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI application monitoring across infrastructure, agents, LLM calls, prompts, RAG retrieval, tools, latency, token usage, cost, errors, throughput, quality, and user experience.`,concept:``,code:``},{id:`ai-versioning`,category:`LLMOps / MLOps`,title:`Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand version control for models, prompts, agents, workflows, tools, datasets, configurations, evaluation criteria, and infrastructure so production behavior can be reproduced, audited, and rolled back.`,concept:``,code:``},{id:`ai-governance`,category:`LLMOps / MLOps`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance throughout the AI lifecycle, including security, responsible AI, access control, data governance, model approval, evaluation gates, auditability, compliance, risk management, monitoring, and controlled production releases.`,concept:``,code:``}];function I_(){return(0,M.jsx)($,{data:F_,title:`LLMOps / MLOps Cookbook`,subtitle:`Models, prompts, evaluation, deployment, monitoring and governance`,icon:`⚙️`,patternLabel:`Topics`})}var L_=[{id:`cwd-decisions`,category:`Architecture Decisions`,title:`Architecture Decisions & Trade-offs`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the key architectural decisions, rationale, alternatives, and trade-offs behind the CWD enterprise multi-agent architecture.`},{id:`why-cwd`,category:`Architecture Decisions`,title:`Why CWD?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why CWD was selected as the enterprise architecture approach for building a scalable, modular, and governed multi-agent platform.`,concept:``,code:``},{id:`why-coordinator`,category:`Architecture Decisions`,title:`Why Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a Coordinator layer is required to manage request orchestration, workflow execution, and communication between agents.`,concept:``,code:``},{id:`why-delegator`,category:`Architecture Decisions`,title:`Why Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the architectural rationale for the Delegator layer and how it selects the appropriate specialized worker or agent.`,concept:``,code:``},{id:`why-workers`,category:`Architecture Decisions`,title:`Why Workers?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why specialized Worker agents are used to isolate domain responsibilities and execute specific business tasks.`,concept:``,code:``},{id:`why-langgraph`,category:`Architecture Decisions`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the decision to use LangGraph for stateful workflows, agent orchestration, branching, retries, and multi-agent coordination.`,concept:``,code:``},{id:`why-mcp`,category:`Architecture Decisions`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using MCP to standardize how agents discover and interact with enterprise tools, APIs, and data sources.`,concept:``,code:``},{id:`why-a2a`,category:`Architecture Decisions`,title:`Why A2A?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for agent-to-agent communication and how independent agents collaborate, delegate tasks, and exchange results.`,concept:``,code:``},{id:`why-kafka`,category:`Architecture Decisions`,title:`Why Kafka?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand when and why Kafka is used for event-driven communication, asynchronous processing, scalability, and reliable event streaming.`,concept:``,code:``},{id:`why-service-bus`,category:`Architecture Decisions`,title:`Why Service Bus?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using Azure Service Bus for reliable asynchronous messaging, decoupling, retries, and enterprise integration.`,concept:``,code:``},{id:`why-redis`,category:`Architecture Decisions`,title:`Why Redis?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why Redis is used for low-latency state access, caching, session management, and temporary agent state.`,concept:``,code:``},{id:`why-azure-ai-search`,category:`Architecture Decisions`,title:`Why Azure AI Search?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for Azure AI Search in enterprise document indexing, hybrid search, vector retrieval, metadata filtering, and RAG workflows.`,concept:``,code:``},{id:`build-vs-buy`,category:`Architecture Decisions`,title:`Build vs Buy Decisions`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how architecture components are evaluated using cost, scalability, security, maintainability, integration, and time-to-market considerations.`,concept:``,code:``}];function R_(){return(0,M.jsx)($,{data:L_,title:`Architecture Decisions Cookbook`,subtitle:`Architectural rationale, alternatives and trade-offs`,icon:`🏗️`,patternLabel:`Topics`})}var z_=[{id:`cwd-challenges`,category:`Challenges & Solutions`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the major challenges encountered while designing, implementing, scaling, securing, and operating the CWD enterprise multi-agent platform.`},{id:`challenge-scalability`,category:`Challenges & Solutions`,title:`Scalability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand scalability challenges in multi-agent systems and how horizontal scaling, stateless services, asynchronous processing, and workload distribution can address them.`,concept:``,code:``},{id:`challenge-agent-coordination`,category:`Challenges & Solutions`,title:`Agent Coordination`,difficulty:`Advanced`,time:`~10 min`,description:`Understand challenges in coordinating multiple agents, including task delegation, execution ordering, dependencies, communication, and state synchronization.`,concept:``,code:``},{id:`challenge-context`,category:`Challenges & Solutions`,title:`Context Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand context propagation, context-window limitations, state management, context compression, and maintaining relevant information across multiple agents.`,concept:``,code:``},{id:`challenge-security`,category:`Challenges & Solutions`,title:`Security`,difficulty:`Advanced`,time:`~10 min`,description:`Understand security challenges in agentic systems, including authentication, authorization, tool access, prompt injection, data protection, and agent identity.`,concept:``,code:``},{id:`challenge-data-access`,category:`Challenges & Solutions`,title:`Data Access`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data-access challenges involving permissions, data isolation, heterogeneous sources, secure retrieval, and controlled agent access.`,concept:``,code:``},{id:`challenge-observability`,category:`Challenges & Solutions`,title:`Observability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand observability challenges across agents, tools, workflows, and LLM calls, including tracing, logging, metrics, evaluation, and troubleshooting.`,concept:``,code:``},{id:`challenge-agent-failures`,category:`Challenges & Solutions`,title:`Agent Failures`,difficulty:`Advanced`,time:`~10 min`,description:`Understand common agent failure scenarios and recovery strategies such as retries, timeouts, fallbacks, circuit breakers, error handling, and human escalation.`,concept:``,code:``},{id:`challenge-cost`,category:`Challenges & Solutions`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost challenges and techniques such as model selection, token optimization, caching, batching, and controlling unnecessary agent execution.`,concept:``,code:``},{id:`challenge-latency`,category:`Challenges & Solutions`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency challenges in multi-agent execution and techniques such as parallel execution, asynchronous processing, caching, model optimization, and reducing unnecessary tool calls.`,concept:``,code:``},{id:`challenge-governance`,category:`Challenges & Solutions`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise AI governance challenges including responsible AI, auditability, access control, model governance, data governance, compliance, and human oversight.`,concept:``,code:``}];function B_(){return(0,M.jsx)($,{data:z_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var V_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function H_(){return(0,M.jsx)($,{data:V_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var U_=[{id:`cwd-interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function W_(){return(0,M.jsx)($,{data:U_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var G_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function K_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:G_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function q_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(K_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(Vm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Vh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Cg,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(S_,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(w_,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(E_,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(O_,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(A_,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(M_,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(P_,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(I_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(R_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(B_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(H_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(W_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(q_,{})}));
