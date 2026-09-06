@@ -1,4 +1,16 @@
 import CookbookApp from "../../components/CookbookApp";
+import cwdCoordinator from "../../assets/CWD/docs/cwd-coordinator.md?raw";
+import WhatIsCoordinator from "../../assets/CWD/docs/what-is-coordinator.md?raw";
+import CoordinatorResponsibilities from "../../assets/CWD/docs/coordinator-responsibilities.md?raw";
+import RequestUnderstanding from "../../assets/CWD/docs/request-understanding.md?raw";
+import IntentClassification from "../../assets/CWD/docs/intent-classification.md?raw";
+import CoordinatorPlanning from "../../assets/CWD/docs/coordinator-planning.md?raw";
+import DelegatorSelection from "../../assets/CWD/docs/delegator-selection.md?raw";
+import TaskCreation from "../../assets/CWD/docs/task-creation.md?raw";
+import ResultAggregation from "../../assets/CWD/docs/result-aggregation.md?raw";
+import CoordinatorRetryRecovery from "../../assets/CWD/docs/coordinator-retry-recovery.md?raw";
+import GlobalGovernance from "../../assets/CWD/docs/global-governance.md?raw";
+//import CoordinatorInterviewQuestions from "../../assets/CWD/docs/coordinator-interview-questions.md?raw";
 const CoordinatorAgent = [
   // =====================================================
   // COORDINATOR AGENT
@@ -12,7 +24,7 @@ const CoordinatorAgent = [
     time: "~60 min",
     description:
       "Understand the role of the Coordinator Agent as the central orchestration, planning, coordination, and governance component of the CWD architecture.",
-
+concept: cwdCoordinator,
   },
       {
         id: "what-is-coordinator",
@@ -22,7 +34,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand the purpose, role, responsibilities, and architectural position of the Coordinator Agent in the CWD platform.",
-        concept: "",
+        concept: WhatIsCoordinator,
         code: "",
       },
 
@@ -34,8 +46,8 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand the responsibilities handled by the Coordinator, including request orchestration, planning, delegation, state management, and result coordination.",
-        concept: "",
-        code: "",
+        concept: CoordinatorResponsibilities,
+        code: ""
       },
 
       {
@@ -46,7 +58,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how the Coordinator interprets incoming user requests, identifies required actions, and determines the appropriate execution path.",
-        concept: "",
+        concept: RequestUnderstanding,
         code: "",
       },
 
@@ -58,7 +70,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how user intent is identified, classified, and mapped to the appropriate business domain, workflow, or downstream agent.",
-        concept: "",
+        concept: IntentClassification,
         code: "",
       },
 
@@ -70,7 +82,7 @@ const CoordinatorAgent = [
         time: "~15 min",
         description:
           "Understand how the Coordinator creates an execution plan, determines task dependencies, identifies required agents, and controls workflow execution.",
-        concept: "",
+        concept: CoordinatorPlanning,
         code: "",
       },
 
@@ -82,7 +94,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how the Coordinator determines when to invoke the Delegator and how the appropriate Delegator is selected for downstream task execution.",
-        concept: "",
+        concept: DelegatorSelection,
         code: "",
       },
 
@@ -94,7 +106,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how the Coordinator creates structured tasks, maintains task context, and passes execution requests to downstream agents.",
-        concept: "",
+        concept: TaskCreation,
         code: "",
       },
 
@@ -106,7 +118,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how the Coordinator collects, validates, combines, and synthesizes results returned by multiple agents or workers.",
-        concept: "",
+        concept: ResultAggregation,
         code: "",
       },
 
@@ -118,7 +130,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how the Coordinator handles agent failures, timeouts, retries, fallback strategies, partial failures, and recovery workflows.",
-        concept: "",
+        concept: CoordinatorRetryRecovery,
         code: "",
       },
 
@@ -130,7 +142,7 @@ const CoordinatorAgent = [
         time: "~10 min",
         description:
           "Understand how centralized governance, security policies, authorization, guardrails, compliance, and policy enforcement are handled by the Coordinator.",
-        concept: "",
+        concept: GlobalGovernance,
         code: "",
       },
 

@@ -1,4 +1,16 @@
 import CookbookApp from "../../components/CookbookApp";
+import CWDDelegatorAgents from "../../assets/CWD/docs/cwd-delegator.md?raw";
+import WhatIsDelegator from "../../assets/CWD/docs/what-is-delegator.md?raw";
+import WhyDelegatorRequired from "../../assets/CWD/docs/why-delegator-required.md?raw";
+import DelegatorResponsibilities from "../../assets/CWD/docs/delegator-responsibilities.md?raw";
+import DomainBasedRouting from "../../assets/CWD/docs/domain-based-routing.md?raw";
+import DelegatorTaskDecomposition from "../../assets/CWD/docs/delegator-task-decomposition.md?raw";
+import WorkerSelection from "../../assets/CWD/docs/worker-selection.md?raw"; 
+import WorkerPoolManagement from "../../assets/CWD/docs/worker-pool-management.md?raw";
+import DomainGuardrails from "../../assets/CWD/docs/domain-guardrails.md?raw";
+import DelegatorWorkerCommunication from "../../assets/CWD/docs/delegator-worker-communication.md?raw";
+import MultipleDelegatorArchitecture from "../../assets/CWD/docs/multiple-delegator-architecture.md?raw";
+// import DelegatorInterviewQuestions from "../../assets/CWD/docs/delegator-interview-questions.md?raw";
 
 const DelegatorAgents = [
   // =====================================================
@@ -13,7 +25,7 @@ const DelegatorAgents = [
     time: "~60 min",
     description:
       "Understand the Delegator layer responsible for domain-level task decomposition, domain routing, Worker selection, execution control, and communication between the Coordinator and specialized Worker agents.",
-
+concept: CWDDelegatorAgents,
   },
       {
         id: "what-is-delegator",
@@ -23,7 +35,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand what a Delegator Agent is, where it fits in the CWD architecture, and how it acts as the domain-level orchestration layer between the Coordinator and specialized Workers.",
-        concept: "",
+        concept: WhatIsDelegator,
         code: "",
       },
 
@@ -35,7 +47,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand why a dedicated Delegator layer is required between the Coordinator and Workers, including separation of responsibilities, domain isolation, scalability, maintainability, and more efficient task routing.",
-        concept: "",
+        concept: WhyDelegatorRequired,
         code: "",
       },
 
@@ -47,7 +59,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand the core responsibilities of a Delegator, including domain identification, task decomposition, Worker discovery and selection, execution coordination, policy enforcement, failure handling, and result management.",
-        concept: "",
+        concept: DelegatorResponsibilities,
         code: "",
       },
 
@@ -59,7 +71,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand how Delegators identify the appropriate business or technical domain and route incoming tasks to the correct domain-specific Worker agents and capabilities.",
-        concept: "",
+        concept: DomainBasedRouting,
         code: "",
       },
 
@@ -71,7 +83,7 @@ const DelegatorAgents = [
         time: "~15 min",
         description:
           "Understand how Delegators decompose complex domain-level tasks into smaller, well-defined, atomic Worker tasks while preserving dependencies, context, execution order, and required inputs and outputs.",
-        concept: "",
+        concept: DelegatorTaskDecomposition,
         code: "",
       },
 
@@ -83,7 +95,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand how the Delegator selects the most appropriate Worker based on capabilities, domain ownership, tool access, availability, health, permissions, workload, and task requirements.",
-        concept: "",
+        concept: WorkerSelection,
         code: "",
       },
 
@@ -95,7 +107,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand how Workers are organized, monitored, scaled, and managed within a domain, including load distribution, Worker availability, health status, concurrency, and capacity management.",
-        concept: "",
+        concept: WorkerPoolManagement,
         code: "",
       },
 
@@ -107,7 +119,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand how Delegators enforce domain-specific policies, authorization boundaries, data-access restrictions, allowed capabilities, tool restrictions, validation rules, and other governance controls.",
-        concept: "",
+        concept: DomainGuardrails,
         code: "",
       },
 
@@ -119,7 +131,7 @@ const DelegatorAgents = [
         time: "~10 min",
         description:
           "Understand how Delegators communicate with Workers, transfer task context and execution metadata, invoke Worker capabilities, track responses, handle failures, and manage asynchronous or synchronous execution.",
-        concept: "",
+        concept: DelegatorWorkerCommunication,
         code: "",
       },
 
@@ -131,7 +143,7 @@ const DelegatorAgents = [
         time: "~15 min",
         description:
           "Understand how multiple domain-specific Delegators can operate within an enterprise CWD architecture, including cross-domain coordination, routing, isolation, scalability, shared governance, and interaction with the central Coordinator.",
-        concept: "",
+        concept: MultipleDelegatorArchitecture,
         code: "",
       },
 
