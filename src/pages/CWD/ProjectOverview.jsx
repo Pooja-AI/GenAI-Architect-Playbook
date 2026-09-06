@@ -5,6 +5,10 @@ import BusinessContext from "../../assets/CWD/docs/cwd-business-context.md?raw";
 import BusinessProblem from "../../assets/CWD/docs/cwd-business-problem.md?raw";
 import ProjectObjectives from "../../assets/CWD/docs/cwd-project-objectives.md?raw";
 import CurrentState from "../../assets/CWD/docs/cwd-current-state.md?raw";
+import TargetState from "../../assets/CWD/docs/cwd-target-state.md?raw";
+import WhyAgenticAI from "../../assets/CWD/docs/cwd-why-agentic-ai.md?raw";
+import BusinessBenefits from "../../assets/CWD/docs/cwd-business-benefits.md?raw";
+
 
 const CWDProjectOverview = [
   // =====================================================
@@ -90,7 +94,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the target CWD architecture and capabilities, including centralized orchestration, Coordinator–Delegator–Worker agents, enterprise data integration, MCP tools, A2A communication, RAG, state management, observability, security, and scalable deployment.",
-        concept: "",
+        concept: TargetState,
         code: "",
       },
 
@@ -102,7 +106,7 @@ const CWDProjectOverview = [
         time: "~15 min",
         description:
           "Understand why CWD moves beyond traditional chatbots and standalone RAG by using agentic AI for planning, reasoning, task decomposition, domain routing, tool execution, multi-step workflows, autonomous coordination, and controlled interaction with enterprise systems.",
-        concept: "",
+        concept: WhyAgenticAI,
         code: "",
       },
 
@@ -114,7 +118,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.",
-        concept: "",
+        concept: BusinessBenefits,
         code: "",
       },
     
