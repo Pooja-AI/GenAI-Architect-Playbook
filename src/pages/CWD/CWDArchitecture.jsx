@@ -1,5 +1,12 @@
 import CookbookApp from "../../components/CookbookApp";
-
+import CWDArchitectureOverview from "../../assets/CWD/docs/cwd-architecture-overview.md?raw";
+import CWDHighLevelArchitecture from "../../assets/CWD/docs/cwd-high-level-architecture.md?raw";
+import CWDArchitectureLayers from "../../assets/CWD/docs/cwd-architecture-layers.md?raw";
+import CWDComponentArchitecture from "../../assets/CWD/docs/cwd-component-architecture.md?raw";
+import CWDLogicalArchitecture from "../../assets/CWD/docs/cwd-logical-architecture.md?raw";
+import CWDDeploymentArchitecture from "../../assets/CWD/docs/cwd-deployment-architecture.md?raw";
+import CWDEndToEndArchitectureFlow from "../../assets/CWD/docs/cwd-end-to-end-architecture-flow.md?raw";  
+import CWDArchitecture from "../../assets/CWD/docs/cwd-architecture.md?raw";
 const CWDArchitecture = [
   // =====================================================
   // CWD ARCHITECTURE
@@ -13,7 +20,8 @@ const CWDArchitecture = [
     time: "~60 min",
     description:
       "Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.",
-
+    concept: CWDArchitecture,
+    code: "",
   },
       {
         id: "cwd-architecture-overview",
@@ -23,7 +31,7 @@ const CWDArchitecture = [
         time: "~15 min",
         description:
           "Understand the major components, responsibilities, communication patterns, and interaction model within the CWD enterprise multi-agent architecture.",
-        concept: "",
+        concept: CWDArchitectureOverview,
         code: "",
       },
 
@@ -35,7 +43,7 @@ const CWDArchitecture = [
         time: "~15 min",
         description:
           "Understand the high-level request flow from the user through the gateway, Coordinator, Delegator, Worker agents, tools, enterprise data sources, and final response.",
-        concept: "",
+        concept: CWDHighLevelArchitecture,
         code: "",
       },
 
@@ -47,7 +55,7 @@ const CWDArchitecture = [
         time: "~10 min",
         description:
           "Understand the presentation, API gateway, orchestration, Coordinator, Delegator, Worker, tool integration, data, security, observability, and infrastructure layers.",
-        concept: "",
+        concept: CWDArchitectureLayers,
         code: "",
       },
 
@@ -59,7 +67,7 @@ const CWDArchitecture = [
         time: "~15 min",
         description:
           "Understand the individual CWD components, their responsibilities, interfaces, dependencies, and how they work together to execute enterprise workflows.",
-        concept: "",
+        concept: CWDComponentArchitecture,
         code: "",
       },
 
@@ -71,7 +79,7 @@ const CWDArchitecture = [
         time: "~10 min",
         description:
           "Understand the logical relationships between the Coordinator, Delegator, Worker agents, MCP tools, A2A communication, services, data sources, and supporting platform components.",
-        concept: "",
+        concept: CWDLogicalArchitecture,
         code: "",
       },
 
@@ -83,7 +91,7 @@ const CWDArchitecture = [
         time: "~15 min",
         description:
           "Understand how CWD components are deployed across cloud infrastructure, including compute, networking, messaging, storage, AI services, security, and observability components.",
-        concept: "",
+        concept: CWDDeploymentArchitecture,
         code: "",
       },
 
@@ -95,7 +103,7 @@ const CWDArchitecture = [
         time: "~20 min",
         description:
           "Trace an enterprise request from the user through the gateway, Coordinator, Delegator, Worker agents, MCP tools, data sources, result aggregation, and final response.",
-        concept: "",
+        concept: CWDEndToEndArchitectureFlow,
         code: "",
       },
    
