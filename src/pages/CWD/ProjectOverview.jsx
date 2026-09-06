@@ -1,4 +1,10 @@
 import CookbookApp from "../../components/CookbookApp";
+import ProjectOverview from "../../assets/CWD/docs/ProjectOverview.md?raw";
+import WhatIsCWD from "../../assets/CWD/docs/CWD.md?raw";
+import BusinessContext from "../../assets/CWD/docs/cwd-business-context.md?raw";
+import BusinessProblem from "../../assets/CWD/docs/cwd-business-problem.md?raw";
+import ProjectObjectives from "../../assets/CWD/docs/cwd-project-objectives.md?raw";
+import CurrentState from "../../assets/CWD/docs/cwd-current-state.md?raw";
 
 const CWDProjectOverview = [
   // =====================================================
@@ -13,19 +19,20 @@ const CWDProjectOverview = [
     time: "~45 min",
     description:
       "Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.",
-
+    concept: ProjectOverview,
+    code: "",
   },
-      {
-        id: "what-is-cwd",
-        category: "Project Overview",
-        title: "What is CWD?",
-        difficulty: "Intermediate",
-        time: "~10 min",
-        description:
-          "Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.",
-        concept: "",
-        code: "",
-      },
+  {
+    id: "what-is-cwd",
+    category: "Project Overview",
+    title: "What is CWD?",
+    difficulty: "Intermediate",
+    time: "~10 min",
+    description:
+      "Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.",
+    concept: WhatIsCWD,
+    code: "",
+  },
 
       {
         id: "cwd-business-context",
@@ -35,7 +42,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the enterprise environment that led to CWD, including fragmented data, multiple business systems, growing AI adoption, domain-specific workflows, and the need for a scalable and governed enterprise AI platform.",
-        concept: "",
+        concept: BusinessContext,
         code: "",
       },
 
@@ -47,7 +54,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the key business and technical challenges CWD is designed to solve, including disconnected enterprise knowledge, manual workflows, limited automation, inconsistent AI experiences, difficult system integrations, and lack of centralized governance.",
-        concept: "",
+        concept: BusinessProblem,
         code: "",
       },
 
@@ -59,7 +66,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the primary objectives of CWD, including creating a reusable enterprise AI platform, enabling multi-agent orchestration, integrating enterprise data and tools, improving automation, enforcing security and governance, and providing scalable AI capabilities.",
-        concept: "",
+        concept: ProjectObjectives,
         code: "",
       },
 
@@ -71,7 +78,7 @@ const CWDProjectOverview = [
         time: "~10 min",
         description:
           "Understand the enterprise AI capabilities that existed before CWD, including traditional RAG, individual AI applications, point-to-point integrations, manual workflows, and the limitations of operating isolated AI solutions.",
-        concept: "",
+        concept: CurrentState,
         code: "",
       },
 
