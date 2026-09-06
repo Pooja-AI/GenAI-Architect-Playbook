@@ -57145,4 +57145,2196 @@ TRACE\r
 **P**artial result / Policy\r
 **R**ecover\r
 **T**race\r
-`,code:``},{id:`coordinator-wrong-routing`,category:`Multi-Agent Reliability`,title:`What happens if the Coordinator makes the wrong routing decision?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how to detect, prevent, recover from, and monitor incorrect routing decisions made by a Coordinator in a multi-agent architecture.`,concept:ig,code:``},{id:`conflicting-agent-results`,category:`Multi-Agent Reliability`,title:`What happens if two agents return conflicting answers?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand strategies for resolving conflicting outputs from multiple agents using validation, confidence scoring, evaluator agents, source verification, consensus, and human escalation.`,concept:tg,code:``},{id:`agent-circular-dependency`,category:`Multi-Agent Reliability`,title:`How do you prevent agents from repeatedly calling each other?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand techniques for preventing circular delegation and infinite communication loops using execution limits, state tracking, correlation IDs, routing policies, and termination conditions.`,concept:Gh,code:``},{id:`agent-observability`,category:`Agentic AI Operations`,title:`How do you monitor and trace the complete multi-agent execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand end-to-end observability for multi-agent systems, including distributed tracing, agent execution logs, tool calls, LLM calls, latency, token usage, failures, and business-level outcomes.`,concept:Yh,code:``}],mg=[`All`,`Advanced`],hg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},gg={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function _g({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function vg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function yg({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:gg[e.difficulty]||`#E6F1FB`,color:hg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function bg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:gg[e.difficulty]||`#E6F1FB`,color:hg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,paddingBottom:0},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(_g,{content:e.concept}),t===`code`&&(0,M.jsx)(vg,{code:e.code})]})}function xg({recipes:e,selected:t,onSelect:n,category:r,setCategory:i,search:a,setSearch:o}){let s=e.filter(e=>{let t=r===`All`||e.category===r,n=a.toLowerCase(),i=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&i});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`,gap:0},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:a,onChange:e=>o(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:mg.map(e=>(0,M.jsx)(`button`,{onClick:()=>i(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:r===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:r===e?`#E6F1FB`:`var(--color-background-primary)`,color:r===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:r===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:s.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):s.map(e=>(0,M.jsx)(yg,{recipe:e,onSelect:n,selected:t?.id===e.id},e.id))})]})}function Sg(){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:`📚`}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:`AgenticAI Cookbook`}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:`End-to-end Agentic AI`})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:pg.length},{label:`Patterns`,value:mg.length-1}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function Cg(){let[e,t]=(0,v.useState)(pg[0]),[n,r]=(0,v.useState)(`All`),[i,a]=(0,v.useState)(``);return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Sg,{}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(xg,{recipes:pg,selected:e,onSelect:t,category:n,setCategory:r,search:i,setSearch:a})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:e?(0,M.jsx)(bg,{recipe:e}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var wg=[{id:`websockets`,category:`Communication Protocols`,title:`WebSockets`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.`,tags:[`websockets`,`real-time`,`communication`,`streaming`,`full duplex`,`networking`],concept:``,steps:[{label:`Establish Connection`,icon:`🤝`,detail:`The client initiates a WebSocket handshake to establish a persistent connection with the server.`},{label:`Maintain Connection`,icon:`🔗`,detail:`A continuous bidirectional communication channel remains open between the client and server.`},{label:`Exchange Messages`,icon:`💬`,detail:`Both the client and server can send and receive messages independently in real time.`},{label:`Process Events`,icon:`⚡`,detail:`Incoming messages are processed immediately, enabling live updates and event-driven communication.`},{label:`Close Connection`,icon:`✅`,detail:`The connection is gracefully closed after communication is complete or when either side disconnects.`}],code:``},{id:`event-streaming`,category:`Communication Protocols`,title:`Event Streaming`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.`,tags:[`event streaming`,`events`,`kafka`,`real-time`,`communication`,`pub-sub`],concept:``,steps:[{label:`Generate Event`,icon:`📢`,detail:`A producer creates an event whenever an important business action or system activity occurs.`},{label:`Publish Event`,icon:`📤`,detail:`The event is published to an event broker such as Kafka, Pulsar, or Event Hubs.`},{label:`Distribute Events`,icon:`📡`,detail:`The broker distributes the event to all subscribed consumers in real time.`},{label:`Process Event`,icon:`⚙️`,detail:`Consumers independently process the event and perform their respective tasks.`},{label:`Trigger Workflows`,icon:`✅`,detail:`Processed events initiate downstream actions, analytics, notifications, or AI workflows.`}],code:``},{id:`message-queues`,category:`Communication Protocols`,title:`Message Queues`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.`,tags:[`message queue`,`rabbitmq`,`sqs`,`asynchronous`,`messaging`,`communication`],concept:``,steps:[{label:`Produce Message`,icon:`📤`,detail:`A producer creates a task or event and places it into the message queue.`},{label:`Store Message`,icon:`📦`,detail:`The message queue safely stores the message until a consumer is ready to process it.`},{label:`Consume Message`,icon:`📥`,detail:`A consumer retrieves the message from the queue and begins processing the assigned task.`},{label:`Acknowledge Processing`,icon:`✔️`,detail:`After successful execution, the consumer sends an acknowledgment to remove the message from the queue.`},{label:`Complete Workflow`,icon:`✅`,detail:`The processed result is delivered to downstream services or returned to the AI agent for further actions.`}],code:``}],Tg=[`All`,`Advanced`],Eg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},Dg={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function Og({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function kg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function Ag({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:Dg[e.difficulty]||`#E6F1FB`,color:Eg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function jg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:Dg[e.difficulty]||`#E6F1FB`,color:Eg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,paddingBottom:0},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(Og,{content:e.concept}),t===`code`&&(0,M.jsx)(kg,{code:e.code})]})}function Mg({recipes:e,selected:t,onSelect:n,category:r,setCategory:i,search:a,setSearch:o}){let s=e.filter(e=>{let t=r===`All`||e.category===r,n=a.toLowerCase(),i=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&i});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`,gap:0},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:a,onChange:e=>o(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:Tg.map(e=>(0,M.jsx)(`button`,{onClick:()=>i(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:r===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:r===e?`#E6F1FB`:`var(--color-background-primary)`,color:r===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:r===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:s.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):s.map(e=>(0,M.jsx)(Ag,{recipe:e,onSelect:n,selected:t?.id===e.id},e.id))})]})}function Ng(){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:`📚`}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:`AgenticAI Cookbook`}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:`End-to-end Agentic AI`})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:wg.length},{label:`Patterns`,value:Tg.length-1}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function Pg(){let[e,t]=(0,v.useState)(wg[0]),[n,r]=(0,v.useState)(`All`),[i,a]=(0,v.useState)(``);return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Ng,{}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(Mg,{recipes:wg,selected:e,onSelect:t,category:n,setCategory:r,search:i,setSearch:a})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:e?(0,M.jsx)(jg,{recipe:e}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var Fg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},Ig={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function Lg({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function Rg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>n(!1),1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function zg({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:Ig[e.difficulty]||`#E6F1FB`,color:Fg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function Bg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:Ig[e.difficulty]||`#E6F1FB`,color:Fg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(Lg,{content:e.concept}),t===`code`&&(0,M.jsx)(Rg,{code:e.code})]})}function Vg({recipes:e,categories:t,selected:n,onSelect:r,category:i,setCategory:a,search:o,setSearch:s}){let c=e.filter(e=>{let t=i===`All`||e.category===i,n=o.toLowerCase(),r=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&r});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:o,onChange:e=>s(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:t.map(e=>(0,M.jsx)(`button`,{onClick:()=>a(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:i===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:i===e?`#E6F1FB`:`var(--color-background-primary)`,color:i===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:i===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:c.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):c.map(e=>(0,M.jsx)(zg,{recipe:e,onSelect:r,selected:n?.id===e.id},e.id))})]})}function Hg({title:e,subtitle:t,icon:n,totalCount:r,categoryCount:i,patternLabel:a}){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:n}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:e}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:t})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:r},{label:a,value:i}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function $({data:e,title:t,subtitle:n,icon:r=`📚`,patternLabel:i=`Patterns`}){let[a,o]=(0,v.useState)(e[0]),[s,c]=(0,v.useState)(`All`),[l,u]=(0,v.useState)(``),d=[`All`,...new Set(e.map(e=>e.category).filter(Boolean))];return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Hg,{title:t,subtitle:n,icon:r,totalCount:e.length,categoryCount:d.length-1,patternLabel:i}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(Vg,{recipes:e,categories:d,selected:a,onSelect:o,category:s,setCategory:c,search:l,setSearch:u})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:a?(0,M.jsx)(Bg,{recipe:a}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var Ug=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Project Overview`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`},{id:`what-is-cwd`,category:`Project Overview`,title:`What is CWD?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:``,code:``},{id:`cwd-business-context`,category:`Project Overview`,title:`Business Context`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise environment that led to CWD, including fragmented data, multiple business systems, growing AI adoption, domain-specific workflows, and the need for a scalable and governed enterprise AI platform.`,concept:``,code:``},{id:`cwd-business-problem`,category:`Project Overview`,title:`Business Problem`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business and technical challenges CWD is designed to solve, including disconnected enterprise knowledge, manual workflows, limited automation, inconsistent AI experiences, difficult system integrations, and lack of centralized governance.`,concept:``,code:``},{id:`cwd-project-objectives`,category:`Project Overview`,title:`Project Objectives`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the primary objectives of CWD, including creating a reusable enterprise AI platform, enabling multi-agent orchestration, integrating enterprise data and tools, improving automation, enforcing security and governance, and providing scalable AI capabilities.`,concept:``,code:``},{id:`cwd-current-state`,category:`Project Overview`,title:`Current State`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise AI capabilities that existed before CWD, including traditional RAG, individual AI applications, point-to-point integrations, manual workflows, and the limitations of operating isolated AI solutions.`,concept:``,code:``},{id:`cwd-target-state`,category:`Project Overview`,title:`Target / End State`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the target CWD architecture and capabilities, including centralized orchestration, Coordinator–Delegator–Worker agents, enterprise data integration, MCP tools, A2A communication, RAG, state management, observability, security, and scalable deployment.`,concept:``,code:``},{id:`cwd-why-agentic-ai`,category:`Project Overview`,title:`Why Agentic AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why CWD moves beyond traditional chatbots and standalone RAG by using agentic AI for planning, reasoning, task decomposition, domain routing, tool execution, multi-step workflows, autonomous coordination, and controlled interaction with enterprise systems.`,concept:``,code:``},{id:`cwd-business-benefits`,category:`Project Overview`,title:`Key Business Benefits`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.`,concept:``,code:``}];function Wg(){return(0,M.jsx)($,{data:Ug,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var Gg=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`},{id:`cwd-architecture-overview`,category:`CWD Architecture`,title:`CWD Architecture Overview`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the major components, responsibilities, communication patterns, and interaction model within the CWD enterprise multi-agent architecture.`,concept:``,code:``},{id:`cwd-high-level-architecture`,category:`CWD Architecture`,title:`High-Level Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the high-level request flow from the user through the gateway, Coordinator, Delegator, Worker agents, tools, enterprise data sources, and final response.`,concept:``,code:``},{id:`cwd-architecture-layers`,category:`CWD Architecture`,title:`Architecture Layers`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the presentation, API gateway, orchestration, Coordinator, Delegator, Worker, tool integration, data, security, observability, and infrastructure layers.`,concept:``,code:``},{id:`cwd-component-architecture`,category:`CWD Architecture`,title:`Component Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the individual CWD components, their responsibilities, interfaces, dependencies, and how they work together to execute enterprise workflows.`,concept:``,code:``},{id:`cwd-logical-architecture`,category:`CWD Architecture`,title:`Logical Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the logical relationships between the Coordinator, Delegator, Worker agents, MCP tools, A2A communication, services, data sources, and supporting platform components.`,concept:``,code:``},{id:`cwd-deployment-architecture`,category:`CWD Architecture`,title:`Deployment Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD components are deployed across cloud infrastructure, including compute, networking, messaging, storage, AI services, security, and observability components.`,concept:``,code:``},{id:`cwd-end-to-end-architecture-flow`,category:`CWD Architecture`,title:`End-to-End Architecture Flow`,difficulty:`Advanced`,time:`~20 min`,description:`Trace an enterprise request from the user through the gateway, Coordinator, Delegator, Worker agents, MCP tools, data sources, result aggregation, and final response.`,concept:``,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var qg=[{id:`cwd-coordinator`,category:`Coordinator Agent`,title:`Coordinator Agent`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the role of the Coordinator Agent as the central orchestration, planning, coordination, and governance component of the CWD architecture.`},{id:`what-is-coordinator`,category:`Coordinator Agent`,title:`What is Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the purpose, role, responsibilities, and architectural position of the Coordinator Agent in the CWD platform.`,concept:``,code:``},{id:`coordinator-responsibilities`,category:`Coordinator Agent`,title:`Coordinator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities handled by the Coordinator, including request orchestration, planning, delegation, state management, and result coordination.`,concept:``,code:``},{id:`request-understanding`,category:`Coordinator Agent`,title:`Request Understanding`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets incoming user requests, identifies required actions, and determines the appropriate execution path.`,concept:``,code:``},{id:`intent-classification`,category:`Coordinator Agent`,title:`Intent Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user intent is identified, classified, and mapped to the appropriate business domain, workflow, or downstream agent.`,concept:``,code:``},{id:`coordinator-planning`,category:`Coordinator Agent`,title:`Planning`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how the Coordinator creates an execution plan, determines task dependencies, identifies required agents, and controls workflow execution.`,concept:``,code:``},{id:`delegator-selection`,category:`Coordinator Agent`,title:`Delegator Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator determines when to invoke the Delegator and how the appropriate Delegator is selected for downstream task execution.`,concept:``,code:``},{id:`task-creation`,category:`Coordinator Agent`,title:`Task Creation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator creates structured tasks, maintains task context, and passes execution requests to downstream agents.`,concept:``,code:``},{id:`result-aggregation`,category:`Coordinator Agent`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator collects, validates, combines, and synthesizes results returned by multiple agents or workers.`,concept:``,code:``},{id:`coordinator-retry-recovery`,category:`Coordinator Agent`,title:`Retry & Recovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator handles agent failures, timeouts, retries, fallback strategies, partial failures, and recovery workflows.`,concept:``,code:``},{id:`global-governance`,category:`Coordinator Agent`,title:`Global Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how centralized governance, security policies, authorization, guardrails, compliance, and policy enforcement are handled by the Coordinator.`,concept:``,code:``},{id:`coordinator-interview-questions`,category:`Coordinator Agent`,title:`Coordinator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions related to Coordinator Agent implementation and orchestration.`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Coordinator Agent Cookbook`,subtitle:`Orchestration, planning, delegation and governance`,icon:`🎯`,patternLabel:`Topics`})}var Yg=[{id:`cwd-delegator`,category:`Delegator Agents`,title:`Delegator Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Delegator layer responsible for domain-level task decomposition, domain routing, Worker selection, execution control, and communication between the Coordinator and specialized Worker agents.`},{id:`what-is-delegator`,category:`Delegator Agents`,title:`What is a Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand what a Delegator Agent is, where it fits in the CWD architecture, and how it acts as the domain-level orchestration layer between the Coordinator and specialized Workers.`,concept:``,code:``},{id:`why-delegator-required`,category:`Delegator Agents`,title:`Why Delegator is Required`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a dedicated Delegator layer is required between the Coordinator and Workers, including separation of responsibilities, domain isolation, scalability, maintainability, and more efficient task routing.`,concept:``,code:``},{id:`delegator-responsibilities`,category:`Delegator Agents`,title:`Delegator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the core responsibilities of a Delegator, including domain identification, task decomposition, Worker discovery and selection, execution coordination, policy enforcement, failure handling, and result management.`,concept:``,code:``},{id:`domain-based-routing`,category:`Delegator Agents`,title:`Domain-Based Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators identify the appropriate business or technical domain and route incoming tasks to the correct domain-specific Worker agents and capabilities.`,concept:``,code:``},{id:`delegator-task-decomposition`,category:`Delegator Agents`,title:`Task Decomposition`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Delegators decompose complex domain-level tasks into smaller, well-defined, atomic Worker tasks while preserving dependencies, context, execution order, and required inputs and outputs.`,concept:``,code:``},{id:`worker-selection`,category:`Delegator Agents`,title:`Worker Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator selects the most appropriate Worker based on capabilities, domain ownership, tool access, availability, health, permissions, workload, and task requirements.`,concept:``,code:``},{id:`worker-pool-management`,category:`Delegator Agents`,title:`Worker Pool Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers are organized, monitored, scaled, and managed within a domain, including load distribution, Worker availability, health status, concurrency, and capacity management.`,concept:``,code:``},{id:`domain-guardrails`,category:`Delegator Agents`,title:`Domain Guardrails`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators enforce domain-specific policies, authorization boundaries, data-access restrictions, allowed capabilities, tool restrictions, validation rules, and other governance controls.`,concept:``,code:``},{id:`delegator-worker-communication`,category:`Delegator Agents`,title:`Delegator-to-Worker Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators communicate with Workers, transfer task context and execution metadata, invoke Worker capabilities, track responses, handle failures, and manage asynchronous or synchronous execution.`,concept:``,code:``},{id:`multiple-delegator-architecture`,category:`Delegator Agents`,title:`Multiple Delegator Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how multiple domain-specific Delegators can operate within an enterprise CWD architecture, including cross-domain coordination, routing, isolation, scalability, shared governance, and interaction with the central Coordinator.`,concept:``,code:``},{id:`delegator-interview-questions`,category:`Delegator Agents`,title:`Delegator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions covering Delegator responsibilities, domain routing, task decomposition, Worker selection, scalability, guardrails, failures, and Coordinator–Delegator–Worker interactions.`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Delegator Agents Cookbook`,subtitle:`Domain routing, task decomposition, Worker selection and execution`,icon:`🧭`,patternLabel:`Topics`})}var Zg=[{id:`cwd-workers`,category:`Worker Agents`,title:`Worker Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand specialized Worker Agents in CWD that execute focused business tasks using enterprise data, APIs, tools, RAG, and governed services while returning validated results to the Delegator.`},{id:`what-is-worker`,category:`Worker Agents`,title:`What is a Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the role of a Worker Agent as a specialized execution component responsible for performing a well-defined business or technical task delegated by the Delegator.`,concept:``,code:``},{id:`worker-responsibilities`,category:`Worker Agents`,title:`Worker Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker responsibilities including task execution, tool selection, data retrieval, business logic, validation, error handling, and returning structured results to the Delegator.`,concept:``,code:``},{id:`atomic-task-execution`,category:`Worker Agents`,title:`Atomic Task Execution`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers execute focused atomic tasks with clear inputs, defined responsibilities, controlled tool access, deterministic processing where possible, and structured outputs.`,concept:``,code:``},{id:`worker-tool-calling`,category:`Worker Agents`,title:`Tool Calling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers discover and invoke authorized enterprise tools through mechanisms such as MCP while enforcing tool permissions, input validation, and execution policies.`,concept:``,code:``},{id:`worker-data-retrieval`,category:`Worker Agents`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers retrieve governed enterprise information using RAG, search services, databases, APIs, and other authorized data sources while respecting user entitlements.`,concept:``,code:``},{id:`worker-api-integration`,category:`Worker Agents`,title:`API Integration`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers securely interact with enterprise APIs and microservices for retrieving information, executing business operations, and integrating with downstream systems.`,concept:``,code:``},{id:`artifact-generation`,category:`Worker Agents`,title:`Artifact Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers generate structured artifacts such as customer briefings, reports, summaries, documents, recommendations, and other business outputs.`,concept:``,code:``},{id:`worker-output-validation`,category:`Worker Agents`,title:`Output Validation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker outputs are validated for schema correctness, completeness, business rules, authorization, data quality, and grounding before being returned to the Delegator.`,concept:``,code:``},{id:`worker-error-handling`,category:`Worker Agents`,title:`Error Handling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers detect transient and permanent failures, apply retry and timeout policies, capture errors, and return controlled failure information for Delegator-level recovery.`,concept:``,code:``},{id:`worker-pool`,category:`Worker Agents`,title:`Worker Pool`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker pooling, horizontal scaling, workload distribution, concurrency, health management, capacity planning, and dynamic Worker selection for reliable enterprise execution.`,concept:``,code:``},{id:`worker-interview-questions`,category:`Worker Agents`,title:`Worker Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture and scenario-based interview questions covering Worker responsibilities, task boundaries, tool calling, RAG, security, scalability, failure handling, and Delegator-to-Worker communication.`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Worker Agents Cookbook`,subtitle:`Atomic execution, tools, enterprise data, validation and scalability`,icon:`⚙️`,patternLabel:`Topics`})}var $g=[{id:`cwd-orchestration`,category:`CWD Orchestration`,title:`CWD Orchestration Flow`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the complete request orchestration flow across the CWD platform, from user request and gateway validation through Coordinator, Delegator, Worker execution, data access, result aggregation, and final response.`},{id:`cwd-user-request`,category:`CWD Orchestration`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request enters the CWD platform and how the request is captured, validated, and prepared for downstream processing.`,concept:``,code:``},{id:`cwd-gateway`,category:`CWD Orchestration`,title:`Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway handles request routing, authentication, validation, security checks, and controlled entry into the agentic platform.`,concept:``,code:``},{id:`cwd-entitlement-check`,category:`CWD Orchestration`,title:`Entitlement Check`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user identity, authorization, roles, permissions, and entitlements are validated before allowing access to agents, tools, and enterprise data.`,concept:``,code:``},{id:`cwd-coordinator-flow`,category:`CWD Orchestration`,title:`Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the request, determines intent, creates an execution plan, manages workflow state, and controls downstream orchestration.`,concept:``,code:``},{id:`cwd-delegator-flow`,category:`CWD Orchestration`,title:`Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator decomposes tasks, identifies the appropriate domain or Worker agents, and routes tasks for execution.`,concept:``,code:``},{id:`cwd-worker-flow`,category:`CWD Orchestration`,title:`Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how specialized Worker agents execute assigned tasks using domain logic, LLM capabilities, tools, APIs, and enterprise data.`,concept:``,code:``},{id:`cwd-data-sources`,category:`CWD Orchestration`,title:`Data Sources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access enterprise data sources through retrieval systems, APIs, MCP tools, databases, and other connected services.`,concept:``,code:``},{id:`cwd-result-aggregation`,category:`CWD Orchestration`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how results from multiple Workers, tools, and data sources are collected, validated, combined, and returned to the Coordinator.`,concept:``,code:``},{id:`cwd-final-response`,category:`CWD Orchestration`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator synthesizes the completed workflow results into a final response and returns it securely to the user.`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`CWD Orchestration Cookbook`,subtitle:`Request flow, coordination, delegation, execution and response`,icon:`🔄`,patternLabel:`Topics`})}var t_=[{id:`cwd-langgraph`,category:`LangGraph`,title:`LangGraph`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how LangGraph is used within CWD to implement stateful, controllable, and resilient agent orchestration, including graph-based workflows, state management, conditional routing, checkpointing, retries, human-in-the-loop execution, and Coordinator–Delegator–Worker coordination.`},{id:`why-langgraph-cwd`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why LangGraph is used for CWD orchestration, including stateful execution, explicit workflow control, conditional routing, persistence, retries, recovery, human-in-the-loop workflows, and complex multi-agent coordination.`,concept:``,code:``},{id:`stategraph`,category:`LangGraph`,title:`StateGraph`,difficulty:`Advanced`,time:`~15 min`,description:`Understand StateGraph as the foundation for defining state-driven agent workflows, including shared state, graph structure, node execution, transitions, workflow lifecycle, and how CWD maintains execution context across agents.`,concept:``,code:``},{id:`langgraph-nodes`,category:`LangGraph`,title:`Nodes`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how LangGraph nodes represent individual units of work such as request processing, planning, Coordinator logic, Delegator routing, Worker execution, retrieval, tool invocation, validation, and response generation.`,concept:``,code:``},{id:`langgraph-edges`,category:`LangGraph`,title:`Edges`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how edges connect LangGraph nodes and control workflow progression, including sequential execution, transitions between agents, completion paths, failure paths, and routing to downstream processing stages.`,concept:``,code:``},{id:`conditional-routing`,category:`LangGraph`,title:`Conditional Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how conditional routing dynamically selects the next workflow path based on state, user intent, task status, agent decisions, Worker availability, tool results, validation outcomes, or failure conditions.`,concept:``,code:``},{id:`langgraph-state-management`,category:`LangGraph`,title:`State Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state is created, updated, and propagated across the CWD workflow, including request context, task information, agent results, tool outputs, intermediate data, errors, status, and final response state.`,concept:``,code:``},{id:`langgraph-checkpointing`,category:`LangGraph`,title:`Checkpointing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how checkpointing persists workflow state so long-running or interrupted CWD executions can resume from a known point, supporting recovery, debugging, state persistence, and reliable agent execution.`,concept:``,code:``},{id:`langgraph-retry`,category:`LangGraph`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retry mechanisms handle transient failures in CWD workflows, including failed agent execution, temporary service failures, tool errors, LLM failures, retry policies, backoff strategies, and recovery decisions.`,concept:``,code:``},{id:`langgraph-human-loop`,category:`LangGraph`,title:`Human-in-the-Loop`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how human approval or intervention can be introduced into CWD workflows for high-risk operations, sensitive decisions, exception handling, validation, approval gates, and controlled continuation of agent execution.`,concept:``,code:``},{id:`langgraph-in-cwd`,category:`LangGraph`,title:`LangGraph in CWD`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the specific role of LangGraph in the CWD architecture, including how it manages workflow state and coordinates the Coordinator, Delegator, and Worker execution lifecycle while supporting conditional routing, retries, persistence, recovery, and controlled agent execution.`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`LangGraph Cookbook`,subtitle:`Stateful orchestration, routing, persistence and agent workflows`,icon:`🕸️`,patternLabel:`Topics`})}var r_=[{id:`cwd-mcp`,category:`MCP`,title:`MCP`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Model Context Protocol (MCP) and how CWD uses it as a standardized integration layer for connecting AI agents with enterprise tools, resources, context, and external services in a secure and governed manner.`},{id:`what-is-mcp-cwd`,category:`MCP`,title:`What is MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Model Context Protocol, its purpose, core concepts, protocol semantics, communication model, and how it standardizes the interaction between AI applications, agents, and external capabilities.`,concept:``,code:``},{id:`why-mcp-cwd`,category:`MCP`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why MCP is used within CWD to avoid point-to-point integrations, standardize tool access, improve reusability, simplify agent integration, and provide a governed interface to enterprise capabilities.`,concept:``,code:``},{id:`mcp-architecture-cwd`,category:`MCP`,title:`MCP Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the MCP architecture, including MCP hosts, clients, servers, tools, resources, prompts, protocol messages, transports, and how these components interact to provide standardized context and capability access.`,concept:``,code:``},{id:`mcp-server`,category:`MCP`,title:`MCP Server`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities of an MCP Server, including exposing tools and resources, validating requests, executing approved operations, enforcing security policies, handling errors, and returning structured results to MCP clients.`,concept:``,code:``},{id:`mcp-tools`,category:`MCP`,title:`MCP Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise capabilities are exposed as MCP tools, including tool discovery, input schemas, invocation, validation, execution, structured outputs, error handling, authorization, and controlled access to APIs and business services.`,concept:``,code:``},{id:`mcp-resources`,category:`MCP`,title:`MCP Resources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand MCP resources as a standardized mechanism for providing contextual information to agents, including documents, application data, knowledge content, metadata, and other read-oriented enterprise information.`,concept:``,code:``},{id:`mcp-context`,category:`MCP`,title:`MCP Context`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MCP enables standardized access to relevant context and capabilities, including how clients discover available resources and tools and provide the appropriate information to an AI application or agent.`,concept:``,code:``},{id:`worker-mcp`,category:`MCP`,title:`Worker + MCP`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD Worker agents use MCP to discover and invoke domain-specific enterprise tools and access approved resources, while the Worker remains focused on domain reasoning and task execution.`,concept:``,code:``},{id:`mcp-security`,category:`MCP`,title:`MCP Security`,difficulty:`Advanced`,time:`~15 min`,description:`Understand enterprise MCP security, including authentication, authorization, identity propagation, tool-level permissions, input validation, secrets management, network controls, data protection, auditing, rate limiting, and preventing unsafe tool execution.`,concept:``,code:``},{id:`mcp-interview`,category:`MCP`,title:`MCP Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for MCP architecture and enterprise interview questions covering MCP clients and servers, tools, resources, prompts, discovery, invocation, transports, security, authorization, enterprise integration, MCP versus REST APIs, and MCP versus function calling.`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`MCP Cookbook`,subtitle:`Protocol, tools, resources, context, Worker integration and security`,icon:`🔗`,patternLabel:`Topics`})}var a_=[{id:`cwd-a2a`,category:`CWD Project`,title:`A2A Communication`,difficulty:`Advanced`,time:`~60 min`,description:`Understand agent-to-agent communication and how independent CWD agents exchange tasks and results.`},{id:`what-is-a2a`,category:`A2A Communication`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the Agent2Agent protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.`,concept:``,code:``},{id:`why-agent-to-agent`,category:`A2A Communication`,title:`Why Agent-to-Agent Communication?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why independent agents require standardized communication.`,concept:``,code:``},{id:`coordinator-delegator-a2a`,category:`A2A Communication`,title:`Coordinator → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand communication between Coordinator and Delegator agents.`,concept:``,code:``},{id:`delegator-worker-a2a`,category:`A2A Communication`,title:`Delegator → Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand task communication between Delegators and Workers.`,concept:``,code:``},{id:`worker-delegator-a2a`,category:`A2A Communication`,title:`Worker → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers return execution results to Delegators.`,concept:``,code:``},{id:`delegator-coordinator-a2a`,category:`A2A Communication`,title:`Delegator → Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators return results to the Coordinator.`,concept:``,code:``},{id:`a2a-message-structure`,category:`A2A Communication`,title:`Message Structure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the structure and metadata of agent communication messages.`,concept:``,code:``},{id:`a2a-correlation-ids`,category:`A2A Communication`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand correlation IDs for distributed agent execution tracking.`,concept:``,code:``},{id:`a2a-kafka`,category:`A2A Communication`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Kafka can support asynchronous agent communication.`,concept:``,code:``},{id:`a2a-service-bus`,category:`A2A Communication`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Service Bus based messaging between agents.`,concept:``,code:``},{id:`a2a-async-communication`,category:`A2A Communication`,title:`Async Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand asynchronous agent communication and long-running tasks.`,concept:``,code:``},{id:`a2a-interview`,category:`A2A Communication`,title:`A2A Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for A2A architecture and scenario-based interview questions.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`A2A Communication Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var s_=[{id:`cwd-agent-registry`,category:`Agent Registry`,title:`Agent Registry`,difficulty:`Advanced`,time:`~50 min`,description:`Understand centralized agent registration, discovery, metadata, capabilities, ownership, health, access control, and dynamic routing.`},{id:`why-agent-registry`,category:`Agent Registry`,title:`Why Agent Registry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why an enterprise multi-agent platform requires a centralized Agent Registry for managing and discovering agents.`,concept:``,code:``},{id:`agent-discovery`,category:`Agent Registry`,title:`Agent Discovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agents discover other available agents based on capabilities, domains, and availability.`,concept:``,code:``},{id:`agent-metadata`,category:`Agent Registry`,title:`Agent Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the metadata maintained for registered agents, including identity, endpoint, version, owner, capabilities, and status.`,concept:``,code:``},{id:`agent-capabilities`,category:`Agent Registry`,title:`Agent Capabilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent capabilities are defined, registered, exposed, and used for intelligent agent selection.`,concept:``,code:``},{id:`domain-ownership`,category:`Agent Registry`,title:`Domain Ownership`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how business domains and responsibilities are mapped to specific agents and agent owners.`,concept:``,code:``},{id:`supported-tools`,category:`Agent Registry`,title:`Supported Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tools, APIs, MCP servers, and external capabilities supported by each agent are registered.`,concept:``,code:``},{id:`agent-access-scope`,category:`Agent Registry`,title:`Access Scope`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authentication, authorization, roles, permissions, and access scopes are associated with registered agents.`,concept:``,code:``},{id:`agent-health-metadata`,category:`Agent Registry`,title:`Health Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent health, availability, readiness, version, and operational status are tracked in the registry.`,concept:``,code:``},{id:`dynamic-agent-routing`,category:`Agent Registry`,title:`Dynamic Agent Routing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how registry information is used to dynamically select and route requests to the most appropriate available agent.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Agent Registry Cookbook`,subtitle:`Discovery, capabilities, governance and dynamic routing`,icon:`🗂️`,patternLabel:`Topics`})}var l_=[{id:`cwd-prompt-registry`,category:`Prompt Registry`,title:`Prompt Registry`,difficulty:`Advanced`,time:`~45 min`,description:`Understand enterprise prompt management through a centralized Prompt Registry, including prompt creation, versioning, metadata, classification, approval, access control, lifecycle management, testing, deployment, rollback, and governance.`},{id:`why-prompt-registry`,category:`Prompt Registry`,title:`Why Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why enterprise AI platforms require centralized prompt management instead of storing prompts directly inside application code, including consistency, reuse, traceability, testing, controlled changes, and governance.`,concept:``,code:``},{id:`prompt-versioning`,category:`Prompt Registry`,title:`Prompt Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompt versions are created, tracked, compared, tested, promoted, and rolled back so changes to production prompts remain controlled, traceable, and reproducible.`,concept:``,code:``},{id:`prompt-metadata`,category:`Prompt Registry`,title:`Prompt Metadata`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand metadata associated with enterprise prompts, including prompt name, version, owner, purpose, model compatibility, variables, environment, domain, status, evaluation results, approval information, and usage history.`,concept:``,code:``},{id:`prompt-approval`,category:`Prompt Registry`,title:`Prompt Approval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production prompt approval workflows, including authoring, validation, evaluation, security review, business approval, deployment gates, audit trails, and controlled promotion from development to production.`,concept:``,code:``},{id:`prompt-classification`,category:`Prompt Registry`,title:`Prompt Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompts can be classified based on purpose, domain, sensitivity, risk level, model usage, business criticality, and allowed capabilities to apply appropriate testing, approval, and governance policies.`,concept:``,code:``},{id:`prompt-rbac`,category:`Prompt Registry`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for prompt management, including who can create, view, modify, approve, publish, deploy, rollback, or retire prompts and how access is restricted based on roles and responsibilities.`,concept:``,code:``},{id:`prompt-lifecycle`,category:`Prompt Registry`,title:`Prompt Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete enterprise prompt lifecycle from design and development through testing, evaluation, approval, registration, deployment, monitoring, version updates, rollback, deprecation, and retirement.`,concept:``,code:``},{id:`prompt-governance`,category:`Prompt Registry`,title:`Prompt Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance controls for enterprise prompts, including ownership, approval policies, auditability, security reviews, sensitive-data protection, prompt injection defenses, evaluation requirements, change management, compliance, and production controls.`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Prompt Registry Cookbook`,subtitle:`Prompt versioning, metadata, approval, RBAC, lifecycle and governance`,icon:`📝`,patternLabel:`Topics`})}var d_=[{id:`cwd-rag`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end Retrieval-Augmented Generation architecture used by CWD for secure enterprise knowledge retrieval, contextual grounding, and accurate LLM responses.`},{id:`why-rag`,category:`RAG Architecture`,title:`Why RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why RAG is required to ground LLM responses in enterprise-specific, current, and governed knowledge instead of relying only on model knowledge.`,concept:``,code:``},{id:`rag-architecture`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the end-to-end RAG flow including ingestion, document processing, chunking, embeddings, indexing, retrieval, context construction, LLM generation, and response grounding.`,concept:``,code:``},{id:`rag-data-ingestion`,category:`RAG Architecture`,title:`Data Ingestion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise documents and knowledge from systems such as SharePoint, enterprise applications, databases, and other governed sources are ingested into the RAG pipeline.`,concept:``,code:``},{id:`rag-chunking`,category:`RAG Architecture`,title:`Chunking`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand document chunking strategies, chunk size, overlap, semantic boundaries, and how chunking decisions affect retrieval quality and LLM context.`,concept:``,code:``},{id:`rag-embeddings`,category:`RAG Architecture`,title:`Embeddings`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how documents and queries are converted into vector representations to enable semantic similarity search and knowledge retrieval.`,concept:``,code:``},{id:`azure-ai-search`,category:`RAG Architecture`,title:`Azure AI Search`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Azure AI Search as the enterprise retrieval layer for vector search, keyword search, hybrid retrieval, indexing, filtering, and semantic ranking.`,concept:``,code:``},{id:`rag-metadata`,category:`RAG Architecture`,title:`Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how document metadata such as source, domain, owner, document type, timestamp, classification, and business attributes improves filtering, ranking, and governance.`,concept:``,code:``},{id:`rag-acl-filtering`,category:`RAG Architecture`,title:`ACL Filtering`,difficulty:`Advanced`,time:`~15 min`,description:`Understand entitlement-aware retrieval and ACL filtering so users can retrieve only the enterprise information they are authorized to access.`,concept:``,code:``},{id:`intent-based-retrieval`,category:`RAG Architecture`,title:`Intent-Based Retrieval`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how user intent, domain, query type, and task context influence retrieval strategy, search filters, ranking, and the selection of relevant enterprise knowledge.`,concept:``,code:``},{id:`context-building`,category:`RAG Architecture`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved chunks are filtered, ranked, deduplicated, and assembled into a high-quality context window for the LLM.`,concept:``,code:``},{id:`rag-cwd-flow`,category:`RAG Architecture`,title:`RAG + CWD Flow`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how RAG integrates with the CWD workflow across the Gateway, Coordinator, Delegator, specialized Workers, enterprise data sources, retrieval layer, context building, and final response generation.`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`RAG Architecture Cookbook`,subtitle:`Enterprise retrieval, grounding, security and CWD integration`,icon:`🔎`,patternLabel:`Topics`})}var p_=[{id:`cwd-memory`,category:`Memory & State Management`,title:`Memory & State Management`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD manages conversational memory, persistent memory, execution state, session context, task state, and context propagation across Coordinator, Delegator, and Worker agents throughout the execution lifecycle.`},{id:`short-term-memory`,category:`Memory & State`,title:`Short-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand short-term memory used to maintain the current conversation and active execution context, including recent messages, intermediate results, tool outputs, agent decisions, and information required during the current workflow.`,concept:``,code:``},{id:`long-term-memory`,category:`Memory & State`,title:`Long-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand persistent memory that can be retained across conversations or tasks, including user preferences, historical interactions, approved business context, and other information that can improve future agent interactions while respecting governance policies.`,concept:``,code:``},{id:`redis-memory`,category:`Memory & State`,title:`Redis`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Redis can provide low-latency storage for session information, temporary execution state, caching, conversation context, distributed locks, task coordination, and short-lived agent state.`,concept:``,code:``},{id:`vector-db-memory`,category:`Memory & State`,title:`Vector DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how vector databases can support semantic memory by storing embeddings of relevant conversations, knowledge, or historical information and retrieving semantically similar context when required by an agent.`,concept:``,code:``},{id:`cosmos-db`,category:`Memory & State`,title:`Cosmos DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Cosmos DB can be used for persistent application and execution data, including session metadata, task information, workflow state, execution history, agent results, and other durable state required by distributed CWD services.`,concept:``,code:``},{id:`session-state`,category:`Memory & State`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand the session-level state representing the overall user interaction, including identity context, conversation history, session metadata, active workflows, and references to tasks and executions associated with the session.`,concept:``,code:``},{id:`task-state`,category:`Memory & State`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand task-level state representing the objective being executed, including task inputs, required capabilities, assigned agents, dependencies, status, intermediate results, errors, and completion information.`,concept:``,code:``},{id:`run-state`,category:`Memory & State`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand run-level state representing a specific execution attempt for a task, including execution status, timestamps, participating agents, retries, intermediate outputs, failures, and final completion state.`,concept:``,code:``},{id:`turn-state`,category:`Memory & State`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand conversation-turn state representing an individual user request and corresponding agent response, including messages, context, decisions, tool interactions, and the results generated during that conversational turn.`,concept:``,code:``},{id:`step-state`,category:`Memory & State`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand step-level state representing individual execution actions such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`context-propagation`,category:`Memory & State`,title:`Context Propagation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how relevant context is propagated across the Coordinator, Delegator, and Worker agents while controlling what information is shared, preserving execution metadata, maintaining security boundaries, and avoiding unnecessary context growth.`,concept:``,code:``},{id:`state-lifecycle`,category:`Memory & State`,title:`State Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete lifecycle of CWD execution state from creation and initialization through updates, persistence, propagation, retries, completion, failure handling, cleanup, archival, and eventual expiration.`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Memory & State Management Cookbook`,subtitle:`Memory, persistence, execution state and context propagation`,icon:`🧠`,patternLabel:`Topics`})}var h_=[{id:`cwd-data-integration`,category:`Enterprise Data Integration`,title:`Enterprise Data Integration`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD securely connects Coordinator, Delegator, and Worker agents to enterprise applications, structured and unstructured data sources, external services, and governed connectors while enforcing authorization, data-access policies, and security controls.`},{id:`snowflake`,category:`Enterprise Data Integration`,title:`Snowflake`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Snowflake for governed access to enterprise analytics data, including secure querying, authorization, data filtering, and using business data as context for agent workflows.`,concept:``,code:``},{id:`salesforce`,category:`Enterprise Data Integration`,title:`Salesforce`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access Salesforce customer, account, opportunity, and activity information through approved APIs or tools while respecting user permissions and enterprise data-access policies.`,concept:``,code:``},{id:`oracle`,category:`Enterprise Data Integration`,title:`Oracle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Oracle enterprise systems and databases to retrieve governed business data, execute approved queries or operations, and expose relevant information to authorized agents.`,concept:``,code:``},{id:`sharepoint`,category:`Enterprise Data Integration`,title:`SharePoint`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with SharePoint documents, sites, and knowledge repositories for enterprise search and RAG, including document retrieval, indexing, metadata filtering, permissions, and source attribution.`,concept:``,code:``},{id:`outlook-m365`,category:`Enterprise Data Integration`,title:`Outlook / M365`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD can integrate with Microsoft 365 and Outlook services to access approved emails, calendars, documents, and collaboration data while enforcing identity, authorization, privacy, and data-access boundaries.`,concept:``,code:``},{id:`hr-systems`,category:`Enterprise Data Integration`,title:`HR Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with HR systems through governed interfaces while protecting sensitive employee information, enforcing role-based access, limiting data exposure, and ensuring agents only access authorized information.`,concept:``,code:``},{id:`finance-systems`,category:`Enterprise Data Integration`,title:`Finance Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD connects to enterprise finance systems for approved financial data retrieval and business workflows while enforcing authorization, data classification, auditability, and strict access controls.`,concept:``,code:``},{id:`marketing-data`,category:`Enterprise Data Integration`,title:`Marketing Data`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how marketing data from campaigns, customer insights, product information, and analytics platforms can be integrated into CWD workflows and made available to authorized domain Workers.`,concept:``,code:``},{id:`web-search`,category:`Enterprise Data Integration`,title:`Web Search`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how controlled external web search can complement enterprise knowledge by retrieving current public information while applying approved domains, query restrictions, source validation, security policies, and hallucination controls.`,concept:``,code:``},{id:`governed-connectors`,category:`Enterprise Data Integration`,title:`Governed Connectors`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how governed connectors provide a standardized and secure integration layer between CWD agents and enterprise systems, including authentication, authorization, secrets management, tool permissions, data filtering, auditing, rate limiting, and policy enforcement.`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Enterprise Data Integration Cookbook`,subtitle:`Enterprise systems, governed connectors, data access and secure integration`,icon:`🔌`,patternLabel:`Topics`})}var __=[{id:`cwd-security`,category:`Security & Governance`,title:`Security & Governance`,difficulty:`Advanced`,time:`~60 min`,description:`Understand enterprise security and governance for CWD, including identity, authentication, authorization, agent and tool access, data protection, threat prevention, auditing, and compliance.`},{id:`zero-trust`,category:`Security & Governance`,title:`Zero Trust`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Zero Trust principles are applied to CWD by continuously validating identity, device or workload context, permissions, and access to agents, tools, data, and services.`,concept:``,code:``},{id:`entitlement-first-execution`,category:`Security & Governance`,title:`Entitlement-First Execution`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why user entitlement and authorization must be validated before Coordinator, Delegator, Worker, MCP tool, or enterprise data-source execution.`,concept:``,code:``},{id:`cwd-rbac`,category:`Security & Governance`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for managing permissions across users, agents, administrators, tools, data sources, prompts, and platform operations.`,concept:``,code:``},{id:`entra-id`,category:`Security & Governance`,title:`Entra ID / Azure AD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise identity management using Microsoft Entra ID for user authentication, application identities, groups, roles, access policies, and token-based authorization.`,concept:``,code:``},{id:`managed-identity`,category:`Security & Governance`,title:`Managed Identity`,difficulty:`Advanced`,time:`~10 min`,description:`Understand passwordless service-to-service authentication using managed identities so CWD components can securely access Azure resources without storing credentials in application code.`,concept:``,code:``},{id:`key-vault`,category:`Security & Governance`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized management of secrets, keys, certificates, and sensitive configuration using Azure Key Vault with controlled application access.`,concept:``,code:``},{id:`least-privilege`,category:`Security & Governance`,title:`Least Privilege`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD applies least-privilege access so each agent, Worker, MCP tool, service, and user receives only the permissions required for its specific responsibilities.`,concept:``,code:``},{id:`dlp`,category:`Security & Governance`,title:`DLP`,difficulty:`Advanced`,time:`~10 min`,description:`Understand data-loss prevention controls for detecting, restricting, and monitoring sensitive information flowing through prompts, retrieved context, agent outputs, tools, and enterprise integrations.`,concept:``,code:``},{id:`data-redaction`,category:`Security & Governance`,title:`Data Redaction`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how sensitive information such as PII, credentials, confidential business data, and regulated content can be detected and redacted before logging, retrieval, or LLM processing.`,concept:``,code:``},{id:`data-classification`,category:`Security & Governance`,title:`Data Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data classification based on sensitivity, business impact, confidentiality, and regulatory requirements, and how classification influences retrieval and access policies.`,concept:``,code:``},{id:`audit-logging`,category:`Security & Governance`,title:`Audit Logging`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD captures auditable records of authentication, authorization, agent execution, tool calls, data access, configuration changes, approvals, and security events.`,concept:``,code:``},{id:`security-threat-modeling`,category:`Security & Governance`,title:`Security Threat Modeling`,difficulty:`Advanced`,time:`~15 min`,description:`Understand threat modeling for agentic systems, including prompt injection, tool misuse, privilege escalation, data exfiltration, insecure agent communication, compromised dependencies, and unauthorized data access.`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:``,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:``,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:``,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:``,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:``,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:``,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:``,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:``,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:``,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:``,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:``,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`},{id:`agent-evaluation-strategy`,category:`Agent Evaluation`,title:`Agent Evaluation Strategy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the overall evaluation strategy.`,concept:``,code:``},{id:`golden-test-suites`,category:`Agent Evaluation`,title:`Golden Test Suites`,difficulty:`Advanced`,time:`~10 min`,description:`Understand golden datasets and test cases.`,concept:``,code:``},{id:`agent-accuracy`,category:`Agent Evaluation`,title:`Accuracy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand accuracy measurement.`,concept:``,code:``},{id:`agent-consistency`,category:`Agent Evaluation`,title:`Consistency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand consistency evaluation.`,concept:``,code:``},{id:`agent-latency`,category:`Agent Evaluation`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency measurement.`,concept:``,code:``},{id:`token-usage`,category:`Agent Evaluation`,title:`Token Usage`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand token consumption.`,concept:``,code:``},{id:`agent-cost`,category:`Agent Evaluation`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost measurement.`,concept:``,code:``},{id:`tool-success-rate`,category:`Agent Evaluation`,title:`Tool Success Rate`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tool execution success metrics.`,concept:``,code:``},{id:`regression-testing`,category:`Agent Evaluation`,title:`Regression Testing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand regression testing for agents and prompts.`,concept:``,code:``},{id:`ab-evaluation`,category:`Agent Evaluation`,title:`A/B Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand comparison of different agent or prompt versions.`,concept:``,code:``}];function P_(){return(0,M.jsx)($,{data:N_,title:`Agent Evaluation Cookbook`,subtitle:`Quality, reliability, latency and cost`,icon:`📊`,patternLabel:`Topics`})}var F_=[{id:`cwd-llmops`,category:`LLMOps / MLOps`,title:`LLMOps / MLOps`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end production lifecycle for models, prompts, agents, datasets, evaluations, experiments, deployments, monitoring, versioning, and governance required to operate CWD reliably at enterprise scale.`},{id:`model-management`,category:`LLMOps / MLOps`,title:`Model Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how AI and ML models are managed throughout their lifecycle, including model selection, registration, validation, deployment, retirement, performance tracking, and managing multiple model versions across environments.`,concept:``,code:``},{id:`prompt-management`,category:`LLMOps / MLOps`,title:`Prompt Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how production prompts are designed, stored, tested, versioned, evaluated, deployed, and rolled back, including prompt templates, variables, model-specific configurations, and controlled prompt changes.`,concept:``,code:``},{id:`llmops-evaluation`,category:`LLMOps / MLOps`,title:`Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI evaluation pipelines for measuring response quality, correctness, groundedness, relevance, safety, latency, and task success across models, prompts, RAG pipelines, and agent workflows.`,concept:``,code:``},{id:`experiment-tracking`,category:`LLMOps / MLOps`,title:`Experiment Tracking`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how experiments are tracked across models, prompts, datasets, parameters, evaluation results, and configurations so teams can reproduce experiments and compare different AI approaches systematically.`,concept:``,code:``},{id:`llmops-mlflow`,category:`LLMOps / MLOps`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle management, evaluation, artifact management, model versioning, and operational workflows across traditional ML and GenAI applications.`,concept:``,code:``},{id:`cicd`,category:`LLMOps / MLOps`,title:`CI/CD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CI/CD pipelines automate testing, validation, security checks, packaging, infrastructure changes, and controlled promotion of AI application and agent changes across development, test, staging, and production environments.`,concept:``,code:``},{id:`ai-deployment`,category:`LLMOps / MLOps`,title:`Deployment`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production deployment strategies for AI applications and agents, including containerized deployment, blue-green releases, canary deployments, rollback strategies, environment configuration, scaling, and zero-downtime releases.`,concept:``,code:``},{id:`llmops-monitoring`,category:`LLMOps / MLOps`,title:`Monitoring`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI application monitoring across infrastructure, agents, LLM calls, prompts, RAG retrieval, tools, latency, token usage, cost, errors, throughput, quality, and user experience.`,concept:``,code:``},{id:`ai-versioning`,category:`LLMOps / MLOps`,title:`Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand version control for models, prompts, agents, workflows, tools, datasets, configurations, evaluation criteria, and infrastructure so production behavior can be reproduced, audited, and rolled back.`,concept:``,code:``},{id:`ai-governance`,category:`LLMOps / MLOps`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance throughout the AI lifecycle, including security, responsible AI, access control, data governance, model approval, evaluation gates, auditability, compliance, risk management, monitoring, and controlled production releases.`,concept:``,code:``}];function I_(){return(0,M.jsx)($,{data:F_,title:`LLMOps / MLOps Cookbook`,subtitle:`Models, prompts, evaluation, deployment, monitoring and governance`,icon:`⚙️`,patternLabel:`Topics`})}var L_=[{id:`cwd-decisions`,category:`Architecture Decisions`,title:`Architecture Decisions & Trade-offs`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the key architectural decisions, rationale, alternatives, and trade-offs behind the CWD enterprise multi-agent architecture.`},{id:`why-cwd`,category:`Architecture Decisions`,title:`Why CWD?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why CWD was selected as the enterprise architecture approach for building a scalable, modular, and governed multi-agent platform.`,concept:``,code:``},{id:`why-coordinator`,category:`Architecture Decisions`,title:`Why Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a Coordinator layer is required to manage request orchestration, workflow execution, and communication between agents.`,concept:``,code:``},{id:`why-delegator`,category:`Architecture Decisions`,title:`Why Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the architectural rationale for the Delegator layer and how it selects the appropriate specialized worker or agent.`,concept:``,code:``},{id:`why-workers`,category:`Architecture Decisions`,title:`Why Workers?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why specialized Worker agents are used to isolate domain responsibilities and execute specific business tasks.`,concept:``,code:``},{id:`why-langgraph`,category:`Architecture Decisions`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the decision to use LangGraph for stateful workflows, agent orchestration, branching, retries, and multi-agent coordination.`,concept:``,code:``},{id:`why-mcp`,category:`Architecture Decisions`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using MCP to standardize how agents discover and interact with enterprise tools, APIs, and data sources.`,concept:``,code:``},{id:`why-a2a`,category:`Architecture Decisions`,title:`Why A2A?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for agent-to-agent communication and how independent agents collaborate, delegate tasks, and exchange results.`,concept:``,code:``},{id:`why-kafka`,category:`Architecture Decisions`,title:`Why Kafka?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand when and why Kafka is used for event-driven communication, asynchronous processing, scalability, and reliable event streaming.`,concept:``,code:``},{id:`why-service-bus`,category:`Architecture Decisions`,title:`Why Service Bus?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using Azure Service Bus for reliable asynchronous messaging, decoupling, retries, and enterprise integration.`,concept:``,code:``},{id:`why-redis`,category:`Architecture Decisions`,title:`Why Redis?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why Redis is used for low-latency state access, caching, session management, and temporary agent state.`,concept:``,code:``},{id:`why-azure-ai-search`,category:`Architecture Decisions`,title:`Why Azure AI Search?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for Azure AI Search in enterprise document indexing, hybrid search, vector retrieval, metadata filtering, and RAG workflows.`,concept:``,code:``},{id:`build-vs-buy`,category:`Architecture Decisions`,title:`Build vs Buy Decisions`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how architecture components are evaluated using cost, scalability, security, maintainability, integration, and time-to-market considerations.`,concept:``,code:``}];function R_(){return(0,M.jsx)($,{data:L_,title:`Architecture Decisions Cookbook`,subtitle:`Architectural rationale, alternatives and trade-offs`,icon:`🏗️`,patternLabel:`Topics`})}var z_=[{id:`cwd-challenges`,category:`Challenges & Solutions`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the major challenges encountered while designing, implementing, scaling, securing, and operating the CWD enterprise multi-agent platform.`},{id:`challenge-scalability`,category:`Challenges & Solutions`,title:`Scalability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand scalability challenges in multi-agent systems and how horizontal scaling, stateless services, asynchronous processing, and workload distribution can address them.`,concept:``,code:``},{id:`challenge-agent-coordination`,category:`Challenges & Solutions`,title:`Agent Coordination`,difficulty:`Advanced`,time:`~10 min`,description:`Understand challenges in coordinating multiple agents, including task delegation, execution ordering, dependencies, communication, and state synchronization.`,concept:``,code:``},{id:`challenge-context`,category:`Challenges & Solutions`,title:`Context Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand context propagation, context-window limitations, state management, context compression, and maintaining relevant information across multiple agents.`,concept:``,code:``},{id:`challenge-security`,category:`Challenges & Solutions`,title:`Security`,difficulty:`Advanced`,time:`~10 min`,description:`Understand security challenges in agentic systems, including authentication, authorization, tool access, prompt injection, data protection, and agent identity.`,concept:``,code:``},{id:`challenge-data-access`,category:`Challenges & Solutions`,title:`Data Access`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data-access challenges involving permissions, data isolation, heterogeneous sources, secure retrieval, and controlled agent access.`,concept:``,code:``},{id:`challenge-observability`,category:`Challenges & Solutions`,title:`Observability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand observability challenges across agents, tools, workflows, and LLM calls, including tracing, logging, metrics, evaluation, and troubleshooting.`,concept:``,code:``},{id:`challenge-agent-failures`,category:`Challenges & Solutions`,title:`Agent Failures`,difficulty:`Advanced`,time:`~10 min`,description:`Understand common agent failure scenarios and recovery strategies such as retries, timeouts, fallbacks, circuit breakers, error handling, and human escalation.`,concept:``,code:``},{id:`challenge-cost`,category:`Challenges & Solutions`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost challenges and techniques such as model selection, token optimization, caching, batching, and controlling unnecessary agent execution.`,concept:``,code:``},{id:`challenge-latency`,category:`Challenges & Solutions`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency challenges in multi-agent execution and techniques such as parallel execution, asynchronous processing, caching, model optimization, and reducing unnecessary tool calls.`,concept:``,code:``},{id:`challenge-governance`,category:`Challenges & Solutions`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise AI governance challenges including responsible AI, auditability, access control, model governance, data governance, compliance, and human oversight.`,concept:``,code:``}];function B_(){return(0,M.jsx)($,{data:z_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var V_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function H_(){return(0,M.jsx)($,{data:V_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var U_=[{id:`cwd-interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function W_(){return(0,M.jsx)($,{data:U_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var G_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function K_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:G_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function q_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(K_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(Vm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Vh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Cg,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(S_,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(w_,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(E_,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(O_,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(A_,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(M_,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(P_,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(I_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(R_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(B_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(H_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(W_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(q_,{})}));
+`,code:``},{id:`coordinator-wrong-routing`,category:`Multi-Agent Reliability`,title:`What happens if the Coordinator makes the wrong routing decision?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how to detect, prevent, recover from, and monitor incorrect routing decisions made by a Coordinator in a multi-agent architecture.`,concept:ig,code:``},{id:`conflicting-agent-results`,category:`Multi-Agent Reliability`,title:`What happens if two agents return conflicting answers?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand strategies for resolving conflicting outputs from multiple agents using validation, confidence scoring, evaluator agents, source verification, consensus, and human escalation.`,concept:tg,code:``},{id:`agent-circular-dependency`,category:`Multi-Agent Reliability`,title:`How do you prevent agents from repeatedly calling each other?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand techniques for preventing circular delegation and infinite communication loops using execution limits, state tracking, correlation IDs, routing policies, and termination conditions.`,concept:Gh,code:``},{id:`agent-observability`,category:`Agentic AI Operations`,title:`How do you monitor and trace the complete multi-agent execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand end-to-end observability for multi-agent systems, including distributed tracing, agent execution logs, tool calls, LLM calls, latency, token usage, failures, and business-level outcomes.`,concept:Yh,code:``}],mg=[`All`,`Advanced`],hg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},gg={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function _g({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function vg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function yg({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:gg[e.difficulty]||`#E6F1FB`,color:hg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function bg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:gg[e.difficulty]||`#E6F1FB`,color:hg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,paddingBottom:0},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(_g,{content:e.concept}),t===`code`&&(0,M.jsx)(vg,{code:e.code})]})}function xg({recipes:e,selected:t,onSelect:n,category:r,setCategory:i,search:a,setSearch:o}){let s=e.filter(e=>{let t=r===`All`||e.category===r,n=a.toLowerCase(),i=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&i});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`,gap:0},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:a,onChange:e=>o(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:mg.map(e=>(0,M.jsx)(`button`,{onClick:()=>i(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:r===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:r===e?`#E6F1FB`:`var(--color-background-primary)`,color:r===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:r===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:s.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):s.map(e=>(0,M.jsx)(yg,{recipe:e,onSelect:n,selected:t?.id===e.id},e.id))})]})}function Sg(){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:`📚`}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:`AgenticAI Cookbook`}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:`End-to-end Agentic AI`})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:pg.length},{label:`Patterns`,value:mg.length-1}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function Cg(){let[e,t]=(0,v.useState)(pg[0]),[n,r]=(0,v.useState)(`All`),[i,a]=(0,v.useState)(``);return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Sg,{}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(xg,{recipes:pg,selected:e,onSelect:t,category:n,setCategory:r,search:i,setSearch:a})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:e?(0,M.jsx)(bg,{recipe:e}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var wg=[{id:`websockets`,category:`Communication Protocols`,title:`WebSockets`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how WebSockets enable persistent, full-duplex communication between AI agents, applications, and servers for real-time data exchange and low-latency interactions.`,tags:[`websockets`,`real-time`,`communication`,`streaming`,`full duplex`,`networking`],concept:``,steps:[{label:`Establish Connection`,icon:`🤝`,detail:`The client initiates a WebSocket handshake to establish a persistent connection with the server.`},{label:`Maintain Connection`,icon:`🔗`,detail:`A continuous bidirectional communication channel remains open between the client and server.`},{label:`Exchange Messages`,icon:`💬`,detail:`Both the client and server can send and receive messages independently in real time.`},{label:`Process Events`,icon:`⚡`,detail:`Incoming messages are processed immediately, enabling live updates and event-driven communication.`},{label:`Close Connection`,icon:`✅`,detail:`The connection is gracefully closed after communication is complete or when either side disconnects.`}],code:``},{id:`event-streaming`,category:`Communication Protocols`,title:`Event Streaming`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how Event Streaming enables AI agents and distributed systems to process continuous streams of events in real time using event-driven architectures and message brokers.`,tags:[`event streaming`,`events`,`kafka`,`real-time`,`communication`,`pub-sub`],concept:``,steps:[{label:`Generate Event`,icon:`📢`,detail:`A producer creates an event whenever an important business action or system activity occurs.`},{label:`Publish Event`,icon:`📤`,detail:`The event is published to an event broker such as Kafka, Pulsar, or Event Hubs.`},{label:`Distribute Events`,icon:`📡`,detail:`The broker distributes the event to all subscribed consumers in real time.`},{label:`Process Event`,icon:`⚙️`,detail:`Consumers independently process the event and perform their respective tasks.`},{label:`Trigger Workflows`,icon:`✅`,detail:`Processed events initiate downstream actions, analytics, notifications, or AI workflows.`}],code:``},{id:`message-queues`,category:`Communication Protocols`,title:`Message Queues`,difficulty:`Intermediate`,time:`~20 min`,description:`Learn how Message Queues enable reliable asynchronous communication between AI agents, applications, and distributed services by decoupling message producers from consumers.`,tags:[`message queue`,`rabbitmq`,`sqs`,`asynchronous`,`messaging`,`communication`],concept:``,steps:[{label:`Produce Message`,icon:`📤`,detail:`A producer creates a task or event and places it into the message queue.`},{label:`Store Message`,icon:`📦`,detail:`The message queue safely stores the message until a consumer is ready to process it.`},{label:`Consume Message`,icon:`📥`,detail:`A consumer retrieves the message from the queue and begins processing the assigned task.`},{label:`Acknowledge Processing`,icon:`✔️`,detail:`After successful execution, the consumer sends an acknowledgment to remove the message from the queue.`},{label:`Complete Workflow`,icon:`✅`,detail:`The processed result is delivered to downstream services or returned to the AI agent for further actions.`}],code:``}],Tg=[`All`,`Advanced`],Eg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},Dg={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function Og({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function kg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function Ag({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:Dg[e.difficulty]||`#E6F1FB`,color:Eg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function jg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:Dg[e.difficulty]||`#E6F1FB`,color:Eg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,paddingBottom:0},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(Og,{content:e.concept}),t===`code`&&(0,M.jsx)(kg,{code:e.code})]})}function Mg({recipes:e,selected:t,onSelect:n,category:r,setCategory:i,search:a,setSearch:o}){let s=e.filter(e=>{let t=r===`All`||e.category===r,n=a.toLowerCase(),i=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&i});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`,gap:0},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:a,onChange:e=>o(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:Tg.map(e=>(0,M.jsx)(`button`,{onClick:()=>i(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:r===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:r===e?`#E6F1FB`:`var(--color-background-primary)`,color:r===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:r===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:s.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):s.map(e=>(0,M.jsx)(Ag,{recipe:e,onSelect:n,selected:t?.id===e.id},e.id))})]})}function Ng(){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:`📚`}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:`AgenticAI Cookbook`}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:`End-to-end Agentic AI`})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:wg.length},{label:`Patterns`,value:Tg.length-1}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function Pg(){let[e,t]=(0,v.useState)(wg[0]),[n,r]=(0,v.useState)(`All`),[i,a]=(0,v.useState)(``);return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Ng,{}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(Mg,{recipes:wg,selected:e,onSelect:t,category:n,setCategory:r,search:i,setSearch:a})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:e?(0,M.jsx)(jg,{recipe:e}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var Fg={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},Ig={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function Lg({content:e}){return(0,M.jsx)(`div`,{className:`prose max-w-none h-[75vh] overflow-y-auto p-6`,children:(0,M.jsx)(bl,{remarkPlugins:[_f],children:e||`No concept available for this recipe.`})})}function Rg({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>n(!1),1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function zg({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:Ig[e.difficulty]||`#E6F1FB`,color:Fg[e.difficulty]||`#185FA5`},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`},children:e.title}),(0,M.jsx)(`div`,{style:{fontSize:13,color:`var(--color-text-secondary)`,lineHeight:1.5},children:e.description})]})}function Bg({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:`24px`,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,marginBottom:4},children:[(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 6px`,fontSize:22,fontWeight:500},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:Ig[e.difficulty]||`#E6F1FB`,color:Fg[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`p`,{style:{margin:`0 0 20px`,color:`var(--color-text-secondary)`,fontSize:14,lineHeight:1.6},children:e.description}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(Lg,{content:e.concept}),t===`code`&&(0,M.jsx)(Rg,{code:e.code})]})}function Vg({recipes:e,categories:t,selected:n,onSelect:r,category:i,setCategory:a,search:o,setSearch:s}){let c=e.filter(e=>{let t=i===`All`||e.category===i,n=o.toLowerCase(),r=e.title?.toLowerCase().includes(n)||e.description?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&r});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100%`},children:[(0,M.jsx)(`div`,{style:{padding:`0 0 16px`},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:o,onChange:e=>s(e.target.value),style:{width:`100%`,boxSizing:`border-box`,padding:`8px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13}})}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:6,flexWrap:`wrap`,marginBottom:16},children:t.map(e=>(0,M.jsx)(`button`,{onClick:()=>a(e),style:{padding:`4px 12px`,borderRadius:20,fontSize:12,cursor:`pointer`,border:i===e?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:i===e?`#E6F1FB`:`var(--color-background-primary)`,color:i===e?`#185FA5`:`var(--color-text-secondary)`,fontWeight:i===e?500:400},children:e},e))}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1},children:c.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):c.map(e=>(0,M.jsx)(zg,{recipe:e,onSelect:r,selected:n?.id===e.id},e.id))})]})}function Hg({title:e,subtitle:t,icon:n,totalCount:r,categoryCount:i,patternLabel:a}){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:n}),(0,M.jsxs)(`div`,{children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`},children:e}),(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`},children:t})]}),(0,M.jsx)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20},children:[{label:`Questions`,value:r},{label:a,value:i}].map(({label:e,value:t})=>(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:t}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:e})]},e))})]})}function $({data:e,title:t,subtitle:n,icon:r=`📚`,patternLabel:i=`Patterns`}){let[a,o]=(0,v.useState)(e[0]),[s,c]=(0,v.useState)(`All`),[l,u]=(0,v.useState)(``),d=[`All`,...new Set(e.map(e=>e.category).filter(Boolean))];return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,height:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))`,color:`var(--color-text-primary)`},children:[(0,M.jsx)(Hg,{title:t,subtitle:n,icon:r,totalCount:e.length,categoryCount:d.length-1,patternLabel:i}),(0,M.jsxs)(`div`,{style:{display:`flex`,flex:1,overflow:`hidden`},children:[(0,M.jsx)(`div`,{style:{width:320,minWidth:260,padding:`20px 20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`},children:(0,M.jsx)(Vg,{recipes:e,categories:d,selected:a,onSelect:o,category:s,setCategory:c,search:l,setSearch:u})}),(0,M.jsx)(`div`,{style:{flex:1,overflowY:`auto`,padding:`24px 28px`},children:a?(0,M.jsx)(Bg,{recipe:a}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started`})})]})]})}var Ug=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Project Overview`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`,concept:`# Project Overview — CWD Platform\r
+\r
+## 1. Business Overview\r
+\r
+CWD — Coordinator, Delegator, and Worker — is an enterprise AI orchestration platform for onsemi.\r
+\r
+Its purpose is to convert a user's business request into a secure, coordinated, and traceable workflow across enterprise systems, data sources, and specialized AI agents.\r
+\r
+Today, business users often need to:\r
+\r
+* Search information across multiple systems.\r
+* Understand and combine data from different domains.\r
+* Perform repetitive analysis and preparation activities.\r
+* Follow business rules and access policies.\r
+* Produce consistent business outputs.\r
+* Coordinate several tools or teams to complete one request.\r
+\r
+CWD addresses this complexity by providing one intelligent entry point that coordinates multiple specialized agents and enterprise capabilities.\r
+\r
+### Business objective\r
+\r
+The platform is designed to:\r
+\r
+* Reduce business process cycle time.\r
+* Improve employee productivity.\r
+* Reuse common AI capabilities across departments.\r
+* Provide reliable and consistent responses.\r
+* Protect enterprise data through governed access.\r
+* Maintain complete execution traceability.\r
+* Enable new AI agents to be developed and deployed on a common platform.\r
+\r
+### Example business scenario\r
+\r
+A user asks:\r
+\r
+> "Prepare a customer briefing document for tomorrow's meeting."\r
+\r
+CWD can coordinate the complete workflow:\r
+\r
+1. Understand the user's request.\r
+2. Validate the user's permissions.\r
+3. Identify the required business domain.\r
+4. Route the request to the appropriate domain agent.\r
+5. Retrieve permitted information from enterprise systems.\r
+6. Analyze and consolidate the information.\r
+7. Generate the briefing document.\r
+8. Return the result to the user.\r
+9. Record the execution for audit and monitoring.\r
+\r
+The user does not need to know which agent, database, API, or tool was used.\r
+\r
+## 2. Functional Overview\r
+\r
+CWD follows a multi-agent orchestration model.\r
+\r
+\`\`\`\r
+User Request\r
+     |\r
+     v\r
+Coordinator\r
+     |\r
+     v\r
+Domain Delegator\r
+     |\r
+     v\r
+Specialized Worker Agents\r
+     |\r
+     v\r
+Enterprise Systems and Tools\r
+     |\r
+     v\r
+Validated Business Response\r
+\`\`\`\r
+\r
+### Coordinator\r
+\r
+The Coordinator is the central intelligence and control layer.\r
+\r
+Its responsibilities include:\r
+\r
+* Understanding the user's intent.\r
+* Classifying the request.\r
+* Identifying the required business domain.\r
+* Creating an execution plan.\r
+* Selecting the appropriate Delegator.\r
+* Managing the overall workflow.\r
+* Coordinating multiple Delegators or Workers.\r
+* Handling failures, retries, and timeouts.\r
+* Combining results from multiple agents.\r
+* Maintaining execution context.\r
+* Applying governance and policy checks.\r
+* Returning the final response to the user.\r
+\r
+The Coordinator does not directly access enterprise data. It determines what needs to happen and delegates execution to governed capabilities.\r
+\r
+### Delegator\r
+\r
+A Delegator represents a specific business domain or capability.\r
+\r
+Examples include:\r
+\r
+* Sales\r
+* Commercial Services\r
+* Finance\r
+* Supply Chain\r
+* Human Resources\r
+* Customer Experience\r
+* Email and Calendar\r
+* Quality\r
+* Business Analysis\r
+\r
+The Delegator is responsible for:\r
+\r
+* Understanding the domain-specific requirement.\r
+* Breaking the request into smaller tasks.\r
+* Selecting the right Worker agents.\r
+* Applying domain-specific rules.\r
+* Managing parallel or sequential execution.\r
+* Validating worker results.\r
+* Escalating incomplete or unauthorized tasks.\r
+\r
+### Worker\r
+\r
+Workers perform the actual business operations.\r
+\r
+A Worker may:\r
+\r
+* Retrieve data from an enterprise system.\r
+* Execute a business API.\r
+* Perform calculations.\r
+* Search indexed knowledge.\r
+* Generate a document.\r
+* Summarize information.\r
+* Validate data.\r
+* Send an approved notification.\r
+* Update an authorized business system.\r
+\r
+Each Worker should have a clearly defined capability, limited permissions, and controlled access to tools and data.\r
+\r
+## 3. Core Functional Capabilities\r
+\r
+### User interaction\r
+\r
+CWD can support enterprise user interfaces such as:\r
+\r
+* Microsoft Teams\r
+* Microsoft 365 experiences\r
+* React-based web applications\r
+* API-based integrations\r
+\r
+### Intelligent routing\r
+\r
+The platform determines:\r
+\r
+* What the user wants.\r
+* Which business domain is involved.\r
+* Which Delegator should handle the request.\r
+* Which Workers are required.\r
+* Whether the task should run sequentially or in parallel.\r
+\r
+### Enterprise data access\r
+\r
+CWD can coordinate access to systems such as:\r
+\r
+* Snowflake\r
+* Salesforce\r
+* Oracle\r
+* SharePoint\r
+* Microsoft Graph\r
+* Other approved enterprise APIs and data services\r
+\r
+Access is performed through governed tools and adapters rather than unrestricted LLM access.\r
+\r
+### Retrieval-Augmented Generation\r
+\r
+The platform can use Azure AI Search to:\r
+\r
+* Retrieve relevant enterprise knowledge.\r
+* Apply metadata and access filters.\r
+* Support semantic and vector search.\r
+* Restrict retrieval to authorized information.\r
+* Provide context to the appropriate agent.\r
+\r
+### Memory and context\r
+\r
+CWD maintains execution context across the workflow.\r
+\r
+The context model is:\r
+\r
+\`\`\`\r
+Session\r
+   └── Task\r
+        └── Run\r
+             └── Turn\r
+                  └── Step\r
+                       ├── LLM Interaction\r
+                       └── Tool Execution\r
+\`\`\`\r
+\r
+* Session: Complete user conversation or business interaction.\r
+* Task: A specific business objective.\r
+* Run: One execution attempt.\r
+* Turn: One logical interaction or exchange.\r
+* Step: One atomic operation within the workflow.\r
+\r
+### Observability\r
+\r
+Every important execution should be traceable through identifiers such as:\r
+\r
+* \`session_id\`\r
+* \`task_id\`\r
+* \`run_id\`\r
+* \`turn_id\`\r
+* \`step_id\`\r
+\r
+This enables:\r
+\r
+* Troubleshooting.\r
+* Performance monitoring.\r
+* Cost and token analysis.\r
+* Agent evaluation.\r
+* Failure analysis.\r
+* Audit and compliance reporting.\r
+\r
+## 4. Technical Architecture\r
+\r
+\`\`\`\r
+┌──────────────────────────────────────────────┐\r
+│              Presentation Layer              │\r
+│       Teams | Microsoft 365 | React UI       │\r
+└──────────────────────┬───────────────────────┘\r
+                       │\r
+                       v\r
+┌──────────────────────────────────────────────┐\r
+│              Gateway Layer                   │\r
+│      API | WebSocket | Authentication        │\r
+│      Request Validation | Correlation IDs    │\r
+└──────────────────────┬───────────────────────┘\r
+                       │\r
+                       v\r
+┌──────────────────────────────────────────────┐\r
+│           CWD Orchestration Layer            │\r
+│                                              │\r
+│  Coordinator                                 │\r
+│      ↓                                       │\r
+│  Domain Delegators                           │\r
+│      ↓                                       │\r
+│  Specialized Workers                        │\r
+└──────────────┬───────────────┬───────────────┘\r
+               │               │\r
+               v               v\r
+┌────────────────────┐  ┌─────────────────────┐\r
+│ Agent Communication│  │ Registry Services    │\r
+│ A2A | Service Bus  │  │ Agent Registry       │\r
+│ Kafka | Messaging  │  │ Prompt Registry      │\r
+└──────────┬─────────┘  └─────────────────────┘\r
+           │\r
+           v\r
+┌──────────────────────────────────────────────┐\r
+│           Enterprise Data Layer              │\r
+│ Snowflake | Salesforce | Oracle | SharePoint │\r
+│ Microsoft Graph | Enterprise APIs            │\r
+│ Azure AI Search | Redis | Cosmos DB          │\r
+└──────────────────────┬───────────────────────┘\r
+                       │\r
+                       v\r
+┌──────────────────────────────────────────────┐\r
+│        Security and Governance Layer         │\r
+│ Entra ID | RBAC | Managed Identity            │\r
+│ Key Vault | DLP | Data Classification         │\r
+│ Policy Enforcement | Audit Controls           │\r
+└──────────────────────┬───────────────────────┘\r
+                       │\r
+                       v\r
+┌──────────────────────────────────────────────┐\r
+│          Observability and Evaluation        │\r
+│ MLflow 3 | Application Insights              │\r
+│ Log Analytics | Dashboards | SIEM            │\r
+└──────────────────────────────────────────────┘\r
+\`\`\`\r
+\r
+### Main technical components\r
+\r
+| Component | Responsibility |\r
+| --- | --- |\r
+| API Gateway | Provides a controlled entry point for requests |\r
+| WebSocket Layer | Supports real-time execution updates |\r
+| Coordinator | Controls the end-to-end workflow |\r
+| Delegators | Manage domain-specific task decomposition |\r
+| Workers | Execute specialized business operations |\r
+| Agent Registry | Stores agent capabilities, endpoints, and metadata |\r
+| Prompt Registry | Manages approved, versioned prompts |\r
+| A2A Layer | Enables agent-to-agent communication |\r
+| Service Bus / Kafka | Supports asynchronous messaging and decoupling |\r
+| Azure AI Search | Provides governed enterprise retrieval |\r
+| Redis | Supports short-term state, cache, and working memory |\r
+| Cosmos DB | Supports persistent application or conversation state |\r
+| Key Vault | Stores secrets, certificates, and configuration |\r
+| Entra ID | Provides identity and access management |\r
+| MLflow 3 | Supports tracing, evaluation, and prompt lifecycle |\r
+| App Insights / Log Analytics | Provides monitoring, diagnostics, and operational visibility |\r
+\r
+## 5. Security and Governance\r
+\r
+Security is a foundational requirement of CWD.\r
+\r
+The platform follows the principle:\r
+\r
+> The LLM reasons about the task, but governed tools execute the task.\r
+\r
+Therefore:\r
+\r
+* The LLM must not directly access enterprise databases.\r
+* Every data access must pass through an approved tool or adapter.\r
+* Authorization must be checked before retrieving data.\r
+* Agents should use least-privilege identities.\r
+* Managed identities should be preferred over embedded credentials.\r
+* Sensitive information must not be unnecessarily included in prompts or logs.\r
+* Input and output validation must be enforced.\r
+* Restricted information should be redacted where required.\r
+* All important actions must be auditable.\r
+* Enterprise services should use private networking and controlled endpoints.\r
+\r
+### Security flow\r
+\r
+\`\`\`\r
+User Identity\r
+     ↓\r
+Authentication\r
+     ↓\r
+Authorization and Entitlement Check\r
+     ↓\r
+Agent and Tool Permission Check\r
+     ↓\r
+Controlled Data Access\r
+     ↓\r
+Output Validation and Redaction\r
+     ↓\r
+Response to User\r
+\`\`\`\r
+\r
+## 6. Deployment and Operations\r
+\r
+CWD is intended to run as a cloud-native enterprise platform using Azure services.\r
+\r
+The deployment model can include:\r
+\r
+* Azure Container Apps or AKS for agent services.\r
+* Azure Service Bus for reliable messaging.\r
+* Kafka for high-throughput event-driven workflows.\r
+* Durable Functions for long-running orchestration where required.\r
+* Azure Key Vault for secrets and certificates.\r
+* Private endpoints and private networking.\r
+* Application Insights and Log Analytics for monitoring.\r
+* MLflow 3 for agent tracing and evaluation.\r
+* Azure AI Search for enterprise knowledge retrieval.\r
+\r
+The platform should support:\r
+\r
+* Independent deployment of agents.\r
+* Horizontal scaling of Workers.\r
+* Parallel execution of tasks.\r
+* Retry and timeout handling.\r
+* Dead-letter queues for failed messages.\r
+* Backpressure and workload isolation.\r
+* Versioned prompts and agent metadata.\r
+* Controlled promotion across development, UAT, and production.\r
+\r
+## 7. Project Scope\r
+\r
+### In scope\r
+\r
+* Reusable Coordinator–Delegator–Worker framework.\r
+* Multi-agent routing and orchestration.\r
+* Enterprise system integration.\r
+* Governed RAG and knowledge retrieval.\r
+* Agent-to-agent communication.\r
+* Prompt and agent registries.\r
+* Conversation and execution context.\r
+* Security and entitlement enforcement.\r
+* Observability and evaluation.\r
+* Real-time user interaction.\r
+* Scalable Azure deployment.\r
+\r
+### Out of scope for the core platform\r
+\r
+* Building every business-domain agent itself.\r
+* Replacing enterprise source systems.\r
+* Allowing unrestricted autonomous database access.\r
+* Bypassing existing business authorization.\r
+* Creating a separate platform for every individual use case.\r
+\r
+The core platform provides the reusable foundation; individual teams build domain-specific Delegators and Workers on top of it.\r
+\r
+## 8. Architectural Value\r
+\r
+CWD provides five major enterprise benefits:\r
+\r
+1. **Reusability** — New agents can use the same orchestration, security, monitoring, and deployment foundation.\r
+2. **Modularity** — Coordinator, Delegators, and Workers can evolve independently.\r
+3. **Scalability** — Worker execution can scale based on workload and business demand.\r
+4. **Governance** — Data access, prompts, identities, and execution activities are controlled.\r
+5. **Operational reliability** — Standardized tracing, retries, monitoring, and evaluation improve production readiness.\r
+\r
+## Final Project Summary\r
+\r
+CWD is a governed, multi-agent enterprise AI platform that connects business users to enterprise capabilities through a Coordinator, domain-specific Delegators, and specialized Workers.\r
+\r
+It combines intelligent routing, enterprise data access, RAG, agent communication, memory, security, observability, and Azure-native deployment into a reusable foundation for building reliable business automation solutions.\r
+\r
+The strategic direction is to make CWD the common enterprise execution platform for onsemi AI agents, while allowing each business domain to develop its own specialized capabilities on top of the shared architecture.`,code:``},{id:`what-is-cwd`,category:`Project Overview`,title:`What is CWD?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:`## What is CWD?\r
+\r
+**CWD stands for Coordinator, Delegator, and Worker.**\r
+\r
+CWD is an enterprise AI orchestration platform designed to help business users complete complex tasks through a coordinated network of specialized AI agents.\r
+\r
+Instead of building one large AI agent that performs every activity, CWD divides responsibilities into three layers:\r
+\r
+- **Coordinator:** Understands the user’s request, creates the execution plan, and manages the overall workflow.\r
+- **Delegator:** Represents a business domain and assigns tasks to the appropriate specialized agents.\r
+- **Worker:** Executes specific business operations, such as retrieving data, calling enterprise APIs, performing analysis, or generating documents.\r
+\r
+### Simple Example\r
+\r
+A user asks:\r
+\r
+> “Prepare a customer briefing document.”\r
+\r
+CWD coordinates the process:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Coordinator\r
+     ↓\r
+Sales Delegator\r
+     ↓\r
+Customer Data Worker\r
+     ↓\r
+Sales Analysis Worker\r
+     ↓\r
+Document Generation Worker\r
+     ↓\r
+Final Customer Briefing`,code:``},{id:`cwd-business-context`,category:`Project Overview`,title:`Business Context`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise environment that led to CWD, including fragmented data, multiple business systems, growing AI adoption, domain-specific workflows, and the need for a scalable and governed enterprise AI platform.`,concept:`## Business Context of CWD\r
+\r
+CWD is being developed as the **common enterprise AI execution platform for onsemi**. Its business context is not simply “using AI to automate tasks.” The platform addresses a specific enterprise problem: **business requests frequently require coordinated access to multiple systems, multiple business capabilities, and multiple levels of authorization before a reliable business outcome can be produced.**\r
+\r
+### 1. Business Problem\r
+\r
+A typical enterprise request may involve:\r
+\r
+- Multiple business applications and data sources.\r
+- Different business owners and access permissions.\r
+- Several dependent activities.\r
+- Domain-specific business rules.\r
+- Human-readable deliverables rather than simple data retrieval.\r
+- The need to explain how the result was produced.\r
+\r
+For example, preparing a customer briefing may require customer information, sales history, open issues, and other relevant business information. These activities cannot be handled reliably by a single generic chatbot without understanding the business domain, coordinating the required capabilities, and enforcing access policies.\r
+\r
+**CWD is intended to solve this coordination problem.**\r
+\r
+### 2. Business Purpose\r
+\r
+The purpose of CWD is to provide a reusable platform through which business users can request an outcome, while the platform coordinates the underlying AI capabilities and enterprise integrations.\r
+\r
+\`\`\`text\r
+Business User\r
+     |\r
+     | Requests a business outcome\r
+     v\r
+CWD Platform\r
+     |\r
+     | Understands, routes, coordinates, governs\r
+     v\r
+Business Capabilities\r
+     |\r
+     | Retrieve, analyze, execute, generate\r
+     v\r
+Business Outcome\r
+\`\`\`\r
+\r
+The platform separates the business request from the technical execution.\r
+\r
+A business user asks for a result. CWD determines how that result should be produced.\r
+\r
+### 3. Business Context in the CWD Operating Model\r
+\r
+The business context of CWD is defined by the following questions:\r
+\r
+| Business Question | CWD Responsibility |\r
+| --- | --- |\r
+| What does the user want to achieve? | Coordinator identifies the business intent |\r
+| Which business domain owns the request? | Coordinator routes to the appropriate Delegator |\r
+| What activities are required? | Delegator decomposes the business objective |\r
+| Which capabilities can perform those activities? | Delegator selects specialized Workers |\r
+| Which enterprise information is required? | Workers use approved data sources and tools |\r
+| What information is the user allowed to access? | Platform enforces entitlement and authorization |\r
+| How should the result be produced? | Agents execute the required workflow |\r
+| Can the result be trusted and explained? | Platform maintains traceability and observability |\r
+\r
+This is the central business meaning of CWD:\r
+\r
+> CWD converts a business objective into a governed, coordinated execution across enterprise capabilities.\r
+\r
+### 4. Business Domains Supported by the Platform\r
+\r
+CWD is designed as a shared foundation for multiple business domains rather than a single-purpose application.\r
+\r
+Potential business domains include:\r
+\r
+* Sales\r
+* Commercial Services\r
+* Finance\r
+* Supply Chain\r
+* Human Resources\r
+* Customer Experience\r
+* Quality\r
+* Email and Calendar\r
+* Business Analysis\r
+\r
+Each domain can have its own Delegator and specialized Workers while using the same platform services for orchestration, security, communication, memory, and monitoring.\r
+\r
+\`\`\`\r
+                    CWD Platform\r
+                         |\r
+       ┌─────────────────┼─────────────────┐\r
+       |                 |                 |\r
+       v                 v                 v\r
+ Sales Delegator   Finance Delegator   Supply Chain\r
+       |                 |                 |\r
+       v                 v                 v\r
+ Sales Workers     Finance Workers    Supply Chain Workers\r
+\`\`\`\r
+\r
+### 5. Business Example: Customer Briefing Document\r
+\r
+The Customer Briefing Document use case represents the business context of CWD.\r
+\r
+#### Business Request\r
+\r
+> “Prepare a customer briefing document for an upcoming meeting.”\r
+\r
+#### Business Objective\r
+\r
+Provide the user with a consolidated briefing that supports customer-meeting preparation.\r
+\r
+#### Business Execution\r
+\r
+\`\`\`\r
+Customer Briefing Request\r
+          |\r
+          v\r
+Coordinator\r
+          |\r
+          | Identifies customer briefing as a Sales-related request\r
+          v\r
+Sales Delegator\r
+          |\r
+          | Decomposes the objective\r
+          v\r
+┌───────────────────────────────────────┐\r
+│ Customer Profile Worker               │\r
+│ Sales History Worker                  │\r
+│ Open Issues / Relevant Information    │\r
+│ Document Generation Worker            │\r
+└───────────────────┬───────────────────┘\r
+                    |\r
+                    v\r
+          Consolidated Briefing\r
+                    |\r
+                    v\r
+             Business User\r
+\`\`\`\r
+\r
+The business value is not the individual API call or database query. The value is the completed customer briefing, produced from the required information and returned through a controlled workflow.\r
+\r
+### 6. Business Context and Governance\r
+\r
+CWD operates in an enterprise environment where information access must follow business authorization.\r
+\r
+Therefore, the platform must ensure that:\r
+\r
+* The user is authenticated.\r
+* The user is entitled to the requested information.\r
+* The selected agent is authorized to perform the task.\r
+* Workers access data only through approved tools.\r
+* Data access follows business and security policies.\r
+* Sensitive information is protected.\r
+* The execution can be traced when required.\r
+\r
+The business context therefore includes not only what the user wants, but also what the user is permitted to do.\r
+\r
+### 7. Business Context vs. Technical Implementation\r
+\r
+| Business Context | Technical Implementation |\r
+| --- | --- |\r
+| Business user requests an outcome | Teams, Microsoft 365, or React interface |\r
+| Request belongs to a business domain | Coordinator routing |\r
+| Domain owns the business process | Domain Delegator |\r
+| Specific activity must be performed | Specialized Worker |\r
+| Enterprise information is required | Governed tools and enterprise connectors |\r
+| User must have permission | Entra ID, RBAC, entitlement checks |\r
+| Workflow must be coordinated | Orchestration and A2A communication |\r
+| Result must be traceable | Correlation IDs, MLflow, Application Insights |\r
+| Platform must support future agents | Agent Registry and reusable platform services |\r
+\r
+### 8. Architectural Position\r
+\r
+From an architecture perspective, CWD is not the business application itself.\r
+\r
+It is the enterprise execution layer that enables business applications and domain agents to work together.\r
+\r
+\`\`\`\r
+Business Applications\r
+        |\r
+        v\r
+       CWD\r
+        |\r
+        ├── Business Domain Agents\r
+        ├── Enterprise Data and APIs\r
+        ├── Security and Governance\r
+        ├── Agent Communication\r
+        ├── Memory and Context\r
+        └── Observability\r
+\`\`\`\r
+\r
+Business teams own their domain capabilities. CWD provides the common platform required to execute those capabilities consistently and securely.\r
+\r
+### Final Definition\r
+\r
+The business context of CWD is the need to provide onsemi business users with a common, governed AI platform that can understand business objectives, coordinate domain-specific agents, access authorized enterprise information, and deliver traceable business outcomes across multiple business processes.`,code:``},{id:`cwd-business-problem`,category:`Project Overview`,title:`Business Problem`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business and technical challenges CWD is designed to solve, including disconnected enterprise knowledge, manual workflows, limited automation, inconsistent AI experiences, difficult system integrations, and lack of centralized governance.`,concept:`## Business Problem\r
+\r
+CWD addresses the problem of **fragmented enterprise AI execution**.\r
+\r
+Business users often need to complete a single business objective by combining information, capabilities, and actions across multiple enterprise systems. These activities are difficult to manage through isolated AI applications or a single general-purpose agent.\r
+\r
+### 1. Fragmented Business Information\r
+\r
+Relevant information is distributed across different enterprise systems, such as:\r
+\r
+- Snowflake\r
+- Salesforce\r
+- Oracle\r
+- SharePoint\r
+- Microsoft 365\r
+- Other enterprise APIs and data sources\r
+\r
+A business request may require information from several of these systems. Without a common orchestration layer, each AI application must independently implement integrations, retrieval logic, access controls, and result consolidation.\r
+\r
+### 2. Lack of Coordinated Multi-Agent Execution\r
+\r
+Complex business requests cannot always be completed by one agent.\r
+\r
+A request may require:\r
+\r
+- Understanding the business intent.\r
+- Identifying the responsible domain.\r
+- Breaking the objective into smaller tasks.\r
+- Selecting specialized agents.\r
+- Executing tasks in sequence or parallel.\r
+- Combining results.\r
+- Handling failures and retries.\r
+\r
+Without CWD, these responsibilities can become duplicated across individual applications, leading to inconsistent routing and execution patterns.\r
+\r
+### 3. Inconsistent Enterprise AI Implementation\r
+\r
+Different teams may build AI solutions using different approaches for:\r
+\r
+- Agent communication.\r
+- Prompt management.\r
+- Memory and context.\r
+- Tool integration.\r
+- Error handling.\r
+- Logging and monitoring.\r
+- Deployment.\r
+- Security enforcement.\r
+\r
+This makes enterprise AI solutions difficult to standardize, maintain, and scale.\r
+\r
+CWD provides a **common execution foundation** so that new business agents do not need to independently solve these platform-level problems.\r
+\r
+### 4. Enterprise Data Access and Security Complexity\r
+\r
+Enterprise AI must operate within existing business authorization and data governance requirements.\r
+\r
+The platform must ensure that:\r
+\r
+- Users access only authorized information.\r
+- Agents use approved capabilities.\r
+- Workers do not receive unrestricted database access.\r
+- Sensitive data is protected.\r
+- Data retrieval and execution activities are traceable.\r
+\r
+A generic LLM response is not sufficient for enterprise use because the response must also be **authorized, governed, and auditable**.\r
+\r
+### 5. Limited Traceability of AI Execution\r
+\r
+For enterprise adoption, it is not enough to know the final answer.\r
+\r
+The organization must be able to understand:\r
+\r
+- Which request was received.\r
+- Which agent handled it.\r
+- Which Workers were executed.\r
+- Which tools and data sources were used.\r
+- What failed or required a retry.\r
+- How long the execution took.\r
+- What information was returned.\r
+\r
+Without standardized execution tracking, troubleshooting, evaluation, and compliance become difficult.\r
+\r
+### 6. Difficulty Scaling AI Use Cases\r
+\r
+Each new business use case may otherwise require a separate application architecture.\r
+\r
+This creates:\r
+\r
+- Duplicate infrastructure.\r
+- Duplicate integrations.\r
+- Higher development effort.\r
+- Inconsistent security controls.\r
+- Higher operational complexity.\r
+- Slower onboarding of new business agents.\r
+\r
+CWD is intended to make the platform reusable across multiple business domains.\r
+\r
+---\r
+\r
+## Business Problem Statement\r
+\r
+> **onsemi needs a common enterprise AI platform that can coordinate complex business requests across specialized agents and enterprise systems while enforcing authorization, maintaining execution traceability, and providing a reusable foundation for scaling AI capabilities across business domains.**\r
+\r
+## Business Impact\r
+\r
+| Current Challenge | Business Impact |\r
+|---|---|\r
+| Information distributed across systems | More manual effort and longer turnaround time |\r
+| No common multi-agent orchestration | Complex workflows are difficult to automate |\r
+| Duplicated AI implementations | Higher development and maintenance cost |\r
+| Inconsistent security controls | Increased enterprise data-access risk |\r
+| Limited execution visibility | Difficult troubleshooting and governance |\r
+| Separate architecture for each use case | Slow expansion of AI adoption |\r
+\r
+## How CWD Addresses the Problem\r
+\r
+\`\`\`text\r
+Fragmented Enterprise Systems\r
+            +\r
+Complex Business Workflows\r
+            +\r
+Multiple Specialized AI Capabilities\r
+            +\r
+Security and Governance Requirements\r
+            +\r
+Need for Reusable AI Infrastructure\r
+            |\r
+            v\r
+       CWD Platform\r
+            |\r
+            v\r
+Coordinated, Governed, Traceable\r
+Business Outcomes`,code:``},{id:`cwd-project-objectives`,category:`Project Overview`,title:`Project Objectives`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the primary objectives of CWD, including creating a reusable enterprise AI platform, enabling multi-agent orchestration, integrating enterprise data and tools, improving automation, enforcing security and governance, and providing scalable AI capabilities.`,concept:`## Project Objectives\r
+\r
+The primary objective of **CWD (Coordinator–Delegator–Worker)** is to establish a **reusable enterprise AI orchestration platform** that enables business domains to build, integrate, govern, and operate AI agents consistently across the organization.\r
+\r
+### 1. Establish a Common AI Orchestration Platform\r
+\r
+Provide a standardized architecture for coordinating enterprise AI agents instead of building independent orchestration mechanisms for every use case.\r
+\r
+The platform should provide:\r
+\r
+- Coordinator-based request orchestration.\r
+- Domain-level Delegators.\r
+- Specialized Workers.\r
+- Standard agent communication.\r
+- Common execution and state management.\r
+- Reusable platform services.\r
+\r
+---\r
+\r
+### 2. Enable Complex Business Workflow Automation\r
+\r
+Enable a single business request to be decomposed into multiple tasks and executed by specialized agents.\r
+\r
+CWD should support:\r
+\r
+\`\`\`text\r
+Business Request\r
+       ↓\r
+Intent Understanding\r
+       ↓\r
+Business Domain Routing\r
+       ↓\r
+Task Decomposition\r
+       ↓\r
+Worker Selection\r
+       ↓\r
+Parallel / Sequential Execution\r
+       ↓\r
+Result Consolidation\r
+       ↓\r
+Business Outcome\r
+\`\`\`\r
+\r
+The objective is to move from **single-agent responses** toward **coordinated business-process execution**.\r
+\r
+---\r
+\r
+### 3. Connect AI Agents to Enterprise Capabilities\r
+\r
+Provide controlled integration between AI agents and enterprise systems.\r
+\r
+CWD should enable Workers to interact with approved:\r
+\r
+* Enterprise APIs.\r
+* Databases.\r
+* Business applications.\r
+* Knowledge repositories.\r
+* Search services.\r
+* External/internal tools.\r
+\r
+The objective is to allow AI agents to perform meaningful enterprise tasks rather than only generate conversational responses.\r
+\r
+---\r
+\r
+### 4. Enforce Enterprise Security and Data Governance\r
+\r
+Ensure that AI-driven execution follows enterprise security and authorization requirements.\r
+\r
+Key objectives include:\r
+\r
+* Authenticate users and services.\r
+* Validate user entitlements.\r
+* Enforce authorization before data access.\r
+* Apply least-privilege access to Workers.\r
+* Prevent direct unrestricted LLM access to enterprise data.\r
+* Protect sensitive information.\r
+* Apply input/output validation and redaction.\r
+* Maintain auditable execution records.\r
+\r
+**Security must be part of the execution flow, not an afterthought.**\r
+\r
+---\r
+\r
+### 5. Standardize Agent-to-Agent Communication\r
+\r
+Provide a consistent mechanism for communication between:\r
+\r
+* Coordinator\r
+* Delegators\r
+* Workers\r
+* Other enterprise agents\r
+\r
+CWD should support reliable agent interaction with:\r
+\r
+* Standard message/context structures.\r
+* Correlation identifiers.\r
+* Request/response tracking.\r
+* Reliable messaging.\r
+* Retry handling.\r
+* Failure handling.\r
+* Asynchronous execution where required.\r
+\r
+This allows agents to be independently developed while still participating in a common enterprise workflow.\r
+\r
+---\r
+\r
+### 6. Provide Reusable Agent and Prompt Management\r
+\r
+Create centralized mechanisms for managing enterprise AI assets.\r
+\r
+#### Agent Registry\r
+\r
+The Agent Registry should provide visibility into:\r
+\r
+* Agent identity.\r
+* Capabilities.\r
+* Endpoint information.\r
+* Availability/health.\r
+* Metadata.\r
+* Version/change information.\r
+\r
+#### Prompt Registry\r
+\r
+The Prompt Registry should support:\r
+\r
+* Version-controlled prompts.\r
+* Approved prompt templates.\r
+* Prompt metadata.\r
+* Access control.\r
+* Approval and change management.\r
+* Prompt lifecycle management.\r
+\r
+This creates consistency across AI solutions.\r
+\r
+---\r
+\r
+### 7. Provide Enterprise Knowledge and RAG Capabilities\r
+\r
+Enable agents to retrieve relevant enterprise knowledge using governed retrieval mechanisms.\r
+\r
+The objective is to support:\r
+\r
+* Enterprise knowledge indexing.\r
+* Semantic/vector retrieval.\r
+* Metadata-based filtering.\r
+* Access-controlled retrieval.\r
+* Intent-aware retrieval.\r
+* Context construction for LLM execution.\r
+\r
+Azure AI Search can serve as a key retrieval capability within the platform.\r
+\r
+---\r
+\r
+### 8. Establish Standardized Context and State Management\r
+\r
+Maintain consistent context throughout the lifecycle of a business request.\r
+\r
+CWD uses a hierarchical execution model:\r
+\r
+\`\`\`text\r
+Session\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Turn\r
+   ↓\r
+Step\r
+   ↓\r
+LLM / Tool Execution\r
+\`\`\`\r
+\r
+The objective is to ensure that context can be:\r
+\r
+* Passed between agents.\r
+* Tracked across execution steps.\r
+* Reused where appropriate.\r
+* Compacted or managed according to lifecycle policies.\r
+* Associated with the correct business request.\r
+\r
+---\r
+\r
+### 9. Provide End-to-End Observability\r
+\r
+Make every important AI execution measurable and traceable.\r
+\r
+CWD should provide visibility into:\r
+\r
+* Request execution.\r
+* Agent routing.\r
+* Agent-to-agent communication.\r
+* Worker execution.\r
+* Tool calls.\r
+* Latency.\r
+* Token consumption.\r
+* Errors.\r
+* Retries.\r
+* Final outcomes.\r
+\r
+Standard identifiers such as:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+\`\`\`\r
+\r
+should provide end-to-end traceability.\r
+\r
+---\r
+\r
+### 10. Enable AI Agent Evaluation\r
+\r
+Establish a foundation for continuously measuring agent quality and operational performance.\r
+\r
+Key evaluation dimensions include:\r
+\r
+* Accuracy.\r
+* Consistency.\r
+* Latency.\r
+* Token consumption.\r
+* Cost.\r
+* Tool-call success.\r
+* Error rate.\r
+* Workflow completion.\r
+* Overall agent performance.\r
+\r
+This enables CWD to move from **"the agent works"** to **"the agent is measurable and production-ready."**\r
+\r
+---\r
+\r
+### 11. Support Independent Agent Development and Deployment\r
+\r
+Allow individual business-domain teams to develop and deploy their agents without rebuilding the underlying platform.\r
+\r
+The platform should provide common capabilities for:\r
+\r
+* Deployment.\r
+* Configuration.\r
+* Security.\r
+* Networking.\r
+* Messaging.\r
+* Observability.\r
+* Agent registration.\r
+* Prompt management.\r
+\r
+This separates:\r
+\r
+**Platform Engineering**\r
+\r
+from\r
+\r
+**Business Agent Development**\r
+\r
+\`\`\`text\r
+              CWD Platform\r
+                   |\r
+       ┌───────────┼───────────┐\r
+       ↓           ↓           ↓\r
+    Sales       Finance     Supply Chain\r
+   Agents       Agents        Agents\r
+\`\`\`\r
+\r
+---\r
+\r
+### 12. Enable Enterprise-Scale AI Adoption\r
+\r
+The ultimate objective is to make CWD a **shared enterprise AI foundation** rather than a single-use application.\r
+\r
+New business use cases should be able to reuse:\r
+\r
+* Orchestration.\r
+* Agent communication.\r
+* Security.\r
+* Enterprise integrations.\r
+* RAG.\r
+* Memory.\r
+* Prompt management.\r
+* Agent registration.\r
+* Observability.\r
+* Evaluation.\r
+* Deployment patterns.\r
+\r
+This reduces duplication and accelerates the onboarding of new AI capabilities.\r
+\r
+---\r
+\r
+## Objective Summary\r
+\r
+| Objective | Expected Outcome |\r
+| --- | --- |\r
+| Common orchestration platform | Standard enterprise AI architecture |\r
+| Multi-agent workflow automation | Complex business processes can be automated |\r
+| Enterprise integration | Agents can use approved business capabilities |\r
+| Security and governance | Controlled and auditable AI execution |\r
+| A2A communication | Agents can collaborate reliably |\r
+| Agent & Prompt Registry | Centralized AI asset management |\r
+| Enterprise RAG | Governed access to organizational knowledge |\r
+| Context & State Management | Consistent execution across workflows |\r
+| Observability | End-to-end operational visibility |\r
+| Agent Evaluation | Measurable AI quality and performance |\r
+| Independent deployment | Faster development of domain agents |\r
+| Enterprise scalability | CWD becomes a reusable AI foundation |\r
+\r
+## Overall Objective\r
+\r
+> **Build CWD as a secure, reusable, observable, and scalable enterprise AI execution platform that enables business domains to deploy specialized AI agents and orchestrate them into reliable business workflows.**`,code:``},{id:`cwd-current-state`,category:`Project Overview`,title:`Current State`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise AI capabilities that existed before CWD, including traditional RAG, individual AI applications, point-to-point integrations, manual workflows, and the limitations of operating isolated AI solutions.`,concept:`## Current State\r
+\r
+CWD is currently operating as a **production enterprise AI platform** that provides a common orchestration and execution layer for AI agents and business workflows.\r
+\r
+The platform has moved beyond the proof-of-concept stage and is being used as a production-grade capability with enterprise security, integrations, agent orchestration, observability, and operational controls.\r
+\r
+### Production Architecture\r
+\r
+\`\`\`text\r
+Business Users\r
+     |\r
+     v\r
+Teams / Web / API\r
+     |\r
+     v\r
+Enterprise Gateway\r
+     |\r
+     v\r
++----------------------------------+\r
+|          CWD Platform            |\r
+|                                  |\r
+|  Coordinator                     |\r
+|       |                          |\r
+|       v                          |\r
+|  Delegators                       |\r
+|       |                          |\r
+|       v                          |\r
+|  Workers / AI Agents              |\r
++----------------------------------+\r
+     |\r
+     +------------------+\r
+     |                  |\r
+     v                  v\r
+Enterprise Systems    Enterprise Knowledge\r
+     |                  |\r
+     |                  v\r
+     |              Azure AI Search\r
+     |\r
+     +-- Snowflake\r
+     +-- Salesforce\r
+     +-- Oracle\r
+     +-- SharePoint\r
+     +-- Microsoft Graph\r
+     +-- Enterprise APIs\r
+     \r
+     |\r
+     v\r
+Security / Governance\r
+     |\r
+     +-- Entra ID\r
+     +-- RBAC\r
+     +-- Managed Identity\r
+     +-- Key Vault\r
+     +-- Data Access Controls\r
+     \r
+     |\r
+     v\r
+Observability\r
+     |\r
+     +-- MLflow\r
+     +-- Application Insights\r
+     +-- Log Analytics\r
+     +-- Audit / Monitoring\r
+\`\`\`\r
+\r
+### Production Capabilities\r
+\r
+The current CWD platform provides the following enterprise capabilities:\r
+\r
+* **Multi-agent orchestration**\r
+* **Coordinator–Delegator–Worker execution model**\r
+* **Business-domain agent routing**\r
+* **Enterprise data and API integration**\r
+* **Agent-to-agent communication**\r
+* **RAG and enterprise knowledge retrieval**\r
+* **Conversation and execution context management**\r
+* **Enterprise authentication and authorization**\r
+* **Controlled tool execution**\r
+* **Prompt and agent management**\r
+* **Production monitoring and observability**\r
+* **Execution tracing and correlation**\r
+* **Error handling and recovery**\r
+* **Scalable cloud deployment**\r
+\r
+### Current Operating Model\r
+\r
+The production execution model is:\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Authentication\r
+     |\r
+     v\r
+Entitlement / Authorization\r
+     |\r
+     v\r
+Coordinator\r
+     |\r
+     | Understand intent\r
+     | Determine business objective\r
+     | Select execution path\r
+     v\r
+Delegator\r
+     |\r
+     | Decompose business task\r
+     | Select specialized capabilities\r
+     v\r
+Workers / Agents\r
+     |\r
+     | Execute approved actions\r
+     | Retrieve authorized data\r
+     | Perform analysis\r
+     | Generate outputs\r
+     v\r
+Result Validation\r
+     |\r
+     v\r
+Response / Business Outcome\r
+\`\`\`\r
+\r
+### Production Characteristics\r
+\r
+CWD is designed to operate as an **enterprise platform**, not as an individual AI application.\r
+\r
+The production architecture emphasizes:\r
+\r
+| Area | Current State |\r
+| --- | --- |\r
+| Platform | Production enterprise AI platform |\r
+| Orchestration | Coordinator–Delegator–Worker |\r
+| Agent Execution | Specialized Workers / Agents |\r
+| Routing | Business/domain-based routing |\r
+| Enterprise Integration | Multiple enterprise systems and APIs |\r
+| Data Access | Governed and authorized |\r
+| RAG | Enterprise knowledge retrieval |\r
+| Agent Communication | A2A / messaging |\r
+| Security | Enterprise identity and access controls |\r
+| Memory / Context | Managed execution and conversational context |\r
+| Observability | Centralized production monitoring |\r
+| Traceability | End-to-end execution correlation |\r
+| Deployment | Azure cloud-native production environment |\r
+| Scalability | Designed for multiple agents and business domains |\r
+| Reusability | Shared platform for multiple use cases |\r
+\r
+### Architectural Position\r
+\r
+The current state of CWD can therefore be described as:\r
+\r
+> **CWD is a production-grade enterprise AI orchestration platform that coordinates specialized AI agents, enterprise data, and business capabilities to deliver governed and traceable business outcomes.**\r
+\r
+The architectural focus is no longer **"Can we build CWD?"**\r
+\r
+It is now:\r
+\r
+> **"How do we operate, scale, govern, standardize, and continuously improve CWD as the enterprise AI platform?"**\r
+\r
+### Current → Next Focus\r
+\r
+\`\`\`text\r
+                    CURRENT\r
+                       |\r
+                       v\r
+              Production CWD\r
+                       |\r
+        +--------------+--------------+\r
+        |              |              |\r
+        v              v              v\r
+    Reliability     Scalability    Governance\r
+        |              |              |\r
+        +--------------+--------------+\r
+                       |\r
+                       v\r
+              Agent Expansion\r
+                       |\r
+                       v\r
+          Enterprise AI Platform\r
+\`\`\`\r
+\r
+The next architecture discussions should therefore focus on **production maturity, scalability, reliability, agent onboarding, governance, evaluation, cost optimization, security hardening, and enterprise adoption** rather than treating CWD as a POC.`,code:``},{id:`cwd-target-state`,category:`Project Overview`,title:`Target / End State`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the target CWD architecture and capabilities, including centralized orchestration, Coordinator–Delegator–Worker agents, enterprise data integration, MCP tools, A2A communication, RAG, state management, observability, security, and scalable deployment.`,concept:`## Target / End State\r
+\r
+The target state of CWD is to establish it as the **enterprise-wide AI execution and orchestration platform** for onsemi.\r
+\r
+The production platform should evolve from supporting individual production use cases into a **scalable, reusable, governed platform capable of onboarding and operating AI agents across multiple business domains**.\r
+\r
+### 1. Target Business Vision\r
+\r
+The end state is:\r
+\r
+> **Any authorized business user should be able to request a business outcome, and CWD should intelligently determine the required capabilities, coordinate the appropriate agents, securely access enterprise information, execute the workflow, and return a reliable, traceable outcome.**\r
+\r
+\`\`\`text\r
+                 Business User\r
+                      |\r
+                      v\r
+              Business Request\r
+                      |\r
+                      v\r
+              ┌──────────────┐\r
+              │ CWD Platform │\r
+              └──────┬───────┘\r
+                     |\r
+          Understand + Plan + Govern\r
+                     |\r
+          ┌──────────┼──────────┐\r
+          v          v          v\r
+       Sales      Finance    Supply Chain\r
+       Agents      Agents       Agents\r
+          |          |           |\r
+          +----------+-----------+\r
+                     |\r
+                     v\r
+          Enterprise Capabilities\r
+                     |\r
+                     v\r
+             Business Outcome\r
+\`\`\`\r
+\r
+---\r
+\r
+## 2. Enterprise AI Platform\r
+\r
+CWD should become the **common platform layer** for enterprise AI agents.\r
+\r
+Instead of every business team creating its own:\r
+\r
+* Orchestration.\r
+* Agent communication.\r
+* Security.\r
+* Data integration.\r
+* Memory.\r
+* Prompt management.\r
+* Monitoring.\r
+* Evaluation.\r
+* Deployment model.\r
+\r
+CWD provides these capabilities centrally.\r
+\r
+\`\`\`text\r
+                 CWD Enterprise Platform\r
+                           |\r
+       ┌───────────────────┼───────────────────┐\r
+       |                   |                   |\r
+       v                   v                   v\r
+   Business Agents     Platform Services   Enterprise\r
+       |                   |               Integrations\r
+       |                   |                   |\r
+       v                   v                   v\r
+    Sales             Orchestration        Snowflake\r
+    Finance           Security             Salesforce\r
+    Supply Chain      Memory               Oracle\r
+    HR                Messaging            SharePoint\r
+    Quality           Observability         M365\r
+    CX                Evaluation            APIs\r
+\`\`\`\r
+\r
+---\r
+\r
+## 3. Target CWD Execution Model\r
+\r
+The Coordinator–Delegator–Worker model remains the core execution pattern.\r
+\r
+\`\`\`text\r
+User\r
+ |\r
+ v\r
+Coordinator\r
+ |\r
+ |-- Intent Understanding\r
+ |-- Planning\r
+ |-- Routing\r
+ |-- Governance\r
+ |\r
+ v\r
+Delegator\r
+ |\r
+ |-- Domain Understanding\r
+ |-- Task Decomposition\r
+ |-- Worker Selection\r
+ |\r
+ v\r
+Workers\r
+ |\r
+ |-- Retrieve\r
+ |-- Analyze\r
+ |-- Calculate\r
+ |-- Execute\r
+ |-- Generate\r
+ |\r
+ v\r
+Result Validation\r
+ |\r
+ v\r
+Business Outcome\r
+\`\`\`\r
+\r
+The target architecture should support both:\r
+\r
+* **Sequential execution**\r
+* **Parallel execution**\r
+\r
+For complex workflows:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                      |\r
+                      v\r
+                Sales Delegator\r
+                      |\r
+          ┌───────────┼───────────┐\r
+          v           v           v\r
+      Customer     Sales        Issue\r
+       Worker      Worker       Worker\r
+          |           |           |\r
+          └───────────┼───────────┘\r
+                      v\r
+               Result Aggregation\r
+                      |\r
+                      v\r
+                Final Outcome\r
+\`\`\`\r
+\r
+---\r
+\r
+## 4. Dynamic Agent Ecosystem\r
+\r
+The target state is a dynamic agent ecosystem rather than a fixed list of hard-coded agents.\r
+\r
+CWD should be able to discover the appropriate agent based on:\r
+\r
+* Business capability.\r
+* Agent capability.\r
+* Domain.\r
+* Availability.\r
+* Authorization.\r
+* Version.\r
+* Health/status.\r
+* Required tools.\r
+\r
+The **Agent Registry** becomes an important control point.\r
+\r
+\`\`\`text\r
+Business Request\r
+      |\r
+      v\r
+Coordinator\r
+      |\r
+      v\r
+Agent Registry\r
+      |\r
+      | Find suitable capability\r
+      v\r
+Available Agent\r
+      |\r
+      v\r
+Execution\r
+\`\`\`\r
+\r
+This allows new agents to be onboarded without redesigning the core platform.\r
+\r
+---\r
+\r
+## 5. Enterprise Data and Knowledge Fabric\r
+\r
+The target state is a governed AI access layer across enterprise information.\r
+\r
+\`\`\`text\r
+             CWD Agents\r
+                 |\r
+                 v\r
+        Governed Data Access\r
+                 |\r
+      ┌──────────┼──────────┐\r
+      v          v          v\r
+  Structured   Knowledge   APIs\r
+     Data        / RAG\r
+      |           |          |\r
+      v           v          v\r
+ Snowflake    AI Search   Enterprise\r
+ Salesforce               Services\r
+ Oracle\r
+\`\`\`\r
+\r
+The important architectural principle remains:\r
+\r
+> **Agents should not directly access enterprise systems. They access enterprise capabilities through governed tools and interfaces.**\r
+\r
+This provides a consistent security and governance boundary.\r
+\r
+---\r
+\r
+## 6. Target Security Model\r
+\r
+Security should be enforced throughout the complete execution lifecycle.\r
+\r
+\`\`\`text\r
+User Identity\r
+      ↓\r
+Authentication\r
+      ↓\r
+Entitlement\r
+      ↓\r
+Authorization\r
+      ↓\r
+Agent Authorization\r
+      ↓\r
+Tool Authorization\r
+      ↓\r
+Data Access\r
+      ↓\r
+Output Validation\r
+      ↓\r
+Response\r
+\`\`\`\r
+\r
+The target state should provide centralized enforcement for:\r
+\r
+* Identity.\r
+* RBAC.\r
+* Least privilege.\r
+* Managed identities.\r
+* Data classification.\r
+* DLP.\r
+* Input/output validation.\r
+* Auditability.\r
+* Secret management.\r
+* Secure agent communication.\r
+\r
+---\r
+\r
+## 7. Target Observability and Evaluation\r
+\r
+The end state should provide **full lifecycle visibility of every AI execution**.\r
+\r
+\`\`\`text\r
+User Request\r
+     |\r
+     v\r
+Coordinator\r
+     |\r
+     v\r
+Delegator\r
+     |\r
+     v\r
+Worker\r
+     |\r
+     v\r
+Tool\r
+     |\r
+     v\r
+Enterprise System\r
+\`\`\`\r
+\r
+Every stage should be traceable through standardized identifiers:\r
+\r
+\`\`\`text\r
+session_id\r
+task_id\r
+run_id\r
+turn_id\r
+step_id\r
+\`\`\`\r
+\r
+The platform should measure:\r
+\r
+* Latency.\r
+* Token consumption.\r
+* Cost.\r
+* Agent accuracy.\r
+* Tool success rate.\r
+* Failure rate.\r
+* Retry rate.\r
+* Workflow completion.\r
+* Agent quality.\r
+* Business outcome quality.\r
+\r
+This enables CWD to become an **operationally measurable AI platform**, not simply an agent runtime.\r
+\r
+---\r
+\r
+## 8. Production-Grade Reliability\r
+\r
+At the target state, CWD should support enterprise-scale operational requirements.\r
+\r
+Key capabilities include:\r
+\r
+* Horizontal scaling.\r
+* High availability.\r
+* Fault isolation.\r
+* Retry policies.\r
+* Timeout management.\r
+* Dead-letter queues.\r
+* Backpressure.\r
+* Priority execution.\r
+* Idempotent operations.\r
+* Failure recovery.\r
+* Long-running workflow support.\r
+* Controlled parallel execution.\r
+\r
+The objective is that failure of one Worker or business capability should not unnecessarily bring down the overall platform.\r
+\r
+---\r
+\r
+## 9. Standardized Agent Onboarding\r
+\r
+One of the most important target-state outcomes is to make **new agent onboarding predictable and repeatable**.\r
+\r
+A new business agent should follow a standard lifecycle:\r
+\r
+\`\`\`text\r
+Business Requirement\r
+       ↓\r
+Agent Design\r
+       ↓\r
+Development\r
+       ↓\r
+Testing / Evaluation\r
+       ↓\r
+Security Review\r
+       ↓\r
+Agent Registration\r
+       ↓\r
+Deployment\r
+       ↓\r
+Production Monitoring\r
+       ↓\r
+Continuous Improvement\r
+\`\`\`\r
+\r
+The platform should provide the common infrastructure while the domain team focuses primarily on the **business capability and agent behavior**.\r
+\r
+---\r
+\r
+## 10. Target Operating Model\r
+\r
+The target organization should operate with clear separation between:\r
+\r
+### CWD Platform Team\r
+\r
+Owns:\r
+\r
+* Core orchestration.\r
+* Platform architecture.\r
+* Security framework.\r
+* Messaging.\r
+* Agent registry.\r
+* Prompt registry.\r
+* Observability.\r
+* Runtime infrastructure.\r
+* Platform reliability.\r
+* Common integrations.\r
+\r
+### Business / Domain Teams\r
+\r
+Own:\r
+\r
+* Domain Delegators.\r
+* Domain Workers.\r
+* Business rules.\r
+* Domain prompts.\r
+* Domain-specific tools.\r
+* Business evaluation criteria.\r
+* Business outcomes.\r
+\r
+\`\`\`text\r
+             CWD Platform Team\r
+                     |\r
+        ┌────────────┼────────────┐\r
+        v            v            v\r
+     Sales        Finance      Supply Chain\r
+      Team          Team           Team\r
+        |            |              |\r
+        v            v              v\r
+    Delegator    Delegator      Delegator\r
+        |            |              |\r
+     Workers      Workers        Workers\r
+\`\`\`\r
+\r
+This separation is critical for enterprise scalability.\r
+\r
+---\r
+\r
+## 11. Target Architecture Maturity\r
+\r
+The evolution of CWD can be viewed as:\r
+\r
+\`\`\`text\r
+Current\r
+Production CWD\r
+      |\r
+      v\r
+Platform Standardization\r
+      |\r
+      v\r
+Agent Onboarding at Scale\r
+      |\r
+      v\r
+Enterprise Governance\r
+      |\r
+      v\r
+Continuous Evaluation\r
+      |\r
+      v\r
+Multi-Domain Enterprise AI\r
+      |\r
+      v\r
+Enterprise AI Execution Platform\r
+\`\`\`\r
+\r
+The goal is not simply to add more agents.\r
+\r
+The goal is to create a **repeatable enterprise capability for building, deploying, governing, and operating AI-driven business processes**.\r
+\r
+---\r
+\r
+## 12. Target-State Success Criteria\r
+\r
+CWD should be considered successful at the end state when:\r
+\r
+* New business agents can be onboarded quickly using standardized platform capabilities.\r
+* Multiple business domains can operate on the same CWD platform.\r
+* Complex workflows can coordinate multiple agents.\r
+* Enterprise data is accessed through governed capabilities.\r
+* Authorization is enforced consistently.\r
+* Agent execution is fully observable.\r
+* AI quality and cost are measurable.\r
+* Agents can communicate reliably.\r
+* Platform components can scale independently.\r
+* Business teams can develop domain capabilities without rebuilding platform infrastructure.\r
+* CWD becomes the default enterprise pattern for production AI agent execution.\r
+\r
+---\r
+\r
+## Target / End-State Definition\r
+\r
+> **CWD's target state is a production-scale, enterprise-wide AI execution platform that provides a standardized foundation for discovering, orchestrating, securing, deploying, monitoring, and evaluating AI agents across business domains.**\r
+\r
+In the end state, **CWD becomes the control and execution layer between enterprise users, AI agents, and enterprise capabilities**, enabling onsemi to scale AI from individual use cases into a governed enterprise AI ecosystem.`,code:``},{id:`cwd-why-agentic-ai`,category:`Project Overview`,title:`Why Agentic AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why CWD moves beyond traditional chatbots and standalone RAG by using agentic AI for planning, reasoning, task decomposition, domain routing, tool execution, multi-step workflows, autonomous coordination, and controlled interaction with enterprise systems.`,concept:`## Why Agentic AI?\r
+\r
+CWD adopts Agentic AI because enterprise business problems are not single-step question-and-answer problems. They are multi-step workflows that require reasoning, planning, data retrieval, tool execution, collaboration between specialized agents, and controlled decision-making.\r
+\r
+Traditional GenAI is primarily focused on generating a response.\r
+\r
+Agentic AI extends this capability by enabling the system to:\r
+\r
+- Understand the business objective\r
+- Determine what needs to be done\r
+- Break the objective into tasks\r
+- Select the appropriate agent or capability\r
+- Retrieve required enterprise data\r
+- Execute tools and business operations\r
+- Evaluate intermediate results\r
+- Continue, retry, or redirect execution when required\r
+- Coordinate multiple specialized agents\r
+- Maintain context across the workflow\r
+- Escalate to humans when necessary\r
+- Produce a traceable business outcome\r
+\r
+This is the fundamental reason Agentic AI is the foundation of CWD.\r
+\r
+### 1. Enterprise Requests Are Multi-Step\r
+\r
+A typical enterprise request rarely belongs to a single system or capability.\r
+\r
+For example:\r
+\r
+> "Prepare a customer briefing for the upcoming customer meeting."\r
+\r
+This may require:\r
+\r
+1. Identify the customer\r
+2. Retrieve customer information\r
+3. Retrieve sales opportunity information\r
+4. Retrieve recent interactions\r
+5. Retrieve relevant product information\r
+6. Search enterprise knowledge\r
+7. Analyze the information\r
+8. Generate the briefing\r
+9. Validate the output\r
+10. Return the final business artifact\r
+\r
+A traditional chatbot can generate the response, but it does not naturally provide the enterprise execution model required to coordinate all these activities.\r
+\r
+Agentic AI enables CWD to manage the complete workflow.\r
+\r
+---\r
+\r
+### 2. Move From "Answer" to "Action"\r
+\r
+The evolution is:\r
+\r
+**Traditional AI**\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Prompt\r
+  ↓\r
+LLM\r
+  ↓\r
+Answer\r
+\`\`\`\r
+\r
+**Agentic AI**\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Understand Objective\r
+  ↓\r
+Plan\r
+  ↓\r
+Select Capability\r
+  ↓\r
+Retrieve Context\r
+  ↓\r
+Execute Tools\r
+  ↓\r
+Evaluate Result\r
+  ↓\r
+Continue / Retry / Delegate\r
+  ↓\r
+Business Outcome\r
+\`\`\`\r
+\r
+The important change is that the AI becomes capable of participating in the execution of the business process rather than only generating text.\r
+\r
+---\r
+\r
+### 3. Enable Multi-Agent Collaboration\r
+\r
+Enterprise capabilities are naturally specialized.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                    Coordinator\r
+                         |\r
+        +----------------+----------------+\r
+        |                |                |\r
+   Sales Agent       Finance Agent    Knowledge Agent\r
+        |                |                |\r
+    CRM Data        Financial Data    Enterprise RAG\r
+\`\`\`\r
+\r
+Each agent can specialize in a particular domain while CWD provides the coordination layer.\r
+\r
+This is why the **Coordinator–Delegator–Worker (CWD)** model is important.\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | decides\r
+     ↓\r
+Delegator\r
+     |\r
+     | decomposes / assigns\r
+     ↓\r
+Workers\r
+     |\r
+     | execute\r
+     ↓\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+This allows domain expertise to remain decentralized while execution governance remains centralized.\r
+\r
+Modern enterprise-agent architectures similarly use orchestration to coordinate multiple agents, tools, systems, and workflows rather than allowing agents to operate independently.\r
+\r
+---\r
+\r
+### 4. Solve Cross-System Business Problems\r
+\r
+Enterprise information is distributed across multiple platforms.\r
+\r
+For CWD, a business workflow may need to interact with systems such as:\r
+\r
+* Salesforce\r
+* Snowflake\r
+* Oracle\r
+* SharePoint\r
+* Microsoft 365\r
+* Enterprise APIs\r
+* Knowledge repositories\r
+* Internal AI services\r
+\r
+The business user should not need to understand where the information resides.\r
+\r
+The user expresses the **business objective**.\r
+\r
+CWD determines:\r
+\r
+\`\`\`text\r
+What information is required?\r
+        ↓\r
+Which capability provides it?\r
+        ↓\r
+Which agent should execute it?\r
+        ↓\r
+Which tools can be used?\r
+        ↓\r
+What sequence should be followed?\r
+        ↓\r
+How should the results be combined?\r
+\`\`\`\r
+\r
+This creates an **outcome-oriented AI experience** rather than a system-oriented experience.\r
+\r
+---\r
+\r
+### 5. Reduce Manual Coordination\r
+\r
+Without Agentic AI:\r
+\r
+\`\`\`text\r
+Employee\r
+   ↓\r
+Open CRM\r
+   ↓\r
+Search Customer\r
+   ↓\r
+Open Snowflake\r
+   ↓\r
+Find Data\r
+   ↓\r
+Search SharePoint\r
+   ↓\r
+Read Documents\r
+   ↓\r
+Analyze Information\r
+   ↓\r
+Create Report\r
+   ↓\r
+Send Report\r
+\`\`\`\r
+\r
+With CWD:\r
+\r
+\`\`\`text\r
+Employee\r
+   ↓\r
+"Prepare the customer briefing"\r
+   ↓\r
+CWD\r
+   ↓\r
+Multiple Agents + Enterprise Systems\r
+   ↓\r
+Customer Briefing\r
+\`\`\`\r
+\r
+The objective is not to eliminate the employee.\r
+\r
+The objective is to move the employee from **manually coordinating systems** to **managing business outcomes**.\r
+\r
+---\r
+\r
+### 6. Enable Dynamic Decision-Making\r
+\r
+Traditional workflow automation follows a predefined path:\r
+\r
+\`\`\`text\r
+Step 1 → Step 2 → Step 3 → Step 4\r
+\`\`\`\r
+\r
+Agentic workflows can adapt based on runtime conditions:\r
+\r
+\`\`\`text\r
+                    Request\r
+                       |\r
+                    Analyze\r
+                       |\r
+                +------+------+\r
+                |             |\r
+             Path A         Path B\r
+                |             |\r
+             Result         Result\r
+                |             |\r
+                +------+------+\r
+                       |\r
+                    Evaluate\r
+                       |\r
+              Continue / Retry /\r
+              Delegate / Escalate\r
+\`\`\`\r
+\r
+This is particularly important when:\r
+\r
+* The required information varies by request\r
+* Different business domains are involved\r
+* A tool fails\r
+* Additional information is required\r
+* Results require validation\r
+* Human approval is necessary\r
+\r
+Workflow-orchestration agents are specifically designed to maintain execution context, delegate work, track intermediate results, and adapt execution based on runtime results.\r
+\r
+---\r
+\r
+### 7. Establish a Common Enterprise AI Execution Model\r
+\r
+Without a common architecture, every business team may build its own agent:\r
+\r
+\`\`\`text\r
+Sales Agent ──────────┐\r
+Finance Agent ────────┤\r
+HR Agent ─────────────┤\r
+Supply Chain Agent ───┤──→ Different frameworks\r
+Quality Agent ────────┤\r
+Customer Agent ───────┘\r
+\`\`\`\r
+\r
+This creates:\r
+\r
+* Duplicate implementations\r
+* Different security models\r
+* Different integration patterns\r
+* Different observability\r
+* Different agent communication mechanisms\r
+* Difficult maintenance\r
+* Agent sprawl\r
+\r
+CWD provides the common execution model:\r
+\r
+\`\`\`text\r
+                    CWD Platform\r
+                         |\r
+       +-----------------+-----------------+\r
+       |                 |                 |\r
+     Sales            Finance             HR\r
+    Agents             Agents            Agents\r
+       |                 |                 |\r
+       +-----------------+-----------------+\r
+                         |\r
+              Common Enterprise Controls\r
+                         |\r
+        Security | Governance | Observability\r
+        Registry | Memory    | A2A | RAG\r
+\`\`\`\r
+\r
+The enterprise therefore builds **agents as business capabilities**, while CWD provides the common platform for operating them.\r
+\r
+---\r
+\r
+### 8. Security Must Follow the Agent\r
+\r
+An important architectural reason for Agentic AI in CWD is that agents can perform actions, not merely generate text.\r
+\r
+Therefore, security must be part of execution.\r
+\r
+\`\`\`text\r
+User Identity\r
+     ↓\r
+Authorization\r
+     ↓\r
+Coordinator\r
+     ↓\r
+Delegator\r
+     ↓\r
+Worker\r
+     ↓\r
+Authorized Tool\r
+     ↓\r
+Enterprise Data\r
+\`\`\`\r
+\r
+The agent should not receive unrestricted access to enterprise systems.\r
+\r
+CWD therefore applies principles such as:\r
+\r
+* Identity propagation\r
+* RBAC\r
+* Least-privilege access\r
+* Entitlement validation\r
+* Controlled tools\r
+* Data access policies\r
+* Input/output validation\r
+* DLP and redaction\r
+* Auditability\r
+* Human approval where required\r
+\r
+This is a critical distinction between an enterprise Agentic AI platform and a simple LLM chatbot.\r
+\r
+---\r
+\r
+### 9. Create End-to-End Observability\r
+\r
+When multiple agents collaborate, simply logging the final answer is not enough.\r
+\r
+CWD needs to understand:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Session\r
+     ↓\r
+Task\r
+     ↓\r
+Run\r
+     ↓\r
+Turn\r
+     ↓\r
+Step\r
+     ↓\r
+Agent\r
+     ↓\r
+Tool\r
+     ↓\r
+Data\r
+     ↓\r
+Result\r
+\`\`\`\r
+\r
+This enables the platform to answer:\r
+\r
+* Which agent handled the request?\r
+* Why was that agent selected?\r
+* Which tools were called?\r
+* Which data was retrieved?\r
+* How long did each step take?\r
+* Where did an error occur?\r
+* How many retries occurred?\r
+* What was the final outcome?\r
+* What did the workflow cost?\r
+\r
+Agent orchestration is therefore also an **operational control mechanism**, not just an AI design pattern.\r
+\r
+---\r
+\r
+### 10. Scale AI From Individual Use Cases to Enterprise Capability\r
+\r
+The strategic objective is not to build one successful AI application.\r
+\r
+The objective is:\r
+\r
+\`\`\`text\r
+One Agent\r
+    ↓\r
+Multiple Agents\r
+    ↓\r
+Multi-Agent Workflows\r
+    ↓\r
+Business Domains\r
+    ↓\r
+Cross-Domain Workflows\r
+    ↓\r
+Enterprise AI Execution Platform\r
+\`\`\`\r
+\r
+This is where CWD becomes strategically important.\r
+\r
+Instead of repeatedly solving:\r
+\r
+> "How do we build this AI application?"\r
+\r
+the organization can solve:\r
+\r
+> "How do we onboard this new business capability into the enterprise AI execution platform?"\r
+\r
+That is a fundamentally different scaling model.\r
+\r
+---\r
+\r
+## Why Agentic AI Specifically for CWD?\r
+\r
+| Business Need | Traditional GenAI | Agentic AI + CWD |\r
+| --- | --- | --- |\r
+| Answer questions | ✓ | ✓ |\r
+| Generate content | ✓ | ✓ |\r
+| Multi-step reasoning | Limited | ✓ |\r
+| Task decomposition | Limited | ✓ |\r
+| Tool execution | Limited | ✓ |\r
+| Multi-agent collaboration | ✗ | ✓ |\r
+| Cross-system workflows | Limited | ✓ |\r
+| Dynamic routing | Limited | ✓ |\r
+| Runtime decision-making | Limited | ✓ |\r
+| Context propagation | Limited | ✓ |\r
+| Retry/recovery | Limited | ✓ |\r
+| Human escalation | Limited | ✓ |\r
+| Enterprise governance | External layer required | Built into platform architecture |\r
+| End-to-end execution tracking | Limited | ✓ |\r
+| Reusable enterprise agent ecosystem | ✗ | ✓ |\r
+\r
+---\r
+\r
+## Architect's View\r
+\r
+The key architectural decision is:\r
+\r
+> **CWD is not being built simply to host LLMs. CWD is being built to operationalize AI agents as governed enterprise business capabilities.**\r
+\r
+Agentic AI provides the **intelligence and autonomy**.\r
+\r
+CWD provides the **coordination, governance, security, execution, integration, and operational control**.\r
+\r
+\`\`\`text\r
+                 AGENTIC AI\r
+                     |\r
+        Reason • Plan • Decide • Act\r
+                     |\r
+                     ↓\r
+              +--------------+\r
+              |     CWD      |\r
+              |              |\r
+              | Coordinate   |\r
+              | Delegate     |\r
+              | Execute      |\r
+              | Govern       |\r
+              | Observe      |\r
+              +--------------+\r
+                     |\r
+          +----------+----------+\r
+          |          |          |\r
+        Agents     Tools      Data\r
+          |          |          |\r
+          +----------+----------+\r
+                     |\r
+              Business Outcome\r
+\`\`\`\r
+\r
+`,code:``},{id:`cwd-business-benefits`,category:`Project Overview`,title:`Key Business Benefits`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.`,concept:``,code:``}];function Wg(){return(0,M.jsx)($,{data:Ug,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var Gg=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`},{id:`cwd-architecture-overview`,category:`CWD Architecture`,title:`CWD Architecture Overview`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the major components, responsibilities, communication patterns, and interaction model within the CWD enterprise multi-agent architecture.`,concept:``,code:``},{id:`cwd-high-level-architecture`,category:`CWD Architecture`,title:`High-Level Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the high-level request flow from the user through the gateway, Coordinator, Delegator, Worker agents, tools, enterprise data sources, and final response.`,concept:``,code:``},{id:`cwd-architecture-layers`,category:`CWD Architecture`,title:`Architecture Layers`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the presentation, API gateway, orchestration, Coordinator, Delegator, Worker, tool integration, data, security, observability, and infrastructure layers.`,concept:``,code:``},{id:`cwd-component-architecture`,category:`CWD Architecture`,title:`Component Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the individual CWD components, their responsibilities, interfaces, dependencies, and how they work together to execute enterprise workflows.`,concept:``,code:``},{id:`cwd-logical-architecture`,category:`CWD Architecture`,title:`Logical Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the logical relationships between the Coordinator, Delegator, Worker agents, MCP tools, A2A communication, services, data sources, and supporting platform components.`,concept:``,code:``},{id:`cwd-deployment-architecture`,category:`CWD Architecture`,title:`Deployment Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD components are deployed across cloud infrastructure, including compute, networking, messaging, storage, AI services, security, and observability components.`,concept:``,code:``},{id:`cwd-end-to-end-architecture-flow`,category:`CWD Architecture`,title:`End-to-End Architecture Flow`,difficulty:`Advanced`,time:`~20 min`,description:`Trace an enterprise request from the user through the gateway, Coordinator, Delegator, Worker agents, MCP tools, data sources, result aggregation, and final response.`,concept:``,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var qg=[{id:`cwd-coordinator`,category:`Coordinator Agent`,title:`Coordinator Agent`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the role of the Coordinator Agent as the central orchestration, planning, coordination, and governance component of the CWD architecture.`},{id:`what-is-coordinator`,category:`Coordinator Agent`,title:`What is Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the purpose, role, responsibilities, and architectural position of the Coordinator Agent in the CWD platform.`,concept:``,code:``},{id:`coordinator-responsibilities`,category:`Coordinator Agent`,title:`Coordinator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities handled by the Coordinator, including request orchestration, planning, delegation, state management, and result coordination.`,concept:``,code:``},{id:`request-understanding`,category:`Coordinator Agent`,title:`Request Understanding`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets incoming user requests, identifies required actions, and determines the appropriate execution path.`,concept:``,code:``},{id:`intent-classification`,category:`Coordinator Agent`,title:`Intent Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user intent is identified, classified, and mapped to the appropriate business domain, workflow, or downstream agent.`,concept:``,code:``},{id:`coordinator-planning`,category:`Coordinator Agent`,title:`Planning`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how the Coordinator creates an execution plan, determines task dependencies, identifies required agents, and controls workflow execution.`,concept:``,code:``},{id:`delegator-selection`,category:`Coordinator Agent`,title:`Delegator Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator determines when to invoke the Delegator and how the appropriate Delegator is selected for downstream task execution.`,concept:``,code:``},{id:`task-creation`,category:`Coordinator Agent`,title:`Task Creation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator creates structured tasks, maintains task context, and passes execution requests to downstream agents.`,concept:``,code:``},{id:`result-aggregation`,category:`Coordinator Agent`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator collects, validates, combines, and synthesizes results returned by multiple agents or workers.`,concept:``,code:``},{id:`coordinator-retry-recovery`,category:`Coordinator Agent`,title:`Retry & Recovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator handles agent failures, timeouts, retries, fallback strategies, partial failures, and recovery workflows.`,concept:``,code:``},{id:`global-governance`,category:`Coordinator Agent`,title:`Global Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how centralized governance, security policies, authorization, guardrails, compliance, and policy enforcement are handled by the Coordinator.`,concept:``,code:``},{id:`coordinator-interview-questions`,category:`Coordinator Agent`,title:`Coordinator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions related to Coordinator Agent implementation and orchestration.`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Coordinator Agent Cookbook`,subtitle:`Orchestration, planning, delegation and governance`,icon:`🎯`,patternLabel:`Topics`})}var Yg=[{id:`cwd-delegator`,category:`Delegator Agents`,title:`Delegator Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Delegator layer responsible for domain-level task decomposition, domain routing, Worker selection, execution control, and communication between the Coordinator and specialized Worker agents.`},{id:`what-is-delegator`,category:`Delegator Agents`,title:`What is a Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand what a Delegator Agent is, where it fits in the CWD architecture, and how it acts as the domain-level orchestration layer between the Coordinator and specialized Workers.`,concept:``,code:``},{id:`why-delegator-required`,category:`Delegator Agents`,title:`Why Delegator is Required`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a dedicated Delegator layer is required between the Coordinator and Workers, including separation of responsibilities, domain isolation, scalability, maintainability, and more efficient task routing.`,concept:``,code:``},{id:`delegator-responsibilities`,category:`Delegator Agents`,title:`Delegator Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the core responsibilities of a Delegator, including domain identification, task decomposition, Worker discovery and selection, execution coordination, policy enforcement, failure handling, and result management.`,concept:``,code:``},{id:`domain-based-routing`,category:`Delegator Agents`,title:`Domain-Based Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators identify the appropriate business or technical domain and route incoming tasks to the correct domain-specific Worker agents and capabilities.`,concept:``,code:``},{id:`delegator-task-decomposition`,category:`Delegator Agents`,title:`Task Decomposition`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Delegators decompose complex domain-level tasks into smaller, well-defined, atomic Worker tasks while preserving dependencies, context, execution order, and required inputs and outputs.`,concept:``,code:``},{id:`worker-selection`,category:`Delegator Agents`,title:`Worker Selection`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator selects the most appropriate Worker based on capabilities, domain ownership, tool access, availability, health, permissions, workload, and task requirements.`,concept:``,code:``},{id:`worker-pool-management`,category:`Delegator Agents`,title:`Worker Pool Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers are organized, monitored, scaled, and managed within a domain, including load distribution, Worker availability, health status, concurrency, and capacity management.`,concept:``,code:``},{id:`domain-guardrails`,category:`Delegator Agents`,title:`Domain Guardrails`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators enforce domain-specific policies, authorization boundaries, data-access restrictions, allowed capabilities, tool restrictions, validation rules, and other governance controls.`,concept:``,code:``},{id:`delegator-worker-communication`,category:`Delegator Agents`,title:`Delegator-to-Worker Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators communicate with Workers, transfer task context and execution metadata, invoke Worker capabilities, track responses, handle failures, and manage asynchronous or synchronous execution.`,concept:``,code:``},{id:`multiple-delegator-architecture`,category:`Delegator Agents`,title:`Multiple Delegator Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how multiple domain-specific Delegators can operate within an enterprise CWD architecture, including cross-domain coordination, routing, isolation, scalability, shared governance, and interaction with the central Coordinator.`,concept:``,code:``},{id:`delegator-interview-questions`,category:`Delegator Agents`,title:`Delegator Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture, design, troubleshooting, and scenario-based interview questions covering Delegator responsibilities, domain routing, task decomposition, Worker selection, scalability, guardrails, failures, and Coordinator–Delegator–Worker interactions.`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Delegator Agents Cookbook`,subtitle:`Domain routing, task decomposition, Worker selection and execution`,icon:`🧭`,patternLabel:`Topics`})}var Zg=[{id:`cwd-workers`,category:`Worker Agents`,title:`Worker Agents`,difficulty:`Advanced`,time:`~60 min`,description:`Understand specialized Worker Agents in CWD that execute focused business tasks using enterprise data, APIs, tools, RAG, and governed services while returning validated results to the Delegator.`},{id:`what-is-worker`,category:`Worker Agents`,title:`What is a Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the role of a Worker Agent as a specialized execution component responsible for performing a well-defined business or technical task delegated by the Delegator.`,concept:``,code:``},{id:`worker-responsibilities`,category:`Worker Agents`,title:`Worker Responsibilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker responsibilities including task execution, tool selection, data retrieval, business logic, validation, error handling, and returning structured results to the Delegator.`,concept:``,code:``},{id:`atomic-task-execution`,category:`Worker Agents`,title:`Atomic Task Execution`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers execute focused atomic tasks with clear inputs, defined responsibilities, controlled tool access, deterministic processing where possible, and structured outputs.`,concept:``,code:``},{id:`worker-tool-calling`,category:`Worker Agents`,title:`Tool Calling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers discover and invoke authorized enterprise tools through mechanisms such as MCP while enforcing tool permissions, input validation, and execution policies.`,concept:``,code:``},{id:`worker-data-retrieval`,category:`Worker Agents`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers retrieve governed enterprise information using RAG, search services, databases, APIs, and other authorized data sources while respecting user entitlements.`,concept:``,code:``},{id:`worker-api-integration`,category:`Worker Agents`,title:`API Integration`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers securely interact with enterprise APIs and microservices for retrieving information, executing business operations, and integrating with downstream systems.`,concept:``,code:``},{id:`artifact-generation`,category:`Worker Agents`,title:`Artifact Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers generate structured artifacts such as customer briefings, reports, summaries, documents, recommendations, and other business outputs.`,concept:``,code:``},{id:`worker-output-validation`,category:`Worker Agents`,title:`Output Validation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker outputs are validated for schema correctness, completeness, business rules, authorization, data quality, and grounding before being returned to the Delegator.`,concept:``,code:``},{id:`worker-error-handling`,category:`Worker Agents`,title:`Error Handling`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers detect transient and permanent failures, apply retry and timeout policies, capture errors, and return controlled failure information for Delegator-level recovery.`,concept:``,code:``},{id:`worker-pool`,category:`Worker Agents`,title:`Worker Pool`,difficulty:`Advanced`,time:`~10 min`,description:`Understand Worker pooling, horizontal scaling, workload distribution, concurrency, health management, capacity planning, and dynamic Worker selection for reliable enterprise execution.`,concept:``,code:``},{id:`worker-interview-questions`,category:`Worker Agents`,title:`Worker Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for architecture and scenario-based interview questions covering Worker responsibilities, task boundaries, tool calling, RAG, security, scalability, failure handling, and Delegator-to-Worker communication.`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Worker Agents Cookbook`,subtitle:`Atomic execution, tools, enterprise data, validation and scalability`,icon:`⚙️`,patternLabel:`Topics`})}var $g=[{id:`cwd-orchestration`,category:`CWD Orchestration`,title:`CWD Orchestration Flow`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the complete request orchestration flow across the CWD platform, from user request and gateway validation through Coordinator, Delegator, Worker execution, data access, result aggregation, and final response.`},{id:`cwd-user-request`,category:`CWD Orchestration`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request enters the CWD platform and how the request is captured, validated, and prepared for downstream processing.`,concept:``,code:``},{id:`cwd-gateway`,category:`CWD Orchestration`,title:`Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway handles request routing, authentication, validation, security checks, and controlled entry into the agentic platform.`,concept:``,code:``},{id:`cwd-entitlement-check`,category:`CWD Orchestration`,title:`Entitlement Check`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how user identity, authorization, roles, permissions, and entitlements are validated before allowing access to agents, tools, and enterprise data.`,concept:``,code:``},{id:`cwd-coordinator-flow`,category:`CWD Orchestration`,title:`Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the request, determines intent, creates an execution plan, manages workflow state, and controls downstream orchestration.`,concept:``,code:``},{id:`cwd-delegator-flow`,category:`CWD Orchestration`,title:`Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Delegator decomposes tasks, identifies the appropriate domain or Worker agents, and routes tasks for execution.`,concept:``,code:``},{id:`cwd-worker-flow`,category:`CWD Orchestration`,title:`Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how specialized Worker agents execute assigned tasks using domain logic, LLM capabilities, tools, APIs, and enterprise data.`,concept:``,code:``},{id:`cwd-data-sources`,category:`CWD Orchestration`,title:`Data Sources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access enterprise data sources through retrieval systems, APIs, MCP tools, databases, and other connected services.`,concept:``,code:``},{id:`cwd-result-aggregation`,category:`CWD Orchestration`,title:`Result Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how results from multiple Workers, tools, and data sources are collected, validated, combined, and returned to the Coordinator.`,concept:``,code:``},{id:`cwd-final-response`,category:`CWD Orchestration`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator synthesizes the completed workflow results into a final response and returns it securely to the user.`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`CWD Orchestration Cookbook`,subtitle:`Request flow, coordination, delegation, execution and response`,icon:`🔄`,patternLabel:`Topics`})}var t_=[{id:`cwd-langgraph`,category:`LangGraph`,title:`LangGraph`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how LangGraph is used within CWD to implement stateful, controllable, and resilient agent orchestration, including graph-based workflows, state management, conditional routing, checkpointing, retries, human-in-the-loop execution, and Coordinator–Delegator–Worker coordination.`},{id:`why-langgraph-cwd`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why LangGraph is used for CWD orchestration, including stateful execution, explicit workflow control, conditional routing, persistence, retries, recovery, human-in-the-loop workflows, and complex multi-agent coordination.`,concept:``,code:``},{id:`stategraph`,category:`LangGraph`,title:`StateGraph`,difficulty:`Advanced`,time:`~15 min`,description:`Understand StateGraph as the foundation for defining state-driven agent workflows, including shared state, graph structure, node execution, transitions, workflow lifecycle, and how CWD maintains execution context across agents.`,concept:``,code:``},{id:`langgraph-nodes`,category:`LangGraph`,title:`Nodes`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how LangGraph nodes represent individual units of work such as request processing, planning, Coordinator logic, Delegator routing, Worker execution, retrieval, tool invocation, validation, and response generation.`,concept:``,code:``},{id:`langgraph-edges`,category:`LangGraph`,title:`Edges`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how edges connect LangGraph nodes and control workflow progression, including sequential execution, transitions between agents, completion paths, failure paths, and routing to downstream processing stages.`,concept:``,code:``},{id:`conditional-routing`,category:`LangGraph`,title:`Conditional Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how conditional routing dynamically selects the next workflow path based on state, user intent, task status, agent decisions, Worker availability, tool results, validation outcomes, or failure conditions.`,concept:``,code:``},{id:`langgraph-state-management`,category:`LangGraph`,title:`State Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state is created, updated, and propagated across the CWD workflow, including request context, task information, agent results, tool outputs, intermediate data, errors, status, and final response state.`,concept:``,code:``},{id:`langgraph-checkpointing`,category:`LangGraph`,title:`Checkpointing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how checkpointing persists workflow state so long-running or interrupted CWD executions can resume from a known point, supporting recovery, debugging, state persistence, and reliable agent execution.`,concept:``,code:``},{id:`langgraph-retry`,category:`LangGraph`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retry mechanisms handle transient failures in CWD workflows, including failed agent execution, temporary service failures, tool errors, LLM failures, retry policies, backoff strategies, and recovery decisions.`,concept:``,code:``},{id:`langgraph-human-loop`,category:`LangGraph`,title:`Human-in-the-Loop`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how human approval or intervention can be introduced into CWD workflows for high-risk operations, sensitive decisions, exception handling, validation, approval gates, and controlled continuation of agent execution.`,concept:``,code:``},{id:`langgraph-in-cwd`,category:`LangGraph`,title:`LangGraph in CWD`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the specific role of LangGraph in the CWD architecture, including how it manages workflow state and coordinates the Coordinator, Delegator, and Worker execution lifecycle while supporting conditional routing, retries, persistence, recovery, and controlled agent execution.`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`LangGraph Cookbook`,subtitle:`Stateful orchestration, routing, persistence and agent workflows`,icon:`🕸️`,patternLabel:`Topics`})}var r_=[{id:`cwd-mcp`,category:`MCP`,title:`MCP`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Model Context Protocol (MCP) and how CWD uses it as a standardized integration layer for connecting AI agents with enterprise tools, resources, context, and external services in a secure and governed manner.`},{id:`what-is-mcp-cwd`,category:`MCP`,title:`What is MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Model Context Protocol, its purpose, core concepts, protocol semantics, communication model, and how it standardizes the interaction between AI applications, agents, and external capabilities.`,concept:``,code:``},{id:`why-mcp-cwd`,category:`MCP`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why MCP is used within CWD to avoid point-to-point integrations, standardize tool access, improve reusability, simplify agent integration, and provide a governed interface to enterprise capabilities.`,concept:``,code:``},{id:`mcp-architecture-cwd`,category:`MCP`,title:`MCP Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the MCP architecture, including MCP hosts, clients, servers, tools, resources, prompts, protocol messages, transports, and how these components interact to provide standardized context and capability access.`,concept:``,code:``},{id:`mcp-server`,category:`MCP`,title:`MCP Server`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the responsibilities of an MCP Server, including exposing tools and resources, validating requests, executing approved operations, enforcing security policies, handling errors, and returning structured results to MCP clients.`,concept:``,code:``},{id:`mcp-tools`,category:`MCP`,title:`MCP Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise capabilities are exposed as MCP tools, including tool discovery, input schemas, invocation, validation, execution, structured outputs, error handling, authorization, and controlled access to APIs and business services.`,concept:``,code:``},{id:`mcp-resources`,category:`MCP`,title:`MCP Resources`,difficulty:`Advanced`,time:`~10 min`,description:`Understand MCP resources as a standardized mechanism for providing contextual information to agents, including documents, application data, knowledge content, metadata, and other read-oriented enterprise information.`,concept:``,code:``},{id:`mcp-context`,category:`MCP`,title:`MCP Context`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MCP enables standardized access to relevant context and capabilities, including how clients discover available resources and tools and provide the appropriate information to an AI application or agent.`,concept:``,code:``},{id:`worker-mcp`,category:`MCP`,title:`Worker + MCP`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how CWD Worker agents use MCP to discover and invoke domain-specific enterprise tools and access approved resources, while the Worker remains focused on domain reasoning and task execution.`,concept:``,code:``},{id:`mcp-security`,category:`MCP`,title:`MCP Security`,difficulty:`Advanced`,time:`~15 min`,description:`Understand enterprise MCP security, including authentication, authorization, identity propagation, tool-level permissions, input validation, secrets management, network controls, data protection, auditing, rate limiting, and preventing unsafe tool execution.`,concept:``,code:``},{id:`mcp-interview`,category:`MCP`,title:`MCP Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for MCP architecture and enterprise interview questions covering MCP clients and servers, tools, resources, prompts, discovery, invocation, transports, security, authorization, enterprise integration, MCP versus REST APIs, and MCP versus function calling.`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`MCP Cookbook`,subtitle:`Protocol, tools, resources, context, Worker integration and security`,icon:`🔗`,patternLabel:`Topics`})}var a_=[{id:`cwd-a2a`,category:`CWD Project`,title:`A2A Communication`,difficulty:`Advanced`,time:`~60 min`,description:`Understand agent-to-agent communication and how independent CWD agents exchange tasks and results.`},{id:`what-is-a2a`,category:`A2A Communication`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the Agent2Agent protocol, its purpose, core concepts, and how it enables interoperability and communication between independent AI agents.`,concept:``,code:``},{id:`why-agent-to-agent`,category:`A2A Communication`,title:`Why Agent-to-Agent Communication?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why independent agents require standardized communication.`,concept:``,code:``},{id:`coordinator-delegator-a2a`,category:`A2A Communication`,title:`Coordinator → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand communication between Coordinator and Delegator agents.`,concept:``,code:``},{id:`delegator-worker-a2a`,category:`A2A Communication`,title:`Delegator → Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand task communication between Delegators and Workers.`,concept:``,code:``},{id:`worker-delegator-a2a`,category:`A2A Communication`,title:`Worker → Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Workers return execution results to Delegators.`,concept:``,code:``},{id:`delegator-coordinator-a2a`,category:`A2A Communication`,title:`Delegator → Coordinator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegators return results to the Coordinator.`,concept:``,code:``},{id:`a2a-message-structure`,category:`A2A Communication`,title:`Message Structure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the structure and metadata of agent communication messages.`,concept:``,code:``},{id:`a2a-correlation-ids`,category:`A2A Communication`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand correlation IDs for distributed agent execution tracking.`,concept:``,code:``},{id:`a2a-kafka`,category:`A2A Communication`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Kafka can support asynchronous agent communication.`,concept:``,code:``},{id:`a2a-service-bus`,category:`A2A Communication`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Service Bus based messaging between agents.`,concept:``,code:``},{id:`a2a-async-communication`,category:`A2A Communication`,title:`Async Communication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand asynchronous agent communication and long-running tasks.`,concept:``,code:``},{id:`a2a-interview`,category:`A2A Communication`,title:`A2A Interview Questions`,difficulty:`Advanced`,time:`~20 min`,description:`Prepare for A2A architecture and scenario-based interview questions.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`A2A Communication Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var s_=[{id:`cwd-agent-registry`,category:`Agent Registry`,title:`Agent Registry`,difficulty:`Advanced`,time:`~50 min`,description:`Understand centralized agent registration, discovery, metadata, capabilities, ownership, health, access control, and dynamic routing.`},{id:`why-agent-registry`,category:`Agent Registry`,title:`Why Agent Registry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why an enterprise multi-agent platform requires a centralized Agent Registry for managing and discovering agents.`,concept:``,code:``},{id:`agent-discovery`,category:`Agent Registry`,title:`Agent Discovery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agents discover other available agents based on capabilities, domains, and availability.`,concept:``,code:``},{id:`agent-metadata`,category:`Agent Registry`,title:`Agent Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the metadata maintained for registered agents, including identity, endpoint, version, owner, capabilities, and status.`,concept:``,code:``},{id:`agent-capabilities`,category:`Agent Registry`,title:`Agent Capabilities`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent capabilities are defined, registered, exposed, and used for intelligent agent selection.`,concept:``,code:``},{id:`domain-ownership`,category:`Agent Registry`,title:`Domain Ownership`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how business domains and responsibilities are mapped to specific agents and agent owners.`,concept:``,code:``},{id:`supported-tools`,category:`Agent Registry`,title:`Supported Tools`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tools, APIs, MCP servers, and external capabilities supported by each agent are registered.`,concept:``,code:``},{id:`agent-access-scope`,category:`Agent Registry`,title:`Access Scope`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authentication, authorization, roles, permissions, and access scopes are associated with registered agents.`,concept:``,code:``},{id:`agent-health-metadata`,category:`Agent Registry`,title:`Health Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent health, availability, readiness, version, and operational status are tracked in the registry.`,concept:``,code:``},{id:`dynamic-agent-routing`,category:`Agent Registry`,title:`Dynamic Agent Routing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how registry information is used to dynamically select and route requests to the most appropriate available agent.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Agent Registry Cookbook`,subtitle:`Discovery, capabilities, governance and dynamic routing`,icon:`🗂️`,patternLabel:`Topics`})}var l_=[{id:`cwd-prompt-registry`,category:`Prompt Registry`,title:`Prompt Registry`,difficulty:`Advanced`,time:`~45 min`,description:`Understand enterprise prompt management through a centralized Prompt Registry, including prompt creation, versioning, metadata, classification, approval, access control, lifecycle management, testing, deployment, rollback, and governance.`},{id:`why-prompt-registry`,category:`Prompt Registry`,title:`Why Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why enterprise AI platforms require centralized prompt management instead of storing prompts directly inside application code, including consistency, reuse, traceability, testing, controlled changes, and governance.`,concept:``,code:``},{id:`prompt-versioning`,category:`Prompt Registry`,title:`Prompt Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompt versions are created, tracked, compared, tested, promoted, and rolled back so changes to production prompts remain controlled, traceable, and reproducible.`,concept:``,code:``},{id:`prompt-metadata`,category:`Prompt Registry`,title:`Prompt Metadata`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand metadata associated with enterprise prompts, including prompt name, version, owner, purpose, model compatibility, variables, environment, domain, status, evaluation results, approval information, and usage history.`,concept:``,code:``},{id:`prompt-approval`,category:`Prompt Registry`,title:`Prompt Approval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production prompt approval workflows, including authoring, validation, evaluation, security review, business approval, deployment gates, audit trails, and controlled promotion from development to production.`,concept:``,code:``},{id:`prompt-classification`,category:`Prompt Registry`,title:`Prompt Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how prompts can be classified based on purpose, domain, sensitivity, risk level, model usage, business criticality, and allowed capabilities to apply appropriate testing, approval, and governance policies.`,concept:``,code:``},{id:`prompt-rbac`,category:`Prompt Registry`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for prompt management, including who can create, view, modify, approve, publish, deploy, rollback, or retire prompts and how access is restricted based on roles and responsibilities.`,concept:``,code:``},{id:`prompt-lifecycle`,category:`Prompt Registry`,title:`Prompt Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete enterprise prompt lifecycle from design and development through testing, evaluation, approval, registration, deployment, monitoring, version updates, rollback, deprecation, and retirement.`,concept:``,code:``},{id:`prompt-governance`,category:`Prompt Registry`,title:`Prompt Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance controls for enterprise prompts, including ownership, approval policies, auditability, security reviews, sensitive-data protection, prompt injection defenses, evaluation requirements, change management, compliance, and production controls.`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Prompt Registry Cookbook`,subtitle:`Prompt versioning, metadata, approval, RBAC, lifecycle and governance`,icon:`📝`,patternLabel:`Topics`})}var d_=[{id:`cwd-rag`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end Retrieval-Augmented Generation architecture used by CWD for secure enterprise knowledge retrieval, contextual grounding, and accurate LLM responses.`},{id:`why-rag`,category:`RAG Architecture`,title:`Why RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why RAG is required to ground LLM responses in enterprise-specific, current, and governed knowledge instead of relying only on model knowledge.`,concept:``,code:``},{id:`rag-architecture`,category:`RAG Architecture`,title:`RAG Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the end-to-end RAG flow including ingestion, document processing, chunking, embeddings, indexing, retrieval, context construction, LLM generation, and response grounding.`,concept:``,code:``},{id:`rag-data-ingestion`,category:`RAG Architecture`,title:`Data Ingestion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how enterprise documents and knowledge from systems such as SharePoint, enterprise applications, databases, and other governed sources are ingested into the RAG pipeline.`,concept:``,code:``},{id:`rag-chunking`,category:`RAG Architecture`,title:`Chunking`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand document chunking strategies, chunk size, overlap, semantic boundaries, and how chunking decisions affect retrieval quality and LLM context.`,concept:``,code:``},{id:`rag-embeddings`,category:`RAG Architecture`,title:`Embeddings`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how documents and queries are converted into vector representations to enable semantic similarity search and knowledge retrieval.`,concept:``,code:``},{id:`azure-ai-search`,category:`RAG Architecture`,title:`Azure AI Search`,difficulty:`Advanced`,time:`~15 min`,description:`Understand Azure AI Search as the enterprise retrieval layer for vector search, keyword search, hybrid retrieval, indexing, filtering, and semantic ranking.`,concept:``,code:``},{id:`rag-metadata`,category:`RAG Architecture`,title:`Metadata`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how document metadata such as source, domain, owner, document type, timestamp, classification, and business attributes improves filtering, ranking, and governance.`,concept:``,code:``},{id:`rag-acl-filtering`,category:`RAG Architecture`,title:`ACL Filtering`,difficulty:`Advanced`,time:`~15 min`,description:`Understand entitlement-aware retrieval and ACL filtering so users can retrieve only the enterprise information they are authorized to access.`,concept:``,code:``},{id:`intent-based-retrieval`,category:`RAG Architecture`,title:`Intent-Based Retrieval`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how user intent, domain, query type, and task context influence retrieval strategy, search filters, ranking, and the selection of relevant enterprise knowledge.`,concept:``,code:``},{id:`context-building`,category:`RAG Architecture`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved chunks are filtered, ranked, deduplicated, and assembled into a high-quality context window for the LLM.`,concept:``,code:``},{id:`rag-cwd-flow`,category:`RAG Architecture`,title:`RAG + CWD Flow`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how RAG integrates with the CWD workflow across the Gateway, Coordinator, Delegator, specialized Workers, enterprise data sources, retrieval layer, context building, and final response generation.`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`RAG Architecture Cookbook`,subtitle:`Enterprise retrieval, grounding, security and CWD integration`,icon:`🔎`,patternLabel:`Topics`})}var p_=[{id:`cwd-memory`,category:`Memory & State Management`,title:`Memory & State Management`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD manages conversational memory, persistent memory, execution state, session context, task state, and context propagation across Coordinator, Delegator, and Worker agents throughout the execution lifecycle.`},{id:`short-term-memory`,category:`Memory & State`,title:`Short-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand short-term memory used to maintain the current conversation and active execution context, including recent messages, intermediate results, tool outputs, agent decisions, and information required during the current workflow.`,concept:``,code:``},{id:`long-term-memory`,category:`Memory & State`,title:`Long-Term Memory`,difficulty:`Advanced`,time:`~10 min`,description:`Understand persistent memory that can be retained across conversations or tasks, including user preferences, historical interactions, approved business context, and other information that can improve future agent interactions while respecting governance policies.`,concept:``,code:``},{id:`redis-memory`,category:`Memory & State`,title:`Redis`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Redis can provide low-latency storage for session information, temporary execution state, caching, conversation context, distributed locks, task coordination, and short-lived agent state.`,concept:``,code:``},{id:`vector-db-memory`,category:`Memory & State`,title:`Vector DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how vector databases can support semantic memory by storing embeddings of relevant conversations, knowledge, or historical information and retrieving semantically similar context when required by an agent.`,concept:``,code:``},{id:`cosmos-db`,category:`Memory & State`,title:`Cosmos DB`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Cosmos DB can be used for persistent application and execution data, including session metadata, task information, workflow state, execution history, agent results, and other durable state required by distributed CWD services.`,concept:``,code:``},{id:`session-state`,category:`Memory & State`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand the session-level state representing the overall user interaction, including identity context, conversation history, session metadata, active workflows, and references to tasks and executions associated with the session.`,concept:``,code:``},{id:`task-state`,category:`Memory & State`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand task-level state representing the objective being executed, including task inputs, required capabilities, assigned agents, dependencies, status, intermediate results, errors, and completion information.`,concept:``,code:``},{id:`run-state`,category:`Memory & State`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand run-level state representing a specific execution attempt for a task, including execution status, timestamps, participating agents, retries, intermediate outputs, failures, and final completion state.`,concept:``,code:``},{id:`turn-state`,category:`Memory & State`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand conversation-turn state representing an individual user request and corresponding agent response, including messages, context, decisions, tool interactions, and the results generated during that conversational turn.`,concept:``,code:``},{id:`step-state`,category:`Memory & State`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand step-level state representing individual execution actions such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`context-propagation`,category:`Memory & State`,title:`Context Propagation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how relevant context is propagated across the Coordinator, Delegator, and Worker agents while controlling what information is shared, preserving execution metadata, maintaining security boundaries, and avoiding unnecessary context growth.`,concept:``,code:``},{id:`state-lifecycle`,category:`Memory & State`,title:`State Lifecycle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete lifecycle of CWD execution state from creation and initialization through updates, persistence, propagation, retries, completion, failure handling, cleanup, archival, and eventual expiration.`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Memory & State Management Cookbook`,subtitle:`Memory, persistence, execution state and context propagation`,icon:`🧠`,patternLabel:`Topics`})}var h_=[{id:`cwd-data-integration`,category:`Enterprise Data Integration`,title:`Enterprise Data Integration`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD securely connects Coordinator, Delegator, and Worker agents to enterprise applications, structured and unstructured data sources, external services, and governed connectors while enforcing authorization, data-access policies, and security controls.`},{id:`snowflake`,category:`Enterprise Data Integration`,title:`Snowflake`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Snowflake for governed access to enterprise analytics data, including secure querying, authorization, data filtering, and using business data as context for agent workflows.`,concept:``,code:``},{id:`salesforce`,category:`Enterprise Data Integration`,title:`Salesforce`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Worker agents securely access Salesforce customer, account, opportunity, and activity information through approved APIs or tools while respecting user permissions and enterprise data-access policies.`,concept:``,code:``},{id:`oracle`,category:`Enterprise Data Integration`,title:`Oracle`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with Oracle enterprise systems and databases to retrieve governed business data, execute approved queries or operations, and expose relevant information to authorized agents.`,concept:``,code:``},{id:`sharepoint`,category:`Enterprise Data Integration`,title:`SharePoint`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with SharePoint documents, sites, and knowledge repositories for enterprise search and RAG, including document retrieval, indexing, metadata filtering, permissions, and source attribution.`,concept:``,code:``},{id:`outlook-m365`,category:`Enterprise Data Integration`,title:`Outlook / M365`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD can integrate with Microsoft 365 and Outlook services to access approved emails, calendars, documents, and collaboration data while enforcing identity, authorization, privacy, and data-access boundaries.`,concept:``,code:``},{id:`hr-systems`,category:`Enterprise Data Integration`,title:`HR Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD integrates with HR systems through governed interfaces while protecting sensitive employee information, enforcing role-based access, limiting data exposure, and ensuring agents only access authorized information.`,concept:``,code:``},{id:`finance-systems`,category:`Enterprise Data Integration`,title:`Finance Systems`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD connects to enterprise finance systems for approved financial data retrieval and business workflows while enforcing authorization, data classification, auditability, and strict access controls.`,concept:``,code:``},{id:`marketing-data`,category:`Enterprise Data Integration`,title:`Marketing Data`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how marketing data from campaigns, customer insights, product information, and analytics platforms can be integrated into CWD workflows and made available to authorized domain Workers.`,concept:``,code:``},{id:`web-search`,category:`Enterprise Data Integration`,title:`Web Search`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how controlled external web search can complement enterprise knowledge by retrieving current public information while applying approved domains, query restrictions, source validation, security policies, and hallucination controls.`,concept:``,code:``},{id:`governed-connectors`,category:`Enterprise Data Integration`,title:`Governed Connectors`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how governed connectors provide a standardized and secure integration layer between CWD agents and enterprise systems, including authentication, authorization, secrets management, tool permissions, data filtering, auditing, rate limiting, and policy enforcement.`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Enterprise Data Integration Cookbook`,subtitle:`Enterprise systems, governed connectors, data access and secure integration`,icon:`🔌`,patternLabel:`Topics`})}var __=[{id:`cwd-security`,category:`Security & Governance`,title:`Security & Governance`,difficulty:`Advanced`,time:`~60 min`,description:`Understand enterprise security and governance for CWD, including identity, authentication, authorization, agent and tool access, data protection, threat prevention, auditing, and compliance.`},{id:`zero-trust`,category:`Security & Governance`,title:`Zero Trust`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Zero Trust principles are applied to CWD by continuously validating identity, device or workload context, permissions, and access to agents, tools, data, and services.`,concept:``,code:``},{id:`entitlement-first-execution`,category:`Security & Governance`,title:`Entitlement-First Execution`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why user entitlement and authorization must be validated before Coordinator, Delegator, Worker, MCP tool, or enterprise data-source execution.`,concept:``,code:``},{id:`cwd-rbac`,category:`Security & Governance`,title:`RBAC`,difficulty:`Advanced`,time:`~10 min`,description:`Understand role-based access control for managing permissions across users, agents, administrators, tools, data sources, prompts, and platform operations.`,concept:``,code:``},{id:`entra-id`,category:`Security & Governance`,title:`Entra ID / Azure AD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise identity management using Microsoft Entra ID for user authentication, application identities, groups, roles, access policies, and token-based authorization.`,concept:``,code:``},{id:`managed-identity`,category:`Security & Governance`,title:`Managed Identity`,difficulty:`Advanced`,time:`~10 min`,description:`Understand passwordless service-to-service authentication using managed identities so CWD components can securely access Azure resources without storing credentials in application code.`,concept:``,code:``},{id:`key-vault`,category:`Security & Governance`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized management of secrets, keys, certificates, and sensitive configuration using Azure Key Vault with controlled application access.`,concept:``,code:``},{id:`least-privilege`,category:`Security & Governance`,title:`Least Privilege`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD applies least-privilege access so each agent, Worker, MCP tool, service, and user receives only the permissions required for its specific responsibilities.`,concept:``,code:``},{id:`dlp`,category:`Security & Governance`,title:`DLP`,difficulty:`Advanced`,time:`~10 min`,description:`Understand data-loss prevention controls for detecting, restricting, and monitoring sensitive information flowing through prompts, retrieved context, agent outputs, tools, and enterprise integrations.`,concept:``,code:``},{id:`data-redaction`,category:`Security & Governance`,title:`Data Redaction`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how sensitive information such as PII, credentials, confidential business data, and regulated content can be detected and redacted before logging, retrieval, or LLM processing.`,concept:``,code:``},{id:`data-classification`,category:`Security & Governance`,title:`Data Classification`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data classification based on sensitivity, business impact, confidentiality, and regulatory requirements, and how classification influences retrieval and access policies.`,concept:``,code:``},{id:`audit-logging`,category:`Security & Governance`,title:`Audit Logging`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD captures auditable records of authentication, authorization, agent execution, tool calls, data access, configuration changes, approvals, and security events.`,concept:``,code:``},{id:`security-threat-modeling`,category:`Security & Governance`,title:`Security Threat Modeling`,difficulty:`Advanced`,time:`~15 min`,description:`Understand threat modeling for agentic systems, including prompt injection, tool misuse, privilege escalation, data exfiltration, insecure agent communication, compromised dependencies, and unauthorized data access.`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:``,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:``,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:``,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:``,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:``,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:``,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:``,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:``,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:``,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:``,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:``,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`},{id:`agent-evaluation-strategy`,category:`Agent Evaluation`,title:`Agent Evaluation Strategy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the overall evaluation strategy.`,concept:``,code:``},{id:`golden-test-suites`,category:`Agent Evaluation`,title:`Golden Test Suites`,difficulty:`Advanced`,time:`~10 min`,description:`Understand golden datasets and test cases.`,concept:``,code:``},{id:`agent-accuracy`,category:`Agent Evaluation`,title:`Accuracy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand accuracy measurement.`,concept:``,code:``},{id:`agent-consistency`,category:`Agent Evaluation`,title:`Consistency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand consistency evaluation.`,concept:``,code:``},{id:`agent-latency`,category:`Agent Evaluation`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency measurement.`,concept:``,code:``},{id:`token-usage`,category:`Agent Evaluation`,title:`Token Usage`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand token consumption.`,concept:``,code:``},{id:`agent-cost`,category:`Agent Evaluation`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost measurement.`,concept:``,code:``},{id:`tool-success-rate`,category:`Agent Evaluation`,title:`Tool Success Rate`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tool execution success metrics.`,concept:``,code:``},{id:`regression-testing`,category:`Agent Evaluation`,title:`Regression Testing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand regression testing for agents and prompts.`,concept:``,code:``},{id:`ab-evaluation`,category:`Agent Evaluation`,title:`A/B Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand comparison of different agent or prompt versions.`,concept:``,code:``}];function P_(){return(0,M.jsx)($,{data:N_,title:`Agent Evaluation Cookbook`,subtitle:`Quality, reliability, latency and cost`,icon:`📊`,patternLabel:`Topics`})}var F_=[{id:`cwd-llmops`,category:`LLMOps / MLOps`,title:`LLMOps / MLOps`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the end-to-end production lifecycle for models, prompts, agents, datasets, evaluations, experiments, deployments, monitoring, versioning, and governance required to operate CWD reliably at enterprise scale.`},{id:`model-management`,category:`LLMOps / MLOps`,title:`Model Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how AI and ML models are managed throughout their lifecycle, including model selection, registration, validation, deployment, retirement, performance tracking, and managing multiple model versions across environments.`,concept:``,code:``},{id:`prompt-management`,category:`LLMOps / MLOps`,title:`Prompt Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how production prompts are designed, stored, tested, versioned, evaluated, deployed, and rolled back, including prompt templates, variables, model-specific configurations, and controlled prompt changes.`,concept:``,code:``},{id:`llmops-evaluation`,category:`LLMOps / MLOps`,title:`Evaluation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI evaluation pipelines for measuring response quality, correctness, groundedness, relevance, safety, latency, and task success across models, prompts, RAG pipelines, and agent workflows.`,concept:``,code:``},{id:`experiment-tracking`,category:`LLMOps / MLOps`,title:`Experiment Tracking`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how experiments are tracked across models, prompts, datasets, parameters, evaluation results, and configurations so teams can reproduce experiments and compare different AI approaches systematically.`,concept:``,code:``},{id:`llmops-mlflow`,category:`LLMOps / MLOps`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle management, evaluation, artifact management, model versioning, and operational workflows across traditional ML and GenAI applications.`,concept:``,code:``},{id:`cicd`,category:`LLMOps / MLOps`,title:`CI/CD`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CI/CD pipelines automate testing, validation, security checks, packaging, infrastructure changes, and controlled promotion of AI application and agent changes across development, test, staging, and production environments.`,concept:``,code:``},{id:`ai-deployment`,category:`LLMOps / MLOps`,title:`Deployment`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production deployment strategies for AI applications and agents, including containerized deployment, blue-green releases, canary deployments, rollback strategies, environment configuration, scaling, and zero-downtime releases.`,concept:``,code:``},{id:`llmops-monitoring`,category:`LLMOps / MLOps`,title:`Monitoring`,difficulty:`Advanced`,time:`~10 min`,description:`Understand AI application monitoring across infrastructure, agents, LLM calls, prompts, RAG retrieval, tools, latency, token usage, cost, errors, throughput, quality, and user experience.`,concept:``,code:``},{id:`ai-versioning`,category:`LLMOps / MLOps`,title:`Versioning`,difficulty:`Advanced`,time:`~10 min`,description:`Understand version control for models, prompts, agents, workflows, tools, datasets, configurations, evaluation criteria, and infrastructure so production behavior can be reproduced, audited, and rolled back.`,concept:``,code:``},{id:`ai-governance`,category:`LLMOps / MLOps`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand governance throughout the AI lifecycle, including security, responsible AI, access control, data governance, model approval, evaluation gates, auditability, compliance, risk management, monitoring, and controlled production releases.`,concept:``,code:``}];function I_(){return(0,M.jsx)($,{data:F_,title:`LLMOps / MLOps Cookbook`,subtitle:`Models, prompts, evaluation, deployment, monitoring and governance`,icon:`⚙️`,patternLabel:`Topics`})}var L_=[{id:`cwd-decisions`,category:`Architecture Decisions`,title:`Architecture Decisions & Trade-offs`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the key architectural decisions, rationale, alternatives, and trade-offs behind the CWD enterprise multi-agent architecture.`},{id:`why-cwd`,category:`Architecture Decisions`,title:`Why CWD?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why CWD was selected as the enterprise architecture approach for building a scalable, modular, and governed multi-agent platform.`,concept:``,code:``},{id:`why-coordinator`,category:`Architecture Decisions`,title:`Why Coordinator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why a Coordinator layer is required to manage request orchestration, workflow execution, and communication between agents.`,concept:``,code:``},{id:`why-delegator`,category:`Architecture Decisions`,title:`Why Delegator?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the architectural rationale for the Delegator layer and how it selects the appropriate specialized worker or agent.`,concept:``,code:``},{id:`why-workers`,category:`Architecture Decisions`,title:`Why Workers?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why specialized Worker agents are used to isolate domain responsibilities and execute specific business tasks.`,concept:``,code:``},{id:`why-langgraph`,category:`Architecture Decisions`,title:`Why LangGraph?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the decision to use LangGraph for stateful workflows, agent orchestration, branching, retries, and multi-agent coordination.`,concept:``,code:``},{id:`why-mcp`,category:`Architecture Decisions`,title:`Why MCP?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using MCP to standardize how agents discover and interact with enterprise tools, APIs, and data sources.`,concept:``,code:``},{id:`why-a2a`,category:`Architecture Decisions`,title:`Why A2A?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for agent-to-agent communication and how independent agents collaborate, delegate tasks, and exchange results.`,concept:``,code:``},{id:`why-kafka`,category:`Architecture Decisions`,title:`Why Kafka?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand when and why Kafka is used for event-driven communication, asynchronous processing, scalability, and reliable event streaming.`,concept:``,code:``},{id:`why-service-bus`,category:`Architecture Decisions`,title:`Why Service Bus?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for using Azure Service Bus for reliable asynchronous messaging, decoupling, retries, and enterprise integration.`,concept:``,code:``},{id:`why-redis`,category:`Architecture Decisions`,title:`Why Redis?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand why Redis is used for low-latency state access, caching, session management, and temporary agent state.`,concept:``,code:``},{id:`why-azure-ai-search`,category:`Architecture Decisions`,title:`Why Azure AI Search?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the rationale for Azure AI Search in enterprise document indexing, hybrid search, vector retrieval, metadata filtering, and RAG workflows.`,concept:``,code:``},{id:`build-vs-buy`,category:`Architecture Decisions`,title:`Build vs Buy Decisions`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how architecture components are evaluated using cost, scalability, security, maintainability, integration, and time-to-market considerations.`,concept:``,code:``}];function R_(){return(0,M.jsx)($,{data:L_,title:`Architecture Decisions Cookbook`,subtitle:`Architectural rationale, alternatives and trade-offs`,icon:`🏗️`,patternLabel:`Topics`})}var z_=[{id:`cwd-challenges`,category:`Challenges & Solutions`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the major challenges encountered while designing, implementing, scaling, securing, and operating the CWD enterprise multi-agent platform.`},{id:`challenge-scalability`,category:`Challenges & Solutions`,title:`Scalability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand scalability challenges in multi-agent systems and how horizontal scaling, stateless services, asynchronous processing, and workload distribution can address them.`,concept:``,code:``},{id:`challenge-agent-coordination`,category:`Challenges & Solutions`,title:`Agent Coordination`,difficulty:`Advanced`,time:`~10 min`,description:`Understand challenges in coordinating multiple agents, including task delegation, execution ordering, dependencies, communication, and state synchronization.`,concept:``,code:``},{id:`challenge-context`,category:`Challenges & Solutions`,title:`Context Management`,difficulty:`Advanced`,time:`~10 min`,description:`Understand context propagation, context-window limitations, state management, context compression, and maintaining relevant information across multiple agents.`,concept:``,code:``},{id:`challenge-security`,category:`Challenges & Solutions`,title:`Security`,difficulty:`Advanced`,time:`~10 min`,description:`Understand security challenges in agentic systems, including authentication, authorization, tool access, prompt injection, data protection, and agent identity.`,concept:``,code:``},{id:`challenge-data-access`,category:`Challenges & Solutions`,title:`Data Access`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise data-access challenges involving permissions, data isolation, heterogeneous sources, secure retrieval, and controlled agent access.`,concept:``,code:``},{id:`challenge-observability`,category:`Challenges & Solutions`,title:`Observability`,difficulty:`Advanced`,time:`~10 min`,description:`Understand observability challenges across agents, tools, workflows, and LLM calls, including tracing, logging, metrics, evaluation, and troubleshooting.`,concept:``,code:``},{id:`challenge-agent-failures`,category:`Challenges & Solutions`,title:`Agent Failures`,difficulty:`Advanced`,time:`~10 min`,description:`Understand common agent failure scenarios and recovery strategies such as retries, timeouts, fallbacks, circuit breakers, error handling, and human escalation.`,concept:``,code:``},{id:`challenge-cost`,category:`Challenges & Solutions`,title:`Cost`,difficulty:`Advanced`,time:`~10 min`,description:`Understand LLM and infrastructure cost challenges and techniques such as model selection, token optimization, caching, batching, and controlling unnecessary agent execution.`,concept:``,code:``},{id:`challenge-latency`,category:`Challenges & Solutions`,title:`Latency`,difficulty:`Advanced`,time:`~10 min`,description:`Understand latency challenges in multi-agent execution and techniques such as parallel execution, asynchronous processing, caching, model optimization, and reducing unnecessary tool calls.`,concept:``,code:``},{id:`challenge-governance`,category:`Challenges & Solutions`,title:`Governance`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise AI governance challenges including responsible AI, auditability, access control, model governance, data governance, compliance, and human oversight.`,concept:``,code:``}];function B_(){return(0,M.jsx)($,{data:z_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var V_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function H_(){return(0,M.jsx)($,{data:V_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var U_=[{id:`cwd-interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function W_(){return(0,M.jsx)($,{data:U_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var G_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function K_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:G_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function q_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(K_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(Vm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Vh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Cg,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(S_,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(w_,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(E_,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(O_,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(A_,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(M_,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(P_,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(I_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(R_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(B_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(H_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(W_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(q_,{})}));
