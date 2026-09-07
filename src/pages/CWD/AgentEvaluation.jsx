@@ -1,5 +1,17 @@
 import CookbookApp from "../../components/CookbookApp";
 
+import CWDEvaluation from "../../assets/CWD/docs/cwd-evaluation.md?raw";
+import AgentEvaluationStrategy from "../../assets/CWD/docs/agent-evaluation-strategy.md?raw";
+import GoldenTestSuites from "../../assets/CWD/docs/golden-test-suites.md?raw";
+import AgentAccuracy from "../../assets/CWD/docs/agent-accuracy.md?raw";
+import AgentConsistency from "../../assets/CWD/docs/agent-consistency.md?raw";
+import AgentLatency from "../../assets/CWD/docs/agent-latency.md?raw";
+import TokenUsage from "../../assets/CWD/docs/token-usage.md?raw";
+import AgentCost from "../../assets/CWD/docs/agent-cost.md?raw";
+import ToolSuccessRate from "../../assets/CWD/docs/tool-success-rate.md?raw";
+import RegressionTesting from "../../assets/CWD/docs/regression-testing.md?raw";
+import ABEvaluation from "../../assets/CWD/docs/ab-evaluation.md?raw";  
+
 const AgentEvaluation = [
   // =====================================================
   // AGENT EVALUATION
@@ -12,7 +24,8 @@ const AgentEvaluation = [
     time: "~50 min",
     description:
       "Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.",
-  },
+  concept: CWDEvaluation,
+    },
       {
         id: "agent-evaluation-strategy",
         category: "Agent Evaluation",
@@ -20,7 +33,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand the overall evaluation strategy.",
-        concept: "",
+        concept: AgentEvaluationStrategy,
         code: "",
       },
       {
@@ -30,7 +43,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand golden datasets and test cases.",
-        concept: "",
+        concept: GoldenTestSuites,
         code: "",
       },
       {
@@ -40,7 +53,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand accuracy measurement.",
-        concept: "",
+        concept: AgentAccuracy,
         code: "",
       },
       {
@@ -49,8 +62,8 @@ const AgentEvaluation = [
         title: "Consistency",
         difficulty: "Advanced",
         time: "~10 min",
-        description: "Understand consistency evaluation.",
-        concept: "",
+        description: "Understand agent-consistency evaluation.",
+        concept: AgentConsistency,
         code: "",
       },
       {
@@ -59,8 +72,8 @@ const AgentEvaluation = [
         title: "Latency",
         difficulty: "Advanced",
         time: "~10 min",
-        description: "Understand latency measurement.",
-        concept: "",
+        description: "Understand agent-latency measurement.",
+        concept: AgentLatency,
         code: "",
       },
       {
@@ -69,8 +82,8 @@ const AgentEvaluation = [
         title: "Token Usage",
         difficulty: "Intermediate",
         time: "~10 min",
-        description: "Understand token consumption.",
-        concept: "",
+        description: "Understand token-usage consumption.",
+        concept: TokenUsage,
         code: "",
       },
       {
@@ -80,7 +93,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand LLM and infrastructure cost measurement.",
-        concept: "",
+        concept: AgentCost,
         code: "",
       },
       {
@@ -90,7 +103,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand tool execution success metrics.",
-        concept: "",
+        concept: ToolSuccessRate,
         code: "",
       },
       {
@@ -100,7 +113,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand regression testing for agents and prompts.",
-        concept: "",
+        concept: RegressionTesting,
         code: "",
       },
       {
@@ -110,7 +123,7 @@ const AgentEvaluation = [
         difficulty: "Advanced",
         time: "~10 min",
         description: "Understand comparison of different agent or prompt versions.",
-        concept: "",
+        concept: ABEvaluation,
         code: "",
       },
    
