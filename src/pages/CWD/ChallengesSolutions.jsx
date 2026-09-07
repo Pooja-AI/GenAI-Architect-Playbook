@@ -1,5 +1,17 @@
 import CookbookApp from "../../components/CookbookApp";
 
+import CWDChallenges from "../../assets/CWD/docs/cwd-challenges.md?raw";
+import Scalability from "../../assets/CWD/docs/challenge-scalability.md?raw";
+import AgentCoordination from "../../assets/CWD/docs/challenge-agent-coordination.md?raw";
+import ContextManagement from "../../assets/CWD/docs/challenge-context.md?raw"; 
+import Security from "../../assets/CWD/docs/challenge-security.md?raw";
+import DataAccess from "../../assets/CWD/docs/challenge-data-access.md?raw";
+import Observability from "../../assets/CWD/docs/challenge-observability.md?raw";
+import AgentFailures from "../../assets/CWD/docs/challenge-agent-failures.md?raw";
+import Cost from "../../assets/CWD/docs/challenge-cost.md?raw";
+import Latency from "../../assets/CWD/docs/challenge-latency.md?raw";
+import Governance from "../../assets/CWD/docs/challenge-governance.md?raw";
+// import CWDChallengesSolutions from "../../assets/CWD/docs/cwd-challenges-solutions.md?raw";
 const ChallengesSolutions = [
   // =====================================================
   // CHALLENGES & SOLUTIONS
@@ -13,7 +25,7 @@ const ChallengesSolutions = [
     time: "~50 min",
     description:
       "Understand the major challenges encountered while designing, implementing, scaling, securing, and operating the CWD enterprise multi-agent platform.",
-
+concept: CWDChallenges,
   },
       {
         id: "challenge-scalability",
@@ -23,7 +35,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand scalability challenges in multi-agent systems and how horizontal scaling, stateless services, asynchronous processing, and workload distribution can address them.",
-        concept: "",
+        concept: Scalability,
         code: "",
       },
 
@@ -35,7 +47,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand challenges in coordinating multiple agents, including task delegation, execution ordering, dependencies, communication, and state synchronization.",
-        concept: "",
+        concept: AgentCoordination,
         code: "",
       },
 
@@ -47,7 +59,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand context propagation, context-window limitations, state management, context compression, and maintaining relevant information across multiple agents.",
-        concept: "",
+        concept: ContextManagement,
         code: "",
       },
 
@@ -59,7 +71,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand security challenges in agentic systems, including authentication, authorization, tool access, prompt injection, data protection, and agent identity.",
-        concept: "",
+        concept: Security,
         code: "",
       },
 
@@ -71,7 +83,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand enterprise data-access challenges involving permissions, data isolation, heterogeneous sources, secure retrieval, and controlled agent access.",
-        concept: "",
+        concept: DataAccess,
         code: "",
       },
 
@@ -83,7 +95,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand observability challenges across agents, tools, workflows, and LLM calls, including tracing, logging, metrics, evaluation, and troubleshooting.",
-        concept: "",
+        concept: Observability,
         code: "",
       },
 
@@ -95,7 +107,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand common agent failure scenarios and recovery strategies such as retries, timeouts, fallbacks, circuit breakers, error handling, and human escalation.",
-        concept: "",
+        concept: AgentFailures,
         code: "",
       },
 
@@ -107,7 +119,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand LLM and infrastructure cost challenges and techniques such as model selection, token optimization, caching, batching, and controlling unnecessary agent execution.",
-        concept: "",
+        concept: Cost,
         code: "",
       },
 
@@ -119,7 +131,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand latency challenges in multi-agent execution and techniques such as parallel execution, asynchronous processing, caching, model optimization, and reducing unnecessary tool calls.",
-        concept: "",
+        concept: Latency,
         code: "",
       },
 
@@ -131,7 +143,7 @@ const ChallengesSolutions = [
         time: "~10 min",
         description:
           "Understand enterprise AI governance challenges including responsible AI, auditability, access control, model governance, data governance, compliance, and human oversight.",
-        concept: "",
+        concept: Governance,
         code: "",
       },
    
