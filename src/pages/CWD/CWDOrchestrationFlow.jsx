@@ -1,5 +1,17 @@
 import CookbookApp from "../../components/CookbookApp";
 
+import CWDOrchestrationFlow from "../../assets/CWD/docs/cwd-orchestration.md?raw";
+import CWDUserRequest from "../../assets/CWD/docs/cwd-user-request.md?raw";
+import CWDGateway from "../../assets/CWD/docs/cwd-gateway.md?raw";
+import CWDEntitlementCheck from "../../assets/CWD/docs/cwd-entitlement-check.md?raw";
+import CWDCoordinatorFlow from "../../assets/CWD/docs/cwd-coordinator-flow.md?raw";
+import CWDDelegatorFlow from "../../assets/CWD/docs/cwd-delegator-flow.md?raw";
+import CWDWorkerFlow from "../../assets/CWD/docs/cwd-worker-flow.md?raw";
+import CWDDataSources from "../../assets/CWD/docs/cwd-data-sources.md?raw";
+import CWDResultAggregation from "../../assets/CWD/docs/cwd-result-aggregation.md?raw";
+import CWDFinalResponse from "../../assets/CWD/docs/cwd-final-response.md?raw";
+
+
 const CWDOrchestration = [
   // =====================================================
   // CWD ORCHESTRATION
@@ -13,7 +25,7 @@ const CWDOrchestration = [
     time: "~45 min",
     description:
       "Understand the complete request orchestration flow across the CWD platform, from user request and gateway validation through Coordinator, Delegator, Worker execution, data access, result aggregation, and final response.",
-
+concept: CWDOrchestrationFlow,
   },
       {
         id: "cwd-user-request",
@@ -23,7 +35,7 @@ const CWDOrchestration = [
         time: "~5 min",
         description:
           "Understand how a user request enters the CWD platform and how the request is captured, validated, and prepared for downstream processing.",
-        concept: "",
+        concept: CWDUserRequest,
         code: "",
       },
 
@@ -35,7 +47,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how the gateway handles request routing, authentication, validation, security checks, and controlled entry into the agentic platform.",
-        concept: "",
+        concept: CWDGateway,
         code: "",
       },
 
@@ -47,7 +59,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how user identity, authorization, roles, permissions, and entitlements are validated before allowing access to agents, tools, and enterprise data.",
-        concept: "",
+        concept: CWDEntitlementCheck,
         code: "",
       },
 
@@ -59,7 +71,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how the Coordinator interprets the request, determines intent, creates an execution plan, manages workflow state, and controls downstream orchestration.",
-        concept: "",
+        concept: CWDCoordinatorFlow,
         code: "",
       },
 
@@ -71,7 +83,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how the Delegator decomposes tasks, identifies the appropriate domain or Worker agents, and routes tasks for execution.",
-        concept: "",
+        concept: CWDDelegatorFlow,
         code: "",
       },
 
@@ -83,7 +95,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how specialized Worker agents execute assigned tasks using domain logic, LLM capabilities, tools, APIs, and enterprise data.",
-        concept: "",
+        concept: CWDWorkerFlow,
         code: "",
       },
 
@@ -95,7 +107,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how Worker agents securely access enterprise data sources through retrieval systems, APIs, MCP tools, databases, and other connected services.",
-        concept: "",
+        concept: CWDDataSources,
         code: "",
       },
 
@@ -107,7 +119,7 @@ const CWDOrchestration = [
         time: "~10 min",
         description:
           "Understand how results from multiple Workers, tools, and data sources are collected, validated, combined, and returned to the Coordinator.",
-        concept: "",
+        concept: CWDResultAggregation,
         code: "",
       },
 
@@ -119,7 +131,7 @@ const CWDOrchestration = [
         time: "~5 min",
         description:
           "Understand how the Coordinator synthesizes the completed workflow results into a final response and returns it securely to the user.",
-        concept: "",
+        concept: CWDFinalResponse,
         code: "",
       },
    
