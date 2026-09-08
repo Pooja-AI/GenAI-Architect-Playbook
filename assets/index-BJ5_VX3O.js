@@ -264951,7 +264951,19503 @@ AUDIT + MONITOR\r
 \`\`\`\r
 \r
 **The architectural goal is not to make the agent “trustworthy.” It is to make the system safe even when the model, user input, retrieved content, tool result, dependency, or another agent behaves maliciously or incorrectly.**\r
-`,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:``,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:``,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:``,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:``,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:``,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:``,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:``,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:``,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:``,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:``,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:``,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:``,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`,concept:`# Agent & Workflow Evaluation in CWD\r
+`,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Security & Governance Cookbook`,subtitle:`Identity, authorization, data protection, threat modeling and compliance`,icon:`🔐`,patternLabel:`Topics`})}var y_=[{id:`cwd-observability`,category:`Observability`,title:`Observability`,difficulty:`Advanced`,time:`~50 min`,description:`Understand end-to-end observability across the CWD agent, application, LLM, tool, data, messaging, and infrastructure layers, including correlation, distributed tracing, logs, metrics, dashboards, alerts, latency, token usage, cost, failures, and AI-specific quality signals.`,concept:`Yes. For CWD, **end-to-end observability means being able to reconstruct and understand an entire agent execution—from the user's request through Gateway → Coordinator → Delegator → Worker → LLM/RAG/MCP/tools/data/messaging/infrastructure → final response—and determine what happened, why it happened, how long it took, what it cost, whether it succeeded, and whether the AI behavior was actually good.**\r
+\r
+The key principle is:\r
+\r
+> **Observability is not just collecting logs. It is the ability to correlate, trace, measure, explain, evaluate, and alert on distributed AI execution.**\r
+\r
+# 1. CWD Observability Architecture\r
+\r
+A production CWD observability architecture looks like:\r
+\r
+\`\`\`text\r
+                         USER REQUEST\r
+                              │\r
+                              ▼\r
+                       ┌─────────────┐\r
+                       │   Gateway   │\r
+                       └──────┬──────┘\r
+                              │\r
+                       correlation_id\r
+                              │\r
+                              ▼\r
+                     ┌────────────────┐\r
+                     │  Coordinator   │\r
+                     └───────┬────────┘\r
+                             │ A2A\r
+                             ▼\r
+                     ┌────────────────┐\r
+                     │   Delegator    │\r
+                     └───────┬────────┘\r
+                             │\r
+                        Service Bus\r
+                             │\r
+                             ▼\r
+                     ┌────────────────┐\r
+                     │     Worker     │\r
+                     └───┬────┬────┬──┘\r
+                         │    │    │\r
+                        LLM  RAG  MCP\r
+                         │    │    │\r
+                         │    │   Tool\r
+                         │    │    │\r
+                         ▼    ▼    ▼\r
+                      Model Search Enterprise\r
+                            Data   Systems\r
+                              │\r
+                              ▼\r
+                         Final Response\r
+\r
+                              │\r
+              ┌───────────────┼────────────────┐\r
+              ▼               ▼                ▼\r
+           Metrics           Logs           Traces\r
+              │               │                │\r
+              └───────────────┼────────────────┘\r
+                              ▼\r
+                   OpenTelemetry / Collector\r
+                              │\r
+             ┌────────────────┼─────────────────┐\r
+             ▼                ▼                 ▼\r
+        Azure Monitor    Application        Log Analytics\r
+                         Insights\r
+             │\r
+             ▼\r
+       Dashboards + Alerts\r
+             │\r
+             ▼\r
+      AI Evaluation / Quality\r
+             │\r
+             ▼\r
+       Operations / Security\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Why CWD Observability Is Harder\r
+\r
+Traditional application:\r
+\r
+\`\`\`text\r
+Request → API → Database → Response\r
+\`\`\`\r
+\r
+CWD:\r
+\r
+\`\`\`text\r
+Request\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Delegator\r
+  ├── Worker A\r
+  │    ├── RAG\r
+  │    └── LLM\r
+  │\r
+  ├── Worker B\r
+  │    ├── MCP\r
+  │    └── API\r
+  │\r
+  └── Worker C\r
+       └── LLM\r
+  ↓\r
+Aggregation\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+One request can generate:\r
+\r
+* multiple agents\r
+* multiple workflows\r
+* multiple tasks\r
+* multiple runs\r
+* multiple steps\r
+* multiple LLM calls\r
+* multiple tool calls\r
+* multiple RAG queries\r
+* multiple Service Bus messages\r
+* multiple database operations\r
+* retries\r
+* parallel branches\r
+* human approvals\r
+\r
+Therefore you need **distributed correlation**, not isolated application logs.\r
+\r
+---\r
+\r
+# 3. The Most Important Concept: Correlation\r
+\r
+Every business request needs a stable:\r
+\r
+\`\`\`text\r
+correlation_id\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+It follows the complete request:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+     │\r
+     ├── Gateway\r
+     │\r
+     ├── Coordinator\r
+     │\r
+     ├── Delegator\r
+     │\r
+     ├── Worker\r
+     │\r
+     ├── Service Bus\r
+     │\r
+     ├── RAG\r
+     │\r
+     ├── MCP\r
+     │\r
+     ├── LLM\r
+     │\r
+     └── Enterprise API\r
+\`\`\`\r
+\r
+But correlation ID alone isn't enough.\r
+\r
+Use a hierarchy:\r
+\r
+\`\`\`text\r
+Session\r
+   │\r
+   └── Conversation\r
+          │\r
+          └── Turn\r
+                │\r
+                └── Workflow\r
+                      │\r
+                      ├── Task\r
+                      │    └── Run\r
+                      │          └── Step\r
+                      │\r
+                      └── Task\r
+                           └── Run\r
+                                └── Step\r
+\`\`\`\r
+\r
+Typical identifiers:\r
+\r
+| ID                | Purpose                          |\r
+| ----------------- | -------------------------------- |\r
+| \`session_id\`      | User interaction session         |\r
+| \`conversation_id\` | Conversation                     |\r
+| \`turn_id\`         | One request/response interaction |\r
+| \`correlation_id\`  | End-to-end business request      |\r
+| \`workflow_id\`     | Workflow execution               |\r
+| \`task_id\`         | Delegated objective              |\r
+| \`run_id\`          | One execution attempt            |\r
+| \`step_id\`         | Individual workflow action       |\r
+| \`message_id\`      | Message                          |\r
+| \`tool_call_id\`    | Tool invocation                  |\r
+| \`trace_id\`        | Distributed trace                |\r
+| \`span_id\`         | Individual trace operation       |\r
+\r
+---\r
+\r
+# 4. Distributed Tracing\r
+\r
+Distributed tracing answers:\r
+\r
+> **Where did the request spend its time and where did it fail?**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TRACE: TR-9001\r
+│\r
+├── Gateway                  40 ms\r
+│\r
+├── Coordinator             220 ms\r
+│   ├── Intent              80 ms\r
+│   ├── Authorization       15 ms\r
+│   ├── Registry             5 ms\r
+│   └── Planning           120 ms\r
+│\r
+├── Delegator               150 ms\r
+│\r
+├── Worker A               2100 ms\r
+│   ├── RAG                 350 ms\r
+│   ├── LLM                1400 ms\r
+│   └── Validation           50 ms\r
+│\r
+├── Worker B               1800 ms\r
+│   ├── MCP                  900 ms\r
+│   └── LLM                  700 ms\r
+│\r
+└── Aggregation             120 ms\r
+\`\`\`\r
+\r
+Now you can immediately see that the bottleneck is not the Gateway or Coordinator.\r
+\r
+It is the Worker/LLM path.\r
+\r
+---\r
+\r
+# 5. Span Model\r
+\r
+Each meaningful operation should be a span:\r
+\r
+\`\`\`text\r
+Trace\r
+ ├── gateway.request\r
+ ├── coordinator.workflow\r
+ │    ├── intent.classification\r
+ │    ├── authorization\r
+ │    ├── agent.discovery\r
+ │    └── a2a.delegation\r
+ │\r
+ ├── delegator.workflow\r
+ │    ├── task.decomposition\r
+ │    ├── worker.selection\r
+ │    └── worker.execution\r
+ │\r
+ ├── worker.execution\r
+ │    ├── rag.retrieve\r
+ │    ├── llm.invoke\r
+ │    ├── mcp.call\r
+ │    └── output.validation\r
+ │\r
+ └── response.generation\r
+\`\`\`\r
+\r
+This makes the execution graph observable.\r
+\r
+---\r
+\r
+# 6. Observability Across Every CWD Layer\r
+\r
+## Gateway\r
+\r
+Capture:\r
+\r
+\`\`\`text\r
+request rate\r
+authentication result\r
+authorization pre-check\r
+request size\r
+response status\r
+latency\r
+rate-limit events\r
+tenant\r
+correlation_id\r
+\`\`\`\r
+\r
+Important metrics:\r
+\r
+\`\`\`text\r
+Requests/sec\r
+4xx rate\r
+5xx rate\r
+429 rate\r
+P50/P95/P99 latency\r
+authentication failures\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. Coordinator Observability\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+intent\r
+domain\r
+query type\r
+plan\r
+selected Delegator\r
+authorization decision\r
+workflow transitions\r
+number of downstream tasks\r
+parallel branches\r
+retries\r
+aggregation\r
+final response\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "agent": "coordinator",\r
+  "agent_version": "3.1.0",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "intent": "root_cause_analysis",\r
+  "domain": "shipping",\r
+  "delegator": "shipping-delegator",\r
+  "status": "completed",\r
+  "duration_ms": 2200\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 8. Delegator Observability\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+task decomposition\r
+dependency graph\r
+Worker candidates\r
+selected Workers\r
+parallelism\r
+queue wait\r
+task execution\r
+retry\r
+failover\r
+partial failures\r
+aggregation\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Delegator\r
+   │\r
+   ├── Tracking Worker ✓\r
+   ├── Carrier Worker  ✓\r
+   └── Route Worker    ✗\r
+\`\`\`\r
+\r
+The Delegator should explain:\r
+\r
+\`\`\`text\r
+Which Worker was selected?\r
+Why?\r
+Which Workers failed?\r
+Was another Worker selected?\r
+How many retries occurred?\r
+Was the domain result complete?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Worker Observability\r
+\r
+Worker-level telemetry should include:\r
+\r
+\`\`\`text\r
+task_id\r
+run_id\r
+step_id\r
+worker_id\r
+worker_version\r
+capability\r
+status\r
+duration\r
+tools used\r
+RAG operations\r
+LLM calls\r
+validation\r
+errors\r
+retry count\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "worker_id": "tracking-worker",\r
+  "capability": "shipment_tracking",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "status": "completed",\r
+  "duration_ms": 1240,\r
+  "tools_used": [\r
+    "get_tracking_events"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. LLM Observability\r
+\r
+This is one of the biggest differences between traditional and AI observability.\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+model\r
+model_version\r
+prompt_id\r
+prompt_version\r
+input_tokens\r
+output_tokens\r
+total_tokens\r
+time_to_first_token\r
+total_generation_latency\r
+temperature/configuration where relevant\r
+finish reason\r
+structured-output validity\r
+retry count\r
+estimated cost\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "model": "approved-model",\r
+  "model_version": "v4",\r
+  "prompt_id": "shipment-analysis",\r
+  "prompt_version": "2.2.0",\r
+  "input_tokens": 4200,\r
+  "output_tokens": 620,\r
+  "latency_ms": 1380,\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+### Important security point\r
+\r
+Do **not** automatically log full prompts or full context.\r
+\r
+Prompts may contain:\r
+\r
+\`\`\`text\r
+PII\r
+confidential data\r
+customer information\r
+credentials\r
+restricted enterprise information\r
+\`\`\`\r
+\r
+Prefer:\r
+\r
+\`\`\`text\r
+prompt_id\r
+prompt_version\r
+context_reference\r
+token counts\r
+classification\r
+hash/reference\r
+\`\`\`\r
+\r
+with controlled access to sensitive payloads.\r
+\r
+---\r
+\r
+# 11. Token Usage\r
+\r
+Token usage must be measured at several levels.\r
+\r
+### LLM call\r
+\r
+\`\`\`text\r
+Input = 4,200\r
+Output = 620\r
+Total = 4,820\r
+\`\`\`\r
+\r
+### Worker\r
+\r
+\`\`\`text\r
+Worker token usage\r
+= Σ LLM calls\r
+\`\`\`\r
+\r
+### Task\r
+\r
+\`\`\`text\r
+Task token usage\r
+= Σ Worker token usage\r
+\`\`\`\r
+\r
+### Workflow\r
+\r
+\`\`\`text\r
+Workflow token usage\r
+= Σ Task token usage\r
+\`\`\`\r
+\r
+This lets you identify:\r
+\r
+\`\`\`text\r
+Which agent consumes the most tokens?\r
+Which workflow is expensive?\r
+Which prompt creates excessive context?\r
+Which model is being overused?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Cost Observability\r
+\r
+Cost should follow the same correlation hierarchy:\r
+\r
+\`\`\`text\r
+Tenant\r
+  ↓\r
+User\r
+  ↓\r
+Session\r
+  ↓\r
+Turn\r
+  ↓\r
+Workflow\r
+  ↓\r
+Task\r
+  ↓\r
+Run\r
+  ↓\r
+Step\r
+  ↓\r
+Agent\r
+  ↓\r
+LLM / Tool / Infrastructure\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+CWD Cost\r
+=\r
+LLM\r
++\r
+Embedding\r
++\r
+RAG/Search\r
++\r
+Compute\r
++\r
+Redis\r
++\r
+Cosmos\r
++\r
+Service Bus\r
++\r
+Storage\r
++\r
+Network\r
++\r
+Observability\r
++\r
+External APIs\r
+\`\`\`\r
+\r
+The most important business metric is often:\r
+\r
+\`\`\`text\r
+Cost Per Successful Workflow\r
+=\r
+Total Workflow Cost\r
+/\r
+Successful Workflows\r
+\`\`\`\r
+\r
+A workflow that costs $0.20 but fails 30% of the time may be worse than one costing $0.30 with a 99% success rate.\r
+\r
+---\r
+\r
+# 13. RAG Observability\r
+\r
+RAG requires AI-specific telemetry.\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+query\r
+query rewrite\r
+embedding model\r
+retrieval mode\r
+top-K\r
+candidate count\r
+authorized count\r
+selected count\r
+reranking\r
+deduplication\r
+context size\r
+retrieved sources\r
+retrieval latency\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Query\r
+ ↓\r
+Rewrite\r
+ ↓\r
+Embedding\r
+ ↓\r
+Azure AI Search\r
+ ↓\r
+100 candidates\r
+ ↓\r
+Security filter\r
+ ↓\r
+42 authorized\r
+ ↓\r
+Reranking\r
+ ↓\r
+8 selected\r
+ ↓\r
+Context assembly\r
+ ↓\r
+LLM\r
+\`\`\`\r
+\r
+This makes it possible to answer:\r
+\r
+> Why did the agent give this answer?\r
+\r
+---\r
+\r
+# 14. RAG Quality Signals\r
+\r
+Monitor:\r
+\r
+\`\`\`text\r
+Recall@K\r
+Precision@K\r
+MRR\r
+NDCG\r
+Context relevance\r
+Context precision\r
+Context recall\r
+Citation accuracy\r
+Groundedness\r
+Faithfulness\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Retrieval quality       92%\r
+Context relevance       94%\r
+Groundedness            96%\r
+Citation accuracy       98%\r
+\`\`\`\r
+\r
+These numbers should come from an evaluation framework rather than being invented by the production LLM itself.\r
+\r
+---\r
+\r
+# 15. MCP / Tool Observability\r
+\r
+Tool execution needs its own telemetry.\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+tool selected\r
+tool selection correctness\r
+arguments\r
+argument validation\r
+authorization\r
+MCP server\r
+tool execution\r
+backend response\r
+result schema validation\r
+result semantic validity\r
+latency\r
+retry\r
+business outcome\r
+\`\`\`\r
+\r
+The complete lifecycle:\r
+\r
+\`\`\`text\r
+Agent\r
+ ↓\r
+Tool Selection\r
+ ↓\r
+Argument Validation\r
+ ↓\r
+Authorization\r
+ ↓\r
+MCP\r
+ ↓\r
+Enterprise API\r
+ ↓\r
+Result\r
+ ↓\r
+Schema Validation\r
+ ↓\r
+Business Validation\r
+ ↓\r
+Agent Interpretation\r
+\`\`\`\r
+\r
+HTTP 200 alone is insufficient.\r
+\r
+---\r
+\r
+# 16. Messaging Observability\r
+\r
+For Azure Service Bus or Kafka, capture:\r
+\r
+\`\`\`text\r
+message_id\r
+correlation_id\r
+workflow_id\r
+task_id\r
+source\r
+destination\r
+topic/queue\r
+partition/session\r
+enqueue time\r
+dequeue time\r
+processing time\r
+delivery count\r
+retry\r
+DLQ\r
+consumer lag\r
+\`\`\`\r
+\r
+Important metrics:\r
+\r
+\`\`\`text\r
+Queue depth\r
+Message age\r
+Consumer lag\r
+Throughput\r
+Delivery failures\r
+Retry rate\r
+DLQ count\r
+Processing latency\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Queue depth\r
+     ↑\r
+     │             /\\\r
+     │            /  \\\r
+     │___________/    \\____\r
+                       Time\r
+\`\`\`\r
+\r
+A growing queue usually means:\r
+\r
+\`\`\`text\r
+Incoming workload > Consumer processing capacity\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. Infrastructure Observability\r
+\r
+Observe the underlying runtime too.\r
+\r
+### Compute\r
+\r
+\`\`\`text\r
+CPU\r
+Memory\r
+Container restarts\r
+Replica count\r
+Concurrency\r
+Network\r
+\`\`\`\r
+\r
+### Cosmos DB\r
+\r
+\`\`\`text\r
+Request volume\r
+Latency\r
+Throttling\r
+Throughput\r
+Hot partitions\r
+Errors\r
+Storage\r
+\`\`\`\r
+\r
+### Redis\r
+\r
+\`\`\`text\r
+Memory\r
+CPU\r
+Connections\r
+Commands/sec\r
+Latency\r
+Cache hit ratio\r
+Evictions\r
+Hot keys\r
+\`\`\`\r
+\r
+### Service Bus\r
+\r
+\`\`\`text\r
+Queue depth\r
+Message age\r
+Delivery count\r
+DLQ\r
+Throughput\r
+\`\`\`\r
+\r
+### Azure AI Search\r
+\r
+\`\`\`text\r
+Query volume\r
+Latency\r
+Errors\r
+Throttling\r
+Indexing failures\r
+\`\`\`\r
+\r
+### Runtime\r
+\r
+\`\`\`text\r
+Pod/container health\r
+Readiness\r
+Availability\r
+Scaling events\r
+Restarts\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. Application Logs\r
+\r
+Logs answer:\r
+\r
+> **What happened?**\r
+\r
+Use structured JSON rather than free-form text.\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "timestamp": "2026-09-07T20:10:15Z",\r
+  "level": "INFO",\r
+  "service": "tracking-worker",\r
+  "event": "tool_execution_completed",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+  "tool": "get_tracking_events",\r
+  "status": "success",\r
+  "duration_ms": 420\r
+}\r
+\`\`\`\r
+\r
+Structured logging makes filtering and aggregation much easier.\r
+\r
+---\r
+\r
+# 19. Metrics\r
+\r
+Metrics answer:\r
+\r
+> **How is the system behaving at scale?**\r
+\r
+Typical CWD metrics:\r
+\r
+### Availability\r
+\r
+\`\`\`text\r
+Agent availability\r
+Worker readiness\r
+Service availability\r
+\`\`\`\r
+\r
+### Reliability\r
+\r
+\`\`\`text\r
+Success rate\r
+Failure rate\r
+Timeout rate\r
+Retry rate\r
+Recovery rate\r
+\`\`\`\r
+\r
+### Performance\r
+\r
+\`\`\`text\r
+P50\r
+P90\r
+P95\r
+P99\r
+\`\`\`\r
+\r
+### Throughput\r
+\r
+\`\`\`text\r
+Requests/sec\r
+Tasks/sec\r
+Tool calls/sec\r
+LLM calls/sec\r
+Messages/sec\r
+\`\`\`\r
+\r
+### AI\r
+\r
+\`\`\`text\r
+Token usage\r
+Groundedness\r
+Retrieval quality\r
+Tool accuracy\r
+Agent accuracy\r
+Consistency\r
+\`\`\`\r
+\r
+### Cost\r
+\r
+\`\`\`text\r
+Cost/request\r
+Cost/task\r
+Cost/workflow\r
+Cost/successful workflow\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Latency Observability\r
+\r
+End-to-end latency:\r
+\r
+\`\`\`text\r
+T_E2E =\r
+T_Gateway\r
++\r
+T_Coordinator\r
++\r
+T_Delegator\r
++\r
+T_Worker/CriticalPath\r
++\r
+T_Aggregation\r
++\r
+T_Response\r
+\`\`\`\r
+\r
+Inside a Worker:\r
+\r
+\`\`\`text\r
+T_Worker =\r
+Validation\r
++\r
+RAG\r
++\r
+MCP\r
++\r
+LLM\r
++\r
+Business Logic\r
++\r
+Output Validation\r
+\`\`\`\r
+\r
+For parallel tasks:\r
+\r
+\`\`\`text\r
+Worker A = 2 sec\r
+Worker B = 5 sec\r
+Worker C = 3 sec\r
+\`\`\`\r
+\r
+The critical execution path is approximately:\r
+\r
+\`\`\`text\r
+max(2,5,3) = 5 sec\r
+\`\`\`\r
+\r
+rather than:\r
+\r
+\`\`\`text\r
+2 + 5 + 3 = 10 sec\r
+\`\`\`\r
+\r
+plus orchestration/aggregation overhead.\r
+\r
+This is why distributed traces are so valuable.\r
+\r
+---\r
+\r
+# 21. Failure Observability\r
+\r
+Failures should be classified.\r
+\r
+\`\`\`text\r
+LLM_TIMEOUT\r
+LLM_RATE_LIMIT\r
+TOOL_TIMEOUT\r
+TOOL_AUTH_FAILURE\r
+MCP_FAILURE\r
+RAG_FAILURE\r
+WORKER_UNAVAILABLE\r
+SERVICE_BUS_FAILURE\r
+COSMOS_THROTTLE\r
+REDIS_FAILURE\r
+POLICY_DENIED\r
+INVALID_OUTPUT\r
+SCHEMA_FAILURE\r
+HITL_TIMEOUT\r
+\`\`\`\r
+\r
+Each error should ideally contain:\r
+\r
+\`\`\`json\r
+{\r
+  "error_code": "TOOL_TIMEOUT",\r
+  "retryable": true,\r
+  "attempt": 2,\r
+  "component": "tracking-worker",\r
+  "step_id": "STEP-007"\r
+}\r
+\`\`\`\r
+\r
+This allows automated recovery and meaningful alerting.\r
+\r
+---\r
+\r
+# 22. AI-Specific Quality Observability\r
+\r
+Traditional systems ask:\r
+\r
+\`\`\`text\r
+Did the request succeed?\r
+\`\`\`\r
+\r
+Agentic systems must additionally ask:\r
+\r
+\`\`\`text\r
+Was the answer correct?\r
+Was it grounded?\r
+Was the right tool selected?\r
+Was the right agent selected?\r
+Was the retrieved evidence relevant?\r
+Was the response consistent?\r
+Did the agent follow policy?\r
+Did it complete the business objective?\r
+\`\`\`\r
+\r
+Important AI quality signals:\r
+\r
+\`\`\`text\r
+Agent accuracy\r
+Workflow success\r
+Intent accuracy\r
+Routing accuracy\r
+Task decomposition accuracy\r
+Tool-selection accuracy\r
+Argument accuracy\r
+RAG Recall@K\r
+Context relevance\r
+Groundedness\r
+Faithfulness\r
+Citation accuracy\r
+Response relevance\r
+Response completeness\r
+Consistency\r
+Human satisfaction\r
+Business outcome success\r
+\`\`\`\r
+\r
+---\r
+\r
+# 23. Observability vs Evaluation\r
+\r
+These are related but different.\r
+\r
+| Capability          | Question                                    |\r
+| ------------------- | ------------------------------------------- |\r
+| Logging             | What did the application record?            |\r
+| Metrics             | How is the system behaving?                 |\r
+| Tracing             | Where did execution go?                     |\r
+| Observability       | What happened and why?                      |\r
+| Evaluation          | Was the behavior good enough?               |\r
+| Testing             | Does it behave according to expected rules? |\r
+| Audit               | Can we reconstruct governed evidence?       |\r
+| Security monitoring | Is suspicious behavior occurring?           |\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Trace:\r
+LLM call took 2.4 seconds.\r
+\r
+Evaluation:\r
+The generated answer was only 70% grounded.\r
+\r
+Audit:\r
+User X accessed document Y under policy Z.\r
+\`\`\`\r
+\r
+These are different questions.\r
+\r
+---\r
+\r
+# 24. Dashboards\r
+\r
+You shouldn't build one giant dashboard.\r
+\r
+Use multiple views.\r
+\r
+## Executive Dashboard\r
+\r
+\`\`\`text\r
+Workflow Success        98.2%\r
+P95 Latency             4.8 sec\r
+Cost / Success          $0.31\r
+Groundedness            96%\r
+Security Violations     3\r
+\`\`\`\r
+\r
+## Operations Dashboard\r
+\r
+\`\`\`text\r
+Request rate\r
+Queue depth\r
+Worker utilization\r
+P95/P99\r
+Errors\r
+Retries\r
+DLQ\r
+Dependency health\r
+\`\`\`\r
+\r
+## Agent Dashboard\r
+\r
+\`\`\`text\r
+Coordinator success\r
+Delegator success\r
+Worker success\r
+Routing accuracy\r
+Agent latency\r
+Agent availability\r
+Agent version\r
+\`\`\`\r
+\r
+## LLM Dashboard\r
+\r
+\`\`\`text\r
+Model\r
+Token usage\r
+Latency\r
+TTFT\r
+Error rate\r
+Retry rate\r
+Cost\r
+Quality\r
+\`\`\`\r
+\r
+## RAG Dashboard\r
+\r
+\`\`\`text\r
+Recall@K\r
+NDCG\r
+Context relevance\r
+Groundedness\r
+Citation accuracy\r
+Search latency\r
+Index freshness\r
+\`\`\`\r
+\r
+## Tool Dashboard\r
+\r
+\`\`\`text\r
+Tool selection accuracy\r
+Argument validity\r
+Authorization denials\r
+Execution success\r
+Timeout\r
+Retry\r
+Latency\r
+Business success\r
+\`\`\`\r
+\r
+## Security Dashboard\r
+\r
+\`\`\`text\r
+Authentication failures\r
+Authorization denials\r
+Prompt injection\r
+DLP violations\r
+Unauthorized tools\r
+Cross-tenant attempts\r
+Privilege escalation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Alerts\r
+\r
+Alerts should represent **actionable conditions**, not every error.\r
+\r
+Examples:\r
+\r
+\`\`\`text\r
+P95 latency > SLA\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Worker failure rate > threshold\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Queue age > threshold\r
+\`\`\`\r
+\r
+\`\`\`text\r
+DLQ messages increasing\r
+\`\`\`\r
+\r
+\`\`\`text\r
+LLM error rate > threshold\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Token consumption unexpectedly increased\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Cost/workflow increased significantly\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Groundedness dropped below threshold\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Unauthorized tool attempts detected\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Cross-tenant access attempt detected\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Agent version causing regression\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Alert Severity\r
+\r
+A useful model:\r
+\r
+\`\`\`text\r
+P1\r
+Critical security or platform failure\r
+\r
+P2\r
+Major degradation\r
+\r
+P3\r
+Localized failure\r
+\r
+P4\r
+Informational\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Cross-tenant data access\r
+→ P1\r
+\r
+Production Worker pool unavailable\r
+→ P1/P2\r
+\r
+P95 latency degradation\r
+→ P2\r
+\r
+One failed retry\r
+→ Usually no alert\r
+\`\`\`\r
+\r
+---\r
+\r
+# 27. End-to-End Example\r
+\r
+Suppose the user asks:\r
+\r
+\`\`\`text\r
+"Why is shipment SHIP123 delayed?"\r
+\`\`\`\r
+\r
+The trace might become:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+│\r
+├── Gateway\r
+│    └── authentication\r
+│\r
+├── Coordinator\r
+│    ├── intent classification\r
+│    ├── authorization\r
+│    ├── Agent Registry\r
+│    └── A2A delegation\r
+│\r
+├── Shipping Delegator\r
+│    ├── task decomposition\r
+│    │\r
+│    ├── Tracking Worker\r
+│    │    └── MCP\r
+│    │         └── get_tracking_events\r
+│    │\r
+│    └── Analysis Worker\r
+│         ├── RAG\r
+│         │    └── Azure AI Search\r
+│         └── LLM\r
+│\r
+├── Aggregation\r
+│\r
+└── Response\r
+\`\`\`\r
+\r
+The observability system can answer:\r
+\r
+\`\`\`text\r
+WHO?\r
+User + agent identities\r
+\r
+WHAT?\r
+Shipment delay analysis\r
+\r
+WHICH AGENTS?\r
+Coordinator → Shipping Delegator → Workers\r
+\r
+WHICH TOOLS?\r
+get_tracking_events\r
+\r
+WHICH DATA?\r
+Authorized shipping evidence\r
+\r
+WHICH MODEL?\r
+Approved model version\r
+\r
+WHICH PROMPT?\r
+shipment-delay-analysis v2.2.0\r
+\r
+HOW LONG?\r
+4.2 seconds\r
+\r
+HOW MUCH?\r
+$0.27\r
+\r
+DID IT SUCCEED?\r
+Yes\r
+\r
+WAS IT GROUNDED?\r
+Yes\r
+\r
+WHY?\r
+Carrier capacity constraint\r
+\`\`\`\r
+\r
+That is true end-to-end observability.\r
+\r
+---\r
+\r
+# 28. OpenTelemetry-Based Architecture\r
+\r
+A common architecture is:\r
+\r
+\`\`\`text\r
+CWD Services\r
+   │\r
+   ├── Gateway\r
+   ├── Coordinator\r
+   ├── Delegators\r
+   ├── Workers\r
+   ├── MCP\r
+   └── RAG\r
+          │\r
+          ▼\r
+    OpenTelemetry\r
+          │\r
+          ▼\r
+      Collector\r
+          │\r
+   ┌──────┼─────────┐\r
+   ▼      ▼         ▼\r
+ Traces  Metrics   Logs\r
+   │      │         │\r
+   └──────┼─────────┘\r
+          ▼\r
+ Azure Monitor / Application Insights\r
+          │\r
+          ▼\r
+      Dashboards\r
+          │\r
+      ┌───┴────┐\r
+      ▼        ▼\r
+    Alerts   Evaluation\r
+\`\`\`\r
+\r
+OpenTelemetry gives a common telemetry model across independently deployed CWD components.\r
+\r
+---\r
+\r
+# 29. What Should Be Correlated?\r
+\r
+At minimum:\r
+\r
+\`\`\`text\r
+correlation_id\r
+workflow_id\r
+task_id\r
+run_id\r
+step_id\r
+agent_id\r
+agent_version\r
+prompt_id\r
+prompt_version\r
+model\r
+model_version\r
+tool\r
+MCP server\r
+RAG index\r
+\`\`\`\r
+\r
+This creates execution lineage:\r
+\r
+\`\`\`text\r
+User Request\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Agent\r
+   ↓\r
+Prompt\r
+   ↓\r
+Model\r
+   ↓\r
+Tool/RAG\r
+   ↓\r
+Result\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. Observability Data Model\r
+\r
+A useful common event envelope:\r
+\r
+\`\`\`json\r
+{\r
+  "timestamp": "2026-09-07T20:10:15Z",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "agent_version": "2.4.1",\r
+\r
+  "event_type": "LLM_INVOCATION",\r
+\r
+  "model": "approved-model",\r
+  "model_version": "v4",\r
+\r
+  "prompt_id": "shipment-analysis",\r
+  "prompt_version": "2.2.0",\r
+\r
+  "input_tokens": 4200,\r
+  "output_tokens": 620,\r
+\r
+  "duration_ms": 1380,\r
+\r
+  "status": "completed",\r
+\r
+  "error": null\r
+}\r
+\`\`\`\r
+\r
+Sensitive payloads should be referenced or redacted rather than blindly embedded.\r
+\r
+---\r
+\r
+# 31. Observability for Agent Consistency\r
+\r
+A production system should detect:\r
+\r
+\`\`\`text\r
+Same input\r
+     ↓\r
+Run 1 → Worker A\r
+Run 2 → Worker B\r
+Run 3 → Worker A\r
+Run 4 → Worker C\r
+\`\`\`\r
+\r
+If the expected routing should be stable, this could indicate:\r
+\r
+\`\`\`text\r
+Registry instability\r
+LLM routing variability\r
+Worker health changes\r
+Prompt changes\r
+Policy differences\r
+\`\`\`\r
+\r
+Similarly:\r
+\r
+\`\`\`text\r
+Same question\r
+ ↓\r
+Answer A\r
+Answer B\r
+Answer C\r
+\`\`\`\r
+\r
+could indicate model/context/retrieval variability.\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+Routing consistency\r
+Tool-selection consistency\r
+Retrieval consistency\r
+Answer semantic consistency\r
+Business-outcome consistency\r
+\`\`\`\r
+\r
+---\r
+\r
+# 32. Observability for Agent Recovery\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Worker A\r
+   ↓\r
+MCP timeout\r
+   ↓\r
+Retry\r
+   ↓\r
+Timeout\r
+   ↓\r
+Agent Registry\r
+   ↓\r
+Worker B\r
+   ↓\r
+Success\r
+\`\`\`\r
+\r
+The trace should show:\r
+\r
+\`\`\`text\r
+RUN-001 → failed\r
+RUN-002 → failed\r
+RUN-003 → completed\r
+\`\`\`\r
+\r
+And explain:\r
+\r
+\`\`\`text\r
+Failure reason\r
+Retry reason\r
+Retry count\r
+Backoff\r
+Failover decision\r
+Selected replacement Worker\r
+Final outcome\r
+\`\`\`\r
+\r
+This is essential for production troubleshooting.\r
+\r
+---\r
+\r
+# 33. Observability and Security\r
+\r
+Security events should also be correlated.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+│\r
+├── Authorization DENIED\r
+│\r
+├── Unauthorized Tool Attempt\r
+│\r
+├── DLP Violation\r
+│\r
+└── Workflow TERMINATED\r
+\`\`\`\r
+\r
+Security observability should detect:\r
+\r
+\`\`\`text\r
+AUTH_FAILURE\r
+AUTHZ_DENY\r
+UNAUTHORIZED_TOOL\r
+PROMPT_INJECTION\r
+DLP_VIOLATION\r
+CROSS_TENANT_ATTEMPT\r
+PRIVILEGE_ESCALATION\r
+AGENT_IMPERSONATION\r
+EXCESSIVE_TOOL_USAGE\r
+ABNORMAL_TOKEN_USAGE\r
+\`\`\`\r
+\r
+---\r
+\r
+# 34. Don't Log Everything\r
+\r
+This is a very important enterprise design principle.\r
+\r
+Bad:\r
+\r
+\`\`\`text\r
+Log entire prompt\r
+Log entire RAG context\r
+Log entire database response\r
+Log every tool payload\r
+Log every token\r
+\`\`\`\r
+\r
+This creates:\r
+\r
+\`\`\`text\r
+Privacy risk\r
+Security risk\r
+Compliance risk\r
+Storage cost\r
+Performance overhead\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Reference\r
++\r
+Hash\r
++\r
+Classification\r
++\r
+Metadata\r
++\r
+Controlled access\r
+\`\`\`\r
+\r
+For sensitive content, store only what is required for the specific operational or audit purpose.\r
+\r
+---\r
+\r
+# 35. Observability vs Audit\r
+\r
+They overlap but should remain separate.\r
+\r
+\`\`\`text\r
+Observability\r
+    ↓\r
+"What happened during runtime?"\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Audit\r
+    ↓\r
+"What governed action happened, who performed it,\r
+under which policy, and what evidence must be retained?"\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Application Insights:\r
+Worker took 1.2 sec.\r
+\r
+Audit:\r
+Worker accessed shipment SHIP123 under policy SHIP-READ-001.\r
+\`\`\`\r
+\r
+---\r
+\r
+# 36. Observability vs Evaluation\r
+\r
+Similarly:\r
+\r
+\`\`\`text\r
+Observability:\r
+LLM generated response in 1.4 sec.\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Evaluation:\r
+Response was 96% grounded.\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Observability:\r
+RAG returned 8 chunks.\r
+\`\`\`\r
+\r
+\`\`\`text\r
+Evaluation:\r
+6 of the 8 chunks were relevant.\r
+\`\`\`\r
+\r
+You need both.\r
+\r
+---\r
+\r
+# 37. Golden Dataset + Production Observability\r
+\r
+Production telemetry should feed evaluation.\r
+\r
+\`\`\`text\r
+Production\r
+   ↓\r
+Failed workflow\r
+   ↓\r
+Root cause\r
+   ↓\r
+Sanitized example\r
+   ↓\r
+Golden Dataset\r
+   ↓\r
+Regression Test\r
+   ↓\r
+Prompt / Model / Workflow change\r
+   ↓\r
+Evaluation\r
+   ↓\r
+Release\r
+\`\`\`\r
+\r
+This creates a continuous improvement loop.\r
+\r
+---\r
+\r
+# 38. Complete CWD Observability Lifecycle\r
+\r
+\`\`\`text\r
+                    REQUEST\r
+                       │\r
+                       ▼\r
+                 CORRELATION\r
+                       │\r
+                       ▼\r
+               DISTRIBUTED TRACE\r
+                       │\r
+        ┌──────────────┼──────────────┐\r
+        ▼              ▼              ▼\r
+       LOGS          METRICS        EVENTS\r
+        │              │              │\r
+        └──────────────┼──────────────┘\r
+                       ▼\r
+                  TELEMETRY\r
+                       │\r
+          ┌────────────┼────────────┐\r
+          ▼            ▼            ▼\r
+       Runtime       Security       AI\r
+       Analysis      Analysis     Evaluation\r
+          │            │            │\r
+          └────────────┼────────────┘\r
+                       ▼\r
+                    DASHBOARD\r
+                       │\r
+                       ▼\r
+                     ALERT\r
+                       │\r
+                       ▼\r
+                 INVESTIGATION\r
+                       │\r
+                       ▼\r
+                    ACTION\r
+                       │\r
+                       ▼\r
+                IMPROVEMENT\r
+\`\`\`\r
+\r
+---\r
+\r
+# 39. Key Metrics by Layer\r
+\r
+| Layer          | Important Observability Signals                       |\r
+| -------------- | ----------------------------------------------------- |\r
+| Gateway        | request rate, auth failures, 4xx/5xx, P95             |\r
+| Coordinator    | intent, routing, planning latency, workflow success   |\r
+| Delegator      | decomposition, Worker selection, fan-out, retries     |\r
+| Worker         | execution latency, availability, failures, retries    |\r
+| LLM            | tokens, latency, model, prompt version, cost          |\r
+| RAG            | Recall@K, NDCG, relevance, groundedness               |\r
+| MCP            | tool selection, args, authorization, success, latency |\r
+| Data           | access, classification, ACL, query latency            |\r
+| Service Bus    | queue depth, age, delivery count, DLQ                 |\r
+| Redis          | latency, memory, hit ratio, evictions                 |\r
+| Cosmos         | latency, throughput, throttling, errors               |\r
+| Infrastructure | CPU, memory, replicas, restarts                       |\r
+| Security       | denials, DLP, injection, privilege violations         |\r
+| Business       | workflow success, goal completion, user satisfaction  |\r
+\r
+---\r
+\r
+# 40. The Most Important Dashboard\r
+\r
+For an AI platform, I would build an **End-to-End CWD Workflow Dashboard** around:\r
+\r
+\`\`\`text\r
+┌─────────────────────────────────────────────┐\r
+│              CWD HEALTH                     │\r
+├──────────────┬──────────────┬───────────────┤\r
+│ Success      │ P95 Latency  │ Cost/Success  │\r
+│   98.2%      │   4.8 sec    │    $0.31      │\r
+├──────────────┼──────────────┼───────────────┤\r
+│ Groundedness │ Tool Success │ Retry Rate    │\r
+│   96.1%      │   99.1%      │    1.8%       │\r
+├──────────────┼──────────────┼───────────────┤\r
+│ Queue Depth  │ LLM Tokens   │ Security      │\r
+│     42       │  2.4M/day    │   0 critical  │\r
+└──────────────┴──────────────┴───────────────┘\r
+\`\`\`\r
+\r
+Then drill down:\r
+\r
+\`\`\`text\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Agent\r
+   ↓\r
+LLM / RAG / MCP\r
+   ↓\r
+Infrastructure\r
+\`\`\`\r
+\r
+---\r
+\r
+# 41. What Good Observability Should Answer\r
+\r
+For any production request, CWD should be able to answer:\r
+\r
+### What happened?\r
+\r
+\`\`\`text\r
+Workflow execution trace\r
+\`\`\`\r
+\r
+### Why did it happen?\r
+\r
+\`\`\`text\r
+Agent decisions + routing + policy\r
+\`\`\`\r
+\r
+### Who did it?\r
+\r
+\`\`\`text\r
+User + agent/workload identity\r
+\`\`\`\r
+\r
+### What data was used?\r
+\r
+\`\`\`text\r
+RAG/data references + classification\r
+\`\`\`\r
+\r
+### What tools were used?\r
+\r
+\`\`\`text\r
+MCP/API telemetry\r
+\`\`\`\r
+\r
+### Which model?\r
+\r
+\`\`\`text\r
+Model + version\r
+\`\`\`\r
+\r
+### Which prompt?\r
+\r
+\`\`\`text\r
+Prompt ID + version\r
+\`\`\`\r
+\r
+### How long?\r
+\r
+\`\`\`text\r
+P50/P95/P99 + critical path\r
+\`\`\`\r
+\r
+### How much did it cost?\r
+\r
+\`\`\`text\r
+Tokens + infrastructure + external services\r
+\`\`\`\r
+\r
+### Did it fail?\r
+\r
+\`\`\`text\r
+Failure classification + retry + recovery\r
+\`\`\`\r
+\r
+### Was the AI answer good?\r
+\r
+\`\`\`text\r
+Groundedness + relevance + correctness + business outcome\r
+\`\`\`\r
+\r
+### Was it secure?\r
+\r
+\`\`\`text\r
+Authorization + DLP + security events\r
+\`\`\`\r
+\r
+---\r
+\r
+# 42. End-to-End CWD Observability Formula\r
+\r
+The architecture can be summarized as:\r
+\r
+\`\`\`text\r
+CWD Observability\r
+=\r
+Correlation\r
++\r
+Distributed Tracing\r
++\r
+Structured Logging\r
++\r
+Metrics\r
++\r
+Agent Telemetry\r
++\r
+Workflow Telemetry\r
++\r
+LLM Telemetry\r
++\r
+Tool/MCP Telemetry\r
++\r
+RAG/Data Telemetry\r
++\r
+Messaging Telemetry\r
++\r
+Infrastructure Telemetry\r
++\r
+Cost Tracking\r
++\r
+AI Quality Evaluation\r
++\r
+Dashboards\r
++\r
+Alerts\r
++\r
+Security Monitoring\r
+\`\`\`\r
+\r
+And the execution lineage is:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Session\r
+ ↓\r
+Turn\r
+ ↓\r
+Workflow\r
+ ↓\r
+Task\r
+ ↓\r
+Run\r
+ ↓\r
+Step\r
+ ↓\r
+Agent\r
+ ↓\r
+LLM / RAG / MCP / Data\r
+ ↓\r
+Infrastructure\r
+ ↓\r
+Result\r
+\`\`\`\r
+\r
+## Interview-ready answer\r
+\r
+> **“For CWD, I design observability as an end-to-end capability across the Gateway, Coordinator, Delegator, Worker, LLM, RAG, MCP/tools, data, messaging, and infrastructure layers. Every request receives a correlation ID and is associated with workflow, task, run, and step identifiers so distributed execution can be reconstructed across synchronous and asynchronous boundaries. We use distributed tracing for execution paths and latency breakdown, structured logs for detailed events, and metrics for throughput, availability, failures, retries, queue depth, P95/P99 latency, and resource utilization. At the AI layer, we additionally capture model and prompt versions, input/output tokens, LLM latency and cost, tool-selection and execution metrics, RAG retrieval quality, groundedness, citation accuracy, agent accuracy, consistency, and business-task success. Service Bus telemetry covers message age, delivery count, retries and DLQ, while Redis, Cosmos DB, Azure AI Search, and compute infrastructure provide their own operational metrics. Dashboards expose operational, agent, LLM, RAG, tool, cost, and security views, and alerts detect actionable conditions such as latency degradation, failure spikes, queue buildup, cost anomalies, unauthorized tool attempts, and quality regressions. Sensitive prompts, RAG content, credentials, and tool payloads are not blindly logged; we use redaction, classification, references, and controlled access. Finally, production telemetry feeds continuous evaluation and regression testing so observability becomes a feedback loop for improving the CWD platform.”**\r
+\r
+### Core definition\r
+\r
+**End-to-end observability in CWD is the capability to correlate, trace, measure, evaluate, and explain distributed agent execution across application, workflow, agent, LLM, tool, RAG/data, messaging, security, and infrastructure layers, enabling the enterprise to understand what happened, why it happened, how long it took, what it cost, whether it failed, whether it was secure, and whether the resulting AI behavior achieved the intended business outcome.**\r
+\r
+**Mental model:**\r
+\r
+\`\`\`text\r
+CORRELATE\r
+    ↓\r
+TRACE\r
+    ↓\r
+LOG\r
+    ↓\r
+MEASURE\r
+    ↓\r
+EVALUATE\r
+    ↓\r
+VISUALIZE\r
+    ↓\r
+ALERT\r
+    ↓\r
+INVESTIGATE\r
+    ↓\r
+IMPROVE\r
+\`\`\`\r
+\r
+The architectural distinction to remember is:\r
+\r
+**Logs tell you what was recorded. Traces tell you where execution went. Metrics tell you how the system behaves at scale. Evaluation tells you whether the AI behavior was good. Audit tells you what governed actions occurred. Together, they provide production-grade CWD observability.**\r
+`},{id:`why-observability`,category:`Observability`,title:`Why Observability?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand why observability is critical for enterprise multi-agent systems, where a single user request can involve multiple agents, LLM calls, tools, data sources, messaging systems, and distributed services.`,concept:`Yes. In an enterprise multi-agent platform such as **CWD (Coordinator–Delegator–Worker)**, observability is not an optional operational feature—it is a **core architectural capability**.\r
+\r
+The reason is simple:\r
+\r
+> **A single user request is no longer one application transaction. It becomes a distributed, dynamic execution graph involving multiple agents, workflows, LLM calls, tools, data sources, queues, and infrastructure components.**\r
+\r
+Without end-to-end observability, the enterprise cannot reliably answer **what happened, why it happened, where it failed, how long it took, what it cost, what data was used, or whether the AI result was correct and secure.**\r
+\r
+---\r
+\r
+# 1. Why Traditional Application Monitoring Is Not Enough\r
+\r
+A traditional application might look like:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+API\r
+  ↓\r
+Business Logic\r
+  ↓\r
+Database\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+You can often diagnose a failure from a few application logs.\r
+\r
+CWD is different:\r
+\r
+\`\`\`text\r
+                         User Request\r
+                              │\r
+                              ▼\r
+                           Gateway\r
+                              │\r
+                              ▼\r
+                        Coordinator\r
+                              │\r
+                         Agent Registry\r
+                              │\r
+                             A2A\r
+                              │\r
+                              ▼\r
+                         Delegator\r
+                         /    |    \\\r
+                        /     |     \\\r
+                       ▼      ▼      ▼\r
+                    Worker Worker Worker\r
+                      │       │       │\r
+                     RAG     MCP     LLM\r
+                      │       │       │\r
+                    Search   API    Model\r
+                      │       │       │\r
+                      └───────┼──────┘\r
+                              ▼\r
+                       Enterprise Data\r
+                              │\r
+                              ▼\r
+                         Aggregation\r
+                              │\r
+                              ▼\r
+                         Final LLM\r
+                              │\r
+                              ▼\r
+                           Response\r
+\`\`\`\r
+\r
+One request can therefore generate dozens or hundreds of operations.\r
+\r
+---\r
+\r
+# 2. Observability Gives You the Complete Execution Story\r
+\r
+Suppose a user asks:\r
+\r
+> "Why is shipment SHIP123 delayed?"\r
+\r
+The request may execute:\r
+\r
+\`\`\`text id="6m1r5w"\r
+User\r
+ ↓\r
+Gateway\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Shipping Delegator\r
+ ├── Tracking Worker\r
+ │    └── MCP → Carrier API\r
+ │\r
+ ├── Analysis Worker\r
+ │    ├── RAG → Azure AI Search\r
+ │    └── LLM\r
+ │\r
+ └── Route Worker\r
+      └── LLM\r
+ ↓\r
+Delegator Aggregation\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Final Response\r
+\`\`\`\r
+\r
+If the final response is wrong, you need to know:\r
+\r
+\`\`\`text\r
+Was the intent wrong?\r
+        ↓\r
+Was the wrong Delegator selected?\r
+        ↓\r
+Was the wrong Worker selected?\r
+        ↓\r
+Did RAG retrieve the wrong documents?\r
+        ↓\r
+Did the MCP tool return bad data?\r
+        ↓\r
+Did the LLM misinterpret the result?\r
+        ↓\r
+Did aggregation combine results incorrectly?\r
+\`\`\`\r
+\r
+**End-to-end observability lets you answer these questions.**\r
+\r
+---\r
+\r
+# 3. Multi-Agent Systems Create Distributed Execution\r
+\r
+Each CWD component can be independently deployed:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   │\r
+   ├── Container Instance 1\r
+   ├── Container Instance 2\r
+   └── Container Instance 3\r
+\r
+Delegator\r
+   │\r
+   ├── Instance 1\r
+   ├── Instance 2\r
+   └── Instance 3\r
+\r
+Worker\r
+   │\r
+   ├── Instance 1\r
+   ├── Instance 2\r
+   ├── Instance 3\r
+   └── Instance 4\r
+\`\`\`\r
+\r
+The original request may move across:\r
+\r
+\`\`\`text\r
+machines\r
+containers\r
+processes\r
+services\r
+queues\r
+networks\r
+databases\r
+external APIs\r
+LLMs\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **A local log from one service cannot explain the entire transaction.**\r
+\r
+You need distributed tracing and correlation.\r
+\r
+---\r
+\r
+# 4. Correlation Is the Backbone\r
+\r
+CWD should establish a \`correlation_id\`.\r
+\r
+Example:\r
+\r
+\`\`\`text id="rj9qgs"\r
+CORR-7890\r
+\`\`\`\r
+\r
+It follows the request:\r
+\r
+\`\`\`text id="f4u3qm"\r
+CORR-7890\r
+   │\r
+   ├── Gateway\r
+   ├── Coordinator\r
+   ├── Delegator\r
+   ├── Worker\r
+   ├── Service Bus\r
+   ├── RAG\r
+   ├── MCP\r
+   ├── LLM\r
+   ├── Database\r
+   └── Final Response\r
+\`\`\`\r
+\r
+But we also maintain hierarchical identifiers:\r
+\r
+\`\`\`text id="zq1g7q"\r
+correlation_id\r
+    │\r
+    └── workflow_id\r
+           │\r
+           ├── task_id\r
+           │      └── run_id\r
+           │             └── step_id\r
+           │\r
+           └── task_id\r
+                  └── run_id\r
+                         └── step_id\r
+\`\`\`\r
+\r
+This allows an enterprise operator to move from:\r
+\r
+\`\`\`text\r
+Business Request\r
+      ↓\r
+Workflow\r
+      ↓\r
+Task\r
+      ↓\r
+Run\r
+      ↓\r
+Step\r
+      ↓\r
+Agent\r
+      ↓\r
+Tool/LLM/Data\r
+\`\`\`\r
+\r
+---\r
+\r
+# 5. Observability Helps Diagnose Failures\r
+\r
+Consider:\r
+\r
+\`\`\`text id="x6a5cc"\r
+User Request\r
+     ↓\r
+Coordinator       ✓\r
+     ↓\r
+Delegator         ✓\r
+     ↓\r
+Worker            ✓\r
+     ↓\r
+MCP Tool          ✗\r
+     ↓\r
+Carrier API       timeout\r
+\`\`\`\r
+\r
+Without tracing:\r
+\r
+\`\`\`text\r
+"Shipment analysis failed."\r
+\`\`\`\r
+\r
+With tracing:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+ ├── Coordinator             220 ms ✓\r
+ ├── Delegator               150 ms ✓\r
+ ├── Tracking Worker        900 ms ✓\r
+ ├── MCP                     50 ms ✓\r
+ └── Carrier API           5000 ms ✗\r
+                              │\r
+                              └── TIMEOUT\r
+\`\`\`\r
+\r
+Now the root cause is obvious.\r
+\r
+---\r
+\r
+# 6. Observability Is Critical for Latency\r
+\r
+Multi-agent workflows introduce latency amplification.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Coordinator       300 ms\r
+Delegator         200 ms\r
+Worker A         1000 ms\r
+Worker B         3000 ms\r
+Worker C         1500 ms\r
+Aggregation       200 ms\r
+\`\`\`\r
+\r
+If workers execute sequentially:\r
+\r
+\`\`\`text\r
+300 + 200 + 1000 + 3000 + 1500 + 200\r
+= 6200 ms\r
+\`\`\`\r
+\r
+If A, B, and C are independent and execute in parallel:\r
+\r
+\`\`\`text\r
+300 + 200 + max(1000,3000,1500) + 200\r
+≈ 3700 ms\r
+\`\`\`\r
+\r
+Observability identifies the **critical path**.\r
+\r
+It tells architects:\r
+\r
+> "Worker B is dominating workflow latency."\r
+\r
+---\r
+\r
+# 7. It Separates Queue Latency From Processing Latency\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="4zjqai"\r
+Task submitted\r
+     ↓\r
+Service Bus\r
+     ↓\r
+Queue wait = 4 seconds\r
+     ↓\r
+Worker processing = 1 second\r
+\`\`\`\r
+\r
+Total task latency:\r
+\r
+\`\`\`text\r
+5 seconds\r
+\`\`\`\r
+\r
+Without messaging telemetry, someone might incorrectly conclude:\r
+\r
+> "The Worker takes five seconds."\r
+\r
+Actually:\r
+\r
+\`\`\`text\r
+Queue wait = 4 sec\r
+Worker execution = 1 sec\r
+\`\`\`\r
+\r
+That leads to completely different remediation.\r
+\r
+---\r
+\r
+# 8. It Helps Identify Bottlenecks\r
+\r
+CWD has many potential bottlenecks:\r
+\r
+\`\`\`text\r
+Gateway\r
+Coordinator\r
+Delegator\r
+Worker\r
+Service Bus\r
+Redis\r
+Cosmos DB\r
+Azure AI Search\r
+MCP\r
+Enterprise API\r
+LLM\r
+Network\r
+\`\`\`\r
+\r
+Observability provides the evidence needed to determine:\r
+\r
+\`\`\`text\r
+WHERE is the bottleneck?\r
+WHY is it happening?\r
+HOW OFTEN does it happen?\r
+WHO is affected?\r
+WHAT is the business impact?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. It Is Essential for LLM Observability\r
+\r
+Traditional application monitoring doesn't tell you whether an LLM response was good.\r
+\r
+You need AI-specific telemetry.\r
+\r
+For every LLM call, consider:\r
+\r
+\`\`\`text\r
+Model\r
+Model version\r
+Prompt ID\r
+Prompt version\r
+Input tokens\r
+Output tokens\r
+Latency\r
+Time-to-first-token\r
+Finish reason\r
+Structured-output validity\r
+Cost\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text id="7v54kw"\r
+LLM\r
+ ├── Model: approved-model-v4\r
+ ├── Prompt: shipment-analysis-v2.2\r
+ ├── Input tokens: 4,200\r
+ ├── Output tokens: 620\r
+ ├── Latency: 1.38 sec\r
+ └── Cost: $X\r
+\`\`\`\r
+\r
+Now you can compare:\r
+\r
+\`\`\`text\r
+Model A vs Model B\r
+Prompt v1 vs v2\r
+Worker A vs Worker B\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. Observability Controls LLM Cost\r
+\r
+A multi-agent request can make many LLM calls.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+1 user request\r
+   ↓\r
+Coordinator LLM        1 call\r
+Delegator LLM          1 call\r
+Worker A               2 calls\r
+Worker B               3 calls\r
+Worker C               2 calls\r
+Final response         1 call\r
+                       ─────\r
+                       10 calls\r
+\`\`\`\r
+\r
+Without token/cost telemetry, the architecture can become unexpectedly expensive.\r
+\r
+Track:\r
+\r
+\`\`\`text\r
+tokens/request\r
+tokens/workflow\r
+tokens/agent\r
+tokens/task\r
+tokens/model\r
+cost/request\r
+cost/workflow\r
+cost/successful-workflow\r
+\`\`\`\r
+\r
+The important business metric is:\r
+\r
+\`\`\`text\r
+Cost per Successful Workflow\r
+=\r
+Total Cost\r
+/\r
+Successful Workflows\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. It Makes Agent Behavior Observable\r
+\r
+A multi-agent platform introduces decisions that don't exist in traditional applications.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator:\r
+Intent = shipment investigation\r
+\r
+Agent Registry:\r
+Candidate agents = A, B, C\r
+\r
+Router:\r
+Selected = Shipping Agent B\r
+\`\`\`\r
+\r
+You should be able to determine:\r
+\r
+\`\`\`text\r
+What intent was detected?\r
+Which agents were candidates?\r
+Why were some rejected?\r
+Which agent was selected?\r
+Why was it selected?\r
+What policy allowed the selection?\r
+\`\`\`\r
+\r
+This is essential for debugging dynamic routing.\r
+\r
+---\r
+\r
+# 12. Observability Helps Evaluate Agent Quality\r
+\r
+Suppose the system completed successfully.\r
+\r
+Traditional monitoring says:\r
+\r
+\`\`\`text\r
+HTTP 200\r
+Workflow completed\r
+\`\`\`\r
+\r
+But the answer could still be wrong.\r
+\r
+AI observability asks:\r
+\r
+\`\`\`text\r
+Was intent correct?\r
+Was routing correct?\r
+Was task decomposition correct?\r
+Was the correct Worker selected?\r
+Was the correct tool selected?\r
+Were tool arguments correct?\r
+Was retrieved context relevant?\r
+Was the answer grounded?\r
+Was the answer complete?\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **Technical success does not necessarily mean AI success.**\r
+\r
+---\r
+\r
+# 13. RAG Requires Its Own Observability\r
+\r
+Suppose the LLM gives a bad answer.\r
+\r
+The problem may actually be retrieval.\r
+\r
+Trace:\r
+\r
+\`\`\`text id="om7cth"\r
+User Query\r
+    ↓\r
+Query Rewrite\r
+    ↓\r
+Embedding\r
+    ↓\r
+Azure AI Search\r
+    ↓\r
+100 candidates\r
+    ↓\r
+Security Filtering\r
+    ↓\r
+40 authorized\r
+    ↓\r
+Reranking\r
+    ↓\r
+8 selected\r
+    ↓\r
+Context\r
+    ↓\r
+LLM\r
+\`\`\`\r
+\r
+You can measure:\r
+\r
+\`\`\`text\r
+Recall@K\r
+Precision@K\r
+MRR\r
+NDCG\r
+Context relevance\r
+Context precision\r
+Context recall\r
+Groundedness\r
+Citation accuracy\r
+\`\`\`\r
+\r
+Without these signals, you may incorrectly blame the LLM when the real problem is poor retrieval.\r
+\r
+---\r
+\r
+# 14. Tool Observability Is Equally Important\r
+\r
+Consider:\r
+\r
+\`\`\`text id="c3d3g5"\r
+Agent\r
+ ↓\r
+Tool Selection\r
+ ↓\r
+Argument Generation\r
+ ↓\r
+Authorization\r
+ ↓\r
+MCP\r
+ ↓\r
+Enterprise API\r
+ ↓\r
+Result\r
+\`\`\`\r
+\r
+You need to know:\r
+\r
+\`\`\`text\r
+Was the right tool selected?\r
+Were the arguments correct?\r
+Was authorization successful?\r
+Did the MCP call succeed?\r
+Did the backend succeed?\r
+Was the result valid?\r
+Did the agent interpret it correctly?\r
+\`\`\`\r
+\r
+Because:\r
+\r
+\`\`\`text\r
+HTTP 200 ≠ Business Success\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. Observability Helps Security\r
+\r
+A multi-agent system creates many security boundaries:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Gateway\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓\r
+MCP\r
+ ↓\r
+Enterprise Data\r
+\`\`\`\r
+\r
+You need to detect:\r
+\r
+\`\`\`text\r
+Authentication failures\r
+Authorization denials\r
+Unauthorized tool calls\r
+Prompt injection\r
+DLP violations\r
+Cross-tenant access\r
+Privilege escalation\r
+Agent impersonation\r
+Abnormal data access\r
+\`\`\`\r
+\r
+Correlation allows security teams to reconstruct:\r
+\r
+\`\`\`text\r
+Who\r
+ ↓\r
+Used which agent\r
+ ↓\r
+Called which tool\r
+ ↓\r
+Accessed which data\r
+ ↓\r
+Under which policy\r
+ ↓\r
+Produced which output\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. It Helps Detect Data Leakage\r
+\r
+Consider:\r
+\r
+\`\`\`text id="qnd7rs"\r
+User\r
+ ↓\r
+RAG\r
+ ↓\r
+Confidential document\r
+ ↓\r
+LLM\r
+ ↓\r
+Response\r
+\`\`\`\r
+\r
+Observability should allow you to determine:\r
+\r
+\`\`\`text\r
+Which document was retrieved?\r
+Which ACL applied?\r
+Which classification?\r
+Which user entitlement?\r
+Which Worker?\r
+Which workflow?\r
+Which response?\r
+\`\`\`\r
+\r
+This is especially important for enterprise RAG.\r
+\r
+---\r
+\r
+# 17. Observability Helps With Asynchronous Execution\r
+\r
+CWD may use:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ ↓\r
+A2A\r
+ ↓\r
+Service Bus\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+\`\`\`\r
+\r
+The original request may return:\r
+\r
+\`\`\`text\r
+202 Accepted\r
+\`\`\`\r
+\r
+while the actual work continues.\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+Worker\r
+ ↓\r
+Service Bus\r
+ ↓\r
+Delegator\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Result\r
+\`\`\`\r
+\r
+Without correlation, the result can become difficult to associate with the original request.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+correlation_id\r
++\r
+workflow_id\r
++\r
+task_id\r
++\r
+message_id\r
+\`\`\`\r
+\r
+are essential.\r
+\r
+---\r
+\r
+# 18. Observability Enables Recovery\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="clq6x2"\r
+Worker A\r
+ ↓\r
+Timeout\r
+ ↓\r
+Retry\r
+ ↓\r
+Timeout\r
+ ↓\r
+Agent Registry\r
+ ↓\r
+Worker B\r
+ ↓\r
+Success\r
+\`\`\`\r
+\r
+Observability should show:\r
+\r
+\`\`\`text\r
+RUN-001 → failed\r
+RUN-002 → failed\r
+RUN-003 → completed\r
+\`\`\`\r
+\r
+and:\r
+\r
+\`\`\`text\r
+failure = timeout\r
+attempts = 2\r
+failover = Worker B\r
+final_status = success\r
+\`\`\`\r
+\r
+This helps determine whether recovery mechanisms actually work.\r
+\r
+---\r
+\r
+# 19. Observability Helps With Scaling\r
+\r
+Suppose traffic increases:\r
+\r
+\`\`\`text\r
+Requests ↑\r
+      ↓\r
+Tasks ↑\r
+      ↓\r
+Queue depth ↑\r
+      ↓\r
+Worker utilization ↑\r
+      ↓\r
+Latency ↑\r
+\`\`\`\r
+\r
+Observability provides:\r
+\r
+\`\`\`text\r
+request rate\r
+queue depth\r
+consumer lag\r
+active Workers\r
+Worker capacity\r
+P95/P99 latency\r
+CPU\r
+memory\r
+LLM latency\r
+tool latency\r
+\`\`\`\r
+\r
+This allows autoscaling decisions.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Queue depth > threshold\r
+       ↓\r
+Scale Worker pool\r
+       ↓\r
+Queue drains\r
+       ↓\r
+Latency returns to normal\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. Observability Helps With Capacity Planning\r
+\r
+You can derive relationships such as:\r
+\r
+\`\`\`text\r
+Incoming task rate = 100/sec\r
+Average processing time = 200 ms\r
+Target utilization = 70%\r
+\`\`\`\r
+\r
+Approximate required concurrency:\r
+\r
+\`\`\`text\r
+Required capacity\r
+≈\r
+(100 × 0.2) / 0.7\r
+≈ 29 concurrent slots\r
+\`\`\`\r
+\r
+Production capacity planning needs additional margin for variability, dependencies, retries, and failure scenarios.\r
+\r
+Without historical telemetry, capacity planning becomes guesswork.\r
+\r
+---\r
+\r
+# 21. Observability Helps Control Retry Storms\r
+\r
+Imagine:\r
+\r
+\`\`\`text id="4xev0a"\r
+Enterprise API slows\r
+      ↓\r
+Worker timeout\r
+      ↓\r
+Retry\r
+      ↓\r
+Timeout\r
+      ↓\r
+Retry\r
+\`\`\`\r
+\r
+Now multiply that by:\r
+\r
+\`\`\`text\r
+100 Workers\r
+\`\`\`\r
+\r
+You can create:\r
+\r
+\`\`\`text\r
+Retry Storm\r
+ ↓\r
+More API traffic\r
+ ↓\r
+More API failures\r
+ ↓\r
+More retries\r
+\`\`\`\r
+\r
+Observability detects:\r
+\r
+\`\`\`text\r
+Retry rate ↑\r
+Error rate ↑\r
+Dependency latency ↑\r
+Queue depth ↑\r
+\`\`\`\r
+\r
+and enables circuit breakers/backpressure.\r
+\r
+---\r
+\r
+# 22. Observability Enables Root-Cause Analysis\r
+\r
+Consider a user complaint:\r
+\r
+> "The AI gave me an incorrect shipment status."\r
+\r
+There could be many causes.\r
+\r
+\`\`\`text id="ppl6hz"\r
+Incorrect Answer\r
+      │\r
+      ├── Wrong Intent?\r
+      ├── Wrong Agent?\r
+      ├── Wrong Worker?\r
+      ├── Wrong Tool?\r
+      ├── Wrong Arguments?\r
+      ├── Bad API data?\r
+      ├── Bad RAG?\r
+      ├── Wrong Prompt?\r
+      ├── Wrong Model?\r
+      ├── Aggregation error?\r
+      └── LLM reasoning error?\r
+\`\`\`\r
+\r
+A correlated trace turns this into an evidence-based investigation rather than guesswork.\r
+\r
+---\r
+\r
+# 23. Observability Supports Version Management\r
+\r
+Agentic behavior changes when you change:\r
+\r
+\`\`\`text\r
+Agent version\r
+Prompt version\r
+Model version\r
+Tool version\r
+MCP server\r
+Embedding model\r
+RAG index\r
+Chunking strategy\r
+Routing policy\r
+\`\`\`\r
+\r
+Therefore every important execution should record references such as:\r
+\r
+\`\`\`text id="ddq1ul"\r
+agent_version\r
+prompt_version\r
+model_version\r
+tool_version\r
+workflow_version\r
+index/version reference\r
+\`\`\`\r
+\r
+Then you can answer:\r
+\r
+> "Did quality degrade after Prompt v2.2 was deployed?"\r
+\r
+or:\r
+\r
+> "Did latency increase after Model v5?"\r
+\r
+---\r
+\r
+# 24. Observability Enables Regression Detection\r
+\r
+Example:\r
+\r
+\`\`\`text id="tckgpx"\r
+Version 1\r
+Accuracy       94%\r
+Groundedness   96%\r
+P95 latency    3.8 sec\r
+Cost           $0.28\r
+\r
+Version 2\r
+Accuracy       91%\r
+Groundedness   89%\r
+P95 latency    5.1 sec\r
+Cost           $0.41\r
+\`\`\`\r
+\r
+This immediately signals a regression.\r
+\r
+Production observability and evaluation therefore form a feedback loop:\r
+\r
+\`\`\`text\r
+Production\r
+   ↓\r
+Telemetry\r
+   ↓\r
+Failure / Quality Analysis\r
+   ↓\r
+Golden Dataset\r
+   ↓\r
+Regression Evaluation\r
+   ↓\r
+Improvement\r
+   ↓\r
+New Version\r
+   ↓\r
+Production\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Observability Supports Business-Level Monitoring\r
+\r
+Enterprise executives usually don't care about:\r
+\r
+\`\`\`text\r
+Span ID = 8f2a...\r
+\`\`\`\r
+\r
+They care about:\r
+\r
+\`\`\`text\r
+Workflow success\r
+Customer satisfaction\r
+Cost per transaction\r
+Response time\r
+Business SLA\r
+Automation rate\r
+Human escalation rate\r
+\`\`\`\r
+\r
+So observability should connect:\r
+\r
+\`\`\`text\r
+Infrastructure Metrics\r
+       ↓\r
+Agent Metrics\r
+       ↓\r
+Workflow Metrics\r
+       ↓\r
+Business Metrics\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+LLM latency ↑\r
+      ↓\r
+Worker latency ↑\r
+      ↓\r
+Workflow latency ↑\r
+      ↓\r
+SLA breach ↑\r
+      ↓\r
+Customer satisfaction ↓\r
+\`\`\`\r
+\r
+That connection is extremely valuable to enterprise architecture.\r
+\r
+---\r
+\r
+# 26. One Request → Multiple Observability Dimensions\r
+\r
+For every request, CWD should ideally be able to answer:\r
+\r
+| Question                 | Observability        |\r
+| ------------------------ | -------------------- |\r
+| What happened?           | Logs                 |\r
+| Where did it go?         | Distributed traces   |\r
+| How long did it take?    | Latency metrics      |\r
+| Where did it fail?       | Error telemetry      |\r
+| Why did it fail?         | Root-cause telemetry |\r
+| Which agent acted?       | Agent telemetry      |\r
+| Which model ran?         | LLM telemetry        |\r
+| How many tokens?         | Token telemetry      |\r
+| What did it cost?        | Cost telemetry       |\r
+| Which tools were called? | Tool telemetry       |\r
+| What data was retrieved? | RAG/data telemetry   |\r
+| Which messages moved?    | Messaging telemetry  |\r
+| Was it secure?           | Security telemetry   |\r
+| Was the answer good?     | AI evaluation        |\r
+| Was it compliant?        | Audit telemetry      |\r
+\r
+---\r
+\r
+# 27. CWD Observability Architecture\r
+\r
+A practical enterprise architecture is:\r
+\r
+\`\`\`text\r
+                         CWD\r
+                          │\r
+        ┌─────────────────┼─────────────────┐\r
+        │                 │                 │\r
+        ▼                 ▼                 ▼\r
+      Logs              Metrics           Traces\r
+        │                 │                 │\r
+        └─────────────────┼─────────────────┘\r
+                          ▼\r
+                   OpenTelemetry\r
+                          │\r
+                          ▼\r
+                    Telemetry Layer\r
+                          │\r
+              ┌───────────┼───────────┐\r
+              ▼           ▼           ▼\r
+          Dashboards    Alerts      Evaluation\r
+              │           │           │\r
+              ▼           ▼           ▼\r
+          Operations   Incident    AI Quality\r
+              │        Response      Team\r
+              │           │           │\r
+              └───────────┼───────────┘\r
+                          ▼\r
+                    Improvement\r
+\`\`\`\r
+\r
+For an Azure-oriented CWD deployment, this commonly integrates with **Azure Monitor / Application Insights / Log Analytics**, alongside OpenTelemetry instrumentation.\r
+\r
+---\r
+\r
+# 28. The Four Levels of Observability\r
+\r
+I recommend thinking about CWD observability at four levels.\r
+\r
+### Level 1 — Infrastructure\r
+\r
+\`\`\`text\r
+CPU\r
+Memory\r
+Network\r
+Containers\r
+Database\r
+Queues\r
+\`\`\`\r
+\r
+### Level 2 — Application\r
+\r
+\`\`\`text\r
+Requests\r
+Errors\r
+Latency\r
+Throughput\r
+Dependencies\r
+\`\`\`\r
+\r
+### Level 3 — Agent/Workflow\r
+\r
+\`\`\`text\r
+Intent\r
+Routing\r
+Delegation\r
+Tasks\r
+Runs\r
+Steps\r
+Tools\r
+Recovery\r
+\`\`\`\r
+\r
+### Level 4 — AI Quality\r
+\r
+\`\`\`text\r
+Accuracy\r
+Groundedness\r
+Relevance\r
+Consistency\r
+Tool correctness\r
+Retrieval quality\r
+Business outcome\r
+\`\`\`\r
+\r
+A production AI platform needs **all four**.\r
+\r
+---\r
+\r
+# 29. Without Observability, CWD Becomes a Black Box\r
+\r
+Without observability:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+"Something went wrong."\r
+ ↓\r
+Engineer\r
+ ↓\r
+Search 20 services\r
+ ↓\r
+Guess\r
+ ↓\r
+Deploy another change\r
+ ↓\r
+Hope\r
+\`\`\`\r
+\r
+With observability:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+CORR-7890\r
+ ↓\r
+Distributed Trace\r
+ ↓\r
+Worker B\r
+ ↓\r
+MCP\r
+ ↓\r
+Carrier API\r
+ ↓\r
+Timeout\r
+ ↓\r
+Retry\r
+ ↓\r
+Worker C\r
+ ↓\r
+Success\r
+\`\`\`\r
+\r
+Now the system becomes explainable.\r
+\r
+---\r
+\r
+# 30. Observability Is Also a Governance Capability\r
+\r
+Enterprise AI must be able to explain:\r
+\r
+\`\`\`text\r
+Who requested it?\r
+Which agent handled it?\r
+Which model was used?\r
+Which prompt version?\r
+Which data was used?\r
+Which tools were called?\r
+Which policy was applied?\r
+What decision occurred?\r
+What was returned?\r
+\`\`\`\r
+\r
+Therefore observability supports:\r
+\r
+\`\`\`text\r
+Security\r
+Compliance\r
+Audit\r
+Responsible AI\r
+Incident Response\r
+Model Governance\r
+Prompt Governance\r
+Data Governance\r
+\`\`\`\r
+\r
+---\r
+\r
+# 31. Observability Should Not Become a Data-Leakage Mechanism\r
+\r
+This is critical.\r
+\r
+You should **not** blindly log:\r
+\r
+\`\`\`text\r
+Full prompts\r
+Full RAG context\r
+Credentials\r
+Access tokens\r
+PII\r
+Restricted documents\r
+Entire tool responses\r
+\`\`\`\r
+\r
+Instead use:\r
+\r
+\`\`\`text id="j7gquk"\r
+Metadata\r
++\r
+References\r
++\r
+Hashes\r
++\r
+Classification\r
++\r
+Redaction\r
++\r
+Controlled access\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json id="k0t2cl"\r
+{\r
+  "event": "LLM_INVOCATION",\r
+  "correlation_id": "CORR-7890",\r
+  "prompt_id": "shipment-analysis",\r
+  "prompt_version": "2.2.0",\r
+  "model_version": "v4",\r
+  "input_tokens": 4200,\r
+  "output_tokens": 620,\r
+  "classification": "CONFIDENTIAL",\r
+  "context_reference": "ctx-8921"\r
+}\r
+\`\`\`\r
+\r
+rather than storing the entire sensitive prompt/context.\r
+\r
+---\r
+\r
+# 32. The Key Enterprise Benefits\r
+\r
+Observability provides CWD with:\r
+\r
+### 1. Reliability\r
+\r
+\`\`\`text\r
+Detect → Diagnose → Recover\r
+\`\`\`\r
+\r
+### 2. Performance\r
+\r
+\`\`\`text\r
+Measure → Find bottleneck → Optimize\r
+\`\`\`\r
+\r
+### 3. Cost control\r
+\r
+\`\`\`text\r
+Measure tokens/resources → Attribute cost → Optimize\r
+\`\`\`\r
+\r
+### 4. Security\r
+\r
+\`\`\`text\r
+Detect abnormal behavior → Investigate → Contain\r
+\`\`\`\r
+\r
+### 5. AI quality\r
+\r
+\`\`\`text\r
+Measure retrieval/model/tool/agent behavior\r
+\`\`\`\r
+\r
+### 6. Governance\r
+\r
+\`\`\`text\r
+Reconstruct decisions and execution\r
+\`\`\`\r
+\r
+### 7. Scalability\r
+\r
+\`\`\`text\r
+Understand workload → Scale appropriate component\r
+\`\`\`\r
+\r
+### 8. Continuous improvement\r
+\r
+\`\`\`text\r
+Production telemetry → Evaluation → Regression testing → Improvement\r
+\`\`\`\r
+\r
+---\r
+\r
+# 33. The Most Important Mental Model\r
+\r
+For traditional applications:\r
+\r
+\`\`\`text\r
+Monitoring = Is the application running?\r
+\`\`\`\r
+\r
+For CWD:\r
+\r
+\`\`\`text\r
+Observability =\r
+Is it running?\r
++\r
+What happened?\r
++\r
+Why did it happen?\r
++\r
+Which agents participated?\r
++\r
+Which decisions were made?\r
++\r
+Which tools/data were used?\r
++\r
+How long did it take?\r
++\r
+How much did it cost?\r
++\r
+Was it secure?\r
++\r
+Was the AI behavior correct?\r
++\r
+Did the business objective succeed?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 34. Final CWD Observability Formula\r
+\r
+\`\`\`text\r
+Enterprise Multi-Agent Observability\r
+=\r
+Correlation\r
++\r
+Distributed Tracing\r
++\r
+Structured Logging\r
++\r
+Metrics\r
++\r
+Agent Telemetry\r
++\r
+Workflow Telemetry\r
++\r
+LLM Telemetry\r
++\r
+Tool/MCP Telemetry\r
++\r
+RAG/Data Telemetry\r
++\r
+Messaging Telemetry\r
++\r
+Infrastructure Telemetry\r
++\r
+Latency\r
++\r
+Token Usage\r
++\r
+Cost\r
++\r
+Failure/Recovery\r
++\r
+Security Signals\r
++\r
+AI Quality Signals\r
++\r
+Dashboards\r
++\r
+Alerts\r
++\r
+Continuous Evaluation\r
+\`\`\`\r
+\r
+### Final definition\r
+\r
+> **Observability is critical for enterprise multi-agent systems because a single user request becomes a distributed execution graph spanning multiple agents, workflows, LLM calls, tools, data sources, messaging systems, and infrastructure components. End-to-end observability provides the correlation, tracing, logs, metrics, AI-quality signals, cost and token telemetry, security events, dashboards, and alerts required to reconstruct that execution, identify failures and bottlenecks, measure reliability and latency, control cost, validate AI behavior, detect security issues, support auditing, and continuously improve the platform.**\r
+\r
+### Interview-ready one-liner\r
+\r
+> **“In CWD, observability is what turns a distributed multi-agent execution from a black box into an explainable production system. By correlating every request across agents, workflows, tasks, runs, steps, LLMs, RAG, MCP, messaging, data, and infrastructure, we can determine what happened, why it happened, how long it took, what it cost, whether it was secure, whether recovery worked, and whether the AI actually achieved the intended business outcome.”**\r
+\r
+**The architectural separation to remember:**\r
+\r
+\`\`\`text\r
+Logs       → What was recorded?\r
+Traces     → Where did execution go?\r
+Metrics    → How is the system behaving?\r
+Evaluation → Was the AI behavior good?\r
+Audit      → What governed action occurred?\r
+Alerts     → What requires action?\r
+\`\`\`\r
+\r
+And together:\r
+\r
+\`\`\`text\r
+                CWD OBSERVABILITY\r
+                       │\r
+          ┌────────────┼────────────┐\r
+          ▼            ▼            ▼\r
+       Runtime       AI Quality    Security\r
+          │            │            │\r
+          └────────────┼────────────┘\r
+                       ▼\r
+                 BUSINESS OUTCOME\r
+\`\`\`\r
+\r
+**That is why observability is a first-class architectural component of CWD, not merely a logging feature.**\r
+`,code:``},{id:`correlation-ids`,category:`Observability`,title:`Correlation IDs`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how correlation IDs provide end-to-end request tracking across the CWD platform, allowing logs, traces, agent executions, tool calls, messages, and downstream service operations to be connected to a single user request.`,concept:`Absolutely. In CWD, **correlation ID is the backbone of end-to-end observability**. It connects everything that happens because of one user request—even when execution crosses Coordinator, Delegator, Workers, A2A, Service Bus, MCP, RAG, LLMs, databases, and external enterprise systems.\r
+\r
+# Correlation IDs in CWD\r
+\r
+## 1. What is a correlation ID?\r
+\r
+A **correlation ID** is a unique, opaque identifier assigned to a user request and propagated across all downstream components involved in processing that request.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User Request\r
+     │\r
+     │ correlation_id = CORR-7890\r
+     ▼\r
+ API Gateway\r
+     │\r
+     ▼\r
+ Coordinator\r
+     │\r
+     ├── Delegator A\r
+     │      │\r
+     │      ├── Worker A1\r
+     │      │      └── MCP → Enterprise API\r
+     │      │\r
+     │      └── Worker A2\r
+     │             └── RAG → Azure AI Search\r
+     │\r
+     └── Delegator B\r
+            │\r
+            └── Worker B1\r
+                   └── LLM\r
+\`\`\`\r
+\r
+Every meaningful operation carries:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+Therefore, when an engineer searches for \`CORR-7890\`, they can reconstruct the entire execution.\r
+\r
+---\r
+\r
+# 2. Why correlation IDs are critical in multi-agent CWD\r
+\r
+In a traditional application:\r
+\r
+\`\`\`text\r
+Request → Service → Database → Response\r
+\`\`\`\r
+\r
+Tracing is relatively straightforward.\r
+\r
+In CWD:\r
+\r
+\`\`\`text\r
+                    User\r
+                      │\r
+                      ▼\r
+                   Gateway\r
+                      │\r
+                      ▼\r
+                 Coordinator\r
+                 /          \\\r
+                /            \\\r
+        Delegator A       Delegator B\r
+          /     \\              \\\r
+         /       \\              \\\r
+     Worker A   Worker B      Worker C\r
+        │          │             │\r
+       MCP        RAG           LLM\r
+        │          │             │\r
+      API       Search        Model\r
+\`\`\`\r
+\r
+One user request can generate:\r
+\r
+* multiple agents\r
+* multiple workflows\r
+* multiple tasks\r
+* multiple Worker executions\r
+* multiple LLM calls\r
+* multiple RAG searches\r
+* multiple MCP tool calls\r
+* multiple Service Bus messages\r
+* multiple database operations\r
+* retries\r
+* parallel branches\r
+* human approvals\r
+\r
+Without a common identifier, troubleshooting becomes extremely difficult.\r
+\r
+The correlation ID answers:\r
+\r
+> **"Which operations belong to this particular user request?"**\r
+\r
+---\r
+\r
+# 3. Correlation ID vs other IDs\r
+\r
+A production CWD platform should not use correlation ID for everything.\r
+\r
+There is an ID hierarchy:\r
+\r
+\`\`\`text\r
+Correlation ID\r
+       │\r
+       └── Workflow ID\r
+              │\r
+              ├── Task ID\r
+              │      │\r
+              │      └── Run ID\r
+              │             │\r
+              │             └── Step ID\r
+              │\r
+              └── Task ID\r
+\`\`\`\r
+\r
+| ID                | Purpose                                |\r
+| ----------------- | -------------------------------------- |\r
+| \`correlation_id\`  | Connects the entire business request   |\r
+| \`session_id\`      | Identifies user interaction session    |\r
+| \`conversation_id\` | Identifies conversation                |\r
+| \`turn_id\`         | Identifies one user interaction        |\r
+| \`workflow_id\`     | Identifies workflow execution          |\r
+| \`task_id\`         | Identifies a delegated objective       |\r
+| \`parent_task_id\`  | Identifies task hierarchy              |\r
+| \`run_id\`          | Identifies one execution attempt       |\r
+| \`step_id\`         | Identifies one workflow action         |\r
+| \`message_id\`      | Identifies one message                 |\r
+| \`tool_call_id\`    | Identifies one tool invocation         |\r
+| \`trace_id\`        | Distributed tracing identifier         |\r
+| \`span_id\`         | Individual trace operation             |\r
+| \`idempotency_key\` | Prevents duplicate business operations |\r
+\r
+### Important distinction\r
+\r
+\`\`\`text\r
+Correlation ID = Which request?\r
+\r
+Workflow ID    = Which workflow?\r
+\r
+Task ID        = Which objective?\r
+\r
+Run ID         = Which attempt?\r
+\r
+Step ID        = Which action?\r
+\r
+Message ID     = Which message?\r
+\r
+Tool Call ID   = Which tool invocation?\r
+\`\`\`\r
+\r
+---\r
+\r
+# 4. Where is the correlation ID created?\r
+\r
+Normally, the correlation ID is established at the **Gateway or Coordinator boundary**.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ ▼\r
+API Gateway\r
+ │\r
+ │ Generate/validate correlation_id\r
+ │\r
+ ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "request_id": "REQ-1001",\r
+  "user_id": "U-123"\r
+}\r
+\`\`\`\r
+\r
+The ID should be:\r
+\r
+* unique\r
+* opaque\r
+* non-sensitive\r
+* stable for the request\r
+* propagated downstream\r
+* recorded in telemetry\r
+\r
+Do **not** put sensitive information inside it.\r
+\r
+Bad:\r
+\r
+\`\`\`text\r
+correlation_id = "USER-pooja-finance-ssn-123456"\r
+\`\`\`\r
+\r
+Good:\r
+\r
+\`\`\`text\r
+correlation_id = "CORR-7890"\r
+\`\`\`\r
+\r
+---\r
+\r
+# 5. Coordinator propagation\r
+\r
+The Coordinator becomes the central orchestration point.\r
+\r
+Suppose the user asks:\r
+\r
+> "Why is shipment SHIP123 delayed?"\r
+\r
+The Coordinator creates:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "turn_id": "TURN-002",\r
+  "intent": "root_cause_analysis",\r
+  "domain": "logistics"\r
+}\r
+\`\`\`\r
+\r
+Then it delegates:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "DT-5001",\r
+  "parent_task_id": null,\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "source_agent": "coordinator",\r
+  "target_agent": "shipping-delegator",\r
+  "capability": "shipment_delay_analysis"\r
+}\r
+\`\`\`\r
+\r
+The Delegator **does not create a new correlation ID**.\r
+\r
+It continues using:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Delegator propagation\r
+\r
+The Delegator decomposes the domain task.\r
+\r
+\`\`\`text\r
+DT-5001\r
+ │\r
+ ├── WT-1001 → Tracking Worker\r
+ │\r
+ ├── WT-1002 → Carrier Worker\r
+ │\r
+ └── WT-1003 → Route Analysis Worker\r
+\`\`\`\r
+\r
+Each task retains:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001"\r
+}\r
+\`\`\`\r
+\r
+This gives us lineage:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   │\r
+   └── WF-1001\r
+         │\r
+         └── DT-5001\r
+               │\r
+               ├── WT-1001\r
+               ├── WT-1002\r
+               └── WT-1003\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. Worker propagation\r
+\r
+The Worker receives:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "source_agent": "shipping-delegator",\r
+  "target_agent": "tracking-worker",\r
+  "action": "get_tracking_events",\r
+  "input": {\r
+    "shipment_id": "SHIP123"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Worker then performs:\r
+\r
+\`\`\`text\r
+Worker\r
+  │\r
+  ├── Validate input\r
+  │\r
+  ├── Check authorization\r
+  │\r
+  ├── MCP tool\r
+  │\r
+  ├── Enterprise API\r
+  │\r
+  └── Return result\r
+\`\`\`\r
+\r
+Every operation still belongs to:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+---\r
+\r
+# 8. Correlation through MCP/tool calls\r
+\r
+Suppose the Worker invokes:\r
+\r
+\`\`\`text\r
+get_tracking_events\r
+\`\`\`\r
+\r
+The telemetry/audit event can contain:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+  "tool_call_id": "TOOL-001",\r
+  "mcp_server": "shipping-mcp",\r
+  "tool": "get_tracking_events",\r
+  "status": "success"\r
+}\r
+\`\`\`\r
+\r
+Now you can answer:\r
+\r
+> Which tool call caused this result?\r
+\r
+Search:\r
+\r
+\`\`\`text\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+and trace:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Shipping Delegator\r
+ ↓\r
+Tracking Worker\r
+ ↓\r
+MCP\r
+ ↓\r
+get_tracking_events\r
+ ↓\r
+Carrier API\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Correlation through RAG\r
+\r
+Suppose another Worker performs RAG.\r
+\r
+\`\`\`text\r
+Worker\r
+   │\r
+   ▼\r
+Query Transformation\r
+   │\r
+   ▼\r
+Azure AI Search\r
+   │\r
+   ├── Candidate documents\r
+   ├── ACL filtering\r
+   ├── Metadata filtering\r
+   └── Ranking\r
+         │\r
+         ▼\r
+    Authorized Context\r
+         │\r
+         ▼\r
+        LLM\r
+\`\`\`\r
+\r
+Telemetry might record:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1002",\r
+  "step_id": "STEP-010",\r
+  "retrieval_mode": "hybrid",\r
+  "candidate_count": 30,\r
+  "authorized_count": 12,\r
+  "selected_count": 5,\r
+  "status": "success"\r
+}\r
+\`\`\`\r
+\r
+You can therefore determine:\r
+\r
+> Which documents/search operation contributed to the final answer?\r
+\r
+without putting the entire confidential document into the log.\r
+\r
+---\r
+\r
+# 10. Correlation through Azure Service Bus\r
+\r
+This becomes especially important for asynchronous CWD execution.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ A2A Task\r
+    ▼\r
+Service Bus Queue\r
+    │\r
+    ▼\r
+Delegator\r
+    │\r
+    ▼\r
+Worker\r
+\`\`\`\r
+\r
+The message contains:\r
+\r
+\`\`\`json\r
+{\r
+  "message_id": "MSG-10001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "DT-5001",\r
+  "parent_task_id": null,\r
+  "source_agent": "coordinator",\r
+  "target_agent": "shipping-delegator",\r
+  "message_type": "A2A_TASK"\r
+}\r
+\`\`\`\r
+\r
+When Service Bus redelivers the message, the correlation ID remains unchanged.\r
+\r
+That allows you to distinguish:\r
+\r
+\`\`\`text\r
+same business request\r
+        │\r
+        ├── delivery attempt 1\r
+        ├── delivery attempt 2\r
+        └── delivery attempt 3\r
+\`\`\`\r
+\r
+from three unrelated requests.\r
+\r
+---\r
+\r
+# 11. Correlation through retries\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+WT-1001\r
+   │\r
+   ├── RUN-001 → timeout\r
+   │\r
+   ├── RUN-002 → MCP failure\r
+   │\r
+   └── RUN-003 → success\r
+\`\`\`\r
+\r
+All belong to:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+So the complete execution becomes:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   │\r
+   └── Task WT-1001\r
+          │\r
+          ├── RUN-001 → Timeout\r
+          │\r
+          ├── RUN-002 → MCP Error\r
+          │\r
+          └── RUN-003 → Success\r
+\`\`\`\r
+\r
+This is extremely valuable for RCA.\r
+\r
+You can determine:\r
+\r
+* how many retries occurred\r
+* why they occurred\r
+* which Worker handled each attempt\r
+* how much latency the retries added\r
+* how much additional cost they generated\r
+\r
+---\r
+\r
+# 12. Correlation through LangGraph\r
+\r
+LangGraph maintains workflow state.\r
+\r
+The correlation information should be part of the workflow state:\r
+\r
+\`\`\`python\r
+state = {\r
+    "correlation_id": "CORR-7890",\r
+    "workflow_id": "WF-1001",\r
+    "task_id": "DT-5001",\r
+    "intent": "root_cause_analysis",\r
+    "status": "running"\r
+}\r
+\`\`\`\r
+\r
+As the graph transitions:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Intent\r
+  ↓\r
+Authorization\r
+  ↓\r
+Planning\r
+  ↓\r
+Agent Discovery\r
+  ↓\r
+Delegation\r
+  ↓\r
+Monitor\r
+  ↓\r
+Aggregation\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+the correlation ID remains associated with the workflow.\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+LangGraph State\r
+      +\r
+Correlation ID\r
+      ↓\r
+Traceable Workflow Execution\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Correlation with distributed tracing\r
+\r
+Correlation IDs and distributed tracing work together.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Correlation ID\r
+      │\r
+      ▼\r
+Distributed Trace\r
+      │\r
+      ├── Gateway Span\r
+      ├── Coordinator Span\r
+      ├── Delegator Span\r
+      ├── Worker Span\r
+      ├── RAG Span\r
+      ├── MCP Span\r
+      ├── LLM Span\r
+      └── Database/API Span\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+│\r
+├── trace/span: Gateway\r
+│\r
+├── trace/span: Coordinator\r
+│    │\r
+│    ├── Delegator\r
+│    │    ├── Worker\r
+│    │    │    └── MCP\r
+│    │    │         └── Carrier API\r
+│    │    │\r
+│    │    └── Worker\r
+│    │         └── Azure AI Search\r
+│    │\r
+│    └── LLM\r
+│\r
+└── Final Response\r
+\`\`\`\r
+\r
+The exact tracing identifiers (\`trace_id\`, \`span_id\`) are usually provided by distributed tracing infrastructure such as OpenTelemetry.\r
+\r
+The **correlation ID is the business-request identifier**.\r
+\r
+The **trace/span IDs describe technical execution relationships**.\r
+\r
+They complement each other.\r
+\r
+---\r
+\r
+# 14. Structured logging\r
+\r
+Every important CWD log should include correlation information.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "timestamp": "2026-09-06T20:00:01Z",\r
+  "level": "INFO",\r
+  "service": "shipping-worker",\r
+  "event": "TOOL_EXECUTION_COMPLETED",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "tool": "get_tracking_events",\r
+\r
+  "duration_ms": 1240,\r
+  "status": "success"\r
+}\r
+\`\`\`\r
+\r
+Now your observability platform can query:\r
+\r
+\`\`\`text\r
+correlation_id = "CORR-7890"\r
+\`\`\`\r
+\r
+and retrieve all related operations.\r
+\r
+---\r
+\r
+# 15. End-to-end example\r
+\r
+Imagine:\r
+\r
+> **User:** "Why is shipment SHIP123 delayed?"\r
+\r
+The execution might look like:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+│\r
+├── Gateway\r
+│\r
+├── Coordinator\r
+│    │\r
+│    ├── Intent Classification\r
+│    ├── Authorization\r
+│    ├── Agent Discovery\r
+│    │\r
+│    └── A2A → Shipping Delegator\r
+│\r
+├── Shipping Delegator\r
+│    │\r
+│    ├── Task WT-1001\r
+│    │      └── Tracking Worker\r
+│    │             └── MCP\r
+│    │                  └── Carrier API\r
+│    │\r
+│    ├── Task WT-1002\r
+│    │      └── RAG Worker\r
+│    │             └── Azure AI Search\r
+│    │\r
+│    └── Task WT-1003\r
+│           └── Analysis Worker\r
+│                  └── LLM\r
+│\r
+├── Aggregation\r
+│\r
+├── Response Validation\r
+│\r
+└── Final Response\r
+\`\`\`\r
+\r
+All of these operations share:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+An engineer can therefore reconstruct the complete request.\r
+\r
+---\r
+\r
+# 16. Correlation IDs enable root-cause analysis\r
+\r
+Suppose the user complains:\r
+\r
+> "The response took 28 seconds."\r
+\r
+Search:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+You discover:\r
+\r
+\`\`\`text\r
+Gateway             100 ms\r
+Coordinator         1.2 sec\r
+Delegator           500 ms\r
+\r
+Worker A             2 sec\r
+Worker B             4 sec\r
+Worker C            18 sec  ← bottleneck\r
+\r
+MCP                  1 sec\r
+RAG                  3 sec\r
+LLM                  5 sec\r
+Aggregation           1 sec\r
+\`\`\`\r
+\r
+Because the execution is correlated, you can identify:\r
+\r
+\`\`\`text\r
+Worker C\r
+   ↓\r
+MCP\r
+   ↓\r
+Enterprise API\r
+   ↓\r
+18-second latency\r
+\`\`\`\r
+\r
+Without correlation, these may appear as unrelated logs from different services.\r
+\r
+---\r
+\r
+# 17. Correlation IDs enable cost attribution\r
+\r
+The same principle applies to cost.\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   │\r
+   ├── LLM Call #1 → $0.01\r
+   ├── LLM Call #2 → $0.03\r
+   ├── Embedding → $0.002\r
+   ├── Search → $0.001\r
+   ├── Compute → $0.01\r
+   └── Tool/API → $0.005\r
+\`\`\`\r
+\r
+You can calculate:\r
+\r
+\`\`\`text\r
+Cost(CORR-7890) = Σ all correlated execution costs\r
+\`\`\`\r
+\r
+This enables:\r
+\r
+\`\`\`text\r
+Tenant\r
+   ↓\r
+User/Application\r
+   ↓\r
+Session\r
+   ↓\r
+Turn\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Agent / LLM / Tool\r
+\`\`\`\r
+\r
+cost attribution.\r
+\r
+---\r
+\r
+# 18. Correlation IDs enable security investigation\r
+\r
+Suppose a security system detects:\r
+\r
+\`\`\`text\r
+UNAUTHORIZED_TOOL_ATTEMPT\r
+\`\`\`\r
+\r
+with:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "agent_id": "shipping-worker",\r
+  "tool": "submit_reroute_request",\r
+  "authorization": "DENY"\r
+}\r
+\`\`\`\r
+\r
+Security engineers can follow:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   │\r
+   ├── User identity\r
+   ├── Coordinator\r
+   ├── Delegator\r
+   ├── Worker\r
+   ├── Authorization decision\r
+   ├── Tool request\r
+   └── Denial\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> Who initiated it?\r
+> Which agent attempted it?\r
+> Which tool was targeted?\r
+> Which policy denied it?\r
+> Was the attempt repeated?\r
+> Did any downstream operation actually occur?\r
+\r
+---\r
+\r
+# 19. Correlation IDs and auditability\r
+\r
+Correlation is also fundamental to CWD auditability.\r
+\r
+The audit trail can be viewed as:\r
+\r
+\`\`\`text\r
+Session\r
+   │\r
+Conversation\r
+   │\r
+Turn\r
+   │\r
+Correlation ID\r
+   │\r
+Workflow\r
+   │\r
+Task\r
+   │\r
+Run\r
+   │\r
+Step\r
+   │\r
+Audit Events\r
+   ├── Authentication\r
+   ├── Authorization\r
+   ├── Agent Selection\r
+   ├── A2A Delegation\r
+   ├── RAG Access\r
+   ├── Tool Execution\r
+   ├── LLM Invocation\r
+   ├── Configuration\r
+   ├── Approval\r
+   └── Security Event\r
+\`\`\`\r
+\r
+This makes the request reconstructable.\r
+\r
+---\r
+\r
+# 20. Correlation ID should propagate across every boundary\r
+\r
+A good CWD design propagates correlation context across:\r
+\r
+\`\`\`text\r
+Gateway\r
+   ↓\r
+Coordinator\r
+   ↓\r
+A2A\r
+   ↓\r
+Delegator\r
+   ↓\r
+Service Bus\r
+   ↓\r
+Worker\r
+   ↓\r
+MCP\r
+   ↓\r
+Enterprise API\r
+   ↓\r
+RAG\r
+   ↓\r
+LLM\r
+   ↓\r
+Database\r
+   ↓\r
+Response\r
+\`\`\`\r
+\r
+The important rule is:\r
+\r
+> **Do not generate a new correlation ID at every service boundary.**\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   ↓\r
+CORR-7890\r
+   ↓\r
+CORR-7890\r
+   ↓\r
+CORR-7890\r
+\`\`\`\r
+\r
+while creating new child identifiers for tasks/runs/steps/messages.\r
+\r
+---\r
+\r
+# 21. Correlation ID vs trace ID\r
+\r
+This distinction is particularly important in interviews.\r
+\r
+### Correlation ID\r
+\r
+Business/request-level:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+Answers:\r
+\r
+> Which operations belong to this user request?\r
+\r
+### Trace ID\r
+\r
+Distributed tracing-level:\r
+\r
+\`\`\`text\r
+TRACE-abc123\r
+\`\`\`\r
+\r
+Answers:\r
+\r
+> Which technical execution trace does this operation belong to?\r
+\r
+### Span ID\r
+\r
+Individual operation:\r
+\r
+\`\`\`text\r
+SPAN-xyz456\r
+\`\`\`\r
+\r
+Answers:\r
+\r
+> Which specific operation/span is this?\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Business Request\r
+CORR-7890\r
+     │\r
+     └── Distributed Trace\r
+           │\r
+           ├── Span: Coordinator\r
+           ├── Span: Delegator\r
+           ├── Span: Worker\r
+           ├── Span: MCP\r
+           └── Span: API\r
+\`\`\`\r
+\r
+So:\r
+\r
+**Correlation ID provides business-level linkage; trace/span IDs provide technical distributed-tracing structure.**\r
+\r
+---\r
+\r
+# 22. Correlation with asynchronous execution\r
+\r
+This is one of the most important CWD use cases.\r
+\r
+Synchronous:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ▼\r
+Delegator\r
+     │\r
+     ▼\r
+Worker\r
+     │\r
+     ▼\r
+Result\r
+\`\`\`\r
+\r
+Asynchronous:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ CORR-7890\r
+     ▼\r
+Service Bus\r
+     │\r
+     │\r
+     ├─────────────── later ───────────────┐\r
+     │                                    │\r
+     ▼                                    ▼\r
+Delegator                            Result Event\r
+     │                                    │\r
+     ▼                                    │\r
+Worker                                    │\r
+     │                                    │\r
+     └────────────────────────────────────┘\r
+                 CORR-7890\r
+\`\`\`\r
+\r
+The correlation ID allows the result received hours later to be connected to the original request.\r
+\r
+This is essential for:\r
+\r
+* long-running workflows\r
+* human approval\r
+* asynchronous agents\r
+* batch processing\r
+* delayed tool results\r
+* retries\r
+* Service Bus redelivery\r
+* event-driven workflows.\r
+\r
+---\r
+\r
+# 23. Correlation IDs with parallel execution\r
+\r
+Suppose the Coordinator launches three Delegators:\r
+\r
+\`\`\`text\r
+                 CORR-7890\r
+                     │\r
+             Coordinator\r
+             /     |     \\\r
+            /      |      \\\r
+       Shipping  Finance  Risk\r
+          │        │       │\r
+         D1       D2      D3\r
+\`\`\`\r
+\r
+All three branches retain:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+but have different:\r
+\r
+\`\`\`text\r
+workflow/task/run/step IDs\r
+\`\`\`\r
+\r
+This lets the Coordinator aggregate results correctly:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+   │\r
+   ├── Shipping → success\r
+   ├── Finance  → success\r
+   └── Risk     → partial\r
+\`\`\`\r
+\r
+---\r
+\r
+# 24. Correlation ID and context propagation\r
+\r
+The correlation ID should travel through the request context.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+context = {\r
+    "correlation_id": "CORR-7890",\r
+    "workflow_id": "WF-1001",\r
+    "task_id": "WT-1001",\r
+    "tenant_id": "tenant-a"\r
+}\r
+\`\`\`\r
+\r
+Every downstream call receives the appropriate context.\r
+\r
+However, **correlation context is not authorization**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+does **not** mean:\r
+\r
+\`\`\`text\r
+"this request is authorized."\r
+\`\`\`\r
+\r
+Authorization still requires:\r
+\r
+\`\`\`text\r
+Identity\r
++\r
+Role\r
++\r
+Permission\r
++\r
+Scope\r
++\r
+Entitlement\r
++\r
+Resource ACL\r
++\r
+Policy\r
+\`\`\`\r
+\r
+Correlation identifies the request; it does not grant access.\r
+\r
+---\r
+\r
+# 25. What should be logged?\r
+\r
+A useful CWD telemetry envelope could contain:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "CORR-7890",\r
+\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+\r
+  "workflow_id": "WF-1001",\r
+\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+\r
+  "message_id": "MSG-10001",\r
+  "tool_call_id": "TOOL-001",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "agent_version": "2.4.1",\r
+\r
+  "event": "TOOL_EXECUTION_COMPLETED",\r
+  "status": "success",\r
+\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+Sensitive information should be handled carefully.\r
+\r
+Avoid logging:\r
+\r
+\`\`\`text\r
+passwords\r
+access tokens\r
+API keys\r
+private keys\r
+unnecessary PII\r
+full confidential documents\r
+unbounded prompts\r
+full sensitive tool responses\r
+\`\`\`\r
+\r
+Instead use:\r
+\r
+\`\`\`text\r
+references\r
+hashes\r
+classification\r
+redacted values\r
+metadata\r
+result IDs\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Correlation ID anti-patterns\r
+\r
+### ❌ New correlation ID at every hop\r
+\r
+\`\`\`text\r
+Gateway → CORR-1\r
+Coordinator → CORR-2\r
+Worker → CORR-3\r
+\`\`\`\r
+\r
+You lose end-to-end linkage.\r
+\r
+### ❌ Using task ID as correlation ID\r
+\r
+One business request can have many tasks.\r
+\r
+### ❌ Putting sensitive data inside correlation IDs\r
+\r
+\`\`\`text\r
+CORR-user123-finance-secret\r
+\`\`\`\r
+\r
+Never do this.\r
+\r
+### ❌ Losing correlation across Service Bus\r
+\r
+Async processing then becomes difficult to trace.\r
+\r
+### ❌ Losing correlation during retries\r
+\r
+Retry should preserve the original request correlation.\r
+\r
+### ❌ Logging only correlation ID\r
+\r
+Correlation is necessary but not sufficient. You also need workflow/task/run/step identifiers.\r
+\r
+### ❌ Trusting client-provided correlation IDs blindly\r
+\r
+A client may provide an ID for convenience, but the platform should validate or establish its own trusted correlation context.\r
+\r
+---\r
+\r
+# 27. Complete CWD correlation architecture\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │ API Gateway │\r
+                    └──────┬──────┘\r
+                           │\r
+                    CORR-7890\r
+                           │\r
+                           ▼\r
+                  ┌────────────────┐\r
+                  │  COORDINATOR   │\r
+                  └───────┬────────┘\r
+                          A2A\r
+                           │\r
+                           ▼\r
+                  ┌────────────────┐\r
+                  │   DELEGATOR    │\r
+                  └───────┬────────┘\r
+                          │\r
+                     Service Bus\r
+                          │\r
+             ┌────────────┼────────────┐\r
+             ▼            ▼            ▼\r
+          Worker A     Worker B     Worker C\r
+             │            │            │\r
+            MCP          RAG          LLM\r
+             │            │            │\r
+            API       AI Search    Model\r
+             │            │            │\r
+             └────────────┼────────────┘\r
+                          │\r
+                          ▼\r
+                       RESULT\r
+\r
+\r
+        ┌────────────────────────────────────┐\r
+        │       CORRELATION / TELEMETRY      │\r
+        │                                    │\r
+        │ correlation_id = CORR-7890         │\r
+        │ workflow_id                        │\r
+        │ task_id                            │\r
+        │ run_id                             │\r
+        │ step_id                            │\r
+        │ message_id                         │\r
+        │ tool_call_id                       │\r
+        │ trace_id / span_id                 │\r
+        └────────────────────────────────────┘\r
+                          │\r
+             ┌────────────┼────────────┐\r
+             ▼            ▼            ▼\r
+           Logs         Traces       Metrics\r
+             │            │            │\r
+             └────────────┼────────────┘\r
+                          ▼\r
+                  Observability Platform\r
+\`\`\`\r
+\r
+---\r
+\r
+# 28. The operational benefits\r
+\r
+Correlation IDs give CWD the ability to perform:\r
+\r
+| Capability                 | What correlation enables               |\r
+| -------------------------- | -------------------------------------- |\r
+| **Debugging**              | Follow one request across services     |\r
+| **Root-cause analysis**    | Identify the failing component         |\r
+| **Latency analysis**       | Find the slowest branch                |\r
+| **Cost attribution**       | Calculate cost per workflow/request    |\r
+| **Security investigation** | Trace suspicious activity              |\r
+| **Auditability**           | Reconstruct governed actions           |\r
+| **Retry analysis**         | Connect multiple attempts              |\r
+| **Async tracking**         | Connect delayed results                |\r
+| **Agent evaluation**       | Associate outcomes with agent versions |\r
+| **Tool evaluation**        | Measure tool behavior per workflow     |\r
+| **RAG evaluation**         | Trace retrieval to final response      |\r
+| **SLA monitoring**         | Measure end-to-end request performance |\r
+| **Capacity planning**      | Understand workload amplification      |\r
+| **Incident response**      | Reconstruct complete execution         |\r
+\r
+---\r
+\r
+# 29. The key CWD principle\r
+\r
+The most important architectural principle is:\r
+\r
+> **One business request should have one end-to-end correlation identity, while every execution layer creates its own child identifiers for workflows, tasks, runs, steps, messages, and tool calls.**\r
+\r
+So:\r
+\r
+\`\`\`text\r
+                 CORRELATION\r
+                     │\r
+                     ▼\r
+                  WORKFLOW\r
+                     │\r
+             ┌───────┴───────┐\r
+             ▼               ▼\r
+           TASK A           TASK B\r
+             │               │\r
+          RUN A1          RUN B1\r
+             │               │\r
+          STEP A1         STEP B1\r
+             │               │\r
+          TOOL CALL       TOOL CALL\r
+\`\`\`\r
+\r
+Everything can be connected back to:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. Core formula\r
+\r
+### Correlation model\r
+\r
+\`\`\`text\r
+End-to-End Request Tracking\r
+=\r
+Correlation ID\r
++\r
+Workflow ID\r
++\r
+Task ID\r
++\r
+Run ID\r
++\r
+Step ID\r
++\r
+Message ID\r
++\r
+Tool Call ID\r
++\r
+Trace/Span Context\r
++\r
+Structured Logging\r
+\`\`\`\r
+\r
+### CWD observability model\r
+\r
+\`\`\`text\r
+User Request\r
+      ↓\r
+Correlation ID\r
+      ↓\r
+Distributed Execution\r
+      ↓\r
+Logs + Traces + Metrics\r
+      ↓\r
+Agent + Workflow + Tool + RAG + LLM Telemetry\r
+      ↓\r
+Root Cause + Performance + Cost + Security + Audit\r
+\`\`\`\r
+\r
+## Interview-ready answer\r
+\r
+> **“In CWD, the correlation ID is the end-to-end business identifier for a user request. The Coordinator establishes or validates it and propagates it through Delegators, Workers, A2A messages, Service Bus messages, MCP tool calls, RAG operations, LLM calls, and downstream enterprise services. We maintain separate workflow, task, run, step, message, and tool-call identifiers underneath the correlation ID so we can reconstruct the complete execution hierarchy. Combined with distributed tracing, structured logs, metrics, and audit events, correlation IDs allow us to determine what happened, where it happened, why it happened, how long it took, what it cost, whether it was authorized, and where a failure or security issue occurred. Importantly, the correlation ID provides traceability—it does not provide authorization.”**\r
+\r
+### Final definition\r
+\r
+**Correlation ID in CWD is the end-to-end, non-sensitive identifier that links all significant activities generated by a single user request across the Gateway, Coordinator, Delegators, Workers, A2A communication, Service Bus, MCP tools, RAG, LLMs, databases, and downstream enterprise services. Combined with hierarchical execution IDs and distributed tracing, it enables CWD to reconstruct, troubleshoot, audit, evaluate, and optimize the complete lifecycle of a distributed multi-agent request.**\r
+`,code:``},{id:`session-id`,category:`Observability`,title:`Session ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Session ID identifies the broader user interaction and connects multiple requests, conversations, tasks, and executions belonging to the same CWD session.`,concept:`Yes. The key distinction is:\r
+\r
+> **Correlation ID tracks one business request; Session ID tracks the broader user interaction that can contain many requests and executions.**\r
+\r
+# Session ID in CWD\r
+\r
+## 1. What is a Session ID?\r
+\r
+A **Session ID** is a unique identifier representing a broader interaction context between a user/application and the CWD platform.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Session ID = S-1001\r
+\`\`\`\r
+\r
+A single session may contain:\r
+\r
+\`\`\`text\r
+S-1001\r
+ │\r
+ ├── Conversation A\r
+ │     ├── Turn 1\r
+ │     │     └── Workflow 1\r
+ │     ├── Turn 2\r
+ │     │     └── Workflow 2\r
+ │     └── Turn 3\r
+ │           └── Workflow 3\r
+ │\r
+ └── Conversation B\r
+       ├── Turn 1\r
+       │     └── Workflow 4\r
+       └── Turn 2\r
+             └── Workflow 5\r
+\`\`\`\r
+\r
+So the Session ID provides the **top-level interaction boundary**.\r
+\r
+---\r
+\r
+# 2. Session ID vs Correlation ID\r
+\r
+This is one of the most important distinctions in CWD.\r
+\r
+\`\`\`text\r
+SESSION\r
+S-1001\r
+   │\r
+   ├── CORR-7890 → User Request 1\r
+   │\r
+   ├── CORR-7891 → User Request 2\r
+   │\r
+   └── CORR-7892 → User Request 3\r
+\`\`\`\r
+\r
+### Session ID\r
+\r
+Answers:\r
+\r
+> **Which broader user interaction does this belong to?**\r
+\r
+### Correlation ID\r
+\r
+Answers:\r
+\r
+> **Which specific business request does this belong to?**\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+One Session\r
+    ↓\r
+Many Requests\r
+    ↓\r
+Many Correlation IDs\r
+\`\`\`\r
+\r
+But normally:\r
+\r
+\`\`\`text\r
+One Correlation ID\r
+    ↓\r
+One business request\r
+    ↓\r
+Many tasks/runs/steps\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. Complete CWD identity hierarchy\r
+\r
+A useful CWD hierarchy is:\r
+\r
+\`\`\`text\r
+Session ID\r
+    │\r
+    └── Conversation ID\r
+          │\r
+          └── Turn ID\r
+                │\r
+                └── Correlation ID\r
+                      │\r
+                      └── Workflow ID\r
+                            │\r
+                            ├── Task ID\r
+                            │     └── Run ID\r
+                            │           └── Step ID\r
+                            │\r
+                            └── Task ID\r
+                                  └── Run ID\r
+\`\`\`\r
+\r
+Each identifier answers a different question.\r
+\r
+| ID                | Question                           |\r
+| ----------------- | ---------------------------------- |\r
+| \`session_id\`      | Which broader interaction?         |\r
+| \`conversation_id\` | Which conversation?                |\r
+| \`turn_id\`         | Which user request/turn?           |\r
+| \`correlation_id\`  | Which end-to-end business request? |\r
+| \`workflow_id\`     | Which workflow execution?          |\r
+| \`task_id\`         | Which objective?                   |\r
+| \`run_id\`          | Which execution attempt?           |\r
+| \`step_id\`         | Which specific action?             |\r
+\r
+---\r
+\r
+# 4. Why CWD needs Session ID\r
+\r
+Imagine a user interacts with CWD for 30 minutes.\r
+\r
+They ask:\r
+\r
+\`\`\`text\r
+Request 1:\r
+"Show me shipment SHIP123 status."\r
+\r
+Request 2:\r
+"Why is it delayed?"\r
+\r
+Request 3:\r
+"What was the previous carrier event?"\r
+\r
+Request 4:\r
+"Can you recommend an alternative route?"\r
+\`\`\`\r
+\r
+These are **different business requests**.\r
+\r
+Therefore they should have different correlation IDs:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+ │\r
+ ├── CORR-001 → shipment status\r
+ ├── CORR-002 → delay analysis\r
+ ├── CORR-003 → previous event\r
+ └── CORR-004 → rerouting recommendation\r
+\`\`\`\r
+\r
+But they belong to the same broader interaction:\r
+\r
+\`\`\`text\r
+S-1001\r
+\`\`\`\r
+\r
+This allows CWD to maintain continuity without treating every request as an isolated interaction.\r
+\r
+---\r
+\r
+# 5. Session state\r
+\r
+A CWD session can contain high-level information such as:\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "S-1001",\r
+  "tenant_id": "tenant-a",\r
+  "user_identity_ref": "identity-123",\r
+\r
+  "conversation_ids": [\r
+    "CONV-1001",\r
+    "CONV-1002"\r
+  ],\r
+\r
+  "active_workflow_ids": [\r
+    "WF-1001"\r
+  ],\r
+\r
+  "metadata": {\r
+    "channel": "web",\r
+    "language": "en",\r
+    "created_at": "2026-09-06T15:00:00Z",\r
+    "last_activity_at": "2026-09-06T15:25:00Z"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+Notice that the session does **not** need to contain every detailed Worker result.\r
+\r
+Instead it maintains references:\r
+\r
+\`\`\`text\r
+Session\r
+   │\r
+   ├── Conversations\r
+   ├── Active Workflows\r
+   ├── Tasks\r
+   └── Runs\r
+\`\`\`\r
+\r
+Detailed execution information belongs in the corresponding state stores.\r
+\r
+---\r
+\r
+# 6. Session ID and conversations\r
+\r
+A session may contain one or more conversations depending on the application's interaction model.\r
+\r
+\`\`\`text\r
+Session S-1001\r
+      │\r
+      ├── Conversation CONV-1001\r
+      │       ├── Turn 1\r
+      │       ├── Turn 2\r
+      │       └── Turn 3\r
+      │\r
+      └── Conversation CONV-1002\r
+              ├── Turn 1\r
+              └── Turn 2\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+S-1001\r
+ ├── Shipping Investigation\r
+ └── Finance Investigation\r
+\`\`\`\r
+\r
+The Session ID allows CWD to understand that these interactions occurred within the same broader session.\r
+\r
+---\r
+\r
+# 7. Session ID and conversation continuity\r
+\r
+Suppose the first request is:\r
+\r
+> "Why is shipment SHIP123 delayed?"\r
+\r
+CWD processes it and stores relevant context.\r
+\r
+Later the user says:\r
+\r
+> "Can you tell me when it was last scanned?"\r
+\r
+The second request may not repeat:\r
+\r
+\`\`\`text\r
+SHIP123\r
+\`\`\`\r
+\r
+The session/conversation context helps CWD identify the active business object.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Turn 1\r
+   │\r
+   └── shipment = SHIP123\r
+          │\r
+          ▼\r
+     Session Context\r
+          │\r
+          ▼\r
+Turn 2\r
+   │\r
+   └── "when was it last scanned?"\r
+\`\`\`\r
+\r
+However, **session context is not authorization**.\r
+\r
+CWD must still independently validate that the user is authorized to access the shipment.\r
+\r
+---\r
+\r
+# 8. Session ID and short-term memory\r
+\r
+Session ID provides the boundary for active conversational context.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+│\r
+├── Recent messages\r
+├── Active topic\r
+├── Active business objects\r
+├── Recent decisions\r
+├── Relevant summaries\r
+├── Pending questions\r
+└── Active workflow references\r
+\`\`\`\r
+\r
+But CWD should not automatically inject the entire session into every LLM call.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Session Context\r
+       ↓\r
+Relevance Selection\r
+       ↓\r
+Authorization\r
+       ↓\r
+Task Scope\r
+       ↓\r
+Token Budget\r
+       ↓\r
+LLM Context\r
+\`\`\`\r
+\r
+This prevents **context explosion** and unnecessary data exposure.\r
+\r
+---\r
+\r
+# 9. Session ID and multiple workflows\r
+\r
+One session can have multiple workflows.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+S-1001\r
+ │\r
+ ├── CORR-001\r
+ │      └── WF-1001\r
+ │\r
+ ├── CORR-002\r
+ │      └── WF-1002\r
+ │\r
+ └── CORR-003\r
+        └── WF-1003\r
+\`\`\`\r
+\r
+Some workflows may even overlap:\r
+\r
+\`\`\`text\r
+S-1001\r
+ │\r
+ ├── WF-1001 → Running\r
+ ├── WF-1002 → Waiting for approval\r
+ └── WF-1003 → Completed\r
+\`\`\`\r
+\r
+The session provides the broader interaction context while each workflow maintains its own execution state.\r
+\r
+---\r
+\r
+# 10. Session ID and asynchronous execution\r
+\r
+This becomes particularly important with long-running agents.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+       │\r
+       └── Turn 4\r
+             │\r
+             └── CORR-7890\r
+                    │\r
+                    └── WF-1005\r
+                           │\r
+                           └── waiting_for_approval\r
+\`\`\`\r
+\r
+The user leaves and comes back later.\r
+\r
+CWD can locate:\r
+\r
+\`\`\`text\r
+S-1001\r
+   ↓\r
+CORR-7890\r
+   ↓\r
+WF-1005\r
+   ↓\r
+waiting_for_approval\r
+\`\`\`\r
+\r
+and continue the interaction.\r
+\r
+The session therefore provides **continuity**, while workflow state provides **execution recovery**.\r
+\r
+---\r
+\r
+# 11. Session ID and LangGraph\r
+\r
+LangGraph state can carry session information:\r
+\r
+\`\`\`python\r
+state = {\r
+    "session_id": "S-1001",\r
+    "conversation_id": "CONV-1001",\r
+    "turn_id": "TURN-004",\r
+    "correlation_id": "CORR-7890",\r
+\r
+    "workflow_id": "WF-1005",\r
+\r
+    "intent": "shipment_investigation",\r
+    "business_object": {\r
+        "type": "shipment",\r
+        "id": "SHIP123"\r
+    }\r
+}\r
+\`\`\`\r
+\r
+LangGraph then controls:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Understand Request\r
+  ↓\r
+Check Context\r
+  ↓\r
+Authorize\r
+  ↓\r
+Plan\r
+  ↓\r
+Delegate\r
+  ↓\r
+Execute\r
+  ↓\r
+Aggregate\r
+  ↓\r
+Respond\r
+\`\`\`\r
+\r
+The Session ID lets the workflow associate itself with the broader user interaction.\r
+\r
+---\r
+\r
+# 12. Session ID and Redis\r
+\r
+Redis is particularly useful for active session context.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Redis\r
+\r
+session:S-1001\r
+       │\r
+       ├── active conversation\r
+       ├── active topic\r
+       ├── recent context\r
+       ├── workflow references\r
+       └── temporary session metadata\r
+\`\`\`\r
+\r
+Because Redis is low latency, CWD can quickly retrieve active session information.\r
+\r
+But Redis should not necessarily be the authoritative long-term store.\r
+\r
+A common architecture is:\r
+\r
+\`\`\`text\r
+Redis\r
+   ↓\r
+Fast active session context\r
+\r
+Cosmos DB\r
+   ↓\r
+Durable session/application state\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Session ID and Cosmos DB\r
+\r
+Cosmos DB can persist durable session metadata:\r
+\r
+\`\`\`json\r
+{\r
+  "id": "S-1001",\r
+  "document_type": "session",\r
+\r
+  "tenant_id": "tenant-a",\r
+\r
+  "session_id": "S-1001",\r
+\r
+  "conversation_ids": [\r
+    "CONV-1001",\r
+    "CONV-1002"\r
+  ],\r
+\r
+  "active_workflow_ids": [\r
+    "WF-1005"\r
+  ],\r
+\r
+  "metadata": {\r
+    "channel": "web",\r
+    "language": "en"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The session record can reference detailed state elsewhere:\r
+\r
+\`\`\`text\r
+Session\r
+  │\r
+  ├── Conversation records\r
+  ├── Workflow records\r
+  ├── Task records\r
+  └── Run records\r
+\`\`\`\r
+\r
+This avoids turning one session document into an enormous unbounded object.\r
+\r
+---\r
+\r
+# 14. Session ID and authentication\r
+\r
+A session should be associated with an authenticated identity context.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Microsoft Entra ID\r
+  ↓\r
+Authenticated Identity\r
+  ↓\r
+Session S-1001\r
+\`\`\`\r
+\r
+The session can reference:\r
+\r
+\`\`\`text\r
+tenant\r
+user/application identity\r
+roles\r
+scope\r
+entitlements reference\r
+\`\`\`\r
+\r
+But:\r
+\r
+> **Session ID does not authenticate the user and does not grant authorization.**\r
+\r
+For example, knowing:\r
+\r
+\`\`\`text\r
+session_id = S-1001\r
+\`\`\`\r
+\r
+must never be enough to access the session.\r
+\r
+CWD must validate:\r
+\r
+\`\`\`text\r
+Authenticated Identity\r
+        +\r
+Session Ownership\r
+        +\r
+Tenant Boundary\r
+        +\r
+Authorization\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. Session ID and security\r
+\r
+Session IDs should be:\r
+\r
+* opaque\r
+* unpredictable\r
+* non-sensitive\r
+* access-controlled\r
+* tenant-aware\r
+* auditable\r
+* associated with authenticated identity\r
+\r
+Avoid:\r
+\r
+\`\`\`text\r
+S-pooja-finance-admin\r
+\`\`\`\r
+\r
+Prefer:\r
+\r
+\`\`\`text\r
+S-7f81a92c...\r
+\`\`\`\r
+\r
+Also avoid exposing internal session identifiers unnecessarily to users.\r
+\r
+---\r
+\r
+# 16. Session ID and observability\r
+\r
+When a request enters CWD:\r
+\r
+\`\`\`text\r
+S-1001\r
+CORR-7890\r
+\`\`\`\r
+\r
+can both be recorded.\r
+\r
+Then:\r
+\r
+\`\`\`json\r
+{\r
+  "session_id": "S-1001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1005",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+  "agent_id": "tracking-worker",\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+This gives two powerful search dimensions.\r
+\r
+### Search by correlation\r
+\r
+\`\`\`text\r
+CORR-7890\r
+\`\`\`\r
+\r
+means:\r
+\r
+> Show me everything associated with **this one request**.\r
+\r
+### Search by session\r
+\r
+\`\`\`text\r
+S-1001\r
+\`\`\`\r
+\r
+means:\r
+\r
+> Show me the broader interaction and related requests.\r
+\r
+---\r
+\r
+# 17. Session-level troubleshooting\r
+\r
+Suppose the user says:\r
+\r
+> "Something went wrong with my previous request."\r
+\r
+If you have only correlation ID, you need to know which request they mean.\r
+\r
+With Session ID:\r
+\r
+\`\`\`text\r
+S-1001\r
+ │\r
+ ├── CORR-001 → completed\r
+ ├── CORR-002 → failed\r
+ ├── CORR-003 → completed\r
+ └── CORR-004 → waiting_for_approval\r
+\`\`\`\r
+\r
+You can inspect the session and identify the relevant execution.\r
+\r
+---\r
+\r
+# 18. Session ID and memory boundaries\r
+\r
+This is important in enterprise systems.\r
+\r
+A session does **not** automatically mean that every piece of information in the session should be shared with every agent.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+      │\r
+      ├── Coordinator\r
+      │      └── needs high-level context\r
+      │\r
+      ├── Shipping Delegator\r
+      │      └── needs shipping context\r
+      │\r
+      └── Finance Delegator\r
+             └── needs finance context\r
+\`\`\`\r
+\r
+CWD should propagate only the **minimum relevant authorized context**.\r
+\r
+\`\`\`text\r
+Session Context\r
+      ↓\r
+Scope\r
+      ↓\r
+Authorization\r
+      ↓\r
+Task relevance\r
+      ↓\r
+Agent-specific context\r
+\`\`\`\r
+\r
+This is the principle of **controlled context propagation**.\r
+\r
+---\r
+\r
+# 19. Session ID vs persistent memory\r
+\r
+These are also different.\r
+\r
+### Session\r
+\r
+Represents:\r
+\r
+> **Current broader interaction**\r
+\r
+### Persistent memory\r
+\r
+Represents:\r
+\r
+> **Information intentionally retained beyond the session**\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+   │\r
+   ├── User asks about shipment\r
+   ├── Temporary context\r
+   ├── Intermediate results\r
+   └── Active workflows\r
+\`\`\`\r
+\r
+After the session:\r
+\r
+\`\`\`text\r
+Approved persistent memory\r
+   │\r
+   └── Only selected information retained\r
+\`\`\`\r
+\r
+Do not automatically convert the entire session into persistent memory.\r
+\r
+---\r
+\r
+# 20. Session lifecycle\r
+\r
+A CWD session can follow a lifecycle such as:\r
+\r
+\`\`\`text\r
+CREATED\r
+   ↓\r
+ACTIVE\r
+   ↓\r
+IDLE\r
+   ↓\r
+CLOSING\r
+   ↓\r
+CLOSED\r
+   │\r
+   └── or EXPIRED\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User opens application\r
+       ↓\r
+Session CREATED\r
+       ↓\r
+User interacts\r
+       ↓\r
+ACTIVE\r
+       ↓\r
+No activity\r
+       ↓\r
+IDLE\r
+       ↓\r
+Timeout\r
+       ↓\r
+EXPIRED\r
+\`\`\`\r
+\r
+The exact timeout should be determined by enterprise security and application requirements.\r
+\r
+---\r
+\r
+# 21. Session ID and context recovery\r
+\r
+Suppose the Coordinator crashes.\r
+\r
+The user still has:\r
+\r
+\`\`\`text\r
+S-1001\r
+\`\`\`\r
+\r
+CWD can reconstruct the interaction from durable state:\r
+\r
+\`\`\`text\r
+S-1001\r
+   ↓\r
+Conversation\r
+   ↓\r
+Turn\r
+   ↓\r
+Correlation ID\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+\`\`\`\r
+\r
+This is particularly useful when combined with:\r
+\r
+* Cosmos DB\r
+* Redis\r
+* LangGraph checkpointing\r
+* Service Bus\r
+* persistent memory\r
+\r
+The Session ID provides the **top-level lookup boundary**.\r
+\r
+---\r
+\r
+# 22. Session ID in a complete CWD architecture\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │ API Gateway │\r
+                    └──────┬──────┘\r
+                           │\r
+                     Session ID\r
+                       S-1001\r
+                           │\r
+                           ▼\r
+                   ┌──────────────┐\r
+                   │ Coordinator  │\r
+                   └──────┬───────┘\r
+                          │\r
+                ┌─────────┴─────────┐\r
+                │                   │\r
+           Conversation A      Conversation B\r
+                │                   │\r
+             Turn 1              Turn 1\r
+                │                   │\r
+           CORR-001              CORR-003\r
+                │                   │\r
+           Workflow              Workflow\r
+                │                   │\r
+             Tasks                Tasks\r
+                │                   │\r
+              Runs                 Runs\r
+                │                   │\r
+             Steps                Steps\r
+                │                   │\r
+             Workers              Workers\r
+                │                   │\r
+            MCP / RAG             MCP / LLM\r
+\`\`\`\r
+\r
+Supporting state:\r
+\r
+\`\`\`text\r
+             Session\r
+                │\r
+        ┌───────┴────────┐\r
+        ▼                ▼\r
+      Redis            Cosmos\r
+   Active Context    Durable State\r
+\`\`\`\r
+\r
+---\r
+\r
+# 23. Session ID in observability\r
+\r
+The hierarchy can be visualized as:\r
+\r
+\`\`\`text\r
+SESSION\r
+S-1001\r
+│\r
+├── CONVERSATION\r
+│   CONV-1001\r
+│   │\r
+│   ├── TURN\r
+│   │   TURN-001\r
+│   │   │\r
+│   │   └── CORR-001\r
+│   │       └── WF-001\r
+│   │           ├── TASK-001\r
+│   │           │   ├── RUN-001\r
+│   │           │   └── RUN-002\r
+│   │           └── TASK-002\r
+│   │\r
+│   └── TURN-002\r
+│       └── CORR-002\r
+│           └── WF-002\r
+│\r
+└── CONVERSATION\r
+    CONV-1002\r
+        └── TURN-001\r
+            └── CORR-003\r
+\`\`\`\r
+\r
+This gives CWD both:\r
+\r
+**breadth** — session-level interaction\r
+\r
+and\r
+\r
+**depth** — request → workflow → task → run → step.\r
+\r
+---\r
+\r
+# 24. Common anti-patterns\r
+\r
+### ❌ Using Session ID as Correlation ID\r
+\r
+A session contains many requests.\r
+\r
+\`\`\`text\r
+S-1001\r
+ ├── Request A\r
+ ├── Request B\r
+ └── Request C\r
+\`\`\`\r
+\r
+They need separate correlation IDs.\r
+\r
+### ❌ Putting entire conversation into session state\r
+\r
+This creates unbounded state and privacy/security problems.\r
+\r
+### ❌ Treating Session ID as authorization\r
+\r
+A session identifier is not a permission.\r
+\r
+### ❌ Sharing the entire session with every agent\r
+\r
+Use controlled context propagation.\r
+\r
+### ❌ Making Redis the only session store\r
+\r
+A cache failure should not destroy critical durable state.\r
+\r
+### ❌ Storing secrets in session state\r
+\r
+Never put credentials, access tokens, API keys, or unnecessary sensitive data into session context.\r
+\r
+### ❌ Never expiring sessions\r
+\r
+Session lifecycle and retention must be governed.\r
+\r
+---\r
+\r
+# 25. Session vs Correlation vs Workflow\r
+\r
+The easiest way to remember this is:\r
+\r
+\`\`\`text\r
+Session\r
+   ↓\r
+"What broader interaction?"\r
+\r
+Correlation\r
+   ↓\r
+"Which business request?"\r
+\r
+Workflow\r
+   ↓\r
+"Which execution process?"\r
+\r
+Task\r
+   ↓\r
+"What objective?"\r
+\r
+Run\r
+   ↓\r
+"Which attempt?"\r
+\r
+Step\r
+   ↓\r
+"What action?"\r
+\`\`\`\r
+\r
+Or:\r
+\r
+\`\`\`text\r
+S-1001\r
+   │\r
+   ├── CORR-001\r
+   │      └── WF-001\r
+   │             ├── TASK-001\r
+   │             │      └── RUN-001\r
+   │             │             └── STEP-001\r
+   │             └── TASK-002\r
+   │\r
+   └── CORR-002\r
+          └── WF-002\r
+\`\`\`\r
+\r
+---\r
+\r
+# 26. Core formula\r
+\r
+\`\`\`text\r
+Session State\r
+=\r
+Identity Context\r
++\r
+Conversation References\r
++\r
+Turn References\r
++\r
+Active Workflow References\r
++\r
+Task/Run References\r
++\r
+Session Metadata\r
++\r
+Controlled Context\r
++\r
+Lifecycle\r
++\r
+Security\r
++\r
+Correlation\r
+\`\`\`\r
+\r
+And the overall CWD state hierarchy is:\r
+\r
+\`\`\`text\r
+Session\r
+   ↓\r
+Conversation\r
+   ↓\r
+Turn\r
+   ↓\r
+Correlation\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Event\r
+\`\`\`\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“In CWD, the Session ID represents the broader user interaction and acts as the top-level boundary for continuity. A single session can contain multiple conversations, conversational turns, business requests, workflows, tasks, and execution runs. Each individual request receives its own correlation ID, while workflow, task, run, and step IDs provide progressively finer execution lineage. The Session ID allows CWD to retrieve relevant short-term context, associate related conversations and active workflows, recover interaction state, and provide session-level observability. Redis can maintain low-latency active session context while Cosmos DB can provide durable session metadata. Importantly, the Session ID is not an authentication or authorization mechanism; access to session data is still governed by identity, tenant isolation, permissions, entitlements, and policy. CWD should also propagate only the minimum authorized context required by each agent rather than exposing the entire session.”**\r
+\r
+### Core definition\r
+\r
+**A Session ID in CWD is the top-level identifier for a broader user interaction, connecting multiple conversations, turns, requests, workflows, tasks, and executions that occur within the same session. It provides the context boundary for continuity, session management, recovery, and observability, while correlation IDs track individual business requests and workflow/task/run/step IDs provide detailed execution lineage.**\r
+\r
+**Mental model:**\r
+\r
+\`\`\`text\r
+SESSION = Who is interacting + broader interaction context\r
+\r
+CORRELATION = Which specific request?\r
+\r
+WORKFLOW = Which process?\r
+\r
+TASK = What objective?\r
+\r
+RUN = Which attempt?\r
+\r
+STEP = What action?\r
+\`\`\`\r
+`,code:``},{id:`task-id`,category:`Observability`,title:`Task ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Task ID tracks a logical business or technical objective across Coordinator, Delegator, and Worker execution, enabling task-level monitoring, debugging, and lifecycle analysis.`,concept:`Yes. In CWD, the **Task ID is the execution-level identity of a logical objective**. It follows that objective as it moves through Coordinator → Delegator → Worker, and it lets the platform answer:\r
+\r
+> **“What specific piece of work are we trying to accomplish, and what happened to it?”**\r
+\r
+# Task ID in CWD\r
+\r
+## 1. What is a Task ID?\r
+\r
+A **Task ID** uniquely identifies a logical business or technical objective within a CWD workflow.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Task ID = WT-1001\r
+\`\`\`\r
+\r
+The task might mean:\r
+\r
+> “Retrieve the tracking events for shipment SHIP123.”\r
+\r
+The Task ID stays associated with that objective even when the work passes through different agents or Worker instances.\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ Task WT-1001\r
+    ▼\r
+Delegator\r
+    │\r
+    │ Task WT-1001\r
+    ▼\r
+Worker\r
+    │\r
+    │ Task WT-1001\r
+    ▼\r
+MCP → Enterprise API\r
+\`\`\`\r
+\r
+The important point is:\r
+\r
+> **The Task ID identifies the logical work, not the physical service instance executing it.**\r
+\r
+---\r
+\r
+# 2. Task ID vs other CWD IDs\r
+\r
+The CWD identity hierarchy becomes:\r
+\r
+\`\`\`text\r
+Session\r
+   │\r
+   └── Conversation\r
+          │\r
+          └── Turn\r
+                │\r
+                └── Correlation ID\r
+                       │\r
+                       └── Workflow\r
+                              │\r
+                              ├── Task A\r
+                              │     └── Run\r
+                              │           └── Step\r
+                              │\r
+                              └── Task B\r
+                                    └── Run\r
+                                          └── Step\r
+\`\`\`\r
+\r
+The easiest distinction:\r
+\r
+| ID                | Meaning                         |\r
+| ----------------- | ------------------------------- |\r
+| \`session_id\`      | Broader user interaction        |\r
+| \`conversation_id\` | Conversation                    |\r
+| \`turn_id\`         | One conversational turn         |\r
+| \`correlation_id\`  | One end-to-end business request |\r
+| \`workflow_id\`     | Overall workflow execution      |\r
+| **\`task_id\`**     | **One logical objective**       |\r
+| \`run_id\`          | One attempt to execute the task |\r
+| \`step_id\`         | One action within that run      |\r
+| \`message_id\`      | One communication message       |\r
+| \`tool_call_id\`    | One tool invocation             |\r
+\r
+So:\r
+\r
+\`\`\`text\r
+Correlation = request\r
+Task        = objective\r
+Run         = attempt\r
+Step        = action\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. Why Task ID is needed\r
+\r
+Consider this user request:\r
+\r
+> “Why is shipment SHIP123 delayed?”\r
+\r
+The Coordinator may create a workflow:\r
+\r
+\`\`\`text\r
+WF-1001\r
+\`\`\`\r
+\r
+The Delegator decomposes it:\r
+\r
+\`\`\`text\r
+WF-1001\r
+ │\r
+ ├── WT-1001 → Get tracking events\r
+ ├── WT-1002 → Check carrier status\r
+ └── WT-1003 → Analyze possible route constraints\r
+\`\`\`\r
+\r
+Each is a separate logical objective.\r
+\r
+The Task ID allows CWD to track them independently.\r
+\r
+\`\`\`text\r
+CORR-7890\r
+     │\r
+     └── WF-1001\r
+           │\r
+           ├── WT-1001 → completed\r
+           ├── WT-1002 → completed\r
+           └── WT-1003 → failed\r
+\`\`\`\r
+\r
+The Coordinator can therefore determine exactly which part of the workflow succeeded or failed.\r
+\r
+---\r
+\r
+# 4. Task ID follows the logical objective\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+is assigned to:\r
+\r
+\`\`\`text\r
+tracking-worker-v2\r
+\`\`\`\r
+\r
+The Worker fails.\r
+\r
+The Delegator selects another Worker:\r
+\r
+\`\`\`text\r
+tracking-worker-v3\r
+\`\`\`\r
+\r
+The logical task is still:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+not:\r
+\r
+\`\`\`text\r
+WT-1002\r
+\`\`\`\r
+\r
+because the objective did not change.\r
+\r
+\`\`\`text\r
+WT-1001\r
+   │\r
+   ├── Worker v2 → failed\r
+   │\r
+   └── Worker v3 → success\r
+\`\`\`\r
+\r
+This is a critical distinction between **logical task identity** and **execution attempt identity**.\r
+\r
+---\r
+\r
+# 5. Task ID and Run ID\r
+\r
+This is one of the most important concepts.\r
+\r
+A task can have multiple runs:\r
+\r
+\`\`\`text\r
+Task WT-1001\r
+   │\r
+   ├── RUN-001 → timeout\r
+   ├── RUN-002 → MCP failure\r
+   └── RUN-003 → success\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Task ID = WT-1001\r
+\`\`\`\r
+\r
+means:\r
+\r
+> What are we trying to accomplish?\r
+\r
+While:\r
+\r
+\`\`\`text\r
+Run ID = RUN-003\r
+\`\`\`\r
+\r
+means:\r
+\r
+> Which attempt successfully accomplished it?\r
+\r
+This gives CWD a clean retry model:\r
+\r
+\`\`\`text\r
+Task\r
+  │\r
+  ├── Run 1\r
+  ├── Run 2\r
+  └── Run 3\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Coordinator's use of Task ID\r
+\r
+The Coordinator works at the enterprise orchestration level.\r
+\r
+It may create or receive:\r
+\r
+\`\`\`json id="l04r0u"\r
+{\r
+  "task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "source_agent": "coordinator",\r
+  "target_agent": "shipping-delegator",\r
+  "objective": "Investigate shipment delay",\r
+  "required_capability": "shipment_delay_analysis"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator uses the Task ID to:\r
+\r
+* track delegated work\r
+* monitor status\r
+* associate results\r
+* detect timeouts\r
+* track failures\r
+* correlate retries\r
+* enforce deadlines\r
+* aggregate Delegator results\r
+* determine workflow progress.\r
+\r
+---\r
+\r
+# 7. Delegator's use of Task ID\r
+\r
+The Delegator receives:\r
+\r
+\`\`\`text\r
+DT-5001\r
+\`\`\`\r
+\r
+and decomposes it.\r
+\r
+\`\`\`text\r
+DT-5001\r
+ │\r
+ ├── WT-1001\r
+ ├── WT-1002\r
+ └── WT-1003\r
+\`\`\`\r
+\r
+The parent-child relationship is important:\r
+\r
+\`\`\`json id="f5cs5x"\r
+{\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001"\r
+}\r
+\`\`\`\r
+\r
+This creates a task tree.\r
+\r
+\`\`\`text\r
+DT-5001\r
+ │\r
+ ├── WT-1001\r
+ ├── WT-1002\r
+ └── WT-1003\r
+\`\`\`\r
+\r
+The Delegator can then determine:\r
+\r
+\`\`\`text\r
+3 tasks\r
+2 successful\r
+1 failed\r
+\`\`\`\r
+\r
+and return an aggregated domain result.\r
+\r
+---\r
+\r
+# 8. Worker use of Task ID\r
+\r
+The Worker receives a specific task:\r
+\r
+\`\`\`json id="2w7n0y"\r
+{\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "objective": "Retrieve shipment tracking events",\r
+  "required_capability": "shipment_tracking",\r
+  "input": {\r
+    "shipment_id": "SHIP123"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Worker uses the Task ID to associate:\r
+\r
+\`\`\`text\r
+Input\r
+ ↓\r
+Validation\r
+ ↓\r
+RAG/tool calls\r
+ ↓\r
+Business logic\r
+ ↓\r
+Validation\r
+ ↓\r
+Result\r
+\`\`\`\r
+\r
+with:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Task lifecycle\r
+\r
+A production CWD Task ID should have a lifecycle.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+CREATED\r
+   ↓\r
+QUEUED\r
+   ↓\r
+ASSIGNED\r
+   ↓\r
+RUNNING\r
+   ↓\r
+WAITING\r
+   ↓\r
+RETRYING\r
+   ↓\r
+RUNNING\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+Failure paths:\r
+\r
+\`\`\`text\r
+RUNNING\r
+   │\r
+   ├── retryable failure → RETRYING\r
+   │                         ↓\r
+   │                      RUNNING\r
+   │\r
+   ├── permanent failure → FAILED\r
+   │\r
+   ├── deadline exceeded → TIMED_OUT\r
+   │\r
+   ├── user/system cancel → CANCELLED\r
+   │\r
+   └── approval required → WAITING_FOR_APPROVAL\r
+\`\`\`\r
+\r
+The exact states are contract-specific, but the principle is the same:\r
+\r
+> **Task state describes where the logical objective is in its lifecycle.**\r
+\r
+---\r
+\r
+# 10. Example Task state\r
+\r
+A CWD task record could look like:\r
+\r
+\`\`\`json id="bq1v6k"\r
+{\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+\r
+  "source_agent": "shipping-delegator",\r
+  "target_agent": "tracking-worker",\r
+\r
+  "objective": "Retrieve shipment tracking events",\r
+\r
+  "required_capability": "shipment_tracking",\r
+\r
+  "input": {\r
+    "shipment_id": "SHIP123"\r
+  },\r
+\r
+  "constraints": {\r
+    "priority": "high",\r
+    "timeout_ms": 5000\r
+  },\r
+\r
+  "assigned_agent": {\r
+    "agent_id": "tracking-worker",\r
+    "version": "2.4.1"\r
+  },\r
+\r
+  "dependencies": [],\r
+\r
+  "status": "completed",\r
+\r
+  "run_ids": [\r
+    "RUN-001",\r
+    "RUN-002"\r
+  ],\r
+\r
+  "result_reference": "RESULT-1001",\r
+\r
+  "errors": [],\r
+\r
+  "completion": {\r
+    "completed_at": "2026-09-06T20:10:00Z"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This record is enough to understand the task without storing every low-level telemetry event inside the task document.\r
+\r
+---\r
+\r
+# 11. Task dependencies\r
+\r
+Tasks often depend on other tasks.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+WT-1001\r
+Get tracking events\r
+       │\r
+       ▼\r
+WT-1002\r
+Analyze delay\r
+       │\r
+       ▼\r
+WT-1003\r
+Recommend action\r
+\`\`\`\r
+\r
+CWD can represent:\r
+\r
+\`\`\`text\r
+WT-1001 → WT-1002 → WT-1003\r
+\`\`\`\r
+\r
+Or parallel tasks:\r
+\r
+\`\`\`text\r
+              ┌── WT-1001 ──┐\r
+              │              │\r
+Start ────────┼── WT-1002 ──┼──> WT-1004\r
+              │              │\r
+              └── WT-1003 ──┘\r
+\`\`\`\r
+\r
+The Delegator/LangGraph can determine:\r
+\r
+> Which tasks can run now?\r
+\r
+and:\r
+\r
+> Which tasks must wait?\r
+\r
+---\r
+\r
+# 12. Task ID and LangGraph\r
+\r
+LangGraph can maintain task information inside workflow state:\r
+\r
+\`\`\`python id="l4j9b6"\r
+state = {\r
+    "correlation_id": "CORR-7890",\r
+    "workflow_id": "WF-1001",\r
+\r
+    "task_id": "WT-1001",\r
+\r
+    "status": "running",\r
+    "attempt": 2\r
+}\r
+\`\`\`\r
+\r
+A graph can then route based on task state:\r
+\r
+\`\`\`text\r
+Task Started\r
+     │\r
+     ▼\r
+Execute\r
+     │\r
+     ├── success ──────→ Complete\r
+     │\r
+     ├── retryable ────→ Retry\r
+     │\r
+     ├── approval ─────→ Human Review\r
+     │\r
+     └── permanent ────→ Recovery/Failure\r
+\`\`\`\r
+\r
+So:\r
+\r
+**Task ID identifies the work; LangGraph determines what happens next.**\r
+\r
+---\r
+\r
+# 13. Task ID and Service Bus\r
+\r
+When a task is delivered asynchronously:\r
+\r
+\`\`\`text\r
+Delegator\r
+    │\r
+    │ Task WT-1001\r
+    ▼\r
+Azure Service Bus\r
+    │\r
+    ▼\r
+Worker\r
+\`\`\`\r
+\r
+The message should carry:\r
+\r
+\`\`\`json id="v7gspk"\r
+{\r
+  "message_id": "MSG-10001",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+  "source_agent": "shipping-delegator",\r
+  "target_agent": "tracking-worker"\r
+}\r
+\`\`\`\r
+\r
+This allows asynchronous delivery to remain connected to the logical task.\r
+\r
+---\r
+\r
+# 14. Task ID and A2A\r
+\r
+At the Coordinator → Delegator boundary:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     │ task_id = DT-5001\r
+     ▼\r
+Shipping Delegator\r
+\`\`\`\r
+\r
+The Delegator might return:\r
+\r
+\`\`\`json id="y8x3e7"\r
+{\r
+  "task_id": "DT-5001",\r
+  "correlation_id": "CORR-7890",\r
+  "status": "completed",\r
+\r
+  "result": {\r
+    "shipment_status": "delayed",\r
+    "root_cause": "carrier_capacity"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator knows exactly which delegated objective produced that result.\r
+\r
+---\r
+\r
+# 15. Task ID and MCP\r
+\r
+The Worker may call several tools while executing one task:\r
+\r
+\`\`\`text\r
+WT-1001\r
+   │\r
+   ├── get_tracking_events\r
+   ├── get_carrier_status\r
+   └── get_route_constraints\r
+\`\`\`\r
+\r
+Each tool call has its own identifier:\r
+\r
+\`\`\`text\r
+TOOL-001\r
+TOOL-002\r
+TOOL-003\r
+\`\`\`\r
+\r
+but all belong to:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`text\r
+Task\r
+ │\r
+ ├── Tool Call 1\r
+ ├── Tool Call 2\r
+ └── Tool Call 3\r
+\`\`\`\r
+\r
+This lets you answer:\r
+\r
+> Which tools contributed to this task?\r
+\r
+---\r
+\r
+# 16. Task ID and RAG\r
+\r
+Similarly, one RAG operation can belong to a task:\r
+\r
+\`\`\`text\r
+WT-1002\r
+   │\r
+   ├── Query rewrite\r
+   ├── Embedding\r
+   ├── Azure AI Search\r
+   ├── Security filtering\r
+   ├── Reranking\r
+   └── Context construction\r
+\`\`\`\r
+\r
+All of these can be associated with:\r
+\r
+\`\`\`text\r
+task_id = WT-1002\r
+\`\`\`\r
+\r
+This enables task-level analysis such as:\r
+\r
+\`\`\`text\r
+Task WT-1002\r
+──────────────────────\r
+Retrieved candidates: 30\r
+Authorized:            12\r
+Selected:               5\r
+Reranking:               4\r
+LLM context:             4\r
+Latency:              2.4 sec\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. Task-level monitoring\r
+\r
+Task ID becomes a powerful monitoring dimension.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task Metrics\r
+\r
+WT-1001\r
+Status: COMPLETED\r
+Duration: 1.2 sec\r
+Attempts: 1\r
+Worker: tracking-worker\r
+Tools: 1\r
+\r
+WT-1002\r
+Status: COMPLETED\r
+Duration: 3.8 sec\r
+Attempts: 1\r
+Worker: rag-worker\r
+Tools: 0\r
+\r
+WT-1003\r
+Status: FAILED\r
+Duration: 5.0 sec\r
+Attempts: 3\r
+Worker: route-worker\r
+Error: dependency_timeout\r
+\`\`\`\r
+\r
+Now operations teams can determine:\r
+\r
+* task success rate\r
+* task failure rate\r
+* task latency\r
+* retry rate\r
+* timeout rate\r
+* Worker utilization\r
+* tool usage\r
+* cost\r
+* task-level quality.\r
+\r
+---\r
+\r
+# 18. Task-level debugging\r
+\r
+Suppose the final workflow failed.\r
+\r
+Instead of searching thousands of logs, start with:\r
+\r
+\`\`\`text\r
+task_id = WT-1003\r
+\`\`\`\r
+\r
+Then reconstruct:\r
+\r
+\`\`\`text\r
+WT-1003\r
+ │\r
+ ├── RUN-001\r
+ │     └── STEP-001 → API timeout\r
+ │\r
+ ├── RUN-002\r
+ │     └── STEP-001 → API timeout\r
+ │\r
+ └── RUN-003\r
+       └── STEP-001 → authorization failure\r
+\`\`\`\r
+\r
+Now you know:\r
+\r
+\`\`\`text\r
+Logical problem = WT-1003\r
+\`\`\`\r
+\r
+and:\r
+\r
+\`\`\`text\r
+Execution problems =\r
+timeout + timeout + authorization failure\r
+\`\`\`\r
+\r
+This is much more useful than simply seeing:\r
+\r
+\`\`\`text\r
+Workflow FAILED\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Task ID enables lifecycle analysis\r
+\r
+You can analyze the complete lifecycle:\r
+\r
+\`\`\`text\r
+Task Created\r
+     ↓\r
+Queue Wait\r
+     ↓\r
+Agent Selected\r
+     ↓\r
+Worker Started\r
+     ↓\r
+Tool/RAG/LLM Execution\r
+     ↓\r
+Validation\r
+     ↓\r
+Completed\r
+\`\`\`\r
+\r
+Measure:\r
+\r
+\`\`\`text\r
+Task lifecycle latency\r
+=\r
+Queue Wait\r
++\r
+Execution\r
++\r
+Retries\r
++\r
+Validation\r
+\`\`\`\r
+\r
+You can then identify whether a task is slow because of:\r
+\r
+* queueing\r
+* Worker selection\r
+* LLM\r
+* RAG\r
+* MCP\r
+* downstream API\r
+* retry\r
+* validation.\r
+\r
+---\r
+\r
+# 20. Task ID and business outcome\r
+\r
+A task should ultimately connect technical execution to a business objective.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task:\r
+WT-1001\r
+\r
+Objective:\r
+Retrieve shipment tracking events\r
+\r
+Business object:\r
+SHIP123\r
+\r
+Result:\r
+Shipment delayed\r
+\r
+Business outcome:\r
+Provide delay evidence to Coordinator\r
+\`\`\`\r
+\r
+This is important because:\r
+\r
+> **Technical success is not always business success.**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+HTTP 200\r
+   ↓\r
+Tool technically succeeded\r
+   ↓\r
+Wrong shipment data\r
+   ↓\r
+Business task failed\r
+\`\`\`\r
+\r
+Therefore CWD should evaluate:\r
+\r
+\`\`\`text\r
+Task Execution Success\r
++\r
+Result Validity\r
++\r
+Business Objective Achievement\r
+\`\`\`\r
+\r
+---\r
+\r
+# 21. Task ID and partial failure\r
+\r
+Multi-agent workflows often produce partial results.\r
+\r
+\`\`\`text\r
+DT-5001\r
+ │\r
+ ├── WT-1001 → SUCCESS\r
+ ├── WT-1002 → SUCCESS\r
+ └── WT-1003 → FAILED\r
+\`\`\`\r
+\r
+The Delegator might return:\r
+\r
+\`\`\`json id="13r6vn"\r
+{\r
+  "task_id": "DT-5001",\r
+  "status": "partial",\r
+\r
+  "worker_summary": {\r
+    "total": 3,\r
+    "successful": 2,\r
+    "failed": 1\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can then decide:\r
+\r
+\`\`\`text\r
+Partial result\r
+     │\r
+     ├── Continue\r
+     ├── Retry failed task\r
+     ├── Select alternate Worker\r
+     ├── Ask user\r
+     └── Escalate\r
+\`\`\`\r
+\r
+Task IDs make this selective recovery possible.\r
+\r
+---\r
+\r
+# 22. Task ID and observability\r
+\r
+A typical telemetry event might contain:\r
+\r
+\`\`\`json id="lh2e9v"\r
+{\r
+  "timestamp": "2026-09-06T20:10:00Z",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001",\r
+\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "agent_version": "2.4.1",\r
+\r
+  "event": "TASK_COMPLETED",\r
+\r
+  "status": "success",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+Searching:\r
+\r
+\`\`\`text\r
+task_id = WT-1001\r
+\`\`\`\r
+\r
+can reconstruct the complete task execution.\r
+\r
+Searching:\r
+\r
+\`\`\`text\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+can reconstruct the entire business request.\r
+\r
+---\r
+\r
+# 23. Task ID and auditability\r
+\r
+Task-level audit records can answer:\r
+\r
+\`\`\`text\r
+WHO?\r
+Which agent/identity executed it?\r
+\r
+WHAT?\r
+What objective was executed?\r
+\r
+WHEN?\r
+When did it start/end?\r
+\r
+WHICH?\r
+Which Worker/version/tool?\r
+\r
+WHY?\r
+Which workflow/request caused it?\r
+\r
+AUTHORIZED?\r
+Which policy allowed/denied it?\r
+\r
+RESULT?\r
+What was the outcome?\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json id="bqng5q"\r
+{\r
+  "event_type": "TASK_COMPLETED",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "agent_version": "2.4.1",\r
+\r
+  "authorization": {\r
+    "decision": "ALLOW",\r
+    "policy_id": "SHIP-READ-001"\r
+  },\r
+\r
+  "status": "SUCCESS"\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 24. Task ID and cost\r
+\r
+Task IDs also enable cost attribution.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+WT-1001\r
+ │\r
+ ├── LLM → $0.02\r
+ ├── RAG → $0.005\r
+ ├── MCP → $0.003\r
+ └── Compute → $0.01\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text\r
+Task Cost\r
+=\r
+LLM\r
++\r
+RAG\r
++\r
+Tool\r
++\r
+Compute\r
++\r
+Messaging\r
++\r
+Other attributed costs\r
+\`\`\`\r
+\r
+This enables:\r
+\r
+\`\`\`text\r
+Cost per Task\r
+Cost per Workflow\r
+Cost per Agent\r
+Cost per Business Outcome\r
+\`\`\`\r
+\r
+---\r
+\r
+# 25. Task ID and dynamic Worker selection\r
+\r
+The logical task remains stable even if Worker assignment changes.\r
+\r
+\`\`\`text\r
+WT-1001\r
+    │\r
+    ├── Worker A → unavailable\r
+    │\r
+    ├── Worker B → overloaded\r
+    │\r
+    └── Worker C → selected\r
+\`\`\`\r
+\r
+Agent Registry determines eligible Workers.\r
+\r
+The Router selects one.\r
+\r
+The Task ID remains:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+This separates:\r
+\r
+\`\`\`text\r
+Logical Objective\r
+       ≠\r
+Physical Execution Instance\r
+\`\`\`\r
+\r
+That's essential for scalable Worker pools.\r
+\r
+---\r
+\r
+# 26. Task ID and security\r
+\r
+Task ID should also be associated with the security context:\r
+\r
+\`\`\`text\r
+Task\r
+ │\r
+ ├── User identity\r
+ ├── Tenant\r
+ ├── Agent identity\r
+ ├── Scope\r
+ ├── Required capability\r
+ ├── Resource\r
+ └── Authorization decision\r
+\`\`\`\r
+\r
+But again:\r
+\r
+> **Task ID itself does not grant permission.**\r
+\r
+Knowing:\r
+\r
+\`\`\`text\r
+WT-1001\r
+\`\`\`\r
+\r
+must not allow another agent or user to retrieve the task.\r
+\r
+CWD still checks:\r
+\r
+\`\`\`text\r
+Identity\r
++\r
+Tenant\r
++\r
+Role\r
++\r
+Permission\r
++\r
+Scope\r
++\r
+Resource ACL\r
++\r
+Policy\r
+\`\`\`\r
+\r
+---\r
+\r
+# 27. Task state vs Run state vs Step state\r
+\r
+This distinction is very important for an architect.\r
+\r
+\`\`\`text\r
+TASK\r
+"What objective are we executing?"\r
+\r
+       ↓\r
+\r
+RUN\r
+"Which attempt are we executing?"\r
+\r
+       ↓\r
+\r
+STEP\r
+"What action are we executing?"\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+WT-1001\r
+Retrieve shipment events\r
+       │\r
+       ├── RUN-001\r
+       │     ├── STEP-001 Validate\r
+       │     └── STEP-002 MCP\r
+       │\r
+       └── RUN-002\r
+             ├── STEP-003 Validate\r
+             └── STEP-004 MCP\r
+\`\`\`\r
+\r
+Task state persists the objective.\r
+\r
+Run state records the attempt.\r
+\r
+Step state records individual actions.\r
+\r
+---\r
+\r
+# 28. Complete CWD task architecture\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                     Coordinator\r
+                           │\r
+                     CORR-7890\r
+                           │\r
+                      WF-1001\r
+                           │\r
+                           ▼\r
+                      Delegator\r
+                           │\r
+              ┌────────────┼────────────┐\r
+              │            │            │\r
+              ▼            ▼            ▼\r
+           WT-1001      WT-1002      WT-1003\r
+              │            │            │\r
+              ▼            ▼            ▼\r
+          Tracking       RAG        Analysis\r
+           Worker        Worker       Worker\r
+              │            │            │\r
+             MCP       AI Search       LLM\r
+              │            │            │\r
+              └────────────┼────────────┘\r
+                           │\r
+                        Results\r
+                           │\r
+                           ▼\r
+                      Delegator\r
+                           │\r
+                      DT-5001\r
+                           │\r
+                           ▼\r
+                     Coordinator\r
+                           │\r
+                           ▼\r
+                     Final Answer\r
+\`\`\`\r
+\r
+The important lineage is:\r
+\r
+\`\`\`text\r
+CORR-7890\r
+    │\r
+    └── WF-1001\r
+          │\r
+          └── DT-5001\r
+                │\r
+                ├── WT-1001\r
+                │     ├── RUN-001\r
+                │     └── RUN-002\r
+                │\r
+                ├── WT-1002\r
+                │\r
+                └── WT-1003\r
+\`\`\`\r
+\r
+---\r
+\r
+# 29. The four most important properties of Task ID\r
+\r
+### 1. Identity\r
+\r
+\`\`\`text\r
+What logical work is this?\r
+\`\`\`\r
+\r
+### 2. Lineage\r
+\r
+\`\`\`text\r
+Which parent task/request created it?\r
+\`\`\`\r
+\r
+### 3. Lifecycle\r
+\r
+\`\`\`text\r
+What is its current state?\r
+\`\`\`\r
+\r
+### 4. Execution history\r
+\r
+\`\`\`text\r
+Which runs, steps, Workers, tools, and results belong to it?\r
+\`\`\`\r
+\r
+Together:\r
+\r
+\`\`\`text\r
+Task ID\r
+   ↓\r
+Identity + Lineage + Lifecycle + Execution History\r
+\`\`\`\r
+\r
+---\r
+\r
+# 30. Core formula\r
+\r
+\`\`\`text\r
+Task State\r
+=\r
+Task Identity\r
++\r
+Objective\r
++\r
+Parent Task\r
++\r
+Correlation\r
++\r
+Workflow\r
++\r
+Input\r
++\r
+Required Capability\r
++\r
+Constraints\r
++\r
+Assignment\r
++\r
+Dependencies\r
++\r
+Status\r
++\r
+Runs\r
++\r
+Intermediate Results\r
++\r
+Errors\r
++\r
+Completion\r
+\`\`\`\r
+\r
+And the execution hierarchy is:\r
+\r
+\`\`\`text\r
+Session\r
+   ↓\r
+Conversation\r
+   ↓\r
+Turn\r
+   ↓\r
+Correlation\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Tool / LLM / RAG / API\r
+\`\`\`\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“In CWD, the Task ID represents a logical business or technical objective that must be completed. It remains stable as the task moves from Coordinator to Delegator to Worker and even if the task is retried or reassigned to another Worker. The Coordinator uses task IDs to monitor delegated objectives and workflow progress; the Delegator uses parent and child task IDs to decompose and aggregate domain work; and Workers use the task ID to associate validation, tool calls, RAG, LLM processing, and results with the correct objective. Each task can have multiple Run IDs representing different execution attempts and Step IDs representing individual actions. This hierarchy enables task-level monitoring, dependency management, targeted retries, failover, debugging, latency and cost analysis, auditability, and business-outcome evaluation. The Task ID identifies the logical work—it does not provide authorization.”**\r
+\r
+### Core definition\r
+\r
+**A Task ID in CWD is the unique identifier for a logical business or technical objective, maintained across Coordinator, Delegator, and Worker execution and linked to its parent request/workflow, execution attempts, steps, tools, results, errors, and lifecycle state. It provides the execution boundary required to monitor, debug, retry, reassign, aggregate, audit, and evaluate an individual piece of work independently of the physical agent instance executing it.**\r
+\r
+### Mental model\r
+\r
+\`\`\`text\r
+CORRELATION\r
+   ↓\r
+"What business request?"\r
+\r
+WORKFLOW\r
+   ↓\r
+"What overall process?"\r
+\r
+TASK\r
+   ↓\r
+"What specific objective?"\r
+\r
+RUN\r
+   ↓\r
+"Which execution attempt?"\r
+\r
+STEP\r
+   ↓\r
+"What specific action?"\r
+\r
+RESULT\r
+   ↓\r
+"What happened?"\r
+\`\`\`\r
+`,code:``},{id:`run-id`,category:`Observability`,title:`Run ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Run ID identifies a specific execution attempt for a task, including execution status, retries, timestamps, participating agents, failures, and completion information.`,concept:`Yes. In CWD, the Run ID identifies one specific execution attempt of a task. It tells us how that attempt started, which agents and steps participated, whether it succeeded or failed, and what happened during execution.\r
+\r
+> Task ID = What objective are we trying to accomplish? Run ID = Which attempt are we making to accomplish it?\r
+\r
+# Run ID in CWD\r
+\r
+## 1. What is a Run ID?\r
+\r
+A Run ID is a unique identifier assigned to one execution attempt of a task.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Task ID = WT-1001\r
+Run ID  = RUN-003\r
+\`\`\`\r
+\r
+The task may be:\r
+\r
+> “Retrieve tracking events for shipment SHIP123.”\r
+\r
+The run represents one attempt to execute that objective.\r
+\r
+\`\`\`\r
+Task WT-1001\r
+      │\r
+      └── Run RUN-003\r
+             │\r
+             ├── Validate input\r
+             ├── Select Worker\r
+             ├── Execute MCP tool\r
+             ├── Validate result\r
+             └── Return outcome\r
+\`\`\`\r
+\r
+The Run ID remains associated with that particular attempt, even if the task later requires another attempt.\r
+\r
+## 2. Why Run ID is needed\r
+\r
+A task can fail, retry, or be reassigned.\r
+\r
+\`\`\`\r
+Task WT-1001\r
+   │\r
+   ├── RUN-001 → Timeout\r
+   ├── RUN-002 → MCP failure\r
+   └── RUN-003 → Success\r
+\`\`\`\r
+\r
+Without Run IDs, these attempts might appear to be one continuous execution.\r
+\r
+With Run IDs, CWD can distinguish:\r
+\r
+* the original attempt\r
+\r
+* the retry\r
+\r
+* the Worker used in each attempt\r
+\r
+* the failure reason\r
+\r
+* the execution duration\r
+\r
+* the final successful attempt.\r
+\r
+This is essential for recovery, debugging, performance analysis, and auditability.\r
+\r
+# 3. Task ID vs Run ID\r
+\r
+|\r
+Concept\r
+\r
+|\r
+\r
+Task ID\r
+\r
+|\r
+\r
+Run ID\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Represents\r
+\r
+|\r
+\r
+Logical objective\r
+\r
+|\r
+\r
+Specific execution attempt\r
+\r
+|\r
+|\r
+\r
+Example\r
+\r
+|\r
+\r
+\`WT-1001\`\r
+\r
+|\r
+\r
+\`RUN-003\`\r
+\r
+|\r
+|\r
+\r
+Changes during retry?\r
+\r
+|\r
+\r
+Usually no\r
+\r
+|\r
+\r
+Yes\r
+\r
+|\r
+|\r
+\r
+Identifies\r
+\r
+|\r
+\r
+What must be done\r
+\r
+|\r
+\r
+Which attempt did it\r
+\r
+|\r
+|\r
+\r
+Tracks\r
+\r
+|\r
+\r
+Objective lifecycle\r
+\r
+|\r
+\r
+Execution lifecycle\r
+\r
+|\r
+|\r
+\r
+Supports\r
+\r
+|\r
+\r
+Task monitoring and aggregation\r
+\r
+|\r
+\r
+Retry analysis and reproducibility\r
+\r
+|\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+TASK\r
+"What needs to be done?"\r
+\r
+   ↓\r
+\r
+RUN\r
+"Which attempt is executing it?"\r
+\r
+   ↓\r
+\r
+STEP\r
+"What action is happening?"\r
+\`\`\`\r
+\r
+# 4. Run ID hierarchy\r
+\r
+The complete CWD execution hierarchy is:\r
+\r
+\`\`\`\r
+Session\r
+   │\r
+   └── Conversation\r
+          │\r
+          └── Turn\r
+                │\r
+                └── Correlation ID\r
+                       │\r
+                       └── Workflow\r
+                              │\r
+                              └── Task\r
+                                     │\r
+                                     ├── Run 1\r
+                                     │     ├── Step 1\r
+                                     │     └── Step 2\r
+                                     │\r
+                                     └── Run 2\r
+                                           ├── Step 1\r
+                                           └── Step 2\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+CORR-7890\r
+   │\r
+   └── WF-1001\r
+         │\r
+         └── WT-1001\r
+               │\r
+               ├── RUN-001\r
+               ├── RUN-002\r
+               └── RUN-003\r
+\`\`\`\r
+\r
+# 5. What information does a Run ID identify?\r
+\r
+A production Run record typically contains:\r
+\r
+\`\`\`\r
+Run ID\r
+Task ID\r
+Workflow ID\r
+Correlation ID\r
+Attempt Number\r
+Execution Status\r
+Start Time\r
+End Time\r
+Participating Agents\r
+Step References\r
+Intermediate Outputs\r
+Failures\r
+Retry Information\r
+Final Result\r
+Execution Metadata\r
+\`\`\`\r
+\r
+The Run ID is therefore the execution boundary for one attempt.\r
+\r
+# 6. Example Run record\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-003",\r
+  "task_id": "WT-1001",\r
+  "workflow_id": "WF-1001",\r
+  "correlation_id": "CORR-7890",\r
+\r
+  "attempt": 3,\r
+\r
+  "status": "completed",\r
+\r
+  "started_at": "2026-09-06T20:00:00Z",\r
+  "completed_at": "2026-09-06T20:00:01Z",\r
+\r
+  "participating_agents": [\r
+    {\r
+      "agent_id": "shipping-delegator",\r
+      "role": "delegator",\r
+      "version": "1.8.0"\r
+    },\r
+    {\r
+      "agent_id": "tracking-worker",\r
+      "role": "worker",\r
+      "version": "2.4.1"\r
+    }\r
+  ],\r
+\r
+  "steps": [\r
+    {\r
+      "step_id": "STEP-001",\r
+      "type": "validation",\r
+      "status": "completed"\r
+    },\r
+    {\r
+      "step_id": "STEP-002",\r
+      "type": "tool_execution",\r
+      "status": "completed"\r
+    }\r
+  ],\r
+\r
+  "intermediate_outputs": [\r
+    {\r
+      "step_id": "STEP-002",\r
+      "reference": "result-001"\r
+    }\r
+  ],\r
+\r
+  "failures": [],\r
+\r
+  "final_result_reference": "result-RUN-003"\r
+}\r
+\`\`\`\r
+\r
+This record describes one execution attempt, not the entire task history.\r
+\r
+# 7. Run lifecycle\r
+\r
+A Run can follow a lifecycle such as:\r
+\r
+\`\`\`\r
+CREATED\r
+   ↓\r
+STARTING\r
+   ↓\r
+RUNNING\r
+   ↓\r
+WAITING\r
+   ↓\r
+RETRYING\r
+   ↓\r
+RUNNING\r
+   ↓\r
+COMPLETING\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+Failure paths:\r
+\r
+\`\`\`\r
+RUNNING\r
+   │\r
+   ├── retryable failure → RETRYING\r
+   │                         ↓\r
+   │                      RUNNING\r
+   │\r
+   ├── permanent failure → FAILED\r
+   │\r
+   ├── deadline exceeded → TIMED_OUT\r
+   │\r
+   ├── user cancellation → CANCELLED\r
+   │\r
+   └── system termination → ABORTED\r
+\`\`\`\r
+\r
+The exact states depend on the CWD execution contract.\r
+\r
+# 8. Run ID and attempt number\r
+\r
+A Run ID should identify one attempt.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+RUN-001 → attempt 1\r
+RUN-002 → attempt 2\r
+RUN-003 → attempt 3\r
+\`\`\`\r
+\r
+The \`attempt\` field makes retry analysis easier:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-003",\r
+  "task_id": "WT-1001",\r
+  "attempt": 3,\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+This allows CWD to answer:\r
+\r
+> How many attempts were required to complete this task?\r
+\r
+# 9. Run ID and timestamps\r
+\r
+A Run should record at least:\r
+\r
+\`\`\`\r
+started_at\r
+completed_at\r
+\`\`\`\r
+\r
+From these:\r
+\r
+\`\`\`\r
+Run Duration\r
+=\r
+completed_at - started_at\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+RUN-003\r
+Started:   20:00:00\r
+Completed: 20:00:01\r
+\r
+Duration: 1 second\r
+\`\`\`\r
+\r
+Additional timestamps may include:\r
+\r
+* queued time\r
+\r
+* assigned time\r
+\r
+* first execution time\r
+\r
+* waiting time\r
+\r
+* retry time\r
+\r
+* approval time\r
+\r
+* completion time.\r
+\r
+This helps separate queue latency from actual execution latency.\r
+\r
+# 10. Run ID and participating agents\r
+\r
+A single run may involve multiple CWD components.\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   ├── Coordinator\r
+   ├── Shipping Delegator\r
+   ├── Tracking Worker\r
+   ├── MCP Server\r
+   └── Enterprise API\r
+\`\`\`\r
+\r
+The Run record can capture:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-003",\r
+  "participating_agents": [\r
+    {\r
+      "agent_id": "shipping-delegator",\r
+      "version": "1.8.0"\r
+    },\r
+    {\r
+      "agent_id": "tracking-worker",\r
+      "version": "2.4.1"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+This is useful for:\r
+\r
+* identifying which agent executed the task\r
+\r
+* comparing agent versions\r
+\r
+* investigating failures\r
+\r
+* reproducing behavior\r
+\r
+* analyzing workload distribution.\r
+\r
+# 11. Run ID and Step IDs\r
+\r
+A Run contains multiple execution steps.\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   ├── STEP-001 → Validate input\r
+   ├── STEP-002 → Check authorization\r
+   ├── STEP-003 → Select tool\r
+   ├── STEP-004 → Execute MCP\r
+   ├── STEP-005 → Validate output\r
+   └── STEP-006 → Complete task\r
+\`\`\`\r
+\r
+Each step belongs to:\r
+\r
+\`\`\`\r
+RUN-003\r
+\`\`\`\r
+\r
+This lets CWD identify the exact action that failed.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   └── STEP-004\r
+          └── MCP timeout\r
+\`\`\`\r
+\r
+The Run is the attempt; the Step is the individual action.\r
+\r
+# 12. Run ID and failures\r
+\r
+A Run should record failures in a structured way.\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-002",\r
+  "task_id": "WT-1001",\r
+  "status": "failed",\r
+\r
+  "failures": [\r
+    {\r
+      "code": "MCP_TIMEOUT",\r
+      "type": "dependency_failure",\r
+      "message": "Tracking service did not respond",\r
+      "retryable": true,\r
+      "step_id": "STEP-004",\r
+      "timestamp": "2026-09-06T20:00:05Z"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The \`retryable\` field is important.\r
+\r
+CWD can decide whether to:\r
+\r
+* retry\r
+\r
+* select another Worker\r
+\r
+* wait for dependency recovery\r
+\r
+* ask for clarification\r
+\r
+* escalate\r
+\r
+* terminate.\r
+\r
+A Run records the failure; LangGraph and policy determine the recovery path.\r
+\r
+# 13. Run ID and retries\r
+\r
+Suppose the task fails:\r
+\r
+\`\`\`\r
+WT-1001\r
+   │\r
+   ├── RUN-001 → Timeout\r
+   │\r
+   ├── RUN-002 → Dependency failure\r
+   │\r
+   └── RUN-003 → Completed\r
+\`\`\`\r
+\r
+The Task ID remains:\r
+\r
+\`\`\`\r
+WT-1001\r
+\`\`\`\r
+\r
+but each Run ID is different.\r
+\r
+This allows CWD to calculate:\r
+\r
+\`\`\`\r
+Retry Count = Number of additional runs\r
+\`\`\`\r
+\r
+and:\r
+\r
+\`\`\`\r
+Recovery Success Rate\r
+=\r
+Tasks recovered after failure\r
+/\r
+Tasks that initially failed\r
+\`\`\`\r
+\r
+# 14. Run ID and Worker reassignment\r
+\r
+Suppose the first attempt uses Worker A:\r
+\r
+\`\`\`\r
+RUN-001\r
+   └── Worker A → unavailable\r
+\`\`\`\r
+\r
+The second attempt uses Worker B:\r
+\r
+\`\`\`\r
+RUN-002\r
+   └── Worker B → success\r
+\`\`\`\r
+\r
+The task remains:\r
+\r
+\`\`\`\r
+WT-1001\r
+\`\`\`\r
+\r
+This gives CWD a clear execution history:\r
+\r
+\`\`\`\r
+WT-1001\r
+   │\r
+   ├── RUN-001 → Worker A → failed\r
+   └── RUN-002 → Worker B → success\r
+\`\`\`\r
+\r
+This is especially important in dynamically routed Worker pools.\r
+\r
+# 15. Run ID and asynchronous processing\r
+\r
+With Service Bus, the task may be accepted now and completed later.\r
+\r
+\`\`\`\r
+Coordinator\r
+     │\r
+     ▼\r
+Service Bus\r
+     │\r
+     ▼\r
+Worker\r
+     │\r
+     ▼\r
+RUN-003\r
+     │\r
+     ▼\r
+Completed\r
+\`\`\`\r
+\r
+The Run ID lets CWD associate:\r
+\r
+* the message\r
+\r
+* the Worker execution\r
+\r
+* the result\r
+\r
+* the completion event.\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "message_id": "MSG-10001",\r
+  "correlation_id": "CORR-7890",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+This is useful for long-running tasks and delayed results.\r
+\r
+# 16. Run ID and LangGraph\r
+\r
+LangGraph can maintain the current Run ID in workflow state:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+state = {\r
+    "correlation_id": "CORR-7890",\r
+    "workflow_id": "WF-1001",\r
+    "task_id": "WT-1001",\r
+    "run_id": "RUN-003",\r
+    "attempt": 3,\r
+    "status": "running"\r
+}\r
+\`\`\`\r
+\r
+As the graph executes:\r
+\r
+\`\`\`\r
+START\r
+  ↓\r
+Validate\r
+  ↓\r
+Select Worker\r
+  ↓\r
+Execute\r
+  ↓\r
+Validate Result\r
+  ↓\r
+Complete\r
+\`\`\`\r
+\r
+the Run ID identifies the current attempt.\r
+\r
+If a failure occurs:\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   └── Failure\r
+         ↓\r
+      Recovery\r
+\`\`\`\r
+\r
+A new attempt may create:\r
+\r
+\`\`\`\r
+RUN-004\r
+\`\`\`\r
+\r
+while the Task ID remains unchanged.\r
+\r
+# 17. Run ID and observability\r
+\r
+A telemetry event should include:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "event": "RUN_COMPLETED",\r
+  "status": "success",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+This enables queries such as:\r
+\r
+\`\`\`\r
+run_id = RUN-003\r
+\`\`\`\r
+\r
+> Show everything that happened during this specific attempt.\r
+\r
+Or:\r
+\r
+\`\`\`\r
+task_id = WT-1001\r
+\`\`\`\r
+\r
+> Show all attempts for this logical task.\r
+\r
+Or:\r
+\r
+\`\`\`\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+> Show the entire business request.\r
+\r
+# 18. Run ID and debugging\r
+\r
+Suppose a task failed.\r
+\r
+\`\`\`\r
+WT-1001\r
+   └── RUN-002 → FAILED\r
+\`\`\`\r
+\r
+You can inspect:\r
+\r
+\`\`\`\r
+RUN-002\r
+   │\r
+   ├── Start time\r
+   ├── Assigned Worker\r
+   ├── Step 1 → success\r
+   ├── Step 2 → success\r
+   ├── Step 3 → MCP timeout\r
+   ├── Retry decision\r
+   └── Final failure\r
+\`\`\`\r
+\r
+This answers:\r
+\r
+> What happened during this particular attempt?\r
+\r
+That is more precise than simply saying:\r
+\r
+\`\`\`\r
+Task failed.\r
+\`\`\`\r
+\r
+# 19. Run ID and latency analysis\r
+\r
+Run-level latency can be calculated as:\r
+\r
+\`\`\`\r
+Run Latency\r
+=\r
+Completion Time - Start Time\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   ├── Queue wait: 500 ms\r
+   ├── Validation: 100 ms\r
+   ├── MCP: 400 ms\r
+   ├── LLM: 200 ms\r
+   └── Finalization: 40 ms\r
+\`\`\`\r
+\r
+Total:\r
+\r
+\`\`\`\r
+Run Latency = 1,240 ms\r
+\`\`\`\r
+\r
+Run-level analysis helps identify whether latency increased because of:\r
+\r
+* queue wait\r
+\r
+* Worker execution\r
+\r
+* tool calls\r
+\r
+* RAG\r
+\r
+* LLM\r
+\r
+* retries\r
+\r
+* downstream dependencies.\r
+\r
+# 20. Run ID and cost analysis\r
+\r
+Each Run may consume resources.\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   ├── LLM calls\r
+   ├── Embeddings\r
+   ├── RAG/search\r
+   ├── MCP/API calls\r
+   ├── Compute\r
+   └── Messaging\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`\r
+Run Cost\r
+=\r
+LLM Cost\r
++\r
+Embedding Cost\r
++\r
+Compute Cost\r
++\r
+Search Cost\r
++\r
+Tool Cost\r
++\r
+Messaging Cost\r
+\`\`\`\r
+\r
+This allows CWD to compare:\r
+\r
+\`\`\`\r
+RUN-001 → $0.02 → failed\r
+RUN-002 → $0.03 → failed\r
+RUN-003 → $0.04 → success\r
+\`\`\`\r
+\r
+The cost of recovery becomes visible.\r
+\r
+# 21. Run ID and reproducibility\r
+\r
+A Run record should preserve enough metadata to understand how the attempt was executed.\r
+\r
+Useful references include:\r
+\r
+\`\`\`\r
+Agent version\r
+Prompt ID/version\r
+Model/version\r
+Tool version\r
+Workflow version\r
+RAG index/version\r
+Configuration version\r
+Execution environment\r
+\`\`\`\r
+\r
+For example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-003",\r
+  "task_id": "WT-1001",\r
+  "agent_version": "2.4.1",\r
+  "prompt_version": "2.2.0",\r
+  "model_version": "approved-model-v4",\r
+  "workflow_version": "1.5.0"\r
+}\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> Why did this attempt behave differently from the previous one?\r
+\r
+# 22. Run ID and partial results\r
+\r
+A Run may produce intermediate outputs before failing.\r
+\r
+\`\`\`\r
+RUN-002\r
+   │\r
+   ├── STEP-001 → validated\r
+   ├── STEP-002 → tracking retrieved\r
+   ├── STEP-003 → carrier API timeout\r
+   └── FAILED\r
+\`\`\`\r
+\r
+The Run can preserve references to those outputs:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "run_id": "RUN-002",\r
+  "status": "failed",\r
+  "intermediate_outputs": [\r
+    {\r
+      "step_id": "STEP-002",\r
+      "reference": "result-001"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+This allows recovery to reuse valid results where policy permits, rather than repeating everything.\r
+\r
+# 23. Run ID and business outcome\r
+\r
+A technically completed Run does not always mean the business objective was achieved.\r
+\r
+\`\`\`\r
+RUN-003\r
+   │\r
+   ├── Tool returned HTTP 200\r
+   ├── Result schema valid\r
+   └── Wrong shipment data\r
+\`\`\`\r
+\r
+So CWD should distinguish:\r
+\r
+\`\`\`\r
+Execution Status = completed\r
+\`\`\`\r
+\r
+from:\r
+\r
+\`\`\`\r
+Business Outcome = unsuccessful\r
+\`\`\`\r
+\r
+This is why Run records should include:\r
+\r
+* execution status\r
+\r
+* validation status\r
+\r
+* business result\r
+\r
+* final result reference\r
+\r
+* warnings/errors.\r
+\r
+# 24. Run ID and auditability\r
+\r
+A Run record supports audit questions such as:\r
+\r
+\`\`\`\r
+Which attempt executed the task?\r
+Which agent/version participated?\r
+When did it start and finish?\r
+Which steps occurred?\r
+Which tools were called?\r
+Which failures occurred?\r
+Which policy decisions applied?\r
+What result was produced?\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_type": "RUN_COMPLETED",\r
+  "run_id": "RUN-003",\r
+  "task_id": "WT-1001",\r
+  "workflow_id": "WF-1001",\r
+  "correlation_id": "CORR-7890",\r
+  "agent_id": "tracking-worker",\r
+  "status": "SUCCESS",\r
+  "final_result_reference": "result-RUN-003"\r
+}\r
+\`\`\`\r
+\r
+The Run ID makes the execution attempt auditable without confusing it with the broader task.\r
+\r
+# 25. Run ID and persistent state\r
+\r
+A Run record can be persisted in Cosmos DB or another durable execution store.\r
+\r
+\`\`\`\r
+Cosmos DB\r
+   │\r
+   └── Run Records\r
+         ├── RUN-001\r
+         ├── RUN-002\r
+         └── RUN-003\r
+\`\`\`\r
+\r
+Redis may hold active working state:\r
+\r
+\`\`\`\r
+Redis\r
+   │\r
+   └── run:RUN-003\r
+\`\`\`\r
+\r
+LangGraph controls workflow transitions.\r
+\r
+Service Bus delivers messages.\r
+\r
+Observability captures detailed telemetry.\r
+\r
+\`\`\`\r
+Run State\r
+   ├── Cosmos → Durable execution record\r
+   ├── Redis → Active working data\r
+   ├── LangGraph → Workflow control\r
+   ├── Service Bus → Message delivery\r
+   └── Observability → Execution telemetry\r
+\`\`\`\r
+\r
+# 26. Run ID vs Task ID vs Step ID\r
+\r
+This distinction is essential for architecture and interviews.\r
+\r
+\`\`\`\r
+TASK WT-1001\r
+"What objective?"\r
+\r
+   │\r
+   └── RUN-003\r
+       "Which attempt?"\r
+\r
+          │\r
+          ├── STEP-001\r
+          │   "What action?"\r
+          │\r
+          ├── STEP-002\r
+          │   "What action?"\r
+          │\r
+          └── STEP-003\r
+              "What action?"\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Task: Retrieve shipment events\r
+Run:  RUN-003\r
+Step: Execute MCP tool\r
+\`\`\`\r
+\r
+A task can have many runs.\r
+\r
+A run can have many steps.\r
+\r
+# 27. Complete CWD example\r
+\r
+\`\`\`\r
+User Request\r
+     │\r
+     ▼\r
+Correlation CORR-7890\r
+     │\r
+     ▼\r
+Workflow WF-1001\r
+     │\r
+     ▼\r
+Task WT-1001\r
+"Retrieve shipment events"\r
+     │\r
+     ├── RUN-001\r
+     │     ├── Tracking Worker v2\r
+     │     ├── MCP timeout\r
+     │     └── FAILED\r
+     │\r
+     ├── RUN-002\r
+     │     ├── Tracking Worker v2\r
+     │     ├── Carrier API failure\r
+     │     └── FAILED\r
+     │\r
+     └── RUN-003\r
+           ├── Tracking Worker v3\r
+           ├── MCP success\r
+           ├── Result validation\r
+           └── COMPLETED\r
+\`\`\`\r
+\r
+This is the complete execution history of one logical task.\r
+\r
+# 28. Core formula\r
+\r
+\`\`\`\r
+Run State\r
+=\r
+Run Identity\r
++\r
+Task Reference\r
++\r
+Workflow Reference\r
++\r
+Correlation\r
++\r
+Attempt Number\r
++\r
+Execution Status\r
++\r
+Timestamps\r
++\r
+Participating Agents\r
++\r
+Step\r
+\`\`\`\r
+\r
+\r
+### One-line mental model\r
+\r
+\`\`\`\r
+Task ID = What must be done\r
+Run ID  = Which attempt is doing it\r
+Step ID = What action happened\r
+\`\`\`\r
+\r
+Example: \`WT-1001\` may have \`RUN-001\` failed, \`RUN-002\` timed out, and \`RUN-003\` completed. The task remains the same; the Run IDs distinguish its execution history.\r
+`,code:``},{id:`turn-id`,category:`Observability`,title:`Turn ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Turn ID tracks an individual conversational interaction between the user and CWD, connecting the user request, agent processing, tool activity, intermediate results, and final response.`,concept:`Yes. In CWD, the **Turn ID represents one conversational interaction**—typically one user request and the CWD processing associated with that request through to the response.\r
+\r
+> **Session ID = broader interaction**\r
+> **Turn ID = one conversational exchange**\r
+> **Correlation ID = end-to-end tracking of the business request**\r
+> **Workflow/Task/Run/Step IDs = execution details**\r
+\r
+# Turn ID in CWD\r
+\r
+## 1. What is a Turn ID?\r
+\r
+A **Turn ID** uniquely identifies one conversational turn within a conversation.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Turn ID = TURN-002\r
+\`\`\`\r
+\r
+The turn could represent:\r
+\r
+\`\`\`text\r
+User:\r
+"Why is shipment SHIP123 delayed?"\r
+\`\`\`\r
+\r
+CWD then associates everything related to processing that request with:\r
+\r
+\`\`\`text\r
+TURN-002\r
+\`\`\`\r
+\r
+including:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Intent Detection\r
+     ↓\r
+Authorization\r
+     ↓\r
+Planning\r
+     ↓\r
+Agent Delegation\r
+     ↓\r
+Worker Execution\r
+     ↓\r
+Tool / RAG / LLM Calls\r
+     ↓\r
+Intermediate Results\r
+     ↓\r
+Aggregation\r
+     ↓\r
+Final Response\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Where Turn ID fits in the CWD hierarchy\r
+\r
+The overall hierarchy is:\r
+\r
+\`\`\`text\r
+SESSION\r
+S-1001\r
+   │\r
+   └── CONVERSATION\r
+       CONV-1001\r
+          │\r
+          ├── TURN-001\r
+          │     └── CORR-001\r
+          │\r
+          ├── TURN-002\r
+          │     └── CORR-002\r
+          │            └── WORKFLOW\r
+          │                  ├── TASK\r
+          │                  │    └── RUN\r
+          │                  │         └── STEP\r
+          │                  └── TASK\r
+          │\r
+          └── TURN-003\r
+                └── CORR-003\r
+\`\`\`\r
+\r
+So the Turn ID is the bridge between **conversation** and **execution**.\r
+\r
+---\r
+\r
+# 3. Turn ID vs Session ID\r
+\r
+A Session can contain many turns.\r
+\r
+\`\`\`text\r
+Session S-1001\r
+ │\r
+ ├── Turn 001\r
+ │   "Show shipment status"\r
+ │\r
+ ├── Turn 002\r
+ │   "Why is it delayed?"\r
+ │\r
+ ├── Turn 003\r
+ │   "When was it last scanned?"\r
+ │\r
+ └── Turn 004\r
+     "Recommend an alternative route"\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Session ID = S-1001\r
+\`\`\`\r
+\r
+identifies the broader interaction.\r
+\r
+Each request gets:\r
+\r
+\`\`\`text\r
+TURN-001\r
+TURN-002\r
+TURN-003\r
+TURN-004\r
+\`\`\`\r
+\r
+The Session provides **continuity**; the Turn provides **interaction-level granularity**.\r
+\r
+---\r
+\r
+# 4. Turn ID vs Correlation ID\r
+\r
+These are closely related but serve different purposes.\r
+\r
+### Turn ID\r
+\r
+Answers:\r
+\r
+> **Which conversational interaction is this?**\r
+\r
+### Correlation ID\r
+\r
+Answers:\r
+\r
+> **Which distributed business request does this execution belong to?**\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Session S-1001\r
+      │\r
+      └── Conversation CONV-1001\r
+             │\r
+             └── Turn TURN-002\r
+                    │\r
+                    └── Correlation CORR-7890\r
+                           │\r
+                           └── Workflow WF-1001\r
+\`\`\`\r
+\r
+A turn normally initiates one correlated execution, although a turn may involve multiple workflows or asynchronous work depending on the application design.\r
+\r
+---\r
+\r
+# 5. Why Turn ID is important\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+User:\r
+"Why is shipment SHIP123 delayed?"\r
+\`\`\`\r
+\r
+CWD may perform:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── Intent classification\r
+   ├── Authorization\r
+   ├── Shipping agent selection\r
+   ├── Worker task 1\r
+   ├── Worker task 2\r
+   ├── RAG retrieval\r
+   ├── MCP tool calls\r
+   ├── LLM analysis\r
+   ├── Result aggregation\r
+   └── Final response\r
+\`\`\`\r
+\r
+The Turn ID lets CWD answer:\r
+\r
+> **Which user interaction caused these operations and this response?**\r
+\r
+---\r
+\r
+# 6. Typical Turn record\r
+\r
+A production CWD system might maintain a turn record like:\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+\r
+  "user_message": {\r
+    "message_id": "MSG-2001",\r
+    "role": "user",\r
+    "content": "Why is shipment SHIP123 delayed?"\r
+  },\r
+\r
+  "context": {\r
+    "active_topic": "shipment investigation",\r
+    "business_object": {\r
+      "type": "shipment",\r
+      "id": "SHIP123"\r
+    },\r
+    "relevant_previous_turns": [\r
+      "TURN-001"\r
+    ]\r
+  },\r
+\r
+  "interpretation": {\r
+    "intent": "root_cause_analysis",\r
+    "domain": "logistics",\r
+    "query_type": "analytical"\r
+  },\r
+\r
+  "execution": {\r
+    "task_ids": [\r
+      "WT-1001",\r
+      "WT-1002"\r
+    ],\r
+    "run_ids": [\r
+      "RUN-001",\r
+      "RUN-002"\r
+    ]\r
+  },\r
+\r
+  "tool_interactions": [\r
+    {\r
+      "tool_call_id": "TOOL-001",\r
+      "tool": "get_tracking_events",\r
+      "status": "completed"\r
+    }\r
+  ],\r
+\r
+  "intermediate_results": [\r
+    {\r
+      "reference": "RESULT-001"\r
+    }\r
+  ],\r
+\r
+  "response": {\r
+    "status": "completed",\r
+    "message_id": "MSG-2002",\r
+    "result_reference": "RESULT-TURN-002"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Turn record therefore connects **conversation → interpretation → execution → response**.\r
+\r
+---\r
+\r
+# 7. Turn lifecycle\r
+\r
+A turn can have a lifecycle such as:\r
+\r
+\`\`\`text\r
+RECEIVED\r
+   ↓\r
+PROCESSING\r
+   ↓\r
+UNDERSTANDING\r
+   ↓\r
+EXECUTING\r
+   ↓\r
+WAITING_FOR_TASK\r
+   ↓\r
+GENERATING_RESPONSE\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+Other possible states:\r
+\r
+\`\`\`text\r
+WAITING_FOR_APPROVAL\r
+WAITING_FOR_INPUT\r
+PARTIAL\r
+FAILED\r
+CANCELLED\r
+TIMEOUT\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── user request received\r
+   ├── workflow started\r
+   ├── Worker executing\r
+   ├── waiting for approval\r
+   ├── approval received\r
+   ├── workflow resumed\r
+   └── response completed\r
+\`\`\`\r
+\r
+This is especially important for asynchronous and human-in-the-loop workflows.\r
+\r
+---\r
+\r
+# 8. Turn ID connects the user request to execution\r
+\r
+The Turn is the bridge:\r
+\r
+\`\`\`text\r
+USER\r
+ │\r
+ │ "Why is shipment SHIP123 delayed?"\r
+ ▼\r
+TURN-002\r
+ │\r
+ ├── CORR-7890\r
+ │\r
+ ├── WF-1001\r
+ │\r
+ ├── WT-1001\r
+ │\r
+ ├── WT-1002\r
+ │\r
+ ├── RUN-001\r
+ │\r
+ ├── TOOL-001\r
+ │\r
+ ├── RAG retrieval\r
+ │\r
+ ├── LLM analysis\r
+ │\r
+ └── FINAL RESPONSE\r
+\`\`\`\r
+\r
+This means an engineer can start from a conversational interaction and follow it into the distributed execution graph.\r
+\r
+---\r
+\r
+# 9. Turn ID and previous conversation context\r
+\r
+Turns provide conversational continuity.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TURN-001\r
+User:\r
+"Tell me about shipment SHIP123."\r
+\r
+       ↓\r
+\r
+TURN-002\r
+User:\r
+"Why is it delayed?"\r
+\`\`\`\r
+\r
+CWD can associate:\r
+\r
+\`\`\`text\r
+TURN-002\r
+    │\r
+    └── relevant_previous_turns\r
+             │\r
+             └── TURN-001\r
+\`\`\`\r
+\r
+The context builder can then construct:\r
+\r
+\`\`\`text\r
+Current Request\r
++\r
+Relevant Previous Turn\r
++\r
+Authorized Memory\r
++\r
+Current Task State\r
++\r
+Authorized RAG Evidence\r
++\r
+Governed Prompt\r
+\`\`\`\r
+\r
+The important word is **relevant**.\r
+\r
+CWD should not blindly send the entire conversation to every agent.\r
+\r
+---\r
+\r
+# 10. Turn ID and Coordinator\r
+\r
+The Coordinator typically begins processing the turn.\r
+\r
+\`\`\`text\r
+TURN-002\r
+    │\r
+    ▼\r
+Coordinator\r
+    │\r
+    ├── Understand intent\r
+    ├── Identify domain\r
+    ├── Validate authorization\r
+    ├── Create plan\r
+    ├── Discover agent\r
+    └── Delegate\r
+\`\`\`\r
+\r
+The Coordinator can associate its decisions with:\r
+\r
+\`\`\`text\r
+turn_id = TURN-002\r
+\`\`\`\r
+\r
+This lets you later determine:\r
+\r
+> What did the Coordinator decide for this particular conversational request?\r
+\r
+---\r
+\r
+# 11. Turn ID and Delegator\r
+\r
+Suppose the Coordinator creates:\r
+\r
+\`\`\`text\r
+DT-5001\r
+\`\`\`\r
+\r
+The Delegator decomposes it:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   └── DT-5001\r
+        │\r
+        ├── WT-1001\r
+        ├── WT-1002\r
+        └── WT-1003\r
+\`\`\`\r
+\r
+The child tasks inherit the relevant execution lineage:\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+  "correlation_id": "CORR-7890",\r
+  "task_id": "WT-1001",\r
+  "parent_task_id": "DT-5001"\r
+}\r
+\`\`\`\r
+\r
+Now every Worker result can be connected back to the conversational turn.\r
+\r
+---\r
+\r
+# 12. Turn ID and Worker\r
+\r
+A Worker receives:\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+  "correlation_id": "CORR-7890",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003"\r
+}\r
+\`\`\`\r
+\r
+Its execution might be:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   └── WT-1001\r
+        │\r
+        └── RUN-003\r
+             │\r
+             ├── Validate\r
+             ├── MCP\r
+             ├── Enterprise API\r
+             └── Validate Result\r
+\`\`\`\r
+\r
+Thus, the Worker result can be traced all the way back to the user's conversational request.\r
+\r
+---\r
+\r
+# 13. Turn ID and tool activity\r
+\r
+One turn can produce many tool calls:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── TOOL-001 → get_tracking_events\r
+   ├── TOOL-002 → get_carrier_status\r
+   └── TOOL-003 → get_route_constraints\r
+\`\`\`\r
+\r
+Each tool call has its own identity, but all belong to:\r
+\r
+\`\`\`text\r
+TURN-002\r
+\`\`\`\r
+\r
+This lets operations teams ask:\r
+\r
+> Which tools were used to answer this particular user request?\r
+\r
+---\r
+\r
+# 14. Turn ID and RAG\r
+\r
+A turn may trigger RAG:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   └── RAG Worker\r
+         │\r
+         ├── Query transformation\r
+         ├── Azure AI Search\r
+         ├── Security filtering\r
+         ├── Ranking\r
+         └── Context construction\r
+\`\`\`\r
+\r
+Telemetry might contain:\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "retrieval_mode": "hybrid",\r
+  "candidate_count": 30,\r
+  "authorized_count": 12,\r
+  "selected_count": 5\r
+}\r
+\`\`\`\r
+\r
+This allows CWD to determine what retrieval activity contributed to a particular response.\r
+\r
+---\r
+\r
+# 15. Turn ID and LLM calls\r
+\r
+One conversational turn may trigger multiple LLM calls:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── LLM #1 → Intent classification\r
+   ├── LLM #2 → Planning\r
+   ├── LLM #3 → Analysis\r
+   └── LLM #4 → Response generation\r
+\`\`\`\r
+\r
+Each invocation can be associated with:\r
+\r
+\`\`\`text\r
+turn_id\r
+correlation_id\r
+workflow_id\r
+task_id\r
+run_id\r
+step_id\r
+model\r
+prompt version\r
+\`\`\`\r
+\r
+This is useful for:\r
+\r
+* token analysis\r
+* cost analysis\r
+* latency analysis\r
+* prompt evaluation\r
+* model evaluation\r
+* regression analysis.\r
+\r
+---\r
+\r
+# 16. Turn ID and intermediate results\r
+\r
+A turn is not simply:\r
+\r
+\`\`\`text\r
+User → LLM → Answer\r
+\`\`\`\r
+\r
+It may generate intermediate information:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── Intent result\r
+   ├── Authorization result\r
+   ├── Agent selection\r
+   ├── Worker result\r
+   ├── Tool result\r
+   ├── RAG evidence\r
+   ├── Analysis result\r
+   └── Final response\r
+\`\`\`\r
+\r
+The Turn record can maintain references to those results:\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+  "intermediate_results": [\r
+    {\r
+      "step": "intent_classification",\r
+      "reference": "RESULT-001"\r
+    },\r
+    {\r
+      "step": "shipment_analysis",\r
+      "reference": "RESULT-002"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+References are preferable to putting huge raw outputs into the turn record.\r
+\r
+---\r
+\r
+# 17. Turn ID and final response\r
+\r
+The final response should also be associated with the turn.\r
+\r
+\`\`\`json\r
+{\r
+  "turn_id": "TURN-002",\r
+  "response": {\r
+    "message_id": "MSG-2002",\r
+    "status": "completed",\r
+    "result_reference": "RESULT-TURN-002"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+So CWD can establish:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── User Message MSG-2001\r
+   │\r
+   ├── Processing\r
+   │\r
+   ├── Execution\r
+   │\r
+   └── Response MSG-2002\r
+\`\`\`\r
+\r
+This gives a clean conversational request/response boundary.\r
+\r
+---\r
+\r
+# 18. Turn ID and asynchronous execution\r
+\r
+A turn can remain open while CWD executes a long-running workflow.\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   └── Workflow WF-1001\r
+          │\r
+          └── WAITING_FOR_APPROVAL\r
+\`\`\`\r
+\r
+Later:\r
+\r
+\`\`\`text\r
+Approval received\r
+       ↓\r
+Workflow resumes\r
+       ↓\r
+TURN-002\r
+       ↓\r
+Final response\r
+\`\`\`\r
+\r
+The same Turn ID connects the eventual response to the original interaction.\r
+\r
+Therefore:\r
+\r
+> **Turn ID is especially useful when a conversational interaction outlives a synchronous HTTP request.**\r
+\r
+---\r
+\r
+# 19. Turn ID and human-in-the-loop\r
+\r
+Suppose CWD determines that a high-risk action requires approval:\r
+\r
+\`\`\`text\r
+TURN-002\r
+    │\r
+    ▼\r
+Workflow\r
+    │\r
+    ▼\r
+Risk Check\r
+    │\r
+    ▼\r
+Human Approval Required\r
+    │\r
+    ▼\r
+WAITING_FOR_APPROVAL\r
+\`\`\`\r
+\r
+The approval event can reference:\r
+\r
+\`\`\`text\r
+turn_id\r
+correlation_id\r
+workflow_id\r
+task_id\r
+approval_id\r
+\`\`\`\r
+\r
+When approval is received:\r
+\r
+\`\`\`text\r
+Approval\r
+   ↓\r
+TURN-002\r
+   ↓\r
+Workflow Resume\r
+   ↓\r
+Final Response\r
+\`\`\`\r
+\r
+This provides complete conversational lineage.\r
+\r
+---\r
+\r
+# 20. Turn ID and observability\r
+\r
+A typical CWD event could look like:\r
+\r
+\`\`\`json\r
+{\r
+  "event": "TOOL_EXECUTION_COMPLETED",\r
+\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-007",\r
+\r
+  "agent_id": "tracking-worker",\r
+\r
+  "tool": "get_tracking_events",\r
+\r
+  "status": "success",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+Now you can query at different levels:\r
+\r
+\`\`\`text\r
+session_id = S-1001\r
+\`\`\`\r
+\r
+→ broader interaction\r
+\r
+\`\`\`text\r
+turn_id = TURN-002\r
+\`\`\`\r
+\r
+→ one conversational request\r
+\r
+\`\`\`text\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+→ one distributed business execution\r
+\r
+\`\`\`text\r
+task_id = WT-1001\r
+\`\`\`\r
+\r
+→ one logical objective\r
+\r
+\`\`\`text\r
+run_id = RUN-003\r
+\`\`\`\r
+\r
+→ one execution attempt\r
+\r
+\`\`\`text\r
+step_id = STEP-007\r
+\`\`\`\r
+\r
+→ one specific action.\r
+\r
+---\r
+\r
+# 21. Turn ID and debugging\r
+\r
+Suppose a user says:\r
+\r
+> "The answer I received was wrong."\r
+\r
+The support engineer can identify:\r
+\r
+\`\`\`text\r
+TURN-002\r
+\`\`\`\r
+\r
+Then reconstruct:\r
+\r
+\`\`\`text\r
+TURN-002\r
+ │\r
+ ├── User request\r
+ │\r
+ ├── Previous context\r
+ │\r
+ ├── Intent\r
+ │\r
+ ├── Coordinator decision\r
+ │\r
+ ├── Delegator\r
+ │\r
+ ├── Worker tasks\r
+ │\r
+ ├── RAG evidence\r
+ │\r
+ ├── Tool calls\r
+ │\r
+ ├── LLM calls\r
+ │\r
+ ├── Intermediate results\r
+ │\r
+ └── Final response\r
+\`\`\`\r
+\r
+Now they can determine whether the problem originated from:\r
+\r
+* incorrect intent\r
+* incorrect routing\r
+* wrong Worker\r
+* incorrect tool\r
+* incorrect tool arguments\r
+* bad RAG evidence\r
+* stale data\r
+* prompt issue\r
+* model reasoning\r
+* aggregation\r
+* response generation.\r
+\r
+---\r
+\r
+# 22. Turn ID and evaluation\r
+\r
+Turn-level evaluation is useful because the turn represents the complete conversational interaction.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TURN-002\r
+   │\r
+   ├── Intent accuracy       ✓\r
+   ├── Agent routing         ✓\r
+   ├── Tool selection        ✓\r
+   ├── Retrieval quality     ✓\r
+   ├── Groundedness          ✓\r
+   ├── Final answer          ✗\r
+   └── Business outcome      ✗\r
+\`\`\`\r
+\r
+This allows CWD to evaluate not only the final answer but **how the answer was produced**.\r
+\r
+---\r
+\r
+# 23. Turn ID and conversation memory\r
+\r
+A previous turn may contribute to the current turn:\r
+\r
+\`\`\`text\r
+TURN-001\r
+   │\r
+   └── Relevant context\r
+          │\r
+          ▼\r
+TURN-002\r
+   │\r
+   └── Current request\r
+\`\`\`\r
+\r
+But CWD should distinguish:\r
+\r
+\`\`\`text\r
+Turn State\r
+\`\`\`\r
+\r
+from:\r
+\r
+\`\`\`text\r
+Short-Term Memory\r
+\`\`\`\r
+\r
+Turn state describes **what happened during this interaction**.\r
+\r
+Short-term memory contains **selected information useful for continuing the interaction**.\r
+\r
+And persistent memory contains **information intentionally retained beyond the session**.\r
+\r
+---\r
+\r
+# 24. Turn ID and security\r
+\r
+A Turn ID is not an authorization mechanism.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TURN-002\r
+\`\`\`\r
+\r
+does not mean the requester can access everything associated with that turn.\r
+\r
+CWD must enforce:\r
+\r
+\`\`\`text\r
+Authenticated Identity\r
+       +\r
+Session Ownership\r
+       +\r
+Tenant Isolation\r
+       +\r
+Authorization\r
+       +\r
+Resource ACL\r
+       +\r
+Policy\r
+\`\`\`\r
+\r
+before exposing turn information.\r
+\r
+Sensitive user messages, tool results, RAG context, and responses should also be protected according to classification and retention policies.\r
+\r
+---\r
+\r
+# 25. Turn ID and auditability\r
+\r
+Turn-level auditability answers:\r
+\r
+> **What happened during this specific conversational interaction?**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+TURN-002\r
+ │\r
+ ├── User request received\r
+ ├── Authentication validated\r
+ ├── Authorization decision\r
+ ├── Intent classified\r
+ ├── Agent selected\r
+ ├── Task delegated\r
+ ├── Tool executed\r
+ ├── Enterprise data accessed\r
+ ├── RAG retrieved evidence\r
+ ├── LLM generated response\r
+ ├── Response validated\r
+ └── Response returned\r
+\`\`\`\r
+\r
+This provides a conversational-level audit boundary.\r
+\r
+---\r
+\r
+# 26. Complete CWD example\r
+\r
+Suppose:\r
+\r
+> **User:** "Why is shipment SHIP123 delayed?"\r
+\r
+The hierarchy could be:\r
+\r
+\`\`\`text\r
+SESSION S-1001\r
+      │\r
+      └── CONVERSATION CONV-1001\r
+              │\r
+              └── TURN-002\r
+                    │\r
+                    └── CORR-7890\r
+                          │\r
+                          └── WORKFLOW WF-1001\r
+                                │\r
+                                ├── TASK WT-1001\r
+                                │     └── RUN-001\r
+                                │           ├── STEP-001\r
+                                │           ├── STEP-002\r
+                                │           └── STEP-003\r
+                                │\r
+                                ├── TASK WT-1002\r
+                                │     └── RUN-001\r
+                                │           ├── RAG\r
+                                │           └── LLM\r
+                                │\r
+                                └── TASK WT-1003\r
+                                      └── RUN-001\r
+\`\`\`\r
+\r
+Finally:\r
+\r
+\`\`\`text\r
+Response\r
+   ↓\r
+TURN-002\r
+\`\`\`\r
+\r
+Everything generated by that conversational interaction can therefore be connected.\r
+\r
+---\r
+\r
+# 27. The key architectural distinction\r
+\r
+Think about the CWD identifiers as different levels of scope:\r
+\r
+\`\`\`text\r
+SESSION\r
+"What broader interaction?"\r
+\r
+      ↓\r
+\r
+CONVERSATION\r
+"Which conversation?"\r
+\r
+      ↓\r
+\r
+TURN\r
+"Which user interaction?"\r
+\r
+      ↓\r
+\r
+CORRELATION\r
+"Which distributed business request?"\r
+\r
+      ↓\r
+\r
+WORKFLOW\r
+"Which execution process?"\r
+\r
+      ↓\r
+\r
+TASK\r
+"What objective?"\r
+\r
+      ↓\r
+\r
+RUN\r
+"Which attempt?"\r
+\r
+      ↓\r
+\r
+STEP\r
+"What action?"\r
+\`\`\`\r
+\r
+This hierarchy prevents different concepts from being mixed together.\r
+\r
+---\r
+\r
+# 28. Core formula\r
+\r
+\`\`\`text\r
+Turn State\r
+=\r
+Turn Identity\r
++\r
+Session Reference\r
++\r
+Conversation Reference\r
++\r
+User Request\r
++\r
+Relevant Context\r
++\r
+Intent\r
++\r
+Domain\r
++\r
+Agent Decisions\r
++\r
+Workflow References\r
++\r
+Task References\r
++\r
+Tool Activity\r
++\r
+Intermediate Results\r
++\r
+Response\r
++\r
+Status\r
++\r
+Timestamps\r
++\r
+Correlation\r
+\`\`\`\r
+\r
+And the conversational execution model is:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+TURN ID\r
+     ↓\r
+Correlation ID\r
+     ↓\r
+Workflow\r
+     ↓\r
+Tasks\r
+     ↓\r
+Runs\r
+     ↓\r
+Steps\r
+     ↓\r
+Tools / RAG / LLM / APIs\r
+     ↓\r
+Intermediate Results\r
+     ↓\r
+Final Response\r
+\`\`\`\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“In CWD, the Turn ID represents one individual conversational interaction between the user and the platform. It provides the bridge between the conversational layer and distributed execution. When a user submits a request, CWD associates the request with a Turn ID and links that turn to its correlation ID, workflow, tasks, runs, and steps. As the Coordinator understands the intent and delegates work, Delegators and Workers propagate the turn context along with the execution identifiers. Tool calls, MCP operations, RAG retrievals, LLM invocations, intermediate results, approvals, and failures can all be associated with the same turn. Finally, the generated response is linked back to that Turn ID. This allows CWD to reconstruct exactly how a particular conversational request was processed, troubleshoot incorrect responses, evaluate agent behavior, support asynchronous and human-in-the-loop execution, and maintain conversational continuity. The Turn ID identifies the interaction; it does not itself provide authorization.”**\r
+\r
+### Core definition\r
+\r
+**A Turn ID in CWD is the unique identifier for one conversational interaction within a conversation, connecting the user's request to its relevant context, intent and domain interpretation, Coordinator and Delegator decisions, workflows, tasks, execution runs, steps, tool/MCP activity, RAG retrieval, LLM processing, intermediate results, approvals, failures, and final response. It provides the conversational execution boundary needed for continuity, observability, debugging, evaluation, recovery, and auditability.**\r
+\r
+### Mental model\r
+\r
+\`\`\`text\r
+Session   = broader interaction\r
+Conversation = dialogue\r
+Turn      = one user request\r
+Correlation = one distributed business execution\r
+Workflow  = execution process\r
+Task      = objective\r
+Run       = attempt\r
+Step      = action\r
+\`\`\`\r
+`,code:``},{id:`step-id`,category:`Observability`,title:`Step ID`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a Step ID tracks individual execution operations such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, and response generation.`,concept:`# Step ID in CWD\r
+\r
+A Step ID uniquely identifies one meaningful execution operation within a workflow run. It allows CWD to track what action was performed, by which agent, with what inputs, what happened, and what result was produced.\r
+\r
+> Task ID = What objective must be completed? Run ID = Which execution attempt? Step ID = Which individual operation?\r
+\r
+For example, investigating a delayed shipment may involve:\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Workflow WF-1001\r
+    ↓\r
+Task WT-1001\r
+    ↓\r
+Run RUN-003\r
+    ├── STEP-001 → Planning\r
+    ├── STEP-002 → Agent Delegation\r
+    ├── STEP-003 → Retrieval\r
+    ├── STEP-004 → Tool Execution\r
+    ├── STEP-005 → LLM Analysis\r
+    ├── STEP-006 → Validation\r
+    ├── STEP-007 → Aggregation\r
+    └── STEP-008 → Response Generation\r
+\`\`\`\r
+\r
+The Step ID is the granular execution boundary that connects each operation to the larger conversational and workflow context.\r
+\r
+## 1. Where Step ID fits in the execution hierarchy\r
+\r
+\`\`\`\r
+Session\r
+   └── Conversation\r
+        └── Turn\r
+             └── Workflow\r
+                  └── Task\r
+                       └── Run\r
+                            ├── Step 1\r
+                            ├── Step 2\r
+                            ├── Step 3\r
+                            └── Step N\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Session:       S-1001\r
+Conversation:  CONV-1001\r
+Turn:          TURN-002\r
+Correlation:   CORR-7890\r
+Workflow:      WF-1001\r
+Task:          WT-1001\r
+Run:           RUN-003\r
+Step:          STEP-004\r
+\`\`\`\r
+\r
+This hierarchy allows CWD to move from:\r
+\r
+> Which user request?\r
+\r
+to:\r
+\r
+> Which workflow?\r
+\r
+to:\r
+\r
+> Which task?\r
+\r
+to:\r
+\r
+> Which execution attempt?\r
+\r
+to:\r
+\r
+> Which exact operation caused the result?\r
+\r
+## 2. What does a Step ID answer?\r
+\r
+A Step ID should answer:\r
+\r
+|\r
+Question\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+What operation is this?\r
+\r
+|\r
+\r
+Tool execution\r
+\r
+|\r
+|\r
+\r
+Which workflow?\r
+\r
+|\r
+\r
+\`WF-1001\`\r
+\r
+|\r
+|\r
+\r
+Which task?\r
+\r
+|\r
+\r
+\`WT-1001\`\r
+\r
+|\r
+|\r
+\r
+Which run?\r
+\r
+|\r
+\r
+\`RUN-003\`\r
+\r
+|\r
+|\r
+\r
+Which agent executed it?\r
+\r
+|\r
+\r
+\`tracking-worker\`\r
+\r
+|\r
+|\r
+\r
+What was the input?\r
+\r
+|\r
+\r
+Shipment ID\r
+\r
+|\r
+|\r
+\r
+What was the output?\r
+\r
+|\r
+\r
+Tracking events\r
+\r
+|\r
+|\r
+\r
+What is the status?\r
+\r
+|\r
+\r
+Completed\r
+\r
+|\r
+|\r
+\r
+How long did it take?\r
+\r
+|\r
+\r
+1,240 ms\r
+\r
+|\r
+|\r
+\r
+Did it fail or retry?\r
+\r
+|\r
+\r
+No\r
+\r
+|\r
+|\r
+\r
+What happens next?\r
+\r
+|\r
+\r
+Validate result\r
+\r
+|\r
+\r
+So:\r
+\r
+> Step ID identifies the individual operation; the surrounding identifiers establish its execution lineage.\r
+\r
+## 3. Step ID vs Task ID vs Run ID\r
+\r
+These identifiers must not be confused.\r
+\r
+### Task ID\r
+\r
+Represents the logical objective.\r
+\r
+\`\`\`\r
+WT-1001\r
+"Retrieve shipment tracking events"\r
+\`\`\`\r
+\r
+### Run ID\r
+\r
+Represents one attempt to execute that objective.\r
+\r
+\`\`\`\r
+RUN-003\r
+Attempt 3\r
+\`\`\`\r
+\r
+### Step ID\r
+\r
+Represents one operation within that attempt.\r
+\r
+\`\`\`\r
+STEP-004\r
+"Execute get_tracking_events"\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Task WT-1001\r
+   ├── Run RUN-001\r
+   │    └── STEP-001 → Failed\r
+   │\r
+   ├── Run RUN-002\r
+   │    └── STEP-002 → Timeout\r
+   │\r
+   └── Run RUN-003\r
+        ├── STEP-003 → Validate input\r
+        ├── STEP-004 → Execute tool\r
+        └── STEP-005 → Validate output\r
+\`\`\`\r
+\r
+One task can have multiple runs, and one run can contain multiple steps.\r
+\r
+## 4. What operations receive a Step ID?\r
+\r
+A Step ID can represent meaningful operations across Coordinator, Delegator, and Worker execution.\r
+\r
+|\r
+Step type\r
+\r
+|\r
+\r
+Example operation\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Planning\r
+\r
+|\r
+\r
+Create execution plan\r
+\r
+|\r
+|\r
+\r
+Authorization\r
+\r
+|\r
+\r
+Evaluate access policy\r
+\r
+|\r
+|\r
+\r
+Agent discovery\r
+\r
+|\r
+\r
+Find eligible Delegator\r
+\r
+|\r
+|\r
+\r
+Delegation\r
+\r
+|\r
+\r
+Send task to Delegator\r
+\r
+|\r
+|\r
+\r
+Decomposition\r
+\r
+|\r
+\r
+Split domain objective into Worker tasks\r
+\r
+|\r
+|\r
+\r
+Retrieval\r
+\r
+|\r
+\r
+Search enterprise knowledge\r
+\r
+|\r
+|\r
+\r
+Reranking\r
+\r
+|\r
+\r
+Rank retrieved chunks\r
+\r
+|\r
+|\r
+\r
+Context construction\r
+\r
+|\r
+\r
+Assemble authorized evidence\r
+\r
+|\r
+|\r
+\r
+LLM invocation\r
+\r
+|\r
+\r
+Generate analysis\r
+\r
+|\r
+|\r
+\r
+Tool selection\r
+\r
+|\r
+\r
+Choose approved tool\r
+\r
+|\r
+|\r
+\r
+Tool execution\r
+\r
+|\r
+\r
+Call MCP/API tool\r
+\r
+|\r
+|\r
+\r
+Validation\r
+\r
+|\r
+\r
+Validate schema/business result\r
+\r
+|\r
+|\r
+\r
+Aggregation\r
+\r
+|\r
+\r
+Combine Worker results\r
+\r
+|\r
+|\r
+\r
+Human approval\r
+\r
+|\r
+\r
+Wait for approval\r
+\r
+|\r
+|\r
+\r
+Response generation\r
+\r
+|\r
+\r
+Produce final answer\r
+\r
+|\r
+|\r
+\r
+Response validation\r
+\r
+|\r
+\r
+Check groundedness and policy\r
+\r
+|\r
+\r
+Not every internal line of code needs a Step ID. A step should represent a meaningful, observable, and recoverable operation, not every function call.\r
+\r
+## 5. Step ID and planning\r
+\r
+The Coordinator may create a planning step:\r
+\r
+\`\`\`\r
+STEP-001\r
+Step Type: planning\r
+Agent: coordinator\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-001",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "DT-5001",\r
+  "run_id": "RUN-003",\r
+  "step_type": "planning",\r
+  "status": "completed",\r
+  "input": {\r
+    "user_request": "Why is shipment SHIP123 delayed?"\r
+  },\r
+  "output": {\r
+    "intent": "root_cause_analysis",\r
+    "domain": "logistics",\r
+    "required_capabilities": [\r
+      "shipment_tracking",\r
+      "delay_analysis"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This lets CWD determine:\r
+\r
+* What plan was created?\r
+\r
+* Which capabilities were identified?\r
+\r
+* Did planning fail?\r
+\r
+* Did the plan lead to the correct Delegator?\r
+\r
+* How long did planning take?\r
+\r
+## 6. Step ID and delegation\r
+\r
+The Coordinator may create a delegation step:\r
+\r
+\`\`\`\r
+STEP-002\r
+Step Type: delegation\r
+Agent: coordinator\r
+\r
+Coordinator\r
+    │\r
+    └── STEP-002\r
+          │\r
+          └── A2A Task → Shipping Delegator\r
+\`\`\`\r
+\r
+The step can record:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-002",\r
+  "step_type": "delegation",\r
+  "status": "completed",\r
+  "selected_agent": "shipping-delegator",\r
+  "task_reference": "DT-5001"\r
+}\r
+\`\`\`\r
+\r
+This provides evidence of:\r
+\r
+> Which agent was selected, when, and for what objective?\r
+\r
+The Delegator then creates its own steps for decomposition, Worker selection, and execution.\r
+\r
+## 7. Step ID and retrieval\r
+\r
+A RAG Worker may execute:\r
+\r
+\`\`\`\r
+STEP-003\r
+Step Type: retrieval\r
+\`\`\`\r
+\r
+The step can record:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-003",\r
+  "step_type": "retrieval",\r
+  "status": "completed",\r
+  "retrieval_mode": "hybrid",\r
+  "candidate_count": 30,\r
+  "authorized_count": 12,\r
+  "selected_count": 5,\r
+  "result_reference": "RESULT-RETRIEVAL-001"\r
+}\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+* How many documents were retrieved?\r
+\r
+* How many passed authorization?\r
+\r
+* Which retrieval strategy was used?\r
+\r
+* Did retrieval fail or timeout?\r
+\r
+* Which evidence contributed to the final answer?\r
+\r
+The step should preserve references to evidence and metadata without unnecessarily storing sensitive document content.\r
+\r
+## 8. Step ID and LLM invocation\r
+\r
+An LLM call is an execution operation:\r
+\r
+\`\`\`\r
+STEP-005\r
+Step Type: llm_invocation\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-005",\r
+  "step_type": "llm_invocation",\r
+  "status": "completed",\r
+  "model": "approved-model-v4",\r
+  "prompt_id": "shipment-delay-analysis",\r
+  "prompt_version": "2.2.0",\r
+  "input_tokens": 1850,\r
+  "output_tokens": 420,\r
+  "duration_ms": 2100,\r
+  "output_reference": "RESULT-LLM-001"\r
+}\r
+\`\`\`\r
+\r
+This provides lineage for:\r
+\r
+* Which model was used?\r
+\r
+* Which prompt version was used?\r
+\r
+* How many tokens were consumed?\r
+\r
+* How long did the invocation take?\r
+\r
+* Did the output pass validation?\r
+\r
+* What cost was associated with this step?\r
+\r
+A workflow may contain several LLM steps, so each invocation should have its own Step ID.\r
+\r
+## 9. Step ID and tool execution\r
+\r
+A Worker may execute:\r
+\r
+\`\`\`\r
+STEP-004\r
+Step Type: tool_execution\r
+\r
+Worker\r
+   │\r
+   └── STEP-004\r
+         │\r
+         └── MCP\r
+              │\r
+              └── get_tracking_events\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-004",\r
+  "step_type": "tool_execution",\r
+  "status": "completed",\r
+  "mcp_server": "shipping-mcp",\r
+  "tool": "get_tracking_events",\r
+  "input_reference": "INPUT-TOOL-001",\r
+  "output_reference": "OUTPUT-TOOL-001",\r
+  "duration_ms": 1240,\r
+  "retry_count": 0\r
+}\r
+\`\`\`\r
+\r
+This lets CWD distinguish:\r
+\r
+\`\`\`\r
+Tool selection\r
+      ↓\r
+Argument validation\r
+      ↓\r
+Authorization\r
+      ↓\r
+Tool invocation\r
+      ↓\r
+Result validation\r
+\`\`\`\r
+\r
+Each may be a separate step when the operation is important enough to observe or recover independently.\r
+\r
+## 10. Step ID and validation\r
+\r
+Validation is not just a final activity. CWD can validate at multiple points.\r
+\r
+\`\`\`\r
+STEP-001 → Planning validation\r
+STEP-002 → Authorization validation\r
+STEP-004 → Tool result validation\r
+STEP-006 → Business result validation\r
+STEP-008 → Final response validation\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-006",\r
+  "step_type": "validation",\r
+  "status": "completed",\r
+  "checks": {\r
+    "schema_valid": true,\r
+    "business_rules_valid": true,\r
+    "grounded": true,\r
+    "security_policy_passed": true\r
+  },\r
+  "result_reference": "RESULT-VALIDATED-001"\r
+}\r
+\`\`\`\r
+\r
+This allows CWD to identify exactly which validation succeeded or failed.\r
+\r
+## 11. Step ID and aggregation\r
+\r
+Suppose three Workers execute in parallel:\r
+\r
+\`\`\`\r
+STEP-010 → Tracking Worker\r
+STEP-011 → Carrier Status Worker\r
+STEP-012 → Route Constraints Worker\r
+\`\`\`\r
+\r
+The Delegator creates:\r
+\r
+\`\`\`\r
+STEP-013\r
+Step Type: aggregation\r
+\r
+STEP-010 ──┐\r
+           │\r
+STEP-011 ──┼──> STEP-013 → Aggregated Domain Result\r
+           │\r
+STEP-012 ──┘\r
+\`\`\`\r
+\r
+The aggregation step records:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-013",\r
+  "step_type": "aggregation",\r
+  "status": "completed",\r
+  "input_steps": [\r
+    "STEP-010",\r
+    "STEP-011",\r
+    "STEP-012"\r
+  ],\r
+  "output_reference": "RESULT-DOMAIN-001"\r
+}\r
+\`\`\`\r
+\r
+This provides a clear explanation of how multiple Worker results became one domain-level result.\r
+\r
+## 12. Step ID and response generation\r
+\r
+The final response may be produced by:\r
+\r
+\`\`\`\r
+STEP-020\r
+Step Type: response_generation\r
+\r
+Validated Domain Results\r
+          ↓\r
+     STEP-020\r
+          ↓\r
+    Final Response\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "step_id": "STEP-020",\r
+  "step_type": "response_generation",\r
+  "status": "completed",\r
+  "input_references": [\r
+    "RESULT-DOMAIN-001",\r
+    "RESULT-RETRIEVAL-001"\r
+  ],\r
+  "output_reference": "RESULT-TURN-002"\r
+}\r
+\`\`\`\r
+\r
+This connects the final response to the validated information used to generate it.\r
+\r
+## 13. Step lifecycle\r
+\r
+A typical step lifecycle is:\r
+\r
+\`\`\`\r
+CREATED\r
+   ↓\r
+READY\r
+   ↓\r
+RUNNING\r
+   ↓\r
+COMPLETED\r
+\`\`\`\r
+\r
+Other states include:\r
+\r
+\`\`\`\r
+WAITING\r
+WAITING_FOR_APPROVAL\r
+RETRYING\r
+FAILED\r
+TIMED_OUT\r
+CANCELLED\r
+SKIPPED\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+STEP-004\r
+   │\r
+   ├── CREATED\r
+   ├── RUNNING\r
+   ├── FAILED\r
+   ├── RETRYING\r
+   └── COMPLETED\r
+\`\`\`\r
+\r
+The step status should describe the execution operation, not merely the overall task.\r
+\r
+## 14. Step ID and conditional routing\r
+\r
+LangGraph can use step outcomes to determine the next operation.\r
+\r
+\`\`\`\r
+STEP-004: Tool Execution\r
+        │\r
+        ▼\r
+STEP-005: Validate Result\r
+        │\r
+        ├── Valid ───────────> STEP-006: Aggregate\r
+        │\r
+        ├── Retryable Error ─> STEP-007: Retry Tool\r
+        │\r
+        ├── Approval Needed ─> STEP-008: Human Approval\r
+        │\r
+        └── Permanent Error ─> STEP-009: Recovery\r
+\`\`\`\r
+\r
+The Step ID allows the workflow engine to know:\r
+\r
+> Which operation completed, which failed, and where execution should continue?\r
+\r
+A failed step does not necessarily require restarting the entire workflow.\r
+\r
+## 15. Step ID and targeted retry\r
+\r
+Suppose the tool execution fails:\r
+\r
+\`\`\`\r
+STEP-004 → FAILED\r
+\`\`\`\r
+\r
+CWD can retry the specific operation:\r
+\r
+\`\`\`\r
+STEP-004\r
+   ├── Attempt 1 → Failed\r
+   └── Attempt 2 → Completed\r
+\`\`\`\r
+\r
+Or create a new run:\r
+\r
+\`\`\`\r
+RUN-003\r
+   └── STEP-004 → Failed\r
+\r
+RUN-004\r
+   └── STEP-010 → Retry Tool → Completed\r
+\`\`\`\r
+\r
+The exact retry representation depends on the implementation, but the important principle is:\r
+\r
+> Retry the smallest safe execution unit rather than restarting successful work unnecessarily.\r
+\r
+Retry must still respect idempotency, deadlines, error classification, authorization, and policy.\r
+\r
+## 16. Step ID and checkpointing\r
+\r
+LangGraph can checkpoint workflow state after meaningful steps.\r
+\r
+\`\`\`\r
+STEP-001 → Completed\r
+STEP-002 → Completed\r
+STEP-003 → Completed\r
+                 │\r
+                 ▼\r
+          CHECKPOINT-001\r
+                 │\r
+                 ▼\r
+STEP-004 → Failed\r
+\`\`\`\r
+\r
+After recovery:\r
+\r
+\`\`\`\r
+Checkpoint\r
+    ↓\r
+Resume from STEP-004\r
+    ↓\r
+STEP-005\r
+    ↓\r
+STEP-006\r
+\`\`\`\r
+\r
+The checkpoint may contain:\r
+\r
+* Current step\r
+\r
+* Completed step references\r
+\r
+* Pending steps\r
+\r
+* Intermediate results\r
+\r
+* Retry counts\r
+\r
+* Approval status\r
+\r
+* Workflow status\r
+\r
+* Correlation identifiers\r
+\r
+Sensitive state must be protected through classification, access control, encryption, retention, and minimization.\r
+\r
+## 17. Step ID and parallel execution\r
+\r
+CWD can execute independent steps in parallel.\r
+\r
+\`\`\`\r
+             ┌── STEP-010 → Tracking\r
+             │\r
+STEP-009 ────┼── STEP-011 → Carrier Status\r
+Planning     │\r
+             └── STEP-012 → Route Constraints\r
+                         │\r
+                         ▼\r
+                    STEP-013\r
+                    Aggregation\r
+\`\`\`\r
+\r
+Each branch has its own Step ID.\r
+\r
+This enables:\r
+\r
+* Independent status tracking\r
+\r
+* Branch-level latency measurement\r
+\r
+* Partial failure detection\r
+\r
+* Parallel execution\r
+\r
+* Dependency-aware aggregation\r
+\r
+* Targeted retries\r
+\r
+* Critical-path analysis.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Sequential:\r
+2s + 3s + 2s = 7s\r
+\r
+Parallel:\r
+max(2s, 3s, 2s) = 3s\r
+\`\`\`\r
+\r
+The workflow still needs aggregation and coordination overhead.\r
+\r
+## 18. Step ID and observability\r
+\r
+A Step ID is the most granular useful execution identifier in many CWD traces.\r
+\r
+Example telemetry:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event": "STEP_COMPLETED",\r
+  "timestamp": "2026-09-06T20:00:00Z",\r
+\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+  "correlation_id": "CORR-7890",\r
+\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+\r
+  "agent_id": "tracking-worker",\r
+  "step_type": "tool_execution",\r
+\r
+  "status": "completed",\r
+  "duration_ms": 1240,\r
+  "retry_count": 0\r
+}\r
+\`\`\`\r
+\r
+This enables queries such as:\r
+\r
+\`\`\`\r
+Find all failed steps in workflow WF-1001\r
+\r
+Find all tool execution steps for TURN-002\r
+\r
+Find the slowest steps for correlation CORR-7890\r
+\r
+Find which step caused the final response to fail\r
+\`\`\`\r
+\r
+## 19. Step ID and latency measurement\r
+\r
+Step-level latency is:\r
+\r
+Tstep=Tend−TstartT_{\\text{step}} = T_{\\text{end}} - T_{\\text{start}}Tstep=Tend−Tstart\r
+\r
+For example:\r
+\r
+\`\`\`\r
+STEP-004\r
+Start: 20:00:00.000\r
+End:   20:00:01.240\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`\r
+Step latency = 1,240 ms\r
+\`\`\`\r
+\r
+CWD can break workflow latency into:\r
+\r
+\`\`\`\r
+Planning\r
++ Delegation\r
++ Retrieval\r
++ Tool Execution\r
++ LLM Invocation\r
++ Validation\r
++ Aggregation\r
++ Response Generation\r
+\`\`\`\r
+\r
+This identifies the actual bottleneck instead of treating the entire workflow as one opaque operation.\r
+\r
+## 20. Step ID and cost measurement\r
+\r
+Each step can contribute to total workflow cost.\r
+\r
+\`\`\`\r
+STEP-001 → Planning LLM cost\r
+STEP-003 → Embedding/Search cost\r
+STEP-004 → Tool/API cost\r
+STEP-005 → LLM inference cost\r
+STEP-013 → Compute cost\r
+\`\`\`\r
+\r
+A conceptual formula is:\r
+\r
+Cworkflow=∑i=1nCstepiC_{\\text{workflow}} = \\sum_{i=1}^{n} C_{\\text{step}_i}Cworkflow=i=1∑nCstepi\r
+\r
+This supports:\r
+\r
+* Cost per LLM invocation\r
+\r
+* Cost per tool execution\r
+\r
+* Cost per Worker\r
+\r
+* Cost per task\r
+\r
+* Cost per workflow\r
+\r
+* Cost per successful business outcome.\r
+\r
+## 21. Step ID and auditability\r
+\r
+Step-level auditability records what happened during one specific operation.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+STEP-004\r
+   │\r
+   ├── Tool selected\r
+   ├── Arguments validated\r
+   ├── Authorization checked\r
+   ├── Tool invoked\r
+   ├── Result received\r
+   ├── Result validated\r
+   └── Result stored\r
+\`\`\`\r
+\r
+An audit record can include:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_type": "STEP_COMPLETED",\r
+  "step_id": "STEP-004",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "agent_id": "tracking-worker",\r
+  "action": "get_tracking_events",\r
+  "authorization_decision": "ALLOW",\r
+  "status": "SUCCESS",\r
+  "result_reference": "OUTPUT-TOOL-001"\r
+}\r
+\`\`\`\r
+\r
+This allows an investigator to reconstruct the operation without storing unnecessary sensitive payloads.\r
+\r
+## 22. Step ID and failure analysis\r
+\r
+Suppose the final answer is incorrect.\r
+\r
+CWD can trace:\r
+\r
+\`\`\`\r
+TURN-002\r
+   │\r
+   └── WF-1001\r
+        │\r
+        ├── STEP-001 → Planning ✓\r
+        ├── STEP-002 → Delegation ✓\r
+        ├── STEP-003 → Retrieval ✗\r
+        ├── STEP-004 → Tool Execution ✓\r
+        ├── STEP-005 → LLM Analysis ✓\r
+        └── STEP-006 → Response ✓\r
+\`\`\`\r
+\r
+The Step ID identifies the first meaningful failure.\r
+\r
+Possible root causes include:\r
+\r
+* Incorrect query transformation\r
+\r
+* Unauthorized or incomplete retrieval\r
+\r
+* Wrong tool selection\r
+\r
+* Invalid tool arguments\r
+\r
+* LLM timeout\r
+\r
+* Invalid intermediate result\r
+\r
+* Aggregation error\r
+\r
+* Response validation failure.\r
+\r
+Without Step IDs, CWD may only know that the overall workflow failed.\r
+\r
+## 23. Step ID and state storage\r
+\r
+A practical separation is:\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+LangGraph\r
+\r
+|\r
+\r
+Workflow transitions, conditional routing, checkpointing\r
+\r
+|\r
+|\r
+\r
+Cosmos DB\r
+\r
+|\r
+\r
+Durable step snapshots and execution references\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Fast working state and temporary step context\r
+\r
+|\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+\r
+Durable task/message delivery\r
+\r
+|\r
+|\r
+\r
+OpenTelemetry / Azure Monitor\r
+\r
+|\r
+\r
+Detailed step telemetry and traces\r
+\r
+|\r
+|\r
+\r
+Audit store\r
+\r
+|\r
+\r
+Governed evidence of significant step actions\r
+\r
+|\r
+\r
+A Step ID should be present across these systems where relevant, allowing the same operation to be correlated.\r
+\r
+## 24. Example: complete shipment investigation\r
+\r
+\`\`\`\r
+TURN-002\r
+   │\r
+   └── WF-1001\r
+        │\r
+        ├── STEP-001: Planning\r
+        │     └── Intent = root_cause_analysis\r
+        │\r
+        ├── STEP-002: Delegation\r
+        │     └── Shipping Delegator\r
+        │\r
+        ├── STEP-003: Worker Decomposition\r
+        │     ├── WT-1001\r
+        │     ├── WT-1002\r
+        │     └── WT-1003\r
+        │\r
+        ├── STEP-004: Retrieval\r
+        │     └── Authorized enterprise evidence\r
+        │\r
+        ├── STEP-005: Tool Execution\r
+        │     └── get_tracking_events\r
+        │\r
+        ├── STEP-006: LLM Analysis\r
+        │     └── Delay analysis\r
+        │\r
+        ├── STEP-007: Validation\r
+        │     └── Schema + business + grounding checks\r
+        │\r
+        ├── STEP-008: Aggregation\r
+        │     └── Domain result\r
+        │\r
+        └── STEP-009: Response Generation\r
+              └── Final answer\r
+\`\`\`\r
+\r
+Every step can be independently measured, traced, retried, audited, and linked to the original turn.\r
+\r
+## 25. What should not be a Step ID?\r
+\r
+Avoid using Step IDs for:\r
+\r
+* Every individual Python function call\r
+\r
+* Every token generated by an LLM\r
+\r
+* Every database row\r
+\r
+* Every low-level network packet\r
+\r
+* Every internal variable assignment\r
+\r
+* Every log message\r
+\r
+Those are too granular.\r
+\r
+Instead, create Step IDs for meaningful execution operations such as:\r
+\r
+\`\`\`\r
+Planning\r
+Delegation\r
+Retrieval\r
+Tool Execution\r
+LLM Invocation\r
+Validation\r
+Aggregation\r
+Response Generation\r
+\`\`\`\r
+\r
+Low-level details can be represented as logs, spans, or events under the step.\r
+\r
+## 26. Step ID and workflow state\r
+\r
+A simplified LangGraph state might contain:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+state = {\r
+    "turn_id": "TURN-002",\r
+    "correlation_id": "CORR-7890",\r
+    "workflow_id": "WF-1001",\r
+    "task_id": "WT-1001",\r
+    "run_id": "RUN-003",\r
+\r
+    "current_step_id": "STEP-004",\r
+    "current_step_type": "tool_execution",\r
+\r
+    "completed_steps": [\r
+        "STEP-001",\r
+        "STEP-002",\r
+        "STEP-003"\r
+    ],\r
+\r
+    "pending_steps": [\r
+        "STEP-005",\r
+        "STEP-006"\r
+    ],\r
+\r
+    "step_results": {\r
+        "STEP-003": "RESULT-RETRIEVAL-001"\r
+    }\r
+}\r
+\`\`\`\r
+\r
+The LLM may recommend an action, but the runtime and policy controls determine whether the step can actually execute.\r
+\r
+## 27. Core architectural distinction\r
+\r
+\`\`\`\r
+Turn ID\r
+"Which conversational interaction?"\r
+\r
+      ↓\r
+\r
+Workflow ID\r
+"Which execution process?"\r
+\r
+      ↓\r
+\r
+Task ID\r
+"What objective?"\r
+\r
+      ↓\r
+\r
+Run ID\r
+"Which attempt?"\r
+\r
+      ↓\r
+\r
+Step ID\r
+"Which individual operation?"\r
+\r
+      ↓\r
+\r
+Event / Span\r
+"What happened during that operation?"\r
+\`\`\`\r
+\r
+This is the foundation of fine-grained execution lineage.\r
+\r
+## 28. Core formula\r
+\r
+Step\xA0State=Step\xA0Identity+Step\xA0Type+Dependencies+Input+Agent+Status+Attempt+Timestamps+Intermediate\xA0Output+Validation+Failure+Result\xA0Reference+Execution\xA0Metadata\\text{Step State} = \\text{Step Identity} + \\text{Step Type} + \\text{Dependencies} + \\text{Input} + \\text{Agent} + \\text{Status} + \\text{Attempt} + \\text{Timestamps} + \\text{Intermediate Output} + \\text{Validation} + \\text{Failure} + \\text{Result Reference} + \\text{Execution Metadata}Step\xA0State=Step\xA0Identity+Step\xA0Type+Dependencies+Input+Agent+Status+Attempt+Timestamps+Intermediate\xA0Output+Validation+Failure+Result\xA0Reference+Execution\xA0Metadata\r
+\r
+And:\r
+\r
+\`\`\`\r
+Step ID\r
+    ↓\r
+Individual Operation\r
+    ↓\r
+Execution Status\r
+    ↓\r
+Result / Failure\r
+    ↓\r
+Next Workflow Transition\r
+\`\`\`\r
+\r
+## Interview-ready answer\r
+\r
+> “In CWD, the Step ID tracks one meaningful execution operation within a workflow run, such as planning, delegation, retrieval, LLM invocation, tool execution, validation, aggregation, or response generation. Each step is linked to the session, conversation, Turn ID, correlation ID, workflow, task, and run, so CWD can reconstruct the exact execution lineage of a user request. Step-level state records the operation type, participating agent, dependencies, inputs, outputs, status, timestamps, retries, validation results, failures, and result references. LangGraph uses step outcomes for conditional routing, checkpointing, parallel execution, and targeted recovery. Cosmos DB can persist durable step snapshots, Redis can hold temporary working context, and observability systems capture detailed step telemetry. This allows CWD to identify bottlenecks, retry failed operations without restarting successful work, trace incorrect responses, calculate cost and latency, and maintain auditability. The Step ID identifies the individual operation; the Run ID identifies the execution attempt; and the Task ID identifies the objective.”\r
+\r
+### Core definition\r
+\r
+A Step ID in CWD is the unique identifier for one meaningful execution operation within a workflow run. It links the operation to its workflow, task, run, agent, dependencies, inputs, outputs, status, timestamps, retries, validation results, failures, and result references, enabling fine-grained tracing, conditional routing, parallel execution, targeted recovery, checkpointing, latency and cost measurement, and auditability from the original conversational turn to the final response.\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+Session\r
+   ↓\r
+Conversation\r
+   ↓\r
+Turn\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Event / Span\r
+\`\`\`\r
+\r
+Step ID = “What individual operation happened, what was its outcome, and what should CWD do next?”\r
+\r
+\r
+### Practical takeaway\r
+\r
+In CWD, Step ID is the smallest meaningful execution boundary. It connects an operation such as \`STEP-004: Tool Execution\` to its inputs, outputs, status, latency, cost, and next workflow transition.\r
+\r
+\`\`\`\r
+TURN-002\r
+   └── WF-1001\r
+        └── RUN-003\r
+             ├── STEP-001 → Planning\r
+             ├── STEP-002 → Delegation\r
+             ├── STEP-003 → Retrieval\r
+             ├── STEP-004 → Tool Execution\r
+             ├── STEP-005 → LLM Invocation\r
+             ├── STEP-006 → Validation\r
+             ├── STEP-007 → Aggregation\r
+             └── STEP-008 → Response Generation\r
+\`\`\`\r
+\r
+The essential distinction is:\r
+\r
+> Task = objective | Run = attempt | Step = operation | Event = what happened during that operation.\r
+\r
+This makes CWD execution traceable, recoverable, measurable, and auditable at a much finer level than task or workflow tracking alone.\r
+`,code:``},{id:`mlflow3`,category:`Observability`,title:`MLflow`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how MLflow can support experiment tracking, model lifecycle visibility, evaluation results, artifacts, parameters, metrics, and comparison of AI and ML experiments as part of the broader CWD observability and LLMOps strategy.`,concept:`## MLflow’s role in CWD\r
+\r
+MLflow provides the experiment, evaluation, and model-lifecycle evidence layer for CWD. It helps teams record what they tried, measure what happened, compare alternatives, and identify which model or AI configuration should move toward production. Its traditional ML capabilities include experiment tracking, model evaluation, and a Model Registry; its LLM and agent capabilities extend into tracing, evaluation, and prompt management.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://www.mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+The key distinction is:\r
+\r
+> CWD executes and orchestrates AI workflows. MLflow records, evaluates, and compares their behavior.\r
+\r
+MLflow does not replace LangGraph, Agent Registry, Policy/IAM, Service Bus, Redis, Cosmos DB, or Azure Monitor. It complements them.\r
+\r
+\r
+## 1. Why MLflow is important in CWD\r
+\r
+A CWD request may involve multiple agents, prompts, models, retrieval operations, and tools. Without experiment tracking, it becomes difficult to answer:\r
+\r
+* Which model and prompt produced this result?\r
+\r
+* What parameters and dataset were used?\r
+\r
+* Why did one experiment outperform another?\r
+\r
+* Did a new prompt improve quality but increase latency?\r
+\r
+* Which model version is approved for production?\r
+\r
+* Can we reproduce the result?\r
+\r
+* Did a change introduce a regression?\r
+\r
+MLflow provides a structured way to capture this evidence. Its Tracking system organizes work into experiments and runs, while the Model Registry provides versioning, lineage, aliases, and lifecycle metadata.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+# 2. MLflow in the broader CWD architecture\r
+\r
+\`\`\`\r
+                         USER\r
+                           │\r
+                           ▼\r
+                    API / Gateway\r
+                           │\r
+                           ▼\r
+                    CWD Coordinator\r
+                           │\r
+                           ▼\r
+                    CWD Delegator\r
+                           │\r
+                           ▼\r
+                     CWD Worker\r
+                           │\r
+             ┌─────────────┼─────────────┐\r
+             ▼             ▼             ▼\r
+          RAG           LLM           MCP Tool\r
+             │             │             │\r
+             └─────────────┼─────────────┘\r
+                           │\r
+                           ▼\r
+                    Workflow Result\r
+                           │\r
+                           ▼\r
+                    CWD Observability\r
+                           │\r
+             ┌─────────────┼─────────────┐\r
+             ▼             ▼             ▼\r
+        OpenTelemetry   MLflow        Audit Store\r
+             │             │             │\r
+             ▼             ▼             ▼\r
+       Azure Monitor   Experiments   Governance\r
+                       Evaluation\r
+                       Registry\r
+                       Artifacts\r
+\`\`\`\r
+\r
+### Responsibility separation\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Primary responsibility\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+CWD Coordinator\r
+\r
+|\r
+\r
+Enterprise orchestration and routing\r
+\r
+|\r
+|\r
+\r
+LangGraph\r
+\r
+|\r
+\r
+Workflow state, transitions, checkpoints, recovery\r
+\r
+|\r
+|\r
+\r
+Agent Registry\r
+\r
+|\r
+\r
+Agent discovery and capability metadata\r
+\r
+|\r
+|\r
+\r
+Prompt Registry\r
+\r
+|\r
+\r
+Governed prompt versions\r
+\r
+|\r
+|\r
+\r
+MLflow\r
+\r
+|\r
+\r
+Experiment tracking, evaluation, model lineage, comparison\r
+\r
+|\r
+|\r
+\r
+OpenTelemetry / Azure Monitor\r
+\r
+|\r
+\r
+Runtime traces, logs, metrics, alerts\r
+\r
+|\r
+|\r
+\r
+Cosmos DB\r
+\r
+|\r
+\r
+Durable application and execution state\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Fast working state and caching\r
+\r
+|\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+\r
+Durable asynchronous task delivery\r
+\r
+|\r
+|\r
+\r
+Audit Store\r
+\r
+|\r
+\r
+Governed evidence of significant actions\r
+\r
+|\r
+\r
+MLflow is therefore part of the broader LLMOps and MLOps control plane, not the CWD execution engine.\r
+\r
+# 3. Experiment tracking\r
+\r
+An experiment groups related runs for a particular objective.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Experiment:\r
+shipment-delay-analysis\r
+\`\`\`\r
+\r
+Possible runs:\r
+\r
+\`\`\`\r
+RUN-001 → GPT model + Prompt v1\r
+RUN-002 → GPT model + Prompt v2\r
+RUN-003 → Claude model + Prompt v2\r
+RUN-004 → Smaller model + Prompt v2\r
+\`\`\`\r
+\r
+Each run represents one execution of the experiment. MLflow Tracking records metadata such as parameters, metrics, timestamps, and artifacts, and provides UI/API capabilities for exploring and comparing runs.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+### CWD experiment examples\r
+\r
+|\r
+Experiment\r
+\r
+|\r
+\r
+Objective\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+\`shipment-delay-analysis\`\r
+\r
+|\r
+\r
+Compare prompts and models for delay analysis\r
+\r
+|\r
+|\r
+\r
+\`rag-retrieval-quality\`\r
+\r
+|\r
+\r
+Compare chunking and retrieval strategies\r
+\r
+|\r
+|\r
+\r
+\`agent-routing-evaluation\`\r
+\r
+|\r
+\r
+Evaluate Coordinator routing decisions\r
+\r
+|\r
+|\r
+\r
+\`tool-selection-evaluation\`\r
+\r
+|\r
+\r
+Measure correct tool selection and arguments\r
+\r
+|\r
+|\r
+\r
+\`workflow-latency-optimization\`\r
+\r
+|\r
+\r
+Compare orchestration configurations\r
+\r
+|\r
+|\r
+\r
+\`credit-risk-model\`\r
+\r
+|\r
+\r
+Compare traditional ML models\r
+\r
+|\r
+\r
+# 4. What is a run?\r
+\r
+A run is one execution of an experiment.\r
+\r
+For a traditional ML model:\r
+\r
+\`\`\`\r
+RUN-001\r
+    │\r
+    ├── Dataset version\r
+    ├── Algorithm\r
+    ├── Hyperparameters\r
+    ├── Training metrics\r
+    ├── Evaluation metrics\r
+    ├── Model artifact\r
+    └── Result\r
+\`\`\`\r
+\r
+For a CWD AI experiment:\r
+\r
+\`\`\`\r
+RUN-001\r
+    │\r
+    ├── User test case\r
+    ├── Agent version\r
+    ├── Prompt version\r
+    ├── Model version\r
+    ├── RAG configuration\r
+    ├── Tool configuration\r
+    ├── Workflow configuration\r
+    ├── Quality metrics\r
+    ├── Latency metrics\r
+    ├── Cost metrics\r
+    ├── Evaluation results\r
+    └── Trace / artifact references\r
+\`\`\`\r
+\r
+This creates a reproducible record of what configuration produced what outcome.\r
+\r
+# 5. Parameters\r
+\r
+Parameters are the configuration values used during an experiment.\r
+\r
+For traditional ML:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+params = {\r
+    "algorithm": "xgboost",\r
+    "learning_rate": 0.05,\r
+    "max_depth": 6,\r
+    "n_estimators": 200,\r
+    "train_dataset_version": "v3"\r
+}\r
+\`\`\`\r
+\r
+For CWD and LLMOps:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+params = {\r
+    "agent_name": "shipping-agent",\r
+    "agent_version": "2.4.1",\r
+    "prompt_id": "shipment-delay-analysis",\r
+    "prompt_version": "2.2.0",\r
+    "model": "approved-model-v4",\r
+    "temperature": 0.1,\r
+    "retrieval_mode": "hybrid",\r
+    "top_k": 5,\r
+    "chunk_size": 600,\r
+    "reranking_enabled": True,\r
+    "max_tool_calls": 4,\r
+    "max_retries": 2\r
+}\r
+\`\`\`\r
+\r
+Parameters answer:\r
+\r
+> What configuration did we use?\r
+\r
+They are especially useful for comparing prompt, model, retrieval, and workflow changes.\r
+\r
+# 6. Metrics\r
+\r
+Metrics are numerical measurements of experiment performance.\r
+\r
+### Traditional ML metrics\r
+\r
+|\r
+Problem\r
+\r
+|\r
+\r
+Example metrics\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Classification\r
+\r
+|\r
+\r
+Accuracy, precision, recall, F1, ROC-AUC\r
+\r
+|\r
+|\r
+\r
+Regression\r
+\r
+|\r
+\r
+MAE, RMSE, R²\r
+\r
+|\r
+|\r
+\r
+Ranking\r
+\r
+|\r
+\r
+NDCG, MRR\r
+\r
+|\r
+|\r
+\r
+Clustering\r
+\r
+|\r
+\r
+Silhouette score\r
+\r
+|\r
+\r
+### CWD / LLMOps metrics\r
+\r
+|\r
+Dimension\r
+\r
+|\r
+\r
+Example metrics\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Agent quality\r
+\r
+|\r
+\r
+Intent accuracy, routing accuracy\r
+\r
+|\r
+|\r
+\r
+Workflow quality\r
+\r
+|\r
+\r
+Task success, goal completion\r
+\r
+|\r
+|\r
+\r
+Tool execution\r
+\r
+|\r
+\r
+Tool-selection accuracy, invocation success\r
+\r
+|\r
+|\r
+\r
+RAG\r
+\r
+|\r
+\r
+Recall@K, Precision@K, groundedness\r
+\r
+|\r
+|\r
+\r
+Generation\r
+\r
+|\r
+\r
+Correctness, relevance, completeness\r
+\r
+|\r
+|\r
+\r
+Reliability\r
+\r
+|\r
+\r
+Success rate, timeout rate, retry recovery\r
+\r
+|\r
+|\r
+\r
+Latency\r
+\r
+|\r
+\r
+P50, P95, P99\r
+\r
+|\r
+|\r
+\r
+Cost\r
+\r
+|\r
+\r
+Cost per run, cost per successful workflow\r
+\r
+|\r
+|\r
+\r
+Safety\r
+\r
+|\r
+\r
+Policy violations, unsafe outputs\r
+\r
+|\r
+|\r
+\r
+Consistency\r
+\r
+|\r
+\r
+Stable decisions across repeated runs\r
+\r
+|\r
+\r
+MLflow evaluation supports built-in and custom evaluation metrics, including domain-specific evaluation criteria.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+Example:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+metrics = {\r
+    "intent_accuracy": 0.98,\r
+    "routing_accuracy": 0.95,\r
+    "tool_selection_accuracy": 0.97,\r
+    "groundedness": 0.91,\r
+    "workflow_success_rate": 0.94,\r
+    "p95_latency_ms": 4200,\r
+    "cost_per_successful_workflow": 0.08\r
+}\r
+\`\`\`\r
+\r
+# 7. Artifacts\r
+\r
+Artifacts are files or other outputs produced by a run.\r
+\r
+MLflow Tracking supports storing artifacts such as model files, images, and data files alongside run metadata.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+### Traditional ML artifacts\r
+\r
+\`\`\`\r
+artifacts/\r
+├── model.pkl\r
+├── confusion_matrix.png\r
+├── feature_importance.png\r
+├── evaluation_report.json\r
+├── predictions.parquet\r
+└── requirements.txt\r
+\`\`\`\r
+\r
+### CWD / LLMOps artifacts\r
+\r
+\`\`\`\r
+artifacts/\r
+├── evaluation_results.json\r
+├── golden_dataset_version.json\r
+├── retrieval_evaluation.json\r
+├── prompt_comparison.json\r
+├── tool_selection_report.json\r
+├── workflow_trace_reference.json\r
+├── latency_breakdown.json\r
+├── cost_report.json\r
+├── safety_evaluation.json\r
+└── model_or_agent_package/\r
+\`\`\`\r
+\r
+For sensitive enterprise data, store references, sanitized outputs, hashes, and metadata rather than unrestricted raw prompts, confidential documents, credentials, or full tool responses.\r
+\r
+# 8. Evaluation results\r
+\r
+MLflow can organize evaluation results so teams can compare the behavior of different models, prompts, and AI applications.\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Experiment: shipment-delay-analysis\r
+\`\`\`\r
+\r
+|\r
+Run\r
+\r
+|\r
+\r
+Model\r
+\r
+|\r
+\r
+Prompt\r
+\r
+|\r
+\r
+Groundedness\r
+\r
+|\r
+\r
+P95 latency\r
+\r
+|\r
+\r
+Cost\r
+\r
+|\r
+| --- | --- | --- | --- | --- | --- |\r
+|\r
+\r
+RUN-001\r
+\r
+|\r
+\r
+Model A\r
+\r
+|\r
+\r
+v1\r
+\r
+|\r
+\r
+0.86\r
+\r
+|\r
+\r
+3,200 ms\r
+\r
+|\r
+\r
+$0.05\r
+\r
+|\r
+|\r
+\r
+RUN-002\r
+\r
+|\r
+\r
+Model A\r
+\r
+|\r
+\r
+v2\r
+\r
+|\r
+\r
+0.93\r
+\r
+|\r
+\r
+3,600 ms\r
+\r
+|\r
+\r
+$0.06\r
+\r
+|\r
+|\r
+\r
+RUN-003\r
+\r
+|\r
+\r
+Model B\r
+\r
+|\r
+\r
+v2\r
+\r
+|\r
+\r
+0.95\r
+\r
+|\r
+\r
+4,100 ms\r
+\r
+|\r
+\r
+$0.09\r
+\r
+|\r
+\r
+This allows the team to ask:\r
+\r
+> Did Prompt v2 improve groundedness, and was the additional latency acceptable?\r
+\r
+MLflow’s evaluation framework supports analyzing LLM and agent outputs with built-in and custom evaluation criteria.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+# 9. Comparing AI and ML experiments\r
+\r
+Comparison is one of MLflow’s most valuable capabilities.\r
+\r
+### Traditional ML comparison\r
+\r
+\`\`\`\r
+Experiment: credit-risk-model\r
+    │\r
+    ├── Logistic Regression\r
+    ├── Random Forest\r
+    ├── XGBoost\r
+    └── Neural Network\r
+\`\`\`\r
+\r
+Compare:\r
+\r
+\`\`\`\r
+Accuracy\r
+F1\r
+ROC-AUC\r
+Training time\r
+Inference latency\r
+Model size\r
+Cost\r
+\`\`\`\r
+\r
+### CWD AI comparison\r
+\r
+\`\`\`\r
+Experiment: enterprise-knowledge-qa\r
+    │\r
+    ├── Prompt v1 + Model A\r
+    ├── Prompt v2 + Model A\r
+    ├── Prompt v2 + Model B\r
+    ├── Hybrid RAG + Model A\r
+    └── Vector-only RAG + Model A\r
+\`\`\`\r
+\r
+Compare:\r
+\r
+\`\`\`\r
+Answer correctness\r
+Groundedness\r
+Citation accuracy\r
+Tool success\r
+Workflow success\r
+P95 latency\r
+Token usage\r
+Cost\r
+Safety\r
+\`\`\`\r
+\r
+MLflow Tracking provides run comparison and metric visualization through its UI.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+# 10. Model lifecycle visibility\r
+\r
+The Model Registry provides centralized lifecycle visibility for registered models.\r
+\r
+It supports model versioning, lineage to the producing run, aliases, tags, descriptions, and lifecycle management.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+\`\`\`\r
+Training / Experiment\r
+        ↓\r
+MLflow Run\r
+        ↓\r
+Logged Model\r
+        ↓\r
+Model Registry\r
+        ↓\r
+Validation\r
+        ↓\r
+Approved Version\r
+        ↓\r
+Deployment\r
+        ↓\r
+Monitoring\r
+        ↓\r
+Rollback / Promotion\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Model: credit-risk-model\r
+    │\r
+    ├── Version 1 → Experimental\r
+    ├── Version 2 → Validation\r
+    ├── Version 3 → Approved\r
+    └── Version 4 → Candidate\r
+\`\`\`\r
+\r
+For CWD, this can be extended to model dependencies used by agents:\r
+\r
+\`\`\`\r
+Agent\r
+   ├── Prompt Version\r
+   ├── LLM Model Version\r
+   ├── Embedding Model Version\r
+   ├── Reranker Version\r
+   ├── Agent Version\r
+   └── Evaluation Dataset Version\r
+\`\`\`\r
+\r
+Important: MLflow Model Registry manages model lifecycle. The CWD Agent Registry manages agent identity, capabilities, endpoints, and operational routing metadata. They are complementary.\r
+\r
+# 11. MLflow and prompt lifecycle\r
+\r
+In LLMOps, prompts are production artifacts.\r
+\r
+A useful experiment might compare:\r
+\r
+\`\`\`\r
+Prompt: shipment-delay-analysis\r
+    ├── v1.0.0\r
+    ├── v1.1.0\r
+    └── v2.0.0\r
+\`\`\`\r
+\r
+Each version can be evaluated against the same golden dataset.\r
+\r
+\`\`\`\r
+Prompt v1 → Evaluation → Metrics\r
+Prompt v2 → Evaluation → Metrics\r
+Prompt v3 → Evaluation → Metrics\r
+\`\`\`\r
+\r
+This helps determine whether a prompt change improves:\r
+\r
+* Correctness\r
+\r
+* Groundedness\r
+\r
+* Tool selection\r
+\r
+* Safety\r
+\r
+* Consistency\r
+\r
+* Latency\r
+\r
+* Cost.\r
+\r
+MLflow’s current LLM/agent platform includes prompt management alongside tracing and evaluation capabilities.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://www.mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+# 12. MLflow and CWD observability\r
+\r
+CWD observability answers:\r
+\r
+> What happened during production execution?\r
+\r
+MLflow experiment tracking and evaluation answer:\r
+\r
+> How good was that execution, and which configuration produced it?\r
+\r
+|\r
+Capability\r
+\r
+|\r
+\r
+CWD observability\r
+\r
+|\r
+\r
+MLflow\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Runtime trace\r
+\r
+|\r
+\r
+OpenTelemetry / Azure Monitor\r
+\r
+|\r
+\r
+LLM/agent tracing capabilities\r
+\r
+|\r
+|\r
+\r
+Request correlation\r
+\r
+|\r
+\r
+Correlation ID\r
+\r
+|\r
+\r
+Run/trace references\r
+\r
+|\r
+|\r
+\r
+Step latency\r
+\r
+|\r
+\r
+Runtime telemetry\r
+\r
+|\r
+\r
+Evaluation and trace analysis\r
+\r
+|\r
+|\r
+\r
+Parameters\r
+\r
+|\r
+\r
+Runtime configuration\r
+\r
+|\r
+\r
+Experiment parameters\r
+\r
+|\r
+|\r
+\r
+Metrics\r
+\r
+|\r
+\r
+Operational metrics\r
+\r
+|\r
+\r
+Experiment/evaluation metrics\r
+\r
+|\r
+|\r
+\r
+Artifacts\r
+\r
+|\r
+\r
+Result references\r
+\r
+|\r
+\r
+Artifact storage\r
+\r
+|\r
+|\r
+\r
+Model lineage\r
+\r
+|\r
+\r
+Runtime model version\r
+\r
+|\r
+\r
+Model Registry\r
+\r
+|\r
+|\r
+\r
+Prompt comparison\r
+\r
+|\r
+\r
+Runtime prompt version\r
+\r
+|\r
+\r
+Prompt/evaluation tracking\r
+\r
+|\r
+|\r
+\r
+Quality evaluation\r
+\r
+|\r
+\r
+Production quality signals\r
+\r
+|\r
+\r
+Evaluation framework\r
+\r
+|\r
+|\r
+\r
+Alerts\r
+\r
+|\r
+\r
+Azure Monitor / alerting\r
+\r
+|\r
+\r
+Evaluation and monitoring workflows\r
+\r
+|\r
+\r
+MLflow’s LLMOps guidance includes tracing, evaluation, prompt management, and production monitoring for LLM applications and multi-step agents.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://www.mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+# 13. MLflow and LangGraph\r
+\r
+LangGraph controls the workflow:\r
+\r
+\`\`\`\r
+START\r
+  ↓\r
+Intent\r
+  ↓\r
+Planning\r
+  ↓\r
+Delegation\r
+  ↓\r
+Retrieval\r
+  ↓\r
+Tool Execution\r
+  ↓\r
+Validation\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+MLflow can record the experiment and evaluation evidence associated with that workflow.\r
+\r
+\`\`\`\r
+LangGraph Step\r
+      ↓\r
+MLflow Run / Trace\r
+      ↓\r
+Parameters + Metrics + Artifacts\r
+      ↓\r
+Evaluation\r
+      ↓\r
+Comparison\r
+\`\`\`\r
+\r
+### Separation\r
+\r
+\`\`\`\r
+LangGraph = What happens next?\r
+MLflow    = How did it perform?\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+LangGraph:\r
+"Retry retrieval because evidence was insufficient."\r
+\r
+MLflow:\r
+"Retrieval sufficiency score = 0.62.\r
+Retry increased latency by 800 ms."\r
+\`\`\`\r
+\r
+MLflow does not replace LangGraph’s workflow state or checkpointing.\r
+\r
+# 14. MLflow and the CWD evaluation lifecycle\r
+\r
+\`\`\`\r
+Business Objective\r
+       ↓\r
+Golden Dataset\r
+       ↓\r
+Experiment Definition\r
+       ↓\r
+Run with CWD\r
+       ↓\r
+Log Parameters\r
+       ↓\r
+Log Metrics\r
+       ↓\r
+Log Artifacts\r
+       ↓\r
+Evaluate Results\r
+       ↓\r
+Compare Runs\r
+       ↓\r
+Model / Prompt / Agent Decision\r
+       ↓\r
+Validation Gate\r
+       ↓\r
+Promotion / Deployment\r
+       ↓\r
+Production Monitoring\r
+       ↓\r
+Regression Evaluation\r
+\`\`\`\r
+\r
+This creates a continuous improvement loop:\r
+\r
+\`\`\`\r
+Measure → Evaluate → Compare → Improve → Validate → Deploy → Monitor\r
+\`\`\`\r
+\r
+# 15. Example: evaluating a CWD RAG Worker\r
+\r
+Suppose a RAG Worker must answer:\r
+\r
+> “Why is shipment SHIP123 delayed?”\r
+\r
+### Experiment configuration\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+experiment = {\r
+    "name": "shipment-delay-rag-evaluation",\r
+    "agent": "shipping-rag-worker",\r
+    "prompt_version": "2.2.0",\r
+    "model": "approved-model-v4",\r
+    "retrieval_mode": "hybrid",\r
+    "top_k": 5,\r
+    "chunk_size": 600\r
+}\r
+\`\`\`\r
+\r
+### Logged parameters\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+mlflow.log_params({\r
+    "agent_version": "2.4.1",\r
+    "prompt_version": "2.2.0",\r
+    "retrieval_mode": "hybrid",\r
+    "top_k": 5,\r
+    "chunk_size": 600\r
+})\r
+\`\`\`\r
+\r
+### Logged metrics\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+mlflow.log_metrics({\r
+    "retrieval_recall_at_5": 0.92,\r
+    "context_relevance": 0.94,\r
+    "groundedness": 0.93,\r
+    "citation_accuracy": 0.96,\r
+    "p95_latency_ms": 3800,\r
+    "workflow_success_rate": 0.95\r
+})\r
+\`\`\`\r
+\r
+### Logged artifacts\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+mlflow.log_dict(\r
+    evaluation_results,\r
+    "artifacts/evaluation_results.json"\r
+)\r
+\r
+mlflow.log_dict(\r
+    retrieval_report,\r
+    "artifacts/retrieval_report.json"\r
+)\r
+\`\`\`\r
+\r
+The experiment can then be compared against another configuration:\r
+\r
+\`\`\`\r
+Hybrid Search + Prompt v2\r
+          vs\r
+Vector Search + Prompt v1\r
+\`\`\`\r
+\r
+The winning configuration should be selected using quality, security, reliability, latency, and cost, not just one metric.\r
+\r
+# 16. Example: tracking a traditional ML model in CWD\r
+\r
+For a credit-risk Worker:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import mlflow\r
+import mlflow.sklearn\r
+\r
+mlflow.set_experiment("credit-risk-model")\r
+\r
+with mlflow.start_run() as run:\r
+    mlflow.log_params({\r
+        "algorithm": "random_forest",\r
+        "n_estimators": 200,\r
+        "max_depth": 8\r
+    })\r
+\r
+    model.fit(X_train, y_train)\r
+\r
+    accuracy = model.score(X_test, y_test)\r
+\r
+    mlflow.log_metric("accuracy", accuracy)\r
+\r
+    mlflow.sklearn.log_model(\r
+        model,\r
+        name="credit-risk-model"\r
+    )\r
+\r
+    print("Run ID:", run.info.run_id)\r
+\`\`\`\r
+\r
+The resulting run can be compared with Logistic Regression or XGBoost experiments.\r
+\r
+For current MLflow APIs, use the installed version’s documentation because model logging and registry APIs evolve.\r
+\r
+# 17. Example: tracking an LLM experiment in CWD\r
+\r
+A simplified conceptual example:\r
+\r
+Python\r
+\r
+Run\r
+\r
+\`\`\`\r
+import mlflow\r
+\r
+mlflow.set_experiment("shipment-delay-analysis")\r
+\r
+with mlflow.start_run() as run:\r
+\r
+    mlflow.log_params({\r
+        "agent": "shipping-agent",\r
+        "prompt_version": "2.2.0",\r
+        "model": "approved-model-v4",\r
+        "temperature": 0.1,\r
+        "retrieval_mode": "hybrid",\r
+        "top_k": 5\r
+    })\r
+\r
+    result = run_cwd_workflow(\r
+        user_request="Why is shipment SHIP123 delayed?"\r
+    )\r
+\r
+    mlflow.log_metrics({\r
+        "groundedness": result["groundedness"],\r
+        "tool_success": result["tool_success"],\r
+        "latency_ms": result["latency_ms"],\r
+        "cost_usd": result["cost_usd"]\r
+    })\r
+\r
+    mlflow.log_dict(\r
+        result["evaluation"],\r
+        "artifacts/evaluation.json"\r
+    )\r
+\r
+    print("Run ID:", run.info.run_id)\r
+\`\`\`\r
+\r
+The \`run_cwd_workflow()\` function represents your existing Coordinator → Delegator → Worker execution. MLflow records the experiment evidence; it does not replace that workflow.\r
+\r
+# 18. Model lifecycle visibility in production\r
+\r
+A production CWD platform should know:\r
+\r
+\`\`\`\r
+Which model is deployed?\r
+Which version?\r
+Which agent uses it?\r
+Which prompt version?\r
+Which evaluation dataset?\r
+Which approval?\r
+Which deployment?\r
+Which rollback target?\r
+\`\`\`\r
+\r
+A useful lineage chain is:\r
+\r
+\`\`\`\r
+Golden Dataset v3\r
+       ↓\r
+Experiment RUN-104\r
+       ↓\r
+Prompt v2.2.0\r
+       ↓\r
+Model Version 7\r
+       ↓\r
+Evaluation Passed\r
+       ↓\r
+Approved\r
+       ↓\r
+Agent Version 2.4.1\r
+       ↓\r
+Production Deployment\r
+       ↓\r
+Workflow Results\r
+\`\`\`\r
+\r
+MLflow Model Registry provides model-version lineage and lifecycle metadata; CWD and deployment systems should connect that information to agent and workflow versions.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform\r
+\r
+# 19. MLflow and production regression evaluation\r
+\r
+Suppose a new model is deployed:\r
+\r
+\`\`\`\r
+Model v1 → Groundedness 0.93\r
+Model v2 → Groundedness 0.84\r
+\`\`\`\r
+\r
+Even if the new model is faster:\r
+\r
+\`\`\`\r
+Model v1 → P95 = 4.2 s\r
+Model v2 → P95 = 2.8 s\r
+\`\`\`\r
+\r
+CWD should not automatically promote it.\r
+\r
+A release decision may require:\r
+\r
+\`\`\`\r
+Security PASS\r
+       AND\r
+Groundedness ≥ Threshold\r
+       AND\r
+Workflow Success ≥ SLA\r
+       AND\r
+P95 Latency ≤ Budget\r
+       AND\r
+Cost ≤ Budget\r
+\`\`\`\r
+\r
+This is where MLflow evaluation results become part of the broader CWD release gate.\r
+\r
+# 20. MLflow and AgentOps\r
+\r
+For multi-agent systems, MLflow can support evaluation of:\r
+\r
+\`\`\`\r
+Coordinator\r
+   ├── Intent classification\r
+   ├── Routing\r
+   └── Planning\r
+\r
+Delegator\r
+   ├── Decomposition\r
+   ├── Worker selection\r
+   └── Aggregation\r
+\r
+Worker\r
+   ├── Tool selection\r
+   ├── RAG\r
+   ├── Business logic\r
+   └── Output validation\r
+\`\`\`\r
+\r
+Each can be evaluated independently and as part of the complete workflow.\r
+\r
+MLflow’s current platform documentation explicitly includes agent and LLM tracing, evaluation, and optimization capabilities, including examples involving LangGraph agents and multi-turn applications.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://www.mlflow.org\\&sz=32)\r
+\r
+MLflow AI Platform+1\r
+\r
+# 21. What MLflow should not replace\r
+\r
+|\r
+CWD component\r
+\r
+|\r
+\r
+Why MLflow does not replace it\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+LangGraph\r
+\r
+|\r
+\r
+Controls execution state and workflow transitions\r
+\r
+|\r
+|\r
+\r
+Agent Registry\r
+\r
+|\r
+\r
+Discovers and routes to eligible agents\r
+\r
+|\r
+|\r
+\r
+Prompt Registry\r
+\r
+|\r
+\r
+Governs prompt lifecycle and deployment\r
+\r
+|\r
+|\r
+\r
+Policy / IAM\r
+\r
+|\r
+\r
+Enforces authorization\r
+\r
+|\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+\r
+Delivers durable asynchronous tasks\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Provides low-latency working state\r
+\r
+|\r
+|\r
+\r
+Cosmos DB\r
+\r
+|\r
+\r
+Stores durable application/execution state\r
+\r
+|\r
+|\r
+\r
+Azure AI Search\r
+\r
+|\r
+\r
+Performs enterprise retrieval\r
+\r
+|\r
+|\r
+\r
+MCP\r
+\r
+|\r
+\r
+Provides standardized tool/system integration\r
+\r
+|\r
+|\r
+\r
+A2A\r
+\r
+|\r
+\r
+Enables agent-to-agent communication\r
+\r
+|\r
+|\r
+\r
+Azure Monitor\r
+\r
+|\r
+\r
+Provides runtime infrastructure and operational monitoring\r
+\r
+|\r
+|\r
+\r
+Audit Store\r
+\r
+|\r
+\r
+Maintains governed audit evidence\r
+\r
+|\r
+\r
+The correct architecture is integration, not substitution.\r
+\r
+# 22. MLflow in the CWD observability strategy\r
+\r
+A useful mental model is:\r
+\r
+\`\`\`\r
+CWD Runtime\r
+   │\r
+   ├── Logs / Metrics / Traces\r
+   │       └── OpenTelemetry / Azure Monitor\r
+   │\r
+   ├── Experiment Evidence\r
+   │       └── MLflow Tracking\r
+   │\r
+   ├── Model Lifecycle\r
+   │       └── MLflow Model Registry\r
+   │\r
+   ├── Prompt Lifecycle\r
+   │       └── Prompt Registry\r
+   │\r
+   ├── Durable Execution State\r
+   │       └── Cosmos DB\r
+   │\r
+   └── Audit Evidence\r
+           └── Audit Store\r
+\`\`\`\r
+\r
+### The key distinction\r
+\r
+\`\`\`\r
+Observability = What happened?\r
+Evaluation    = Was it good enough?\r
+MLflow        = What configuration produced it, and how do alternatives compare?\r
+Audit         = What governed action occurred?\r
+\`\`\`\r
+\r
+# 23. Core formulas\r
+\r
+### Experiment tracking\r
+\r
+Experiment=Collection\xA0of\xA0Related\xA0Runs\\text{Experiment} = \\text{Collection of Related Runs}Experiment=Collection\xA0of\xA0Related\xA0Runs\r
+\r
+Run=Configuration+Execution+Metrics+Artifacts\\text{Run} = \\text{Configuration} + \\text{Execution} + \\text{Metrics} + \\text{Artifacts}Run=Configuration+Execution+Metrics+Artifacts\r
+\r
+### Evaluation\r
+\r
+Evaluation\xA0Result=Actual\xA0Output+Expected\xA0Behavior+Evaluation\xA0Metrics\\text{Evaluation Result} = \\text{Actual Output} + \\text{Expected Behavior} + \\text{Evaluation Metrics}Evaluation\xA0Result=Actual\xA0Output+Expected\xA0Behavior+Evaluation\xA0Metrics\r
+\r
+### Model lifecycle\r
+\r
+Model\xA0Lifecycle=Training+Tracking+Evaluation+Versioning+Approval+Deployment+Monitoring+Rollback\\text{Model Lifecycle} = \\text{Training} + \\text{Tracking} + \\text{Evaluation} + \\text{Versioning} + \\text{Approval} + \\text{Deployment} + \\text{Monitoring} + \\text{Rollback}Model\xA0Lifecycle=Training+Tracking+Evaluation+Versioning+Approval+Deployment+Monitoring+Rollback\r
+\r
+### CWD + MLflow\r
+\r
+CWD\xA0LLMOps=Workflow\xA0Execution+Observability+Experiment\xA0Tracking+Evaluation+Model\xA0Lifecycle+Prompt\xA0Governance+Continuous\xA0Improvement\\text{CWD LLMOps} = \\text{Workflow Execution} + \\text{Observability} + \\text{Experiment Tracking} + \\text{Evaluation} + \\text{Model Lifecycle} + \\text{Prompt Governance} + \\text{Continuous Improvement}CWD\xA0LLMOps=Workflow\xA0Execution+Observability+Experiment\xA0Tracking+Evaluation+Model\xA0Lifecycle+Prompt\xA0Governance+Continuous\xA0Improvement\r
+\r
+## Interview-ready answer\r
+\r
+> “In CWD, MLflow supports the experiment and evaluation layer of the broader MLOps and LLMOps strategy. It records experiments and runs, including parameters such as model, prompt version, retrieval configuration, and agent version; metrics such as accuracy, groundedness, tool success, workflow success, latency, and cost; and artifacts such as evaluation reports, model files, retrieval results, and sanitized trace references. This allows us to compare different models, prompts, RAG strategies, and agent configurations using the same golden datasets. MLflow’s Model Registry provides model versioning, lineage, lifecycle visibility, and controlled promotion. In the CWD architecture, LangGraph still manages workflow execution, Agent Registry manages agent discovery, Policy/IAM manages authorization, Service Bus manages messaging, and Azure Monitor provides runtime observability. MLflow complements these components by answering which configuration produced the result, how well it performed, and whether it should be promoted or rolled back.”\r
+\r
+### Core definition\r
+\r
+MLflow in CWD is the experiment-tracking, evaluation, artifact-management, and model-lifecycle capability that records the configurations and outcomes of AI, ML, RAG, and multi-agent experiments, enables comparison across models, prompts, agents, and workflows, preserves lineage and reproducibility, and provides evidence for governed promotion, regression detection, and continuous improvement within the broader MLOps and LLMOps strategy.\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+CWD executes\r
+   ↓\r
+Observability measures\r
+   ↓\r
+MLflow records and compares\r
+   ↓\r
+Evaluation determines quality\r
+   ↓\r
+Registry manages lifecycle\r
+   ↓\r
+Governance decides promotion\r
+   ↓\r
+CWD deploys and monitors\r
+\`\`\`\r
+\r
+One sentence: MLflow helps CWD move from “the agent produced an answer” to “we know exactly which configuration produced it, how well it performed, what it cost, and whether it is ready for production.”\r
+`,code:``},{id:`application-insights`,category:`Observability`,title:`Application Insights`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Application Insights provides application telemetry for CWD services, including requests, dependencies, exceptions, performance, availability, distributed operations, and service-level health.`,concept:`## 1. What Application Insights does\r
+\r
+Application Insights is Azure Monitor’s application performance monitoring capability. It collects application telemetry and stores it in the Azure Monitor data platform, commonly through a Log Analytics workspace. It helps teams diagnose failures, investigate slow transactions, understand dependencies, and monitor application behavior.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+For CWD, this means observing the operational behavior of:\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Gateway\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker\r
+    ├── LLM\r
+    ├── RAG / Azure AI Search\r
+    ├── MCP / API\r
+    ├── Cosmos DB\r
+    ├── Redis\r
+    └── Service Bus\r
+\`\`\`\r
+\r
+The goal is to answer:\r
+\r
+> Is the service healthy, where did the request spend time, what failed, and which dependency caused the problem?\r
+\r
+\r
+# 2. Application Insights in the CWD observability architecture\r
+\r
+\`\`\`\r
+CWD Services\r
+   ├── Gateway\r
+   ├── Coordinator\r
+   ├── Delegators\r
+   ├── Workers\r
+   └── MCP / RAG Services\r
+          │\r
+          ▼\r
+   OpenTelemetry / SDK\r
+          │\r
+          ▼\r
+   Application Insights\r
+          │\r
+          ▼\r
+   Azure Monitor + Log Analytics\r
+          │\r
+     ┌────┼─────────────┐\r
+     ▼    ▼             ▼\r
+ Dashboards Alerts   Transaction\r
+                     Diagnostics\r
+\`\`\`\r
+\r
+Application Insights collects requests, dependencies, exceptions, traces, metrics, and other telemetry. The Azure Monitor OpenTelemetry Distro is a recommended instrumentation path for supported applications, while custom instrumentation can capture CWD-specific operations.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+# 3. Requests: tracking incoming operations\r
+\r
+A request represents an operation received by an application, such as an HTTP API call.\r
+\r
+In CWD, examples include:\r
+\r
+\`\`\`\r
+POST /api/chat\r
+POST /api/workflows\r
+POST /api/tasks\r
+GET  /api/health\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+User\r
+  ↓\r
+POST /api/chat\r
+  ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+Application Insights request telemetry can capture:\r
+\r
+|\r
+Field\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request name\r
+\r
+|\r
+\r
+\`POST /api/chat\`\r
+\r
+|\r
+|\r
+\r
+Operation ID\r
+\r
+|\r
+\r
+\`operation-123\`\r
+\r
+|\r
+|\r
+\r
+Duration\r
+\r
+|\r
+\r
+\`4200 ms\`\r
+\r
+|\r
+|\r
+\r
+Result code\r
+\r
+|\r
+\r
+\`200\`\r
+\r
+|\r
+|\r
+\r
+Success\r
+\r
+|\r
+\r
+\`true\`\r
+\r
+|\r
+|\r
+\r
+Cloud role\r
+\r
+|\r
+\r
+\`cwd-coordinator\`\r
+\r
+|\r
+|\r
+\r
+Cloud role instance\r
+\r
+|\r
+\r
+\`coordinator-pod-3\`\r
+\r
+|\r
+|\r
+\r
+Timestamp\r
+\r
+|\r
+\r
+Request start time\r
+\r
+|\r
+\r
+Request telemetry includes operation identity, duration, and success or failure information.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+### CWD example\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "request_name": "POST /api/chat",\r
+  "service": "cwd-coordinator",\r
+  "operation_id": "operation-123",\r
+  "duration_ms": 4200,\r
+  "result_code": 200,\r
+  "success": true\r
+}\r
+\`\`\`\r
+\r
+This answers:\r
+\r
+> How many requests arrived, how long did they take, and how many succeeded?\r
+\r
+# 4. Dependencies: tracking downstream calls\r
+\r
+A dependency is something a CWD service calls to complete its work.\r
+\r
+Examples:\r
+\r
+\`\`\`\r
+Coordinator → Delegator\r
+Worker → Azure OpenAI\r
+Worker → Azure AI Search\r
+Worker → MCP Server\r
+Worker → Cosmos DB\r
+Worker → Redis\r
+Worker → Service Bus\r
+\`\`\`\r
+\r
+Application Insights dependency tracking measures dependency duration, success or failure, and dependency information such as the target name. It can correlate dependency calls with requests and exceptions.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request: POST /api/chat\r
+    │\r
+    ├── Dependency: shipping-delegator\r
+    ├── Dependency: Azure AI Search\r
+    ├── Dependency: shipping-mcp\r
+    └── Dependency: Azure OpenAI\r
+\`\`\`\r
+\r
+A dependency record might contain:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "dependency_type": "HTTP",\r
+  "target": "shipping-mcp",\r
+  "name": "get_tracking_events",\r
+  "duration_ms": 1240,\r
+  "result_code": 200,\r
+  "success": true\r
+}\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> Is the Coordinator slow, or is the downstream MCP service slow?\r
+\r
+# 5. Exceptions: tracking failures\r
+\r
+Application Insights captures exception telemetry, including error information useful for troubleshooting. Exception records can be associated with the operation in which they occurred.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+CWD exceptions may occur in:\r
+\r
+\`\`\`\r
+Gateway\r
+   ├── Invalid request\r
+   ├── Authentication failure\r
+   └── Rate limit\r
+\r
+Coordinator\r
+   ├── Planning failure\r
+   ├── Agent discovery failure\r
+   └── Authorization rejection\r
+\r
+Delegator\r
+   ├── Worker unavailable\r
+   ├── Aggregation failure\r
+   └── Dependency timeout\r
+\r
+Worker\r
+   ├── Tool failure\r
+   ├── RAG failure\r
+   ├── LLM timeout\r
+   └── Output validation failure\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "exception_type": "TimeoutError",\r
+  "message": "Azure AI Search request timed out",\r
+  "operation_id": "operation-123",\r
+  "service": "cwd-rag-worker",\r
+  "step_id": "STEP-003"\r
+}\r
+\`\`\`\r
+\r
+The important distinction is:\r
+\r
+> An exception is an error signal; the surrounding request, dependency, and operation context explains its impact.\r
+\r
+# 6. Performance: measuring service behavior\r
+\r
+Application Insights provides performance views and metrics for investigating slow operations and application bottlenecks.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+For CWD, performance telemetry should include:\r
+\r
+|\r
+Performance area\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request duration\r
+\r
+|\r
+\r
+Coordinator API took 4.2 seconds\r
+\r
+|\r
+|\r
+\r
+Dependency duration\r
+\r
+|\r
+\r
+MCP call took 1.2 seconds\r
+\r
+|\r
+|\r
+\r
+LLM duration\r
+\r
+|\r
+\r
+Model invocation took 2.1 seconds\r
+\r
+|\r
+|\r
+\r
+RAG duration\r
+\r
+|\r
+\r
+Search and reranking took 0.8 seconds\r
+\r
+|\r
+|\r
+\r
+Queue wait\r
+\r
+|\r
+\r
+Task waited 500 ms\r
+\r
+|\r
+|\r
+\r
+Exception rate\r
+\r
+|\r
+\r
+Worker errors increased\r
+\r
+|\r
+|\r
+\r
+Request rate\r
+\r
+|\r
+\r
+100 requests/sec\r
+\r
+|\r
+|\r
+\r
+Memory\r
+\r
+|\r
+\r
+Worker memory usage\r
+\r
+|\r
+|\r
+\r
+CPU\r
+\r
+|\r
+\r
+Process CPU utilization\r
+\r
+|\r
+\r
+Application Insights metrics include request rate, request duration, dependency duration, dependency failures, exceptions, and performance counters.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+### CWD latency breakdown\r
+\r
+\`\`\`\r
+T_E2E\r
+  =\r
+  T_Gateway\r
+  + T_Coordinator\r
+  + T_Delegator\r
+  + T_CriticalPath\r
+  + T_Aggregation\r
+  + T_Response\r
+\`\`\`\r
+\r
+Application Insights helps identify where the time was spent, while CWD-specific telemetry should explain the business execution path.\r
+\r
+# 7. Availability: is the service reachable?\r
+\r
+Availability monitoring checks whether an application is responding and whether its response time is acceptable.\r
+\r
+Application Insights availability tests send requests at regular intervals and can monitor uptime and responsiveness from different locations.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+For CWD, availability checks may include:\r
+\r
+\`\`\`\r
+Coordinator /health\r
+Delegator /health\r
+Worker /health\r
+MCP Server /health\r
+RAG Service /health\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Availability Test\r
+    ↓\r
+POST /api/health\r
+    ↓\r
+Coordinator\r
+    ↓\r
+HTTP 200\r
+    ↓\r
+Available\r
+\`\`\`\r
+\r
+However:\r
+\r
+> A healthy HTTP endpoint does not necessarily mean the agent is ready to execute business work.\r
+\r
+CWD should distinguish:\r
+\r
+\`\`\`\r
+Liveness  = Is the process alive?\r
+Readiness = Can it accept work?\r
+Availability = Can it serve work now?\r
+Health = Is it functioning correctly?\r
+\`\`\`\r
+\r
+A Worker may be alive but not ready because its LLM or MCP dependency is unavailable.\r
+\r
+# 8. Distributed operations: connecting the execution graph\r
+\r
+This is one of the most important capabilities for CWD.\r
+\r
+A single request may cross multiple services:\r
+\r
+\`\`\`\r
+User\r
+  ↓\r
+Gateway\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Delegator\r
+  ↓\r
+Worker\r
+  ↓\r
+MCP\r
+  ↓\r
+Enterprise API\r
+  ↓\r
+Worker\r
+  ↓\r
+Delegator\r
+  ↓\r
+Coordinator\r
+  ↓\r
+User\r
+\`\`\`\r
+\r
+Application Insights transaction diagnostics can show an end-to-end operation timeline containing requests, dependencies, exceptions, and calls across components.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+### Example trace\r
+\r
+\`\`\`\r
+operation-123\r
+│\r
+├── Gateway request                  100 ms\r
+├── Coordinator request             300 ms\r
+├── Delegator dependency            200 ms\r
+├── Worker request                3,000 ms\r
+│   ├── Azure AI Search             800 ms\r
+│   ├── MCP dependency            1,200 ms\r
+│   └── LLM dependency            2,100 ms\r
+└── Response generation             600 ms\r
+\`\`\`\r
+\r
+This allows an engineer to see the critical path instead of looking at isolated service logs.\r
+\r
+# 9. Application Insights and CWD correlation IDs\r
+\r
+Application Insights provides operation correlation through its telemetry model. CWD should also propagate its own business identifiers.\r
+\r
+\`\`\`\r
+correlation_id = CORR-7890\r
+workflow_id    = WF-1001\r
+task_id        = WT-1001\r
+run_id         = RUN-003\r
+step_id        = STEP-004\r
+\`\`\`\r
+\r
+Example telemetry:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "operation_id": "operation-123",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+  "agent_id": "tracking-worker",\r
+  "step_type": "tool_execution"\r
+}\r
+\`\`\`\r
+\r
+### Why both?\r
+\r
+|\r
+Identifier\r
+\r
+|\r
+\r
+Purpose\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Application Insights operation ID\r
+\r
+|\r
+\r
+Technical distributed operation correlation\r
+\r
+|\r
+|\r
+\r
+CWD correlation ID\r
+\r
+|\r
+\r
+End-to-end business request\r
+\r
+|\r
+|\r
+\r
+Turn ID\r
+\r
+|\r
+\r
+Conversational interaction\r
+\r
+|\r
+|\r
+\r
+Workflow ID\r
+\r
+|\r
+\r
+Workflow execution\r
+\r
+|\r
+|\r
+\r
+Task ID\r
+\r
+|\r
+\r
+Logical objective\r
+\r
+|\r
+|\r
+\r
+Run ID\r
+\r
+|\r
+\r
+Execution attempt\r
+\r
+|\r
+|\r
+\r
+Step ID\r
+\r
+|\r
+\r
+Individual operation\r
+\r
+|\r
+\r
+The result is:\r
+\r
+\`\`\`\r
+Technical Trace\r
+      +\r
+CWD Business Lineage\r
+      =\r
+End-to-End Explainability\r
+\`\`\`\r
+\r
+# 10. Service-level health\r
+\r
+Application Insights helps monitor the health of individual applications and dependencies. CWD should combine that telemetry with service-level indicators that reflect whether each agent is capable of performing its responsibility.\r
+\r
+### Coordinator health\r
+\r
+\`\`\`\r
+Request success rate\r
+P95 latency\r
+Planning failures\r
+Authorization failures\r
+Delegation failures\r
+Active workflows\r
+\`\`\`\r
+\r
+### Delegator health\r
+\r
+\`\`\`\r
+Task success rate\r
+Worker selection failures\r
+Queue wait time\r
+Aggregation failures\r
+Retry rate\r
+Partial-result rate\r
+\`\`\`\r
+\r
+### Worker health\r
+\r
+\`\`\`\r
+Task success rate\r
+Tool success rate\r
+LLM latency\r
+RAG latency\r
+Dependency failures\r
+Concurrency\r
+Capacity\r
+\`\`\`\r
+\r
+### Platform health\r
+\r
+\`\`\`\r
+Service Bus queue depth\r
+Cosmos DB throttling\r
+Redis latency\r
+Azure AI Search failures\r
+LLM rate limits\r
+MCP availability\r
+\`\`\`\r
+\r
+Application Insights can collect application and dependency telemetry, while CWD-specific custom metrics should capture domain-level health and execution outcomes.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+# 11. Custom CWD telemetry\r
+\r
+Standard request and dependency telemetry is not enough to understand agentic execution.\r
+\r
+CWD should emit custom events and metrics for operations such as:\r
+\r
+\`\`\`\r
+AGENT_SELECTED\r
+WORKFLOW_STARTED\r
+TASK_CREATED\r
+STEP_STARTED\r
+STEP_COMPLETED\r
+TOOL_EXECUTED\r
+RAG_RETRIEVED\r
+LLM_INVOKED\r
+APPROVAL_REQUESTED\r
+WORKFLOW_COMPLETED\r
+\`\`\`\r
+\r
+Application Insights supports custom events and custom metrics through instrumentation.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "CWD_STEP_COMPLETED",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+  "agent_id": "tracking-worker",\r
+  "step_type": "tool_execution",\r
+  "status": "completed",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+This is how CWD-specific execution becomes visible in Application Insights.\r
+\r
+# 12. Application Insights and LangGraph\r
+\r
+LangGraph controls workflow state and transitions:\r
+\r
+\`\`\`\r
+Planning\r
+   ↓\r
+Delegation\r
+   ↓\r
+Retrieval\r
+   ↓\r
+Tool Execution\r
+   ↓\r
+Validation\r
+   ↓\r
+Aggregation\r
+\`\`\`\r
+\r
+Application Insights records the operational evidence:\r
+\r
+\`\`\`\r
+LangGraph Step\r
+      ↓\r
+Telemetry Event\r
+      ↓\r
+Application Insights\r
+      ↓\r
+Latency / Errors / Dependencies / Trace\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+LangGraph:\r
+STEP-004 → Tool Execution → Failed\r
+\r
+Application Insights:\r
+MCP dependency → TimeoutError → 5,000 ms\r
+\`\`\`\r
+\r
+### Separation\r
+\r
+\`\`\`\r
+LangGraph = What happens next?\r
+Application Insights = What happened during execution?\r
+\`\`\`\r
+\r
+Application Insights does not replace LangGraph checkpointing or workflow state.\r
+\r
+# 13. Application Insights and Azure Service Bus\r
+\r
+Service Bus handles durable asynchronous task delivery.\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+Service Bus\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker\r
+\`\`\`\r
+\r
+Application Insights can help monitor the application-side processing around that messaging flow.\r
+\r
+Useful CWD telemetry includes:\r
+\r
+\`\`\`\r
+message_id\r
+correlation_id\r
+workflow_id\r
+task_id\r
+source_agent\r
+target_agent\r
+queue_name\r
+delivery_count\r
+processing_duration\r
+status\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "TASK_MESSAGE_PROCESSED",\r
+  "queue_name": "shipping-tasks",\r
+  "message_id": "MSG-1001",\r
+  "correlation_id": "CORR-7890",\r
+  "task_id": "WT-1001",\r
+  "status": "completed",\r
+  "processing_duration_ms": 2400\r
+}\r
+\`\`\`\r
+\r
+Application Insights is useful for application processing telemetry; Service Bus remains the messaging system of record for delivery semantics.\r
+\r
+# 14. Application Insights and MCP tools\r
+\r
+A Worker may call an MCP tool:\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+MCP Client\r
+   ↓\r
+MCP Server\r
+   ↓\r
+Enterprise API\r
+\`\`\`\r
+\r
+Application Insights can capture the application-side dependency operation.\r
+\r
+Recommended custom fields:\r
+\r
+\`\`\`\r
+mcp_server\r
+tool_name\r
+tool_call_id\r
+agent_id\r
+task_id\r
+step_id\r
+authorization_decision\r
+result_status\r
+duration_ms\r
+retry_count\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "MCP_TOOL_COMPLETED",\r
+  "mcp_server": "shipping-mcp",\r
+  "tool_name": "get_tracking_events",\r
+  "tool_call_id": "TOOL-001",\r
+  "step_id": "STEP-004",\r
+  "status": "success",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+This helps distinguish:\r
+\r
+\`\`\`\r
+Tool selection failure\r
+Argument validation failure\r
+Authorization rejection\r
+MCP transport failure\r
+Backend API failure\r
+Result validation failure\r
+\`\`\`\r
+\r
+An HTTP 200 response alone does not prove business success.\r
+\r
+# 15. Application Insights and RAG\r
+\r
+For a RAG Worker, Application Insights can capture retrieval-related telemetry.\r
+\r
+\`\`\`\r
+User Query\r
+    ↓\r
+Query Transformation\r
+    ↓\r
+Embedding\r
+    ↓\r
+Azure AI Search\r
+    ↓\r
+Security Filtering\r
+    ↓\r
+Reranking\r
+    ↓\r
+Context Construction\r
+    ↓\r
+LLM\r
+\`\`\`\r
+\r
+Useful fields:\r
+\r
+\`\`\`\r
+retrieval_mode\r
+top_k\r
+candidate_count\r
+authorized_count\r
+selected_count\r
+reranking_enabled\r
+context_size\r
+retrieval_duration_ms\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "RAG_RETRIEVAL_COMPLETED",\r
+  "step_id": "STEP-003",\r
+  "retrieval_mode": "hybrid",\r
+  "candidate_count": 30,\r
+  "authorized_count": 12,\r
+  "selected_count": 5,\r
+  "duration_ms": 800\r
+}\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> Was the final answer slow because of the LLM, or because retrieval and context construction were slow?\r
+\r
+Do not log unrestricted confidential document content or full sensitive prompts merely for troubleshooting.\r
+\r
+# 16. Application Insights and LLM telemetry\r
+\r
+CWD should capture model-related metadata such as:\r
+\r
+\`\`\`\r
+model_name\r
+model_version\r
+prompt_id\r
+prompt_version\r
+input_tokens\r
+output_tokens\r
+time_to_first_token\r
+total_duration\r
+finish_reason\r
+cost\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "LLM_INVOCATION_COMPLETED",\r
+  "step_id": "STEP-005",\r
+  "model": "approved-model-v4",\r
+  "prompt_id": "shipment-delay-analysis",\r
+  "prompt_version": "2.2.0",\r
+  "input_tokens": 1850,\r
+  "output_tokens": 420,\r
+  "duration_ms": 2100,\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+This supports:\r
+\r
+* LLM latency analysis\r
+\r
+* Token usage\r
+\r
+* Cost attribution\r
+\r
+* Model comparison\r
+\r
+* Prompt regression analysis\r
+\r
+* Timeout investigation.\r
+\r
+Application Insights has generative AI telemetry support in its current telemetry model, while custom CWD instrumentation can capture additional agent-specific fields.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+# 17. Application Insights and reliability metrics\r
+\r
+CWD should calculate service-level reliability metrics from telemetry.\r
+\r
+### Request success rate\r
+\r
+Request\xA0Success\xA0Rate=Successful\xA0RequestsTotal\xA0Requests×100\\text{Request Success Rate} = \\frac{\\text{Successful Requests}} {\\text{Total Requests}} \\times 100Request\xA0Success\xA0Rate=Total\xA0RequestsSuccessful\xA0Requests×100\r
+\r
+### Dependency success rate\r
+\r
+Dependency\xA0Success\xA0Rate=Successful\xA0Dependency\xA0CallsTotal\xA0Dependency\xA0Calls×100\\text{Dependency Success Rate} = \\frac{\\text{Successful Dependency Calls}} {\\text{Total Dependency Calls}} \\times 100Dependency\xA0Success\xA0Rate=Total\xA0Dependency\xA0CallsSuccessful\xA0Dependency\xA0Calls×100\r
+\r
+### Step success rate\r
+\r
+Step\xA0Success\xA0Rate=Completed\xA0StepsTotal\xA0Step\xA0Attempts×100\\text{Step Success Rate} = \\frac{\\text{Completed Steps}} {\\text{Total Step Attempts}} \\times 100Step\xA0Success\xA0Rate=Total\xA0Step\xA0AttemptsCompleted\xA0Steps×100\r
+\r
+### Workflow success rate\r
+\r
+Workflow\xA0Success\xA0Rate=Successful\xA0WorkflowsTotal\xA0Workflows×100\\text{Workflow Success Rate} = \\frac{\\text{Successful Workflows}} {\\text{Total Workflows}} \\times 100Workflow\xA0Success\xA0Rate=Total\xA0WorkflowsSuccessful\xA0Workflows×100\r
+\r
+Application Insights provides request and dependency failure metrics; CWD should add custom workflow and step metrics because business success is not equivalent to HTTP success.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+# 18. Application Insights and latency analysis\r
+\r
+For CWD, latency should be measured at multiple levels:\r
+\r
+\`\`\`\r
+Step Latency\r
+    ↓\r
+Agent Latency\r
+    ↓\r
+Task Latency\r
+    ↓\r
+Workflow Latency\r
+    ↓\r
+End-to-End Latency\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+STEP-001 Planning             300 ms\r
+STEP-002 Delegation           200 ms\r
+STEP-003 Retrieval            800 ms\r
+STEP-004 Tool Execution     1,240 ms\r
+STEP-005 LLM Invocation     2,100 ms\r
+STEP-006 Validation           100 ms\r
+STEP-007 Aggregation          200 ms\r
+\`\`\`\r
+\r
+Application Insights performance views and transaction diagnostics help identify slow operations and their dependencies.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+For production SLAs, use:\r
+\r
+\`\`\`\r
+P50\r
+P95\r
+P99\r
+\`\`\`\r
+\r
+rather than relying only on average latency.\r
+\r
+# 19. Application Insights and exception analysis\r
+\r
+Suppose a workflow fails:\r
+\r
+\`\`\`\r
+TURN-002\r
+   ↓\r
+WF-1001\r
+   ↓\r
+STEP-004\r
+   ↓\r
+MCP Timeout\r
+   ↓\r
+Worker Exception\r
+   ↓\r
+Delegator Failure\r
+   ↓\r
+Coordinator Response\r
+\`\`\`\r
+\r
+Application Insights can help investigate:\r
+\r
+\`\`\`\r
+Failed Request\r
+    ↓\r
+Related Exception\r
+    ↓\r
+Failed Dependency\r
+    ↓\r
+End-to-End Transaction\r
+\`\`\`\r
+\r
+The transaction diagnostics experience supports drilling into problematic operations and viewing related dependencies and exceptions.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+This helps determine whether the root cause was:\r
+\r
+* A downstream API timeout\r
+\r
+* An MCP failure\r
+\r
+* A Worker exception\r
+\r
+* A queue delay\r
+\r
+* An LLM failure\r
+\r
+* A validation failure\r
+\r
+* An authorization rejection.\r
+\r
+# 20. Application Insights and dashboards\r
+\r
+A CWD platform should create dashboards at different levels.\r
+\r
+### Executive dashboard\r
+\r
+\`\`\`\r
+Workflow Success Rate\r
+P95 End-to-End Latency\r
+Cost per Successful Workflow\r
+Groundedness\r
+Security Violations\r
+\`\`\`\r
+\r
+### Operations dashboard\r
+\r
+\`\`\`\r
+Request Rate\r
+Failed Requests\r
+Dependency Failures\r
+Exceptions\r
+P95/P99 Latency\r
+Queue Depth\r
+Worker Availability\r
+\`\`\`\r
+\r
+### Agent dashboard\r
+\r
+\`\`\`\r
+Coordinator Success\r
+Delegator Success\r
+Worker Success\r
+Routing Failures\r
+Tool Success\r
+RAG Latency\r
+LLM Latency\r
+\`\`\`\r
+\r
+### Infrastructure dashboard\r
+\r
+\`\`\`\r
+CPU\r
+Memory\r
+Restarts\r
+Cosmos Throttling\r
+Redis Latency\r
+Service Bus Queue Age\r
+Azure AI Search Latency\r
+\`\`\`\r
+\r
+Application Insights and Azure Monitor provide the underlying telemetry and monitoring capabilities; CWD-specific dashboards should combine operational metrics with business execution metrics.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+# 21. Application Insights and alerts\r
+\r
+Alerts should be actionable rather than simply reporting every error.\r
+\r
+Examples:\r
+\r
+\`\`\`\r
+Coordinator P95 latency > SLA\r
+Worker failure rate > threshold\r
+Service Bus queue age > threshold\r
+MCP dependency timeout spike\r
+LLM rate-limit errors increasing\r
+Cosmos throttling detected\r
+Redis memory pressure\r
+Availability test failure\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Alert:\r
+"Shipping Worker P95 latency exceeded 5 seconds."\r
+\r
+Investigation:\r
+    ↓\r
+Application Insights\r
+    ↓\r
+Dependency duration\r
+    ↓\r
+MCP call latency\r
+    ↓\r
+Root cause identified\r
+\`\`\`\r
+\r
+Azure Monitor can use Application Insights telemetry for monitoring and alerting.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn\r
+\r
+# 22. Application Insights and security\r
+\r
+Application Insights is not an authorization engine. It observes application behavior.\r
+\r
+CWD security decisions should still be enforced by:\r
+\r
+\`\`\`\r
+Entra ID\r
+Policy / IAM\r
+RBAC\r
+ACLs\r
+DLP\r
+MCP authorization\r
+Network controls\r
+\`\`\`\r
+\r
+Application Insights can record security-related telemetry such as:\r
+\r
+\`\`\`\r
+Authentication failure\r
+Authorization denial\r
+Unauthorized tool attempt\r
+DLP violation\r
+Cross-tenant access attempt\r
+Prompt injection detection\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "AUTHORIZATION_DENIED",\r
+  "correlation_id": "CORR-7890",\r
+  "agent_id": "tracking-worker",\r
+  "tool_name": "submit_reroute_request",\r
+  "policy_id": "SHIP-WRITE-001",\r
+  "decision": "DENY"\r
+}\r
+\`\`\`\r
+\r
+Avoid logging passwords, access tokens, secrets, full confidential prompts, or unrestricted sensitive tool results.\r
+\r
+# 23. Application Insights and auditability\r
+\r
+Application Insights provides operational telemetry, but it should not automatically be treated as the authoritative audit store.\r
+\r
+|\r
+Concern\r
+\r
+|\r
+\r
+Primary system\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Runtime traces\r
+\r
+|\r
+\r
+Application Insights / OpenTelemetry\r
+\r
+|\r
+|\r
+\r
+Application errors\r
+\r
+|\r
+\r
+Application Insights\r
+\r
+|\r
+|\r
+\r
+Performance\r
+\r
+|\r
+\r
+Application Insights\r
+\r
+|\r
+|\r
+\r
+Service health\r
+\r
+|\r
+\r
+Azure Monitor\r
+\r
+|\r
+|\r
+\r
+Workflow state\r
+\r
+|\r
+\r
+LangGraph + durable state store\r
+\r
+|\r
+|\r
+\r
+Business audit evidence\r
+\r
+|\r
+\r
+Governed audit store\r
+\r
+|\r
+|\r
+\r
+Model experiments\r
+\r
+|\r
+\r
+MLflow\r
+\r
+|\r
+|\r
+\r
+Messaging delivery\r
+\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+|\r
+\r
+Agent discovery\r
+\r
+|\r
+\r
+Agent Registry\r
+\r
+|\r
+\r
+### Key distinction\r
+\r
+\`\`\`\r
+Application Insights = What happened operationally?\r
+Audit Store          = What governed action occurred?\r
+MLflow               = How did the AI configuration perform?\r
+\`\`\`\r
+\r
+# 24. Application Insights and MLflow\r
+\r
+These two systems complement each other.\r
+\r
+\`\`\`\r
+CWD Runtime\r
+   │\r
+   ├── Application Insights\r
+   │      └── Requests, dependencies, errors, latency\r
+   │\r
+   └── MLflow\r
+          └── Parameters, metrics, artifacts, evaluations\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Application Insights:\r
+"LLM invocation took 2.1 seconds."\r
+\r
+MLflow:\r
+"Prompt v2.2.0 achieved groundedness 0.93\r
+with P95 latency of 3.8 seconds."\r
+\`\`\`\r
+\r
+Application Insights explains production execution; MLflow compares AI and ML configurations.\r
+\r
+# 25. Recommended CWD telemetry model\r
+\r
+Every meaningful CWD operation should carry a common context:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "timestamp": "2026-09-06T20:00:00Z",\r
+  "correlation_id": "CORR-7890",\r
+  "session_id": "S-1001",\r
+  "conversation_id": "CONV-1001",\r
+  "turn_id": "TURN-002",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+  "agent_id": "tracking-worker",\r
+  "agent_version": "2.4.1",\r
+  "environment": "prod",\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+Then add operation-specific fields:\r
+\r
+\`\`\`\r
+Request → route, HTTP status, duration\r
+Dependency → target, type, duration, success\r
+LLM → model, prompt version, tokens\r
+RAG → retrieval mode, counts, duration\r
+Tool → MCP server, tool name, result status\r
+Step → step type, retry count, result reference\r
+\`\`\`\r
+\r
+This creates consistent telemetry across independently deployed CWD services.\r
+\r
+# 26. End-to-end example\r
+\r
+User request:\r
+\r
+> “Why is shipment SHIP123 delayed?”\r
+\r
+\`\`\`\r
+TURN-002\r
+   │\r
+   ▼\r
+Coordinator\r
+   └── Request: POST /api/chat\r
+          │\r
+          ▼\r
+Delegator\r
+   └── Dependency: shipping-delegator\r
+          │\r
+          ▼\r
+Worker\r
+   ├── STEP-003 → RAG retrieval\r
+   │      └── Azure AI Search dependency\r
+   │\r
+   ├── STEP-004 → MCP tool execution\r
+   │      └── get_tracking_events\r
+   │\r
+   ├── STEP-005 → LLM invocation\r
+   │      └── Azure OpenAI dependency\r
+   │\r
+   ├── STEP-006 → Validation\r
+   │\r
+   └── STEP-007 → Aggregation\r
+          │\r
+          ▼\r
+Coordinator\r
+   └── Response: POST /api/chat completed\r
+\`\`\`\r
+\r
+Application Insights can help reconstruct:\r
+\r
+\`\`\`\r
+Request duration\r
+   ↓\r
+Delegator dependency duration\r
+   ↓\r
+Worker execution duration\r
+   ↓\r
+RAG duration\r
+   ↓\r
+MCP duration\r
+   ↓\r
+LLM duration\r
+   ↓\r
+Exception or validation result\r
+   ↓\r
+Final response\r
+\`\`\`\r
+\r
+The CWD identifiers connect the technical telemetry to the original conversational interaction.\r
+\r
+# 27. What Application Insights does not provide by itself\r
+\r
+Application Insights is powerful, but it does not automatically understand every CWD business concept.\r
+\r
+It does not inherently know:\r
+\r
+* Whether a Coordinator selected the correct Delegator\r
+\r
+* Whether a Worker decomposition was optimal\r
+\r
+* Whether a tool result was semantically correct\r
+\r
+* Whether an answer was grounded in the right evidence\r
+\r
+* Whether a workflow achieved the business objective\r
+\r
+* Whether a prompt version is better than another\r
+\r
+* Whether an agent had sufficient authorization\r
+\r
+* Whether a business action should have been approved.\r
+\r
+These require:\r
+\r
+\`\`\`\r
+Custom CWD telemetry\r
++\r
+Evaluation framework\r
++\r
+Policy / IAM\r
++\r
+Auditability\r
++\r
+MLflow\r
+\`\`\`\r
+\r
+# 28. Core formulas\r
+\r
+### Application telemetry\r
+\r
+Application\xA0Telemetry=Requests+Dependencies+Exceptions+Traces+Metrics+Availability\\text{Application Telemetry} = \\text{Requests} + \\text{Dependencies} + \\text{Exceptions} + \\text{Traces} + \\text{Metrics} + \\text{Availability}Application\xA0Telemetry=Requests+Dependencies+Exceptions+Traces+Metrics+Availability\r
+\r
+### CWD observability\r
+\r
+CWD\xA0Observability=Application\xA0Telemetry+Agent\xA0Telemetry+Workflow\xA0Telemetry+Task/Run/Step\xA0Telemetry+LLM\xA0Telemetry+Tool/MCP\xA0Telemetry+RAG\xA0Telemetry+Messaging\xA0Telemetry+Security\xA0Monitoring\\text{CWD Observability} = \\text{Application Telemetry} + \\text{Agent Telemetry} + \\text{Workflow Telemetry} + \\text{Task/Run/Step Telemetry} + \\text{LLM Telemetry} + \\text{Tool/MCP Telemetry} + \\text{RAG Telemetry} + \\text{Messaging Telemetry} + \\text{Security Monitoring}CWD\xA0Observability=Application\xA0Telemetry+Agent\xA0Telemetry+Workflow\xA0Telemetry+Task/Run/Step\xA0Telemetry+LLM\xA0Telemetry+Tool/MCP\xA0Telemetry+RAG\xA0Telemetry+Messaging\xA0Telemetry+Security\xA0Monitoring\r
+\r
+### Service health\r
+\r
+Service\xA0Health=Availability+Reliability+Performance+Dependency\xA0Health+Capacity+Error\xA0Rate\\text{Service Health} = \\text{Availability} + \\text{Reliability} + \\text{Performance} + \\text{Dependency Health} + \\text{Capacity} + \\text{Error Rate}Service\xA0Health=Availability+Reliability+Performance+Dependency\xA0Health+Capacity+Error\xA0Rate\r
+\r
+## Interview-ready answer\r
+\r
+> “In CWD, Application Insights provides the application performance monitoring layer for the Coordinator, Delegators, Workers, and supporting services. It captures incoming requests, outbound dependencies, exceptions, performance metrics, availability results, and distributed operation telemetry. We use it to understand request rates, success and failure rates, dependency latency, P95/P99 performance, exception patterns, and service-level health. By propagating CWD identifiers such as correlation ID, Turn ID, workflow ID, task ID, run ID, and Step ID, we can connect a user request to the complete distributed execution path across agents, LLMs, RAG, MCP tools, databases, and messaging systems. We also add custom telemetry for agent selection, workflow transitions, tool execution, retrieval quality, LLM usage, and business outcomes. Application Insights supports runtime troubleshooting and operational monitoring, while LangGraph manages workflow state, MLflow manages experiment and evaluation evidence, Policy/IAM enforces authorization, and the audit store preserves governed evidence. This turns CWD from a collection of distributed services into an observable, diagnosable, and measurable enterprise platform.”\r
+\r
+### Core definition\r
+\r
+Application Insights in CWD is the application telemetry and performance-monitoring capability that captures requests, dependencies, exceptions, performance, availability, and distributed operation data across Coordinator, Delegator, Worker, and supporting services. When combined with CWD correlation identifiers and custom agent/workflow telemetry, it enables end-to-end tracing, failure diagnosis, latency analysis, dependency health monitoring, service-level health measurement, alerting, and operational troubleshooting across the complete multi-agent execution graph.\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+Application Insights\r
+        ↓\r
+Requests + Dependencies + Exceptions + Performance\r
+        ↓\r
+Distributed CWD Execution\r
+        ↓\r
+Latency + Reliability + Service Health\r
+        ↓\r
+Troubleshooting + Alerts + Continuous Improvement\r
+\`\`\`\r
+`,code:``},{id:`log-analytics`,category:`Observability`,title:`Log Analytics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand centralized log collection and analysis for CWD, including structured application logs, agent events, errors, security events, tool invocations, infrastructure logs, query-based troubleshooting, and operational investigation.`,concept:`## Centralized logging in CWD\r
+\r
+Centralized log collection is the practice of collecting logs from all CWD services and supporting components into a shared, searchable platform so engineers can reconstruct, investigate, and troubleshoot distributed execution from one place.\r
+\r
+For CWD, the goal is not simply to store more logs. It is to answer:\r
+\r
+> What happened, where did it happen, why did it happen, and what should we do next?\r
+\r
+A single request may generate logs across the Gateway, Coordinator, Delegator, Worker, LLM, RAG, MCP, database, messaging, and infrastructure layers. Centralized logging makes those records searchable through common identifiers such as Correlation ID, Turn ID, Workflow ID, Task ID, Run ID, and Step ID.\r
+\r
+## 1. Where centralized logging fits\r
+\r
+\`\`\`\r
+Users\r
+  ↓\r
+API Gateway\r
+  ↓\r
+CWD Coordinator\r
+  ↓\r
+Delegators\r
+  ↓\r
+Workers\r
+  ├── LLM\r
+  ├── RAG / Azure AI Search\r
+  ├── MCP / APIs\r
+  ├── Cosmos DB\r
+  ├── Redis\r
+  └── Service Bus\r
+          │\r
+          ▼\r
+   Log Collection\r
+          │\r
+          ▼\r
+   Central Log Platform\r
+          │\r
+          ├── Search / Query\r
+          ├── Dashboards\r
+          ├── Alerts\r
+          ├── Incident Investigation\r
+          └── Audit / Security Integration\r
+\`\`\`\r
+\r
+In an Azure-oriented CWD platform, Azure Monitor Logs / Log Analytics can provide the centralized query and analysis layer, while Application Insights contributes application telemetry and Azure services contribute their own diagnostic logs.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+Important distinction:\r
+\r
+\`\`\`\r
+Application Insights = Application telemetry\r
+Log Analytics        = Centralized log query and analysis\r
+Azure Monitor        = Monitoring, metrics, alerts, and analysis\r
+Audit Store          = Governed audit evidence\r
+MLflow               = AI/ML experiment and evaluation evidence\r
+\`\`\`\r
+\r
+These systems complement one another rather than replacing each other.\r
+\r
+\r
+# 2. Why centralized logging is critical for CWD\r
+\r
+Traditional applications may have one service log. CWD has a distributed execution graph.\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker\r
+    ├── RAG\r
+    ├── LLM\r
+    ├── MCP Tool\r
+    └── Enterprise API\r
+    ↓\r
+Aggregation\r
+    ↓\r
+Final Response\r
+\`\`\`\r
+\r
+If the final response is slow or incorrect, checking only the Coordinator log is insufficient.\r
+\r
+Centralized logs help answer:\r
+\r
+* Did the request reach the Coordinator?\r
+\r
+* Which Delegator was selected?\r
+\r
+* Which Workers executed?\r
+\r
+* Which tool was called?\r
+\r
+* Did authorization succeed?\r
+\r
+* Did RAG retrieve relevant evidence?\r
+\r
+* Did the LLM timeout?\r
+\r
+* Was the failure retryable?\r
+\r
+* Did the workflow recover?\r
+\r
+* Why was the final response partial or failed?\r
+\r
+> Centralized logging turns distributed execution into a searchable operational history.\r
+\r
+# 3. Structured application logs\r
+\r
+CWD should use structured logs, preferably JSON, rather than only free-form messages.\r
+\r
+### Unstructured log\r
+\r
+\`\`\`\r
+Worker failed while calling shipment API\r
+\`\`\`\r
+\r
+### Structured log\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "timestamp": "2026-09-06T20:00:01.240Z",\r
+  "level": "ERROR",\r
+  "service": "tracking-worker",\r
+  "event_name": "TOOL_EXECUTION_FAILED",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "step_id": "STEP-004",\r
+  "agent_id": "tracking-worker",\r
+  "tool_name": "get_tracking_events",\r
+  "error_type": "TimeoutError",\r
+  "retryable": true,\r
+  "duration_ms": 5000\r
+}\r
+\`\`\`\r
+\r
+Structured fields allow queries such as:\r
+\r
+\`\`\`\r
+Find all failed tool executions for correlation CORR-7890\r
+\`\`\`\r
+\r
+rather than searching manually through text.\r
+\r
+# 4. Common log fields\r
+\r
+A shared CWD logging schema should include:\r
+\r
+|\r
+Field\r
+\r
+|\r
+\r
+Purpose\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+\`timestamp\`\r
+\r
+|\r
+\r
+When the event occurred\r
+\r
+|\r
+|\r
+\r
+\`level\`\r
+\r
+|\r
+\r
+DEBUG, INFO, WARN, ERROR\r
+\r
+|\r
+|\r
+\r
+\`service\`\r
+\r
+|\r
+\r
+Gateway, Coordinator, Worker, etc.\r
+\r
+|\r
+|\r
+\r
+\`environment\`\r
+\r
+|\r
+\r
+DEV, TEST, UAT, PROD\r
+\r
+|\r
+|\r
+\r
+\`event_name\`\r
+\r
+|\r
+\r
+Meaningful operation\r
+\r
+|\r
+|\r
+\r
+\`correlation_id\`\r
+\r
+|\r
+\r
+End-to-end business request\r
+\r
+|\r
+|\r
+\r
+\`session_id\`\r
+\r
+|\r
+\r
+Broader interaction\r
+\r
+|\r
+|\r
+\r
+\`conversation_id\`\r
+\r
+|\r
+\r
+Conversation\r
+\r
+|\r
+|\r
+\r
+\`turn_id\`\r
+\r
+|\r
+\r
+Individual user interaction\r
+\r
+|\r
+|\r
+\r
+\`workflow_id\`\r
+\r
+|\r
+\r
+Workflow execution\r
+\r
+|\r
+|\r
+\r
+\`task_id\`\r
+\r
+|\r
+\r
+Logical objective\r
+\r
+|\r
+|\r
+\r
+\`run_id\`\r
+\r
+|\r
+\r
+Execution attempt\r
+\r
+|\r
+|\r
+\r
+\`step_id\`\r
+\r
+|\r
+\r
+Individual operation\r
+\r
+|\r
+|\r
+\r
+\`agent_id\`\r
+\r
+|\r
+\r
+Agent identity\r
+\r
+|\r
+|\r
+\r
+\`agent_version\`\r
+\r
+|\r
+\r
+Deployed agent version\r
+\r
+|\r
+|\r
+\r
+\`status\`\r
+\r
+|\r
+\r
+Started, completed, failed, etc.\r
+\r
+|\r
+|\r
+\r
+\`duration_ms\`\r
+\r
+|\r
+\r
+Operation duration\r
+\r
+|\r
+|\r
+\r
+\`error_code\`\r
+\r
+|\r
+\r
+Classified failure\r
+\r
+|\r
+|\r
+\r
+\`result_reference\`\r
+\r
+|\r
+\r
+Reference to stored result\r
+\r
+|\r
+\r
+The most important principle is:\r
+\r
+> Every meaningful log should be correlated with the execution context that produced it.\r
+\r
+# 5. Agent events\r
+\r
+CWD should log meaningful agent lifecycle and decision events.\r
+\r
+\`\`\`\r
+AGENT_SELECTED\r
+AGENT_STARTED\r
+AGENT_COMPLETED\r
+AGENT_FAILED\r
+AGENT_TIMEOUT\r
+AGENT_RETRY\r
+AGENT_FAILOVER\r
+AGENT_DEGRADED\r
+AGENT_DRAINING\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "AGENT_SELECTED",\r
+  "correlation_id": "CORR-7890",\r
+  "workflow_id": "WF-1001",\r
+  "agent_id": "shipping-delegator",\r
+  "capability": "shipment_delay_analysis",\r
+  "selection_reason": "capability_and_policy_match",\r
+  "status": "selected"\r
+}\r
+\`\`\`\r
+\r
+This helps investigate:\r
+\r
+> Why did CWD choose this agent instead of another eligible agent?\r
+\r
+For dynamic routing, logs should capture relevant candidate and exclusion information without exposing sensitive policy details unnecessarily.\r
+\r
+# 6. Workflow and step events\r
+\r
+LangGraph controls workflow transitions, while centralized logs record those transitions.\r
+\r
+\`\`\`\r
+WORKFLOW_STARTED\r
+       ↓\r
+STEP_STARTED\r
+       ↓\r
+STEP_COMPLETED\r
+       ↓\r
+STEP_STARTED\r
+       ↓\r
+STEP_FAILED\r
+       ↓\r
+STEP_RETRYING\r
+       ↓\r
+STEP_COMPLETED\r
+       ↓\r
+WORKFLOW_COMPLETED\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "STEP_COMPLETED",\r
+  "step_id": "STEP-004",\r
+  "step_type": "tool_execution",\r
+  "workflow_id": "WF-1001",\r
+  "task_id": "WT-1001",\r
+  "run_id": "RUN-003",\r
+  "status": "completed",\r
+  "duration_ms": 1240\r
+}\r
+\`\`\`\r
+\r
+This provides a searchable execution timeline.\r
+\r
+# 7. Error logs\r
+\r
+Error logs should capture what failed and how the platform should respond.\r
+\r
+A useful error record includes:\r
+\r
+\`\`\`\r
+error_code\r
+error_type\r
+message\r
+service\r
+step_id\r
+dependency\r
+retryable\r
+attempt\r
+deadline\r
+status\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "STEP_FAILED",\r
+  "step_id": "STEP-004",\r
+  "error_code": "MCP_TIMEOUT",\r
+  "error_type": "TimeoutError",\r
+  "dependency": "shipping-mcp",\r
+  "retryable": true,\r
+  "attempt": 1,\r
+  "status": "failed"\r
+}\r
+\`\`\`\r
+\r
+### Error classification\r
+\r
+|\r
+Error type\r
+\r
+|\r
+\r
+Example\r
+\r
+|\r
+\r
+Typical response\r
+\r
+|\r
+| --- | --- | --- |\r
+|\r
+\r
+Validation\r
+\r
+|\r
+\r
+Invalid shipment ID\r
+\r
+|\r
+\r
+Reject or request correction\r
+\r
+|\r
+|\r
+\r
+Authorization\r
+\r
+|\r
+\r
+Tool access denied\r
+\r
+|\r
+\r
+Stop or escalate\r
+\r
+|\r
+|\r
+\r
+Timeout\r
+\r
+|\r
+\r
+MCP API timeout\r
+\r
+|\r
+\r
+Controlled retry\r
+\r
+|\r
+|\r
+\r
+Dependency\r
+\r
+|\r
+\r
+Search unavailable\r
+\r
+|\r
+\r
+Retry or fallback\r
+\r
+|\r
+|\r
+\r
+Rate limit\r
+\r
+|\r
+\r
+LLM throttling\r
+\r
+|\r
+\r
+Backoff\r
+\r
+|\r
+|\r
+\r
+Permanent business error\r
+\r
+|\r
+\r
+Shipment not found\r
+\r
+|\r
+\r
+Return business result\r
+\r
+|\r
+|\r
+\r
+Infrastructure\r
+\r
+|\r
+\r
+Worker crashed\r
+\r
+|\r
+\r
+Redistribute task\r
+\r
+|\r
+\r
+Do not treat every error as a system failure. A correct authorization denial may be a successful security control.\r
+\r
+# 8. Security event logs\r
+\r
+Security events should be logged separately from ordinary application messages, while remaining correlated with the same execution context.\r
+\r
+Examples:\r
+\r
+\`\`\`\r
+AUTHENTICATION_FAILED\r
+AUTHORIZATION_DENIED\r
+UNAUTHORIZED_TOOL_ATTEMPT\r
+DLP_VIOLATION\r
+PROMPT_INJECTION_DETECTED\r
+CROSS_TENANT_ACCESS_ATTEMPT\r
+PRIVILEGE_ESCALATION_ATTEMPT\r
+SECRET_ACCESS_DENIED\r
+POLICY_REJECTED\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "AUTHORIZATION_DENIED",\r
+  "correlation_id": "CORR-7890",\r
+  "agent_id": "tracking-worker",\r
+  "tool_name": "submit_reroute_request",\r
+  "policy_id": "SHIP-WRITE-001",\r
+  "decision": "DENY",\r
+  "reason_code": "INSUFFICIENT_SCOPE"\r
+}\r
+\`\`\`\r
+\r
+Security logs should support:\r
+\r
+* Incident investigation\r
+\r
+* Detection of abnormal behavior\r
+\r
+* Compliance evidence\r
+\r
+* Least-privilege review\r
+\r
+* Cross-tenant isolation monitoring\r
+\r
+* Policy regression analysis.\r
+\r
+Never log passwords, access tokens, private keys, or unrestricted sensitive payloads.\r
+\r
+# 9. Tool invocation logs\r
+\r
+A tool invocation should be observable as a complete lifecycle.\r
+\r
+\`\`\`\r
+TOOL_SELECTED\r
+      ↓\r
+TOOL_ARGUMENTS_VALIDATED\r
+      ↓\r
+TOOL_AUTHORIZATION_CHECKED\r
+      ↓\r
+TOOL_INVOKED\r
+      ↓\r
+TOOL_RESULT_RECEIVED\r
+      ↓\r
+TOOL_RESULT_VALIDATED\r
+\`\`\`\r
+\r
+Example:\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "TOOL_EXECUTION_COMPLETED",\r
+  "correlation_id": "CORR-7890",\r
+  "task_id": "WT-1001",\r
+  "step_id": "STEP-004",\r
+  "mcp_server": "shipping-mcp",\r
+  "tool_name": "get_tracking_events",\r
+  "authorization_decision": "ALLOW",\r
+  "result_status": "valid",\r
+  "duration_ms": 1240,\r
+  "retry_count": 0\r
+}\r
+\`\`\`\r
+\r
+This helps distinguish:\r
+\r
+\`\`\`\r
+Wrong tool\r
+   vs\r
+Wrong arguments\r
+   vs\r
+Authorization failure\r
+   vs\r
+MCP transport failure\r
+   vs\r
+Backend API failure\r
+   vs\r
+Invalid result\r
+\`\`\`\r
+\r
+> HTTP 200 is not the same as successful business execution.\r
+\r
+# 10. LLM and RAG logs\r
+\r
+CWD should capture model and retrieval metadata without logging sensitive content unnecessarily.\r
+\r
+### LLM event\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "LLM_INVOCATION_COMPLETED",\r
+  "step_id": "STEP-005",\r
+  "model": "approved-model-v4",\r
+  "prompt_id": "shipment-delay-analysis",\r
+  "prompt_version": "2.2.0",\r
+  "input_tokens": 1850,\r
+  "output_tokens": 420,\r
+  "duration_ms": 2100,\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+### RAG event\r
+\r
+JSON\r
+\r
+\`\`\`\r
+{\r
+  "event_name": "RAG_RETRIEVAL_COMPLETED",\r
+  "step_id": "STEP-003",\r
+  "retrieval_mode": "hybrid",\r
+  "candidate_count": 30,\r
+  "authorized_count": 12,\r
+  "selected_count": 5,\r
+  "duration_ms": 800\r
+}\r
+\`\`\`\r
+\r
+These logs support:\r
+\r
+* Model latency analysis\r
+\r
+* Token and cost attribution\r
+\r
+* Retrieval troubleshooting\r
+\r
+* Groundedness investigation\r
+\r
+* Prompt and model regression analysis.\r
+\r
+# 11. Infrastructure logs\r
+\r
+CWD also depends on infrastructure services.\r
+\r
+\`\`\`\r
+Coordinator\r
+   ├── Container Apps / AKS\r
+   ├── Cosmos DB\r
+   ├── Redis\r
+   ├── Service Bus\r
+   ├── Azure AI Search\r
+   ├── Azure OpenAI\r
+   └── Key Vault\r
+\`\`\`\r
+\r
+Infrastructure logs may include:\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Useful operational information\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Container runtime\r
+\r
+|\r
+\r
+Restarts, crashes, deployment events\r
+\r
+|\r
+|\r
+\r
+Cosmos DB\r
+\r
+|\r
+\r
+Throttling, request failures, partition issues\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Connection failures, memory pressure, evictions\r
+\r
+|\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+\r
+Delivery failures, dead-lettering, processing errors\r
+\r
+|\r
+|\r
+\r
+Azure AI Search\r
+\r
+|\r
+\r
+Query failures, indexing failures, throttling\r
+\r
+|\r
+|\r
+\r
+LLM service\r
+\r
+|\r
+\r
+Rate limits, model errors, timeouts\r
+\r
+|\r
+|\r
+\r
+Key Vault\r
+\r
+|\r
+\r
+Access failures and secret retrieval errors\r
+\r
+|\r
+|\r
+\r
+Network\r
+\r
+|\r
+\r
+Connectivity and firewall-related failures\r
+\r
+|\r
+\r
+These logs help determine whether an application problem is actually caused by infrastructure.\r
+\r
+# 12. Centralized log collection flow\r
+\r
+\`\`\`\r
+CWD Services\r
+    ↓\r
+Structured Logging SDK\r
+    ↓\r
+OpenTelemetry / Azure Diagnostic Settings\r
+    ↓\r
+Log Collection\r
+    ↓\r
+Azure Monitor Logs / Log Analytics\r
+    ↓\r
+Queries + Dashboards + Alerts\r
+\`\`\`\r
+\r
+For Azure services, diagnostic settings can route supported resource logs and metrics to destinations such as Log Analytics. Application Insights application telemetry can also be queried through Azure Monitor Logs.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://learn.microsoft.com\\&sz=32)\r
+\r
+Microsoft Learn+1\r
+\r
+The exact collection mechanism depends on the service and deployment model.\r
+\r
+# 13. Query-based troubleshooting\r
+\r
+Centralized logs become valuable when engineers can query them by execution context.\r
+\r
+For example, in Kusto Query Language (KQL), a conceptual query might be:\r
+\r
+kusto\r
+\r
+\`\`\`\r
+AppTraces\r
+| where TimeGenerated > ago(1h)\r
+| where Properties["correlation_id"] == "CORR-7890"\r
+| project TimeGenerated, SeverityLevel, Message, Properties\r
+| order by TimeGenerated asc\r
+\`\`\`\r
+\r
+This retrieves logs associated with one business request.\r
+\r
+> Use the actual table and field names available in your workspace; custom properties may be stored differently depending on instrumentation.\r
+\r
+# 14. Query: find failed steps\r
+\r
+kusto\r
+\r
+\`\`\`\r
+AppTraces\r
+| where TimeGenerated > ago(1h)\r
+| where Properties["event_name"] == "STEP_FAILED"\r
+| project\r
+    TimeGenerated,\r
+    StepId = tostring(Properties["step_id"]),\r
+    WorkflowId = tostring(Properties["workflow_id"]),\r
+    TaskId = tostring(Properties["task_id"]),\r
+    ErrorCode = tostring(Properties["error_code"]),\r
+    Message\r
+| order by TimeGenerated desc\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> Which execution steps are failing most frequently?\r
+\r
+# 15. Query: find slow dependencies\r
+\r
+kusto\r
+\r
+\`\`\`\r
+AppDependencies\r
+| where TimeGenerated > ago(1h)\r
+| where DurationMs > 2000\r
+| project\r
+    TimeGenerated,\r
+    Target,\r
+    Name,\r
+    DurationMs,\r
+    Success,\r
+    OperationId\r
+| order by DurationMs desc\r
+\`\`\`\r
+\r
+This helps identify whether latency is caused by:\r
+\r
+* MCP\r
+\r
+* Azure AI Search\r
+\r
+* Cosmos DB\r
+\r
+* Redis\r
+\r
+* LLM calls\r
+\r
+* External APIs.\r
+\r
+# 16. Query: investigate one Turn ID\r
+\r
+kusto\r
+\r
+\`\`\`\r
+union AppRequests, AppDependencies, AppTraces, AppExceptions\r
+| where TimeGenerated > ago(1h)\r
+| where tostring(Properties["turn_id"]) == "TURN-002"\r
+| project\r
+    TimeGenerated,\r
+    Type,\r
+    OperationName,\r
+    Message,\r
+    Properties\r
+| order by TimeGenerated asc\r
+\`\`\`\r
+\r
+This creates a conversational-level investigation view.\r
+\r
+A more robust implementation may use a normalized custom field or a dedicated telemetry schema rather than relying on \`Properties\`.\r
+\r
+# 17. Query: find retry storms\r
+\r
+kusto\r
+\r
+\`\`\`\r
+AppTraces\r
+| where TimeGenerated > ago(1h)\r
+| where Properties["event_name"] == "STEP_RETRYING"\r
+| summarize RetryCount = count()\r
+    by AgentId = tostring(Properties["agent_id"]),\r
+       ErrorCode = tostring(Properties["error_code"])\r
+| order by RetryCount desc\r
+\`\`\`\r
+\r
+This can reveal:\r
+\r
+\`\`\`\r
+MCP timeout\r
+   ↓\r
+Retry\r
+   ↓\r
+Retry\r
+   ↓\r
+Retry\r
+   ↓\r
+More queue pressure\r
+\`\`\`\r
+\r
+Retry storms can degrade reliability and increase cost.\r
+\r
+# 18. Query: find authorization denials\r
+\r
+kusto\r
+\r
+\`\`\`\r
+AppTraces\r
+| where TimeGenerated > ago(24h)\r
+| where Properties["event_name"] == "AUTHORIZATION_DENIED"\r
+| summarize Denials = count()\r
+    by AgentId = tostring(Properties["agent_id"]),\r
+       ToolName = tostring(Properties["tool_name"])\r
+| order by Denials desc\r
+\`\`\`\r
+\r
+This supports security investigation and least-privilege analysis.\r
+\r
+# 19. Query: investigate a slow workflow\r
+\r
+A useful investigation sequence is:\r
+\r
+\`\`\`\r
+1. Find correlation ID\r
+2. Find workflow ID\r
+3. Find failed or slow steps\r
+4. Inspect dependencies\r
+5. Inspect exceptions\r
+6. Inspect retries\r
+7. Inspect infrastructure\r
+8. Determine root cause\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+CORR-7890\r
+   ↓\r
+WF-1001\r
+   ↓\r
+STEP-004\r
+   ↓\r
+MCP dependency\r
+   ↓\r
+Timeout\r
+   ↓\r
+Retry\r
+   ↓\r
+Workflow latency increased\r
+\`\`\`\r
+\r
+This is much more useful than searching for the word \`"timeout"\` across all services.\r
+\r
+# 20. Operational investigation example\r
+\r
+Suppose a user reports:\r
+\r
+> “The shipment response took too long.”\r
+\r
+The engineer searches:\r
+\r
+\`\`\`\r
+correlation_id = CORR-7890\r
+\`\`\`\r
+\r
+The centralized timeline shows:\r
+\r
+\`\`\`\r
+Gateway request                  100 ms\r
+Coordinator                      300 ms\r
+Delegator                        200 ms\r
+RAG retrieval                    800 ms\r
+MCP tool execution             1,240 ms\r
+LLM invocation                 2,100 ms\r
+Retry                            900 ms\r
+Aggregation                     200 ms\r
+\`\`\`\r
+\r
+The engineer discovers:\r
+\r
+\`\`\`\r
+MCP timeout\r
+    ↓\r
+Retry\r
+    ↓\r
+Additional latency\r
+\`\`\`\r
+\r
+The issue is not necessarily the LLM. The root cause may be a downstream dependency.\r
+\r
+# 21. Logging vs tracing vs metrics\r
+\r
+These concepts are related but different.\r
+\r
+|\r
+Capability\r
+\r
+|\r
+\r
+Main question\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Logs\r
+\r
+|\r
+\r
+What event was recorded?\r
+\r
+|\r
+|\r
+\r
+Traces\r
+\r
+|\r
+\r
+Where did the operation travel?\r
+\r
+|\r
+|\r
+\r
+Metrics\r
+\r
+|\r
+\r
+How is the system behaving numerically?\r
+\r
+|\r
+|\r
+\r
+Evaluation\r
+\r
+|\r
+\r
+Was the AI behavior good enough?\r
+\r
+|\r
+|\r
+\r
+Audit\r
+\r
+|\r
+\r
+What governed action occurred?\r
+\r
+|\r
+|\r
+\r
+Alerts\r
+\r
+|\r
+\r
+What needs attention now?\r
+\r
+|\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Log:\r
+"MCP timeout occurred."\r
+\r
+Trace:\r
+"Gateway → Coordinator → Worker → MCP."\r
+\r
+Metric:\r
+"P95 MCP latency = 4.8 seconds."\r
+\r
+Evaluation:\r
+"Workflow success rate decreased."\r
+\r
+Audit:\r
+"Tool access was authorized under policy X."\r
+\`\`\`\r
+\r
+Centralized logging is therefore one part of the broader observability strategy.\r
+\r
+# 22. Logging vs auditability\r
+\r
+Application logs are primarily operational records.\r
+\r
+Audit records are governed evidence.\r
+\r
+\`\`\`\r
+Application Log:\r
+"Tool execution completed in 1240 ms."\r
+\r
+Audit Record:\r
+"Agent tracking-worker accessed shipment SHIP123\r
+under policy SHIP-READ-001."\r
+\`\`\`\r
+\r
+The audit record should be designed for:\r
+\r
+* Accountability\r
+\r
+* Compliance\r
+\r
+* Forensic investigation\r
+\r
+* Retention\r
+\r
+* Tamper resistance\r
+\r
+* Controlled access.\r
+\r
+Do not assume that every application log is automatically an audit record.\r
+\r
+# 23. Logging vs MLflow\r
+\r
+\`\`\`\r
+Application Insights / Log Analytics\r
+    ↓\r
+"What happened during production execution?"\r
+\r
+MLflow\r
+    ↓\r
+"Which model, prompt, or configuration produced this result,\r
+and how did it compare with alternatives?"\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`\r
+Log:\r
+STEP-005 completed in 2.1 seconds.\r
+\r
+MLflow:\r
+Prompt v2.2.0 achieved groundedness 0.93\r
+with P95 latency of 3.8 seconds.\r
+\`\`\`\r
+\r
+Both are needed for enterprise LLMOps.\r
+\r
+# 24. Logging security and privacy\r
+\r
+Centralized logs can become a sensitive data store.\r
+\r
+Potentially sensitive information includes:\r
+\r
+\`\`\`\r
+User messages\r
+LLM prompts\r
+RAG context\r
+Tool arguments\r
+Tool results\r
+Access tokens\r
+Connection strings\r
+PII\r
+Confidential business data\r
+\`\`\`\r
+\r
+Recommended controls:\r
+\r
+* Redact secrets before logging\r
+\r
+* Mask or tokenize sensitive identifiers\r
+\r
+* Avoid full prompt and context logging by default\r
+\r
+* Store references instead of large payloads\r
+\r
+* Apply data classification\r
+\r
+* Restrict log access using RBAC\r
+\r
+* Encrypt data in transit and at rest\r
+\r
+* Apply retention policies\r
+\r
+* Separate operational logs from audit evidence\r
+\r
+* Monitor access to sensitive logs\r
+\r
+* Avoid putting sensitive data in log field names or correlation IDs.\r
+\r
+> Logs should explain execution without becoming a second source of data leakage.\r
+\r
+# 25. Logging and scalability\r
+\r
+CWD can generate a large volume of logs because one request may create many steps, tool calls, and retries.\r
+\r
+Challenges include:\r
+\r
+\`\`\`\r
+High request volume\r
+      +\r
+Multi-agent fan-out\r
+      +\r
+Verbose tool logs\r
+      +\r
+LLM telemetry\r
+      +\r
+Infrastructure logs\r
+      =\r
+High ingestion and storage cost\r
+\`\`\`\r
+\r
+Recommended practices:\r
+\r
+* Use structured logs\r
+\r
+* Log meaningful events, not every internal function\r
+\r
+* Use appropriate log levels\r
+\r
+* Sample high-volume diagnostic data\r
+\r
+* Retain critical security and audit records separately\r
+\r
+* Avoid logging large payloads\r
+\r
+* Use correlation IDs for targeted investigation\r
+\r
+* Monitor ingestion volume and query performance.\r
+\r
+# 26. Recommended CWD logging architecture\r
+\r
+\`\`\`\r
+                         USER\r
+                           │\r
+                           ▼\r
+                     API Gateway\r
+                           │\r
+                           ▼\r
+                    CWD Coordinator\r
+                           │\r
+                           ▼\r
+                    CWD Delegators\r
+                           │\r
+                           ▼\r
+                     CWD Workers\r
+                  ┌────────┼────────┐\r
+                  ▼        ▼        ▼\r
+                 LLM      RAG      MCP\r
+                  │        │        │\r
+                  └────────┼────────┘\r
+                           │\r
+                           ▼\r
+                  Structured Log SDK\r
+                           │\r
+                           ▼\r
+                    Log Collection\r
+                           │\r
+                           ▼\r
+                 Azure Monitor Logs\r
+                           │\r
+             ┌─────────────┼─────────────┐\r
+             ▼             ▼             ▼\r
+          Queries       Dashboards      Alerts\r
+             │             │             │\r
+             └─────────────┼─────────────┘\r
+                           ▼\r
+                  Operational Investigation\r
+\`\`\`\r
+\r
+Supporting systems:\r
+\r
+\`\`\`\r
+LangGraph → Workflow State\r
+Cosmos DB → Durable State\r
+Redis → Working State\r
+MLflow → Experiment Evidence\r
+Audit Store → Governed Audit Evidence\r
+\`\`\`\r
+\r
+# 27. Core formulas\r
+\r
+### Centralized logging\r
+\r
+Centralized\xA0Logging=Structured\xA0Events+Collection+Central\xA0Storage+Correlation+Query+Analysis\\text{Centralized Logging} = \\text{Structured Events} + \\text{Collection} + \\text{Central Storage} + \\text{Correlation} + \\text{Query} + \\text{Analysis}Centralized\xA0Logging=Structured\xA0Events+Collection+Central\xA0Storage+Correlation+Query+Analysis\r
+\r
+### CWD operational investigation\r
+\r
+Operational\xA0Investigation=Correlation+Logs+Traces+Metrics+Dependencies+Exceptions+Execution\xA0State\\text{Operational Investigation} = \\text{Correlation} + \\text{Logs} + \\text{Traces} + \\text{Metrics} + \\text{Dependencies} + \\text{Exceptions} + \\text{Execution State}Operational\xA0Investigation=Correlation+Logs+Traces+Metrics+Dependencies+Exceptions+Execution\xA0State\r
+\r
+### CWD observability\r
+\r
+CWD\xA0Observability=Logs+Traces+Metrics+Agent\xA0Telemetry+Workflow\xA0Telemetry+LLM/RAG/Tool\xA0Telemetry+Security\xA0Monitoring+Evaluation\\text{CWD Observability} = \\text{Logs} + \\text{Traces} + \\text{Metrics} + \\text{Agent Telemetry} + \\text{Workflow Telemetry} + \\text{LLM/RAG/Tool Telemetry} + \\text{Security Monitoring} + \\text{Evaluation}CWD\xA0Observability=Logs+Traces+Metrics+Agent\xA0Telemetry+Workflow\xA0Telemetry+LLM/RAG/Tool\xA0Telemetry+Security\xA0Monitoring+Evaluation\r
+\r
+## Interview-ready answer\r
+\r
+> “In CWD, centralized logging provides a shared operational record of distributed execution across the Gateway, Coordinator, Delegators, Workers, LLMs, RAG, MCP tools, databases, messaging systems, and infrastructure. We use structured JSON logs with common identifiers such as correlation ID, Turn ID, workflow ID, task ID, run ID, and Step ID. This allows us to query a complete business request rather than searching isolated service logs. We capture agent lifecycle events, workflow transitions, step execution, tool invocations, exceptions, security decisions, infrastructure failures, and performance information. Azure Monitor Logs and Log Analytics can provide the centralized query and analysis layer, while Application Insights contributes application telemetry. We use query-based troubleshooting to identify failed steps, slow dependencies, retry storms, authorization denials, and infrastructure bottlenecks. Logs are correlated with traces and metrics for end-to-end diagnosis, while audit stores preserve governed evidence and MLflow tracks AI/ML experiment results. The objective is to make every production execution explainable, searchable, diagnosable, and secure without exposing sensitive enterprise data.”\r
+\r
+### Core definition\r
+\r
+Centralized logging in CWD is the governed collection, normalization, correlation, storage, and analysis of structured application, agent, workflow, tool, security, and infrastructure events across the distributed platform. By linking logs with Turn ID, Correlation ID, Workflow ID, Task ID, Run ID, and Step ID, CWD can reconstruct execution timelines, investigate failures, identify performance bottlenecks, monitor service health, detect security issues, support operational troubleshooting, and provide evidence for continuous improvement.\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+Structured Logs\r
+      ↓\r
+Central Collection\r
+      ↓\r
+Correlation IDs\r
+      ↓\r
+Searchable Execution History\r
+      ↓\r
+Troubleshooting + Investigation\r
+      ↓\r
+Reliable + Secure + Observable CWD\r
+\`\`\`\r
+`,code:``},{id:`distributed-tracing`,category:`Observability`,title:`Distributed Tracing`,difficulty:`Advanced`,time:`~15 min`,description:`Understand distributed tracing across the complete CWD execution path, including Gateway → Coordinator → Delegator → Worker → LLM → MCP Tool → Data Source → Aggregation, and how trace context helps identify latency, failures, bottlenecks, and dependency issues.`,concept:`Understood. I’ll explain the concept without code.\r
+\r
+# Distributed Tracing in CWD\r
+\r
+Distributed tracing is the capability that follows one user request across all the services, agents, workflow steps, and external dependencies involved in producing the final response.\r
+\r
+In CWD, a single request may travel through:\r
+\r
+\`\`\`\r
+Gateway\r
+   ↓\r
+Coordinator\r
+   ↓\r
+Delegator\r
+   ↓\r
+Worker\r
+   ↓\r
+LLM\r
+   ↓\r
+MCP Tool\r
+   ↓\r
+Enterprise Data Source\r
+   ↓\r
+Worker Result\r
+   ↓\r
+Delegator Aggregation\r
+   ↓\r
+Coordinator\r
+   ↓\r
+Final Response\r
+\`\`\`\r
+\r
+The central principle is:\r
+\r
+> One business request → one distributed trace → many correlated spans.\r
+\r
+A trace represents the complete operation. A span represents one individual operation within that trace.\r
+\r
+## 1. Why distributed tracing is required\r
+\r
+A traditional application may have one service handling a request. CWD is different because one request can involve:\r
+\r
+* Multiple agents\r
+\r
+* Multiple workflow steps\r
+\r
+* Multiple LLM calls\r
+\r
+* Multiple MCP tools\r
+\r
+* Multiple enterprise data sources\r
+\r
+* Asynchronous messaging\r
+\r
+* Parallel Workers\r
+\r
+* Retries and failover\r
+\r
+* Aggregation of partial results\r
+\r
+Without distributed tracing, an engineer may only see:\r
+\r
+> “The request took 10 seconds.”\r
+\r
+With tracing, the engineer can determine:\r
+\r
+> “The Gateway took 100 ms, the Coordinator took 300 ms, the Delegator waited 2 seconds for a Worker, the Worker spent 5 seconds calling an enterprise API, and the remaining time was used for aggregation.”\r
+\r
+This changes troubleshooting from guessing to evidence-based investigation.\r
+\r
+## 2. Trace and span\r
+\r
+### Trace\r
+\r
+A trace represents the complete execution of one logical request.\r
+\r
+\`\`\`\r
+Trace ID: T-100\r
+Business Request: CORR-7890\r
+\`\`\`\r
+\r
+### Span\r
+\r
+A span represents one operation within that trace.\r
+\r
+\`\`\`\r
+Trace: T-100\r
+│\r
+├── Gateway request\r
+├── Coordinator processing\r
+├── Delegator execution\r
+├── Worker execution\r
+├── LLM invocation\r
+├── MCP tool call\r
+├── Enterprise API call\r
+└── Aggregation\r
+\`\`\`\r
+\r
+Each span normally contains:\r
+\r
+* Start time\r
+\r
+* End time\r
+\r
+* Duration\r
+\r
+* Operation name\r
+\r
+* Service or agent\r
+\r
+* Parent relationship\r
+\r
+* Status\r
+\r
+* Error information\r
+\r
+* Relevant attributes\r
+\r
+### Simple distinction\r
+\r
+|\r
+Concept\r
+\r
+|\r
+\r
+Meaning\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Trace\r
+\r
+|\r
+\r
+Complete request execution\r
+\r
+|\r
+|\r
+\r
+Span\r
+\r
+|\r
+\r
+One operation\r
+\r
+|\r
+|\r
+\r
+Parent span\r
+\r
+|\r
+\r
+Calling operation\r
+\r
+|\r
+|\r
+\r
+Child span\r
+\r
+|\r
+\r
+Operation performed by a dependency\r
+\r
+|\r
+|\r
+\r
+Trace context\r
+\r
+|\r
+\r
+Information that connects spans\r
+\r
+|\r
+|\r
+\r
+Correlation ID\r
+\r
+|\r
+\r
+CWD business-request identifier\r
+\r
+|\r
+\r
+## 3. Trace context propagation\r
+\r
+Trace context allows downstream services to continue the same distributed trace.\r
+\r
+\`\`\`\r
+Gateway\r
+Trace ID: T-100\r
+Span ID: S-001\r
+      ↓\r
+Coordinator\r
+Trace ID: T-100\r
+Span ID: S-002\r
+Parent: S-001\r
+      ↓\r
+Delegator\r
+Trace ID: T-100\r
+Span ID: S-003\r
+Parent: S-002\r
+      ↓\r
+Worker\r
+Trace ID: T-100\r
+Span ID: S-004\r
+Parent: S-003\r
+\`\`\`\r
+\r
+The Trace ID remains the same, while each service creates its own span.\r
+\r
+For HTTP communication, trace context is commonly propagated using the W3C \`traceparent\` standard. For asynchronous messaging, the context must be carried through message metadata so the consumer can be associated with the originating operation.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry+1\r
+\r
+### Why propagation matters\r
+\r
+Without propagation:\r
+\r
+\`\`\`\r
+Gateway trace:     T-100\r
+Coordinator trace: T-200\r
+Worker trace:      T-300\r
+\`\`\`\r
+\r
+The relationship becomes difficult to reconstruct.\r
+\r
+With propagation:\r
+\r
+\`\`\`\r
+Gateway → Coordinator → Worker\r
+          All connected to T-100\r
+\`\`\`\r
+\r
+## 4. Complete CWD tracing path\r
+\r
+A conceptual execution may look like this:\r
+\r
+\`\`\`\r
+Trace: T-100\r
+Correlation: CORR-7890\r
+│\r
+├── Gateway\r
+│   └── Receive user request\r
+│\r
+├── Coordinator\r
+│   ├── Classify intent\r
+│   ├── Authorize request\r
+│   ├── Discover agent\r
+│   └── Delegate task\r
+│\r
+├── Delegator\r
+│   ├── Decompose task\r
+│   ├── Select Workers\r
+│   └── Execute domain workflow\r
+│\r
+├── Worker\r
+│   ├── Validate input\r
+│   ├── Invoke LLM\r
+│   ├── Call MCP tool\r
+│   ├── Access enterprise data\r
+│   └── Validate result\r
+│\r
+├── Delegator\r
+│   └── Aggregate Worker results\r
+│\r
+├── Coordinator\r
+│   └── Generate final response\r
+│\r
+└── Gateway\r
+    └── Return response\r
+\`\`\`\r
+\r
+This gives engineers a complete view of the request rather than isolated service activity.\r
+\r
+## 5. Gateway tracing\r
+\r
+The Gateway is the entry point of the request.\r
+\r
+### What it records\r
+\r
+* Incoming request\r
+\r
+* Authentication result\r
+\r
+* Request validation\r
+\r
+* Route\r
+\r
+* Response status\r
+\r
+* Request duration\r
+\r
+* Correlation and trace identifiers\r
+\r
+### Questions tracing answers\r
+\r
+* Did the request reach CWD?\r
+\r
+* Was authentication slow?\r
+\r
+* Did the Gateway reject the request?\r
+\r
+* Was the request delayed before reaching the Coordinator?\r
+\r
+* Did the Gateway return an error?\r
+\r
+If the Gateway span is slow, the problem may exist before orchestration begins.\r
+\r
+## 6. Coordinator tracing\r
+\r
+The Coordinator manages enterprise-level orchestration.\r
+\r
+\`\`\`\r
+Coordinator\r
+   ├── Intent classification\r
+   ├── Domain identification\r
+   ├── Authorization\r
+   ├── Planning\r
+   ├── Agent discovery\r
+   ├── Delegation\r
+   └── Aggregation\r
+\`\`\`\r
+\r
+### Useful trace information\r
+\r
+* Intent\r
+\r
+* Domain\r
+\r
+* Required capability\r
+\r
+* Selected Delegator\r
+\r
+* Workflow ID\r
+\r
+* Authorization outcome\r
+\r
+* Planning duration\r
+\r
+* Delegation duration\r
+\r
+### Questions tracing answers\r
+\r
+* Was intent classification slow?\r
+\r
+* Did authorization delay execution?\r
+\r
+* Did agent discovery fail?\r
+\r
+* Why was a particular Delegator selected?\r
+\r
+* Did the Coordinator wait for downstream results?\r
+\r
+## 7. Delegator tracing\r
+\r
+The Delegator manages domain-level execution.\r
+\r
+\`\`\`\r
+Coordinator\r
+   ↓\r
+Shipping Delegator\r
+   ├── Decompose task\r
+   ├── Identify dependencies\r
+   ├── Select Workers\r
+   ├── Execute Workers\r
+   └── Aggregate results\r
+\`\`\`\r
+\r
+### Useful trace information\r
+\r
+* Task ID\r
+\r
+* Parent task ID\r
+\r
+* Selected Workers\r
+\r
+* Number of parallel branches\r
+\r
+* Queue wait time\r
+\r
+* Retry count\r
+\r
+* Aggregation duration\r
+\r
+* Partial-result status\r
+\r
+### Questions tracing answers\r
+\r
+* Was task decomposition inefficient?\r
+\r
+* Did the Delegator wait for a Worker?\r
+\r
+* Which Worker caused the delay?\r
+\r
+* Did a retry increase workflow latency?\r
+\r
+* Was aggregation delayed by one slow branch?\r
+\r
+## 8. Worker tracing\r
+\r
+The Worker performs the specialized task.\r
+\r
+\`\`\`\r
+Worker\r
+   ├── Input validation\r
+   ├── Context retrieval\r
+   ├── LLM invocation\r
+   ├── MCP tool execution\r
+   ├── Enterprise data access\r
+   └── Output validation\r
+\`\`\`\r
+\r
+The Worker span is especially important because it often contains several child dependencies.\r
+\r
+### Useful trace information\r
+\r
+* Agent ID and version\r
+\r
+* Task ID\r
+\r
+* Run ID\r
+\r
+* Step ID\r
+\r
+* Capability\r
+\r
+* Execution status\r
+\r
+* Tool calls\r
+\r
+* Retrieval operations\r
+\r
+* LLM calls\r
+\r
+* Validation results\r
+\r
+### Questions tracing answers\r
+\r
+* Is the Worker itself slow?\r
+\r
+* Is the delay caused by a tool?\r
+\r
+* Is the delay caused by the LLM?\r
+\r
+* Did the Worker retry?\r
+\r
+* Did the Worker return a valid result?\r
+\r
+## 9. LLM tracing\r
+\r
+The LLM is one dependency used by the Worker.\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+LLM Invocation\r
+   ├── Model request\r
+   ├── Response generation\r
+   └── Output validation\r
+\`\`\`\r
+\r
+### Useful trace information\r
+\r
+* Model and model version\r
+\r
+* Prompt ID and version\r
+\r
+* Input/output token counts\r
+\r
+* Time to first token, where available\r
+\r
+* Total generation duration\r
+\r
+* Finish reason\r
+\r
+* Structured-output validity\r
+\r
+* Error or timeout status\r
+\r
+### Questions tracing answers\r
+\r
+* Is the model causing latency?\r
+\r
+* Did the model timeout?\r
+\r
+* Did token volume increase?\r
+\r
+* Did a prompt change increase execution time?\r
+\r
+* Is the model being retried excessively?\r
+\r
+LLM latency should be measured as part of the Worker and workflow, not treated as the entire system latency.\r
+\r
+## 10. MCP tool tracing\r
+\r
+MCP provides the standardized integration boundary between the Worker and an enterprise capability.\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+MCP Client\r
+   ↓\r
+MCP Server\r
+   ↓\r
+Tool Handler\r
+   ↓\r
+Enterprise System\r
+\`\`\`\r
+\r
+### Useful trace information\r
+\r
+* MCP server\r
+\r
+* Tool name\r
+\r
+* Tool call ID\r
+\r
+* Authorization result\r
+\r
+* Argument-validation result\r
+\r
+* Execution status\r
+\r
+* Backend dependency\r
+\r
+* Retry count\r
+\r
+* Duration\r
+\r
+### Questions tracing answers\r
+\r
+* Was the correct tool selected?\r
+\r
+* Were the arguments valid?\r
+\r
+* Was access authorized?\r
+\r
+* Did the MCP server respond?\r
+\r
+* Did the backend API fail?\r
+\r
+* Was the result valid?\r
+\r
+A successful HTTP response does not necessarily mean the business operation succeeded.\r
+\r
+## 11. Enterprise data-source tracing\r
+\r
+The MCP tool or Worker may access:\r
+\r
+* SQL databases\r
+\r
+* Cosmos DB\r
+\r
+* Azure AI Search\r
+\r
+* Shipment APIs\r
+\r
+* ERP systems\r
+\r
+* CRM systems\r
+\r
+* Internal REST APIs\r
+\r
+* Object storage\r
+\r
+  MCP Tool\r
+  ↓\r
+  Enterprise Data Source\r
+\r
+### Useful trace information\r
+\r
+* Dependency type\r
+\r
+* Target system\r
+\r
+* Operation\r
+\r
+* Duration\r
+\r
+* Success status\r
+\r
+* Error code\r
+\r
+* Query or operation reference\r
+\r
+### Questions tracing answers\r
+\r
+* Is the database slow?\r
+\r
+* Is the API unavailable?\r
+\r
+* Did the dependency throttle the request?\r
+\r
+* Is the network connection failing?\r
+\r
+* Is the query taking too long?\r
+\r
+Application telemetry can track dependency duration, success, and target, allowing downstream calls to be connected to requests and exceptions.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry+1\r
+\r
+## 12. Aggregation tracing\r
+\r
+Aggregation combines results from multiple Workers or Delegators.\r
+\r
+\`\`\`\r
+Worker A ──┐\r
+Worker B ──┼──→ Aggregation\r
+Worker C ──┘\r
+                ↓\r
+           Final Response\r
+\`\`\`\r
+\r
+### Useful trace information\r
+\r
+* Number of completed Workers\r
+\r
+* Number of failed Workers\r
+\r
+* Partial-result status\r
+\r
+* Aggregation duration\r
+\r
+* Missing dependencies\r
+\r
+* Validation status\r
+\r
+### Questions tracing answers\r
+\r
+* Did aggregation wait for all Workers?\r
+\r
+* Was one branch much slower?\r
+\r
+* Was a partial result returned?\r
+\r
+* Did aggregation fail?\r
+\r
+* Did the final response depend on incomplete evidence?\r
+\r
+## 13. Identifying latency bottlenecks\r
+\r
+Consider this illustrative trace:\r
+\r
+|\r
+Operation\r
+\r
+|\r
+\r
+Duration\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Gateway\r
+\r
+|\r
+\r
+100 ms\r
+\r
+|\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+300 ms\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+200 ms\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+1,500 ms\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+700 ms\r
+\r
+|\r
+|\r
+\r
+MCP tool\r
+\r
+|\r
+\r
+500 ms\r
+\r
+|\r
+|\r
+\r
+Enterprise API\r
+\r
+|\r
+\r
+200 ms\r
+\r
+|\r
+|\r
+\r
+Aggregation\r
+\r
+|\r
+\r
+100 ms\r
+\r
+|\r
+\r
+The trace helps identify that the Worker is the largest contributor and that the LLM is its largest child operation.\r
+\r
+### Sequential execution\r
+\r
+Ttotal=TGateway+TCoordinator+TDelegator+TWorker+TAggregationT_{\\text{total}} = T_{\\text{Gateway}} + T_{\\text{Coordinator}} + T_{\\text{Delegator}} + T_{\\text{Worker}} + T_{\\text{Aggregation}}Ttotal=TGateway+TCoordinator+TDelegator+TWorker+TAggregation\r
+\r
+### Parallel execution\r
+\r
+If Workers execute independently:\r
+\r
+Tcritical\xA0path≈max⁡(TWorker\xA0A,TWorker\xA0B,TWorker\xA0C)+TAggregationT_{\\text{critical path}} \\approx \\max(T_{\\text{Worker A}},T_{\\text{Worker B}},T_{\\text{Worker C}}) + T_{\\text{Aggregation}}Tcritical\xA0path≈max(TWorker\xA0A,TWorker\xA0B,TWorker\xA0C)+TAggregation\r
+\r
+Tracing reveals whether the workflow is actually sequential or parallel and which branch determines completion time.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry\r
+\r
+## 14. Identifying failures\r
+\r
+A trace can show the difference between a failed request and a recovered workflow.\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+MCP Tool\r
+   ↓\r
+Enterprise API\r
+   ✕ Timeout\r
+   ↓\r
+Retry\r
+   ↓\r
+Enterprise API\r
+   ✓ Success\r
+   ↓\r
+Worker\r
+   ↓\r
+Aggregation\r
+   ↓\r
+Final Response\r
+\`\`\`\r
+\r
+The trace can answer:\r
+\r
+* Where did the first failure occur?\r
+\r
+* Was it retryable?\r
+\r
+* How many attempts were made?\r
+\r
+* Did the retry succeed?\r
+\r
+* Did the failure affect the final business outcome?\r
+\r
+This is more useful than seeing only:\r
+\r
+> “Request completed with warning.”\r
+\r
+## 15. Identifying dependency bottlenecks\r
+\r
+Suppose the Worker takes four seconds:\r
+\r
+\`\`\`\r
+Worker: 4,000 ms\r
+   ├── LLM: 500 ms\r
+   ├── MCP Tool: 3,200 ms\r
+   │   └── Enterprise API: 3,000 ms\r
+   └── Validation: 300 ms\r
+\`\`\`\r
+\r
+The trace shows that the real bottleneck is the enterprise API.\r
+\r
+Therefore:\r
+\r
+> Do not optimize the LLM when the enterprise dependency is responsible for most of the latency.\r
+\r
+Distributed tracing helps identify the actual source of delay.\r
+\r
+## 16. Tracing asynchronous execution\r
+\r
+CWD may use Service Bus for long-running or asynchronous tasks.\r
+\r
+\`\`\`\r
+Coordinator\r
+   ↓\r
+Service Bus\r
+   ↓\r
+Delegator\r
+   ↓\r
+Worker\r
+\`\`\`\r
+\r
+The trace context and business identifiers should be preserved across the message boundary.\r
+\r
+\`\`\`\r
+Producer Span\r
+      ↓\r
+Message Delivery\r
+      ↓\r
+Consumer Span\r
+      ↓\r
+Worker Span\r
+\`\`\`\r
+\r
+For asynchronous systems, the producer and consumer may be represented as separate spans connected by a causal relationship rather than a simple synchronous parent-child chain.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry\r
+\r
+### Why this matters\r
+\r
+Without trace context, an engineer may not know which Worker execution belongs to which original request.\r
+\r
+With trace context, the engineer can connect:\r
+\r
+\`\`\`\r
+Original Request\r
+   ↓\r
+Queued Task\r
+   ↓\r
+Worker Execution\r
+   ↓\r
+Result\r
+   ↓\r
+Workflow Continuation\r
+\`\`\`\r
+\r
+## 17. Tracing and CWD identifiers\r
+\r
+Trace identifiers and CWD business identifiers should work together.\r
+\r
+\`\`\`\r
+Trace ID\r
+   ↓\r
+Correlation ID\r
+   ↓\r
+Workflow ID\r
+   ↓\r
+Task ID\r
+   ↓\r
+Run ID\r
+   ↓\r
+Step ID\r
+\`\`\`\r
+\r
+### Their roles\r
+\r
+|\r
+Identifier\r
+\r
+|\r
+\r
+Meaning\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Trace ID\r
+\r
+|\r
+\r
+Complete technical operation\r
+\r
+|\r
+|\r
+\r
+Span ID\r
+\r
+|\r
+\r
+One technical operation\r
+\r
+|\r
+|\r
+\r
+Correlation ID\r
+\r
+|\r
+\r
+One business request\r
+\r
+|\r
+|\r
+\r
+Workflow ID\r
+\r
+|\r
+\r
+One workflow execution\r
+\r
+|\r
+|\r
+\r
+Task ID\r
+\r
+|\r
+\r
+One delegated objective\r
+\r
+|\r
+|\r
+\r
+Run ID\r
+\r
+|\r
+\r
+One execution attempt\r
+\r
+|\r
+|\r
+\r
+Step ID\r
+\r
+|\r
+\r
+One workflow action\r
+\r
+|\r
+\r
+Trace context explains technical relationships. CWD identifiers explain business relationships.\r
+\r
+## 18. Tracing and centralized logs\r
+\r
+Tracing tells you where the operation went. Logs tell you what happened during that operation.\r
+\r
+\`\`\`\r
+Trace\r
+   ↓\r
+Slow MCP Span\r
+   ↓\r
+Related Logs\r
+   ↓\r
+Timeout Error\r
+   ↓\r
+Enterprise API Failure\r
+   ↓\r
+Root Cause\r
+\`\`\`\r
+\r
+Application Insights can correlate requests, dependencies, exceptions, and other application telemetry for transaction investigation.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry+1\r
+\r
+### Example\r
+\r
+Trace: MCP call took 3.8 seconds.\r
+\r
+Log: Enterprise API timed out after 3 seconds.\r
+\r
+Metric: MCP P95 latency increased.\r
+\r
+Investigation result: Backend API degradation caused the workflow delay.\r
+\r
+## 19. Tracing and Application Insights\r
+\r
+Application Insights provides application performance monitoring and telemetry such as requests, dependencies, exceptions, performance, and availability. Distributed tracing connects those operations across services.\r
+\r
+![](https://www.google.com/s2/favicons?domain=https://opentelemetry.io\\&sz=32)\r
+\r
+OpenTelemetry+1\r
+\r
+In CWD, it can help visualize:\r
+\r
+\`\`\`\r
+Gateway Request\r
+   ↓\r
+Coordinator Operation\r
+   ↓\r
+Delegator Operation\r
+   ↓\r
+Worker Operation\r
+   ↓\r
+LLM Dependency\r
+   ↓\r
+MCP Dependency\r
+   ↓\r
+Enterprise API Dependency\r
+\`\`\`\r
+\r
+The platform can then investigate:\r
+\r
+* Slow transactions\r
+\r
+* Failed dependencies\r
+\r
+* Exception chains\r
+\r
+* Service health\r
+\r
+* Request success rates\r
+\r
+* Dependency latency\r
+\r
+* End-to-end execution time\r
+\r
+## 20. Distributed tracing vs centralized logging\r
+\r
+|\r
+Distributed tracing\r
+\r
+|\r
+\r
+Centralized logging\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Shows the execution path\r
+\r
+|\r
+\r
+Shows recorded events\r
+\r
+|\r
+|\r
+\r
+Connects operations causally\r
+\r
+|\r
+\r
+Provides detailed event information\r
+\r
+|\r
+|\r
+\r
+Measures span duration\r
+\r
+|\r
+\r
+Records errors, decisions, and messages\r
+\r
+|\r
+|\r
+\r
+Identifies critical path\r
+\r
+|\r
+\r
+Supports field-based investigation\r
+\r
+|\r
+|\r
+\r
+Shows dependency relationships\r
+\r
+|\r
+\r
+Explains what happened\r
+\r
+|\r
+|\r
+\r
+Best for “where did time go?”\r
+\r
+|\r
+\r
+Best for “what happened and why?”\r
+\r
+|\r
+\r
+They are complementary:\r
+\r
+> Tracing identifies the problematic operation; centralized logs explain the event; metrics show whether the problem is widespread.\r
+\r
+## 21. Operational investigation example\r
+\r
+Suppose a user reports:\r
+\r
+> “The shipment response is taking too long.”\r
+\r
+The engineer follows this sequence:\r
+\r
+\`\`\`\r
+1. Find correlation ID\r
+       ↓\r
+2. Open distributed trace\r
+       ↓\r
+3. Inspect Gateway → Coordinator → Delegator\r
+       ↓\r
+4. Identify slow Worker span\r
+       ↓\r
+5. Inspect LLM, MCP, and data-source spans\r
+       ↓\r
+6. Correlate related logs and exceptions\r
+       ↓\r
+7. Check retries and dependency health\r
+       ↓\r
+8. Identify root cause\r
+\`\`\`\r
+\r
+The investigation might reveal:\r
+\r
+\`\`\`\r
+Gateway: 100 ms\r
+Coordinator: 300 ms\r
+Delegator: 200 ms\r
+Worker: 4,200 ms\r
+   ├── LLM: 500 ms\r
+   ├── MCP: 3,800 ms\r
+   │   └── API: 3,600 ms\r
+   └── Validation: 200 ms\r
+\`\`\`\r
+\r
+### Root cause\r
+\r
+The enterprise API is slow.\r
+\r
+### Impact\r
+\r
+The MCP tool and Worker are delayed.\r
+\r
+### Recovery\r
+\r
+A retry may succeed, but it increases total workflow latency.\r
+\r
+### Correct optimization target\r
+\r
+Investigate the enterprise API rather than changing the LLM first.\r
+\r
+## 22. Recommended CWD tracing architecture\r
+\r
+\`\`\`\r
+CWD Services\r
+    │\r
+    ├── Gateway\r
+    ├── Coordinator\r
+    ├── Delegators\r
+    ├── Workers\r
+    ├── LLM\r
+    ├── RAG\r
+    ├── MCP\r
+    └── Enterprise APIs\r
+    │\r
+    ▼\r
+OpenTelemetry Instrumentation\r
+    │\r
+    ▼\r
+Trace Context Propagation\r
+    │\r
+    ▼\r
+Central Telemetry Platform\r
+    │\r
+    ├── Distributed Traces\r
+    ├── Centralized Logs\r
+    ├── Metrics\r
+    ├── Dashboards\r
+    └── Alerts\r
+    │\r
+    ▼\r
+Operational Investigation\r
+\`\`\`\r
+\r
+Supporting responsibilities remain separate:\r
+\r
+\`\`\`\r
+LangGraph      → Workflow state and transitions\r
+A2A            → Agent-to-agent task communication\r
+MCP            → Tool and system integration\r
+Policy / IAM   → Authorization\r
+Cosmos DB      → Durable execution state\r
+Redis          → Fast working state\r
+Audit Store    → Governed audit evidence\r
+\`\`\`\r
+\r
+## 23. Core formulas\r
+\r
+### Distributed tracing\r
+\r
+Distributed\xA0Trace=Root\xA0Span+Child\xA0Spans+Trace\xA0Context+Causal\xA0Relationships\\text{Distributed Trace} = \\text{Root Span} + \\text{Child Spans} + \\text{Trace Context} + \\text{Causal Relationships}Distributed\xA0Trace=Root\xA0Span+Child\xA0Spans+Trace\xA0Context+Causal\xA0Relationships\r
+\r
+### Trace context\r
+\r
+Trace\xA0Context=Trace\xA0ID+Parent\xA0Span\xA0ID+Trace\xA0Flags+Trace\xA0State\\text{Trace Context} = \\text{Trace ID} + \\text{Parent Span ID} + \\text{Trace Flags} + \\text{Trace State}Trace\xA0Context=Trace\xA0ID+Parent\xA0Span\xA0ID+Trace\xA0Flags+Trace\xA0State\r
+\r
+### End-to-end latency\r
+\r
+TE2E=TGateway+TCoordinator+TDelegator+TCritical\xA0Path+TAggregation+TResponseT_{\\text{E2E}} = T_{\\text{Gateway}} + T_{\\text{Coordinator}} + T_{\\text{Delegator}} + T_{\\text{Critical Path}} + T_{\\text{Aggregation}} + T_{\\text{Response}}TE2E=TGateway+TCoordinator+TDelegator+TCritical\xA0Path+TAggregation+TResponse\r
+\r
+### CWD distributed tracing\r
+\r
+CWD\xA0Distributed\xA0Tracing=Trace\xA0Context+Span\xA0Instrumentation+Context\xA0Propagation+Agent\xA0Tracing+Workflow\xA0Tracing+Dependency\xA0Tracing+Latency\xA0Analysis+Failure\xA0Analysis+Root\xA0Cause\xA0Investigation\\text{CWD Distributed Tracing} = \\text{Trace Context} + \\text{Span Instrumentation} + \\text{Context Propagation} + \\text{Agent Tracing} + \\text{Workflow Tracing} + \\text{Dependency Tracing} + \\text{Latency Analysis} + \\text{Failure Analysis} + \\text{Root Cause Investigation}CWD\xA0Distributed\xA0Tracing=Trace\xA0Context+Span\xA0Instrumentation+Context\xA0Propagation+Agent\xA0Tracing+Workflow\xA0Tracing+Dependency\xA0Tracing+Latency\xA0Analysis+Failure\xA0Analysis+Root\xA0Cause\xA0Investigation\r
+\r
+## Final definition\r
+\r
+Distributed tracing in CWD is the end-to-end observability capability that follows a single business request across Gateway, Coordinator, Delegator, Worker, LLM, MCP tools, enterprise data sources, messaging systems, and aggregation by propagating trace context and creating correlated spans. It enables CWD to reconstruct the execution path, measure latency and critical paths, identify failures and dependency bottlenecks, correlate logs and exceptions, understand retries and recovery, and perform operational root-cause investigation across the complete multi-agent system.\r
+\r
+### Interview-ready answer\r
+\r
+> “In CWD, distributed tracing follows one business request across the complete execution path: Gateway, Coordinator, Delegator, Worker, LLM, MCP tool, enterprise data source, aggregation, and final response. We use trace context to connect operations across service and messaging boundaries, while CWD identifiers such as correlation ID, workflow ID, task ID, run ID, and step ID preserve business execution lineage. Each meaningful operation is represented as a span with timing, status, dependency, and error information. This allows us to identify the critical path, distinguish LLM latency from MCP or database latency, trace failures and retries, and investigate bottlenecks without guessing. Centralized logs explain what happened, metrics show aggregate behavior, and distributed traces show where the execution traveled. The result is an explainable, diagnosable, and measurable enterprise multi-agent platform.”\r
+`,code:``},{id:`cwd-metrics`,category:`Observability`,title:`Metrics`,difficulty:`Advanced`,time:`~10 min`,description:`Understand operational and AI-specific metrics such as request volume, throughput, error rate, agent execution time, LLM latency, time to first token, token consumption, tool latency, retrieval performance, queue depth, success rate, and cost.`,concept:`# Operational and AI-Specific Metrics in CWD\r
+\r
+Metrics are numerical measurements that tell us how CWD is performing, how reliably it executes work, how efficiently it uses AI and infrastructure, and whether it achieves the intended business outcome.\r
+\r
+For CWD, metrics must cover both:\r
+\r
+* Operational performance: Is the platform available, responsive, scalable, and reliable?\r
+\r
+* AI behavior: Are agents making correct decisions, using tools appropriately, retrieving useful evidence, and producing quality results?\r
+\r
+> A fast agent that produces incorrect answers is not successful. A correct agent that consistently times out is not production-ready.\r
+\r
+## 1. Where metrics fit in CWD\r
+\r
+\`\`\`\r
+User Request\r
+    ↓\r
+Gateway\r
+    ↓\r
+Coordinator\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker\r
+    ├── LLM\r
+    ├── RAG\r
+    ├── MCP Tool\r
+    └── Enterprise Data Source\r
+    ↓\r
+Aggregation\r
+    ↓\r
+Final Response\r
+    ↓\r
+Metrics Collection\r
+    ↓\r
+Dashboards + Alerts + Evaluation\r
+\`\`\`\r
+\r
+A single request can generate multiple agent executions, LLM calls, tool calls, retrieval operations, and messages. Therefore, metrics must be measured at multiple levels rather than only at the API Gateway.\r
+\r
+## 2. Operational vs AI-specific metrics\r
+\r
+|\r
+Category\r
+\r
+|\r
+\r
+Main question\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Operational metrics\r
+\r
+|\r
+\r
+Is the platform running efficiently and reliably?\r
+\r
+|\r
+|\r
+\r
+AI-specific metrics\r
+\r
+|\r
+\r
+Is the AI behaving correctly and efficiently?\r
+\r
+|\r
+|\r
+\r
+Business metrics\r
+\r
+|\r
+\r
+Is the intended business outcome being achieved?\r
+\r
+|\r
+\r
+### Examples\r
+\r
+\`\`\`\r
+Operational:\r
+Request volume, throughput, error rate, queue depth, latency\r
+\r
+AI-specific:\r
+Agent accuracy, LLM latency, TTFT, token consumption,\r
+tool success, retrieval quality, groundedness\r
+\r
+Business:\r
+Task completion, successful workflows, user satisfaction,\r
+cost per successful business outcome\r
+\`\`\`\r
+\r
+## 3. Request volume\r
+\r
+Request volume measures how many requests CWD receives during a specific time period.\r
+\r
+Examples:\r
+\r
+* Requests per second\r
+\r
+* Requests per minute\r
+\r
+* Requests per hour\r
+\r
+* Requests per tenant\r
+\r
+* Requests per application\r
+\r
+* Requests per agent capability\r
+\r
+### Example\r
+\r
+\`\`\`\r
+10:00–10:01\r
+Incoming requests = 600\r
+\`\`\`\r
+\r
+### Why it matters\r
+\r
+Request volume helps determine:\r
+\r
+* Traffic patterns\r
+\r
+* Peak usage\r
+\r
+* Capacity requirements\r
+\r
+* Autoscaling needs\r
+\r
+* Tenant workload distribution\r
+\r
+* Cost trends\r
+\r
+### CWD example\r
+\r
+\`\`\`\r
+Gateway receives 1,000 requests/minute\r
+        ↓\r
+Coordinator creates 1,500 tasks\r
+        ↓\r
+Workers execute 3,000 tool calls\r
+\`\`\`\r
+\r
+Request volume is not the same as execution volume. One request may create many downstream operations.\r
+\r
+## 4. Throughput\r
+\r
+Throughput measures how much work CWD successfully processes during a time period.\r
+\r
+Examples:\r
+\r
+* Completed workflows per second\r
+\r
+* Completed tasks per minute\r
+\r
+* Worker executions per minute\r
+\r
+* Tool calls per second\r
+\r
+* RAG queries per second\r
+\r
+* Messages processed per second\r
+\r
+### Formula\r
+\r
+Throughput=Completed\xA0OperationsTime\xA0Period\\text{Throughput} = \\frac{\\text{Completed Operations}}{\\text{Time Period}}Throughput=Time\xA0PeriodCompleted\xA0Operations\r
+\r
+### Example\r
+\r
+\`\`\`\r
+500 tasks completed in 60 seconds\r
+\`\`\`\r
+\r
+Throughput=50060≈8.33\\text{Throughput} = \\frac{500}{60} \\approx 8.33Throughput=60500≈8.33\r
+\r
+Throughput measures completed work, not merely incoming requests.\r
+\r
+## 5. Error rate\r
+\r
+Error rate measures the percentage of operations that fail.\r
+\r
+### Formula\r
+\r
+Error\xA0Rate=Failed\xA0OperationsTotal\xA0Operations×100\\text{Error Rate} = \\frac{\\text{Failed Operations}}{\\text{Total Operations}} \\times 100Error\xA0Rate=Total\xA0OperationsFailed\xA0Operations×100\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Total requests = 1,000\r
+Failed requests = 20\r
+\`\`\`\r
+\r
+Error\xA0Rate=201000×100=2%\\text{Error Rate} = \\frac{20}{1000}\\times100 = 2\\%Error\xA0Rate=100020×100=2%\r
+\r
+### CWD error layers\r
+\r
+\`\`\`\r
+Gateway errors\r
+Coordinator errors\r
+Delegator errors\r
+Worker errors\r
+LLM errors\r
+MCP errors\r
+RAG errors\r
+Database errors\r
+Messaging errors\r
+Workflow errors\r
+\`\`\`\r
+\r
+### Important distinction\r
+\r
+A request may return HTTP 200 but still have:\r
+\r
+* Failed Worker\r
+\r
+* Partial result\r
+\r
+* Invalid tool result\r
+\r
+* Incorrect business outcome\r
+\r
+Therefore, CWD should measure both technical error rate and business failure rate.\r
+\r
+## 6. Agent execution time\r
+\r
+Agent execution time measures how long an individual Coordinator, Delegator, or Worker takes to complete its assigned responsibility.\r
+\r
+### Formula\r
+\r
+Agent\xA0Execution\xA0Time=Tcompletion−Tstart\\text{Agent Execution Time} = T_{\\text{completion}} - T_{\\text{start}}Agent\xA0Execution\xA0Time=Tcompletion−Tstart\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Worker started:   10:00:00\r
+Worker completed: 10:00:02\r
+\`\`\`\r
+\r
+Execution\xA0Time=2\xA0seconds\\text{Execution Time} = 2\\text{ seconds}Execution\xA0Time=2\xA0seconds\r
+\r
+### CWD measurement levels\r
+\r
+\`\`\`\r
+Coordinator execution time\r
+Delegator execution time\r
+Worker execution time\r
+Task execution time\r
+Workflow execution time\r
+End-to-end request time\r
+\`\`\`\r
+\r
+### Why it matters\r
+\r
+It helps identify whether latency comes from:\r
+\r
+* Planning\r
+\r
+* Agent discovery\r
+\r
+* Task decomposition\r
+\r
+* Worker execution\r
+\r
+* Aggregation\r
+\r
+* Retries\r
+\r
+* Dependency calls\r
+\r
+Agent execution time should be broken down into meaningful steps rather than treated as one unexplained number.\r
+\r
+## 7. LLM latency\r
+\r
+LLM latency measures the time spent waiting for an LLM response.\r
+\r
+It is a dependency-level metric inside the Worker.\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+LLM Invocation\r
+   ↓\r
+Response\r
+\`\`\`\r
+\r
+### Important latency measures\r
+\r
+|\r
+Metric\r
+\r
+|\r
+\r
+Meaning\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request latency\r
+\r
+|\r
+\r
+Time until the LLM request completes\r
+\r
+|\r
+|\r
+\r
+Time to first token (TTFT)\r
+\r
+|\r
+\r
+Time until the first output token is received\r
+\r
+|\r
+|\r
+\r
+Generation latency\r
+\r
+|\r
+\r
+Time spent generating output\r
+\r
+|\r
+|\r
+\r
+Total LLM latency\r
+\r
+|\r
+\r
+Complete LLM request duration\r
+\r
+|\r
+|\r
+\r
+P50/P95/P99 latency\r
+\r
+|\r
+\r
+Typical and tail latency\r
+\r
+|\r
+\r
+### Why it matters\r
+\r
+LLM latency affects:\r
+\r
+* User experience\r
+\r
+* Workflow completion time\r
+\r
+* Worker utilization\r
+\r
+* Queue buildup\r
+\r
+* Cost\r
+\r
+* Timeout and retry behavior\r
+\r
+A Worker may be slow because the LLM is slow, but it may also be slow because of RAG, MCP, or an enterprise API.\r
+\r
+## 8. Time to first token (TTFT)\r
+\r
+Time to first token measures how long it takes for the LLM to begin producing output after the request is sent.\r
+\r
+\`\`\`\r
+LLM Request Sent\r
+       ↓\r
+       ↓\r
+First Token Received\r
+\`\`\`\r
+\r
+### Formula\r
+\r
+TTFT=Tfirst\xA0token−Trequest\xA0sent\\text{TTFT} = T_{\\text{first token}} - T_{\\text{request sent}}TTFT=Tfirst\xA0token−Trequest\xA0sent\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Request sent:      10:00:00.000\r
+First token:       10:00:00.800\r
+\`\`\`\r
+\r
+TTFT=800\xA0ms\\text{TTFT} = 800\\text{ ms}TTFT=800\xA0ms\r
+\r
+### Why it matters\r
+\r
+TTFT is especially important for:\r
+\r
+* Streaming responses\r
+\r
+* Interactive chat\r
+\r
+* User-perceived responsiveness\r
+\r
+* Long prompts\r
+\r
+* Large context windows\r
+\r
+* Model queueing\r
+\r
+### TTFT vs total latency\r
+\r
+\`\`\`\r
+Request sent\r
+    ↓ 800 ms\r
+First token\r
+    ↓ 2,200 ms\r
+Complete response\r
+\r
+TTFT = 800 ms\r
+Total latency = 3,000 ms\r
+\`\`\`\r
+\r
+TTFT measures responsiveness; total latency measures completion time.\r
+\r
+## 9. Token consumption\r
+\r
+Token consumption measures how many input and output tokens CWD sends to and receives from LLMs.\r
+\r
+### Formula\r
+\r
+Total\xA0Tokens=Input\xA0Tokens+Output\xA0Tokens\\text{Total Tokens} = \\text{Input Tokens} + \\text{Output Tokens}Total\xA0Tokens=Input\xA0Tokens+Output\xA0Tokens\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Input tokens  = 2,000\r
+Output tokens = 500\r
+\`\`\`\r
+\r
+Total\xA0Tokens=2,500\\text{Total Tokens} = 2,500Total\xA0Tokens=2,500\r
+\r
+### CWD token sources\r
+\r
+* User prompt\r
+\r
+* System/developer instructions\r
+\r
+* Conversation history\r
+\r
+* Short-term memory\r
+\r
+* Persistent memory\r
+\r
+* Retrieved RAG context\r
+\r
+* Tool results\r
+\r
+* Agent-to-agent context\r
+\r
+* LLM output\r
+\r
+### Why it matters\r
+\r
+Token consumption affects:\r
+\r
+* LLM cost\r
+\r
+* Latency\r
+\r
+* Context-window usage\r
+\r
+* Throughput\r
+\r
+* Memory requirements\r
+\r
+* Prompt efficiency\r
+\r
+### Important insight\r
+\r
+\`\`\`\r
+More context ≠ Better answer\r
+\`\`\`\r
+\r
+CWD should retrieve and propagate relevant, authorized, bounded context, not the entire conversation or all available documents.\r
+\r
+## 10. Tool latency\r
+\r
+Tool latency measures how long an MCP tool or approved enterprise API takes to execute.\r
+\r
+\`\`\`\r
+Worker\r
+   ↓\r
+MCP Tool\r
+   ↓\r
+Enterprise API\r
+   ↓\r
+Result\r
+\`\`\`\r
+\r
+### Formula\r
+\r
+Tool\xA0Latency=Tresult−Tinvocation\\text{Tool Latency} = T_{\\text{result}} - T_{\\text{invocation}}Tool\xA0Latency=Tresult−Tinvocation\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Tool invoked: 10:00:00.000\r
+Tool result:   10:00:01.200\r
+\`\`\`\r
+\r
+Tool\xA0Latency=1.2\xA0seconds\\text{Tool Latency} = 1.2\\text{ seconds}Tool\xA0Latency=1.2\xA0seconds\r
+\r
+### Why it matters\r
+\r
+Tool latency can dominate Worker execution time.\r
+\r
+\`\`\`\r
+Worker = 4 seconds\r
+   ├── LLM = 500 ms\r
+   ├── MCP Tool = 3,200 ms\r
+   └── Validation = 300 ms\r
+\`\`\`\r
+\r
+The enterprise dependency may be the actual bottleneck.\r
+\r
+### Tool metrics\r
+\r
+* Tool latency\r
+\r
+* Tool invocation success rate\r
+\r
+* Tool timeout rate\r
+\r
+* Tool retry rate\r
+\r
+* Tool argument-validation failures\r
+\r
+* Tool authorization denials\r
+\r
+* Tool result-validation failures\r
+\r
+* Tool business success rate\r
+\r
+## 11. Retrieval performance\r
+\r
+Retrieval performance measures how effectively and efficiently the RAG layer finds useful enterprise evidence.\r
+\r
+It includes both quality and latency.\r
+\r
+\`\`\`\r
+Query\r
+   ↓\r
+Query Transformation\r
+   ↓\r
+Embedding\r
+   ↓\r
+Azure AI Search\r
+   ↓\r
+Security Filtering\r
+   ↓\r
+Ranking\r
+   ↓\r
+Context Assembly\r
+\`\`\`\r
+\r
+### Operational retrieval metrics\r
+\r
+* Retrieval latency\r
+\r
+* Query volume\r
+\r
+* Indexing latency\r
+\r
+* Indexing failure rate\r
+\r
+* Search throttling\r
+\r
+* Candidate count\r
+\r
+* Authorized result count\r
+\r
+* Selected chunk count\r
+\r
+* Context size\r
+\r
+### AI retrieval-quality metrics\r
+\r
+|\r
+Metric\r
+\r
+|\r
+\r
+Meaning\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Recall@K\r
+\r
+|\r
+\r
+How many relevant documents were retrieved in top K\r
+\r
+|\r
+|\r
+\r
+Precision@K\r
+\r
+|\r
+\r
+How many retrieved documents were relevant\r
+\r
+|\r
+|\r
+\r
+MRR\r
+\r
+|\r
+\r
+How highly the first relevant result appears\r
+\r
+|\r
+|\r
+\r
+NDCG\r
+\r
+|\r
+\r
+Quality of ranking across retrieved results\r
+\r
+|\r
+|\r
+\r
+Context relevance\r
+\r
+|\r
+\r
+Whether retrieved evidence is relevant\r
+\r
+|\r
+|\r
+\r
+Context precision\r
+\r
+|\r
+\r
+Whether selected context is mostly useful\r
+\r
+|\r
+|\r
+\r
+Context recall\r
+\r
+|\r
+\r
+Whether necessary evidence was retrieved\r
+\r
+|\r
+|\r
+\r
+Groundedness\r
+\r
+|\r
+\r
+Whether the answer is supported by evidence\r
+\r
+|\r
+\r
+### Why it matters\r
+\r
+A retrieval system can be fast but return irrelevant evidence.\r
+\r
+\`\`\`\r
+Retrieval latency = 100 ms\r
+Retrieval quality = Poor\r
+\`\`\`\r
+\r
+Or it can retrieve excellent evidence but be too slow.\r
+\r
+\`\`\`\r
+Retrieval quality = High\r
+Retrieval latency = 5 seconds\r
+\`\`\`\r
+\r
+CWD must optimize both retrieval quality and retrieval performance.\r
+\r
+## 12. Queue depth\r
+\r
+Queue depth measures how many messages or tasks are waiting to be processed.\r
+\r
+\`\`\`\r
+Coordinator\r
+    ↓\r
+Service Bus Queue\r
+    ↓\r
+Worker Pool\r
+\`\`\`\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Queue depth = 500 tasks\r
+Available Workers = 10\r
+\`\`\`\r
+\r
+### Why it matters\r
+\r
+Queue depth indicates:\r
+\r
+* Backlog\r
+\r
+* Consumer capacity\r
+\r
+* Traffic spikes\r
+\r
+* Worker availability\r
+\r
+* Scaling requirements\r
+\r
+* Downstream dependency slowdown\r
+\r
+### Related metrics\r
+\r
+* Queue depth\r
+\r
+* Message age\r
+\r
+* Queue wait time\r
+\r
+* Consumer throughput\r
+\r
+* Delivery count\r
+\r
+* Retry count\r
+\r
+* Dead-letter count\r
+\r
+* Consumer lag\r
+\r
+### Important distinction\r
+\r
+\`\`\`\r
+High request volume\r
+        ↓\r
+High queue depth\r
+        ↓\r
+Longer task latency\r
+        ↓\r
+Timeouts\r
+        ↓\r
+Retries\r
+        ↓\r
+More queue pressure\r
+\`\`\`\r
+\r
+Queue depth is often an early warning of overload.\r
+\r
+## 13. Success rate\r
+\r
+Success rate measures the percentage of operations that complete successfully.\r
+\r
+### Formula\r
+\r
+Success\xA0Rate=Successful\xA0OperationsTotal\xA0Operations×100\\text{Success Rate} = \\frac{\\text{Successful Operations}}{\\text{Total Operations}} \\times 100Success\xA0Rate=Total\xA0OperationsSuccessful\xA0Operations×100\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Total workflows = 1,000\r
+Successful workflows = 950\r
+\`\`\`\r
+\r
+Success\xA0Rate=95%\\text{Success Rate} = 95\\%Success\xA0Rate=95%\r
+\r
+### CWD success levels\r
+\r
+\`\`\`\r
+Request success\r
+Agent success\r
+Task success\r
+Run success\r
+Tool success\r
+Workflow success\r
+Business outcome success\r
+\`\`\`\r
+\r
+These are not interchangeable.\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Gateway request = Success\r
+Worker execution = Success\r
+Tool execution = Success\r
+Business outcome = Failure\r
+\`\`\`\r
+\r
+The system technically executed, but the business objective was not achieved.\r
+\r
+## 14. Cost\r
+\r
+Cost metrics measure the resources consumed by CWD to execute agents and complete workflows.\r
+\r
+### Cost categories\r
+\r
+\`\`\`\r
+LLM inference\r
+Embedding generation\r
+RAG / Search\r
+Compute\r
+Cosmos DB\r
+Redis\r
+Service Bus\r
+Storage\r
+Networking\r
+Observability\r
+External APIs\r
+\`\`\`\r
+\r
+### LLM cost\r
+\r
+LLM\xA0Cost=(Input\xA0Tokens×Input\xA0Price)+(Output\xA0Tokens×Output\xA0Price)\\text{LLM Cost} = (\\text{Input Tokens}\\times\\text{Input Price}) + (\\text{Output Tokens}\\times\\text{Output Price})LLM\xA0Cost=(Input\xA0Tokens×Input\xA0Price)+(Output\xA0Tokens×Output\xA0Price)\r
+\r
+### Workflow cost\r
+\r
+Workflow\xA0Cost=∑LLM\xA0Costs+∑Infrastructure\xA0Costs+∑External\xA0Service\xA0Costs\\text{Workflow Cost} = \\sum \\text{LLM Costs} + \\sum \\text{Infrastructure Costs} + \\sum \\text{External Service Costs}Workflow\xA0Cost=∑LLM\xA0Costs+∑Infrastructure\xA0Costs+∑External\xA0Service\xA0Costs\r
+\r
+### Cost attribution\r
+\r
+\`\`\`\r
+Tenant\r
+   ↓\r
+Session\r
+   ↓\r
+Turn\r
+   ↓\r
+Workflow\r
+   ↓\r
+Task\r
+   ↓\r
+Run\r
+   ↓\r
+Step\r
+   ↓\r
+Agent / Worker\r
+   ↓\r
+LLM / Tool / Infrastructure\r
+\`\`\`\r
+\r
+### Important metric\r
+\r
+Cost\xA0per\xA0Successful\xA0Workflow=Total\xA0CostSuccessful\xA0Workflows\\text{Cost per Successful Workflow} = \\frac{\\text{Total Cost}}{\\text{Successful Workflows}}Cost\xA0per\xA0Successful\xA0Workflow=Successful\xA0WorkflowsTotal\xA0Cost\r
+\r
+Cost should be evaluated together with quality, reliability, latency, and business value.\r
+\r
+## 15. Metrics across the complete CWD path\r
+\r
+|\r
+Component\r
+\r
+|\r
+\r
+Important metrics\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Gateway\r
+\r
+|\r
+\r
+Request volume, throughput, error rate, latency, availability\r
+\r
+|\r
+|\r
+\r
+Coordinator\r
+\r
+|\r
+\r
+Planning time, routing accuracy, authorization decisions, workflow success\r
+\r
+|\r
+|\r
+\r
+Delegator\r
+\r
+|\r
+\r
+Task decomposition, Worker selection, queue wait, aggregation time\r
+\r
+|\r
+|\r
+\r
+Worker\r
+\r
+|\r
+\r
+Execution time, success rate, retries, tool latency, LLM latency\r
+\r
+|\r
+|\r
+\r
+LLM\r
+\r
+|\r
+\r
+TTFT, total latency, tokens, model errors, cost\r
+\r
+|\r
+|\r
+\r
+MCP Tool\r
+\r
+|\r
+\r
+Tool latency, invocation success, argument validity, authorization, retries\r
+\r
+|\r
+|\r
+\r
+RAG\r
+\r
+|\r
+\r
+Retrieval latency, Recall@K, Precision@K, groundedness, context size\r
+\r
+|\r
+|\r
+\r
+Service Bus\r
+\r
+|\r
+\r
+Queue depth, message age, throughput, delivery failures, DLQ\r
+\r
+|\r
+|\r
+\r
+Cosmos DB\r
+\r
+|\r
+\r
+Request latency, throttling, failures, throughput\r
+\r
+|\r
+|\r
+\r
+Redis\r
+\r
+|\r
+\r
+Latency, hit ratio, memory, evictions, connection failures\r
+\r
+|\r
+|\r
+\r
+Workflow\r
+\r
+|\r
+\r
+End-to-end latency, success rate, partial failures, recovery rate\r
+\r
+|\r
+|\r
+\r
+Business\r
+\r
+|\r
+\r
+Goal completion, user satisfaction, cost per successful outcome\r
+\r
+|\r
+\r
+## 16. Latency breakdown in CWD\r
+\r
+A useful end-to-end latency model is:\r
+\r
+TE2E=TGateway+TCoordinator+TDelegator+TCritical\xA0Path+TAggregation+TResponseT_{\\text{E2E}} = T_{\\text{Gateway}} + T_{\\text{Coordinator}} + T_{\\text{Delegator}} + T_{\\text{Critical Path}} + T_{\\text{Aggregation}} + T_{\\text{Response}}TE2E=TGateway+TCoordinator+TDelegator+TCritical\xA0Path+TAggregation+TResponse\r
+\r
+For a Worker:\r
+\r
+TWorker=TValidation+TRAG+TLLM+TMCP+TBusiness\xA0Logic+TOutput\xA0ValidationT_{\\text{Worker}} = T_{\\text{Validation}} + T_{\\text{RAG}} + T_{\\text{LLM}} + T_{\\text{MCP}} + T_{\\text{Business Logic}} + T_{\\text{Output Validation}}TWorker=TValidation+TRAG+TLLM+TMCP+TBusiness\xA0Logic+TOutput\xA0Validation\r
+\r
+For parallel Workers:\r
+\r
+TCritical\xA0Path≈max⁡(TWorker\xA0A,TWorker\xA0B,TWorker\xA0C)T_{\\text{Critical Path}} \\approx \\max(T_{\\text{Worker A}},T_{\\text{Worker B}},T_{\\text{Worker C}})TCritical\xA0Path≈max(TWorker\xA0A,TWorker\xA0B,TWorker\xA0C)\r
+\r
+This helps identify whether the bottleneck is:\r
+\r
+* Gateway\r
+\r
+* Coordinator\r
+\r
+* Delegator\r
+\r
+* Queue\r
+\r
+* Worker\r
+\r
+* LLM\r
+\r
+* MCP\r
+\r
+* Data source\r
+\r
+* Aggregation\r
+\r
+## 17. Metrics and observability\r
+\r
+Metrics alone do not explain every failure.\r
+\r
+\`\`\`\r
+Metrics → What is happening?\r
+Traces  → Where did it happen?\r
+Logs    → What happened in detail?\r
+Evaluation → Was the AI behavior good?\r
+Audit   → What governed action occurred?\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`\r
+Metric:\r
+P95 workflow latency increased to 8 seconds.\r
+\r
+Trace:\r
+Worker → MCP → Enterprise API is the slow path.\r
+\r
+Log:\r
+Enterprise API timeout occurred.\r
+\r
+Evaluation:\r
+Workflow success rate decreased.\r
+\r
+Audit:\r
+Tool access was authorized.\r
+\`\`\`\r
+\r
+Together, these provide a complete operational picture.\r
+\r
+## 18. Metrics and evaluation\r
+\r
+Operational metrics tell us whether the system is functioning.\r
+\r
+AI-specific evaluation tells us whether the system is correct and useful.\r
+\r
+|\r
+Operational metric\r
+\r
+|\r
+\r
+AI-specific evaluation\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request success rate\r
+\r
+|\r
+\r
+Answer correctness\r
+\r
+|\r
+|\r
+\r
+Worker execution time\r
+\r
+|\r
+\r
+Agent decision accuracy\r
+\r
+|\r
+|\r
+\r
+Tool latency\r
+\r
+|\r
+\r
+Tool-selection accuracy\r
+\r
+|\r
+|\r
+\r
+Queue depth\r
+\r
+|\r
+\r
+Workflow completion\r
+\r
+|\r
+|\r
+\r
+LLM latency\r
+\r
+|\r
+\r
+Groundedness\r
+\r
+|\r
+|\r
+\r
+Token consumption\r
+\r
+|\r
+\r
+Response relevance\r
+\r
+|\r
+|\r
+\r
+Retrieval latency\r
+\r
+|\r
+\r
+Recall@K / Precision@K\r
+\r
+|\r
+|\r
+\r
+Infrastructure availability\r
+\r
+|\r
+\r
+Business outcome success\r
+\r
+|\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Workflow success rate = 99%\r
+Answer accuracy = 70%\r
+\`\`\`\r
+\r
+The platform is reliable, but the AI quality is poor.\r
+\r
+Another example:\r
+\r
+\`\`\`\r
+Answer accuracy = 95%\r
+Workflow success rate = 60%\r
+\`\`\`\r
+\r
+The AI may be capable, but the execution architecture is unreliable.\r
+\r
+## 19. Metrics and scalability\r
+\r
+Metrics help CWD determine when to scale.\r
+\r
+### Scaling signals\r
+\r
+* Request volume\r
+\r
+* Task throughput\r
+\r
+* Queue depth\r
+\r
+* Active Worker count\r
+\r
+* Worker utilization\r
+\r
+* P95/P99 latency\r
+\r
+* LLM latency\r
+\r
+* Tool latency\r
+\r
+* Memory pressure\r
+\r
+* CPU utilization\r
+\r
+* Message age\r
+\r
+* Cost per workflow\r
+\r
+### Example\r
+\r
+\`\`\`\r
+Queue depth increases\r
+        ↓\r
+Worker capacity is insufficient\r
+        ↓\r
+Autoscaling adds Worker instances\r
+        ↓\r
+Throughput increases\r
+        ↓\r
+Queue depth decreases\r
+\`\`\`\r
+\r
+CPU alone is not enough. A Worker may be waiting on an LLM or API while CPU remains low.\r
+\r
+## 20. Metrics and security\r
+\r
+Security metrics help detect abnormal behavior.\r
+\r
+Examples:\r
+\r
+* Authentication failure rate\r
+\r
+* Authorization denial rate\r
+\r
+* Unauthorized tool attempts\r
+\r
+* DLP violations\r
+\r
+* Prompt-injection detections\r
+\r
+* Cross-tenant access attempts\r
+\r
+* Privilege-escalation attempts\r
+\r
+* Secret-access failures\r
+\r
+* Policy rejection rate\r
+\r
+A security denial may be a successful security control, not an application failure.\r
+\r
+## 21. Metrics and cost optimization\r
+\r
+Metrics help identify unnecessary resource consumption.\r
+\r
+\`\`\`\r
+High token consumption\r
+        ↓\r
+Large context\r
+        ↓\r
+Higher LLM cost\r
+        ↓\r
+Higher latency\r
+\`\`\`\r
+\r
+Possible optimization:\r
+\r
+* Reduce unnecessary context\r
+\r
+* Improve retrieval filtering\r
+\r
+* Use smaller models for simple tasks\r
+\r
+* Reduce redundant LLM calls\r
+\r
+* Cache appropriate results\r
+\r
+* Avoid excessive retries\r
+\r
+* Optimize Worker scaling\r
+\r
+* Reduce unnecessary tool calls\r
+\r
+* Improve prompt efficiency\r
+\r
+Cost optimization should not reduce security, accuracy, or reliability.\r
+\r
+## 22. Recommended CWD metrics architecture\r
+\r
+\`\`\`\r
+CWD Services\r
+    │\r
+    ├── Gateway\r
+    ├── Coordinator\r
+    ├── Delegators\r
+    ├── Workers\r
+    ├── LLM\r
+    ├── RAG\r
+    ├── MCP\r
+    └── Infrastructure\r
+    │\r
+    ▼\r
+Metrics Instrumentation\r
+    │\r
+    ▼\r
+OpenTelemetry / Azure Monitor\r
+    │\r
+    ├── Operational Metrics\r
+    ├── AI Metrics\r
+    ├── Cost Metrics\r
+    ├── Security Metrics\r
+    └── Business Metrics\r
+    │\r
+    ▼\r
+Dashboards + Alerts + Evaluation\r
+    │\r
+    ▼\r
+Capacity Planning + Troubleshooting + Optimization\r
+\`\`\`\r
+\r
+## 23. Core formulas\r
+\r
+### Operational metrics\r
+\r
+Operational\xA0Metrics=Volume+Throughput+Latency+Error\xA0Rate+Availability+Queue\xA0Depth\\text{Operational Metrics} = \\text{Volume} + \\text{Throughput} + \\text{Latency} + \\text{Error Rate} + \\text{Availability} + \\text{Queue Depth}Operational\xA0Metrics=Volume+Throughput+Latency+Error\xA0Rate+Availability+Queue\xA0Depth\r
+\r
+### AI-specific metrics\r
+\r
+AI\xA0Metrics=Agent\xA0Quality+LLM\xA0Latency+TTFT+Token\xA0Consumption+Tool\xA0Success+Retrieval\xA0Quality+Groundedness\\text{AI Metrics} = \\text{Agent Quality} + \\text{LLM Latency} + \\text{TTFT} + \\text{Token Consumption} + \\text{Tool Success} + \\text{Retrieval Quality} + \\text{Groundedness}AI\xA0Metrics=Agent\xA0Quality+LLM\xA0Latency+TTFT+Token\xA0Consumption+Tool\xA0Success+Retrieval\xA0Quality+Groundedness\r
+\r
+### CWD performance\r
+\r
+CWD\xA0Performance=Quality+Reliability+Latency+Throughput+Scalability+Cost\xA0Efficiency\\text{CWD Performance} = \\text{Quality} + \\text{Reliability} + \\text{Latency} + \\text{Throughput} + \\text{Scalability} + \\text{Cost Efficiency}CWD\xA0Performance=Quality+Reliability+Latency+Throughput+Scalability+Cost\xA0Efficiency\r
+\r
+### CWD success\r
+\r
+CWD\xA0Success=Correct\xA0AI\xA0Behavior∧Reliable\xA0Execution∧Acceptable\xA0Latency∧Business\xA0Outcome\xA0Achieved\\text{CWD Success} = \\text{Correct AI Behavior} \\land \\text{Reliable Execution} \\land \\text{Acceptable Latency} \\land \\text{Business Outcome Achieved}CWD\xA0Success=Correct\xA0AI\xA0Behavior∧Reliable\xA0Execution∧Acceptable\xA0Latency∧Business\xA0Outcome\xA0Achieved\r
+\r
+## Final definition\r
+\r
+Operational and AI-specific metrics in CWD are the systematic measurements used to evaluate the platform’s traffic, throughput, reliability, latency, resource consumption, AI behavior, retrieval quality, tool execution, and business outcomes. Operational metrics measure request volume, throughput, error rate, agent execution time, queue depth, availability, and dependency performance. AI-specific metrics measure LLM latency, time to first token, token consumption, tool latency and success, retrieval performance, groundedness, accuracy, and cost. These metrics are correlated across Gateway, Coordinator, Delegator, Worker, LLM, MCP, RAG, messaging, and infrastructure components so CWD can identify bottlenecks, detect failures, scale capacity, control cost, and continuously improve quality and reliability.\r
+\r
+### Interview-ready answer\r
+\r
+> “In CWD, I measure both operational and AI-specific metrics because a multi-agent platform must be reliable, performant, cost-efficient, and correct. Operational metrics include request volume, throughput, error rate, agent execution time, queue depth, availability, and dependency latency. AI-specific metrics include LLM latency, time to first token, token consumption, tool latency and success, retrieval quality, groundedness, and cost. I measure these at Gateway, Coordinator, Delegator, Worker, workflow, and end-to-end levels, using correlation IDs to connect the execution. For example, if workflow latency increases, I break it down into queue wait, Worker execution, LLM, MCP, RAG, and aggregation latency. I also distinguish technical success from business success, because an HTTP 200 response does not guarantee a correct business outcome. Finally, I evaluate quality, reliability, latency, and cost together so that optimizing one metric does not damage the overall enterprise outcome.”\r
+\r
+### Mental model\r
+\r
+\`\`\`\r
+Operational Metrics\r
+        +\r
+AI-Specific Metrics\r
+        +\r
+Business Metrics\r
+        ↓\r
+CWD Performance Measurement\r
+        ↓\r
+Quality + Reliability + Latency + Cost\r
+        ↓\r
+Scaling + Troubleshooting + Optimization\r
+\`\`\`\r
+\r
+\r
+### The most important distinction\r
+\r
+CWD should not use one metric to represent the entire system. A production scorecard should keep these measurements separate:\r
+\r
+|\r
+Metric\r
+\r
+|\r
+\r
+What it tells you\r
+\r
+|\r
+| --- | --- |\r
+|\r
+\r
+Request volume\r
+\r
+|\r
+\r
+How much demand is arriving\r
+\r
+|\r
+|\r
+\r
+Throughput\r
+\r
+|\r
+\r
+How much work is being completed\r
+\r
+|\r
+|\r
+\r
+Error rate\r
+\r
+|\r
+\r
+How often operations fail\r
+\r
+|\r
+|\r
+\r
+Agent execution time\r
+\r
+|\r
+\r
+How long an agent takes to process work\r
+\r
+|\r
+|\r
+\r
+LLM latency\r
+\r
+|\r
+\r
+How long the model takes to respond\r
+\r
+|\r
+|\r
+\r
+TTFT\r
+\r
+|\r
+\r
+How quickly streaming output begins\r
+\r
+|\r
+|\r
+\r
+Token consumption\r
+\r
+|\r
+\r
+How much model context and output is used\r
+\r
+|\r
+|\r
+\r
+Tool latency\r
+\r
+|\r
+\r
+How long enterprise capabilities take\r
+\r
+|\r
+|\r
+\r
+Retrieval performance\r
+\r
+|\r
+\r
+How efficiently and accurately evidence is found\r
+\r
+|\r
+|\r
+\r
+Queue depth\r
+\r
+|\r
+\r
+How much work is waiting\r
+\r
+|\r
+|\r
+\r
+Success rate\r
+\r
+|\r
+\r
+How often operations complete successfully\r
+\r
+|\r
+|\r
+\r
+Cost\r
+\r
+|\r
+\r
+How many resources are consumed\r
+\r
+|\r
+\r
+The final CWD objective is not “lowest latency” or “lowest cost.” It is:\r
+\r
+> Achieve the required business quality and security with reliable execution, acceptable latency, and sustainable cost.\r
+`,code:``},{id:`dashboards-alerts`,category:`Observability`,title:`Dashboards & Alerts`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how CWD dashboards provide real-time visibility into application, agent, infrastructure, LLM, messaging, and business metrics, while alerts detect failures, latency degradation, unusual traffic, cost spikes, and service-health issues.`,concept:`# CWD Dashboards and Alerting\r
+\r
+**Dashboards and alerts are the operational control layer of CWD.**\r
+\r
+Observability collects the telemetry, but dashboards turn that telemetry into **real-time operational visibility**, while alerts turn important metric changes into **actionable notifications**.\r
+\r
+\`\`\`text\r
+CWD Services\r
+    ↓\r
+Telemetry\r
+    ↓\r
+Logs + Traces + Metrics + AI Evaluation\r
+    ↓\r
+┌─────────────────────────────┐\r
+│       CWD Dashboards        │\r
+│ Application                 │\r
+│ Agents / Workflows          │\r
+│ Infrastructure              │\r
+│ LLM / AI                    │\r
+│ Messaging                   │\r
+│ Business                    │\r
+└──────────────┬──────────────┘\r
+               ↓\r
+        Threshold / Anomaly\r
+             Detection\r
+               ↓\r
+            Alerts\r
+               ↓\r
+     Investigation / Action\r
+\`\`\`\r
+\r
+---\r
+\r
+## 1. Why CWD needs dashboards\r
+\r
+A CWD request can travel through:\r
+\r
+\`\`\`text\r
+Gateway\r
+   ↓\r
+Coordinator\r
+   ↓\r
+Delegator\r
+   ↓\r
+Worker\r
+   ↓\r
+LLM\r
+   ↓\r
+MCP\r
+   ↓\r
+Enterprise Data\r
+   ↓\r
+Aggregation\r
+\`\`\`\r
+\r
+One request can therefore produce dozens or hundreds of telemetry events.\r
+\r
+A dashboard provides a **condensed operational view**.\r
+\r
+Instead of searching individual logs, an operator can immediately see:\r
+\r
+\`\`\`text\r
+Requests       → 12,450/min\r
+Success Rate   → 98.7%\r
+P95 Latency    → 3.2 sec\r
+Queue Depth    → 420\r
+LLM TTFT       → 850 ms\r
+Token Usage    → 4.2M/hour\r
+Tool Success   → 97.8%\r
+Workflow Cost  → $0.18\r
+\`\`\`\r
+\r
+This allows an operator to quickly answer:\r
+\r
+> **Is CWD healthy right now?**\r
+\r
+---\r
+\r
+# 2. CWD dashboard hierarchy\r
+\r
+A useful enterprise implementation should have multiple dashboards rather than one giant dashboard.\r
+\r
+\`\`\`text\r
+                    CWD Monitoring\r
+                         │\r
+        ┌────────────────┼────────────────┐\r
+        ↓                ↓                ↓\r
+ Application          Agent/AI        Infrastructure\r
+ Dashboard            Dashboard          Dashboard\r
+        │                │                │\r
+        ├────────────┬───┴────┬───────────┤\r
+                     ↓\r
+                Messaging\r
+                 Dashboard\r
+                     │\r
+                     ↓\r
+                Business\r
+                 Dashboard\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. Application dashboard\r
+\r
+The application dashboard focuses on the health of CWD services.\r
+\r
+### Important metrics\r
+\r
+* Request volume\r
+* Requests/sec\r
+* Throughput\r
+* Success rate\r
+* Error rate\r
+* HTTP 4xx/5xx\r
+* P50/P95/P99 latency\r
+* Availability\r
+* Active requests\r
+* Dependency failures\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+CWD APPLICATION HEALTH\r
+────────────────────────────────\r
+Request Rate       1,250 / sec\r
+Success Rate       99.1%\r
+Error Rate          0.9%\r
+P95 Latency         2.4 sec\r
+P99 Latency         5.8 sec\r
+Availability       99.95%\r
+\`\`\`\r
+\r
+### Questions answered\r
+\r
+* Is the API healthy?\r
+* Is traffic increasing?\r
+* Are requests failing?\r
+* Is latency degrading?\r
+* Which service is responsible?\r
+\r
+---\r
+\r
+# 4. Agent dashboard\r
+\r
+This dashboard focuses on Coordinator, Delegator, and Worker behavior.\r
+\r
+\`\`\`text\r
+Agent Health\r
+──────────────────────────────\r
+Coordinator\r
+  Success        99.5%\r
+  P95             420 ms\r
+\r
+Shipping Delegator\r
+  Success        98.7%\r
+  P95             1.8 sec\r
+\r
+Tracking Worker\r
+  Success        97.2%\r
+  P95             2.9 sec\r
+\r
+Finance Worker\r
+  Success        99.4%\r
+  P95             1.1 sec\r
+\`\`\`\r
+\r
+### Important metrics\r
+\r
+* Agent execution time\r
+* Agent success rate\r
+* Agent failure rate\r
+* Retry rate\r
+* Timeout rate\r
+* Task completion\r
+* Workflow completion\r
+* Agent availability\r
+* Worker utilization\r
+* Agent selection frequency\r
+* Failover frequency\r
+\r
+### Why it matters\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Overall workflow success = 97%\r
+\`\`\`\r
+\r
+The Agent dashboard might reveal:\r
+\r
+\`\`\`text\r
+Coordinator = 99.9%\r
+Delegator   = 99.5%\r
+Worker A    = 99.2%\r
+Worker B    = 87.4%   ← Problem\r
+\`\`\`\r
+\r
+The problem can immediately be narrowed to Worker B.\r
+\r
+---\r
+\r
+# 5. LLM / AI dashboard\r
+\r
+This is one of the most important dashboards for an agentic platform.\r
+\r
+### LLM metrics\r
+\r
+* LLM request volume\r
+* LLM success rate\r
+* LLM latency\r
+* P50/P95/P99\r
+* TTFT\r
+* Input tokens\r
+* Output tokens\r
+* Total tokens\r
+* Model usage\r
+* Model errors\r
+* Timeout rate\r
+* Retry rate\r
+* Cost\r
+* Model distribution\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+LLM HEALTH\r
+────────────────────────────\r
+Requests       85,000/hour\r
+P95 latency       2.1 sec\r
+TTFT              650 ms\r
+Input tokens      240M\r
+Output tokens      52M\r
+Error rate         0.7%\r
+Cost             $182/hour\r
+\`\`\`\r
+\r
+### AI-quality metrics\r
+\r
+Operational LLM metrics aren't enough.\r
+\r
+The dashboard can also include:\r
+\r
+* Agent accuracy\r
+* Tool-selection accuracy\r
+* Groundedness\r
+* Response relevance\r
+* Citation accuracy\r
+* Retrieval Recall@K\r
+* Retrieval Precision@K\r
+* Workflow success\r
+* Consistency\r
+\r
+This gives two views:\r
+\r
+\`\`\`text\r
+LLM PERFORMANCE\r
+       +\r
+AI QUALITY\r
+       ↓\r
+AI PRODUCTION HEALTH\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Messaging dashboard\r
+\r
+CWD may use Azure Service Bus or Kafka depending on the communication pattern.\r
+\r
+The messaging dashboard monitors the asynchronous execution layer.\r
+\r
+### Important metrics\r
+\r
+* Queue depth\r
+* Message rate\r
+* Processing rate\r
+* Message age\r
+* Queue wait time\r
+* Consumer lag\r
+* Delivery count\r
+* Retry count\r
+* Dead-letter count\r
+* Consumer availability\r
+* Processing failures\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+SERVICE BUS\r
+────────────────────────────\r
+Queue Depth       2,450\r
+Oldest Message      18 sec\r
+Incoming Rate     1,200/sec\r
+Processing Rate    1,050/sec\r
+Retries              85\r
+DLQ                  12\r
+\`\`\`\r
+\r
+### Important signal\r
+\r
+If:\r
+\r
+\`\`\`text\r
+Incoming Rate > Processing Rate\r
+\`\`\`\r
+\r
+then backlog will grow.\r
+\r
+\`\`\`text\r
+Traffic\r
+  ↓\r
+Queue Depth ↑\r
+  ↓\r
+Queue Wait ↑\r
+  ↓\r
+Task Latency ↑\r
+  ↓\r
+Timeouts ↑\r
+\`\`\`\r
+\r
+The dashboard allows operators to detect this before it becomes a major outage.\r
+\r
+---\r
+\r
+# 7. Infrastructure dashboard\r
+\r
+This dashboard focuses on the underlying platform.\r
+\r
+\`\`\`text\r
+Infrastructure\r
+────────────────────────────\r
+Coordinator Instances     6\r
+Worker Instances         42\r
+CPU                      64%\r
+Memory                   71%\r
+Restarts                   2\r
+Cosmos Latency           18 ms\r
+Redis Latency              4 ms\r
+Search Latency            95 ms\r
+Service Bus Depth        420\r
+\`\`\`\r
+\r
+### Typical components\r
+\r
+* Container Apps / AKS\r
+* Cosmos DB\r
+* Redis\r
+* Azure AI Search\r
+* Service Bus\r
+* Storage\r
+* Network\r
+* API Gateway\r
+* Compute\r
+* LLM endpoints\r
+\r
+### Why it matters\r
+\r
+An agent may appear slow when the actual problem is:\r
+\r
+\`\`\`text\r
+Worker\r
+   ↓\r
+Cosmos DB\r
+   ↓\r
+Throttling\r
+\`\`\`\r
+\r
+Infrastructure dashboards expose that dependency problem.\r
+\r
+---\r
+\r
+# 8. Business dashboard\r
+\r
+This is where technical observability connects to business value.\r
+\r
+### Metrics\r
+\r
+* Successful workflows\r
+* Business task completion\r
+* Cases resolved\r
+* Orders processed\r
+* Recommendations generated\r
+* Human escalations\r
+* Approval rates\r
+* User satisfaction\r
+* Cost per successful workflow\r
+* Business SLA compliance\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+BUSINESS HEALTH\r
+────────────────────────────\r
+Workflows completed       98.2%\r
+Business success          94.7%\r
+Human escalation           3.1%\r
+SLA compliance            97.8%\r
+Cost / successful task     $0.21\r
+\`\`\`\r
+\r
+This answers the most important question:\r
+\r
+> **Is the CWD platform actually delivering business value?**\r
+\r
+---\r
+\r
+# 9. Alerting\r
+\r
+A dashboard is primarily for **visibility**.\r
+\r
+An alert is for **action**.\r
+\r
+\`\`\`text\r
+Metric\r
+  ↓\r
+Threshold / Anomaly Detection\r
+  ↓\r
+Alert\r
+  ↓\r
+Notification\r
+  ↓\r
+Investigation\r
+  ↓\r
+Remediation\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+P95 latency\r
+     ↓\r
+> 5 seconds for 5 minutes\r
+     ↓\r
+Alert\r
+     ↓\r
+On-call engineer\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. Failure alerts\r
+\r
+CWD should alert on abnormal failures such as:\r
+\r
+\`\`\`text\r
+Error rate ↑\r
+Worker failures ↑\r
+LLM failures ↑\r
+MCP failures ↑\r
+Database failures ↑\r
+Authentication failures ↑\r
+Workflow failures ↑\r
+Dead-letter messages ↑\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+ALERT\r
+\r
+Worker failure rate\r
+Current: 8.2%\r
+Baseline: 1.1%\r
+\r
+Severity: HIGH\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. Latency degradation alerts\r
+\r
+Latency should generally use percentiles rather than only averages.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+P50 = 0.8 sec\r
+P95 = 3.2 sec\r
+P99 = 8.5 sec\r
+\`\`\`\r
+\r
+An alert might detect:\r
+\r
+\`\`\`text\r
+P95 workflow latency > SLA\r
+for 5 consecutive minutes\r
+\`\`\`\r
+\r
+This is more meaningful than:\r
+\r
+\`\`\`text\r
+Average latency = 1.2 sec\r
+\`\`\`\r
+\r
+because tail latency can affect a significant subset of users.\r
+\r
+---\r
+\r
+# 12. Unusual traffic alerts\r
+\r
+CWD should detect unexpected traffic patterns.\r
+\r
+Examples:\r
+\r
+\`\`\`text\r
+Normal:\r
+1,000 requests/min\r
+\r
+Current:\r
+8,000 requests/min\r
+\`\`\`\r
+\r
+Potential causes:\r
+\r
+* Traffic spike\r
+* Client retry storm\r
+* Bot activity\r
+* Misconfigured application\r
+* Runaway agent\r
+* Recursive workflow\r
+* Denial-of-service behavior\r
+\r
+### Agent-specific anomaly\r
+\r
+\`\`\`text\r
+Normal:\r
+4 tool calls/request\r
+\r
+Current:\r
+35 tool calls/request\r
+\`\`\`\r
+\r
+This may indicate:\r
+\r
+* Poor agent planning\r
+* Tool loop\r
+* Prompt injection\r
+* Retry storm\r
+* Unexpected workflow behavior\r
+\r
+---\r
+\r
+# 13. Cost spike alerts\r
+\r
+AI systems can create unexpected costs very quickly.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Normal LLM cost:\r
+$100/hour\r
+\r
+Current:\r
+$450/hour\r
+\`\`\`\r
+\r
+The alert should trigger investigation.\r
+\r
+Potential causes:\r
+\r
+\`\`\`text\r
+Token consumption ↑\r
+LLM calls/request ↑\r
+Retries ↑\r
+Context size ↑\r
+Expensive model usage ↑\r
+Workflow fan-out ↑\r
+Tool loops ↑\r
+\`\`\`\r
+\r
+A useful metric is:\r
+\r
+$$\r
+\\text{Cost Per Successful Workflow}\r
+=\r
+\\frac{\\text{Total CWD Cost}}\r
+{\\text{Successful Workflows}}\r
+$$\r
+\r
+This is often more meaningful than total spend alone.\r
+\r
+---\r
+\r
+# 14. Service-health alerts\r
+\r
+Service health combines several signals.\r
+\r
+\`\`\`text\r
+Availability\r
+     +\r
+Reliability\r
+     +\r
+Latency\r
+     +\r
+Dependency Health\r
+     +\r
+Capacity\r
+     +\r
+Error Rate\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+$$\r
+\\text{Service Health}\r
+=\r
+f(\r
+Availability,\r
+Reliability,\r
+Performance,\r
+Dependencies,\r
+Capacity,\r
+Errors\r
+)\r
+$$\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Worker Service\r
+────────────────────\r
+Availability    ✓\r
+Error Rate      ✓\r
+CPU             ✓\r
+Memory          ✓\r
+LLM             ✓\r
+MCP             ✕\r
+Database        ✓\r
+\`\`\`\r
+\r
+The Worker itself may be healthy, but one dependency is degraded.\r
+\r
+---\r
+\r
+# 15. Alert severity\r
+\r
+Not every alert should page an engineer.\r
+\r
+A useful model is:\r
+\r
+| Severity          | Example                                    |\r
+| ----------------- | ------------------------------------------ |\r
+| **Critical**      | Production service unavailable             |\r
+| **High**          | Major workflow failure / security incident |\r
+| **Medium**        | P95 latency degradation                    |\r
+| **Low**           | Capacity approaching threshold             |\r
+| **Informational** | Version deployment completed               |\r
+\r
+This prevents **alert fatigue**.\r
+\r
+---\r
+\r
+# 16. Alert correlation\r
+\r
+The best CWD alerting architecture correlates alerts with:\r
+\r
+\`\`\`text\r
+Correlation ID\r
+Workflow ID\r
+Task ID\r
+Run ID\r
+Step ID\r
+Agent ID\r
+Agent Version\r
+Prompt Version\r
+Model\r
+Tool\r
+MCP Server\r
+Dependency\r
+Environment\r
+Tenant\r
+\`\`\`\r
+\r
+Suppose the alert says:\r
+\r
+> Worker latency increased.\r
+\r
+The operator should be able to trace:\r
+\r
+\`\`\`text\r
+Worker\r
+   ↓\r
+LLM\r
+   ↓\r
+MCP Tool\r
+   ↓\r
+Enterprise API\r
+   ↓\r
+API latency increased\r
+\`\`\`\r
+\r
+This turns an alert into an investigation starting point.\r
+\r
+---\r
+\r
+# 17. Dashboard + Trace + Log + Alert\r
+\r
+These four capabilities work together.\r
+\r
+\`\`\`text\r
+Dashboard\r
+   │\r
+   │ detects\r
+   ↓\r
+Alert\r
+   │\r
+   │ identifies\r
+   ↓\r
+Trace\r
+   │\r
+   │ shows execution path\r
+   ↓\r
+Logs\r
+   │\r
+   │ explain detailed event\r
+   ↓\r
+Root Cause\r
+\`\`\`\r
+\r
+### Example\r
+\r
+**Dashboard**\r
+\r
+\`\`\`text\r
+P95 Workflow Latency = 7.2 sec\r
+\`\`\`\r
+\r
+**Alert**\r
+\r
+\`\`\`text\r
+Workflow latency SLA breached\r
+\`\`\`\r
+\r
+**Trace**\r
+\r
+\`\`\`text\r
+Worker\r
+  ↓\r
+MCP\r
+  ↓\r
+Enterprise API = 5.8 sec\r
+\`\`\`\r
+\r
+**Logs**\r
+\r
+\`\`\`text\r
+Enterprise API timeout\r
+Retry attempt = 1\r
+\`\`\`\r
+\r
+**Root cause**\r
+\r
+\`\`\`text\r
+Enterprise API degradation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. CWD operational investigation\r
+\r
+When an alert occurs, the investigation flow should be:\r
+\r
+\`\`\`text\r
+ALERT\r
+  ↓\r
+Identify affected service\r
+  ↓\r
+Check dashboard\r
+  ↓\r
+Find correlation / trace\r
+  ↓\r
+Inspect distributed trace\r
+  ↓\r
+Inspect related logs\r
+  ↓\r
+Check dependencies\r
+  ↓\r
+Check infrastructure\r
+  ↓\r
+Check recent deployments/configuration\r
+  ↓\r
+Determine root cause\r
+  ↓\r
+Recover / rollback / scale / failover\r
+  ↓\r
+Verify metrics return to normal\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Real-time CWD dashboard architecture\r
+\r
+\`\`\`text\r
+                         CWD\r
+                          │\r
+       ┌──────────────────┼──────────────────┐\r
+       ↓                  ↓                  ↓\r
+   Application         Agent/AI        Infrastructure\r
+    Metrics             Metrics            Metrics\r
+       │                  │                  │\r
+       └──────────────────┼──────────────────┘\r
+                          ↓\r
+                    Telemetry Layer\r
+                          │\r
+             ┌────────────┼────────────┐\r
+             ↓            ↓            ↓\r
+           Logs         Traces       Metrics\r
+             │            │            │\r
+             └────────────┼────────────┘\r
+                          ↓\r
+                  Monitoring Platform\r
+                          │\r
+             ┌────────────┴────────────┐\r
+             ↓                         ↓\r
+        Dashboards                   Alerts\r
+             │                         │\r
+             ↓                         ↓\r
+      Human Investigation       Automated Action\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. What should be on the main CWD dashboard?\r
+\r
+A useful executive/operations dashboard could look like:\r
+\r
+\`\`\`text\r
+┌──────────────────────────────────────────────────────┐\r
+│                 CWD PLATFORM HEALTH                  │\r
+├──────────────┬──────────────┬──────────────┬─────────┤\r
+│ Requests     │ Success      │ P95 Latency  │ Errors  │\r
+│ 12.4K/min    │ 98.9%        │ 2.8 sec      │ 1.1%    │\r
+├──────────────┼──────────────┼──────────────┼─────────┤\r
+│ Workflows    │ Queue Depth  │ LLM TTFT     │ Cost    │\r
+│ 8.2K/min     │ 320          │ 650 ms       │ $120/hr │\r
+├──────────────┴──────────────┴──────────────┴─────────┤\r
+│                                                      │\r
+│ Agent Health     ✓                                   │\r
+│ Worker Health    ✓                                   │\r
+│ LLM Health       ✓                                   │\r
+│ MCP Health       ⚠                                   │\r
+│ RAG Health       ✓                                   │\r
+│ Service Bus      ✓                                   │\r
+│ Cosmos DB        ✓                                   │\r
+│ Redis            ✓                                   │\r
+│                                                      │\r
+├──────────────────────────────────────────────────────┤\r
+│ Active Alerts: 2                                    │\r
+│ High: MCP latency degradation                        │\r
+│ Medium: Worker capacity approaching threshold        │\r
+└──────────────────────────────────────────────────────┘\r
+\`\`\`\r
+\r
+---\r
+\r
+# 21. Dashboards should support different audiences\r
+\r
+### Executive\r
+\r
+Focus on:\r
+\r
+* Business success\r
+* Availability\r
+* SLA\r
+* Cost\r
+* Adoption\r
+* Major incidents\r
+\r
+### Operations / SRE\r
+\r
+Focus on:\r
+\r
+* P95/P99\r
+* Error rates\r
+* Queue depth\r
+* Dependencies\r
+* Infrastructure\r
+* Availability\r
+* Capacity\r
+\r
+### AI/ML team\r
+\r
+Focus on:\r
+\r
+* Model latency\r
+* TTFT\r
+* Tokens\r
+* Model errors\r
+* Accuracy\r
+* Groundedness\r
+* Retrieval quality\r
+* Cost\r
+\r
+### Agent engineering team\r
+\r
+Focus on:\r
+\r
+* Agent execution\r
+* Routing\r
+* Worker success\r
+* Tool calls\r
+* Workflow paths\r
+* Retries\r
+* Failover\r
+\r
+---\r
+\r
+# 22. Important CWD alert categories\r
+\r
+\`\`\`text\r
+APPLICATION\r
+ ├── Error-rate spike\r
+ ├── Request failure\r
+ └── Availability degradation\r
+\r
+AGENT\r
+ ├── Worker failure\r
+ ├── Agent timeout\r
+ ├── Excessive retries\r
+ └── Routing failure\r
+\r
+LLM\r
+ ├── Latency increase\r
+ ├── TTFT degradation\r
+ ├── Token spike\r
+ ├── Model errors\r
+ └── Cost spike\r
+\r
+MESSAGING\r
+ ├── Queue depth\r
+ ├── Message age\r
+ ├── Consumer lag\r
+ └── DLQ growth\r
+\r
+DEPENDENCIES\r
+ ├── MCP failure\r
+ ├── API latency\r
+ ├── Database throttling\r
+ └── Search degradation\r
+\r
+SECURITY\r
+ ├── Unauthorized access\r
+ ├── DLP violation\r
+ ├── Prompt injection\r
+ └── Cross-tenant attempt\r
+\r
+BUSINESS\r
+ ├── Workflow success degradation\r
+ ├── SLA breach\r
+ └── Cost per successful workflow increase\r
+\`\`\`\r
+\r
+---\r
+\r
+# 23. The key architecture separation\r
+\r
+Do not make dashboards responsible for executing business decisions.\r
+\r
+\`\`\`text\r
+Dashboard\r
+   ↓\r
+Visibility\r
+\r
+Alert\r
+   ↓\r
+Detection\r
+\r
+Policy\r
+   ↓\r
+Authorization\r
+\r
+LangGraph\r
+   ↓\r
+Workflow control\r
+\r
+Service Bus\r
+   ↓\r
+Message delivery\r
+\r
+Agent Registry\r
+   ↓\r
+Agent discovery\r
+\r
+Application Insights / Monitoring\r
+   ↓\r
+Telemetry\r
+\`\`\`\r
+\r
+For example, a dashboard may show:\r
+\r
+> Worker authorization failures increased.\r
+\r
+But the dashboard does **not** authorize the Worker.\r
+\r
+**Policy/IAM remains the security decision point.**\r
+\r
+---\r
+\r
+# 24. Final formula\r
+\r
+$$\r
+\\boxed{\r
+\\text{CWD Operational Monitoring}\r
+=\r
+\\text{Telemetry}\r
++\r
+\\text{Dashboards}\r
++\r
+\\text{Alerts}\r
++\r
+\\text{Investigation}\r
++\r
+\\text{Remediation}\r
+}\r
+$$\r
+\r
+More specifically:\r
+\r
+$$\r
+\\boxed{\r
+\\text{CWD Dashboards}\r
+=\r
+\\text{Application}\r
++\r
+\\text{Agent}\r
++\r
+\\text{LLM}\r
++\r
+\\text{Infrastructure}\r
++\r
+\\text{Messaging}\r
++\r
+\\text{Business}\r
+}\r
+$$\r
+\r
+And:\r
+\r
+$$\r
+\\boxed{\r
+\\text{CWD Alerting}\r
+=\r
+\\text{Failure Detection}\r
++\r
+\\text{Latency Detection}\r
++\r
+\\text{Traffic Anomaly Detection}\r
++\r
+\\text{Cost Anomaly Detection}\r
++\r
+\\text{Capacity Detection}\r
++\r
+\\text{Service Health Detection}\r
++\r
+\\text{Security Detection}\r
+}\r
+$$\r
+\r
+---\r
+\r
+# Final definition\r
+\r
+**CWD dashboards and alerting provide the operational control layer for the enterprise multi-agent platform. Dashboards aggregate real-time application, Coordinator, Delegator, Worker, LLM, RAG, MCP, messaging, infrastructure, security, and business metrics into role-specific views that show system health, performance, reliability, capacity, AI behavior, and cost. Alerts continuously evaluate these signals against thresholds, SLAs, baselines, or anomaly patterns to detect failures, latency degradation, unusual traffic, queue buildup, dependency problems, cost spikes, capacity constraints, and security issues. When combined with distributed tracing and centralized logs, dashboards and alerts allow operators to move from detection → trace → investigation → root cause → remediation → verification.**\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, dashboards provide real-time visibility across the entire multi-agent execution platform. I separate them into application, agent, LLM/AI, infrastructure, messaging, security, and business views. Application dashboards monitor request volume, throughput, error rate, availability, and P95/P99 latency. Agent dashboards monitor Coordinator, Delegator, and Worker execution, success, retries, and failures. LLM dashboards track model latency, TTFT, tokens, errors, and cost, while AI dashboards track quality metrics such as groundedness and retrieval performance. Messaging dashboards monitor queue depth, message age, consumer throughput, retries, and DLQ. Infrastructure dashboards monitor compute, Cosmos, Redis, Search, and dependency health. On top of these metrics, alerting detects SLA violations, failure spikes, latency degradation, unusual traffic, retry storms, queue buildup, cost anomalies, and service-health issues. When an alert fires, we correlate it with trace and log information using correlation, workflow, task, run, and step identifiers to identify the root cause and take corrective action.”**\r
+\r
+### Mental model\r
+\r
+\`\`\`text\r
+              CWD TELEMETRY\r
+                    │\r
+       ┌────────────┼────────────┐\r
+       ↓            ↓            ↓\r
+     Logs         Traces       Metrics\r
+       │            │            │\r
+       └────────────┼────────────┘\r
+                    ↓\r
+              DASHBOARDS\r
+                    │\r
+        "What is happening?"\r
+                    ↓\r
+                 ALERTS\r
+                    │\r
+        "What needs attention?"\r
+                    ↓\r
+              INVESTIGATION\r
+                    │\r
+        "Why did it happen?"\r
+                    ↓\r
+               REMEDIATION\r
+                    │\r
+              "Fix + verify"\r
+\`\`\`\r
+`,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Observability Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var x_=[{id:`cwd-messaging`,category:`Messaging Architecture`,title:`Messaging Architecture`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the event-driven and asynchronous messaging architecture used by CWD to decouple agents and services, support reliable task execution, handle high workloads, enable scalable communication, and provide resilient message processing.`},{id:`messaging-kafka`,category:`Messaging Architecture`,title:`Kafka`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Apache Kafka can support high-throughput, distributed event streaming in CWD, including topics, partitions, producers, consumers, consumer groups, ordering, offsets, replay, scalability, and asynchronous agent communication.`,concept:``,code:``},{id:`messaging-service-bus`,category:`Messaging Architecture`,title:`Azure Service Bus`,difficulty:`Advanced`,time:`~15 min`,description:`Understand how Azure Service Bus provides reliable enterprise messaging for CWD using queues and topics, including asynchronous task delivery, competing consumers, message locks, retries, dead-lettering, duplicate detection, and reliable delivery.`,concept:``,code:``},{id:`event-driven-architecture`,category:`Messaging Architecture`,title:`Event-Driven Architecture`,difficulty:`Advanced`,time:`~10 min`,description:`Understand event-driven architecture in CWD, including event producers, consumers, event contracts, asynchronous processing, loose coupling, event propagation, workflow triggers, and how agent activities can generate events for downstream services.`,concept:``,code:``},{id:`command-delivery`,category:`Messaging Architecture`,title:`Command Delivery`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how commands are reliably delivered from orchestration components to Delegators and Workers, including command identifiers, delivery guarantees, acknowledgements, idempotency, timeout handling, retries, and execution tracking.`,concept:``,code:``},{id:`pub-sub`,category:`Messaging Architecture`,title:`Pub/Sub`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the publish-subscribe pattern and how CWD can distribute events to multiple independent consumers without tightly coupling the event producer to downstream services or agents.`,concept:``,code:``},{id:`messaging-retry`,category:`Messaging Architecture`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand message retry strategies for transient failures, including retry counts, exponential backoff, retryable versus non-retryable errors, visibility or lock timeouts, idempotent processing, and preventing repeated failed execution.`,concept:``,code:``},{id:`dead-letter-queue`,category:`Messaging Architecture`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how dead-letter queues isolate messages that cannot be successfully processed after configured retry attempts, including failure diagnostics, message inspection, remediation, replay strategies, and operational monitoring.`,concept:``,code:``},{id:`backpressure`,category:`Messaging Architecture`,title:`Backpressure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles workload spikes when message production exceeds processing capacity, including queue buffering, consumer scaling, concurrency controls, throttling, rate limiting, load shedding, and protecting downstream services.`,concept:``,code:``},{id:`priority-lanes`,category:`Messaging Architecture`,title:`Priority Lanes`,difficulty:`Advanced`,time:`~10 min`,description:`Understand priority-based workload processing where critical CWD tasks receive preferential processing over lower-priority workloads, including priority queues, workload classification, scheduling, starvation prevention, and SLA-aware execution.`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Messaging Architecture Cookbook`,subtitle:`Kafka, Service Bus, event-driven processing, retries and resilient messaging`,icon:`📨`,patternLabel:`Topics`})}var C_=[{id:`cwd-gateway`,category:`Enterprise Gateway`,title:`Enterprise Gateway`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the secure enterprise entry point for CWD requests, including API exposure, real-time communication, authentication, authorization, request validation, traffic protection, routing, and Web Application Firewall security.`},{id:`api-gateway`,category:`Enterprise Gateway`,title:`API Gateway`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the role of the API Gateway as the controlled entry point into CWD, including request forwarding, authentication integration, traffic management, API protection, observability, and service routing.`,concept:``,code:``},{id:`websocket`,category:`Enterprise Gateway`,title:`WebSocket`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how WebSockets enable real-time, bidirectional communication between clients and CWD, including streaming agent responses, execution updates, notifications, connection management, and failure handling.`,concept:``,code:``},{id:`gateway-authentication`,category:`Enterprise Gateway`,title:`Authentication`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway authenticates users and services before allowing access to CWD, including enterprise identity providers, tokens, service identities, token validation, and secure identity propagation.`,concept:``,code:``},{id:`gateway-authorization`,category:`Enterprise Gateway`,title:`Authorization`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how authorization policies determine what an authenticated user or service can access, including roles, permissions, entitlements, agent access, tool access, and enterprise data boundaries.`,concept:``,code:``},{id:`request-validation`,category:`Enterprise Gateway`,title:`Request Validation`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how incoming requests are validated for schema correctness, required fields, supported operations, payload constraints, security requirements, and malformed or potentially unsafe input before entering the agent workflow.`,concept:``,code:``},{id:`rate-limiting`,category:`Enterprise Gateway`,title:`Rate Limiting`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how rate limiting protects CWD from excessive traffic, abuse, accidental overload, and uncontrolled agent requests using quotas, throttling, concurrency limits, and user or service-specific policies.`,concept:``,code:``},{id:`gateway-routing`,category:`Enterprise Gateway`,title:`Routing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the gateway routes validated requests to the appropriate CWD services and orchestration components while supporting service discovery, load balancing, versioning, failover, and controlled traffic distribution.`,concept:``,code:``},{id:`waf`,category:`Enterprise Gateway`,title:`WAF`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a Web Application Firewall protects the CWD entry point against common web threats, malicious requests, injection attacks, abnormal traffic patterns, and other application-layer security risks.`,concept:``,code:``}];function w_(){return(0,M.jsx)($,{data:C_,title:`Enterprise Gateway Cookbook`,subtitle:`Secure entry, authentication, authorization, routing and traffic protection`,icon:`🛡️`,patternLabel:`Topics`})}var T_=[{id:`cwd-cloud`,category:`Infrastructure & Cloud`,title:`Infrastructure & Cloud`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the Azure infrastructure used to deploy, secure, scale, connect, and operate the CWD enterprise multi-agent platform, including compute, networking, messaging, secrets management, orchestration, and resource organization.`},{id:`azure-architecture`,category:`Infrastructure & Cloud`,title:`Azure Architecture`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the overall Azure architecture supporting CWD, including application services, agent workloads, networking, identity, data services, messaging, security controls, monitoring, and how these components work together in an enterprise deployment.`,concept:``,code:``},{id:`azure-container-apps`,category:`Infrastructure & Cloud`,title:`Azure Container Apps`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how containerized CWD services and agents can be deployed using Azure Container Apps, including scaling, revisions, service-to-service communication, ingress, workload isolation, and operational management.`,concept:``,code:``},{id:`aks`,category:`Infrastructure & Cloud`,title:`AKS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Kubernetes Service can be used for production-grade deployment of CWD agents and supporting services, including container orchestration, scaling, networking, service discovery, workload management, and high availability.`,concept:``,code:``},{id:`azure-functions`,category:`Infrastructure & Cloud`,title:`Azure Functions`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Functions can support event-driven and serverless workloads within CWD, including lightweight processing, asynchronous tasks, integrations, scheduled operations, and event-triggered agent workflows.`,concept:``,code:``},{id:`durable-functions`,category:`Infrastructure & Cloud`,title:`Durable Functions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Durable Functions can implement stateful serverless orchestration, including long-running workflows, checkpoints, retries, timers, fan-out/fan-in patterns, and recovery of distributed CWD operations.`,concept:``,code:``},{id:`private-vnet`,category:`Infrastructure & Cloud`,title:`Private VNet`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how a private Azure Virtual Network isolates CWD workloads and enables secure communication between agents, services, data stores, and enterprise resources without unnecessary exposure to the public internet.`,concept:``,code:``},{id:`private-endpoints`,category:`Infrastructure & Cloud`,title:`Private Endpoints`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how private endpoints provide private network connectivity to Azure services, helping CWD access data, AI, storage, messaging, and other cloud resources through private IP addresses and controlled network paths.`,concept:``,code:``},{id:`cloud-key-vault`,category:`Infrastructure & Cloud`,title:`Key Vault`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Key Vault protects secrets, credentials, certificates, encryption keys, and connection information used by CWD services while supporting managed identities, access policies, rotation, and centralized secret management.`,concept:``,code:``},{id:`cloud-service-bus`,category:`Infrastructure & Cloud`,title:`Service Bus`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Azure Service Bus supports reliable asynchronous communication between CWD components using queues and topics, including decoupling, message delivery, retries, dead-letter handling, ordering, and workload buffering.`,concept:``,code:``},{id:`resource-groups`,category:`Infrastructure & Cloud`,title:`Azure Resource Groups`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand how Azure Resource Groups organize and manage CWD infrastructure resources, including lifecycle management, access control, environment separation, deployment organization, tagging, monitoring, and cost management.`,concept:``,code:``}];function E_(){return(0,M.jsx)($,{data:T_,title:`Infrastructure & Cloud Cookbook`,subtitle:`Azure compute, networking, security, messaging and orchestration`,icon:`☁️`,patternLabel:`Topics`})}var D_=[{id:`cwd-cbd-scenario`,category:`End-to-End CWD Scenario`,title:`End-to-End CWD Scenario`,difficulty:`Advanced`,time:`~60 min`,description:`Walk through a complete Customer Briefing Document (CBD) scenario across the CWD platform, showing how the user request flows through the Coordinator, Sales Delegator, specialized Worker, enterprise data and RAG systems, context building, result generation, aggregation, and final response.`},{id:`customer-briefing-document`,category:`End-to-End CWD Scenario`,title:`Customer Briefing Document (CBD)`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the Customer Briefing Document use case, its business purpose, the information required to prepare a customer briefing, and how CWD automates the process using multi-agent orchestration and enterprise knowledge.`,concept:``,code:``},{id:`cbd-user-request`,category:`End-to-End CWD Scenario`,title:`User Request`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user initiates a CBD request, including the requested customer, briefing objectives, required information, and any additional constraints provided with the request.`,concept:``,code:``},{id:`cbd-coordinator-processing`,category:`End-to-End CWD Scenario`,title:`Coordinator Processing`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Coordinator interprets the CBD request, identifies the intent, determines the required workflow, creates the execution plan, and routes the domain-level task to the appropriate Delegator.`,concept:``,code:``},{id:`sales-delegator`,category:`End-to-End CWD Scenario`,title:`Sales Delegator`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Sales Delegator receives the domain-level task, decomposes the CBD request into smaller activities, identifies required capabilities, and selects the appropriate Worker agents for execution.`,concept:``,code:``},{id:`cbd-worker`,category:`End-to-End CWD Scenario`,title:`CBD Worker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the specialized CBD Worker executes assigned tasks by combining LLM reasoning, retrieval, enterprise tools, APIs, business rules, and domain-specific logic to produce the required briefing information.`,concept:``,code:``},{id:`cbd-data-retrieval`,category:`End-to-End CWD Scenario`,title:`Data Retrieval`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how customer and enterprise information is retrieved from approved data sources such as RAG indexes, databases, APIs, documents, CRM systems, and other enterprise knowledge repositories.`,concept:``,code:``},{id:`cbd-context-building`,category:`End-to-End CWD Scenario`,title:`Context Building`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how retrieved information is validated, filtered, ranked, and assembled into relevant context for the Worker and LLM while maintaining source attribution, security boundaries, and task-specific context.`,concept:``,code:``},{id:`cbd-result-generation`,category:`End-to-End CWD Scenario`,title:`Result Generation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how the Worker and LLM generate the CBD output from the retrieved evidence and constructed context, including summarization, synthesis, reasoning, formatting, and business-specific content generation.`,concept:``,code:``},{id:`cbd-aggregation`,category:`End-to-End CWD Scenario`,title:`Aggregation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how outputs from multiple Worker tasks, retrieval operations, and enterprise sources are collected, validated, reconciled, and combined into a coherent Customer Briefing Document result.`,concept:``,code:``},{id:`cbd-final-response`,category:`End-to-End CWD Scenario`,title:`Final Response`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how the Coordinator receives the completed CBD result, performs final validation and response synthesis, and securely delivers the final customer briefing response to the user.`,concept:``,code:``}];function O_(){return(0,M.jsx)($,{data:D_,title:`End-to-End CWD Scenario Cookbook`,subtitle:`Customer briefing, orchestration, delegation, RAG and final response`,icon:`📋`,patternLabel:`Topics`})}var k_=[{id:`cwd-execution-model`,category:`CWD State & Execution Model`,title:`CWD State & Execution Model`,difficulty:`Advanced`,time:`~50 min`,description:`Understand the hierarchical execution and state model used by CWD, including sessions, tasks, runs, conversational turns, execution steps, LLM and tool invocations, state transitions, and the overall execution hierarchy.`},{id:`execution-session`,category:`CWD State & Execution Model`,title:`Session`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a CWD session represents the overall lifecycle of a user interaction, including session context, identity, conversation state, and execution history across multiple requests.`,concept:``,code:``},{id:`execution-task`,category:`CWD State & Execution Model`,title:`Task`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a user request is represented as a task and how tasks capture the objective, required capabilities, assigned agents, execution status, and task-level context.`,concept:``,code:``},{id:`execution-run`,category:`CWD State & Execution Model`,title:`Run`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a task execution is represented as a run, including run identifiers, lifecycle status, timestamps, participating agents, intermediate results, failures, and completion state.`,concept:``,code:``},{id:`execution-turn`,category:`CWD State & Execution Model`,title:`Turn`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how individual conversational turns are tracked within a session and how user messages, agent responses, context, and turn-level state contribute to the overall interaction.`,concept:``,code:``},{id:`execution-step`,category:`CWD State & Execution Model`,title:`Step`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand how a run is broken into individual execution steps representing actions such as agent processing, planning, retrieval, tool calls, validation, and response generation.`,concept:``,code:``},{id:`llm-invocation`,category:`CWD State & Execution Model`,title:`LLM Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLM invocations are represented within execution state, including model selection, prompts, input and output tokens, latency, response metadata, errors, retries, and usage or cost information.`,concept:``,code:``},{id:`tool-invocation`,category:`CWD State & Execution Model`,title:`Tool Invocation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how tool calls are tracked during execution, including tool selection, input parameters, authorization, execution status, results, errors, retries, and integration with MCP or enterprise services.`,concept:``,code:``},{id:`state-transitions`,category:`CWD State & Execution Model`,title:`State Transitions`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how execution state transitions between lifecycle stages such as pending, running, waiting, completed, failed, cancelled, and retried across Coordinator, Delegator, and Worker execution.`,concept:``,code:``},{id:`execution-hierarchy`,category:`CWD State & Execution Model`,title:`Execution Hierarchy`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the complete Session → Task → Run → Turn → Step hierarchy and how each level maintains its own state, context, metadata, execution history, and relationship to downstream agent and tool operations.`,concept:``,code:``}];function A_(){return(0,M.jsx)($,{data:k_,title:`CWD State & Execution Model Cookbook`,subtitle:`Sessions, tasks, runs, turns, steps and execution state`,icon:`🧩`,patternLabel:`Topics`})}var j_=[{id:`cwd-reliability`,category:`Reliability & Failure Handling`,title:`Reliability & Failure Handling`,difficulty:`Advanced`,time:`~60 min`,description:`Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.`},{id:`agent-failure`,category:`Reliability & Failure Handling`,title:`Agent Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.`,concept:``,code:``},{id:`worker-failure`,category:`Reliability & Failure Handling`,title:`Worker Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD handles specialized Worker failures using retry, timeout, alternate Worker selection, checkpointing, and failure isolation.`,concept:``,code:``},{id:`delegator-failure`,category:`Reliability & Failure Handling`,title:`Delegator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Delegator failures are detected and recovered while preserving domain-level task orchestration, Worker selection, task state, and execution continuity.`,concept:``,code:``},{id:`coordinator-failure`,category:`Reliability & Failure Handling`,title:`Coordinator Failure`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD recovers from Coordinator failures using persisted execution state, checkpoints, retries, failover, and workflow resumption without losing the overall request context.`,concept:``,code:``},{id:`reliability-retry`,category:`Reliability & Failure Handling`,title:`Retry`,difficulty:`Advanced`,time:`~10 min`,description:`Understand retry strategies such as fixed delay, exponential backoff, jitter, bounded retries, and retry policies based on transient versus permanent failures.`,concept:``,code:``},{id:`timeout`,category:`Reliability & Failure Handling`,title:`Timeout`,difficulty:`Advanced`,time:`~10 min`,description:`Understand timeout management across agents, LLM calls, MCP tools, data sources, APIs, and messaging systems to prevent long-running executions from blocking workflows.`,concept:``,code:``},{id:`circuit-breaker`,category:`Reliability & Failure Handling`,title:`Circuit Breaker`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how circuit breakers prevent repeated calls to unhealthy downstream services and protect CWD from cascading failures.`,concept:``,code:``},{id:`compensation`,category:`Reliability & Failure Handling`,title:`Compensation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand compensation patterns for partially completed workflows, including corrective actions, rollback strategies, and recovery when distributed operations cannot be fully reversed.`,concept:``,code:``},{id:`replay`,category:`Reliability & Failure Handling`,title:`Replay`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how persisted execution state, checkpoints, events, and messages can be replayed to recover failed executions or reproduce workflow behavior.`,concept:``,code:``},{id:`reliability-dlq`,category:`Reliability & Failure Handling`,title:`Dead Letter Queue`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Dead Letter Queues isolate messages that repeatedly fail processing and support investigation, remediation, controlled reprocessing, and operational recovery.`,concept:``,code:``},{id:`graceful-degradation`,category:`Reliability & Failure Handling`,title:`Graceful Degradation`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD continues providing useful responses when selected agents, tools, data sources, or downstream services are unavailable by using fallbacks, partial results, alternate paths, and controlled failure responses.`,concept:``,code:``}];function M_(){return(0,M.jsx)($,{data:j_,title:`Reliability & Failure Handling Cookbook`,subtitle:`Retries, recovery, resilience, failover and graceful degradation`,icon:`🛡️`,patternLabel:`Topics`})}var N_=[{id:`cwd-evaluation`,category:`Agent Evaluation`,title:`Agent Evaluation`,difficulty:`Advanced`,time:`~50 min`,description:`Understand how agents and workflows are evaluated for quality, reliability, latency, and cost.`,concept:`# Agent & Workflow Evaluation in CWD\r
 \r
 **Core principle:**\r
 \r
