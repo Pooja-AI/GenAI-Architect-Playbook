@@ -1,8 +1,7 @@
 import CookbookApp from "../../components/CookbookApp";
 
-// =====================================================
-// 22. Reliability & Failure Handling
-// =====================================================
+import CWDReliability from "../../assets/CWD/docs/cwd-reliability.md?raw";
+import AgentFailure from "../../assets/CWD/docs/agent-failure.md?raw";
 
 const ReliabilityFailureHandling = [
   {
@@ -13,7 +12,9 @@ const ReliabilityFailureHandling = [
     time: "~60 min",
     description:
       "Understand how CWD detects, isolates, retries, recovers, and manages failures across the Gateway, Coordinator, Delegator, Workers, LLMs, tools, data sources, and messaging infrastructure.",
-  },
+    
+    concept:CWDReliability
+    },
       {
         id: "agent-failure",
         category: "Reliability & Failure Handling",
@@ -22,7 +23,7 @@ const ReliabilityFailureHandling = [
         time: "~10 min",
         description:
           "Understand how agent failures are detected through health checks, execution status, timeouts, exceptions, and telemetry, and how failed agents are recovered or rerouted.",
-        concept: "",
+        concept: AgentFailure,
         code: "",
       },
 
