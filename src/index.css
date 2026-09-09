@@ -536,82 +536,37 @@ input:focus {
 
 
 /* =====================================================
-   MOBILE COOKBOOK — FINAL OVERRIDE
+   COOKBOOK MOBILE LAYOUT
    ===================================================== */
 
 @media (max-width: 750px) {
 
-  /* Browser/page */
-  html,
-  body,
-  #root {
-    width: 100%;
-    max-width: 100%;
-    height: auto !important;
-    min-height: 100%;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-  }
-
-  /* Remove desktop fixed-height behavior */
-  .cookbook-layout,
-  .cookbook-container,
-  .app-container {
-    width: 100%;
-    max-width: 100%;
-    height: auto !important;
-    min-height: 0;
-    overflow: visible !important;
-  }
-
-  /* Stack sidebar above content */
+  /* Main cookbook two-column layout */
   .cookbook-layout {
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Sidebar */
-  .sidebar,
-  .questions-sidebar {
-    width: 100%;
-    max-width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
     height: auto !important;
-    max-height: none;
+    min-height: 0 !important;
     overflow: visible !important;
   }
 
-  /* Main highlighted area */
-  .cookbook-main,
-  .main-content,
-  .content-area,
-  .question-content {
-    width: 100%;
-    max-width: 100%;
+  /* Left question panel */
+  .cookbook-sidebar {
+    width: 100% !important;
+    max-width: 100% !important;
     height: auto !important;
-    min-height: 0;
-    max-height: none;
+    max-height: none !important;
     overflow: visible !important;
   }
 
-  /* Prevent content from forcing horizontal width */
-  .cookbook-main *,
-  .main-content *,
-  .content-area *,
-  .question-content * {
-    max-width: 100%;
-  }
-
-  /* Code blocks can scroll horizontally without
-     making the entire page wider */
-  pre {
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  img,
-  video,
-  iframe {
-    max-width: 100%;
-    height: auto;
+  /* Right content */
+  .cookbook-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
   }
 }
