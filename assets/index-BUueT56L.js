@@ -347467,4 +347467,386 @@ $$\r
 ### The key principle\r
 \r
 > **Enterprise AI governance means ensuring that every AI decision and action is attributable, authorized, explainable where required, based on governed data and approved models/prompts/tools, subject to appropriate human oversight, continuously evaluated, and supported by sufficient audit evidence to demonstrate that the system behaved responsibly and within enterprise policy.**\r
-`,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var a_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var s_=[{id:`cwd-interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var l_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function u_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:l_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function d_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(u_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(_p,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(yp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Vp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(lm,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(jm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)($m,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(dh,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Yh,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(og,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(cg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(ug,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(fg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(mg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(gg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(vg,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(bg,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(Sg,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(wg,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(Eg,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(Og,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(Ag,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(Mg,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(Ig,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(Rg,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(Bg,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(Hg,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(c_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(d_,{})}));
+`,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`Challenges & Solutions Cookbook`,subtitle:`Scalability, security, reliability, cost and governance`,icon:`🛠️`,patternLabel:`Topics`})}var a_=[{id:`cwd-current-future-state`,category:`Current State vs Future State`,title:`Current State vs Future State`,difficulty:`Advanced`,time:`~45 min`,description:`Understand the evolution from legacy RAG and current AIOPS capabilities toward the CWD enterprise multi-agent platform and its future evolution.`},{id:`legacy-rag`,category:`Current State vs Future State`,title:`Legacy RAG`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand traditional RAG architecture, its capabilities, limitations, and challenges when applied to complex enterprise use cases.`,concept:``,code:``},{id:`current-aiops`,category:`Current State vs Future State`,title:`Current AIOPS`,difficulty:`Advanced`,time:`~10 min`,description:`Understand the capabilities, architecture, workflows, and limitations of the existing AIOPS platform.`,concept:``,code:``},{id:`cwd-adoption`,category:`Current State vs Future State`,title:`CWD Adoption`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how CWD is introduced into the existing platform while preserving existing capabilities and enabling multi-agent workflows.`,concept:``,code:``},{id:`platform-hardening`,category:`Current State vs Future State`,title:`Platform Hardening`,difficulty:`Advanced`,time:`~10 min`,description:`Understand production hardening of the CWD platform across security, reliability, scalability, observability, governance, and operational readiness.`,concept:``,code:``},{id:`future-agent-expansion`,category:`Current State vs Future State`,title:`Future Agent Expansion`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how additional domain-specific agents can be introduced, registered, discovered, governed, and integrated into the CWD platform.`,concept:``,code:``},{id:`migration-strategy`,category:`Current State vs Future State`,title:`Migration Strategy`,difficulty:`Advanced`,time:`~15 min`,description:`Understand the phased migration strategy from existing AIOPS and RAG capabilities toward the CWD architecture while minimizing business and operational risk.`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`Current State vs Future State Cookbook`,subtitle:`Legacy RAG, AIOPS evolution and CWD adoption`,icon:`🔄`,patternLabel:`Topics`})}var s_=[{id:`CST Interview`,category:`Interview Preparation`,title:`Interview Preparation`,difficulty:`Advanced`,time:`~90 min`,description:`Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.`,concept:`For an **enterprise Agent Orchestration architecture on Azure**, you can use several Azure services together. The exact services depend on whether you need **multi-agent orchestration, RAG, enterprise security, event-driven execution, observability, and scalability**.\r
+\r
+### Azure services for Agent Orchestration\r
+\r
+| Layer                   | Azure Service                        | Purpose                                                           |\r
+| ----------------------- | ------------------------------------ | ----------------------------------------------------------------- |\r
+| **Agent orchestration** | **Azure AI Foundry Agent Service**   | Build/manage agents, tools, conversations, agent workflows        |\r
+|                         | **Azure Functions**                  | Execute lightweight agent tasks/tools                             |\r
+|                         | **Azure Container Apps**             | Host long-running/custom agents and microservices                 |\r
+|                         | **AKS**                              | Large-scale, highly customized agent workloads                    |\r
+| **LLM / reasoning**     | **Azure OpenAI Service**             | GPT models for planning, reasoning, tool selection, summarization |\r
+|                         | **Azure AI Foundry**                 | Model catalog, evaluations, agent development                     |\r
+| **RAG**                 | **Azure AI Search**                  | Hybrid/vector search, grounding, semantic retrieval               |\r
+|                         | **Azure Blob Storage**               | Documents/files used by RAG                                       |\r
+| **Workflow/events**     | **Azure Service Bus**                | Reliable asynchronous agent-to-agent/task messaging               |\r
+|                         | **Event Grid**                       | Event-driven agent activation                                     |\r
+|                         | **Logic Apps**                       | Business workflow orchestration/integration                       |\r
+| **API layer**           | **Azure API Management**             | Secure API/tool gateway for agents                                |\r
+|                         | **Application Gateway / Front Door** | External traffic/load balancing                                   |\r
+| **State & memory**      | **Azure Cache for Redis**            | Session/state/short-term agent memory                             |\r
+|                         | **Cosmos DB**                        | Conversation/task/run state and agent metadata                    |\r
+|                         | **Azure AI Search**                  | Long-term semantic memory                                         |\r
+| **Enterprise data**     | **Microsoft Graph**                  | M365/SharePoint/Teams/Outlook data                                |\r
+|                         | **Azure SQL**                        | Structured enterprise data                                        |\r
+|                         | **Azure Data Lake / Blob**           | Large-scale enterprise data                                       |\r
+| **Security**            | **Microsoft Entra ID**               | Authentication/identity                                           |\r
+|                         | **Managed Identity**                 | Passwordless service-to-service authentication                    |\r
+|                         | **Azure Key Vault**                  | Secrets, keys, certificates                                       |\r
+|                         | **Microsoft Purview**                | Data governance/classification                                    |\r
+|                         | **Azure AI Content Safety**          | Safety and content filtering                                      |\r
+| **Observability**       | **Application Insights**             | Agent/API tracing and latency                                     |\r
+|                         | **Azure Monitor**                    | Infrastructure/application monitoring                             |\r
+|                         | **Log Analytics**                    | Centralized logs                                                  |\r
+|                         | **MLflow / Foundry evaluation**      | Model/agent evaluation and experiment tracking                    |\r
+\r
+### A strong architecture for your CWD\r
+\r
+For your **Coordinator → Delegator → Worker** architecture, I'd describe the Azure stack like this:\r
+\r
+\`\`\`text\r
+                        User\r
+                          |\r
+                          v\r
+                Azure Front Door\r
+                          |\r
+                          v\r
+                 API Management\r
+                          |\r
+                          v\r
+              +---------------------+\r
+              |    Coordinator      |\r
+              |   Agent / Planner   |\r
+              +----------+----------+\r
+                         |\r
+              +----------+----------+\r
+              |                     |\r
+              v                     v\r
+       Sales Delegator       HR Delegator\r
+              |                     |\r
+        +-----+-----+         +-----+-----+\r
+        |           |         |           |\r
+        v           v         v           v\r
+     Worker 1    Worker 2   Worker 3    Worker 4\r
+        |           |         |           |\r
+        +-----------+---------+-----------+\r
+                    |\r
+             Azure Service Bus\r
+                    |\r
+       +------------+-------------+\r
+       |                          |\r
+       v                          v\r
+ Azure AI Search            Enterprise APIs\r
+       |                    / SQL / M365\r
+       v\r
+   RAG / Knowledge\r
+\`\`\`\r
+\r
+### Where each service fits\r
+\r
+**1. Azure OpenAI**\r
+\r
+* Coordinator reasoning\r
+* Intent classification\r
+* Planning\r
+* Delegator selection\r
+* Worker selection\r
+* Response synthesis\r
+\r
+**2. Azure AI Foundry Agent Service**\r
+\r
+* Agent definitions\r
+* Agent tools\r
+* Conversations\r
+* Agent lifecycle\r
+* Agent evaluation/management\r
+\r
+**3. Azure Service Bus**\r
+This is especially useful for your hierarchical architecture.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | task message\r
+     v\r
+Service Bus\r
+     |\r
+     v\r
+Sales Delegator\r
+     |\r
+     | worker task\r
+     v\r
+Service Bus\r
+     |\r
+     v\r
+Sales Worker\r
+\`\`\`\r
+\r
+It gives you **asynchronous communication, retries, dead-letter queues and reliable delivery**.\r
+\r
+**4. Azure API Management**\r
+\r
+Use APIM as the controlled gateway between agents and enterprise systems:\r
+\r
+\`\`\`text\r
+Worker Agent\r
+     |\r
+     v\r
+MCP Tool\r
+     |\r
+     v\r
+Azure API Management\r
+     |\r
+     +---- Salesforce\r
+     +---- ServiceNow\r
+     +---- SAP\r
+     +---- Internal APIs\r
+\`\`\`\r
+\r
+This is particularly good for **authentication, authorization, throttling, auditing and API governance**.\r
+\r
+**5. Azure AI Search**\r
+\r
+For Agentic RAG:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓\r
+Azure AI Search\r
+ ↓\r
+Hybrid / Vector Search\r
+ ↓\r
+Retrieved context\r
+ ↓\r
+LLM\r
+\`\`\`\r
+\r
+You can combine **keyword + vector + semantic retrieval + metadata/ACL filtering**.\r
+\r
+### If they ask you in an interview\r
+\r
+A strong answer would be:\r
+\r
+> **"For Azure-based agent orchestration, I would use Azure AI Foundry/Azure OpenAI for the reasoning and agent layer, Azure AI Search for enterprise RAG, API Management as the governed tool/API gateway, and Service Bus for asynchronous communication between my Coordinator, Delegators and Workers. I would deploy custom agents using Container Apps or AKS depending on scale, use Redis or Cosmos DB for state and memory, and secure the platform with Entra ID, Managed Identity and Key Vault. For observability, I would use Application Insights, Azure Monitor and Log Analytics. This gives me a scalable, secure and observable enterprise multi-agent architecture."**\r
+\r
+For **your CWD specifically**, the most important Azure services to remember are:\r
+\r
+**Azure OpenAI + AI Foundry + AI Search + Service Bus + APIM + Container Apps/AKS + Redis/Cosmos DB + Entra ID + Key Vault + Application Insights.**\r
+\r
+\r
+If you want to integrate your **CWD multi-agent system with Microsoft Teams**, the clean enterprise architecture is:\r
+\r
+\`\`\`text\r
+Microsoft Teams\r
+      |\r
+      v\r
+Teams App / Bot\r
+      |\r
+      v\r
+Azure Bot Service\r
+      |\r
+      v\r
+Azure API Management\r
+      |\r
+      v\r
+CWD Coordinator Agent\r
+      |\r
+      +------> Sales Delegator\r
+      |              |\r
+      |              +--> Worker Agents\r
+      |\r
+      +------> HR Delegator\r
+      |              |\r
+      |              +--> Worker Agents\r
+      |\r
+      +------> IT Delegator\r
+                     |\r
+                     +--> Worker Agents\r
+      |\r
+      v\r
+Azure OpenAI / AI Foundry\r
+      |\r
+      v\r
+Enterprise Systems\r
+\`\`\`\r
+\r
+### 1. Teams becomes your user interface\r
+\r
+The employee opens your **Teams app** and sends:\r
+\r
+> "Show me the latest sales forecast for customer ABC."\r
+\r
+Teams sends the message to your bot/backend.\r
+\r
+### 2. Azure Bot Service handles Teams communication\r
+\r
+Your Teams bot receives the message and forwards it to your backend.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Teams\r
+  ↓\r
+Bot Framework / Azure Bot Service\r
+  ↓\r
+CWD API\r
+\`\`\`\r
+\r
+Your backend shouldn't contain Teams-specific business logic. Keep the **CWD Coordinator** independent so you can later expose it through Teams, web, mobile, or another channel.\r
+\r
+### 3. Coordinator performs orchestration\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+User:\r
+"Show me ABC's latest sales forecast"\r
+\r
+             ↓\r
+\r
+       Coordinator\r
+             ↓\r
+      Intent Classification\r
+             ↓\r
+       Sales Delegator\r
+             ↓\r
+        Sales Worker\r
+             ↓\r
+       Salesforce API\r
+             ↓\r
+       Result returned\r
+             ↓\r
+       Coordinator\r
+             ↓\r
+       Teams Response\r
+\`\`\`\r
+\r
+The user sees something like:\r
+\r
+> **ABC Sales Forecast**\r
+> Q4 forecast: $12.4M\r
+> Confidence: 87%\r
+> Source: Salesforce\r
+\r
+### 4. Use Entra ID for enterprise identity\r
+\r
+This is very important for your architecture.\r
+\r
+\`\`\`text\r
+Teams User\r
+    ↓\r
+Microsoft Entra ID\r
+    ↓\r
+User identity / groups / roles\r
+    ↓\r
+CWD Coordinator\r
+    ↓\r
+Authorization\r
+    ↓\r
+Allowed Delegators / Workers / Data\r
+\`\`\`\r
+\r
+This allows **user-level authorization**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Employee A\r
+   ↓\r
+Sales data ✅\r
+HR data ❌\r
+\r
+HR Employee\r
+   ↓\r
+Sales data ❌\r
+HR data ✅\r
+\`\`\`\r
+\r
+You don't want the LLM itself deciding whether a user is allowed to access confidential information.\r
+\r
+### 5. Teams + Agentic RAG\r
+\r
+You can also integrate your RAG layer:\r
+\r
+\`\`\`text\r
+Teams\r
+  ↓\r
+Coordinator\r
+  ↓\r
+Knowledge Delegator\r
+  ↓\r
+RAG Worker\r
+  ↓\r
+Azure AI Search\r
+  ↓\r
+ACL / entitlement filtering\r
+  ↓\r
+Retrieved documents\r
+  ↓\r
+Azure OpenAI\r
+  ↓\r
+Teams\r
+\`\`\`\r
+\r
+For example:\r
+\r
+> "What is our company travel policy?"\r
+\r
+The agent searches approved enterprise documents and returns the answer with citations.\r
+\r
+### 6. Adaptive Cards\r
+\r
+Instead of returning only plain text, your agent can return **Teams Adaptive Cards**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+┌─────────────────────────────────┐\r
+│ Customer: ABC                   │\r
+│                                 │\r
+│ Q4 Forecast: $12.4M             │\r
+│ Growth: +18%                    │\r
+│ Confidence: 87%                 │\r
+│                                 │\r
+│ [View Details] [Open Salesforce]│\r
+└─────────────────────────────────┘\r
+\`\`\`\r
+\r
+Buttons can trigger additional agent actions.\r
+\r
+### 7. For your CWD, I'd use this stack\r
+\r
+| Requirement             | Azure/Microsoft technology                           |\r
+| ----------------------- | ---------------------------------------------------- |\r
+| Teams UI                | **Microsoft Teams App**                              |\r
+| Bot/channel integration | **Azure Bot Service / Bot Framework**                |\r
+| Identity                | **Microsoft Entra ID**                               |\r
+| API gateway             | **Azure API Management**                             |\r
+| Coordinator             | **Azure AI Foundry Agent / custom agent**            |\r
+| LLM                     | **Azure OpenAI**                                     |\r
+| Agent workflow          | **LangGraph** if retaining your custom orchestration |\r
+| Agent messaging         | **Azure Service Bus**                                |\r
+| RAG                     | **Azure AI Search**                                  |\r
+| Custom workers          | **Azure Container Apps / AKS**                       |\r
+| State                   | **Cosmos DB / Redis**                                |\r
+| Secrets                 | **Azure Key Vault**                                  |\r
+| Monitoring              | **Application Insights + Azure Monitor**             |\r
+\r
+### Interview answer\r
+\r
+If an interviewer asks **"How would you integrate your CWD agentic system with Teams?"**, say:\r
+\r
+> **"I would expose CWD through a Microsoft Teams application using a Teams bot as the conversational channel. The bot would authenticate the user through Microsoft Entra ID and route requests to our APIM-protected CWD API. The Coordinator would perform intent classification and task planning, select the appropriate Delegator and Workers, and use Azure OpenAI for reasoning. Service Bus could provide asynchronous communication for long-running tasks. Workers would access enterprise systems through governed APIs exposed by APIM, while Azure AI Search would support RAG with entitlement-based filtering. The final response could be returned to Teams as text or an Adaptive Card. Application Insights and Azure Monitor would provide end-to-end tracing and observability."**\r
+\r
+**One important distinction:** Teams is primarily your **channel/UI**, not your agent orchestration engine. Your **Coordinator → Delegator → Worker** architecture remains behind the Teams interface.\r
+`},{id:`cwd-project-introduction`,category:`Interview Preparation`,title:`Project Introduction`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.`,concept:``,code:``},{id:`cwd-explain-2-minutes`,category:`Interview Preparation`,title:`Explain CWD in 2 Minutes`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.`,concept:``,code:``},{id:`cwd-explain-5-minutes`,category:`Interview Preparation`,title:`Explain CWD in 5 Minutes`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a detailed five-minute architecture walkthrough covering the request flow, gateway, entitlement checks, Coordinator, Delegator, Workers, RAG, tools, enterprise data, state management, observability, security, and final response generation.`,concept:``,code:``},{id:`cwd-architecture-questions`,category:`Interview Preparation`,title:`Architecture Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare architecture questions covering CWD component boundaries, multi-agent design, orchestration, communication patterns, state management, deployment, scalability, reliability, observability, security, and enterprise integration.`,concept:``,code:``},{id:`cwd-coordinator-questions`,category:`Interview Preparation`,title:`Coordinator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Coordinator Agent questions covering intent understanding, planning, workflow orchestration, task creation, Delegator selection, state management, result aggregation, retries, failure recovery, and governance.`,concept:``,code:``},{id:`cwd-delegator-questions`,category:`Interview Preparation`,title:`Delegator Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Delegator Agent questions covering domain routing, task decomposition, Worker discovery, Worker selection, domain guardrails, Worker pool management, communication patterns, scalability, and failure handling.`,concept:``,code:``},{id:`cwd-worker-questions`,category:`Interview Preparation`,title:`Worker Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare Worker Agent questions covering domain responsibilities, tool usage, RAG, LLM invocation, enterprise data access, task execution, validation, error handling, retries, and reporting results back to the Delegator.`,concept:``,code:``},{id:`cwd-langgraph-questions`,category:`Interview Preparation`,title:`LangGraph Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare LangGraph interview questions using CWD examples, including graph design, nodes, edges, state management, conditional routing, checkpoints, persistence, human-in-the-loop, retries, parallel execution, and multi-agent orchestration.`,concept:``,code:``},{id:`cwd-mcp-questions`,category:`Interview Preparation`,title:`MCP Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare MCP interview questions using CWD examples, including MCP servers, tools, resources, prompts, discovery, tool invocation, authentication, authorization, enterprise connectors, security, and controlled agent access.`,concept:``,code:``},{id:`cwd-a2a-questions`,category:`Interview Preparation`,title:`A2A Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare A2A interview questions using CWD examples, including Agent Cards, agent discovery, agent-to-agent communication, task delegation, asynchronous execution, authentication, authorization, interoperability, and multi-agent collaboration.`,concept:``,code:``},{id:`cwd-rag-questions`,category:`Interview Preparation`,title:`RAG Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare RAG architecture questions covering ingestion, chunking, embeddings, vector search, hybrid search, retrieval strategies, reranking, context construction, citations, access control, hallucination reduction, evaluation, and enterprise knowledge integration.`,concept:``,code:``},{id:`cwd-security-questions`,category:`Interview Preparation`,title:`Security Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare enterprise AI security questions covering authentication, authorization, entitlements, managed identities, secrets management, network isolation, private endpoints, prompt injection, tool security, data protection, auditing, and governance.`,concept:``,code:``},{id:`cwd-scalability-questions`,category:`Interview Preparation`,title:`Scalability Questions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare scalability and performance questions covering concurrent users, agent scaling, Worker pools, asynchronous processing, queue-based architectures, caching, rate limiting, load balancing, LLM latency, throughput, and cost optimization.`,concept:``,code:``},{id:`cwd-scenario-questions`,category:`Interview Preparation`,title:`Scenario-Based Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare real-world CWD scenarios involving agent failures, incorrect routing, unavailable Workers, slow LLM responses, data-source failures, conflicting results, security violations, high traffic, hallucinations, and degraded dependencies.`,concept:``,code:``},{id:`cwd-challenges-interview`,category:`Interview Preparation`,title:`Challenges & Solutions`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare to explain the most important CWD engineering challenges, the root causes, alternatives considered, implemented solutions, trade-offs, measurable outcomes, and lessons learned from production-scale AI architecture.`,concept:``,code:``},{id:`cwd-tradeoff-interview`,category:`Interview Preparation`,title:`Architecture Trade-offs`,difficulty:`Advanced`,time:`~10 min`,description:`Prepare architecture decision and trade-off questions covering Coordinator versus direct routing, Delegator versus Coordinator responsibilities, synchronous versus asynchronous execution, MCP versus APIs, A2A communication, RAG strategies, and cloud architecture choices.`,concept:``,code:``},{id:`cwd-leadership-design`,category:`Interview Preparation`,title:`Leadership / Design Questions`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare senior architect leadership and system-design questions covering technical ownership, architecture governance, stakeholder communication, design reviews, mentoring, team leadership, roadmap decisions, risk management, cost optimization, and enterprise AI strategy.`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Interview Preparation Cookbook`,subtitle:`CWD architecture, agents, security, scalability, scenarios and leadership`,icon:`🎤`,patternLabel:`Topics`})}var l_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function u_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Agentic AI Fundamentals`,path:`/agentic-ai-fundamentals`},{name:`Single Agent Architecture`,path:`/single-agent-architecture`},{name:`Multi-Agent Systems`,path:`/multi-agent-systems`},{name:`LangGraph`,path:`/langgraph`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic RAG`,path:`/agent-rag`},{name:`Planning & Reasoning`,path:`/planning-reasoning`},{name:`Memory`,path:`/memory`},{name:`Agent Evaluation`,path:`/agent-evaluation`},{name:`Production LLMOps`,path:`/production-llmops`},{name:`Security & Responsible AI`,path:`/security-responsible-ai`},{name:`Cloud Architecture`,path:`/cloud-architecture`},{name:`Enterprise Agent Architecture`,path:`/enterprise-agent-architecture`},{name:`Agentic System Design`,path:`/agentic-system-design`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`},{name:`Agentic Project Questions`,path:`/agentic-own-project`},{name:`Top Questions`,path:`/top-questions`},{name:`GenAI Questions`,path:`/genai-questions`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`Python`,path:`/python`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let c=e=>{t(t=>t===e?null:e)},l=()=>{t(null)},u=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>c(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:l,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:l_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(u,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(u,{name:`AgenticAI`,topics:a}),(0,M.jsx)(u,{name:`CWD Project`,topics:o}),(0,M.jsx)(u,{name:`Coding & AI`,topics:s})]})]})}function d_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(u_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/agentic-ai-fundamentals`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/single-agent-architecture`,element:(0,M.jsx)(zf,{})}),(0,M.jsx)(j,{path:`/multi-agent-systems`,element:(0,M.jsx)(Xf,{})}),(0,M.jsx)(j,{path:`/langgraph`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(_p,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(yp,{})}),(0,M.jsx)(j,{path:`/agent-rag`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/planning-reasoning`,element:(0,M.jsx)(Vp,{})}),(0,M.jsx)(j,{path:`/memory`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/agent-evaluation`,element:(0,M.jsx)(lm,{})}),(0,M.jsx)(j,{path:`/production-llmops`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/security-responsible-ai`,element:(0,M.jsx)(jm,{})}),(0,M.jsx)(j,{path:`/cloud-architecture`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/enterprise-agent-architecture`,element:(0,M.jsx)($m,{})}),(0,M.jsx)(j,{path:`/agentic-system-design-questions`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(dh,{})}),(0,M.jsx)(j,{path:`/agentic-own-project`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(Yh,{})}),(0,M.jsx)(j,{path:`/genai-questions`,element:(0,M.jsx)(og,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(cg,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(ug,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(fg,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(mg,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(gg,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(vg,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(bg,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(Sg,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(wg,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(Eg,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(Og,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(Ag,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(Mg,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(Ig,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(Rg,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(Bg,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)(Hg,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(c_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(d_,{})}));
