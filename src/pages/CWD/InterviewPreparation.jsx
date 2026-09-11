@@ -1,4 +1,5 @@
 import CookbookApp from "../../components/CookbookApp";
+import InterviewCST from "../../assets/CWD/docs/interviewCST.md?raw";
 
 const InterviewPreparation = [
   // =====================================================
@@ -6,14 +7,14 @@ const InterviewPreparation = [
   // =====================================================
 
   {
-    id: "cwd-interview",
+    id: "CST Interview",
     category: "Interview Preparation",
     title: "Interview Preparation",
     difficulty: "Advanced",
     time: "~90 min",
     description:
       "Prepare for CWD project, architecture, multi-agent orchestration, Coordinator–Delegator–Worker design, LangGraph, MCP, A2A, RAG, security, scalability, troubleshooting, architecture trade-offs, scenario-based discussions, and senior architect leadership interviews.",
-
+concept:InterviewCST,
   },
       {
         id: "cwd-project-introduction",
