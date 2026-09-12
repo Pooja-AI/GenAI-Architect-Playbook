@@ -172,8 +172,8 @@ const cwdTopics = [
 
   const codingTopics = [
     {
-      name: "Python",
-      path: "/python",
+      name: "ArraysAndLists",
+      path: "/ArraysAndLists",
     },
   ];
 

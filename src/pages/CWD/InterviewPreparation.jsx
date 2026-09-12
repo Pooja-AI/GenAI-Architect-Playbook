@@ -1,5 +1,7 @@
 import CookbookApp from "../../components/CookbookApp";
 import InterviewCST from "../../assets/CWD/docs/interviewCST.md?raw";
+import AWS from "../../assets/CWD/docs/aws.md?raw";
+import GCP from "../../assets/CWD/docs/gcp.md?raw";
 
 const InterviewPreparation = [
   // =====================================================
@@ -9,7 +11,7 @@ const InterviewPreparation = [
   {
     id: "CST Interview",
     category: "Interview Preparation",
-    title: "Interview Preparation",
+    title: "CST Preparation",
     difficulty: "Advanced",
     time: "~90 min",
     description:
@@ -17,26 +19,26 @@ const InterviewPreparation = [
 concept:InterviewCST,
   },
       {
-        id: "cwd-project-introduction",
+        id: "TCS Interview - vanguard",
         category: "Interview Preparation",
-        title: "Project Introduction",
+        title: "Azure AWS Comparision",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
           "Prepare a strong project introduction covering the business problem, CWD objective, architecture, key technologies, your responsibilities, team contribution, and measurable business or technical impact.",
-        concept: "",
+        concept: AWS,
         code: "",
       },
 
       {
-        id: "cwd-explain-2-minutes",
+        id: "GCP",
         category: "Interview Preparation",
-        title: "Explain CWD in 2 Minutes",
+        title: "GCP",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
           "Prepare a concise two-minute explanation of CWD covering the problem, solution, Coordinator, Delegator, Worker agents, enterprise data integration, and the overall value delivered by the platform.",
-        concept: "",
+        concept: GCP,
         code: "",
       },
 

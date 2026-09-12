@@ -64,6 +64,7 @@ import InterviewPreparation from "./pages/CWD/InterviewPreparation";
 // COMPONENTS
 // =====================================================
 
+import ArraysAndLists from "./pages/Python/ArraysAndList"
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -324,6 +325,11 @@ function App() {
         <Route
           path="/cwd-interview"
           element={<InterviewPreparation />}
+        />
+
+        <Route 
+        path="/ArraysAndLists" element={<ArraysAndLists />}
+
         />
 
       </Routes>

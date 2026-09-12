@@ -1,2521 +1,543 @@
+Yes. For a **production-ready CWD deployment**, I would make the comparison broader than just “Azure service = AWS service.” The table should show **what each service does, where it fits in CWD, how it operates end-to-end, and which production concern it addresses**.
 
-# CWD on AWS — Complete End-to-End Architecture
+## CWD Production Architecture — Azure vs AWS
 
-## 1. First: The complete picture
+| CWD Layer / Capability               | Azure Service                                     | AWS Service                                       | What it is / Why CWD needs it                 | How it works in production                                                                                                            |
+| ------------------------------------ | ------------------------------------------------- | ------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. User / Client**                 | Azure Static Web Apps / Storage + Front Door      | S3 + CloudFront                                   | Hosts CWD web UI                              | User accesses CWD through CDN/edge; static frontend is cached globally and served over HTTPS                                          |
+| **2. DNS**                           | Azure DNS                                         | Route 53                                          | Maps CWD domain to application endpoint       | `cwd.company.com` → Front Door/CloudFront → application                                                                               |
+| **3. Global entry / Edge**           | Azure Front Door                                  | CloudFront                                        | Global traffic routing, TLS, edge caching     | Terminates TLS, routes traffic to healthy regional endpoints and protects the application at the edge                                 |
+| **4. Web security**                  | Azure WAF                                         | AWS WAF                                           | Protects HTTP/API endpoints                   | Blocks malicious requests, common exploits, abnormal traffic and known attack patterns                                                |
+| **5. API Gateway**                   | Azure API Management                              | Amazon API Gateway                                | Controlled entry point for APIs               | Validates requests, authentication, throttling, quotas, routing and API policies before requests reach CWD                            |
+| **6. Identity**                      | Microsoft Entra ID                                | Amazon Cognito / IAM                              | User and service identity                     | User authenticates; identity/claims are propagated to CWD so authorization can be enforced                                            |
+| **7. Authorization**                 | Entra ID + RBAC                                   | IAM + Cognito + application authorization         | Determines what user/agent/service can access | Gateway validates roles/permissions; downstream agents/tools enforce least privilege                                                  |
+| **8. Gateway**                       | APIM + Functions/Container Apps                   | API Gateway + Lambda/ECS                          | CWD controlled entry layer                    | Receives request → authenticates → validates → applies security policies → creates correlation/session context → sends to Coordinator |
+| **9. Coordinator**                   | Container Apps / AKS                              | ECS/Fargate / EKS                                 | Central CWD intelligence/orchestration layer  | Understands user intent, creates plan, determines domains, invokes Delegators, aggregates results and produces final response         |
+| **10. Workflow orchestration**       | Durable Functions / Logic Apps                    | Step Functions                                    | Durable workflow execution                    | Maintains workflow progress, retries failed steps, handles timeouts, branching, compensation and recovery                             |
+| **11. LangGraph**                    | AKS / Container Apps                              | ECS/EKS                                           | Stateful AI workflow orchestration            | Manages CWD graph state, Coordinator → Delegator → Worker lifecycle, conditional routing, checkpoints and recovery                    |
+| **12. Delegator**                    | Container Apps / AKS                              | ECS/Fargate / EKS                                 | Domain-level orchestration                    | Receives domain task from Coordinator → decomposes into Worker tasks → selects Workers → coordinates execution                        |
+| **13. Worker agents**                | Functions / Container Apps / AKS                  | Lambda / ECS / EKS                                | Specialized execution agents                  | Worker performs a focused business task using LLMs, tools, RAG, APIs or databases and returns structured results                      |
+| **14. Managed AI agents**            | Azure AI Foundry Agent Service                    | Amazon Bedrock Agents                             | Managed agent capability                      | Provides managed agent reasoning, instructions, tool/action selection and model interaction where appropriate                         |
+| **15. LLM / Foundation Models**      | Azure OpenAI / Foundry models                     | Amazon Bedrock                                    | Reasoning and generation                      | Coordinator/Workers call approved models for classification, planning, reasoning, summarization and response generation               |
+| **16. Model gateway**                | Azure AI Foundry / APIM                           | Bedrock + API Gateway                             | Central model access/control                  | Controls which models agents can invoke, model parameters, quotas, logging and safety policies                                        |
+| **17. RAG ingestion**                | Data Factory / Functions / AI Search              | Glue / Lambda / Step Functions                    | Ingests enterprise documents                  | Documents are extracted → cleaned → chunked → embedded → indexed with metadata and ACL information                                    |
+| **18. Document storage**             | Blob Storage                                      | Amazon S3                                         | Durable document storage                      | Stores source documents, reports, artifacts and RAG source material                                                                   |
+| **19. Vector / semantic search**     | Azure AI Search                                   | OpenSearch / Bedrock Knowledge Bases              | Enterprise retrieval                          | Query → embedding → vector/hybrid search → metadata/ACL filtering → relevant chunks → Worker/LLM context                              |
+| **20. RAG managed service**          | Azure AI Search + Foundry                         | Bedrock Knowledge Bases                           | Managed RAG capability                        | Connects data sources to embeddings/vector retrieval and provides grounded context to agents                                          |
+| **21. Enterprise SQL**               | Azure SQL                                         | Aurora / RDS                                      | Transactional structured data                 | Workers access business records through authorized service identities and controlled data-access APIs                                 |
+| **22. NoSQL state**                  | Cosmos DB                                         | DynamoDB                                          | Durable application/workflow state            | Stores sessions, tasks, executions, agent metadata, checkpoints and workflow status                                                   |
+| **23. Short-term memory/cache**      | Azure Cache for Redis                             | ElastiCache for Redis                             | Fast temporary state                          | Stores session context, cache entries, distributed locks and frequently used data                                                     |
+| **24. Long-term semantic memory**    | Azure AI Search                                   | OpenSearch                                        | Semantic memory                               | Stores embeddings and retrieves previous relevant information based on semantic similarity                                            |
+| **25. Data lake**                    | ADLS Gen2                                         | Amazon S3                                         | Enterprise-scale data                         | Central data lake for documents, raw data, processed data and analytical datasets                                                     |
+| **26. Data catalog**                 | Microsoft Purview                                 | Glue Data Catalog                                 | Data discovery/governance                     | Maintains metadata, ownership, classification and lineage of enterprise data                                                          |
+| **27. Data governance**              | Microsoft Purview                                 | Lake Formation                                    | Fine-grained data governance                  | Controls which identities can access which datasets, tables, columns or objects                                                       |
+| **28. Agent-to-agent communication** | Azure Service Bus                                 | SQS / EventBridge / MSK                           | Reliable agent messaging                      | Coordinator sends task → Delegator/Worker consumes → executes → returns result using correlation ID                                   |
+| **29. Event-driven architecture**    | Event Grid                                        | EventBridge                                       | Event routing                                 | Business/system event triggers appropriate CWD workflow or agent                                                                      |
+| **30. High-throughput messaging**    | Event Hubs                                        | Amazon MSK / Kinesis                              | Streaming                                     | Streams high-volume events, telemetry or business events for asynchronous processing                                                  |
+| **31. Queue**                        | Service Bus Queue                                 | SQS                                               | Reliable asynchronous work                    | Tasks wait in queue until Worker is available; supports retries and controlled processing                                             |
+| **32. Dead Letter Queue**            | Service Bus DLQ                                   | SQS DLQ                                           | Failed-message isolation                      | Messages exceeding retry limits are moved to DLQ for investigation and controlled replay                                              |
+| **33. Secrets**                      | Azure Key Vault                                   | AWS Secrets Manager                               | Secret storage                                | Database credentials, API keys and service secrets are retrieved at runtime rather than hard-coded                                    |
+| **34. Encryption**                   | Azure Key Vault / Managed HSM                     | AWS KMS                                           | Encryption/key management                     | Encrypts databases, storage, messages, secrets and sensitive application data                                                         |
+| **35. Service identity**             | Managed Identity                                  | IAM Roles                                         | Passwordless service authentication           | ECS/Lambda/EKS workload receives temporary credentials instead of storing passwords                                                   |
+| **36. Network isolation**            | VNet / Private Endpoint                           | VPC / PrivateLink                                 | Private networking                            | CWD services communicate through private networks; sensitive services remain inaccessible from the public internet                    |
+| **37. Container hosting**            | Azure Container Apps                              | ECS + Fargate                                     | Managed containers                            | Runs Coordinator, Delegator and Worker containers without managing servers                                                            |
+| **38. Kubernetes**                   | AKS                                               | EKS                                               | Advanced container orchestration              | Used when CWD requires advanced scheduling, service mesh, custom networking or large-scale agent workloads                            |
+| **39. Serverless execution**         | Azure Functions                                   | AWS Lambda                                        | Lightweight execution                         | Executes short-lived tools, transformations and event-driven Worker tasks                                                             |
+| **40. Container registry**           | Azure Container Registry                          | Amazon ECR                                        | Stores container images                       | CI/CD builds image → scans image → pushes to registry → deploys approved image                                                        |
+| **41. CI/CD**                        | Azure DevOps / GitHub Actions                     | CodePipeline + CodeBuild / GitHub Actions         | Automated deployment                          | Commit → build → test → security scan → deploy to staging → validation → production                                                   |
+| **42. Infrastructure as Code**       | Bicep / Terraform                                 | CloudFormation / CDK / Terraform                  | Reproducible infrastructure                   | Networks, databases, queues, compute, IAM and monitoring are defined as code                                                          |
+| **43. Auto scaling**                 | Container Apps scaling / AKS HPA                  | ECS Auto Scaling / EKS HPA / Lambda concurrency   | Handles changing traffic                      | Worker replicas automatically increase during demand and decrease during low traffic                                                  |
+| **44. Load balancing**               | Application Gateway / Front Door                  | ALB / CloudFront                                  | Distributes traffic                           | Requests are distributed across healthy Coordinator/Worker instances                                                                  |
+| **45. Health checks**                | Azure Monitor / App Health                        | CloudWatch / ELB health checks                    | Detects unhealthy services                    | Failed instances are removed from traffic and replaced/restarted                                                                      |
+| **46. Retry**                        | Service Bus / Durable Functions                   | Step Functions / SDK retries / SQS                | Handles transient failures                    | Temporary failures use bounded retries with exponential backoff and jitter                                                            |
+| **47. Timeout**                      | Functions / Service Bus / application layer       | Lambda / Step Functions / application layer       | Prevents stuck execution                      | Each LLM, Worker, tool, API and messaging operation has an explicit timeout                                                           |
+| **48. Circuit breaker**              | Application implementation / resilience libraries | Application implementation / resilience libraries | Prevents cascading failures                   | Repeated failures temporarily stop calls to unhealthy downstream services                                                             |
+| **49. Checkpointing**                | Durable Functions / Cosmos DB                     | Step Functions / DynamoDB / S3                    | Recovery                                      | Saves workflow state so CWD can resume rather than restart an entire workflow                                                         |
+| **50. Compensation**                 | Durable Functions / Logic Apps                    | Step Functions                                    | Corrects partial execution                    | If Worker A succeeds but Worker B fails, compensation actions can undo/reconcile A where required                                     |
+| **51. Observability**                | Azure Monitor                                     | CloudWatch                                        | Overall system monitoring                     | Central visibility into infrastructure, APIs, agents, queues, models and business metrics                                             |
+| **52. Application logs**             | Log Analytics                                     | CloudWatch Logs                                   | Centralized logs                              | Gateway, Coordinator, Delegator and Workers write structured logs with correlation IDs                                                |
+| **53. Distributed tracing**          | Application Insights                              | X-Ray / OpenTelemetry                             | End-to-end tracing                            | Trace follows `User → Gateway → Coordinator → Delegator → Worker → Tool → LLM → Response`                                             |
+| **54. Metrics**                      | Azure Monitor                                     | CloudWatch Metrics                                | Performance monitoring                        | Tracks latency, throughput, errors, token usage, cost, queue depth and agent success                                                  |
+| **55. Alerting**                     | Azure Monitor Alerts                              | CloudWatch Alarms                                 | Operational alerts                            | Alerts on failures, latency, queue buildup, service health, cost spikes and abnormal behavior                                         |
+| **56. AI safety**                    | Azure AI Content Safety / Foundry safety          | Bedrock Guardrails                                | AI safety                                     | Filters harmful content, validates model inputs/outputs and applies organizational policies                                           |
+| **57. Prompt injection protection**  | AI Foundry + application controls                 | Bedrock Guardrails + application controls         | Protects agents from malicious instructions   | Untrusted retrieved/user content is treated as data, not authority; tools require authorization                                       |
+| **58. Tool security**                | APIM + Managed Identity                           | API Gateway + IAM                                 | Secure tool execution                         | Worker can invoke only approved tools and only with permitted scopes                                                                  |
+| **59. Data-loss prevention**         | Purview / Defender                                | Macie / Lake Formation / Security Hub             | Protects sensitive data                       | Detects/classifies sensitive information and restricts unauthorized access                                                            |
+| **60. Security monitoring**          | Defender for Cloud / Sentinel                     | GuardDuty / Security Hub                          | Threat detection                              | Detects suspicious activity, compromised workloads and security configuration problems                                                |
+| **61. Audit**                        | Azure Activity Log / Monitor                      | CloudTrail                                        | Compliance/audit                              | Records administrative and API actions for investigation and compliance                                                               |
+| **62. Vulnerability management**     | Defender for Cloud                                | Inspector                                         | Finds vulnerabilities                         | Scans containers, dependencies and infrastructure for security vulnerabilities                                                        |
+| **63. Agent registry**               | Cosmos DB / App Configuration                     | DynamoDB / Cloud Map                              | Agent discovery                               | Stores agent ID, capabilities, version, endpoint, owner, permissions, health and status                                               |
+| **64. Configuration**                | Azure App Configuration                           | AppConfig                                         | Central configuration                         | Separates configuration from code and supports controlled configuration changes                                                       |
+| **65. Prompt registry**              | AI Foundry                                        | Bedrock Prompt Management                         | Prompt lifecycle                              | Versioned prompts → testing/evaluation → approval → deployment → rollback                                                             |
+| **66. Model evaluation**             | Azure AI Foundry Evaluation                       | Bedrock Evaluations                               | AI quality                                    | Evaluates accuracy, groundedness, relevance, safety, latency and cost                                                                 |
+| **67. Backup**                       | Azure Backup / Storage redundancy                 | AWS Backup / S3 versioning                        | Data recovery                                 | Automated backups and versioning protect critical state and artifacts                                                                 |
+| **68. Disaster recovery**            | Azure paired regions                              | AWS multi-AZ / multi-region                       | Business continuity                           | Production can fail over to another availability zone/region depending on RTO/RPO requirements                                        |
+| **69. Cost management**              | Azure Cost Management                             | AWS Cost Explorer / Budgets                       | Cost control                                  | Tracks infrastructure and AI/model costs by environment, application, agent or workload                                               |
+| **70. Governance**                   | Azure Policy                                      | AWS Organizations / SCP / Config                  | Enterprise governance                         | Prevents deployment of resources that violate company policies                                                                        |
 
-Your CWD architecture remains:
+---
+
+# End-to-End CWD Production Flow
+
+The two clouds would implement essentially the same **CWD logical architecture**:
 
 ```text
-                         ENTERPRISE USERS
-                                |
-                                v
-                       +------------------+
-                       |   CloudFront     |
-                       +------------------+
-                                |
-                                v
-                       +------------------+
-                       |    AWS WAF       |
-                       +------------------+
-                                |
-                                v
-                       +------------------+
-                       |  API Gateway     |
-                       +------------------+
-                                |
-                                v
-                       +------------------+
-                       |  CWD GATEWAY     |
-                       | Auth / Security  |
-                       +------------------+
-                                |
-                                v
-                       +------------------+
-                       |   COORDINATOR    |
-                       | Intent / Planning|
-                       +------------------+
-                                |
-                                v
-                       +------------------+
-                       |    LangGraph     |
-                       | State / Workflow |
-                       +------------------+
-                                |
-              +-----------------+------------------+
-              |                 |                  |
-              v                 v                  v
-       Finance Delegator   Sales Delegator    HR Delegator
-              |                 |                  |
-              v                 v                  v
-          Workers           Workers            Workers
-              |                 |                  |
-              +-----------------+------------------+
-                                |
-               +----------------+----------------+
-               |                |                |
-               v                v                v
-            Bedrock           MCP              RAG
-               |                |                |
-               v                v                v
-          LLM Models       Enterprise APIs   Knowledge Base
-                                                |
-                                                v
-                                           S3 / Vector DB
-```
-
-And underneath everything:
-
-```text
-       +------------------------------------------------+
-       |              CWD DATA & STATE                  |
-       |                                                |
-       | DynamoDB | Aurora | Redis | S3 | Vector Store |
-       +------------------------------------------------+
-
-       +------------------------------------------------+
-       |             CWD ASYNC EXECUTION                |
-       |                                                |
-       | SQS | SNS | EventBridge | Step Functions      |
-       +------------------------------------------------+
-
-       +------------------------------------------------+
-       |             CWD SECURITY                       |
-       |                                                |
-       | IAM | KMS | Secrets Manager | WAF | GuardDuty |
-       | Security Hub | CloudTrail | Config             |
-       +------------------------------------------------+
-
-       +------------------------------------------------+
-       |             CWD OBSERVABILITY                  |
-       |                                                |
-       | CloudWatch | OpenTelemetry | X-Ray             |
-       +------------------------------------------------+
-
-       +------------------------------------------------+
-       |             CWD DEPLOYMENT                     |
-       |                                                |
-       | ECR | ECS/Fargate | CodeBuild | CodePipeline  |
-       | CDK/Terraform                                  |
-       +------------------------------------------------+
+                         ┌──────────────────────┐
+                         │       User / UI      │
+                         └──────────┬───────────┘
+                                    │
+                             HTTPS / TLS
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │ CDN / WAF / Global Entry      │
+                    │ Azure: Front Door             │
+                    │ AWS: CloudFront + WAF         │
+                    └───────────────┬───────────────┘
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │        API Gateway            │
+                    │ Azure: API Management         │
+                    │ AWS: API Gateway              │
+                    └───────────────┬───────────────┘
+                                    │
+                         Authentication
+                         Authorization
+                         Validation
+                         Rate limiting
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │           GATEWAY              │
+                    └───────────────┬───────────────┘
+                                    │
+                           Correlation ID
+                           Session ID
+                           User Context
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │         COORDINATOR            │
+                    │                                │
+                    │ Intent                         │
+                    │ Planning                       │
+                    │ Task decomposition             │
+                    │ Governance                     │
+                    └───────────────┬───────────────┘
+                                    │
+                           Domain selection
+                                    │
+              ┌─────────────────────┼─────────────────────┐
+              │                     │                     │
+       ┌──────▼──────┐       ┌──────▼──────┐       ┌──────▼──────┐
+       │ Delegator A │       │ Delegator B │       │ Delegator C │
+       │ Finance     │       │ HR          │       │ Support     │
+       └──────┬──────┘       └──────┬──────┘       └──────┬──────┘
+              │                     │                     │
+         task routing          task routing          task routing
+              │                     │                     │
+       ┌──────▼──────┐       ┌──────▼──────┐       ┌──────▼──────┐
+       │  Workers    │       │  Workers    │       │  Workers    │
+       │             │       │             │       │             │
+       │ LLM         │       │ RAG         │       │ CRM/API     │
+       │ MCP Tools   │       │ DB          │       │ Tools       │
+       │ APIs        │       │ Tools       │       │ LLM         │
+       └──────┬──────┘       └──────┬──────┘       └──────┬──────┘
+              │                     │                     │
+              └─────────────────────┼─────────────────────┘
+                                    │
+                            Structured Results
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │         COORDINATOR            │
+                    │                                │
+                    │ Validate                      │
+                    │ Aggregate                     │
+                    │ Synthesize                    │
+                    │ Apply policy                   │
+                    └───────────────┬───────────────┘
+                                    │
+                             Final Response
+                                    │
+                    ┌───────────────▼───────────────┐
+                    │          Gateway/API           │
+                    └───────────────┬───────────────┘
+                                    │
+                              User / UI
 ```
 
 ---
 
-# 2. AWS services you actually need
+# Where the production services sit
 
-I would divide the AWS services into **10 layers**.
+A useful way to think about the architecture is in **10 production planes**.
 
-| Layer                  | AWS Services                                                           |
-| ---------------------- | ---------------------------------------------------------------------- |
-| 1. Edge                | CloudFront, Route 53, ACM                                              |
-| 2. API/Security        | WAF, Shield, API Gateway                                               |
-| 3. Compute             | ECS, Fargate, ECR, optionally Lambda                                   |
-| 4. AI                  | Bedrock, Guardrails, AgentCore                                         |
-| 5. CWD orchestration   | LangGraph running on ECS/AgentCore                                     |
-| 6. Integration         | AgentCore Gateway, MCP, EventBridge                                    |
-| 7. Data/RAG            | S3, Knowledge Bases, OpenSearch/S3 Vectors, Aurora                     |
-| 8. State/Messaging     | DynamoDB, Redis, SQS, SNS, Step Functions                              |
-| 9. Security/Governance | IAM, KMS, Secrets Manager, CloudTrail, GuardDuty, Security Hub, Config |
-| 10. Operations         | CloudWatch, OpenTelemetry, X-Ray, CodePipeline, CodeBuild              |
-
-Now let's go service by service.
+| Production Plane      | Azure                                          | AWS                                                  | Main Responsibility                               |
+| --------------------- | ---------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------- |
+| **1. Edge**           | Front Door + WAF                               | CloudFront + WAF                                     | Internet protection and global traffic            |
+| **2. API**            | API Management                                 | API Gateway                                          | Controlled API access                             |
+| **3. Agent runtime**  | Container Apps / AKS / Functions               | ECS/Fargate / EKS / Lambda                           | Host CWD agents                                   |
+| **4. AI**             | Azure OpenAI + AI Foundry                      | Bedrock                                              | LLMs and managed AI capabilities                  |
+| **5. Orchestration**  | LangGraph + Durable Functions                  | LangGraph + Step Functions                           | Stateful/durable workflows                        |
+| **6. Integration**    | Service Bus + Event Grid                       | SQS + EventBridge + MSK                              | A2A/events/asynchronous processing                |
+| **7. Data**           | Blob + SQL + Cosmos + AI Search                | S3 + Aurora + DynamoDB + OpenSearch                  | Enterprise data, state and RAG                    |
+| **8. Security**       | Entra + Managed Identity + Key Vault + Purview | IAM + Roles + Secrets Manager + KMS + Lake Formation | Identity, secrets, encryption and governance      |
+| **9. Reliability**    | Durable Functions + Service Bus + Cosmos       | Step Functions + SQS/DLQ + DynamoDB                  | Retry, checkpoint, recovery and failure isolation |
+| **10. Observability** | Monitor + App Insights + Log Analytics         | CloudWatch + X-Ray + CloudTrail                      | Logs, metrics, traces, audit and alerts           |
 
 ---
 
-# 3. Route 53
+# Production deployment recommendation
 
-## What?
+For **CWD**, I would not deploy everything as serverless functions. A hybrid architecture is more appropriate.
 
-AWS DNS service.
-
-## Why CWD?
-
-Users shouldn't call an AWS endpoint directly.
-
-Instead:
+### Azure
 
 ```text
-https://api.cwd.company.com
+                    Azure Front Door
+                           │
+                         WAF
+                           │
+                  API Management
+                           │
+                    ┌──────▼──────┐
+                    │ Coordinator │
+                    │ Container   │
+                    │ Apps / AKS  │
+                    └──────┬──────┘
+                           │
+                    ┌──────▼──────┐
+                    │ Delegators  │
+                    │ Container   │
+                    │ Apps / AKS  │
+                    └──────┬──────┘
+                           │
+                ┌──────────┼──────────┐
+                ▼          ▼          ▼
+             Worker     Worker     Worker
+             Agents     Agents     Agents
+                │          │          │
+                └──────────┼──────────┘
+                           │
+        ┌──────────────────┼──────────────────┐
+        ▼                  ▼                  ▼
+ Azure OpenAI         AI Search            APIs
+        │                  │                  │
+        └──────────────────┼──────────────────┘
+                           ▼
+               Cosmos DB / Redis / SQL
+                           │
+                    Blob Storage
 ```
 
-Route 53 resolves this to the CWD infrastructure.
-
-## How?
+### AWS
 
 ```text
-User
- |
- | api.cwd.company.com
- v
-Route 53
- |
- v
-CloudFront
-```
-
-You can also use Route 53 health checks for disaster recovery.
-
----
-
-# 4. ACM — AWS Certificate Manager
-
-## What?
-
-Manages TLS/SSL certificates.
-
-## Why CWD?
-
-CWD is an enterprise application, so communication must be encrypted.
-
-```text
-https://api.cwd.company.com
-```
-
-needs a certificate.
-
-## How?
-
-```text
-User
-  |
- HTTPS
-  |
-CloudFront
-  |
-HTTPS
-  |
-API Gateway
-```
-
-ACM manages the certificates.
-
----
-
-# 5. CloudFront
-
-## What?
-
-AWS global content delivery and edge service.
-
-## Why CWD?
-
-It provides:
-
-* Global edge entry
-* TLS termination
-* caching where appropriate
-* integration with WAF
-* reduced latency
-* additional protection
-
-For APIs, caching must be carefully configured; you don't want sensitive conversational responses accidentally cached.
-
-## How?
-
-```text
-User
- ↓
-CloudFront
- ↓
-WAF
- ↓
-API Gateway
-```
-
-CloudFront is not the CWD Gateway itself.
-
-It is the **edge layer**.
-
----
-
-# 6. AWS WAF
-
-## What?
-
-Web Application Firewall.
-
-## Why CWD?
-
-CWD is an AI system exposed to potentially untrusted input.
-
-WAF protects against things like:
-
-* malicious HTTP requests
-* abnormal traffic
-* common web exploits
-* request flooding
-* known attack patterns
-
-## How?
-
-```text
-Internet
-   |
-   v
-CloudFront
-   |
-   v
-WAF
-   |
-   +---- BLOCK
-   |
-   v
-API Gateway
-```
-
-WAF is your **network/application perimeter**, not your LLM safety mechanism.
-
----
-
-# 7. AWS Shield
-
-## What?
-
-DDoS protection.
-
-## Why?
-
-CWD is production enterprise infrastructure.
-
-You don't want a massive volume of malicious traffic taking down the API layer.
-
-```text
-Internet
-   |
- Shield
-   |
- WAF
-   |
- API Gateway
-```
-
-Shield and WAF solve different problems.
-
----
-
-# 8. API Gateway
-
-This is an important service.
-
-## What?
-
-Managed API entry point.
-
-## Why CWD?
-
-Your applications need APIs such as:
-
-```text
-POST /v1/chat
-POST /v1/tasks
-GET  /v1/tasks/{taskId}
-GET  /v1/sessions/{sessionId}
-POST /v1/approval
-```
-
-API Gateway provides:
-
-* API routing
-* authentication integration
-* throttling
-* request validation
-* usage controls
-* API versioning
-* monitoring
-
-## How?
-
-```text
-User
- ↓
-CloudFront
- ↓
-WAF
- ↓
-API Gateway
- ↓
-CWD Gateway
+                    CloudFront
+                        │
+                       WAF
+                        │
+                  API Gateway
+                        │
+                ┌───────▼────────┐
+                │  Coordinator   │
+                │ ECS/Fargate or │
+                │      EKS       │
+                └───────┬────────┘
+                        │
+                ┌───────▼────────┐
+                │   Delegators   │
+                │ ECS/Fargate or │
+                │      EKS       │
+                └───────┬────────┘
+                        │
+             ┌──────────┼──────────┐
+             ▼          ▼          ▼
+          Worker     Worker     Worker
+          Agents     Agents     Agents
+             │          │          │
+             └──────────┼──────────┘
+                        │
+       ┌────────────────┼────────────────┐
+       ▼                ▼                ▼
+    Bedrock         OpenSearch          APIs
+       │                │                │
+       └────────────────┼────────────────┘
+                        ▼
+          DynamoDB / Redis / Aurora
+                        │
+                        S3
 ```
 
 ---
 
-# 9. IAM
+# Scalability strategy
 
-## What?
+For CWD, scalability should happen at **multiple levels**, not only infrastructure.
 
-AWS Identity and Access Management.
+| Area                 | Production scaling strategy                                       |
+| -------------------- | ----------------------------------------------------------------- |
+| **Gateway**          | Horizontal replicas + API throttling                              |
+| **Coordinator**      | Multiple stateless replicas behind load balancer                  |
+| **Delegator**        | Independently scalable by domain                                  |
+| **Workers**          | Scale independently according to workload                         |
+| **LLM**              | Model selection, quotas, concurrency controls and fallback models |
+| **RAG**              | Independently scale search/indexing                               |
+| **Queue**            | Buffer workload spikes                                            |
+| **Redis**            | Cluster/replication for high-volume session/cache workloads       |
+| **Database**         | Partitioning, replicas, autoscaling where supported               |
+| **Containers**       | Horizontal autoscaling                                            |
+| **Lambda/Functions** | Automatic concurrent execution                                    |
+| **Events**           | Asynchronous processing to prevent cascading failures             |
 
-## Why CWD?
-
-CWD has hundreds of resources and services.
-
-You don't want:
-
-```text
-Worker → administrator access
-```
-
-Instead:
-
-```text
-Coordinator Role
-Worker Role
-RAG Role
-Ingestion Role
-Deployment Role
-```
-
-Each gets only what it needs.
-
-Example:
+A particularly important CWD design is:
 
 ```text
-Sales Worker
-    |
-    +-- Bedrock: InvokeModel
-    |
-    +-- DynamoDB: Read specific table
-    |
-    +-- S3: Read specific bucket/prefix
-    |
-    X-- KMS admin
-    X-- Production administrator
+                    Traffic increases
+                          │
+                          ▼
+                     Coordinator
+                          │
+                ┌─────────┼─────────┐
+                ▼         ▼         ▼
+             Finance     HR       Support
+                │         │         │
+                ▼         ▼         ▼
+             Workers   Workers   Workers
+                ↑         ↑         ↑
+                │         │         │
+              Scale     Scale     Scale
+             independently
 ```
 
-This is **least privilege**.
+You don't want a heavy **Support Worker workload** to force every CWD Worker to scale.
 
 ---
 
-# 10. IAM Identity Center / Enterprise Identity Provider
+# Reliability strategy
 
-For human users, integrate CWD with the company's identity provider.
-
-For example:
-
-```text
-Employee
- ↓
-Corporate SSO
- ↓
-Identity Token
- ↓
-CWD Gateway
-```
-
-The user identity becomes part of CWD context:
-
-```json
-{
-  "user_id": "123",
-  "roles": ["sales"],
-  "groups": ["sales-analytics"],
-  "entitlements": [
-    "crm.read",
-    "pipeline.read"
-  ]
-}
-```
-
----
-
-# 11. ECS
-
-## What?
-
-Amazon Elastic Container Service.
-
-## Why CWD?
-
-Your CWD components are Python services.
-
-For example:
-
-```text
-cwd-gateway
-cwd-coordinator
-cwd-sales-delegator
-cwd-finance-delegator
-cwd-sales-worker
-cwd-finance-worker
-```
-
-ECS manages those containers.
-
----
-
-# 12. Fargate
-
-## What?
-
-Serverless compute for ECS containers.
-
-You don't manage EC2 servers.
-
-## Why CWD?
-
-Instead of:
-
-```text
-EC2
- ↓
-Install Docker
- ↓
-Manage OS
- ↓
-Patch servers
- ↓
-Run containers
-```
-
-you get:
-
-```text
-ECS
- ↓
-Fargate
- ↓
-Container
-```
-
-AWS handles the underlying infrastructure.
-
-For your CWD architecture, **ECS + Fargate is a strong default for Coordinator, Delegators, platform APIs, ingestion services, and conventional Worker services.**
-
----
-
-# 13. ECR
-
-## What?
-
-Elastic Container Registry.
-
-Stores Docker images.
-
-## How?
-
-```text
-Developer
-   |
-   v
-Docker Build
-   |
-   v
-ECR
-   |
-   v
-ECS/Fargate
-```
-
-Example:
-
-```text
-cwd-coordinator:1.0.0
-cwd-sales-worker:2.1.0
-cwd-finance-worker:3.0.0
-```
-
-Use immutable image digests for production deployments.
-
----
-
-# 14. Lambda
-
-You don't need Lambda for everything.
-
-Use Lambda for smaller event-driven jobs.
-
-Good CWD examples:
-
-```text
-S3 document notification
- ↓
-Lambda
- ↓
-EventBridge
-```
-
-or:
-
-```text
-Scheduled evaluation
- ↓
-Lambda
-```
-
-But don't force your long-running Coordinator or complex Worker services into Lambda.
-
-For those:
-
-**ECS/Fargate or AgentCore Runtime.**
-
----
-
-# 15. Amazon Bedrock
-
-This is the **LLM layer**.
-
-## What?
-
-Managed access to foundation models.
-
-## Why CWD?
-
-Your Coordinator and Workers need LLM reasoning.
-
-For example:
-
-```text
-Coordinator
-   ↓
-Bedrock
-   ↓
-Model
-   ↓
-Intent
-```
-
-Worker:
-
-```text
-Sales Worker
-   ↓
-Bedrock
-   ↓
-Model
-   ↓
-Analyze sales data
-```
-
-CWD should not hard-code its architecture around one model.
-
-Instead:
-
-```text
-CWD Model Configuration
-       |
-       +--- Planning model
-       +--- Extraction model
-       +--- Reasoning model
-       +--- Synthesis model
-       +--- Embedding model
-```
-
----
-
-# 16. Bedrock Guardrails
-
-## Why?
-
-The LLM should not be allowed to freely produce or process everything.
-
-Guardrails can be applied around model interactions.
-
-```text
-User
- ↓
-CWD
- ↓
-Guardrail
- ↓
-Bedrock
- ↓
-Guardrail
- ↓
-Response
-```
-
-Important:
-
-**Guardrails do not replace authorization.**
-
-For example:
-
-```text
-Can user access salary data?
-```
-
-must be answered by deterministic authorization.
-
-Not by an LLM.
-
----
-
-# 17. Bedrock AgentCore
-
-This is particularly relevant to your CWD architecture.
-
-AgentCore provides managed infrastructure capabilities for production AI agents.
-
-Think:
-
-```text
-CWD
- |
- +-- Coordinator
- +-- Delegators
- +-- Workers
- |
- +-- AgentCore
-       |
-       +-- Runtime
-       +-- Gateway
-       +-- Identity
-       +-- Memory
-       +-- Observability
-```
-
-## AgentCore Runtime
-
-Can host/run agent applications.
-
-Use it where an agent benefits from managed agent runtime capabilities.
-
-## AgentCore Gateway
-
-Important for tools and MCP.
-
-```text
-Worker
- ↓
-AgentCore Gateway
- ↓
-MCP Tool
- ↓
-Enterprise System
-```
-
-## AgentCore Memory
-
-For agent memory use cases.
-
-```text
-Conversation
- ↓
-Worker
- ↓
-AgentCore Memory
-```
-
-## AgentCore Identity
-
-Helps establish governed identity for agent/tool interactions.
-
----
-
-# 18. Important: AgentCore vs CWD
-
-Don't confuse these.
-
-### CWD
-
-Owns:
-
-```text
-Enterprise orchestration
-Business workflow
-Coordinator
-Delegators
-Worker selection
-Governance
-Policies
-Cross-agent execution
-```
-
-### AgentCore
-
-Provides AWS-managed capabilities that CWD can use for:
-
-```text
-Agent runtime
-Gateway
-Identity
-Memory
-Observability
-```
-
-So:
-
-```text
-              CWD
-               |
-       +-------+-------+
-       |               |
- Coordinator       Delegators
-       |               |
-       +-------+-------+
-               |
-            Workers
-               |
-          AgentCore
-               |
-          AWS Services
-```
-
----
-
-# 19. LangGraph
-
-LangGraph is **not an AWS service**.
-
-It is your application orchestration framework.
-
-It runs inside:
-
-```text
-ECS/Fargate
-```
-
-or potentially:
-
-```text
-AgentCore Runtime
-```
-
-depending on the deployment pattern.
-
-## Why?
-
-CWD needs stateful workflow orchestration.
-
-Example:
-
-```text
-START
- ↓
-Validate
- ↓
-Classify
- ↓
-Plan
- ↓
-Delegator
- ↓
-Worker A
- ↓
-Worker B
- ↓
-Validate
- ↓
-Aggregate
- ↓
-END
-```
-
-LangGraph manages this graph and state.
-
----
-
-# 20. Coordinator
-
-The Coordinator is your CWD component, not an AWS service.
-
-It performs:
+For your CWD production system, I would use this pattern:
 
 ```text
 Request
- ↓
-Intent
- ↓
-Plan
- ↓
-Delegator selection
- ↓
-Task execution
- ↓
-Result validation
- ↓
-Aggregation
- ↓
-Final response
-```
-
-Recommended AWS implementation:
-
-```text
-ECS/Fargate
- +
-Python
- +
-LangGraph
- +
-Bedrock
- +
-DynamoDB
- +
-Redis
-```
-
----
-
-# 21. Delegators
-
-Again, these are CWD components.
-
-Example:
-
-```text
+   │
+   ▼
 Coordinator
-    |
-    +-- Sales Delegator
-    |      |
-    |      +-- CRM Worker
-    |      +-- Lead Worker
-    |      +-- Pipeline Worker
-    |
-    +-- Finance Delegator
-           |
-           +-- Invoice Worker
-           +-- Revenue Worker
-           +-- Forecast Worker
-```
-
-Deploy independently so each domain can scale separately.
-
----
-
-# 22. Worker Agents
-
-Workers execute specialized tasks.
-
-Example:
-
-```text
-CRM Worker
- ↓
-MCP
- ↓
-Salesforce
-```
-
-or:
-
-```text
-Finance Worker
- ↓
-RAG
- ↓
-Financial policy
- ↓
-Bedrock
-```
-
-or:
-
-```text
-Forecast Worker
- ↓
-Snowflake
- ↓
-Data
- ↓
-Bedrock
-```
-
----
-
-# 23. MCP + AgentCore Gateway
-
-This is your enterprise integration layer.
-
-Instead of:
-
-```text
-Worker A → Salesforce REST
-Worker B → Salesforce REST
-Worker C → Salesforce REST
-Worker D → Salesforce REST
-```
-
-use:
-
-```text
-                   MCP Gateway
-                       |
-          +------------+------------+
-          |            |            |
-       CRM MCP     Finance MCP   HR MCP
-          |            |            |
-      Salesforce    Database     HR System
-```
-
-The Worker asks:
-
-```text
-salesforce.get_customer()
-```
-
-rather than owning every authentication and API implementation itself.
-
----
-
-# 24. Why MCP?
-
-MCP standardizes access to:
-
-* Tools
-* Resources
-* Context
-* External systems
-
-It reduces point-to-point integration.
-
-CWD can therefore have:
-
-```text
+   │
+   ▼
+Delegator
+   │
+   ▼
 Worker
- ↓
-MCP
- ↓
-Enterprise Tool
+   │
+   ├──── transient failure ────► Retry
+   │                              │
+   │                              ▼
+   │                         Exponential
+   │                         Backoff + Jitter
+   │
+   ├──── repeated failure ──────► Circuit Breaker
+   │
+   ├──── message failure ────────► DLQ
+   │
+   ├──── Worker unavailable ─────► Alternate Worker
+   │
+   ├──── tool unavailable ───────► Fallback Tool
+   │
+   └──── partial execution ──────► Compensation
+                                      │
+                                      ▼
+                                  Recovery
 ```
 
-instead of hundreds of custom integrations.
-
----
-
-# 25. A2A
-
-A2A is for **agent-to-agent communication**.
-
-Example:
+And persist:
 
 ```text
-Coordinator
-    |
-    | Task
-    v
-Sales Delegator
-    |
-    | Task
-    v
-CRM Worker
-    |
-    | Result
-    v
-Sales Delegator
-    |
-    | Result
-    v
-Coordinator
-```
-
-For long-running tasks:
-
-```text
-Agent A
- ↓
-SQS/EventBridge
- ↓
-Agent B
- ↓
-Result
-```
-
-Use A2A for agent-level communication.
-
-Use MCP for tool/system integration.
-
-That distinction is important:
-
-```text
-A2A = Agent ↔ Agent
-
-MCP = Agent ↔ Tool/System
-```
-
----
-
-# 26. Amazon S3
-
-S3 becomes the CWD **object/data lake layer**.
-
-Use it for:
-
-* Documents
-* PDFs
-* Reports
-* Attachments
-* Generated artifacts
-* Raw data
-* Processed data
-* Evaluation datasets
-* Audit artifacts
-
-Example:
-
-```text
-s3://cwd-prod/
-       |
-       +-- raw/
-       +-- processed/
-       +-- knowledge/
-       +-- artifacts/
-       +-- evaluation/
-```
-
----
-
-# 27. Bedrock Knowledge Bases
-
-For managed RAG.
-
-Flow:
-
-```text
-Enterprise Documents
-        ↓
-       S3
-        ↓
-Knowledge Base
-        ↓
-Chunking
-        ↓
-Embeddings
-        ↓
-Vector Store
-```
-
-Then:
-
-```text
-User
- ↓
-Worker
- ↓
-Knowledge Base
- ↓
-Relevant documents
- ↓
-Context
- ↓
-Bedrock
- ↓
-Answer
-```
-
----
-
-# 28. Vector Store
-
-You have several choices.
-
-## S3 Vectors
-
-Good for large-scale, cost-conscious vector storage.
-
-## OpenSearch Serverless
-
-Good when you need:
-
-```text
-Vector search
-+
-Keyword search
-+
-Hybrid search
-+
-Metadata filtering
-```
-
-## Aurora PostgreSQL + pgvector
-
-Good when vector data is closely tied to relational business data.
-
-So don't say:
-
-> "CWD must use OpenSearch."
-
-Instead:
-
-```text
-RAG requirement
-       |
-       +--- S3 Vectors
-       |
-       +--- OpenSearch
-       |
-       +--- Aurora pgvector
-```
-
-Choose based on workload.
-
----
-
-# 29. DynamoDB
-
-This is one of the most important CWD data services.
-
-Use DynamoDB for:
-
-```text
-Sessions
-Tasks
-Workflow metadata
-Checkpoints
-Agent registry
-Prompt registry
-Idempotency
-Execution metadata
-```
-
-Example:
-
-```text
-cwd-tasks
-
-task_id
-session_id
-workflow_id
-agent_id
-status
-attempt
-checkpoint
-created_at
-updated_at
-```
-
----
-
-# 30. Why DynamoDB instead of only Redis?
-
-Because:
-
-```text
-Redis = fast temporary state
-
-DynamoDB = durable application state
-```
-
-For example:
-
-```text
-Coordinator
-   |
-   +---- Redis
-   |       temporary cache
-   |
-   +---- DynamoDB
-           durable task state
-```
-
-If Redis disappears, CWD should still be able to recover.
-
----
-
-# 31. ElastiCache Redis
-
-Redis is your fast state/cache layer.
-
-Use it for:
-
-* Cache
-* Session acceleration
-* Distributed locks
-* Rate limiting
-* Short-lived coordination
-* Frequently accessed metadata
-
-Example:
-
-```text
-Coordinator
-    |
-    +---- Redis → cache
-    |
-    +---- DynamoDB → durable state
-```
-
-Don't use Redis as the only source of truth.
-
----
-
-# 32. Aurora PostgreSQL
-
-Use Aurora when CWD needs relational database capabilities.
-
-Examples:
-
-```text
-Users
-Organizations
-Business metadata
-Configuration
-Transactional data
-Complex SQL queries
-Relational reporting
-```
-
-You may also use pgvector where it fits the workload.
-
-So CWD can have:
-
-```text
-DynamoDB
-    ↓
-High-scale workflow/task state
-
-Aurora
-    ↓
-Relational application data
-
-Redis
-    ↓
-Fast temporary data
-
-S3
-    ↓
-Documents/artifacts
-```
-
----
-
-# 33. SQS
-
-SQS is the backbone for reliable asynchronous execution.
-
-Example:
-
-```text
-Coordinator
-     |
-     v
-SQS
-     |
-     v
-Worker
-```
-
-Why?
-
-Because the Coordinator doesn't always need to wait synchronously.
-
-It provides:
-
-* Durable queues
-* Retry
-* Decoupling
-* Backpressure
-* Worker scaling
-
----
-
-# 34. SQS DLQ
-
-Every important queue should have a Dead Letter Queue.
-
-```text
-Main Queue
-    |
- Worker
-    |
- failure
-    |
- retry
-    |
- retry
-    |
- retry
-    |
-    v
-   DLQ
-```
-
-DLQ allows operations teams to investigate failures and perform controlled replay.
-
----
-
-# 35. SNS
-
-SNS is useful for fan-out.
-
-Example:
-
-```text
-Workflow Completed
-        |
-        v
-       SNS
-     /  |  \
-    /   |   \
-Email  Audit Analytics
-```
-
-Use SNS when one event needs to notify multiple subscribers.
-
----
-
-# 36. EventBridge
-
-EventBridge is your event bus.
-
-Example:
-
-```text
-CWD Coordinator
-       |
-       v
-EventBridge
-       |
-       +---- Audit
-       +---- Analytics
-       +---- Notification
-       +---- Evaluation
-       +---- Monitoring
-```
-
-Events:
-
-```text
-agent.task.created
-agent.task.completed
-agent.task.failed
-workflow.completed
-workflow.failed
-document.ingested
-agent.registered
-prompt.approved
-```
-
----
-
-# 37. Step Functions
-
-Step Functions is different from LangGraph.
-
-### LangGraph
-
-AI/agent execution graph:
-
-```text
-Classify
- ↓
-Plan
- ↓
-Agent
- ↓
-Tool
- ↓
-Validate
-```
-
-### Step Functions
-
-Durable enterprise workflow:
-
-```text
-Start
- ↓
-Ingest 100,000 documents
- ↓
-Validate
- ↓
-Transform
- ↓
-Index
- ↓
-Notify
-```
-
-So:
-
-```text
-LangGraph
-= AI reasoning/workflow
-
-Step Functions
-= durable infrastructure/business workflow
-```
-
-They can coexist.
-
----
-
-# 38. Secrets Manager
-
-Never put:
-
-```text
-API keys
-passwords
-database credentials
-OAuth secrets
-```
-
-inside code.
-
-Use:
-
-```text
-Worker
- ↓
-IAM Role
- ↓
-Secrets Manager
- ↓
-Secret
-```
-
----
-
-# 39. KMS
-
-KMS manages encryption keys.
-
-Use it for encryption of:
-
-```text
-S3
-DynamoDB
-Aurora
-SQS
-SNS
-Secrets
-Logs
-Other supported services
-```
-
-Think:
-
-```text
-Data
- ↓
-KMS encryption
- ↓
-Stored securely
-```
-
----
-
-# 40. CloudTrail
-
-CloudTrail answers:
-
-> Who did what in AWS?
-
-Example:
-
-```text
-User
- ↓
-AWS API
- ↓
-CloudTrail
-```
-
-It records AWS API activity for auditing and investigation.
-
----
-
-# 41. GuardDuty
-
-GuardDuty is threat detection.
-
-It looks for suspicious AWS activity such as:
-
-```text
-Credential misuse
-Suspicious API activity
-Compromised resources
-Network threats
-```
-
-It is part of the AWS security layer.
-
----
-
-# 42. Security Hub
-
-Security Hub aggregates security findings.
-
-```text
-GuardDuty
-   |
-Inspector
-   |
-Config
-   |
-Other security sources
-   |
-   v
-Security Hub
-```
-
-Security teams get centralized visibility.
-
----
-
-# 43. AWS Config
-
-Config checks AWS resource configuration/compliance.
-
-For example:
-
-```text
-Is S3 public?
-Is encryption enabled?
-Are resources configured according to policy?
-```
-
-This is infrastructure governance.
-
----
-
-# 44. Macie
-
-Macie is useful when CWD stores sensitive enterprise information in S3.
-
-It can help identify sensitive data in S3.
-
-Example:
-
-```text
-CWD Documents
-      ↓
-     S3
-      ↓
-    Macie
-      ↓
-Sensitive data findings
-```
-
----
-
-# 45. CloudWatch
-
-CloudWatch is your primary operations monitoring layer.
-
-Monitor:
-
-```text
-API
-Coordinator
-Delegators
-Workers
-ECS
-SQS
-DynamoDB
-Aurora
-Redis
-Bedrock-related application metrics
-```
-
-Important metrics:
-
-```text
-Request count
-Error rate
-P95/P99 latency
-Queue depth
-Task duration
-Worker failures
-Retry count
-DLQ count
-Token usage
-LLM latency
-Tool failures
-```
-
----
-
-# 46. OpenTelemetry / X-Ray
-
-CWD is distributed.
-
-One request may touch:
-
-```text
-API Gateway
- ↓
-Coordinator
- ↓
-Sales Delegator
- ↓
-CRM Worker
- ↓
-MCP
- ↓
-Salesforce
- ↓
-Bedrock
-```
-
-You need one distributed trace.
-
-Example:
-
-```text
-trace_id = ABC123
-```
-
-Then:
-
-```text
-Coordinator
-  └── Delegator
-       └── Worker
-            ├── MCP
-            └── Bedrock
-```
-
-This is critical for production troubleshooting.
-
----
-
-# 47. CloudWatch + AI observability
-
-Don't only monitor infrastructure.
-
-Monitor AI.
-
-For each request:
-
-```text
-Agent
-Model
-Prompt version
-Tool
-Tokens
-Latency
-Retrieval
-Result
-Cost
-Quality
-```
-
-Example:
-
-```text
-Sales Worker
- ├── Model latency: 1.4 sec
- ├── Input tokens: 2,300
- ├── Output tokens: 600
- ├── Tool calls: 3
- ├── Retrieval: 420 ms
- ├── Total latency: 4.8 sec
- └── Success: true
-```
-
----
-
-# 48. Agent Registry
-
-This is a CWD application service.
-
-Use DynamoDB.
-
-Example:
-
-```json
-{
-  "agent_id": "sales-worker",
-  "version": "3.0",
-  "domain": "sales",
-  "capabilities": [
-    "lead_scoring",
-    "crm_lookup"
-  ],
-  "status": "READY",
-  "health": "HEALTHY"
-}
-```
-
-Coordinator can discover:
-
-```text
-Who can perform this task?
-```
-
-Then:
-
-```text
-Agent Registry
- ↓
-Capability matching
- ↓
-Health
- ↓
-Permission
- ↓
-Workload
- ↓
-Select Worker
-```
-
----
-
-# 49. Prompt Registry
-
-Also CWD application functionality.
-
-Store in DynamoDB/S3 depending on the implementation.
-
-```text
-Prompt
- ↓
-Version
- ↓
-Test
- ↓
-Evaluation
- ↓
-Approval
- ↓
-Production
-```
-
-Example:
-
-```text
-sales-classifier v1
-sales-classifier v2
-sales-classifier v3
-```
-
-If v3 causes degradation:
-
-```text
-Rollback → v2
-```
-
----
-
-# 50. CI/CD
-
-Recommended:
-
-```text
-GitHub/GitLab/CodeCommit
-       |
-       v
-CodeBuild
-       |
-       v
-Tests
-       |
-       v
-Security scan
-       |
-       v
-Docker
-       |
-       v
-ECR
-       |
-       v
-ECS
-```
-
-Production:
-
-```text
-Dev
- ↓
-Test
- ↓
-Stage
- ↓
-AI Evaluation
- ↓
-Approval
- ↓
-Production
-```
-
----
-
-# 51. Infrastructure as Code
-
-Use:
-
-**AWS CDK or Terraform**
-
-Don't manually create 200 AWS resources.
-
-Instead:
-
-```text
-Terraform/CDK
-      |
-      +-- VPC
-      +-- ECS
-      +-- DynamoDB
-      +-- SQS
-      +-- IAM
-      +-- KMS
-      +-- Bedrock configuration
-      +-- Monitoring
-```
-
-Then:
-
-```text
-git commit
- ↓
-pipeline
- ↓
-IaC validation
- ↓
-deploy
-```
-
----
-
-# 52. Complete CWD Runtime Flow
-
-Let's take a real request:
-
-> "Analyze our sales pipeline and identify high-risk opportunities."
-
-### Step 1 — User
-
-```text
-User
- ↓
-https://cwd.company.com
-```
-
-### Step 2 — Route 53
-
-```text
-Route 53
- ↓
-CloudFront
-```
-
-### Step 3 — CloudFront/WAF
-
-```text
-CloudFront
- ↓
-WAF
- ↓
-Allowed
-```
-
-### Step 4 — API Gateway
-
-```text
-API Gateway
- ↓
-POST /v1/chat
-```
-
-### Step 5 — Authentication
-
-```text
-Enterprise Identity
- ↓
-Token
- ↓
-CWD Gateway
-```
-
-### Step 6 — Gateway
-
-CWD Gateway validates:
-
-```text
-Identity
-Role
-Entitlement
-Input
+Session ID
+Task ID
+Run ID
 Correlation ID
-```
-
-### Step 7 — Coordinator
-
-```text
-Coordinator
- ↓
-Intent = Sales Analysis
-```
-
-### Step 8 — LangGraph
-
-```text
-LangGraph
- ↓
-Create plan
-```
-
-Plan:
-
-```text
-1. Retrieve pipeline
-2. Analyze opportunities
-3. Calculate risk
-4. Generate recommendation
-```
-
-### Step 9 — Sales Delegator
-
-```text
-Sales Delegator
-```
-
-breaks it into:
-
-```text
-CRM Worker
-Forecast Worker
-Risk Worker
-```
-
-### Step 10 — CRM Worker
-
-```text
-CRM Worker
- ↓
-MCP
- ↓
-AgentCore Gateway
- ↓
-CRM
-```
-
-### Step 11 — Forecast Worker
-
-```text
-Forecast Worker
- ↓
-Data API / Snowflake
- ↓
-MCP
-```
-
-### Step 12 — Risk Worker
-
-```text
-Risk Worker
- ↓
-RAG
- ↓
-Sales policies
- ↓
-Bedrock
-```
-
-### Step 13 — Bedrock
-
-Workers use Bedrock models.
-
-```text
-Worker
- ↓
-Bedrock
- ↓
-LLM
-```
-
-### Step 14 — Validation
-
-```text
-Worker result
- ↓
-Schema validation
- ↓
-Authorization validation
- ↓
-Data quality
- ↓
-Grounding
-```
-
-### Step 15 — Delegator
-
-```text
-CRM result
-+
-Forecast result
-+
-Risk result
-```
-
-### Step 16 — Coordinator
-
-Coordinator aggregates results.
-
-```text
-Delegator results
- ↓
-Coordinator
- ↓
-Final synthesis
-```
-
-### Step 17 — Guardrail
-
-```text
-Final response
- ↓
-Guardrail
- ↓
-Policy validation
-```
-
-### Step 18 — Response
-
-```text
-Coordinator
- ↓
-CWD Gateway
- ↓
-API Gateway
- ↓
-CloudFront
- ↓
-User
-```
-
-At the same time:
-
-```text
-CloudWatch
-CloudTrail
-OpenTelemetry
-```
-
-capture the execution telemetry.
-
----
-
-# 53. What happens when a Worker fails?
-
-Suppose CRM Worker fails.
-
-```text
-CRM Worker
- ↓
-Timeout
- ↓
-Retry
- ↓
-Retry
- ↓
-Circuit breaker
-```
-
-Then:
-
-```text
-Alternate Worker
-       OR
-Cached data
-       OR
-Partial result
-```
-
-If still unavailable:
-
-```text
-Coordinator
- ↓
-Controlled partial response
-```
-
-Example:
-
-> Pipeline analysis completed using available forecast data. Live CRM enrichment was unavailable, so customer-level changes could not be verified.
-
-**Never invent CRM information.**
-
----
-
-# 54. Complete Failure Architecture
-
-```text
-                     Worker
-                       |
-                     Error
-                       |
-                  Is transient?
-                  /          \
-                Yes           No
-                 |             |
-               Retry        Fail fast
-                 |
-          Retry successful?
-             /       \
-           Yes        No
-            |          |
-         Continue   Circuit Breaker
-                         |
-                  Alternate Worker
-                         |
-                    Available?
-                    /       \
-                  Yes        No
-                   |          |
-                Continue   Partial Result
-                              |
-                         Controlled Error
-```
-
----
-
-# 55. Complete CWD State Architecture
-
-You should not put all state in one database.
-
-Use:
-
-```text
-                    CWD STATE
-                       |
-       +---------------+----------------+
-       |               |                |
-       v               v                v
-   DynamoDB          Redis           Aurora
-       |               |                |
- Durable state      Cache/locks      Relational
-       |
-       |
-       v
-     S3
-       |
- Documents/artifacts
-```
-
-And:
-
-```text
-LangGraph
-   |
-   v
+Agent ID
+Agent Version
+Workflow State
+Step Status
+Tool Calls
+LLM Calls
+Results
+Errors
 Checkpoint
-   |
-   v
-DynamoDB
+Retry Count
+Timestamps
 ```
+
+That state is what allows CWD to **resume rather than restart** after a failure.
 
 ---
 
-# 56. Complete CWD Messaging Architecture
+# Security architecture
+
+For an enterprise CWD system, security should be **defense in depth**:
 
 ```text
-                    Coordinator
-                         |
-              +----------+----------+
-              |                     |
-              v                     v
-             SQS               EventBridge
-              |                     |
-              v              +------+------+
-           Workers            |      |     |
-                              v      v     v
-                           Audit  Eval  Notification
-              |
-              v
-             DLQ
-```
-
----
-
-# 57. Complete CWD Security Architecture
-
-This is how I would explain security in an architecture interview:
-
-```text
-                    Internet
-                       |
-                    Shield
-                       |
-                      WAF
-                       |
-                  CloudFront
-                       |
-                  API Gateway
-                       |
-                  Authentication
-                       |
-                Authorization
-                       |
-                CWD Gateway
-                       |
-              Application Policies
-                       |
-                  Coordinator
-                       |
-                Agent Policies
-                       |
-                    Worker
-                       |
-                 Tool Policy
-                       |
-                     MCP
-                       |
-               Enterprise System
-```
-
-And simultaneously:
-
-```text
-IAM
-KMS
-Secrets Manager
-CloudTrail
-GuardDuty
-Security Hub
-Config
-Macie
-```
-
-provide AWS security/governance.
-
----
-
-# 58. Complete CWD data security
-
-For RAG:
-
-```text
-User
- ↓
-Identity
- ↓
-Entitlements
- ↓
-Retriever
- ↓
-ACL/metadata filtering
- ↓
-Authorized documents
- ↓
-Context
- ↓
-LLM
-```
-
-Not:
-
-```text
-LLM
- ↓
-Search everything
- ↓
-Maybe hide unauthorized information
-```
-
-Authorization must happen before sensitive content enters the model context.
-
----
-
-# 59. Complete production AWS architecture by service
-
-Here is the simplest mental model.
-
-### User-facing
-
-```text
-Route 53
-CloudFront
+Internet
+   │
+   ▼
+CDN
+   │
+   ▼
 WAF
-Shield
-ACM
+   │
+   ▼
 API Gateway
+   │
+   ▼
+Identity / Authentication
+   │
+   ▼
+Authorization / RBAC
+   │
+   ▼
+Gateway
+   │
+   ▼
+Coordinator
+   │
+   ▼
+Delegator
+   │
+   ▼
+Worker
+   │
+   ├── Tool authorization
+   ├── Data authorization
+   ├── MCP authorization
+   ├── RAG ACL filtering
+   └── LLM Guardrails
+   │
+   ▼
+Enterprise Data
 ```
 
-### CWD application
+### Critical CWD security controls
 
-```text
-ECS/Fargate
-    |
-    +-- Gateway
-    +-- Coordinator
-    +-- Delegators
-    +-- Workers
-    +-- Ingestion
-```
-
-### AI
-
-```text
-Bedrock
-Guardrails
-AgentCore
-```
-
-### Agent integration
-
-```text
-AgentCore Gateway
-MCP
-A2A
-EventBridge
-```
-
-### Data
-
-```text
-S3
-DynamoDB
-Aurora
-Redis
-OpenSearch / S3 Vectors
-Knowledge Bases
-```
-
-### Async
-
-```text
-SQS
-SNS
-EventBridge
-Step Functions
-```
-
-### Security
-
-```text
-IAM
-KMS
-Secrets Manager
-CloudTrail
-GuardDuty
-Security Hub
-Config
-Macie
-```
-
-### Observability
-
-```text
-CloudWatch
-OpenTelemetry
-X-Ray
-```
-
-### Deployment
-
-```text
-ECR
-CodeBuild
-CodePipeline
-CDK/Terraform
-ECS deployment
-AgentCore deployment
-```
+* **Zero Trust**
+* Least-privilege IAM/RBAC
+* Managed identities/IAM roles
+* Private networking
+* Encryption at rest
+* TLS in transit
+* Secrets never stored in source code
+* API throttling
+* WAF
+* DLP/data classification
+* Prompt-injection defenses
+* Tool authorization
+* MCP authorization
+* RAG ACL enforcement
+* LLM input/output guardrails
+* Audit logging
+* Security monitoring
+* Container vulnerability scanning
+* Dependency scanning
+* Network segmentation
 
 ---
 
-# 60. The most important architecture distinction
+# Observability architecture
 
-For your CWD, I would use this rule:
+Every CWD request should carry the same identifiers:
 
 ```text
-                    CWD
-                     |
-        +------------+-------------+
-        |                          |
-   CONTROL PLANE              EXECUTION
-        |                          |
-   Coordinator                Workers
-   Delegators                    |
-   Registry                      |
-   Policies                      |
-   LangGraph                     |
-        |                         |
-        +-------------+-----------+
-                      |
-                   AWS AI
-                      |
-          +-----------+-----------+
-          |                       |
-       Bedrock                AgentCore
-          |                       |
-       Models              Runtime/Gateway
-                                  |
-                                 MCP
-                                  |
-                           Enterprise Systems
+Correlation ID
+      │
+      ├── Gateway
+      │
+      ├── Coordinator
+      │
+      ├── Delegator
+      │
+      ├── Worker
+      │
+      ├── MCP Tool
+      │
+      ├── Database
+      │
+      ├── RAG
+      │
+      ├── LLM
+      │
+      └── Final Response
 ```
 
-This gives you a clean separation:
+This allows an engineer to answer:
 
-**CWD decides what should happen.**
+> **Why did this particular CWD request take 18 seconds?**
 
-**Workers execute the work.**
+For example:
 
-**Bedrock provides intelligence.**
+```text
+Total latency = 18 sec
 
-**AgentCore provides managed agent capabilities.**
+Gateway       = 100 ms
+Coordinator   = 1.2 sec
+Delegator     = 400 ms
+RAG           = 800 ms
+Worker        = 3 sec
+LLM           = 11 sec
+Response      = 500 ms
+```
 
-**MCP provides governed tool integration.**
-
-**AWS infrastructure provides security, state, messaging, networking, scaling, and observability.**
+That's much more useful than simply seeing **"API latency = 18 sec."**
 
 ---
 
-# 61. My recommended CWD AWS stack
+# My recommended production stack
 
-If we were actually building the production migration, I would start with this exact baseline:
+If I were architecting **CWD on AWS today**, my core stack would be:
 
-```text
-AWS Organizations
-        |
-        +-- Security Account
-        +-- Log Archive
-        +-- Network
-        +-- CWD Dev
-        +-- CWD Test
-        +-- CWD Stage
-        +-- CWD Prod
+| CWD Requirement           | Recommended AWS                                       |
+| ------------------------- | ----------------------------------------------------- |
+| Global entry              | **CloudFront**                                        |
+| Protection                | **WAF + Shield where appropriate**                    |
+| API                       | **API Gateway**                                       |
+| Identity                  | **Cognito + IAM**                                     |
+| Coordinator               | **ECS/Fargate**                                       |
+| Delegators                | **ECS/Fargate**                                       |
+| Heavy Workers             | **ECS/Fargate / EKS**                                 |
+| Lightweight Workers       | **Lambda**                                            |
+| LLM                       | **Amazon Bedrock**                                    |
+| Agent capability          | **Bedrock Agents where useful**                       |
+| Stateful AI workflow      | **LangGraph**                                         |
+| Durable workflow          | **Step Functions**                                    |
+| A2A async                 | **SQS + EventBridge**                                 |
+| High-throughput streaming | **MSK/Kinesis**                                       |
+| RAG                       | **Bedrock Knowledge Bases + OpenSearch**              |
+| Documents                 | **S3**                                                |
+| Session/cache             | **ElastiCache Redis**                                 |
+| Durable state             | **DynamoDB**                                          |
+| Relational DB             | **Aurora PostgreSQL**                                 |
+| Secrets                   | **Secrets Manager**                                   |
+| Encryption                | **KMS**                                               |
+| Service identity          | **IAM Roles**                                         |
+| Data governance           | **Lake Formation + Glue**                             |
+| Sensitive data discovery  | **Macie**                                             |
+| AI safety                 | **Bedrock Guardrails**                                |
+| Security posture          | **Security Hub + GuardDuty**                          |
+| Audit                     | **CloudTrail**                                        |
+| Monitoring                | **CloudWatch**                                        |
+| Distributed tracing       | **X-Ray + OpenTelemetry**                             |
+| Containers                | **ECR**                                               |
+| CI/CD                     | **CodePipeline + CodeBuild**                          |
+| Infrastructure            | **CDK / CloudFormation / Terraform**                  |
+| DR                        | **Multi-AZ + multi-region strategy based on RTO/RPO** |
 
-CWD PROD
- |
- +-- Route 53
- +-- ACM
- +-- CloudFront
- +-- WAF
- +-- Shield
- +-- API Gateway
- |
- +-- ECS/Fargate
- |    +-- Gateway
- |    +-- Coordinator
- |    +-- Delegators
- |    +-- Workers
- |
- +-- ECR
- |
- +-- Bedrock
- +-- Bedrock Guardrails
- +-- AgentCore
- |    +-- Runtime
- |    +-- Gateway
- |    +-- Identity
- |    +-- Memory
- |
- +-- S3
- +-- Bedrock Knowledge Bases
- +-- OpenSearch/S3 Vectors
- |
- +-- DynamoDB
- +-- Aurora PostgreSQL
- +-- ElastiCache Redis
- |
- +-- SQS
- +-- SNS
- +-- EventBridge
- +-- Step Functions
- |
- +-- IAM
- +-- KMS
- +-- Secrets Manager
- |
- +-- CloudTrail
- +-- CloudWatch
- +-- OpenTelemetry/X-Ray
- +-- GuardDuty
- +-- Security Hub
- +-- Config
- +-- Macie
- |
- +-- CodeBuild
- +-- CodePipeline
- +-- CDK/Terraform
-```
+### The key architectural principle
 
-**That is the AWS target architecture I would recommend for production CWD.**
+**Don't make AWS services the architecture. Make CWD the architecture and use AWS services to implement each responsibility.**
 
-The next logical step is to go one level deeper and design the **actual AWS deployment architecture**: VPC/subnets/security groups, ECS services, ECR repositories, IAM roles, DynamoDB tables, SQS queues/DLQs, EventBridge buses, Bedrock/AgentCore integration, MCP servers, RAG, and CI/CD — including the **end-to-end Python project code and AWS CDK/Terraform infrastructure**.
+So the logical architecture remains:
+
+**Gateway → Coordinator → Delegator → Worker → Tools/Data/LLM → Validation → Aggregation → Response**
+
+while AWS provides the production platform underneath it:
+
+**API Gateway → ECS/EKS/Lambda → Bedrock → S3/OpenSearch → DynamoDB/Redis/Aurora → SQS/EventBridge → IAM/KMS/Secrets Manager → CloudWatch/X-Ray/CloudTrail.**
+
+That gives you a **cloud-native, scalable, reliable, secure, observable and maintainable production CWD**, while keeping the architecture portable enough that the same logical CWD design can run on Azure.
