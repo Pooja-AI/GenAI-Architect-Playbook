@@ -3,6 +3,16 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+
+const cwdImages = import.meta.glob(
+  "../../assets/CWD/images/*.{png,jpg,jpeg,webp,svg}",
+  {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }
+);
+
 const DIFFICULTIES = {
   Beginner: "#0F6E56",
   Intermediate: "#185FA5",
@@ -14,7 +24,6 @@ const DIFFICULTY_BG = {
   Intermediate: "#E6F1FB",
   Advanced: "#FAECE7",
 };
-
 function ContentViewer({ content }) {
   return (
     <div
@@ -28,7 +37,38 @@ function ContentViewer({ content }) {
         padding: 24,
       }}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          img: ({ src, alt, ...props }) => {
+            let imageSrc = src;
+
+            if (src?.startsWith("../images/")) {
+              const imageName = src.split("/").pop();
+
+              const imagePath = `../../assets/CWD/images/${imageName}`;
+
+              if (cwdImages[imagePath]) {
+                imageSrc = cwdImages[imagePath];
+              }
+            }
+
+            return (
+              <img
+                src={imageSrc}
+                alt={alt}
+                {...props}
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  display: "block",
+                  margin: "24px auto",
+                }}
+              />
+            );
+          },
+        }}
+      >
         {content || "No concept available for this recipe."}
       </ReactMarkdown>
     </div>
