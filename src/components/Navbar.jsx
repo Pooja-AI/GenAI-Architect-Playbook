@@ -177,6 +177,23 @@ const cwdTopics = [
     },
   ];
 
+
+
+  const CloudTopics = [
+    {
+      name: "Azure",
+      path: "/Azure",
+    },
+    {
+      name: "AWS",
+      path: "/AWS",
+    },
+    {
+      name: "GCP",
+      path: "/GCP",
+    },
+  ];
+
   // =====================================================
   // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
   // =====================================================
@@ -370,6 +387,15 @@ const cwdTopics = [
         <Dropdown
           name="Coding & AI"
           topics={codingTopics}
+        />
+
+        {/* =================================================
+            Cloud AI
+        ================================================= */}
+
+      <Dropdown
+          name="Cloud & AI"
+          topics={CloudTopics}
         />
 
       </div>

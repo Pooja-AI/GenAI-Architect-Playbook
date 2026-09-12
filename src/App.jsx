@@ -60,6 +60,10 @@ import ChallengesSolutions from "./pages/CWD/ChallengesSolutions";
 import CurrentStateAndFutureState from "./pages/CWD/CurrentStateAndFutureState";
 import InterviewPreparation from "./pages/CWD/InterviewPreparation";
 
+import AWS from "./pages/CWD/AWS";
+import GCP from "./pages/CWD/GCP";
+import Azure from "./pages/CWD/Azure";
+
 // =====================================================
 // COMPONENTS
 // =====================================================
@@ -329,6 +333,19 @@ function App() {
 
         <Route 
         path="/ArraysAndLists" element={<ArraysAndLists />}
+
+        />
+
+        <Route 
+        path="/AWS" element={<AWS />}
+
+        />
+        <Route 
+        path="/GCP" element={<GCP />}
+
+        />
+        <Route 
+        path="/Azure" element={<Azure />}
 
         />
 
