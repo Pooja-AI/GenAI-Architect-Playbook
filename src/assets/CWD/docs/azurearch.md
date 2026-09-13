@@ -1,3 +1,491 @@
+### KPI's 
+
+# Azure Agent Orchestration — KPIs for Interviews
+
+For a **Coordinator → Delegator → Worker** enterprise architecture, the best answer is to organize KPIs into **business, orchestration, agent, tool, RAG, performance, cost, and reliability**.
+
+## 1. Top KPIs to remember
+
+If the interviewer asks:
+
+> **"What KPIs do you use to measure your agent orchestration?"**
+
+Give these first:
+
+| KPI                              | What it measures                                 |
+| -------------------------------- | ------------------------------------------------ |
+| **Task Success Rate**            | % of user tasks completed successfully           |
+| **Routing Accuracy**             | Coordinator/Delegator selects the correct agent  |
+| **Task Completion Rate**         | % of tasks reaching successful completion        |
+| **Agent Success Rate**           | % of agent executions completed without failure  |
+| **Tool Success Rate**            | % of tool/API calls successfully executed        |
+| **RAG Groundedness**             | Whether answers are supported by enterprise data |
+| **Answer Accuracy**              | Correctness of final response                    |
+| **End-to-End Latency**           | User request → final answer                      |
+| **P95/P99 Latency**              | Tail latency under production load               |
+| **Token Usage**                  | Tokens consumed per task                         |
+| **Cost per Task**                | AI cost for completing a business task           |
+| **Hallucination Rate**           | Unsupported/incorrect responses                  |
+| **Failure/Error Rate**           | Failed agent/tool/workflow executions            |
+| **Retry Rate**                   | How often agents need retries                    |
+| **Fallback Rate**                | How often backup agents/models are required      |
+| **Human Escalation Rate**        | Tasks requiring human intervention               |
+| **Safety/Policy Violation Rate** | Unsafe or unauthorized behavior                  |
+
+---
+
+# 2. Coordinator KPIs
+
+The **Coordinator** is responsible for understanding the request and selecting the right Delegator/workflow.
+
+### Important KPIs
+
+**1. Intent Classification Accuracy**
+
+```text
+Correctly classified requests
+-----------------------------
+Total requests
+```
+
+Example:
+
+```text
+1,000 requests
+950 correctly classified
+
+= 95% routing accuracy
+```
+
+**2. Delegator Routing Accuracy**
+
+Did the Coordinator select the correct Delegator?
+
+```text
+Sales request → Sales Delegator ✓
+HR request → HR Delegator ✓
+Finance request → Finance Delegator ✓
+```
+
+**3. Planning Accuracy**
+
+Did the Coordinator generate the correct execution plan?
+
+**4. Routing Latency**
+
+How long does Coordinator decision-making take?
+
+**5. Re-routing Rate**
+
+How frequently does the Coordinator need to change the initial route?
+
+---
+
+# 3. Delegator KPIs
+
+Your **Delegator** decomposes the task and selects Workers.
+
+### KPIs
+
+* **Task decomposition accuracy**
+* **Worker selection accuracy**
+* **Delegation success rate**
+* **Delegator latency**
+* **Parallel execution efficiency**
+* **Number of unnecessary worker calls**
+* **Worker failure/retry rate**
+
+Example:
+
+```text
+Sales Delegator
+
+User:
+"Give me sales performance and create a report."
+
+Delegator
+   ↓
+Sales Data Worker
+   ↓
+Report Worker
+   ↓
+Notification Worker
+```
+
+You measure whether the Delegator selected the **right Workers** and avoided unnecessary calls.
+
+---
+
+# 4. Worker KPIs
+
+Workers actually perform the business operations.
+
+### KPIs
+
+**Tool Success Rate**
+
+```text
+Successful tool calls
+---------------------
+Total tool calls
+```
+
+**API Success Rate**
+
+```text
+Successful API calls
+--------------------
+Total API calls
+```
+
+**Worker Task Success**
+
+```text
+Completed worker tasks
+----------------------
+Total worker tasks
+```
+
+Other important metrics:
+
+* Execution latency
+* Error rate
+* Retry rate
+* Timeout rate
+* Tool-call accuracy
+* Data retrieval success
+* Unauthorized-action attempts
+
+---
+
+# 5. Agent-to-Agent KPIs
+
+For your **A2A architecture**:
+
+```text
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+```
+
+Measure:
+
+* A2A message success rate
+* Message latency
+* Agent response time
+* Agent timeout rate
+* Failed agent communication
+* Duplicate messages
+* Retry rate
+* Message throughput
+
+Example:
+
+> "I monitor A2A communication latency and failure rate because orchestration overhead can become significant when multiple agents are involved."
+
+---
+
+# 6. RAG KPIs
+
+For CWD, this is very important because Workers can retrieve enterprise information through **Azure AI Search**.
+
+### Main KPIs
+
+**Retrieval Relevance**
+
+Did we retrieve the right documents?
+
+**Groundedness**
+
+Is the final answer actually supported by retrieved information?
+
+**Context Precision**
+
+Are the retrieved documents relevant?
+
+**Context Recall**
+
+Did we retrieve the important information needed?
+
+**Citation/Source Accuracy**
+
+Did the response correctly reference the supporting enterprise data?
+
+**Retrieval Latency**
+
+How long did Azure AI Search take?
+
+---
+
+# 7. Tool/MCP KPIs
+
+For your MCP-based Workers:
+
+```text
+Worker
+  ↓
+MCP Client
+  ↓
+MCP Server
+  ↓
+Tool
+  ↓
+Enterprise System
+```
+
+Measure:
+
+* Tool selection accuracy
+* Tool parameter accuracy
+* Tool success rate
+* Tool latency
+* Tool timeout rate
+* Tool retry rate
+* Unauthorized tool-call attempts
+* Tool failure rate
+
+### Example
+
+User:
+
+> "Create a ServiceNow ticket."
+
+Agent:
+
+```text
+Select create_ticket ✓
+Correct parameters ✓
+MCP call ✓
+ServiceNow API ✓
+Ticket created ✓
+```
+
+That entire chain should be measurable.
+
+---
+
+# 8. Performance KPIs
+
+For production orchestration:
+
+### Latency
+
+Measure:
+
+```text
+End-to-End Latency
+Coordinator Latency
+Delegator Latency
+Worker Latency
+RAG Latency
+LLM Latency
+Tool/API Latency
+```
+
+Don't only measure total latency.
+
+For example:
+
+```text
+Total = 8 seconds
+
+Coordinator = 0.5 sec
+Delegator = 0.3 sec
+RAG = 1.2 sec
+LLM = 4 sec
+ServiceNow API = 2 sec
+```
+
+Now you know **where the bottleneck is**.
+
+---
+
+# 9. Cost KPIs
+
+For enterprise agentic systems, cost control is critical.
+
+Measure:
+
+* Tokens per task
+* LLM cost per request
+* Cost per successful task
+* Cost per user
+* Tool/API cost
+* RAG cost
+* Average agent turns
+* Average tool calls per task
+
+### Particularly useful KPI
+
+**Cost per successful business task**
+
+Not just:
+
+> "How much did the LLM cost?"
+
+Instead:
+
+> "How much did it cost to successfully complete one business operation?"
+
+---
+
+# 10. Reliability KPIs
+
+Measure:
+
+```text
+Task Failure Rate
+Agent Failure Rate
+Tool Failure Rate
+Timeout Rate
+Retry Rate
+Fallback Rate
+A2A Failure Rate
+Recovery Rate
+```
+
+### Example
+
+```text
+10,000 tasks
+
+9,700 successful
+300 failed
+
+Task Success Rate = 97%
+```
+
+---
+
+# 11. Business KPIs
+
+This is what makes your answer **Solution Architect level**.
+
+Don't stop at technical metrics.
+
+For CWD:
+
+| Business KPI                 | Example        |
+| ---------------------------- | -------------- |
+| Task automation rate         | 80%            |
+| Human intervention reduction | 60%            |
+| MTTR reduction               | 40%            |
+| Resolution time              | 20 min → 5 min |
+| Ticket automation            | 70%            |
+| User satisfaction            | >90%           |
+| First-contact resolution     | >85%           |
+| Business task success        | >95%           |
+
+For your IFA use case, for example:
+
+```text
+Before:
+Engineer investigates failure manually
+        ↓
+Several hours
+
+After:
+CWD
+ ↓
+RAG
+ ↓
+Agent reasoning
+ ↓
+RCA
+ ↓
+ServiceNow ticket
+
+Target:
+Investigation time ↓
+MTTR ↓
+Manual effort ↓
+```
+
+---
+
+# 12. Security KPIs
+
+Enterprise agent orchestration also needs security measurements.
+
+Track:
+
+* Unauthorized tool-call attempts
+* Authorization failure rate
+* Prompt injection detection rate
+* PII detection rate
+* DLP violations
+* Policy violations
+* Privileged-action approval rate
+* Audit-log coverage
+
+Important interview statement:
+
+> **"I don't treat the LLM as the authorization layer. Identity and authorization are enforced outside the model using Entra ID, RBAC, managed identities and backend authorization."**
+
+---
+
+# 13. Your CWD KPI Dashboard
+
+I would present your dashboard like this:
+
+```text
+             CWD AGENTIC PLATFORM
+                     │
+ ┌───────────────────┼────────────────────┐
+ │                   │                    │
+Business          Orchestration       AI Quality
+ │                   │                    │
+Task Success       Routing Accuracy    Accuracy
+MTTR               Decomposition       Groundedness
+Automation         Agent Success       Hallucination
+User Satisfaction  Worker Success      Safety
+ │                   │                    │
+ └───────────────────┼────────────────────┘
+                     │
+              Performance / Cost
+                     │
+             Latency / P95 / P99
+             Tokens / Task
+             Cost / Task
+                     │
+             Reliability
+                     │
+          Error / Retry / Timeout
+          Fallback / Availability
+                     │
+                Security
+                     │
+        DLP / PII / Authorization
+        Prompt Injection / Audit
+```
+
+# 14. Strong Interview Answer
+
+If they ask:
+
+> **"What KPIs do you use for your Coordinator-Delegator-Worker architecture?"**
+
+Say:
+
+> **"I measure KPIs at multiple levels. At the business level, I track task success, automation rate, MTTR reduction and user satisfaction. At the orchestration level, I track intent and routing accuracy, task decomposition accuracy, agent success rate and orchestration latency. At the worker level, I monitor tool-call accuracy, MCP/API success rate, retries and timeouts. For RAG, I measure retrieval relevance, context precision, recall and groundedness. For the LLM layer, I monitor token consumption, latency, model errors and cost per successful task. Finally, I track security and reliability metrics such as unauthorized tool calls, prompt-injection detection, failure rate, fallback rate and availability."**
+
+### ⭐ Memorize this short version
+
+**"I measure 7 dimensions:**
+
+**Business → Orchestration → Agent → RAG → Tools → Performance/Cost → Security/Reliability.**
+
+**The most important KPIs are Task Success, Routing Accuracy, Agent Success, Tool Success, Groundedness, P95 Latency, Cost per Task, Failure Rate, Fallback Rate and Safety."**
+
+
+
+
+
+
+
+
 # Senior Solution Architect – Agentic AI & Enterprise Data
 
 ## Complete Interview Question Bank

@@ -2,7 +2,20 @@ import CookbookApp from "../../components/CookbookApp";
 
 import AzureArch from "../../assets/CWD/docs/azurearch.md?raw";
 import AzureAIFoundary from "../../assets/CWD/docs/azureaifoundary.md?raw";
-import AzureAIFoundaryCode from "../../assets/CWD/code/azureaifoundary.py?raw"
+import AzureAIFoundaryCode from "../../assets/CWD/code/azureaifoundary.py?raw";
+import AzureFoundryAgentService from "../../assets/CWD/docs/AzureFoundryAgentService.md?raw";
+import AzureOpenAI from "../../assets/CWD/docs/AzureOpenAI.md?raw";
+import AzureOpenAIModelDeployment from "../../assets/CWD/docs/AzureOpenAIModelDeployment.md?raw";
+import AzureAgentOrchestration from "../../assets/CWD/docs/AzureAgentOrchestration.md?raw";
+import AzureContainerAppsAgents from "../../assets/CWD/docs/AzureContainerAppsAgents.md?raw";
+import AzureAKSAgents from "../../assets/CWD/docs/AzureAKSAgents.md?raw";
+import AzureFunctionsAgents from "../../assets/CWD/docs/AzureFunctionsAgents.md?raw";
+import AzureServiceBus from "../../assets/CWD/docs/AzureServiceBus.md?raw";
+import AzureEventGrid from "../../assets/CWD/docs/AzureEventGrid.md?raw";
+import AzureLogicApps from "../../assets/CWD/docs/AzureLogicApps.md?raw";
+import AzureAISearchVector from "../../assets/CWD/docs/AzureAISearchVector.md?raw";
+import AzureAgenticRAG from "../../assets/CWD/docs/AzureAgenticRAG.md?raw";
+
 
 const Azure = [
   // =====================================================
@@ -44,7 +57,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand managed agents, tools, conversations, agent execution, enterprise identity, and production agent deployment using Azure AI Foundry.",
-    concept: "",
+    concept: AzureFoundryAgentService,
   },
 
   {
@@ -55,7 +68,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand enterprise LLM integration using Azure OpenAI, including GPT models, embeddings, structured outputs, tool calling, deployments, quotas, and responsible AI.",
-    concept: "",
+    concept: AzureOpenAI,
   },
 
   {
@@ -66,7 +79,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand model deployments, TPM/RPM limits, quota management, model selection, scaling, fallback, and production reliability patterns.",
-    concept: "",
+    concept: AzureOpenAIModelDeployment,
   },
 
   // =====================================================
@@ -81,7 +94,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Design enterprise Coordinator, Delegator, and Worker orchestration using Azure services and custom agent frameworks.",
-    concept: "",
+    concept: AzureAgentOrchestration,
   },
 
   {
@@ -92,7 +105,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand hosting custom agents and worker services using Azure Container Apps with autoscaling, revisions, ingress, networking, and managed identity.",
-    concept: "",
+    concept: AzureContainerAppsAgents,
   },
 
   {
@@ -103,7 +116,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand deploying large-scale production agent services and worker pools on AKS with Kubernetes orchestration, scaling, networking, and security.",
-    concept: "",
+    concept: AzureAKSAgents,
   },
 
   {
@@ -114,7 +127,7 @@ const Azure = [
     time: "~40 min",
     description:
       "Understand using serverless Azure Functions as tools and task executors for agent workflows.",
-    concept: "",
+    concept: AzureFunctionsAgents,
   },
 
   // =====================================================
@@ -129,7 +142,7 @@ const Azure = [
     time: "~50 min",
     description:
       "Understand queues, topics, subscriptions, retries, dead-letter queues, asynchronous task execution, and reliable Coordinator-to-Delegator-to-Worker communication.",
-    concept: "",
+    concept: AzureServiceBus,
   },
 
   {
@@ -140,7 +153,7 @@ const Azure = [
     time: "~40 min",
     description:
       "Understand event-driven architectures for triggering agents and workflows from enterprise events.",
-    concept: "",
+    concept: AzureEventGrid,
   },
 
   {
@@ -151,7 +164,7 @@ const Azure = [
     time: "~40 min",
     description:
       "Understand integrating agent workflows with enterprise applications, approvals, notifications, and business processes.",
-    concept: "",
+    concept: AzureLogicApps,
   },
 
   // =====================================================
@@ -177,7 +190,7 @@ const Azure = [
     time: "~50 min",
     description:
       "Understand vector, keyword, hybrid, semantic, filtered, and multi-stage retrieval for enterprise Agentic RAG.",
-    concept: "",
+    concept: AzureAISearchVector,
   },
 
   {
@@ -188,7 +201,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand query planning, retrieval agents, search agents, reranking, grounding, citations, and multi-step enterprise RAG.",
-    concept: "",
+    concept: AzureAgenticRAG,
   },
 
   {
