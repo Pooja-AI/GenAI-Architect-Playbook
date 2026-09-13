@@ -15,6 +15,23 @@ import AzureEventGrid from "../../assets/CWD/docs/AzureEventGrid.md?raw";
 import AzureLogicApps from "../../assets/CWD/docs/AzureLogicApps.md?raw";
 import AzureAISearchVector from "../../assets/CWD/docs/AzureAISearchVector.md?raw";
 import AzureAgenticRAG from "../../assets/CWD/docs/AzureAgenticRAG.md?raw";
+import AzureBlobStorage from "../../assets/CWD/docs/AzureBlobStorage.md?raw";
+import AzureCosmosDB from "../../assets/CWD/docs/AzureCosmosDB.md?raw";
+import AzureRedis from "../../assets/CWD/docs/AzureRedis.md?raw";
+import AzureSQL from "../../assets/CWD/docs/AzureSQL.md?raw";
+import AzureDataLake from "../../assets/CWD/docs/AzureDataLake.md?raw";
+import AzureAPIM from "../../assets/CWD/docs/AzureAPIM.md?raw";
+import AzureMCP from "../../assets/CWD/docs/AzureMCP.md?raw";
+import AzureAPIAgentTools from "../../assets/CWD/docs/AzureAPIAgentTools.md?raw";
+import MicrosoftTeamsIntegration from "../../assets/CWD/docs/MicrosoftTeamsIntegration.md?raw";
+import MicrosoftCopilotStudio from "../../assets/CWD/docs/MicrosoftCopilotStudio.md?raw";
+import MicrosoftGraph from "../../assets/CWD/docs/MicrosoftGraph.md?raw";
+import SharePointIntegration from "../../assets/CWD/docs/SharePointIntegration.md?raw";
+import MicrosoftFabric from "../../assets/CWD/docs/MicrosoftFabric.md?raw";
+import MicrosoftEntraID from "../../assets/CWD/docs/MicrosoftEntraID.md?raw";
+import AzureManagedIdentity from "../../assets/CWD/docs/AzureManagedIdentity.md?raw";
+import AzureKeyVault from "../../assets/CWD/docs/AzureKeyVault.md?raw";
+
 
 
 const Azure = [
@@ -212,7 +229,7 @@ const Azure = [
     time: "~40 min",
     description:
       "Understand document storage, raw enterprise files, ingestion pipelines, artifacts, and RAG data preparation using Azure Blob Storage.",
-    concept: "",
+    concept: AzureBlobStorage,
   },
 
   // =====================================================
@@ -227,7 +244,7 @@ const Azure = [
     time: "~50 min",
     description:
       "Understand conversation state, task state, agent metadata, session persistence, scalable NoSQL storage, and distributed application patterns.",
-    concept: "",
+    concept: AzureCosmosDB,
   },
 
   {
@@ -238,7 +255,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand short-term agent memory, session state, caching, distributed state, conversation context, and low-latency access.",
-    concept: "",
+    concept: AzureRedis,
   },
 
   {
@@ -249,7 +266,7 @@ const Azure = [
     time: "~40 min",
     description:
       "Understand structured enterprise data access for agent tools, workers, analytics, and transactional workloads.",
-    concept: "",
+    concept: AzureSQL,
   },
 
   {
@@ -260,7 +277,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand enterprise-scale data lake architecture for analytics, AI pipelines, historical data, and agent knowledge sources.",
-    concept: "",
+    concept: AzureDataLake,
   },
 
   // =====================================================
@@ -275,7 +292,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand API gateway architecture for securing and governing agent tools, enterprise APIs, throttling, authentication, authorization, and auditing.",
-    concept: "",
+    concept: AzureAPIM,
   },
 
   {
@@ -286,7 +303,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand exposing enterprise tools and data through MCP servers and integrating MCP with Azure-hosted agents and workers.",
-    concept: "",
+    concept: AzureMCP,
   },
 
   {
@@ -297,7 +314,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand how agents securely invoke Salesforce, ServiceNow, SAP, SQL, M365, and internal APIs through governed Azure API layers.",
-    concept: "",
+    concept: AzureAPIAgentTools,
   },
 
   // =====================================================
@@ -312,7 +329,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand integrating CWD agents with Microsoft Teams using conversational interfaces, authentication, Adaptive Cards, and enterprise agent workflows.",
-    concept: "",
+    concept: MicrosoftTeamsIntegration,
   },
 
   {
@@ -334,7 +351,7 @@ const Azure = [
     time: "~50 min",
     description:
       "Understand accessing Microsoft 365 services such as Teams, SharePoint, Outlook, OneDrive, users, groups, and enterprise collaboration data.",
-    concept: "",
+    concept: MicrosoftGraph,
   },
 
   {
@@ -345,7 +362,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand enterprise document ingestion, retrieval, permissions, and RAG integration with SharePoint and Microsoft 365.",
-    concept: "",
+    concept: SharePointIntegration,
   },
 
   {
@@ -356,7 +373,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand enterprise analytics, OneLake, data engineering, data science, real-time intelligence, and AI workloads integrated with agentic systems.",
-    concept: "",
+    concept: MicrosoftFabric,
   },
 
   // =====================================================
@@ -371,7 +388,7 @@ const Azure = [
     time: "~60 min",
     description:
       "Understand enterprise authentication, OAuth2, RBAC, application identities, user identity propagation, and agent authorization.",
-    concept: "",
+    concept: MicrosoftEntraID,
   },
 
   {
@@ -382,7 +399,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand passwordless authentication between agents, Azure services, APIs, databases, storage, and enterprise resources.",
-    concept: "",
+    concept: AzureManagedIdentity,
   },
 
   {
@@ -393,7 +410,7 @@ const Azure = [
     time: "~45 min",
     description:
       "Understand secure management of API keys, secrets, certificates, encryption keys, and application credentials.",
-    concept: "",
+    concept: AzureKeyVault,
   },
 
   {
