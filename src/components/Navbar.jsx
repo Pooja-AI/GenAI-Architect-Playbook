@@ -25,18 +25,7 @@ function Navbar() {
   // =====================================================
 
   const agenticAITopics = [
-    {
-      name: "Agentic AI Fundamentals",
-      path: "/agentic-ai-fundamentals",
-    },
-    {
-      name: "Single Agent Architecture",
-      path: "/single-agent-architecture",
-    },
-    {
-      name: "Multi-Agent Systems",
-      path: "/multi-agent-systems",
-    },
+    
     {
       name: "LangGraph",
       path: "/langgraph",

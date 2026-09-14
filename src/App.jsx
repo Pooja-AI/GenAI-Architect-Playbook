@@ -7,9 +7,6 @@ import Home from "./pages/Home";
 // AGENTIC AI
 // =====================================================
 
-import AgenticAIFundamentalsQuestion from "./pages/AgenticAIFundamentalsQuestion";
-import SingleAgentArchitectureQuestions from "./pages/SingleAgentArchitectureQuestions";
-import MultiAgentSystemsQuestions from "./pages/MultiAgentSystemsQuestions";
 import LangraphQuestion from "./pages/LangraphQuestion";
 import MCPQuestion from "./pages/MCPQuestion";
 import A2AQuestion from "./pages/A2AQuestion";
@@ -63,6 +60,7 @@ import InterviewPreparation from "./pages/CWD/InterviewPreparation";
 import AWS from "./pages/CWD/AWS";
 import GCP from "./pages/CWD/GCP";
 import Azure from "./pages/CWD/Azure";
+import AboutPooja from "./pages/CWD/AboutPooja";
 
 // =====================================================
 // COMPONENTS
@@ -92,20 +90,7 @@ function App() {
             AGENTIC AI
         ================================================= */}
 
-        <Route
-          path="/agentic-ai-fundamentals"
-          element={<AgenticAIFundamentalsQuestion />}
-        />
-
-        <Route
-          path="/single-agent-architecture"
-          element={<SingleAgentArchitectureQuestions />}
-        />
-
-        <Route
-          path="/multi-agent-systems"
-          element={<MultiAgentSystemsQuestions />}
-        />
+        
 
         <Route
           path="/langgraph"
@@ -346,6 +331,11 @@ function App() {
         />
         <Route 
         path="/Azure" element={<Azure />}
+
+        />
+
+        <Route 
+        path="/about" element={<AboutPooja/>}
 
         />
 
