@@ -25,11 +25,12 @@ function Navbar() {
   // =====================================================
 
   const agenticAITopics = [
-    
-    {
-      name: "LangGraph",
-      path: "/langgraph",
+     {
+      name: "Top Questions",
+      path: "/top-questions",
     },
+    
+   
     {
       name: "MCP",
       path: "/mcp",
@@ -38,58 +39,14 @@ function Navbar() {
       name: "A2A",
       path: "/a2a",
     },
-    {
-      name: "Agentic RAG",
-      path: "/agent-rag",
-    },
-    {
-      name: "Planning & Reasoning",
-      path: "/planning-reasoning",
-    },
-    {
-      name: "Memory",
-      path: "/memory",
-    },
-    {
-      name: "Agent Evaluation",
-      path: "/agent-evaluation",
-    },
-    {
-      name: "Production LLMOps",
-      path: "/production-llmops",
-    },
-    {
-      name: "Security & Responsible AI",
-      path: "/security-responsible-ai",
-    },
-    {
-      name: "Cloud Architecture",
-      path: "/cloud-architecture",
-    },
-    {
-      name: "Enterprise Agent Architecture",
-      path: "/enterprise-agent-architecture",
-    },
-    {
-      name: "Agentic System Design",
-      path: "/agentic-system-design",
-    },
-    {
+      
+     {
       name: "Agentic Scenario Based",
       path: "/agentic-scenario-based",
     },
-    {
-      name: "Agentic Project Questions",
-      path: "/agentic-own-project",
-    },
-    {
-      name: "Top Questions",
-      path: "/top-questions",
-    },
-    {
-      name: "GenAI Questions",
-      path: "/genai-questions",
-    },
+    
+   
+    
   ];
 
   // =====================================================
@@ -98,6 +55,11 @@ function Navbar() {
 
   // CWD PROJECT
 const cwdTopics = [
+  {
+      name: "CWD Top Questions",
+      path: "/cwd-top-questions",
+    },
+
   { name: "01. Project Overview", path: "/cwd-project-overview" },
 
   { name: "02. CWD Architecture", path: "/cwd-architecture" },
@@ -169,6 +131,10 @@ const cwdTopics = [
 
 
   const CloudTopics = [
+    {
+      name: "Cloud Top Questions",
+      path: "/cloud-top-questions",
+    },
     {
       name: "Azure",
       path: "/Azure",

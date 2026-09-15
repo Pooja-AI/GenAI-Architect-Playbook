@@ -1,8 +1,10 @@
-
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+// ============================================================
+// CWD IMAGES
+// ============================================================
 
 const cwdImages = import.meta.glob(
   "../../assets/CWD/images/*.{png,jpg,jpeg,webp,svg}",
@@ -12,6 +14,10 @@ const cwdImages = import.meta.glob(
     import: "default",
   }
 );
+
+// ============================================================
+// DIFFICULTY CONFIGURATION
+// ============================================================
 
 const DIFFICULTIES = {
   Beginner: "#0F6E56",
@@ -24,6 +30,11 @@ const DIFFICULTY_BG = {
   Intermediate: "#E6F1FB",
   Advanced: "#FAECE7",
 };
+
+// ============================================================
+// CONTENT VIEWER
+// ============================================================
+
 function ContentViewer({ content }) {
   return (
     <div
@@ -46,7 +57,8 @@ function ContentViewer({ content }) {
             if (src?.startsWith("../images/")) {
               const imageName = src.split("/").pop();
 
-              const imagePath = `../../assets/CWD/images/${imageName}`;
+              const imagePath =
+                `../../assets/CWD/images/${imageName}`;
 
               if (cwdImages[imagePath]) {
                 imageSrc = cwdImages[imagePath];
@@ -69,11 +81,15 @@ function ContentViewer({ content }) {
           },
         }}
       >
-        {content || "No concept available for this recipe."}
+        {content || "No concept available for this topic."}
       </ReactMarkdown>
     </div>
   );
 }
+
+// ============================================================
+// CODE BLOCK
+// ============================================================
 
 function CodeBlock({ code }) {
   const [copied, setCopied] = useState(false);
@@ -81,8 +97,12 @@ function CodeBlock({ code }) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(code || "");
+
       setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 1800);
     } catch (error) {
       console.error("Failed to copy code:", error);
     }
@@ -144,7 +164,15 @@ function CodeBlock({ code }) {
   );
 }
 
-function RecipeCard({ recipe, onSelect, selected }) {
+// ============================================================
+// RECIPE CARD
+// ============================================================
+
+function RecipeCard({
+  recipe,
+  onSelect,
+  selected,
+}) {
   return (
     <div
       onClick={() => onSelect(recipe)}
@@ -152,18 +180,23 @@ function RecipeCard({ recipe, onSelect, selected }) {
         padding: "16px 18px",
         borderRadius: 12,
         cursor: "pointer",
+
         border: selected
           ? "1.5px solid #185FA5"
           : "0.5px solid var(--color-border-tertiary)",
+
         background: selected
           ? "#061320"
           : "var(--color-background-primary)",
+
         transition: "all 0.15s",
+
         width: "100%",
         maxWidth: "100%",
         boxSizing: "border-box",
       }}
     >
+      {/* Category + Difficulty */}
       <div
         style={{
           display: "flex",
@@ -179,6 +212,7 @@ function RecipeCard({ recipe, onSelect, selected }) {
             color: "var(--color-text-secondary)",
             fontWeight: 400,
             minWidth: 0,
+            overflowWrap: "anywhere",
           }}
         >
           {recipe.category}
@@ -203,6 +237,7 @@ function RecipeCard({ recipe, onSelect, selected }) {
         </span>
       </div>
 
+      {/* Question */}
       <div
         style={{
           fontWeight: 500,
@@ -214,20 +249,13 @@ function RecipeCard({ recipe, onSelect, selected }) {
       >
         {recipe.title}
       </div>
-
-      <div
-        style={{
-          fontSize: 13,
-          color: "var(--color-text-secondary)",
-          lineHeight: 1.5,
-          overflowWrap: "anywhere",
-        }}
-      >
-        {recipe.description}
-      </div>
     </div>
   );
 }
+
+// ============================================================
+// RECIPE DETAIL
+// ============================================================
 
 function RecipeDetail({ recipe }) {
   const [tab, setTab] = useState("concept");
@@ -248,17 +276,23 @@ function RecipeDetail({ recipe }) {
         overflow: "hidden",
       }}
     >
+      {/* HEADER */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
           gap: 16,
-          marginBottom: 4,
+          marginBottom: 18,
           flexWrap: "wrap",
         }}
       >
-        <div style={{ minWidth: 0, flex: "1 1 250px" }}>
+        <div
+          style={{
+            minWidth: 0,
+            flex: "1 1 250px",
+          }}
+        >
           <span
             style={{
               fontSize: 12,
@@ -270,7 +304,7 @@ function RecipeDetail({ recipe }) {
 
           <h2
             style={{
-              margin: "4px 0 6px",
+              margin: "4px 0 0",
               fontSize: 22,
               fontWeight: 500,
               overflowWrap: "anywhere",
@@ -280,6 +314,7 @@ function RecipeDetail({ recipe }) {
           </h2>
         </div>
 
+        {/* Difficulty + Time */}
         <div
           style={{
             display: "flex",
@@ -319,18 +354,7 @@ function RecipeDetail({ recipe }) {
         </div>
       </div>
 
-      <p
-        style={{
-          margin: "0 0 20px",
-          color: "var(--color-text-secondary)",
-          fontSize: 14,
-          lineHeight: 1.6,
-          overflowWrap: "anywhere",
-        }}
-      >
-        {recipe.description}
-      </p>
-
+      {/* TABS */}
       <div
         style={{
           display: "flex",
@@ -350,16 +374,21 @@ function RecipeDetail({ recipe }) {
               border: "none",
               background: "none",
               cursor: "pointer",
+
               fontSize: 14,
-              fontWeight: tab === t ? 500 : 400,
+              fontWeight:
+                tab === t ? 500 : 400,
+
               color:
                 tab === t
                   ? "var(--color-text-primary)"
                   : "var(--color-text-secondary)",
+
               borderBottom:
                 tab === t
                   ? "2px solid #185FA5"
                   : "2px solid transparent",
+
               marginBottom: -1,
               transition: "all 0.12s",
             }}
@@ -369,6 +398,7 @@ function RecipeDetail({ recipe }) {
         ))}
       </div>
 
+      {/* CONTENT */}
       {tab === "concept" && (
         <ContentViewer content={recipe.concept} />
       )}
@@ -379,6 +409,10 @@ function RecipeDetail({ recipe }) {
     </div>
   );
 }
+
+// ============================================================
+// SIDEBAR
+// ============================================================
 
 function Sidebar({
   recipes,
@@ -391,23 +425,25 @@ function Sidebar({
   setSearch,
 }) {
   const filtered = recipes.filter((r) => {
-    const matchCat =
-      category === "All" || r.category === category;
+    // Category filter
+    const matchCategory =
+      category === "All" ||
+      r.category === category;
 
-    const searchText = search.toLowerCase();
+    // Search filter
+    const searchText =
+      search.trim().toLowerCase();
 
     const matchSearch =
+      !searchText ||
       r.title
-        ?.toLowerCase()
-        .includes(searchText) ||
-      r.description
         ?.toLowerCase()
         .includes(searchText) ||
       r.category
         ?.toLowerCase()
         .includes(searchText);
 
-    return matchCat && matchSearch;
+    return matchCategory && matchSearch;
   });
 
   return (
@@ -421,66 +457,97 @@ function Sidebar({
         height: "100%",
       }}
     >
-      <div style={{ padding: "0 0 16px" }}>
+      {/* SEARCH */}
+      <div
+        style={{
+          paddingBottom: 16,
+        }}
+      >
         <input
           type="text"
           placeholder="Search questions…"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
           style={{
             width: "100%",
             maxWidth: "100%",
             boxSizing: "border-box",
-            padding: "8px 12px",
+
+            padding: "9px 12px",
             borderRadius: 8,
+
             border:
               "0.5px solid var(--color-border-secondary)",
+
             background:
               "var(--color-background-secondary)",
-            color: "var(--color-text-primary)",
+
+            color:
+              "var(--color-text-primary)",
+
             fontSize: 13,
+            outline: "none",
           }}
         />
       </div>
 
+      {/* CATEGORY DROPDOWN */}
       <div
         style={{
-          display: "flex",
-          gap: 6,
-          flexWrap: "wrap",
           marginBottom: 16,
+          width: "100%",
         }}
       >
-        {categories.map((c) => (
-          <button
-            key={c}
-            onClick={() => setCategory(c)}
-            style={{
-              padding: "4px 12px",
-              borderRadius: 20,
-              fontSize: 12,
-              cursor: "pointer",
-              border:
-                category === c
-                  ? "1.5px solid #185FA5"
-                  : "0.5px solid var(--color-border-tertiary)",
-              background:
-                category === c
-                  ? "#E6F1FB"
-                  : "var(--color-background-primary)",
-              color:
-                category === c
-                  ? "#185FA5"
-                  : "var(--color-text-secondary)",
-              fontWeight:
-                category === c ? 500 : 400,
-            }}
-          >
-            {c}
-          </button>
-        ))}
+        <label
+          htmlFor="category-select"
+          style={{
+            display: "block",
+            fontSize: 12,
+            color: "var(--color-text-secondary)",
+            marginBottom: 6,
+            fontWeight: 500,
+          }}
+        >
+          Category
+        </label>
+
+        <select
+          id="category-select"
+          value={category}
+          onChange={(e) =>
+            setCategory(e.target.value)
+          }
+          style={{
+            width: "100%",
+            padding: "9px 12px",
+            borderRadius: 8,
+
+            border:
+              "0.5px solid var(--color-border-secondary)",
+
+            background:
+              "var(--color-background-secondary)",
+
+            color:
+              "var(--color-text-primary)",
+
+            fontSize: 13,
+            cursor: "pointer",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+        >
+          {categories.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
       </div>
 
+      {/* QUESTION LIST */}
       <div
         style={{
           display: "flex",
@@ -494,8 +561,7 @@ function Sidebar({
         {filtered.length === 0 ? (
           <div
             style={{
-              color:
-                "var(--color-text-tertiary)",
+              color: "var(--color-text-tertiary)",
               fontSize: 13,
               padding: "12px 0",
             }}
@@ -508,7 +574,9 @@ function Sidebar({
               key={r.id}
               recipe={r}
               onSelect={onSelect}
-              selected={selected?.id === r.id}
+              selected={
+                selected?.id === r.id
+              }
             />
           ))
         )}
@@ -516,6 +584,10 @@ function Sidebar({
     </div>
   );
 }
+
+// ============================================================
+// HEADER
+// ============================================================
 
 function Header({
   title,
@@ -529,33 +601,44 @@ function Header({
     <div
       style={{
         padding: "20px 32px 16px",
+
         borderBottom:
           "0.5px solid var(--color-border-tertiary)",
+
         display: "flex",
         alignItems: "center",
+
         gap: 16,
         flexWrap: "wrap",
+
         width: "100%",
         maxWidth: "100%",
+
         boxSizing: "border-box",
       }}
     >
+      {/* ICON */}
       <div
         style={{
           width: 40,
           height: 40,
           minWidth: 40,
+
           borderRadius: 10,
+
           background: "#E6F1FB",
+
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+
           fontSize: 20,
         }}
       >
         {icon}
       </div>
 
+      {/* TITLE */}
       <div
         style={{
           minWidth: 0,
@@ -574,18 +657,22 @@ function Header({
           {title}
         </h1>
 
-        <p
-          style={{
-            margin: 0,
-            fontSize: 13,
-            color: "var(--color-text-secondary)",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {subtitle}
-        </p>
+        {subtitle && (
+          <p
+            style={{
+              margin: 0,
+              fontSize: 13,
+              color:
+                "var(--color-text-secondary)",
+              overflowWrap: "anywhere",
+            }}
+          >
+            {subtitle}
+          </p>
+        )}
       </div>
 
+      {/* STATISTICS */}
       <div
         style={{
           marginLeft: "auto",
@@ -594,60 +681,90 @@ function Header({
           flexWrap: "wrap",
         }}
       >
-        {[
-          {
-            label: "Questions",
-            value: totalCount,
-          },
-          {
-            label: patternLabel,
-            value: categoryCount,
-          },
-        ].map(({ label, value }) => (
+        <div
+          style={{
+            textAlign: "center",
+          }}
+        >
           <div
-            key={label}
-            style={{ textAlign: "center" }}
+            style={{
+              fontSize: 18,
+              fontWeight: 500,
+            }}
           >
-            <div
-              style={{
-                fontSize: 18,
-                fontWeight: 500,
-              }}
-            >
-              {value}
-            </div>
-
-            <div
-              style={{
-                fontSize: 11,
-                color:
-                  "var(--color-text-tertiary)",
-              }}
-            >
-              {label}
-            </div>
+            {totalCount}
           </div>
-        ))}
+
+          <div
+            style={{
+              fontSize: 11,
+              color:
+                "var(--color-text-tertiary)",
+            }}
+          >
+            Questions
+          </div>
+        </div>
+
+        <div
+          style={{
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 500,
+            }}
+          >
+            {categoryCount}
+          </div>
+
+          <div
+            style={{
+              fontSize: 11,
+              color:
+                "var(--color-text-tertiary)",
+            }}
+          >
+            {patternLabel}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
+
+// ============================================================
+// COOKBOOK APP
+// ============================================================
 
 export default function CookbookApp({
   data,
   title,
   subtitle,
   icon = "📚",
-  patternLabel = "Patterns",
+  patternLabel = "Categories",
 }) {
-  const [selected, setSelected] = useState(data[0]);
-  const [category, setCategory] = useState("All");
-  const [search, setSearch] = useState("");
+  const [selected, setSelected] =
+    useState(data?.[0] || null);
+
+  const [category, setCategory] =
+    useState("All");
+
+  const [search, setSearch] =
+    useState("");
+
+  // ==========================================================
+  // BUILD UNIQUE CATEGORIES
+  // ==========================================================
 
   const categories = [
     "All",
     ...new Set(
-      data.map((r) => r.category).filter(Boolean)
+      data
+        .map((r) => r.category)
+        .filter(Boolean)
     ),
   ];
 
@@ -656,53 +773,80 @@ export default function CookbookApp({
       style={{
         display: "flex",
         flexDirection: "column",
+
         width: "100%",
         maxWidth: "100%",
+
         minHeight: "100vh",
-        height: "auto",
+
         fontFamily:
           "var(--font-sans, system-ui, sans-serif)",
+
         background:
-          "var(--color-background-tertiary, radial-gradient(circle at top, #0f172a, #020617))",
-        color: "var(--color-text-primary)",
+          "var(--color-background-tertiary, #020617)",
+
+        color:
+          "var(--color-text-primary)",
+
         boxSizing: "border-box",
+
         overflowX: "hidden",
       }}
     >
+      {/* ======================================================
+          HEADER
+      ====================================================== */}
+
       <Header
         title={title}
         subtitle={subtitle}
         icon={icon}
         totalCount={data.length}
-        categoryCount={categories.length - 1}
+        categoryCount={
+          categories.length - 1
+        }
         patternLabel={patternLabel}
       />
 
-      {/* Main layout */}
+      {/* ======================================================
+          MAIN LAYOUT
+      ====================================================== */}
+
       <div
         className="cookbook-layout"
         style={{
           display: "flex",
           flex: 1,
           minHeight: 0,
+
           width: "100%",
           maxWidth: "100%",
+
           overflow: "hidden",
         }}
       >
-        {/* Sidebar */}
+        {/* ====================================================
+            SIDEBAR
+        ==================================================== */}
+
         <div
           className="cookbook-sidebar"
           style={{
             width: 320,
             minWidth: 260,
-            padding: "20px 20px",
+
+            padding: "20px",
+
             borderRight:
               "0.5px solid var(--color-border-tertiary)",
+
             background:
               "var(--color-background-primary)",
+
             overflowY: "auto",
+
             boxSizing: "border-box",
+
             flexShrink: 0,
           }}
         >
@@ -718,20 +862,28 @@ export default function CookbookApp({
           />
         </div>
 
-        {/* Main content */}
+        {/* ====================================================
+            CONTENT
+        ==================================================== */}
+
         <div
           className="cookbook-content"
           style={{
             flex: 1,
             minWidth: 0,
+
             overflowY: "auto",
             overflowX: "hidden",
+
             padding: "24px 28px",
+
             boxSizing: "border-box",
           }}
         >
           {selected ? (
-            <RecipeDetail recipe={selected} />
+            <RecipeDetail
+              recipe={selected}
+            />
           ) : (
             <div
               style={{
@@ -741,22 +893,29 @@ export default function CookbookApp({
                 textAlign: "center",
               }}
             >
-              Select a question to get started
+              Select a question to get started.
             </div>
           )}
         </div>
       </div>
 
-      {/* Mobile layout */}
+      {/* ======================================================
+          RESPONSIVE CSS
+      ====================================================== */}
+
       <style>{`
         @media (max-width: 750px) {
+
           .cookbook-layout {
             display: flex !important;
             flex-direction: column !important;
+
             width: 100% !important;
             max-width: 100% !important;
+
             height: auto !important;
             min-height: 0 !important;
+
             overflow: visible !important;
           }
 
@@ -764,48 +923,55 @@ export default function CookbookApp({
             width: 100% !important;
             min-width: 0 !important;
             max-width: 100% !important;
+
             height: auto !important;
             max-height: none !important;
+
             flex-shrink: 1 !important;
+
             overflow: visible !important;
+
             border-right: none !important;
-            border-bottom: 0.5px solid var(--color-border-tertiary) !important;
+
+            border-bottom:
+              0.5px solid
+              var(--color-border-tertiary) !important;
+
             padding: 16px !important;
-          }
-
-          .cookbook-sidebar > div {
-            height: auto !important;
-          }
-
-          .cookbook-sidebar > div > div:last-child {
-            overflow: visible !important;
-            flex: none !important;
           }
 
           .cookbook-content {
             width: 100% !important;
             max-width: 100% !important;
             min-width: 0 !important;
+
             height: auto !important;
             min-height: 0 !important;
+
             overflow: visible !important;
+
             padding: 16px !important;
+
             box-sizing: border-box !important;
           }
 
           .cookbook-content .prose {
             max-height: none !important;
+
             overflow: visible !important;
+
             padding: 12px 0 !important;
           }
 
           .cookbook-content pre {
             max-width: 100% !important;
+
             overflow-x: auto !important;
           }
         }
 
         @media (max-width: 450px) {
+
           .cookbook-sidebar {
             padding: 12px !important;
           }
@@ -822,7 +988,3 @@ export default function CookbookApp({
     </div>
   );
 }
-
-
-
-

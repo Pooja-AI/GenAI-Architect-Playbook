@@ -7,22 +7,12 @@ import Home from "./pages/Home";
 // AGENTIC AI
 // =====================================================
 
-import LangraphQuestion from "./pages/LangraphQuestion";
+
 import MCPQuestion from "./pages/MCPQuestion";
 import A2AQuestion from "./pages/A2AQuestion";
-import AgentRAGQuestion from "./pages/AgentRAGQuestion";
-import PlanningReasoningQuestion from "./pages/PlanningReasoningQuestion";
-import MemoryQuestion from "./pages/MemoryQuestion";
-import AgentEvaluationQuestion from "./pages/AgentEvaluationQuestion";
-import ProductionLLMOpsQuestion from "./pages/ProductionLLMOpsQuestion";
-import SecurityResponsibleAIQuestion from "./pages/SecurityResponsibleAIQuestion";
-import CloudArchitectureQuestion from "./pages/CloudArchitectureQuestion";
-import EnterpriseAgentArchitectureQuestion from "./pages/EnterpriseAgentArchitectureQuestion";
-import AgenticSystemDesignQuestionsQuestion from "./pages/AgenticSystemDesignQuestionsQuestion";
 import AgenticScenarioBasedQuestion from "./pages/AgenticScenarioBasedQuestion";
-import AgenticOwnProjectQuestion from "./pages/AgenticOwnProjectQuestion";
 import TopQuestionsQuestion from "./pages/TopQuestionsQuestion";
-import GenAIQuestion from "./pages/GenAIQuestion";
+
 
 // =====================================================
 // CWD PROJECT
@@ -61,6 +51,7 @@ import AWS from "./pages/CWD/AWS";
 import GCP from "./pages/CWD/GCP";
 import Azure from "./pages/CWD/Azure";
 import AboutPooja from "./pages/CWD/AboutPooja";
+import AzureEnterpriseQuestions from "./pages/CWD/CWDQuestions";
 
 // =====================================================
 // COMPONENTS
@@ -89,14 +80,7 @@ function App() {
         {/* =================================================
             AGENTIC AI
         ================================================= */}
-
         
-
-        <Route
-          path="/langgraph"
-          element={<LangraphQuestion />}
-        />
-
         <Route
           path="/mcp"
           element={<MCPQuestion />}
@@ -106,72 +90,18 @@ function App() {
           path="/a2a"
           element={<A2AQuestion />}
         />
-
-        <Route
-          path="/agent-rag"
-          element={<AgentRAGQuestion />}
-        />
-
-        <Route
-          path="/planning-reasoning"
-          element={<PlanningReasoningQuestion />}
-        />
-
-        <Route
-          path="/memory"
-          element={<MemoryQuestion />}
-        />
-
-        <Route
-          path="/agent-evaluation"
-          element={<AgentEvaluationQuestion />}
-        />
-
-        <Route
-          path="/production-llmops"
-          element={<ProductionLLMOpsQuestion />}
-        />
-
-        <Route
-          path="/security-responsible-ai"
-          element={<SecurityResponsibleAIQuestion />}
-        />
-
-        <Route
-          path="/cloud-architecture"
-          element={<CloudArchitectureQuestion />}
-        />
-
-        <Route
-          path="/enterprise-agent-architecture"
-          element={<EnterpriseAgentArchitectureQuestion />}
-        />
-
-        <Route
-          path="/agentic-system-design-questions"
-          element={<AgenticSystemDesignQuestionsQuestion />}
-        />
-
+       
         <Route
           path="/agentic-scenario-based"
           element={<AgenticScenarioBasedQuestion />}
         />
-
-        <Route
-          path="/agentic-own-project"
-          element={<AgenticOwnProjectQuestion />}
-        />
-
+       
         <Route
           path="/top-questions"
           element={<TopQuestionsQuestion />}
         />
 
-        <Route
-          path="/genai-questions"
-          element={<GenAIQuestion />}
-        />
-
+      
         {/* =================================================
             CWD PROJECT
         ================================================= */}
@@ -338,6 +268,8 @@ function App() {
         path="/about" element={<AboutPooja/>}
 
         />
+
+        <Route path="/cwd-top-questions" element={<AzureEnterpriseQuestions/>} />
 
       </Routes>
 

@@ -4,6 +4,8 @@ AWS's current guidance maps agentic workloads across Bedrock for model/agent cap
 
 # CWD: Azure → AWS — End-to-End Migration Workflow
 
+![AWS Agentic AI Architecture](../../images/azurearch.png)
+
 ![Image](https://images.openai.com/static-rsc-4/c4klWe1dxfAB3etP4PoZSW1GH_4u74is2a47WuN9HBlGKsc6775Ng8I1rHtsFUJltTD2nGlCvjh5TU7UArAFM-unlN4yExVe_l19XNQB5nOXUrx6J3i5dL75wuwGhpKzAr2VuGeBaTCK-_X-Z5RlZG1vDRe1P38jeas65oOK2u5lMu4y95JvZB2GL41UfS-X?purpose=fullsize)
 
 ![Image](https://images.openai.com/static-rsc-4/GVHNYUUILTn9PG4RaED1p5bPfxnlBr4tGuc9xcRXnjaVTdaY7YiXYHi64aT8cKqWu0uu1KkpG5ub6qbjIh55IniPOAtcYPj81zZnB8mAFN_4LgJk3fWCnog5UEFJ2sXfksK4h3M5leW2tFCdUIkNfUTfv42QwG5TlAis1kQwtIcEP7qdfQn_Ly4uMqNwPHds?purpose=fullsize)
