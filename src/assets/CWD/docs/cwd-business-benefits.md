@@ -1,314 +1,1026 @@
-## Key Business Benefits
+### 16.	How does CWD handle dependencies between Workers?
 
-CWD delivers value by creating a common enterprise AI execution platform that can coordinate AI agents, enterprise data, business applications, and workflows under a consistent governance model.
+# 1. What does “dependency between Workers” mean?
 
-### 1. Faster Business Decision-Making
+A dependency exists when **Worker B needs the output of Worker A** before it can execute.
 
-CWD reduces the time required to collect, analyze, and consolidate information from multiple enterprise systems.
+For example:
 
-Instead of employees manually gathering information from different sources, CWD can coordinate agents to retrieve and analyze the required information.
+> “Find customer 12345's open opportunities and then retrieve the contracts associated with those opportunities.”
 
-**Business impact:**
+You cannot execute the Contract Worker immediately because you don't know the opportunity IDs yet.
 
-- Faster access to business insights
-- Reduced information-gathering time
-- Faster preparation for meetings and decisions
-- Reduced dependency on manual analysis
-
----
-
-### 2. Increased Employee Productivity
-
-CWD automates repetitive multi-step activities that traditionally require employees to work across several applications.
-
-Examples include:
-
-- Customer briefing preparation
-- Information gathering
-- Business analysis
-- Knowledge discovery
-- Report generation
-- Cross-system data consolidation
-- Follow-up and workflow activities
-
-Employees can focus more on **decision-making and higher-value activities** rather than administrative execution.
-
----
-
-### 3. Reduced Manual Effort
-
-A single business request can involve multiple systems and several manual steps.
-
-CWD coordinates these activities through agents and tools.
+So:
 
 ```text
-Before CWD
-
-Employee
-   ↓
-CRM
-   ↓
-Data Platform
-   ↓
-SharePoint
-   ↓
-Email
-   ↓
-Manual Analysis
-   ↓
-Final Report
+Customer ID
+    ↓
+Opportunity Worker
+    ↓
+Opportunity IDs
+    ↓
+Contract Worker
+    ↓
+Contract Details
 ```
 
-```text
-With CWD
+Here:
 
-Employee
-   ↓
-Business Objective
-   ↓
-CWD
-   ↓
-Agents + Enterprise Systems
-   ↓
-Business Outcome
+**Contract Worker depends on Opportunity Worker.**
+
+---
+
+# 2. There are two types of Worker relationships
+
+## Type 1 — Independent Workers
+
+Suppose the Sales Delegator needs:
+
+* Customer profile
+* Open opportunities
+* Recent orders
+
+All three can use the same `customer_id`.
+
+```text
+                 customer_id
+                     │
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+ Customer Worker  Opportunity   Order Worker
+                    Worker
 ```
 
-This reduces repetitive operational work and improves process efficiency.
+There is no dependency between them.
 
----
-
-### 4. Faster AI Adoption Across the Enterprise
-
-Without a common platform, every business team may build its own AI solution.
-
-This creates duplicated effort and inconsistent architectures.
-
-CWD provides a reusable foundation where new business agents can be onboarded without rebuilding the complete AI infrastructure.
+Therefore CWD can execute them concurrently:
 
 ```text
-                 CWD Platform
-                      |
-       +--------------+--------------+
-       |              |              |
-     Sales          Finance          HR
-      Agent          Agent          Agent
-       |              |              |
-       +--------------+--------------+
-                      |
-              Common AI Foundation
+T0 ───────────────────────────────>
+
+Customer Worker       ███████
+Opportunity Worker    █████████
+Order Worker          ██████
+
+                              ↓
+                           Aggregate
 ```
 
-**Business impact:**
-
-* Shorter time-to-market for new AI use cases
-* Reusable capabilities
-* Reduced development duplication
-* Easier expansion into new business domains
+This reduces latency.
 
 ---
 
-### 5. Scalable Enterprise AI
+# 3. Type 2 — Dependent Workers
 
-CWD enables the organization to move from individual AI applications toward a shared enterprise AI capability.
+Now consider:
 
-The platform can support:
+> “Find the customer's open opportunities and retrieve the contract for each opportunity.”
 
-* Multiple business domains
-* Multiple delegators
-* Multiple specialized workers
-* Parallel task execution
-* Cross-domain workflows
-* New agents and capabilities
-
-This allows AI adoption to scale with the business rather than creating a separate platform for every use case.
-
----
-
-### 6. Consistent Security and Data Governance
-
-Enterprise AI cannot operate effectively if every agent implements security differently.
-
-CWD establishes a common governance model around AI execution.
-
-Key controls include:
-
-* User identity and authorization
-* Entitlement validation
-* Least-privilege access
-* Controlled tool execution
-* Data access policies
-* Input/output validation
-* Sensitive-data protection
-* Auditability
-
-**Business benefit:**
-
-The organization can expand AI adoption while maintaining confidence that enterprise data is being accessed and used appropriately.
-
----
-
-### 7. Improved AI Reliability
-
-CWD introduces controlled orchestration rather than relying on a single LLM response.
-
-Agents can:
-
-* Break complex work into tasks
-* Select appropriate capabilities
-* Validate results
-* Retry failed operations
-* Redirect work
-* Escalate when required
-
-This improves the reliability of AI-driven business workflows.
-
----
-
-### 8. End-to-End Business Traceability
-
-CWD provides visibility into how a business request was executed.
+The Contract Worker requires:
 
 ```text
-User Request
-     ↓
+opportunity_id
+```
+
+But the opportunity ID comes from the Opportunity Worker.
+
+Therefore:
+
+```text
+Opportunity Worker
+       │
+       │ produces
+       ↓
+opportunity_id
+       │
+       │ required by
+       ↓
+Contract Worker
+```
+
+The Delegator must wait.
+
+```text
+Opportunity Worker
+       █████████
+             │
+             ↓
+       opportunity_id
+             │
+             ↓
+Contract Worker
+             ███████
+```
+
+---
+
+# 4. How does CWD know that a dependency exists?
+
+This is where **Worker metadata** becomes very important.
+
+Each Worker should describe:
+
+* capabilities
+* required inputs
+* outputs
+* dependencies
+* authorization
+* timeout
+* retry policy
+
+For example:
+
+```python
+WORKER_REGISTRY = {
+
+    "opportunity_worker": {
+        "capabilities": [
+            "open_opportunities"
+        ],
+        "required_inputs": [
+            "customer_id"
+        ],
+        "outputs": [
+            "opportunity_id",
+            "opportunity_name",
+            "stage"
+        ]
+    },
+
+    "contract_worker": {
+        "capabilities": [
+            "contract_details"
+        ],
+        "required_inputs": [
+            "opportunity_id"
+        ],
+        "outputs": [
+            "contract_id",
+            "contract_status",
+            "contract_value"
+        ]
+    }
+}
+```
+
+Now the Delegator can reason:
+
+```text
+Contract Worker requires:
+    opportunity_id
+
+Who produces:
+    opportunity_id?
+
+Opportunity Worker
+```
+
+Therefore:
+
+```text
+Opportunity Worker → Contract Worker
+```
+
+---
+
+# 5. The Delegator builds a dependency graph
+
+The Delegator can represent the execution plan as a directed graph.
+
+For example:
+
+```text
+              Customer ID
+                  │
+                  ↓
+          Opportunity Worker
+                  │
+          ┌───────┴────────┐
+          ↓                ↓
+     Contract Worker    Contact Worker
+```
+
+The arrows mean:
+
+> **The upstream Worker must provide information required by the downstream Worker.**
+
+This is essentially a **DAG — Directed Acyclic Graph**.
+
+---
+
+# 6. Example with your Salesforce + ServiceNow use case
+
+Let's use your CWD scenario.
+
+User asks:
+
+> **“For customer 12345, get the Salesforce account, find their open opportunities, and retrieve related ServiceNow incidents.”**
+
+The Coordinator might route the request to:
+
+```text
 Coordinator
+     │
+     ├───────────────┐
+     ↓               ↓
+Sales Delegator   Service Delegator
+```
+
+### Sales Delegator
+
+Needs:
+
+```text
+Customer account
+Open opportunities
+```
+
+Both can use:
+
+```text
+customer_id = 12345
+```
+
+So:
+
+```text
+          customer_id
+          /         \
+         ↓           ↓
+ Account Worker   Opportunity Worker
+```
+
+These are independent.
+
+---
+
+### Service Delegator
+
+Suppose ServiceNow requires a Salesforce account/customer mapping first.
+
+Then:
+
+```text
+Salesforce Account Worker
+          ↓
+ServiceNow Customer Mapping Worker
+          ↓
+ServiceNow Incident Worker
+```
+
+Now there is a **cross-system dependency**.
+
+---
+
+# 7. Dependencies can exist inside one Delegator
+
+Example:
+
+```text
+Sales Delegator
+       │
+       ├── Customer Worker
+       │
+       ├── Opportunity Worker
+       │
+       └── Contract Worker
+```
+
+If Contract Worker needs `opportunity_id`:
+
+```text
+Customer Worker
+      │
+      │
+Opportunity Worker
+      │
+      ↓
+opportunity_id
+      │
+      ↓
+Contract Worker
+```
+
+The Delegator manages this dependency.
+
+---
+
+# 8. Dependencies can also exist across Delegators
+
+This is more advanced and important for your architecture.
+
+Suppose:
+
+```text
+Sales Delegator
+      ↓
+Salesforce Account Worker
+      ↓
+Salesforce Account ID
+```
+
+The Service Delegator needs that account ID:
+
+```text
+Salesforce Account ID
+      ↓
+Service Delegator
+      ↓
+ServiceNow Incident Worker
+```
+
+Now the dependency crosses the Delegator boundary.
+
+The **Coordinator** should manage that cross-domain dependency.
+
+Conceptually:
+
+```text
+                    Coordinator
+                         │
+             ┌───────────┴───────────┐
+             ↓                       ↓
+      Sales Delegator          Service Delegator
+             │                       │
+             ↓                       │
+      Salesforce Worker              │
+             │                       │
+             └──── account_id ───────┘
+                                     ↓
+                              ServiceNow Worker
+```
+
+This is why your architecture needs a **Coordinator above the Delegators**.
+
+---
+
+# 9. How LangGraph handles this
+
+This is one of the strongest reasons to use LangGraph in your CWD design.
+
+LangGraph lets you represent the workflow as nodes and edges while maintaining shared state.
+
+For example:
+
+```python
+from typing import TypedDict
+
+class CWDState(TypedDict):
+    customer_id: str
+    opportunities: list
+    contracts: list
+    errors: list
+```
+
+Then you can have nodes such as:
+
+```text
+START
+  ↓
+Get Opportunities
+  ↓
+Get Contracts
+  ↓
+Aggregate
+  ↓
+END
+```
+
+The important part is:
+
+```text
+Get Opportunities
+       ↓
+Get Contracts
+```
+
+The second node cannot execute until the first node has populated the required state.
+
+---
+
+# 10. State carries the dependency outputs
+
+Suppose:
+
+```text
+customer_id = 12345
+```
+
+Initially:
+
+```python
+state = {
+    "customer_id": "12345",
+    "opportunities": [],
+    "contracts": [],
+    "errors": []
+}
+```
+
+After Opportunity Worker:
+
+```python
+state = {
+    "customer_id": "12345",
+
+    "opportunities": [
+        {"id": "OP1001"},
+        {"id": "OP1002"}
+    ],
+
+    "contracts": [],
+
+    "errors": []
+}
+```
+
+Now the Contract Worker has what it needs:
+
+```text
+OP1001
+OP1002
+```
+
+It can execute.
+
+After that:
+
+```python
+state = {
+    "customer_id": "12345",
+
+    "opportunities": [
+        {"id": "OP1001"},
+        {"id": "OP1002"}
+    ],
+
+    "contracts": [
+        {"opportunity_id": "OP1001", "status": "Active"},
+        {"opportunity_id": "OP1002", "status": "Expired"}
+    ],
+
+    "errors": []
+}
+```
+
+This is **stateful dependency management**.
+
+---
+
+# 11. Parallel execution is extremely important
+
+Consider:
+
+```text
+Customer Worker
+Opportunity Worker
+Order Worker
+```
+
+They all require:
+
+```text
+customer_id
+```
+
+They don't depend on one another.
+
+Instead of:
+
+```text
+Customer Worker
      ↓
-Delegator
+Opportunity Worker
      ↓
+Order Worker
+```
+
+which could take:
+
+```text
+2 sec + 3 sec + 2 sec = 7 sec
+```
+
+CWD can execute them concurrently:
+
+```text
+Customer Worker       2 sec
+Opportunity Worker    3 sec
+Order Worker          2 sec
+```
+
+Total ≈ **3 seconds**, assuming the systems and infrastructure support concurrent execution.
+
+So dependency management is not just about correctness.
+
+It is also a **latency optimization mechanism**.
+
+---
+
+# 12. Example of a more complex dependency graph
+
+Suppose your customer briefing requires:
+
+```text
+A = Customer Profile
+B = Opportunities
+C = Orders
+D = Contracts
+E = Support Incidents
+F = Final Customer Summary
+```
+
+Dependencies:
+
+```text
+A ──────┐
+        │
+        ├──→ B ───→ D ───┐
+        │                 │
+        └──→ C ───────────┤
+                          ↓
+E ─────────────────────→ F
+                          ↑
+A ────────────────────────┘
+```
+
+This means:
+
+```text
+A
+├── B
+│   └── D
+└── C
+
+E
+
+A + B + C + D + E
+        ↓
+        F
+```
+
+The execution could be:
+
+### Phase 1
+
+```text
+A
+E
+```
+
+run concurrently.
+
+### Phase 2
+
+Once A completes:
+
+```text
+B
+C
+```
+
+can run concurrently.
+
+### Phase 3
+
+Once B completes:
+
+```text
+D
+```
+
+runs.
+
+### Phase 4
+
+Once everything is available:
+
+```text
+F
+```
+
+generates the final summary.
+
+---
+
+# 13. What happens if one Worker fails?
+
+This is a very important production interview question.
+
+Suppose:
+
+```text
+Customer Worker       ✓
+Opportunity Worker    ✓
+Order Worker          ✗
+Contract Worker       ✓
+```
+
+The Delegator shouldn't automatically throw away everything.
+
+It records:
+
+```python
+state = {
+    "customer": "...",
+    "opportunities": "...",
+    "orders": None,
+    "contracts": "...",
+    "errors": [
+        {
+            "worker": "order_worker",
+            "error": "Salesforce timeout"
+        }
+    ]
+}
+```
+
+Then it determines:
+
+> Is the failed Worker required for downstream Workers?
+
+---
+
+# 14. Dependency-aware failure handling
+
+Suppose:
+
+```text
+Opportunity Worker
+       ↓
+Contract Worker
+```
+
+If Opportunity Worker fails:
+
+```text
+Opportunity Worker ✗
+       ↓
+Contract Worker ?
+```
+
+Contract Worker cannot run because it doesn't have:
+
+```text
+opportunity_id
+```
+
+Therefore:
+
+```text
+Contract Worker = BLOCKED
+```
+
+This is different from:
+
+```text
+Contract Worker = FAILED
+```
+
+That's an important distinction.
+
+### Failed
+
+The Worker executed but encountered an error.
+
+### Blocked
+
+The Worker couldn't execute because a required dependency wasn't available.
+
+---
+
+# 15. Example
+
+```text
+Opportunity Worker
+       ✗
+       │
+       ↓
+No opportunity_id
+       │
+       ↓
+Contract Worker
+       │
+       ↓
+BLOCKED
+```
+
+The Delegator can return:
+
+```json
+{
+  "completed": [
+    "customer_worker"
+  ],
+  "failed": [
+    "opportunity_worker"
+  ],
+  "blocked": [
+    "contract_worker"
+  ]
+}
+```
+
+That gives the Coordinator a much better picture of what happened.
+
+---
+
+# 16. Retry logic
+
+Suppose the Opportunity Worker fails because of a temporary Salesforce timeout.
+
+The Delegator checks:
+
+```text
+Is error retryable?
+```
+
+For example:
+
+```text
+Timeout           → Retry
+HTTP 429          → Retry with backoff
+Temporary 5xx     → Retry
+Invalid input     → Don't retry
+Unauthorized      → Don't retry
+```
+
+So:
+
+```text
+Opportunity Worker
+       ↓
+Timeout
+       ↓
+Retry #1
+       ↓
+Retry #2
+       ↓
+Success
+       ↓
+Contract Worker
+```
+
+Because the Opportunity Worker eventually succeeded, the downstream dependency can now proceed.
+
+---
+
+# 17. What if the dependency never succeeds?
+
+Then:
+
+```text
+Opportunity Worker
+       ↓
+Retry
+       ↓
+Retry
+       ↓
+Failure
+       ↓
+Contract Worker = BLOCKED
+```
+
+The Delegator returns partial execution status to the Coordinator.
+
+The Coordinator might produce:
+
+> Customer profile was retrieved successfully, but opportunity-related contract information could not be retrieved because the upstream opportunity lookup failed.
+
+This is much better than generating a hallucinated contract result.
+
+---
+
+# 18. How do you prevent circular dependencies?
+
+Production systems should validate the Worker DAG before executing it.
+
+Bad design:
+
+```text
+Worker A
+   ↓
+Worker B
+   ↓
+Worker C
+   ↓
+Worker A
+```
+
+That's a cycle.
+
+The workflow can never finish.
+
+Therefore, the execution planner should perform **cycle detection / DAG validation** before execution.
+
+Valid:
+
+```text
+A → B → C
+```
+
+Invalid:
+
+```text
+A → B → C → A
+```
+
+This is another reason to model dependencies explicitly instead of allowing arbitrary agent-to-agent calls.
+
+---
+
+# 19. Dependency types you should know for interviews
+
+There are several useful categories.
+
+### Data dependency
+
+Worker B needs data produced by Worker A.
+
+```text
+A → customer_id → B
+```
+
+### Execution dependency
+
+Worker B should only start after A completes.
+
+```text
+A completed → B starts
+```
+
+### Resource dependency
+
+Two Workers require the same constrained resource.
+
+Example:
+
+```text
+Same API rate limit
+Same database connection pool
+Same external system
+```
+
+### Authorization dependency
+
+A downstream operation requires an authorization decision or entitlement established earlier.
+
+```text
+Authorization check
+       ↓
+Sensitive Worker
+```
+
+### Cross-domain dependency
+
+One Delegator produces information required by another Delegator.
+
+```text
+Sales Delegator
+      ↓
+Service Delegator
+```
+
+---
+
+# 20. Where MCP fits
+
+MCP is **not the dependency manager**.
+
+That's another important distinction.
+
+For example:
+
+```text
+Opportunity Worker
+       ↓
+MCP Salesforce tool
+       ↓
+Salesforce
+```
+
+MCP provides standardized access to tools/resources.
+
+The dependency orchestration is handled by:
+
+```text
+Coordinator / Delegator
+        +
+LangGraph state/workflow
+        +
+Execution planner
+```
+
+So:
+
+```text
+LangGraph
+    → controls workflow
+
 Worker
-     ↓
-Tool
-     ↓
-Enterprise Data
-     ↓
-Result
+    → performs business operation
+
+MCP
+    → provides standardized tool access
+
+Salesforce / ServiceNow
+    → actual enterprise systems
 ```
 
-This makes it possible to understand:
-
-* What happened?
-* Which agent performed the work?
-* Which systems were accessed?
-* Which steps succeeded or failed?
-* Where did latency occur?
-* What was the final outcome?
-
-This is particularly important for enterprise AI governance and operational accountability.
-
 ---
 
-### 9. Better Customer and Business Experience
-
-CWD enables users to interact with enterprise capabilities through a simpler business-oriented experience.
-
-Instead of knowing:
-
-> Which application should I use?
-
-the user can focus on:
-
-> What business outcome do I need?
-
-For example:
-
-> "Prepare a customer briefing for tomorrow's meeting."
-
-CWD handles the underlying coordination.
-
-This creates a more natural and efficient enterprise AI experience.
-
----
-
-### 10. Lower Long-Term AI Development Cost
-
-A common platform reduces the need to repeatedly build:
-
-* Agent orchestration
-* Authentication
-* Agent communication
-* Observability
-* Memory
-* RAG integration
-* Prompt management
-* Enterprise integrations
-* Error handling
-* Deployment infrastructure
-
-Business teams can therefore concentrate on **business-specific agent capabilities** rather than rebuilding common AI infrastructure.
-
----
-
-### 11. Reusable Enterprise AI Capabilities
-
-Capabilities developed for one workflow can potentially be reused by other agents and domains.
-
-For example:
+# 21. Your complete CWD dependency architecture
 
 ```text
-Customer Data Capability
-        |
-   +----+----+-------------+
-   |         |             |
- Sales     Finance     Customer Experience
- Agent      Agent           Agent
+                         USER
+                           │
+                           ↓
+                      COORDINATOR
+                           │
+                  Create Execution Plan
+                           │
+             ┌─────────────┴─────────────┐
+             ↓                           ↓
+      SALES DELEGATOR             SERVICE DELEGATOR
+             │                           │
+        Worker DAG                  Worker DAG
+             │                           │
+     ┌───────┼────────┐           ┌──────┴──────┐
+     ↓       ↓        ↓           ↓             ↓
+ Customer  Opp.     Order      Customer      Incident
+ Worker    Worker   Worker      Mapping       Worker
+     │       │                    Worker
+     │       ↓                       │
+     │   Contract                    ↓
+     │    Worker                ServiceNow
+     │
+     └───────────────┐
+                     ↓
+               Domain Results
+                     │
+                     ↓
+                 COORDINATOR
+                     │
+              Validate Results
+                     │
+              Aggregate Results
+                     │
+                     ↓
+                Final Response
 ```
-
-This creates a reusable enterprise AI ecosystem rather than isolated AI applications.
 
 ---
 
-### 12. Improved Time-to-Value
+# 22. The key production principle
 
-CWD separates the common AI platform capabilities from business-specific capabilities.
+The most important principle is:
+
+> **Don't let Workers arbitrarily call each other. Make dependencies explicit in the execution plan.**
+
+Instead of:
 
 ```text
-CWD Platform
-     |
-     +-- Security
-     +-- Orchestration
-     +-- A2A
-     +-- RAG
-     +-- Memory
-     +-- Observability
-     +-- Agent Management
-     +-- Prompt Management
-     |
-     +-- Business Agents
-            |
-            +-- Sales
-            +-- Finance
-            +-- HR
-            +-- Supply Chain
-            +-- Customer Experience
+Worker A → "Hey Worker B, do something"
 ```
 
-Once the common foundation is established, new agents can focus primarily on their business functionality.
+prefer:
 
-This accelerates delivery of additional AI use cases.
+```text
+Execution Planner
+      ↓
+Dependency Graph
+      ↓
+Worker A
+      ↓
+State update
+      ↓
+Worker B
+```
+
+This gives you:
+
+* predictable execution
+* traceability
+* retryability
+* resumability
+* parallel execution
+* failure isolation
+* dependency-aware recovery
+* better observability
+* easier testing
 
 ---
 
-## Business Value Summary
+# 23. Interview answer
 
-| Business Area | CWD Benefit |
-| --- | --- |
-| Productivity | Automates multi-step business activities |
-| Efficiency | Reduces manual coordination across systems |
-| Decision Making | Provides faster access to consolidated information |
-| AI Adoption | Accelerates development of new AI capabilities |
-| Scalability | Supports multiple agents and business domains |
-| Security | Provides consistent enterprise AI controls |
-| Governance | Enables traceability and controlled execution |
-| Reliability | Supports validation, retry, and recovery |
-| User Experience | Shifts interaction from applications to business outcomes |
-| Cost | Reduces duplicated AI platform development |
-| Time-to-Market | Reuses common enterprise AI capabilities |
-| Innovation | Creates a foundation for new agentic business solutions |
+If the interviewer asks:
 
-## Executive-Level Value Proposition
+> **“How does CWD handle dependencies between Workers?”**
 
-> **CWD transforms AI from isolated conversational applications into a scalable, governed enterprise capability that can execute business workflows across people, agents, data, and enterprise systems.**
+A strong answer is:
 
-The biggest business benefit is therefore **not simply automation**.
+> **“In CWD, Worker dependencies are modeled explicitly in the execution plan. When a Delegator decomposes a task, it identifies the required capabilities and the inputs and outputs of each Worker. If Worker B requires an output produced by Worker A, the planner creates a dependency edge from A to B. Independent Workers are executed concurrently, while dependent Workers execute only after their required inputs are available. We use LangGraph to maintain the execution state and control these transitions. If an upstream Worker fails, downstream Workers that depend on its output are marked blocked rather than executed with incomplete data. Retryable failures are retried with backoff, and the workflow state is persisted so execution can resume. At the end, the Delegator validates and aggregates the Worker results and sends the domain result back to the Coordinator.”**
 
-It is the ability to **scale AI-powered business execution across the enterprise without scaling complexity at the same rate**.
+### Remember this one line:
+
+**“CWD converts Worker dependencies into a DAG: independent Workers run in parallel, dependent Workers wait for upstream outputs, and LangGraph state controls execution, recovery, and resumption.”**

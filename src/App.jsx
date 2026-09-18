@@ -12,6 +12,7 @@ import MCPQuestion from "./pages/MCPQuestion";
 import A2AQuestion from "./pages/A2AQuestion";
 import AgenticScenarioBasedQuestion from "./pages/AgenticScenarioBasedQuestion";
 import TopQuestionsQuestion from "./pages/TopQuestionsQuestion";
+import RAGQuestion from "./pages/RAGQuestion";
 
 
 // =====================================================
@@ -82,10 +83,15 @@ function App() {
         ================================================= */}
         
         <Route
+          path="/rag"
+          element={<RAGQuestion />}
+        />
+
+        <Route
           path="/mcp"
           element={<MCPQuestion />}
         />
-
+  
         <Route
           path="/a2a"
           element={<A2AQuestion />}

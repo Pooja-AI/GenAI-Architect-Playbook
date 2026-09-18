@@ -29,7 +29,10 @@ function Navbar() {
       name: "Top Questions",
       path: "/top-questions",
     },
-    
+    {
+      name: "RAG",
+      path: "/rag",
+    },
    
     {
       name: "MCP",

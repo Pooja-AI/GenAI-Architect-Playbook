@@ -1,189 +1,352 @@
-## Business Context of CWD
+**CWD (Coordinator → Delegator → Worker)** architecture, the Coordinator should **not hard-code “if request contains X, call Delegator Y.”** Instead, it should use a combination of **intent classification, capability matching, business-domain mapping, authorization, and execution planning**.
 
-CWD is being developed as the **common enterprise AI execution platform for onsemi**. Its business context is not simply “using AI to automate tasks.” The platform addresses a specific enterprise problem: **business requests frequently require coordinated access to multiple systems, multiple business capabilities, and multiple levels of authorization before a reliable business outcome can be produced.**
+### How do you decide which Delegator should handle a request?
 
-### 1. Business Problem
+### 1. First understand the request
 
-A typical enterprise request may involve:
+Suppose the user asks:
 
-- Multiple business applications and data sources.
-- Different business owners and access permissions.
-- Several dependent activities.
-- Domain-specific business rules.
-- Human-readable deliverables rather than simple data retrieval.
-- The need to explain how the result was produced.
+> “Prepare a customer briefing for customer ID 12345 using their Salesforce account information and recent ServiceNow incidents.”
 
-For example, preparing a customer briefing may require customer information, sales history, open issues, and other relevant business information. These activities cannot be handled reliably by a single generic chatbot without understanding the business domain, coordinating the required capabilities, and enforcing access policies.
-
-**CWD is intended to solve this coordination problem.**
-
-### 2. Business Purpose
-
-The purpose of CWD is to provide a reusable platform through which business users can request an outcome, while the platform coordinates the underlying AI capabilities and enterprise integrations.
+The Coordinator first converts the natural-language request into a structured intent:
 
 ```text
-Business User
-     |
-     | Requests a business outcome
-     v
-CWD Platform
-     |
-     | Understands, routes, coordinates, governs
-     v
-Business Capabilities
-     |
-     | Retrieve, analyze, execute, generate
-     v
-Business Outcome
+Intent:
+    Customer Briefing
+
+Entities:
+    customer_id = 12345
+
+Required capabilities:
+    - Customer/CRM information
+    - Incident/ticket information
+
+Potential Delegators:
+    - Sales Delegator
+    - IT/Service Delegator
 ```
 
-The platform separates the business request from the technical execution.
+The LLM can perform the **semantic understanding**, but the final routing should be constrained by a controlled capability registry rather than allowing the LLM to arbitrarily select an agent.
 
-A business user asks for a result. CWD determines how that result should be produced.
+---
 
-### 3. Business Context in the CWD Operating Model
+# 2. Coordinator maintains a Delegator Capability Registry
 
-The business context of CWD is defined by the following questions:
+Conceptually, you maintain metadata like:
 
-| Business Question | CWD Responsibility |
-| --- | --- |
-| What does the user want to achieve? | Coordinator identifies the business intent |
-| Which business domain owns the request? | Coordinator routes to the appropriate Delegator |
-| What activities are required? | Delegator decomposes the business objective |
-| Which capabilities can perform those activities? | Delegator selects specialized Workers |
-| Which enterprise information is required? | Workers use approved data sources and tools |
-| What information is the user allowed to access? | Platform enforces entitlement and authorization |
-| How should the result be produced? | Agents execute the required workflow |
-| Can the result be trusted and explained? | Platform maintains traceability and observability |
+```python
+DELEGATOR_REGISTRY = {
+    "sales_delegator": {
+        "domains": ["customer", "sales", "account"],
+        "capabilities": [
+            "customer_profile",
+            "account_details",
+            "opportunity_details",
+            "sales_history"
+        ],
+        "workers": [
+            "salesforce_customer_worker",
+            "salesforce_opportunity_worker"
+        ]
+    },
 
-This is the central business meaning of CWD:
+    "service_delegator": {
+        "domains": ["incident", "service", "support"],
+        "capabilities": [
+            "incident_details",
+            "service_history",
+            "ticket_status"
+        ],
+        "workers": [
+            "servicenow_incident_worker",
+            "servicenow_ticket_worker"
+        ]
+    },
 
-> CWD converts a business objective into a governed, coordinated execution across enterprise capabilities.
-
-### 4. Business Domains Supported by the Platform
-
-CWD is designed as a shared foundation for multiple business domains rather than a single-purpose application.
-
-Potential business domains include:
-
-* Sales
-* Commercial Services
-* Finance
-* Supply Chain
-* Human Resources
-* Customer Experience
-* Quality
-* Email and Calendar
-* Business Analysis
-
-Each domain can have its own Delegator and specialized Workers while using the same platform services for orchestration, security, communication, memory, and monitoring.
-
+    "hr_delegator": {
+        "domains": ["employee", "hr"],
+        "capabilities": [
+            "employee_profile",
+            "leave",
+            "payroll"
+        ],
+        "workers": [
+            "employee_worker",
+            "leave_worker"
+        ]
+    }
+}
 ```
-                    CWD Platform
-                         |
-       ┌─────────────────┼─────────────────┐
-       |                 |                 |
-       v                 v                 v
- Sales Delegator   Finance Delegator   Supply Chain
-       |                 |                 |
-       v                 v                 v
- Sales Workers     Finance Workers    Supply Chain Workers
+
+This registry tells the Coordinator:
+
+> **What does each Delegator know how to do?**
+
+---
+
+# 3. The LLM performs intent and capability extraction
+
+The Coordinator sends the user request to an LLM with a structured output schema.
+
+For example:
+
+```python
+class RequestAnalysis(BaseModel):
+    intent: str
+    entities: dict
+    required_capabilities: list[str]
+    required_domains: list[str]
 ```
 
-### 5. Business Example: Customer Briefing Document
+For:
 
-The Customer Briefing Document use case represents the business context of CWD.
+> "Prepare a customer briefing for customer 12345 using Salesforce data and recent ServiceNow incidents."
 
-#### Business Request
+The LLM could return:
 
-> “Prepare a customer briefing document for an upcoming meeting.”
-
-#### Business Objective
-
-Provide the user with a consolidated briefing that supports customer-meeting preparation.
-
-#### Business Execution
-
+```json
+{
+  "intent": "customer_briefing",
+  "entities": {
+    "customer_id": "12345"
+  },
+  "required_capabilities": [
+    "customer_profile",
+    "incident_details"
+  ],
+  "required_domains": [
+    "customer",
+    "service"
+  ]
+}
 ```
-Customer Briefing Request
-          |
-          v
-Coordinator
-          |
-          | Identifies customer briefing as a Sales-related request
-          v
+
+Notice something important:
+
+**The LLM doesn't directly execute Salesforce or ServiceNow.**
+
+It only helps the Coordinator understand the request.
+
+---
+
+# 4. Coordinator performs capability matching
+
+Now the Coordinator compares the required capabilities against the Delegator registry.
+
+```text
+Required:
+
+customer_profile
+incident_details
+```
+
+Registry:
+
+```text
 Sales Delegator
-          |
-          | Decomposes the objective
-          v
-┌───────────────────────────────────────┐
-│ Customer Profile Worker               │
-│ Sales History Worker                  │
-│ Open Issues / Relevant Information    │
-│ Document Generation Worker            │
-└───────────────────┬───────────────────┘
-                    |
-                    v
-          Consolidated Briefing
-                    |
-                    v
-             Business User
+    customer_profile       ✓
+
+Service Delegator
+    incident_details       ✓
 ```
 
-The business value is not the individual API call or database query. The value is the completed customer briefing, produced from the required information and returned through a controlled workflow.
+Therefore:
 
-### 6. Business Context and Governance
-
-CWD operates in an enterprise environment where information access must follow business authorization.
-
-Therefore, the platform must ensure that:
-
-* The user is authenticated.
-* The user is entitled to the requested information.
-* The selected agent is authorized to perform the task.
-* Workers access data only through approved tools.
-* Data access follows business and security policies.
-* Sensitive information is protected.
-* The execution can be traced when required.
-
-The business context therefore includes not only what the user wants, but also what the user is permitted to do.
-
-### 7. Business Context vs. Technical Implementation
-
-| Business Context | Technical Implementation |
-| --- | --- |
-| Business user requests an outcome | Teams, Microsoft 365, or React interface |
-| Request belongs to a business domain | Coordinator routing |
-| Domain owns the business process | Domain Delegator |
-| Specific activity must be performed | Specialized Worker |
-| Enterprise information is required | Governed tools and enterprise connectors |
-| User must have permission | Entra ID, RBAC, entitlement checks |
-| Workflow must be coordinated | Orchestration and A2A communication |
-| Result must be traceable | Correlation IDs, MLflow, Application Insights |
-| Platform must support future agents | Agent Registry and reusable platform services |
-
-### 8. Architectural Position
-
-From an architecture perspective, CWD is not the business application itself.
-
-It is the enterprise execution layer that enables business applications and domain agents to work together.
-
-```
-Business Applications
-        |
-        v
-       CWD
-        |
-        ├── Business Domain Agents
-        ├── Enterprise Data and APIs
-        ├── Security and Governance
-        ├── Agent Communication
-        ├── Memory and Context
-        └── Observability
+```text
+Coordinator
+      |
+      +---- Sales Delegator
+      |
+      +---- Service Delegator
 ```
 
-Business teams own their domain capabilities. CWD provides the common platform required to execute those capabilities consistently and securely.
+This is much safer than:
 
-### Final Definition
+```text
+LLM → "I think Sales Delegator should handle it"
+```
 
-The business context of CWD is the need to provide onsemi business users with a common, governed AI platform that can understand business objectives, coordinate domain-specific agents, access authorized enterprise information, and deliver traceable business outcomes across multiple business processes.
+because the routing decision is constrained by known capabilities.
+
+---
+
+# 5. How does it select ONE Delegator?
+
+If the request only requires Salesforce:
+
+> "Get the account details for customer 12345."
+
+The matching becomes:
+
+```text
+customer_profile
+       ↓
+Sales Delegator
+       ↓
+Salesforce Customer Worker
+```
+
+So:
+
+```text
+Coordinator
+     ↓
+Sales Delegator
+     ↓
+Salesforce Customer Worker
+```
+
+---
+
+# 6. What if multiple Delegators are required?
+
+This is where your CWD architecture becomes important.
+
+For:
+
+> "Prepare a customer briefing using Salesforce account information and recent ServiceNow incidents."
+
+The Coordinator identifies:
+
+```text
+Sales Delegator
+    ↓
+Salesforce Worker
+
+Service Delegator
+    ↓
+ServiceNow Worker
+```
+
+The workflow becomes:
+
+```text
+                         ┌── Sales Delegator
+                         │       ↓
+User → Coordinator ──────┤   Salesforce Worker
+                         │
+                         └── Service Delegator
+                                 ↓
+                           ServiceNow Worker
+```
+
+The Delegators execute their own domain-specific work.
+
+Then:
+
+```text
+Salesforce result ──────┐
+                        ↓
+                  Coordinator
+                        ↓
+                Validate / Aggregate
+                        ↑
+ServiceNow result ──────┘
+```
+
+The Coordinator is therefore the **global orchestrator**, while Delegators are **domain-level orchestrators**.
+
+---
+
+# 7. How does the Coordinator know which Delegator is better when capabilities overlap?
+
+This is an important interview question.
+
+Suppose two Delegators have similar capabilities.
+
+You can use a **routing score**.
+
+For example:
+
+```text
+Routing Score =
+    Capability Match
+  + Domain Match
+  + Intent Match
+  + Entity Compatibility
+  + Authorization
+  + Availability
+```
+
+Conceptually:
+
+```python
+def score_delegator(request, delegator):
+
+    score = 0
+
+    score += capability_match(request, delegator) * 0.40
+    score += domain_match(request, delegator) * 0.25
+    score += intent_match(request, delegator) * 0.20
+    score += entity_match(request, delegator) * 0.10
+    score += authorization_check(request, delegator) * 0.05
+
+    return score
+```
+
+Then:
+
+```text
+Sales Delegator       0.91
+Service Delegator     0.42
+HR Delegator          0.08
+```
+
+The Coordinator selects the qualified Delegator with the strongest match.
+
+But **authorization should be a hard constraint**, not simply something that can be outweighed by a high score.
+
+---
+
+# 8. Authorization happens before execution
+
+This is especially important for an enterprise system.
+
+Suppose the user asks:
+
+> "Give me employee salary information."
+
+The LLM may correctly identify:
+
+```text
+Domain = HR
+Capability = payroll
+```
+
+But that does **not** mean the Coordinator should execute it.
+
+The Coordinator checks:
+
+```text
+User
+ ↓
+Identity
+ ↓
+Role
+ ↓
+Entitlements
+ ↓
+Delegator
+ ↓
+Worker
+```
+
+For example:
+
+```python
+if not authorization_service.is_allowed(
+        user_id,
+        capability="payroll",
+        resource="employee_salary"
+):
+    raise AuthorizationError()
+```
+
+Therefore:
+
+**Intent tells us what the user wants.**
+
+**Capability tells us who can perform it.**
+
+**Authorization tells us whether the user is allowed to do it.**
+

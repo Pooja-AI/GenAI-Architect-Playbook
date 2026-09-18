@@ -1,26 +1,47 @@
-Sure. One of the key Generative AI solutions I worked on was the CWD Multi-Agent Enterprise Assistant for **onsemi**, a semiconductor company. The solution was focused on enterprise engineering and operational use cases, where users needed to access information, analyze issues, and interact with multiple enterprise systems.
-
 ### Business Problem
 
 The business had information distributed across multiple enterprise systems and knowledge sources. Engineers and business users often had to manually search different systems, understand the information, and perform multiple steps to complete a task.
 
-We initially had traditional RAG and AI capabilities, which worked well for simple question answering. However, as the use cases became more complex, we needed the system to handle multi-step workflows, make decisions, interact with different tools and systems, and coordinate multiple capabilities.
+1.	Explain the CWD project end-to-end.
+2.	What business problem does CWD solve?
+3.	Why did you need a multi-agent architecture?
+4.	Why not implement CWD as a single LLM application?
+5.	What are the major components of CWD?
 
-The objective was therefore to build an enterprise assistant that could understand a business request, plan the work, retrieve the right information, interact with enterprise systems, execute tasks, and provide a consolidated response.
+### Explain the CWD project end-to-end.
 
-### Solution Architecture
-
-We designed CWD as a hierarchical multi-agent architecture:
+CWD is an enterprise multi-agent AI platform for Onsemi. It provides one secure entry point for business requests. The Coordinator understands the request and creates an execution plan, then routes it to the appropriate Delegator. Each Delegator manages multiple Workers, and Workers perform specific tasks by using MCP tools to access enterprise systems such as Salesforce, ServiceNow, SharePoint, or Snowflake. The results come back through the Delegator to the Coordinator, which validates and aggregates them before returning the final response to the user.
 
 **User → Gateway → Coordinator → Delegators → Workers → Enterprise Systems → Response**
 
-The **Coordinator** is responsible for understanding the user's intent, creating the overall plan, and determining which business capability or Delegator should handle each part of the request.
+### What business problem does CWD solve?
 
-The **Delegator** is responsible for a particular business domain or capability. It decomposes the task further and selects the appropriate specialized Workers.
+CWD solves the problem of fragmented enterprise information and manual business workflows. Instead of users accessing multiple systems and teams separately, CWD provides one secure entry point that can coordinate multiple AI agents and enterprise systems, reducing manual effort, response time, and operational complexity.
 
-The **Workers** perform the actual execution. They can retrieve information, call APIs, query data sources, execute tools, perform analysis, or carry out specific business operations.
+### Why did you need a multi-agent architecture?
 
-The results flow back from the Workers to the Delegators, then to the Coordinator, which validates and aggregates the results before returning the final response to the user.
+We needed multi-agent architecture because enterprise requests often involve multiple business capabilities and systems. For example, one customer briefing may require Salesforce customer data, ServiceNow ticket information, and knowledge from SharePoint. We separate these responsibilities across specialized Delegators and Workers so each agent has a clear responsibility, controlled access, and reusable capability.
+
+### Why not implement CWD as a single LLM application?
+
+A single LLM application would become difficult to maintain, secure, scale, and govern as the number of business capabilities grows. In CWD, we separate responsibilities using Coordinator, Delegator, and Worker layers. This gives us modularity, independent scaling, better security boundaries, easier troubleshooting, and reusable agents.
+
+### What are the major components of CWD?
+
+The major components are:
+
+API Layer – receives user requests.
+Authentication & Authorization – validates user identity and permissions.
+Coordinator – understands the request and orchestrates the workflow.
+Delegators – manage specific business capabilities.
+Workers – perform specialized tasks.
+MCP – provides standardized access to enterprise tools and systems.
+RAG/Search – retrieves relevant enterprise knowledge.
+LLMs – reasoning, planning, and response generation.
+State/Memory – maintains workflow and conversation state.
+Observability – tracks latency, errors, tokens, tool calls, and agent execution.
+Security/Governance – RBAC, secrets, audit, DLP, and policy enforcement.
+
 
 ### Technology Stack
 
@@ -42,31 +63,6 @@ For observability and evaluation, we incorporated tracing, logging, latency and 
 
 For security, we implemented enterprise identity, authorization, access control, secrets management, and data protection so that an agent could only access information and capabilities that the user was entitled to access.
 
-### Implementation
-
-From an implementation perspective, we first defined the business capabilities and separated them into Coordinator, Delegator, and Worker responsibilities.
-
-We then implemented the Coordinator workflow to classify the request, determine the execution plan, and route tasks.
-
-For each Delegator, we implemented domain-specific task decomposition and Worker selection. Workers were designed as smaller, focused components rather than creating one large agent with dozens of tools.
-
-For RAG, we implemented the complete pipeline from document ingestion and preprocessing through chunking, embedding, indexing, retrieval, filtering, and LLM-based response generation.
-
-We integrated enterprise tools and APIs through standardized interfaces so that Workers could interact with external systems without tightly coupling the agent logic to every individual integration.
-
-We also implemented error handling such as retries, timeouts, fallback handling, and controlled failure propagation. This was important because in a multi-agent system, one failed downstream tool should not necessarily bring down the entire workflow.
-
-We added tracing and evaluation so that we could understand what each agent did, which tools were selected, how long each step took, and where failures or poor responses occurred.
-
-### My Role
-
-My role was not limited to architecture. I was involved throughout the lifecycle.
-
-I worked with stakeholders to understand the business requirements and translate them into AI use cases. I designed the overall solution architecture and agent interaction model, and I was also hands-on with development.
-
-I contributed to the implementation of agent workflows, RAG components, APIs, integrations, tool calling, error handling, testing, evaluation, deployment, monitoring, and production readiness.
-
-I also worked closely with developers and reviewed implementation decisions to make sure that the individual components aligned with the overall architecture.
 
 ### Key Challenge and Outcome
 
