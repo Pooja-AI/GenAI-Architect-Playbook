@@ -1,459 +1,500 @@
-## Target / End State
+In **CWD**, if one Worker fails, we **do not automatically fail the entire request**. The behavior depends on whether that Worker is independent or a dependency for other Workers.
 
-The target state of CWD is to establish it as the **enterprise-wide AI execution and orchestration platform** for onsemi.
+### Example
 
-The production platform should evolve from supporting individual production use cases into a **scalable, reusable, governed platform capable of onboarding and operating AI agents across multiple business domains**.
-
-### 1. Target Business Vision
-
-The end state is:
-
-> **Any authorized business user should be able to request a business outcome, and CWD should intelligently determine the required capabilities, coordinate the appropriate agents, securely access enterprise information, execute the workflow, and return a reliable, traceable outcome.**
+Suppose the **Sales Delegator** has 3 Workers:
 
 ```text
-                 Business User
-                      |
-                      v
-              Business Request
-                      |
-                      v
-              ┌──────────────┐
-              │ CWD Platform │
-              └──────┬───────┘
-                     |
-          Understand + Plan + Govern
-                     |
-          ┌──────────┼──────────┐
-          v          v          v
-       Sales      Finance    Supply Chain
-       Agents      Agents       Agents
-          |          |           |
-          +----------+-----------+
-                     |
-                     v
-          Enterprise Capabilities
-                     |
-                     v
-             Business Outcome
+Sales Delegator
+   ├── W1: Salesforce Customer Profile
+   ├── W2: Salesforce Opportunities
+   └── W3: Salesforce Orders
 ```
 
----
+The user asks:
 
-## 2. Enterprise AI Platform
+> “Give me a complete customer briefing for customer 12345.”
 
-CWD should become the **common platform layer** for enterprise AI agents.
+All three Workers need the same `customer_id`, so they can execute in parallel.
 
-Instead of every business team creating its own:
-
-* Orchestration.
-* Agent communication.
-* Security.
-* Data integration.
-* Memory.
-* Prompt management.
-* Monitoring.
-* Evaluation.
-* Deployment model.
-
-CWD provides these capabilities centrally.
+If:
 
 ```text
-                 CWD Enterprise Platform
-                           |
-       ┌───────────────────┼───────────────────┐
-       |                   |                   |
-       v                   v                   v
-   Business Agents     Platform Services   Enterprise
-       |                   |               Integrations
-       |                   |                   |
-       v                   v                   v
-    Sales             Orchestration        Snowflake
-    Finance           Security             Salesforce
-    Supply Chain      Memory               Oracle
-    HR                Messaging            SharePoint
-    Quality           Observability         M365
-    CX                Evaluation            APIs
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → TIMEOUT
 ```
 
----
-
-## 3. Target CWD Execution Model
-
-The Coordinator–Delegator–Worker model remains the core execution pattern.
+CWD handles it like this:
 
 ```text
-User
- |
- v
-Coordinator
- |
- |-- Intent Understanding
- |-- Planning
- |-- Routing
- |-- Governance
- |
- v
-Delegator
- |
- |-- Domain Understanding
- |-- Task Decomposition
- |-- Worker Selection
- |
- v
-Workers
- |
- |-- Retrieve
- |-- Analyze
- |-- Calculate
- |-- Execute
- |-- Generate
- |
- v
-Result Validation
- |
- v
-Business Outcome
-```
-
-The target architecture should support both:
-
-* **Sequential execution**
-* **Parallel execution**
-
-For complex workflows:
-
-```text
+                 Sales Delegator
+                       |
+             ┌─────────┼─────────┐
+             ↓         ↓         ↓
+            W1        W2        W3
+          SUCCESS   SUCCESS    FAILED
+             |         |         |
+             └─────────┼─────────┘
+                       ↓
+              Validate Results
+                       ↓
+             Partial Domain Result
+                       ↓
                  Coordinator
-                      |
-                      v
-                Sales Delegator
-                      |
-          ┌───────────┼───────────┐
-          v           v           v
-      Customer     Sales        Issue
-       Worker      Worker       Worker
-          |           |           |
-          └───────────┼───────────┘
-                      v
-               Result Aggregation
-                      |
-                      v
-                Final Outcome
+                       ↓
+             Final Validation
+                       ↓
+              LLM Synthesis
 ```
+
+### 1. Worker reports a structured failure
+
+The Worker should not simply return:
+
+```text
+"Something went wrong"
+```
+
+It returns something structured:
+
+```json
+{
+  "worker_id": "salesforce_order_worker",
+  "status": "FAILED",
+  "error_type": "TIMEOUT",
+  "retryable": true,
+  "source": "Salesforce",
+  "execution_id": "exec-123",
+  "correlation_id": "corr-456"
+}
+```
+
+This allows the orchestration layer to understand **what failed and whether it can retry**.
 
 ---
 
-## 4. Dynamic Agent Ecosystem
+### 2. Delegator determines whether to retry
 
-The target state is a dynamic agent ecosystem rather than a fixed list of hard-coded agents.
-
-CWD should be able to discover the appropriate agent based on:
-
-* Business capability.
-* Agent capability.
-* Domain.
-* Availability.
-* Authorization.
-* Version.
-* Health/status.
-* Required tools.
-
-The **Agent Registry** becomes an important control point.
+For a temporary failure:
 
 ```text
-Business Request
-      |
-      v
+Timeout
+429 rate limit
+Temporary 5xx
+Network failure
+```
+
+the Delegator can retry with exponential backoff:
+
+```text
+Attempt 1 → failed
+     ↓
+wait 1 sec
+     ↓
+Attempt 2 → failed
+     ↓
+wait 2 sec
+     ↓
+Attempt 3 → SUCCESS
+```
+
+But for something like:
+
+```text
+Invalid customer ID
+Unauthorized
+Forbidden
+Invalid request
+```
+
+we normally **don't blindly retry**.
+
+---
+
+### 3. What if retry also fails?
+
+Suppose:
+
+```text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → FAILED after retries
+```
+
+The Delegator marks W3 as failed and returns a **partial domain result**.
+
+Important:
+
+> **Failure is not treated as “no data.”**
+
+For example, we should NOT tell the LLM:
+
+```text
+orders = []
+```
+
+because that could mean:
+
+> “The customer has no orders.”
+
+Instead:
+
+```json
+{
+  "customer": {...},
+  "opportunities": [...],
+  "orders": {
+    "status": "UNAVAILABLE",
+    "reason": "Salesforce order worker failed"
+  }
+}
+```
+
+This prevents the LLM from hallucinating that there are no orders.
+
+---
+
+## 4. What if another Worker depends on the failed Worker?
+
+This is more important.
+
+Suppose:
+
+```text
+W1: Get Customer
+       ↓
+W2: Get Opportunities
+       ↓
+W3: Get Contracts
+```
+
+If W2 fails:
+
+```text
+W1 → SUCCESS
+W2 → FAILED
+W3 → BLOCKED
+```
+
+W3 should **not execute**, because it needs the opportunity IDs produced by W2.
+
+Notice the difference:
+
+```text
+W2 = FAILED
+W3 = BLOCKED
+```
+
+**Failed** means the Worker executed but couldn't complete.
+
+**Blocked** means the Worker could not safely execute because a required dependency was unavailable.
+
+---
+
+## 5. LangGraph manages this state
+
+In our CWD architecture, LangGraph maintains the workflow state.
+
+For example:
+
+```python
+state = {
+    "customer_id": "12345",
+    "worker_results": {},
+    "errors": [],
+    "blocked_workers": []
+}
+```
+
+After W1:
+
+```python
+state["worker_results"]["W1"] = {
+    "status": "SUCCESS",
+    "data": customer_data
+}
+```
+
+After W2 failure:
+
+```python
+state["worker_results"]["W2"] = {
+    "status": "FAILED",
+    "error": "Salesforce timeout",
+    "retryable": True
+}
+```
+
+The graph then evaluates dependencies:
+
+```text
+W2 failed
+   ↓
+Does W3 require W2 output?
+   ↓
+YES
+   ↓
+W3 = BLOCKED
+```
+
+LangGraph controls the transition rather than allowing W3 to run with incomplete inputs.
+
+---
+
+## 6. Coordinator receives the partial result
+
+The Delegator sends something like:
+
+```json
+{
+  "delegator": "Sales",
+  "status": "PARTIAL",
+  "results": {
+    "customer": {...},
+    "opportunities": [...]
+  },
+  "failed_workers": [
+    {
+      "worker": "salesforce_order_worker",
+      "reason": "timeout"
+    }
+  ]
+}
+```
+
+The Coordinator combines this with results from other Delegators.
+
+For example:
+
+```text
 Coordinator
-      |
-      v
-Agent Registry
-      |
-      | Find suitable capability
-      v
-Available Agent
-      |
-      v
-Execution
-```
-
-This allows new agents to be onboarded without redesigning the core platform.
-
----
-
-## 5. Enterprise Data and Knowledge Fabric
-
-The target state is a governed AI access layer across enterprise information.
-
-```text
-             CWD Agents
-                 |
-                 v
-        Governed Data Access
-                 |
-      ┌──────────┼──────────┐
-      v          v          v
-  Structured   Knowledge   APIs
-     Data        / RAG
-      |           |          |
-      v           v          v
- Snowflake    AI Search   Enterprise
- Salesforce               Services
- Oracle
-```
-
-The important architectural principle remains:
-
-> **Agents should not directly access enterprise systems. They access enterprise capabilities through governed tools and interfaces.**
-
-This provides a consistent security and governance boundary.
-
----
-
-## 6. Target Security Model
-
-Security should be enforced throughout the complete execution lifecycle.
-
-```text
-User Identity
-      ↓
-Authentication
-      ↓
-Entitlement
-      ↓
-Authorization
-      ↓
-Agent Authorization
-      ↓
-Tool Authorization
-      ↓
-Data Access
-      ↓
-Output Validation
-      ↓
-Response
-```
-
-The target state should provide centralized enforcement for:
-
-* Identity.
-* RBAC.
-* Least privilege.
-* Managed identities.
-* Data classification.
-* DLP.
-* Input/output validation.
-* Auditability.
-* Secret management.
-* Secure agent communication.
-
----
-
-## 7. Target Observability and Evaluation
-
-The end state should provide **full lifecycle visibility of every AI execution**.
-
-```text
-User Request
      |
-     v
+     ├── Sales Delegator
+     │      ├── Customer → SUCCESS
+     │      ├── Opportunity → SUCCESS
+     │      └── Orders → FAILED
+     │
+     └── Service Delegator
+            └── Incidents → SUCCESS
+```
+
+The Coordinator can still produce a useful response.
+
+---
+
+## 7. Final response clearly communicates partial availability
+
+The LLM receives the **validated structured context**, including the failure information.
+
+It should generate something like:
+
+> Customer 12345 has three active opportunities and two recent ServiceNow incidents. Order information could not be retrieved because the Salesforce order service timed out.
+
+It should **not** say:
+
+> Customer 12345 has no orders.
+
+because we don't actually know that.
+
+---
+
+# What if the Worker failure is critical?
+
+Some Workers may be marked as **mandatory**.
+
+For example:
+
+```text
+Customer Identity Worker → mandatory
+Salesforce Opportunity Worker → optional
+Order Worker → optional
+```
+
+If the mandatory Worker fails:
+
+```text
+Customer Identity Worker
+          ↓
+       FAILED
+          ↓
+Entire task cannot safely continue
+```
+
+The Coordinator may stop the workflow and return:
+
+```text
+REQUEST_FAILED
+reason = "Required customer identity data unavailable"
+```
+
+Whereas an optional Worker failure results in:
+
+```text
+PARTIAL_SUCCESS
+```
+
+So CWD can distinguish:
+
+| Situation                   | Action                            |
+| --------------------------- | --------------------------------- |
+| Temporary timeout           | Retry                             |
+| 429 / rate limit            | Retry with backoff                |
+| Temporary 5xx               | Retry                             |
+| Invalid input               | Fail                              |
+| Authorization failure       | Fail/deny                         |
+| Optional Worker fails       | Continue with partial result      |
+| Required Worker fails       | Stop dependent workflow           |
+| Dependency Worker fails     | Downstream Worker becomes BLOCKED |
+| All required data available | Continue normally                 |
+
+### Interview answer
+
+> **“In CWD, a Worker failure doesn't automatically fail the entire request. The Worker returns a structured status containing the error type, retryability, source, and execution metadata. The Delegator retries transient failures such as timeouts, 429s, or temporary 5xx errors using backoff. If the Worker still fails, we check whether it is optional or a dependency for another Worker. Independent optional failures are represented as partial results, while downstream Workers that depend on the failed Worker are marked BLOCKED rather than executed with incomplete data. LangGraph maintains the execution state and allows the workflow to resume from the last successful checkpoint. The Delegator returns the partial domain result and failure metadata to the Coordinator, which performs final validation and decides whether to return a partial response or fail the overall request. Most importantly, we never interpret missing data as negative data.”**
+
+### The key architecture principle
+
+```text
+Worker fails
+     ↓
+Classify failure
+     ↓
+Retry if retryable
+     ↓
+Still failing?
+     ↓
+Check dependencies
+     ├── Independent → continue
+     ├── Dependent → block downstream
+     └── Critical → fail workflow
+     ↓
+Persist state
+     ↓
+Coordinator aggregates successful + failed results
+     ↓
+Final response explicitly indicates unavailable data
+```
+
+**Interview one-liner:**
+
+> “We use failure isolation, retries, dependency-aware blocking, checkpointed state, and partial-result handling so one Worker failure doesn't unnecessarily bring down the entire multi-agent workflow.”
+
+For **CWD Worker failure handling**, no single technology handles everything. Each layer has a specific responsibility.
+
+### CWD failure-handling tech stack
+
+| Responsibility              | Technology                                      | What it handles                                                        |
+| --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |
+| **Workflow orchestration**  | **LangGraph**                                   | Worker states, transitions, dependencies, retries, conditional routing |
+| **Durable execution/state** | **LangGraph checkpointer + Redis/PostgreSQL**   | Saves workflow state so execution can resume                           |
+| **Retry / backoff**         | **LangGraph logic + application retry library** | Retries transient failures                                             |
+| **Async messaging**         | **Azure Service Bus**                           | Queuing, retries, DLQ, decoupling Workers                              |
+| **Dead-letter handling**    | **Azure Service Bus DLQ**                       | Stores messages that repeatedly fail                                   |
+| **Worker execution**        | **FastAPI + Python services**                   | Executes Worker business logic                                         |
+| **Tool integration**        | **MCP**                                         | Standardized access to Salesforce, ServiceNow, databases, APIs         |
+| **Authorization**           | **Microsoft Entra ID + RBAC/ACL**               | Prevents unauthorized Worker execution                                 |
+| **Timeout/circuit breaker** | **Python resilience logic / service layer**     | Prevents cascading failures                                            |
+| **Monitoring**              | **Azure App Insights + Log Analytics**          | Errors, latency, retries, traces                                       |
+| **Distributed tracing**     | **OpenTelemetry + App Insights**                | Tracks Coordinator → Delegator → Worker                                |
+| **Secrets**                 | **Azure Key Vault**                             | Credentials/API secrets                                                |
+| **Container runtime**       | **AKS / Azure Container Apps**                  | Runs Worker services                                                   |
+
+### The most important one: LangGraph
+
+For your interview, emphasize:
+
+```text
 Coordinator
-     |
-     v
+     ↓
 Delegator
-     |
-     v
+     ↓
+LangGraph execution graph
+     ↓
+Worker 1 ──→ SUCCESS
+Worker 2 ──→ FAILED ──→ RETRY
+Worker 3 ──→ BLOCKED
+     ↓
+Persist State / Checkpoint
+     ↓
+Delegator
+     ↓
+Coordinator
+```
+
+**LangGraph** handles the **workflow state and decision logic**:
+
+```python
+Worker 1 → success
+Worker 2 → retry
+Worker 2 → failed
+        ↓
+Does Worker 3 depend on Worker 2?
+        ↓
+      YES
+        ↓
+Worker 3 → BLOCKED
+```
+
+### Where Azure Service Bus fits
+
+Service Bus is more for **reliable asynchronous messaging**, especially when Workers are independently deployed:
+
+```text
+Delegator
+   ↓
+Service Bus Queue
+   ↓
 Worker
-     |
-     v
-Tool
-     |
-     v
-Enterprise System
+   ↓
+Success
+   │
+   └── Failure → Retry
+                    ↓
+              Max retries
+                    ↓
+                  DLQ
 ```
 
-Every stage should be traceable through standardized identifiers:
+So don't say **“Service Bus handles Worker dependencies.”**
+
+Instead:
+
+> **LangGraph handles workflow dependencies and state; Service Bus provides reliable asynchronous messaging, retry delivery, and dead-letter handling.**
+
+### Where MCP fits
+
+MCP does **not** manage failure orchestration.
+
+For example:
 
 ```text
-session_id
-task_id
-run_id
-turn_id
-step_id
+Salesforce Worker
+       ↓
+MCP Client
+       ↓
+MCP Server
+       ↓
+Salesforce API
 ```
 
-The platform should measure:
-
-* Latency.
-* Token consumption.
-* Cost.
-* Agent accuracy.
-* Tool success rate.
-* Failure rate.
-* Retry rate.
-* Workflow completion.
-* Agent quality.
-* Business outcome quality.
-
-This enables CWD to become an **operationally measurable AI platform**, not simply an agent runtime.
-
----
-
-## 8. Production-Grade Reliability
-
-At the target state, CWD should support enterprise-scale operational requirements.
-
-Key capabilities include:
-
-* Horizontal scaling.
-* High availability.
-* Fault isolation.
-* Retry policies.
-* Timeout management.
-* Dead-letter queues.
-* Backpressure.
-* Priority execution.
-* Idempotent operations.
-* Failure recovery.
-* Long-running workflow support.
-* Controlled parallel execution.
-
-The objective is that failure of one Worker or business capability should not unnecessarily bring down the overall platform.
-
----
-
-## 9. Standardized Agent Onboarding
-
-One of the most important target-state outcomes is to make **new agent onboarding predictable and repeatable**.
-
-A new business agent should follow a standard lifecycle:
+If Salesforce times out:
 
 ```text
-Business Requirement
-       ↓
-Agent Design
-       ↓
-Development
-       ↓
-Testing / Evaluation
-       ↓
-Security Review
-       ↓
-Agent Registration
-       ↓
-Deployment
-       ↓
-Production Monitoring
-       ↓
-Continuous Improvement
+MCP/tool call
+     ↓
+timeout
+     ↓
+Worker catches error
+     ↓
+LangGraph retry policy
+     ↓
+retry
 ```
 
-The platform should provide the common infrastructure while the domain team focuses primarily on the **business capability and agent behavior**.
+So:
 
----
+> **MCP standardizes tool access; LangGraph manages the workflow response to the failure.**
 
-## 10. Target Operating Model
+### Best interview summary
 
-The target organization should operate with clear separation between:
-
-### CWD Platform Team
-
-Owns:
-
-* Core orchestration.
-* Platform architecture.
-* Security framework.
-* Messaging.
-* Agent registry.
-* Prompt registry.
-* Observability.
-* Runtime infrastructure.
-* Platform reliability.
-* Common integrations.
-
-### Business / Domain Teams
-
-Own:
-
-* Domain Delegators.
-* Domain Workers.
-* Business rules.
-* Domain prompts.
-* Domain-specific tools.
-* Business evaluation criteria.
-* Business outcomes.
-
-```text
-             CWD Platform Team
-                     |
-        ┌────────────┼────────────┐
-        v            v            v
-     Sales        Finance      Supply Chain
-      Team          Team           Team
-        |            |              |
-        v            v              v
-    Delegator    Delegator      Delegator
-        |            |              |
-     Workers      Workers        Workers
-```
-
-This separation is critical for enterprise scalability.
-
----
-
-## 11. Target Architecture Maturity
-
-The evolution of CWD can be viewed as:
-
-```text
-Current
-Production CWD
-      |
-      v
-Platform Standardization
-      |
-      v
-Agent Onboarding at Scale
-      |
-      v
-Enterprise Governance
-      |
-      v
-Continuous Evaluation
-      |
-      v
-Multi-Domain Enterprise AI
-      |
-      v
-Enterprise AI Execution Platform
-```
-
-The goal is not simply to add more agents.
-
-The goal is to create a **repeatable enterprise capability for building, deploying, governing, and operating AI-driven business processes**.
-
----
-
-## 12. Target-State Success Criteria
-
-CWD should be considered successful at the end state when:
-
-* New business agents can be onboarded quickly using standardized platform capabilities.
-* Multiple business domains can operate on the same CWD platform.
-* Complex workflows can coordinate multiple agents.
-* Enterprise data is accessed through governed capabilities.
-* Authorization is enforced consistently.
-* Agent execution is fully observable.
-* AI quality and cost are measurable.
-* Agents can communicate reliably.
-* Platform components can scale independently.
-* Business teams can develop domain capabilities without rebuilding platform infrastructure.
-* CWD becomes the default enterprise pattern for production AI agent execution.
-
----
-
-## Target / End-State Definition
-
-> **CWD's target state is a production-scale, enterprise-wide AI execution platform that provides a standardized foundation for discovering, orchestrating, securing, deploying, monitoring, and evaluating AI agents across business domains.**
-
-In the end state, **CWD becomes the control and execution layer between enterprise users, AI agents, and enterprise capabilities**, enabling onsemi to scale AI from individual use cases into a governed enterprise AI ecosystem.
+> **“In our CWD architecture, LangGraph is the primary orchestration layer for Worker failure handling. It maintains execution state, models dependencies, controls conditional transitions, and supports retry/resume behavior. Service Bus is used for asynchronous decoupling and reliable message delivery, including retries and dead-letter queues. Workers are implemented as Python/FastAPI services, and MCP standardizes their access to enterprise systems such as Salesforce and ServiceNow. App Insights, Log Analytics, and OpenTelemetry provide observability and distributed tracing. So LangGraph handles workflow recovery, Service Bus handles messaging reliability, and the Worker/service layer handles the actual business and tool-level errors.”**

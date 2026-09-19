@@ -48,7 +48,7 @@ import ChallengesSolutions from "./pages/CWD/ChallengesSolutions";
 import CurrentStateAndFutureState from "./pages/CWD/CurrentStateAndFutureState";
 import InterviewPreparation from "./pages/CWD/InterviewPreparation";
 
-import AWS from "./pages/CWD/AWS";
+import AWS from "./pages/AWS";
 import GCP from "./pages/CWD/GCP";
 import Azure from "./pages/CWD/Azure";
 import AboutPooja from "./pages/CWD/AboutPooja";
