@@ -3,7 +3,7 @@ import ProjectOverview from "../../assets/CWD/docs/ProjectOverview.md?raw";
 import WhatIsCWD from "../../assets/CWD/docs/CWD.md?raw";
 import BusinessContext from "../../assets/CWD/docs/cwd-business-context.md?raw";
 import BusinessProblem from "../../assets/CWD/docs/cwd-business-problem.md?raw";
-import ProjectObjectives from "../../assets/CWD/docs/cwd-project-objectives.md?raw";
+import ProjectObjectives from "../../assets/CWD/docs/cwd-resultaggregation.md?raw";
 import CurrentState from "../../assets/CWD/docs/cwd-current-state.md?raw";
 import TargetState from "../../assets/CWD/docs/cwd-target-state.md?raw";
 import WhyAgenticAI from "../../assets/CWD/docs/cwd-why-agentic-ai.md?raw";
@@ -19,7 +19,7 @@ const CWDProjectOverview = [
   {
     id: "cwd-project-overview",
     category: "Project Overview",
-    title: "Project Overview",
+    title: "Explain the CWD project end-to-end.",
     difficulty: "Intermediate",
     time: "~45 min",
     description:
@@ -30,7 +30,7 @@ const CWDProjectOverview = [
   {
     id: "what-is-cwd",
     category: "Project Overview",
-    title: "What is CWD?",
+    title: "Explain the Coordinator → Delegator → Worker architecture.?",
     difficulty: "Intermediate",
     time: "~10 min",
     description:
@@ -42,7 +42,7 @@ const CWDProjectOverview = [
       {
         id: "cwd-business-context",
         category: "Project Overview",
-        title: "Business Context",
+        title: "How do you decide which Delegator should handle a request?",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
@@ -54,7 +54,7 @@ const CWDProjectOverview = [
       {
         id: "cwd-business-problem",
         category: "Project Overview",
-        title: "Business Problem",
+        title: "How does a Delegator decide which Workers to invoke?",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
@@ -64,9 +64,21 @@ const CWDProjectOverview = [
       },
 
       {
+        id: "cwd-business-benefits",
+        category: "Project Overview",
+        title: "How do you decide which Delegator should handle a request?",
+        difficulty: "Intermediate",
+        time: "~10 min",
+        description:
+          "Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.",
+        concept: BusinessBenefits,
+        code: "",
+      },
+
+      {
         id: "cwd-project-objectives",
         category: "Project Overview",
-        title: "Project Objectives",
+        title: "What does “result aggregation” mean?",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
@@ -78,7 +90,7 @@ const CWDProjectOverview = [
       {
         id: "cwd-current-state",
         category: "Project Overview",
-        title: "Current State",
+        title: "Where does validation happen?",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
@@ -111,17 +123,7 @@ const CWDProjectOverview = [
         code: "",
       },
 
-      {
-        id: "cwd-business-benefits",
-        category: "Project Overview",
-        title: "Key Business Benefits",
-        difficulty: "Intermediate",
-        time: "~10 min",
-        description:
-          "Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.",
-        concept: BusinessBenefits,
-        code: "",
-      },
+      
 
       {
         id: "aws",
