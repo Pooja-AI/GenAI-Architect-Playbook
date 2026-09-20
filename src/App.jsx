@@ -55,6 +55,38 @@ import AboutPooja from "./pages/CWD/AboutPooja";
 import AzureEnterpriseQuestions from "./pages/CWD/CWDQuestions";
 
 // =====================================================
+// CWD INTERVIEW QUESTION COOKBOOKS (one page per section)
+// =====================================================
+
+import ArchitectureQuestions from "./pages/CWD/02-CWDArchitecture";
+import CoordinatorAgentQuestions from "./pages/CWD/03-CWDCoordinatorAgent";
+import DelegatorArchitectureQuestions from "./pages/CWD/04-CWDDelegatorArchitecture";
+import WorkerArchitectureQuestions from "./pages/CWD/05-CWDWorkerArchitecture";
+import McpDeepInterviewQuestions from "./pages/CWD/06-CWDMcpDeepInterview";
+import A2aAgentCommunicationQuestions from "./pages/CWD/07-CWDA2aAgentCommunication";
+import LangGraphQuestions from "./pages/CWD/08-CWDLangGraph";
+import RagArchitectureQuestions from "./pages/CWD/09-CWDRagArchitecture";
+import LlmArchitectureQuestions from "./pages/CWD/10-CWDLlmArchitecture";
+import HallucinationGroundingQuestions from "./pages/CWD/11-CWDHallucinationGrounding";
+import LlmEvaluationQuestions from "./pages/CWD/12-CWDLlmEvaluation";
+import SecurityArchitectureQuestions from "./pages/CWD/13-CWDSecurityArchitecture";
+import ObservabilityQuestions from "./pages/CWD/15-CWDObservability";
+import ReliabilityFailureHandlingQuestions from "./pages/CWD/16-CWDReliabilityFailureHandling";
+import ScalabilityQuestions from "./pages/CWD/17-CWDScalability";
+import PerformanceOptimizationQuestions from "./pages/CWD/18-CWDPerformanceOptimization";
+import CostOptimizationQuestions from "./pages/CWD/19-CWDCostOptimization";
+import DataArchitectureQuestions from "./pages/CWD/20-CWDDataArchitecture";
+import EnterpriseIntegrationQuestions from "./pages/CWD/21-CWDEnterpriseIntegration";
+import ApiBackendArchitectureQuestions from "./pages/CWD/22-CWDApiBackendArchitecture";
+import DeploymentDevOpsQuestions from "./pages/CWD/23-CWDDeploymentDevOps";
+import TestingQuestions from "./pages/CWD/24-CWDTesting";
+import TroubleshootingScenariosQuestions from "./pages/CWD/25-CWDTroubleshootingScenarios";
+import AgenticAiDesignQuestions from "./pages/CWD/26-CWDAgenticAiDesign";
+import GovernanceQuestions from "./pages/CWD/27-CWDGovernance";
+import ArchitectureTradeOffsQuestions from "./pages/CWD/28-CWDArchitectureTradeOffs";
+import PrincipalArchitectQuestions from "./pages/CWD/29-CWDPrincipalArchitect";
+
+// =====================================================
 // COMPONENTS
 // =====================================================
 
@@ -276,6 +308,172 @@ function App() {
         />
 
         <Route path="/cwd-top-questions" element={<AzureEnterpriseQuestions/>} />
+
+        {/* =================================================
+            CWD INTERVIEW QUESTION COOKBOOKS
+        ================================================= */}
+
+        {/* 02. Architecture Questions */}
+        <Route
+          path="/cwd-q-architecture-questions"
+          element={<ArchitectureQuestions />}
+        />
+
+        {/* 03. Coordinator Agent */}
+        <Route
+          path="/cwd-q-coordinator-agent"
+          element={<CoordinatorAgentQuestions />}
+        />
+
+        {/* 04. Delegator Architecture */}
+        <Route
+          path="/cwd-q-delegator-architecture"
+          element={<DelegatorArchitectureQuestions />}
+        />
+
+        {/* 05. Worker Architecture */}
+        <Route
+          path="/cwd-q-worker-architecture"
+          element={<WorkerArchitectureQuestions />}
+        />
+
+        {/* 06. Mcp Deep Interview */}
+        <Route
+          path="/cwd-q-mcp-deep-interview"
+          element={<McpDeepInterviewQuestions />}
+        />
+
+        {/* 07. A2A Agent Communication */}
+        <Route
+          path="/cwd-q-a2a-agent-communication"
+          element={<A2aAgentCommunicationQuestions />}
+        />
+
+        {/* 08. Langgraph */}
+        <Route
+          path="/cwd-q-langgraph"
+          element={<LangGraphQuestions />}
+        />
+
+        {/* 09. Rag Architecture */}
+        <Route
+          path="/cwd-q-rag-architecture"
+          element={<RagArchitectureQuestions />}
+        />
+
+        {/* 10. Llm Architecture */}
+        <Route
+          path="/cwd-q-llm-architecture"
+          element={<LlmArchitectureQuestions />}
+        />
+
+        {/* 11. Hallucination And Grounding */}
+        <Route
+          path="/cwd-q-hallucination-and-grounding"
+          element={<HallucinationGroundingQuestions />}
+        />
+
+        {/* 12. Llm Evaluation */}
+        <Route
+          path="/cwd-q-llm-evaluation"
+          element={<LlmEvaluationQuestions />}
+        />
+
+        {/* 13. Security Architecture */}
+        <Route
+          path="/cwd-q-security-architecture"
+          element={<SecurityArchitectureQuestions />}
+        />
+
+        {/* 15. Observability */}
+        <Route
+          path="/cwd-q-observability"
+          element={<ObservabilityQuestions />}
+        />
+
+        {/* 16. Reliability And Failure Handling */}
+        <Route
+          path="/cwd-q-reliability-and-failure-handling"
+          element={<ReliabilityFailureHandlingQuestions />}
+        />
+
+        {/* 17. Scalability */}
+        <Route
+          path="/cwd-q-scalability"
+          element={<ScalabilityQuestions />}
+        />
+
+        {/* 18. Performance And Optimization */}
+        <Route
+          path="/cwd-q-performance-and-optimization"
+          element={<PerformanceOptimizationQuestions />}
+        />
+
+        {/* 19. Cost Optimization */}
+        <Route
+          path="/cwd-q-cost-optimization"
+          element={<CostOptimizationQuestions />}
+        />
+
+        {/* 20. Data Architecture */}
+        <Route
+          path="/cwd-q-data-architecture"
+          element={<DataArchitectureQuestions />}
+        />
+
+        {/* 21. Enterprise Integration */}
+        <Route
+          path="/cwd-q-enterprise-integration"
+          element={<EnterpriseIntegrationQuestions />}
+        />
+
+        {/* 22. Api And Backend Architecture */}
+        <Route
+          path="/cwd-q-api-and-backend-architecture"
+          element={<ApiBackendArchitectureQuestions />}
+        />
+
+        {/* 23. Production Deployment Devops */}
+        <Route
+          path="/cwd-q-production-deployment-devops"
+          element={<DeploymentDevOpsQuestions />}
+        />
+
+        {/* 24. Testing */}
+        <Route
+          path="/cwd-q-testing"
+          element={<TestingQuestions />}
+        />
+
+        {/* 25. Troubleshooting Scenarios */}
+        <Route
+          path="/cwd-q-troubleshooting-scenarios"
+          element={<TroubleshootingScenariosQuestions />}
+        />
+
+        {/* 26. Agentic Ai Design Questions */}
+        <Route
+          path="/cwd-q-agentic-ai-design-questions"
+          element={<AgenticAiDesignQuestions />}
+        />
+
+        {/* 27. Governance */}
+        <Route
+          path="/cwd-q-governance"
+          element={<GovernanceQuestions />}
+        />
+
+        {/* 28. Architecture Trade Off Questions */}
+        <Route
+          path="/cwd-q-architecture-trade-off-questions"
+          element={<ArchitectureTradeOffsQuestions />}
+        />
+
+        {/* 29. Senior Principal Architect Questions */}
+        <Route
+          path="/cwd-q-senior-principal-architect-questions"
+          element={<PrincipalArchitectQuestions />}
+        />
 
       </Routes>
 

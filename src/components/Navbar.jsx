@@ -65,7 +65,63 @@ const cwdTopics = [
 
   { name: "01. Project Overview", path: "/cwd-project-overview" },
 
-  { name: "02. CWD Architecture", path: "/cwd-architecture" },
+  // ---------- CWD Interview Question Cookbooks ----------
+
+  { name: "Q02. Architecture", path: "/cwd-q-architecture-questions" },
+
+  { name: "Q03. Coordinator Agent", path: "/cwd-q-coordinator-agent" },
+
+  { name: "Q04. Delegator Architecture", path: "/cwd-q-delegator-architecture" },
+
+  { name: "Q05. Worker Architecture", path: "/cwd-q-worker-architecture" },
+
+  { name: "Q06. MCP Deep Interview", path: "/cwd-q-mcp-deep-interview" },
+
+  { name: "Q07. A2A — Agent Communication", path: "/cwd-q-a2a-agent-communication" },
+
+  { name: "Q08. LangGraph", path: "/cwd-q-langgraph" },
+
+  { name: "Q09. RAG Architecture", path: "/cwd-q-rag-architecture" },
+
+  { name: "Q10. LLM Architecture", path: "/cwd-q-llm-architecture" },
+
+  { name: "Q11. Hallucination & Grounding", path: "/cwd-q-hallucination-and-grounding" },
+
+  { name: "Q12. LLM Evaluation", path: "/cwd-q-llm-evaluation" },
+
+  { name: "Q13. Security Architecture", path: "/cwd-q-security-architecture" },
+
+  { name: "Q15. Observability", path: "/cwd-q-observability" },
+
+  { name: "Q16. Reliability & Failure Handling", path: "/cwd-q-reliability-and-failure-handling" },
+
+  { name: "Q17. Scalability", path: "/cwd-q-scalability" },
+
+  { name: "Q18. Performance & Optimization", path: "/cwd-q-performance-and-optimization" },
+
+  { name: "Q19. Cost Optimization", path: "/cwd-q-cost-optimization" },
+
+  { name: "Q20. Data Architecture", path: "/cwd-q-data-architecture" },
+
+  { name: "Q21. Enterprise Integration", path: "/cwd-q-enterprise-integration" },
+
+  { name: "Q22. API & Backend Architecture", path: "/cwd-q-api-and-backend-architecture" },
+
+  { name: "Q23. Production Deployment / DevOps", path: "/cwd-q-production-deployment-devops" },
+
+  { name: "Q24. Testing", path: "/cwd-q-testing" },
+
+  { name: "Q25. Troubleshooting Scenarios", path: "/cwd-q-troubleshooting-scenarios" },
+
+  { name: "Q26. Agentic AI Design Questions", path: "/cwd-q-agentic-ai-design-questions" },
+
+  { name: "Q27. Governance", path: "/cwd-q-governance" },
+
+  { name: "Q28. Architecture Trade-Off Questions", path: "/cwd-q-architecture-trade-off-questions" },
+
+  { name: "Q29. Senior/Principal Architect Questions", path: "/cwd-q-senior-principal-architect-questions" },
+
+   { name: "02. CWD Architecture", path: "/cwd-architecture" },
 
   { name: "03. Coordinator Agent", path: "/cwd-coordinator" },
 
@@ -118,6 +174,7 @@ const cwdTopics = [
   { name: "27. Current State vs Future State", path: "/cwd-current-future-state" },
 
   { name: "28. Interview Preparation", path: "/cwd-interview" },
+
 ];
   // =====================================================
   // CODING & AI

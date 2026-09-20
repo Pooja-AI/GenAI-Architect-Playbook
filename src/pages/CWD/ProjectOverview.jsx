@@ -102,7 +102,7 @@ const CWDProjectOverview = [
       {
         id: "cwd-target-state",
         category: "Project Overview",
-        title: "Target / End State",
+        title: "What happens if one Worker fails?",
         difficulty: "Intermediate",
         time: "~10 min",
         description:
@@ -114,7 +114,7 @@ const CWDProjectOverview = [
       {
         id: "cwd-why-agentic-ai",
         category: "Project Overview",
-        title: "Why Agentic AI?",
+        title: "How do you maintain state?",
         difficulty: "Advanced",
         time: "~15 min",
         description:
@@ -123,18 +123,6 @@ const CWDProjectOverview = [
         code: "",
       },
 
-      
-
-      {
-        id: "aws",
-        category: "aws Project Overview",
-        title: "AWS",
-        difficulty: "Intermediate",
-        time: "~10 min",
-        description:" aws",
-        concept: AWS,
-        code: "",
-      },
     
   
 ];

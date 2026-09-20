@@ -1,482 +1,932 @@
-## Why Agentic AI?
+### How do you maintain state?
 
-CWD adopts Agentic AI because enterprise business problems are not single-step question-and-answer problems. They are multi-step workflows that require reasoning, planning, data retrieval, tool execution, collaboration between specialized agents, and controlled decision-making.
+The easiest way to understand state is:
 
-Traditional GenAI is primarily focused on generating a response.
+> **State is the memory of what is happening in the current request/workflow.**
 
-Agentic AI extends this capability by enabling the system to:
+Without state, CWD would not know **what the user asked, what Workers were selected, what already completed, what failed, what needs to run next, or what results have already been produced.**
 
-- Understand the business objective
-- Determine what needs to be done
-- Break the objective into tasks
-- Select the appropriate agent or capability
-- Retrieve required enterprise data
-- Execute tools and business operations
-- Evaluate intermediate results
-- Continue, retry, or redirect execution when required
-- Coordinate multiple specialized agents
-- Maintain context across the workflow
-- Escalate to humans when necessary
-- Produce a traceable business outcome
+---
 
-This is the fundamental reason Agentic AI is the foundation of CWD.
+# 1. First: What does "state" mean?
 
-### 1. Enterprise Requests Are Multi-Step
+Imagine you ask CWD:
 
-A typical enterprise request rarely belongs to a single system or capability.
+> **"Prepare a customer briefing for customer C123."**
+
+CWD starts working.
+
+At the beginning, it might know:
+
+```text
+User request = customer briefing
+Customer ID = C123
+```
+
+Then the Coordinator decides:
+
+```text
+Sales Delegator is required
+```
+
+Then the Sales Delegator decides:
+
+```text
+Customer Profile Worker
+Support History Worker
+Contract Worker
+```
+
+Then execution starts:
+
+```text
+Customer Profile → SUCCESS
+Support History  → SUCCESS
+Contract         → RUNNING
+```
+
+Then Contract fails:
+
+```text
+Contract → FAILED
+Retry → 1
+Retry → 2
+Retry → 3
+```
+
+At this point, the system needs to **remember all of this information**.
+
+That information is the **state**.
+
+---
+
+# 2. Think about state like a notebook
+
+This is the simplest mental model.
+
+Imagine a person manually managing your CWD workflow with a notebook:
+
+```text
+REQUEST
+-------------------------
+Customer: C123
+Request: Customer Briefing
+
+PLAN
+-------------------------
+Sales Delegator
+  ├── Customer Profile
+  ├── Support History
+  └── Contract
+
+STATUS
+-------------------------
+Customer Profile → DONE
+Support History  → DONE
+Contract         → FAILED
+
+RETRY
+-------------------------
+Contract → 3 attempts
+
+CURRENT STEP
+-------------------------
+Contract failure handling
+
+RESULTS
+-------------------------
+Customer Profile → data
+Support History  → data
+
+ERRORS
+-------------------------
+Contract → timeout
+```
+
+That notebook is basically your **workflow state**.
+
+LangGraph provides a structured way to manage that notebook programmatically.
+
+---
+
+# 3. What happens without state?
+
+Suppose you have:
+
+```text
+W1 → Customer Profile
+W2 → Support History
+W3 → Contract
+```
+
+W1 completes:
+
+```text
+W1 → SUCCESS
+```
+
+W2 completes:
+
+```text
+W2 → SUCCESS
+```
+
+Then the application crashes.
+
+If you don't have persistent state, after restart the system may not know:
+
+```text
+Did W1 finish?
+Did W2 finish?
+Was W3 started?
+How many times did W3 retry?
+What were W1 and W2's results?
+```
+
+It might start everything again:
+
+```text
+W1 → execute again
+W2 → execute again
+W3 → execute again
+```
+
+That's bad.
+
+With state:
+
+```text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → FAILED
+```
+
+is saved.
+
+After restart:
+
+```text
+Load state
+   ↓
+W1 already completed
+W2 already completed
+W3 failed
+   ↓
+Continue/recover from W3
+```
+
+That's why state management is important.
+
+---
+
+# 4. What does your CWD state contain?
+
+For your architecture, I would divide state into **8 major pieces**.
+
+## A. Request state
+
+What did the user ask?
+
+```python
+request_id = "REQ-123"
+
+user_request = \
+    "Prepare customer briefing for customer C123"
+
+customer_id = "C123"
+```
+
+This is the original context.
+
+---
+
+# 5. B. Planning state
+
+The Coordinator determines what needs to happen.
+
+```python
+execution_plan = {
+    "delegators": [
+        "sales_delegator"
+    ],
+
+    "workers": [
+        "customer_profile",
+        "support_history",
+        "contract_details"
+    ]
+}
+```
+
+Now the system knows:
+
+> "These are the components I need to execute."
+
+---
+
+# 6. C. Worker status state
+
+This is extremely important.
+
+Initially:
+
+```python
+worker_status = {
+    "customer_profile": "PENDING",
+    "support_history": "PENDING",
+    "contract_details": "PENDING"
+}
+```
+
+After execution:
+
+```python
+worker_status = {
+    "customer_profile": "SUCCESS",
+    "support_history": "SUCCESS",
+    "contract_details": "RUNNING"
+}
+```
+
+If Contract fails:
+
+```python
+worker_status = {
+    "customer_profile": "SUCCESS",
+    "support_history": "SUCCESS",
+    "contract_details": "FAILED"
+}
+```
+
+Now CWD knows exactly what happened.
+
+---
+
+# 7. D. Worker results
+
+Status tells us **whether something succeeded**.
+
+But we also need the actual result.
 
 For example:
 
-> "Prepare a customer briefing for the upcoming customer meeting."
+```python
+worker_results = {
+    "customer_profile": {
+        "name": "ABC Corp",
+        "industry": "Semiconductor"
+    },
 
-This may require:
+    "support_history": {
+        "open_cases": 2,
+        "resolved_cases": 15
+    },
 
-1. Identify the customer
-2. Retrieve customer information
-3. Retrieve sales opportunity information
-4. Retrieve recent interactions
-5. Retrieve relevant product information
-6. Search enterprise knowledge
-7. Analyze the information
-8. Generate the briefing
-9. Validate the output
-10. Return the final business artifact
-
-A traditional chatbot can generate the response, but it does not naturally provide the enterprise execution model required to coordinate all these activities.
-
-Agentic AI enables CWD to manage the complete workflow.
-
----
-
-### 2. Move From "Answer" to "Action"
-
-The evolution is:
-
-**Traditional AI**
-
-```text
-User
-  ↓
-Prompt
-  ↓
-LLM
-  ↓
-Answer
+    "contract_details": {
+        "status": "FAILED"
+    }
+}
 ```
 
-**Agentic AI**
+Now the system has both:
 
 ```text
-User
-  ↓
-Understand Objective
-  ↓
-Plan
-  ↓
-Select Capability
-  ↓
-Retrieve Context
-  ↓
-Execute Tools
-  ↓
-Evaluate Result
-  ↓
-Continue / Retry / Delegate
-  ↓
-Business Outcome
-```
-
-The important change is that the AI becomes capable of participating in the execution of the business process rather than only generating text.
-
----
-
-### 3. Enable Multi-Agent Collaboration
-
-Enterprise capabilities are naturally specialized.
-
-For example:
-
-```text
-                    Coordinator
-                         |
-        +----------------+----------------+
-        |                |                |
-   Sales Agent       Finance Agent    Knowledge Agent
-        |                |                |
-    CRM Data        Financial Data    Enterprise RAG
-```
-
-Each agent can specialize in a particular domain while CWD provides the coordination layer.
-
-This is why the **Coordinator–Delegator–Worker (CWD)** model is important.
-
-```text
-Coordinator
-     |
-     | decides
-     ↓
-Delegator
-     |
-     | decomposes / assigns
-     ↓
-Workers
-     |
-     | execute
-     ↓
-Enterprise Systems
-```
-
-This allows domain expertise to remain decentralized while execution governance remains centralized.
-
-Modern enterprise-agent architectures similarly use orchestration to coordinate multiple agents, tools, systems, and workflows rather than allowing agents to operate independently.
-
----
-
-### 4. Solve Cross-System Business Problems
-
-Enterprise information is distributed across multiple platforms.
-
-For CWD, a business workflow may need to interact with systems such as:
-
-* Salesforce
-* Snowflake
-* Oracle
-* SharePoint
-* Microsoft 365
-* Enterprise APIs
-* Knowledge repositories
-* Internal AI services
-
-The business user should not need to understand where the information resides.
-
-The user expresses the **business objective**.
-
-CWD determines:
-
-```text
-What information is required?
-        ↓
-Which capability provides it?
-        ↓
-Which agent should execute it?
-        ↓
-Which tools can be used?
-        ↓
-What sequence should be followed?
-        ↓
-How should the results be combined?
-```
-
-This creates an **outcome-oriented AI experience** rather than a system-oriented experience.
-
----
-
-### 5. Reduce Manual Coordination
-
-Without Agentic AI:
-
-```text
-Employee
-   ↓
-Open CRM
-   ↓
-Search Customer
-   ↓
-Open Snowflake
-   ↓
-Find Data
-   ↓
-Search SharePoint
-   ↓
-Read Documents
-   ↓
-Analyze Information
-   ↓
-Create Report
-   ↓
-Send Report
-```
-
-With CWD:
-
-```text
-Employee
-   ↓
-"Prepare the customer briefing"
-   ↓
-CWD
-   ↓
-Multiple Agents + Enterprise Systems
-   ↓
-Customer Briefing
-```
-
-The objective is not to eliminate the employee.
-
-The objective is to move the employee from **manually coordinating systems** to **managing business outcomes**.
-
----
-
-### 6. Enable Dynamic Decision-Making
-
-Traditional workflow automation follows a predefined path:
-
-```text
-Step 1 → Step 2 → Step 3 → Step 4
-```
-
-Agentic workflows can adapt based on runtime conditions:
-
-```text
-                    Request
-                       |
-                    Analyze
-                       |
-                +------+------+
-                |             |
-             Path A         Path B
-                |             |
-             Result         Result
-                |             |
-                +------+------+
-                       |
-                    Evaluate
-                       |
-              Continue / Retry /
-              Delegate / Escalate
-```
-
-This is particularly important when:
-
-* The required information varies by request
-* Different business domains are involved
-* A tool fails
-* Additional information is required
-* Results require validation
-* Human approval is necessary
-
-Workflow-orchestration agents are specifically designed to maintain execution context, delegate work, track intermediate results, and adapt execution based on runtime results.
-
----
-
-### 7. Establish a Common Enterprise AI Execution Model
-
-Without a common architecture, every business team may build its own agent:
-
-```text
-Sales Agent ──────────┐
-Finance Agent ────────┤
-HR Agent ─────────────┤
-Supply Chain Agent ───┤──→ Different frameworks
-Quality Agent ────────┤
-Customer Agent ───────┘
-```
-
-This creates:
-
-* Duplicate implementations
-* Different security models
-* Different integration patterns
-* Different observability
-* Different agent communication mechanisms
-* Difficult maintenance
-* Agent sprawl
-
-CWD provides the common execution model:
-
-```text
-                    CWD Platform
-                         |
-       +-----------------+-----------------+
-       |                 |                 |
-     Sales            Finance             HR
-    Agents             Agents            Agents
-       |                 |                 |
-       +-----------------+-----------------+
-                         |
-              Common Enterprise Controls
-                         |
-        Security | Governance | Observability
-        Registry | Memory    | A2A | RAG
-```
-
-The enterprise therefore builds **agents as business capabilities**, while CWD provides the common platform for operating them.
-
----
-
-### 8. Security Must Follow the Agent
-
-An important architectural reason for Agentic AI in CWD is that agents can perform actions, not merely generate text.
-
-Therefore, security must be part of execution.
-
-```text
-User Identity
-     ↓
-Authorization
-     ↓
-Coordinator
-     ↓
-Delegator
-     ↓
-Worker
-     ↓
-Authorized Tool
-     ↓
-Enterprise Data
-```
-
-The agent should not receive unrestricted access to enterprise systems.
-
-CWD therefore applies principles such as:
-
-* Identity propagation
-* RBAC
-* Least-privilege access
-* Entitlement validation
-* Controlled tools
-* Data access policies
-* Input/output validation
-* DLP and redaction
-* Auditability
-* Human approval where required
-
-This is a critical distinction between an enterprise Agentic AI platform and a simple LLM chatbot.
-
----
-
-### 9. Create End-to-End Observability
-
-When multiple agents collaborate, simply logging the final answer is not enough.
-
-CWD needs to understand:
-
-```text
-User Request
-     ↓
-Session
-     ↓
-Task
-     ↓
-Run
-     ↓
-Turn
-     ↓
-Step
-     ↓
-Agent
-     ↓
-Tool
-     ↓
-Data
-     ↓
+Status
++
 Result
 ```
 
-This enables the platform to answer:
-
-* Which agent handled the request?
-* Why was that agent selected?
-* Which tools were called?
-* Which data was retrieved?
-* How long did each step take?
-* Where did an error occur?
-* How many retries occurred?
-* What was the final outcome?
-* What did the workflow cost?
-
-Agent orchestration is therefore also an **operational control mechanism**, not just an AI design pattern.
-
 ---
 
-### 10. Scale AI From Individual Use Cases to Enterprise Capability
+# 8. E. Failure state
 
-The strategic objective is not to build one successful AI application.
+Suppose Contract failed because of timeout.
 
-The objective is:
+We maintain:
 
-```text
-One Agent
-    ↓
-Multiple Agents
-    ↓
-Multi-Agent Workflows
-    ↓
-Business Domains
-    ↓
-Cross-Domain Workflows
-    ↓
-Enterprise AI Execution Platform
+```python
+failures = {
+    "contract_details": {
+        "error_type": "TIMEOUT",
+        "message": "Contract API timeout",
+        "retryable": True
+    }
+}
 ```
 
-This is where CWD becomes strategically important.
+This is important because the next node needs to know:
 
-Instead of repeatedly solving:
-
-> "How do we build this AI application?"
-
-the organization can solve:
-
-> "How do we onboard this new business capability into the enterprise AI execution platform?"
-
-That is a fundamentally different scaling model.
+> "Why did it fail?"
 
 ---
 
-## Why Agentic AI Specifically for CWD?
+# 9. F. Retry state
 
-| Business Need | Traditional GenAI | Agentic AI + CWD |
-| --- | --- | --- |
-| Answer questions | ✓ | ✓ |
-| Generate content | ✓ | ✓ |
-| Multi-step reasoning | Limited | ✓ |
-| Task decomposition | Limited | ✓ |
-| Tool execution | Limited | ✓ |
-| Multi-agent collaboration | ✗ | ✓ |
-| Cross-system workflows | Limited | ✓ |
-| Dynamic routing | Limited | ✓ |
-| Runtime decision-making | Limited | ✓ |
-| Context propagation | Limited | ✓ |
-| Retry/recovery | Limited | ✓ |
-| Human escalation | Limited | ✓ |
-| Enterprise governance | External layer required | Built into platform architecture |
-| End-to-end execution tracking | Limited | ✓ |
-| Reusable enterprise agent ecosystem | ✗ | ✓ |
+Suppose we allow 3 retries.
 
----
+We maintain:
 
-## Architect's View
-
-The key architectural decision is:
-
-> **CWD is not being built simply to host LLMs. CWD is being built to operationalize AI agents as governed enterprise business capabilities.**
-
-Agentic AI provides the **intelligence and autonomy**.
-
-CWD provides the **coordination, governance, security, execution, integration, and operational control**.
-
-```text
-                 AGENTIC AI
-                     |
-        Reason • Plan • Decide • Act
-                     |
-                     ↓
-              +--------------+
-              |     CWD      |
-              |              |
-              | Coordinate   |
-              | Delegate     |
-              | Execute      |
-              | Govern       |
-              | Observe      |
-              +--------------+
-                     |
-          +----------+----------+
-          |          |          |
-        Agents     Tools      Data
-          |          |          |
-          +----------+----------+
-                     |
-              Business Outcome
+```python
+retry_count = {
+    "contract_details": 2
+}
 ```
 
+The system knows:
+
+```text
+Attempt 1 → failed
+Attempt 2 → failed
+Attempt 3 → next
+```
+
+Without retry state, the system wouldn't know how many times it has already tried.
+
+---
+
+# 10. G. Dependency state
+
+This becomes important in your CWD because Workers can depend on other Workers.
+
+Suppose:
+
+```text
+Customer Profile
+       ↓
+Customer Contract
+       ↓
+Renewal Analysis
+```
+
+You cannot execute Renewal Analysis until Contract succeeds.
+
+State can represent:
+
+```python
+dependencies = {
+    "contract_details": [
+        "customer_profile"
+    ],
+
+    "renewal_analysis": [
+        "contract_details"
+    ]
+}
+```
+
+Now CWD knows:
+
+```text
+Customer Profile → SUCCESS
+        ↓
+Contract → can execute
+        ↓
+Contract → SUCCESS
+        ↓
+Renewal Analysis → can execute
+```
+
+---
+
+# 11. H. Current execution position
+
+This is another important part.
+
+The state can tell the graph:
+
+```python
+current_step = "contract_details"
+```
+
+or:
+
+```text
+current node = contract_worker
+```
+
+So after recovery, CWD knows where it was.
+
+---
+
+# 12. Put everything together
+
+Your CWD state could conceptually look like:
+
+```python
+state = {
+
+    # Request
+    "request_id": "REQ-123",
+    "customer_id": "C123",
+    "user_request": "Prepare customer briefing",
+
+    # Planning
+    "intent": "customer_briefing",
+    "delegator": "sales_delegator",
+
+    # Workers
+    "worker_status": {
+        "customer_profile": "SUCCESS",
+        "support_history": "SUCCESS",
+        "contract_details": "FAILED"
+    },
+
+    # Results
+    "worker_results": {
+        "customer_profile": {...},
+        "support_history": {...}
+    },
+
+    # Failures
+    "failures": [
+        {
+            "worker": "contract_details",
+            "error": "TIMEOUT"
+        }
+    ],
+
+    # Retry
+    "retry_counts": {
+        "contract_details": 3
+    },
+
+    # Execution position
+    "current_step": "contract_details",
+
+    # Final
+    "final_status": "PARTIAL_FAILURE"
+}
+```
+
+This is your **workflow state**.
+
+---
+
+# 13. Now let's understand LangGraph
+
+This is where many people get confused.
+
+**LangGraph is not the database.**
+
+Think:
+
+```text
+LangGraph
+   ↓
+manages workflow execution + state transitions
+```
+
+And:
+
+```text
+Checkpoint Store
+   ↓
+persists the state so it can be recovered
+```
+
+So:
+
+```text
+             LangGraph
+                 │
+                 │ manages
+                 ▼
+          Workflow State
+                 │
+                 │ checkpoint
+                 ▼
+          Durable Storage
+```
+
+---
+
+# 14. What does "state transition" mean?
+
+Suppose initial state is:
+
+```text
+W1 = PENDING
+W2 = PENDING
+W3 = PENDING
+```
+
+Coordinator executes W1.
+
+State becomes:
+
+```text
+W1 = SUCCESS
+W2 = PENDING
+W3 = PENDING
+```
+
+Then W2 executes.
+
+State becomes:
+
+```text
+W1 = SUCCESS
+W2 = SUCCESS
+W3 = PENDING
+```
+
+Then W3 executes and fails.
+
+State becomes:
+
+```text
+W1 = SUCCESS
+W2 = SUCCESS
+W3 = FAILED
+```
+
+These changes are called **state transitions**.
+
+LangGraph is essentially controlling these transitions through graph nodes and edges.
+
+---
+
+# 15. Very simple LangGraph example
+
+Conceptually:
+
+```python
+class CWDState(TypedDict):
+    request: str
+    worker_status: dict
+    worker_results: dict
+    retry_count: dict
+```
+
+Then you create nodes:
+
+```text
+Coordinator Node
+       ↓
+Delegator Node
+       ↓
+Worker Node
+       ↓
+Failure Handler
+       ↓
+Aggregation Node
+```
+
+Each node reads the state and updates it.
+
+For example:
+
+```python
+def execute_worker(state):
+
+    result = call_worker()
+
+    return {
+        "worker_status": {
+            "contract": "SUCCESS"
+        },
+        "worker_results": {
+            "contract": result
+        }
+    }
+```
+
+The important concept is:
+
+> **Nodes don't have to carry everything manually from one function to another. They operate on the shared workflow state.**
+
+---
+
+# 16. What is checkpointing?
+
+This is probably the most important word to understand.
+
+Imagine the workflow reaches:
+
+```text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → FAILED
+```
+
+LangGraph can create a **checkpoint**.
+
+Think of it as taking a snapshot:
+
+```text
+CHECKPOINT #1
+
+request = C123
+
+W1 = SUCCESS
+W2 = SUCCESS
+W3 = FAILED
+
+retry_count = 3
+
+current_step = W3
+```
+
+That snapshot is persisted.
+
+---
+
+# 17. Why checkpointing matters
+
+Now suppose your application crashes:
+
+```text
+💥 Application crash
+```
+
+Without checkpoint:
+
+```text
+State lost
+   ↓
+Start again
+```
+
+With checkpoint:
+
+```text
+Application crash
+       ↓
+Application restarts
+       ↓
+Load checkpoint
+       ↓
+Recover state
+       ↓
+W1 = already SUCCESS
+W2 = already SUCCESS
+W3 = FAILED
+       ↓
+Resume/retry/recover W3
+```
+
+That's **durable state management**.
+
+---
+
+# 18. State vs database
+
+This is another common interview question.
+
+Don't say:
+
+> "We store the state in LangGraph."
+
+A better explanation is:
+
+> **"LangGraph manages the workflow state, and we persist checkpoints using a durable persistence layer."**
+
+For example:
+
+```text
+Azure deployment
+      ↓
+LangGraph
+      ↓
+Checkpoint persistence
+      ↓
+Redis / PostgreSQL / Cosmos DB
+```
+
+or in an AWS architecture:
+
+```text
+AWS deployment
+      ↓
+LangGraph
+      ↓
+Checkpoint persistence
+      ↓
+DynamoDB / PostgreSQL / Redis
+```
+
+The exact database depends on your production design.
+
+---
+
+# 19. What about conversation memory?
+
+Don't confuse this with workflow state.
+
+Suppose the user says:
+
+> User: Prepare customer briefing for C123.
+
+Then:
+
+> User: Also include contract information.
+
+That's **conversation context**.
+
+But:
+
+```text
+W1 SUCCESS
+W2 SUCCESS
+W3 FAILED
+retry_count = 2
+```
+
+is **workflow state**.
+
+You can have:
+
+```text
+Conversation Memory
+        +
+Workflow State
+        +
+Long-term Data
+```
+
+They are different concepts.
+
+---
+
+# 20. What happens in your CWD from start to finish?
+
+Let's walk through the entire thing.
+
+### Step 1 — User request
+
+```text
+"Prepare customer briefing for C123."
+```
+
+State:
+
+```text
+request = customer briefing
+customer = C123
+```
+
+### Step 2 — Coordinator
+
+```text
+intent = customer_briefing
+delegator = sales
+```
+
+State updated.
+
+### Step 3 — Delegator plans Workers
+
+```text
+W1 = Customer Profile
+W2 = Support History
+W3 = Contract
+```
+
+State updated.
+
+### Step 4 — W1 executes
+
+```text
+W1 = SUCCESS
+```
+
+State updated.
+
+### Step 5 — W2 executes
+
+```text
+W2 = SUCCESS
+```
+
+State updated.
+
+### Step 6 — W3 executes
+
+```text
+W3 = TIMEOUT
+```
+
+State updated:
+
+```text
+W3 = FAILED
+retry_count = 1
+```
+
+### Step 7 — Retry
+
+```text
+W3 = TIMEOUT
+retry_count = 2
+```
+
+### Step 8 — Retry again
+
+```text
+W3 = TIMEOUT
+retry_count = 3
+```
+
+### Step 9 — Policy check
+
+```text
+W3 = mandatory
+```
+
+Therefore:
+
+```text
+Workflow = BLOCKED / INCOMPLETE
+```
+
+### Step 10 — Coordinator
+
+Coordinator receives:
+
+```text
+W1 = SUCCESS
+W2 = SUCCESS
+W3 = FAILED
+```
+
+It validates the result and generates the appropriate final response.
+
+**Every one of those steps is represented in state.**
+
+---
+
+# 21. The easiest way to remember state management
+
+Think of CWD as a **project manager's checklist**.
+
+```text
+REQUEST
+   ↓
+What does the user want?
+
+PLAN
+   ↓
+What needs to be done?
+
+WORKERS
+   ↓
+Which Workers are running?
+
+STATUS
+   ↓
+Which Workers succeeded/failed?
+
+RESULTS
+   ↓
+What did they return?
+
+ERRORS
+   ↓
+What went wrong?
+
+RETRIES
+   ↓
+How many times did we try?
+
+DEPENDENCIES
+   ↓
+What must finish before something else?
+
+CURRENT STEP
+   ↓
+Where are we now?
+
+CHECKPOINT
+   ↓
+What was the last known state?
+
+FINAL RESULT
+   ↓
+Can we complete the request?
+```
+
+That's **state management**.
+
+---
+
+# 22. Strong interview answer
+
+If an interviewer asks:
+
+> **"How do you maintain state in your CWD system?"**
+
+Don't just say "we use LangGraph."
+
+Say:
+
+> **"In CWD, state represents the complete execution context of a request. It includes the original request and identifiers, Coordinator's execution plan, selected Delegators and Workers, Worker statuses, results, dependencies, retry counts, failures, and the current workflow position. LangGraph manages this state as the workflow moves from one node to another. We use checkpoint persistence to durably save the state at important execution points. So if a Worker or application fails, we can restore the latest checkpoint, identify which Workers already completed, and resume from the appropriate point instead of restarting the entire workflow. Large Worker outputs can be stored externally with references in the state. Observability is handled separately through tracing and logging systems."**
+
+### And if they ask, "Why do you need state?"
+
+Answer:
+
+> **"Because a multi-agent workflow is not a single API call. It is a long-running sequence of dependent operations. The system needs to remember what was planned, what completed, what failed, what needs to retry, and where execution should resume. State provides that execution memory."**
+
+**The one sentence I want you to remember for interviews:**
+
+> **State is the execution memory of CWD; LangGraph manages the state transitions, checkpoint storage makes the state durable, and the Coordinator/Delegators use that state to know what has happened and what should happen next.**
