@@ -58,10 +58,6 @@ function Navbar() {
 
   // CWD PROJECT
 const cwdTopics = [
-  {
-      name: "CWD Top Questions",
-      path: "/cwd-top-questions",
-    },
 
   { name: "01. Project Overview", path: "/cwd-project-overview" },
 
@@ -121,82 +117,185 @@ const cwdTopics = [
 
   { name: "Q29. Senior/Principal Architect Questions", path: "/cwd-q-senior-principal-architect-questions" },
 
-   { name: "02. CWD Architecture", path: "/cwd-architecture" },
-
-  { name: "03. Coordinator Agent", path: "/cwd-coordinator" },
-
-  { name: "04. Delegator Agents", path: "/cwd-delegator" },
-
-  { name: "05. Worker Agents", path: "/cwd-workers" },
-
-  { name: "06. CWD Orchestration Flow", path: "/cwd-orchestration" },
-
-  { name: "07. LangGraph", path: "/cwd-langgraph" },
-
-  { name: "08. MCP", path: "/cwd-mcp" },
-
-  { name: "09. A2A Communication", path: "/cwd-a2a" },
-
-  { name: "10. Agent Registry", path: "/cwd-agent-registry" },
-
-  { name: "11. Prompt Registry", path: "/cwd-prompt-registry" },
-
-  { name: "12. RAG Architecture", path: "/cwd-rag" },
-
-  { name: "13. Memory & State Management", path: "/cwd-memory" },
-
-  { name: "14. Enterprise Data Integration", path: "/cwd-data-integration" },
-
-  { name: "15. Security & Governance", path: "/cwd-security" },
-
-  { name: "16. Observability", path: "/cwd-observability" },
-
-  { name: "17. Messaging Architecture", path: "/cwd-messaging" },
-
-  { name: "18. Enterprise Gateway", path: "/cwd-gateway" },
-
-  { name: "19. Infrastructure & Cloud", path: "/cwd-cloud" },
-
-  { name: "20. End-to-End CWD Scenario", path: "/cwd-cbd-scenario" },
-
-  { name: "21. CWD State & Execution Model", path: "/cwd-execution-model" },
-
-  { name: "22. Reliability & Failure Handling", path: "/cwd-reliability" },
-
-  { name: "23. Agent Evaluation", path: "/cwd-evaluation" },
-
-  { name: "24. LLMOps / MLOps", path: "/cwd-llmops" },
-
-  { name: "25. Architecture Decisions & Trade-offs", path: "/cwd-decisions" },
-
-  { name: "26. Challenges & Solutions", path: "/cwd-challenges" },
-
-  { name: "27. Current State vs Future State", path: "/cwd-current-future-state" },
-
-  { name: "28. Interview Preparation", path: "/cwd-interview" },
-
+   
 ];
 
 
 
-  const CloudTopics = [
+  // const CloudTopics = [
+  //   {
+  //     name: "Cloud Top Questions",
+  //     path: "/cloud-top-questions",
+  //   },
+  //   {
+  //     name: "Azure",
+  //     path: "/Azure",
+  //   },
+  //   {
+  //     name: "AWS",
+  //     path: "/AWS",
+  //   },
+  //   {
+  //     name: "GCP",
+  //     path: "/GCP",
+  //   },
+  // ];
+
+const AWSTopics = [
     {
-      name: "Cloud Top Questions",
-      path: "/cloud-top-questions",
+      name: "AWS Architecture",
+      path: "/aws-architecture",
     },
     {
-      name: "Azure",
-      path: "/Azure",
+      name: "Amazon Bedrock",
+      path: "/aws-bedrock",
     },
     {
-      name: "AWS",
-      path: "/AWS",
+      name: "API Gateway",
+      path: "/aws-api-gateway",
     },
     {
-      name: "GCP",
-      path: "/GCP",
+      name: "AWS Lambda",
+      path: "/aws-lambda",
+    },
+    {
+      name: "ECS / Fargate / EKS",
+      path: "/aws-ecs-fargate-eks",
+    },
+    {
+      name: "SQS & Asynchronous Processing",
+      path: "/aws-sqs",
+    },
+    {
+      name: "Step Functions",
+      path: "/aws-step-functions",
+    },
+    {
+      name: "DynamoDB",
+      path: "/aws-dynamodb",
+    },
+    {
+      name: "Amazon S3",
+      path: "/aws-s3",
+    },
+    {
+      name: "OpenSearch",
+      path: "/aws-opensearch",
+    },
+    {
+      name: "IAM & Security",
+      path: "/aws-iam-security",
+    },
+    {
+      name: "KMS & Secrets Manager",
+      path: "/aws-kms-secrets",
+    },
+    {
+      name: "VPC & Networking",
+      path: "/aws-vpc-networking",
+    },
+    {
+      name: "CloudWatch & Observability",
+      path: "/aws-cloudwatch",
+    },
+    {
+      name: "Scalability & High Availability",
+      path: "/aws-scalability-ha",
+    },
+    {
+      name: "AWS Cost Optimization",
+      path: "/aws-cost-optimization",
+    },
+    {
+      name: "AWS DevOps / Deployment",
+      path: "/aws-devops",
+    },
+    {
+      name: "AWS Glue",
+      path: "/aws-glue",
+    },
+    {
+      name: "Amazon SageMaker",
+      path: "/aws-sagemaker",
     },
   ];
+
+
+const AzureTopics = [
+    {
+      name: "Azure Architecture",
+      path: "/azure-architecture",
+    },
+    {
+      name: "Azure OpenAI",
+      path: "/azure-openai",
+    },
+    {
+      name: "Azure AI Foundry",
+      path: "/azure-ai-foundry",
+    },
+    {
+      name: "Azure AI Search",
+      path: "/azure-ai-search",
+    },
+    {
+      name: "Azure Data Factory / Data Integration",
+      path: "/azure-data-factory",
+    },
+    {
+      name: "Azure Databricks",
+      path: "/azure-databricks",
+    },
+    {
+      name: "Azure Machine Learning",
+      path: "/azure-machine-learning",
+    },
+    {
+      name: "Azure Functions",
+      path: "/azure-functions",
+    },
+    {
+      name: "Azure Container Apps / AKS",
+      path: "/azure-container-apps",
+    },
+    {
+      name: "Azure API Management",
+      path: "/azure-api-management",
+    },
+    {
+      name: "Azure Service Bus",
+      path: "/azure-service-bus",
+    },
+    {
+      name: "Cosmos DB",
+      path: "/azure-cosmos-db",
+    },
+    {
+      name: "Azure Cache for Redis",
+      path: "/azure-redis",
+    },
+    {
+      name: "Microsoft Entra ID",
+      path: "/azure-entra-id",
+    },
+    {
+      name: "Azure Key Vault",
+      path: "/azure-key-vault",
+    },
+    {
+      name: "Azure Networking",
+      path: "/azure-networking",
+    },
+    {
+      name: "Azure Monitor / Application Insights",
+      path: "/azure-monitor",
+    },
+    {
+      name: "Azure DevOps / CI/CD",
+      path: "/azure-devops",
+    },
+  ];
+
 
   // =====================================================
   // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
@@ -390,8 +489,13 @@ const cwdTopics = [
         ================================================= */}
 
       <Dropdown
-          name="Cloud & AI"
-          topics={CloudTopics}
+          name="AWS"
+          topics={AWSTopics}
+        />
+
+      <Dropdown
+          name="Azure"
+          topics={AzureTopics}
         />
 
       </div>

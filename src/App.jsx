@@ -21,38 +21,9 @@ import RAGQuestion from "./pages/RAGQuestion";
 
 import ProjectOverview from "./pages/CWD/ProjectOverview";
 import CWDArchitecture from "./pages/CWD/CWDArchitecture";
-import CoordinatorAgent from "./pages/CWD/CoordinatorAgent";
-import DelegatorAgents from "./pages/CWD/DelegatorAgents";
-import WorkerAgents from "./pages/CWD/WorkerAgents";
-import CWDOrchestrationFlow from "./pages/CWD/CWDOrchestrationFlow";
-import LangGraph from "./pages/CWD/LangGraph";
-import MCP from "./pages/CWD/MCP";
-import A2ACommunication from "./pages/CWD/A2ACommunication";
-import AgentRegistry from "./pages/CWD/AgentRegistry";
-import PromptRegistry from "./pages/CWD/PromptRegistry";
-import RAGArchitecture from "./pages/CWD/RAGArchitecture";
-import MemoryStateManagement from "./pages/CWD/MemoryStateManagement";
-import EnterpriseDataIntegration from "./pages/CWD/EnterpriseDataIntegration";
-import SecurityGovernance from "./pages/CWD/SecurityGovernance";
-import Observability from "./pages/CWD/Observability";
-import MessagingArchitecture from "./pages/CWD/MessagingArchitecture";
-import EnterpriseGateway from "./pages/CWD/EnterpriseGateway";
-import InfrastructureCloud from "./pages/CWD/InfrastructureCloud";
-import EndtoEndCWDScenario from "./pages/CWD/EndtoEndCWDScenario";
-import CWDStateExecutionModel from "./pages/CWD/CWDStateExecutionModel";
-import ReliabilityFailureHandling from "./pages/CWD/ReliabilityFailureHandling";
-import AgentEvaluation from "./pages/CWD/AgentEvaluation";
-import LLMOpsAndMLOps from "./pages/CWD/LLMOpsAndMLOps";
-import ArchitectureDecisionsTradeoffs from "./pages/CWD/ArchitectureDecisionsTrade-offs";
-import ChallengesSolutions from "./pages/CWD/ChallengesSolutions";
-import CurrentStateAndFutureState from "./pages/CWD/CurrentStateAndFutureState";
-import InterviewPreparation from "./pages/CWD/InterviewPreparation";
 
-import AWS from "./pages/AWS";
-import GCP from "./pages/CWD/GCP";
-import Azure from "./pages/CWD/Azure";
 import AboutPooja from "./pages/CWD/AboutPooja";
-import AzureEnterpriseQuestions from "./pages/CWD/CWDQuestions";
+
 
 // =====================================================
 // CWD INTERVIEW QUESTION COOKBOOKS (one page per section)
@@ -85,6 +56,53 @@ import AgenticAiDesignQuestions from "./pages/CWD/26-CWDAgenticAiDesign";
 import GovernanceQuestions from "./pages/CWD/27-CWDGovernance";
 import ArchitectureTradeOffsQuestions from "./pages/CWD/28-CWDArchitectureTradeOffs";
 import PrincipalArchitectQuestions from "./pages/CWD/29-CWDPrincipalArchitect";
+
+// =====================================================
+// AWS INTERVIEW QUESTION COOKBOOKS (one page per concept)
+// =====================================================
+
+import AWSArchitectureQuestion from "./pages/AWS/AWSArchitectureQuestion";
+import AWSBedrockQuestion from "./pages/AWS/AWSBedrockQuestion";
+import AWSApiGatewayQuestion from "./pages/AWS/AWSApiGatewayQuestion";
+import AWSLambdaQuestion from "./pages/AWS/AWSLambdaQuestion";
+import AWSEcsFargateEksQuestion from "./pages/AWS/AWSEcsFargateEksQuestion";
+import AWSSqsAsyncQuestion from "./pages/AWS/AWSSqsAsyncQuestion";
+import AWSStepFunctionsQuestion from "./pages/AWS/AWSStepFunctionsQuestion";
+import AWSDynamoDbQuestion from "./pages/AWS/AWSDynamoDbQuestion";
+import AWSS3Question from "./pages/AWS/AWSS3Question";
+import AWSOpenSearchQuestion from "./pages/AWS/AWSOpenSearchQuestion";
+import AWSIamSecurityQuestion from "./pages/AWS/AWSIamSecurityQuestion";
+import AWSKmsSecretsQuestion from "./pages/AWS/AWSKmsSecretsQuestion";
+import AWSVpcNetworkingQuestion from "./pages/AWS/AWSVpcNetworkingQuestion";
+import AWSCloudWatchQuestion from "./pages/AWS/AWSCloudWatchQuestion";
+import AWSScalabilityHaQuestion from "./pages/AWS/AWSScalabilityHaQuestion";
+import AWSCostOptimizationQuestion from "./pages/AWS/AWSCostOptimizationQuestion";
+import AWSDevOpsQuestion from "./pages/AWS/AWSDevOpsQuestion";
+import AWSGlueQuestion from "./pages/AWS/AWSGlueQuestion";
+import AWSSageMakerQuestion from "./pages/AWS/AWSSageMakerQuestion";
+
+// =====================================================
+// AZURE INTERVIEW QUESTION COOKBOOKS (one page per concept)
+// =====================================================
+
+import AzureArchitectureQuestion from "./pages/Azure/AzureArchitectureQuestion";
+import AzureOpenAIQuestion from "./pages/Azure/AzureOpenAIQuestion";
+import AzureAIFoundryQuestion from "./pages/Azure/AzureAIFoundryQuestion";
+import AzureAISearchQuestion from "./pages/Azure/AzureAISearchQuestion";
+import AzureDataFactoryQuestion from "./pages/Azure/AzureDataFactoryQuestion";
+import AzureDatabricksQuestion from "./pages/Azure/AzureDatabricksQuestion";
+import AzureMachineLearningQuestion from "./pages/Azure/AzureMachineLearningQuestion";
+import AzureFunctionsQuestion from "./pages/Azure/AzureFunctionsQuestion";
+import AzureContainerAppsQuestion from "./pages/Azure/AzureContainerAppsQuestion";
+import AzureApiManagementQuestion from "./pages/Azure/AzureApiManagementQuestion";
+import AzureServiceBusQuestion from "./pages/Azure/AzureServiceBusQuestion";
+import AzureCosmosDbQuestion from "./pages/Azure/AzureCosmosDbQuestion";
+import AzureRedisQuestion from "./pages/Azure/AzureRedisQuestion";
+import AzureEntraIdQuestion from "./pages/Azure/AzureEntraIdQuestion";
+import AzureKeyVaultQuestion from "./pages/Azure/AzureKeyVaultQuestion";
+import AzureNetworkingQuestion from "./pages/Azure/AzureNetworkingQuestion";
+import AzureMonitorQuestion from "./pages/Azure/AzureMonitorQuestion";
+import AzureDevOpsQuestion from "./pages/Azure/AzureDevOpsQuestion";
 
 // =====================================================
 // COMPONENTS
@@ -153,156 +171,13 @@ function App() {
           element={<CWDArchitecture />}
         />
 
-        <Route
-          path="/cwd-coordinator"
-          element={<CoordinatorAgent />}
-        />
-
-        <Route
-          path="/cwd-delegator"
-          element={<DelegatorAgents />}
-        />
-
-        <Route
-          path="/cwd-workers"
-          element={<WorkerAgents />}
-        />
-
-        <Route
-          path="/cwd-orchestration"
-          element={<CWDOrchestrationFlow />}
-        />
-
-        <Route
-          path="/cwd-langgraph"
-          element={<LangGraph />}
-        />
-
-        <Route
-          path="/cwd-mcp"
-          element={<MCP />}
-        />
-
-        <Route
-          path="/cwd-a2a"
-          element={<A2ACommunication />}
-        />
-
-        <Route
-          path="/cwd-agent-registry"
-          element={<AgentRegistry />}
-        />
-
-        <Route
-          path="/cwd-prompt-registry"
-          element={<PromptRegistry />}
-        />
-
-        <Route
-          path="/cwd-rag"
-          element={<RAGArchitecture />}
-        />
-
-        <Route
-          path="/cwd-memory"
-          element={<MemoryStateManagement />}
-        />
-
-        <Route
-          path="/cwd-data-integration"
-          element={<EnterpriseDataIntegration />}
-        />
-
-        <Route
-          path="/cwd-security"
-          element={<SecurityGovernance />}
-        />
-
-        <Route
-          path="/cwd-observability"
-          element={<Observability />}
-        />
-
-        <Route
-          path="/cwd-messaging"
-          element={<MessagingArchitecture />}
-        />
-
-        <Route
-          path="/cwd-gateway"
-          element={<EnterpriseGateway />}
-        />
-
-        <Route
-          path="/cwd-cloud"
-          element={<InfrastructureCloud />}
-        />
-
-        <Route
-          path="/cwd-cbd-scenario"
-          element={<EndtoEndCWDScenario />}
-        />
-
-        <Route
-          path="/cwd-execution-model"
-          element={<CWDStateExecutionModel />}
-        />
-
-        <Route
-          path="/cwd-reliability"
-          element={<ReliabilityFailureHandling />}
-        />
-
-        <Route
-          path="/cwd-evaluation"
-          element={<AgentEvaluation />}
-        />
-
-        <Route
-          path="/cwd-llmops"
-          element={<LLMOpsAndMLOps />}
-        />
-
-        <Route
-          path="/cwd-decisions"
-          element={<ArchitectureDecisionsTradeoffs />}
-        />
-
-        <Route
-          path="/cwd-challenges"
-          element={<ChallengesSolutions />}
-        />
-
-        <Route
-          path="/cwd-current-future-state"
-          element={<CurrentStateAndFutureState />}
-        />
-
-        <Route
-          path="/cwd-interview"
-          element={<InterviewPreparation />}
-        />
-
-       
-        <Route 
-        path="/AWS" element={<AWS />}
-
-        />
-        <Route 
-        path="/GCP" element={<GCP />}
-
-        />
-        <Route 
-        path="/Azure" element={<Azure />}
-
-        />
+        
 
         <Route 
         path="/about" element={<AboutPooja/>}
 
         />
 
-        <Route path="/cwd-top-questions" element={<AzureEnterpriseQuestions/>} />
 
         {/* =================================================
             CWD INTERVIEW QUESTION COOKBOOKS
@@ -468,6 +343,236 @@ function App() {
         <Route
           path="/cwd-q-senior-principal-architect-questions"
           element={<PrincipalArchitectQuestions />}
+        />
+
+        {/* =================================================
+            AWS INTERVIEW QUESTION COOKBOOKS
+        ================================================= */}
+
+        {/* AWS Architecture */}
+        <Route
+          path="/aws-architecture"
+          element={<AWSArchitectureQuestion />}
+        />
+
+        {/* Amazon Bedrock */}
+        <Route
+          path="/aws-bedrock"
+          element={<AWSBedrockQuestion />}
+        />
+
+        {/* API Gateway */}
+        <Route
+          path="/aws-api-gateway"
+          element={<AWSApiGatewayQuestion />}
+        />
+
+        {/* AWS Lambda */}
+        <Route
+          path="/aws-lambda"
+          element={<AWSLambdaQuestion />}
+        />
+
+        {/* ECS / Fargate / EKS */}
+        <Route
+          path="/aws-ecs-fargate-eks"
+          element={<AWSEcsFargateEksQuestion />}
+        />
+
+        {/* SQS & Asynchronous Processing */}
+        <Route
+          path="/aws-sqs"
+          element={<AWSSqsAsyncQuestion />}
+        />
+
+        {/* Step Functions */}
+        <Route
+          path="/aws-step-functions"
+          element={<AWSStepFunctionsQuestion />}
+        />
+
+        {/* DynamoDB */}
+        <Route
+          path="/aws-dynamodb"
+          element={<AWSDynamoDbQuestion />}
+        />
+
+        {/* Amazon S3 */}
+        <Route
+          path="/aws-s3"
+          element={<AWSS3Question />}
+        />
+
+        {/* OpenSearch */}
+        <Route
+          path="/aws-opensearch"
+          element={<AWSOpenSearchQuestion />}
+        />
+
+        {/* IAM & Security */}
+        <Route
+          path="/aws-iam-security"
+          element={<AWSIamSecurityQuestion />}
+        />
+
+        {/* KMS & Secrets Manager */}
+        <Route
+          path="/aws-kms-secrets"
+          element={<AWSKmsSecretsQuestion />}
+        />
+
+        {/* VPC & Networking */}
+        <Route
+          path="/aws-vpc-networking"
+          element={<AWSVpcNetworkingQuestion />}
+        />
+
+        {/* CloudWatch & Observability */}
+        <Route
+          path="/aws-cloudwatch"
+          element={<AWSCloudWatchQuestion />}
+        />
+
+        {/* Scalability & High Availability */}
+        <Route
+          path="/aws-scalability-ha"
+          element={<AWSScalabilityHaQuestion />}
+        />
+
+        {/* AWS Cost Optimization */}
+        <Route
+          path="/aws-cost-optimization"
+          element={<AWSCostOptimizationQuestion />}
+        />
+
+        {/* AWS DevOps / Deployment */}
+        <Route
+          path="/aws-devops"
+          element={<AWSDevOpsQuestion />}
+        />
+
+        {/* AWS Glue */}
+        <Route
+          path="/aws-glue"
+          element={<AWSGlueQuestion />}
+        />
+
+        {/* Amazon SageMaker */}
+        <Route
+          path="/aws-sagemaker"
+          element={<AWSSageMakerQuestion />}
+        />
+
+        {/* =================================================
+            AZURE INTERVIEW QUESTION COOKBOOKS
+        ================================================= */}
+
+        {/* Azure Architecture */}
+        <Route
+          path="/azure-architecture"
+          element={<AzureArchitectureQuestion />}
+        />
+
+        {/* Azure OpenAI */}
+        <Route
+          path="/azure-openai"
+          element={<AzureOpenAIQuestion />}
+        />
+
+        {/* Azure AI Foundry */}
+        <Route
+          path="/azure-ai-foundry"
+          element={<AzureAIFoundryQuestion />}
+        />
+
+        {/* Azure AI Search */}
+        <Route
+          path="/azure-ai-search"
+          element={<AzureAISearchQuestion />}
+        />
+
+        {/* Azure Data Factory / Data Integration */}
+        <Route
+          path="/azure-data-factory"
+          element={<AzureDataFactoryQuestion />}
+        />
+
+        {/* Azure Databricks */}
+        <Route
+          path="/azure-databricks"
+          element={<AzureDatabricksQuestion />}
+        />
+
+        {/* Azure Machine Learning */}
+        <Route
+          path="/azure-machine-learning"
+          element={<AzureMachineLearningQuestion />}
+        />
+
+        {/* Azure Functions */}
+        <Route
+          path="/azure-functions"
+          element={<AzureFunctionsQuestion />}
+        />
+
+        {/* Azure Container Apps / AKS */}
+        <Route
+          path="/azure-container-apps"
+          element={<AzureContainerAppsQuestion />}
+        />
+
+        {/* Azure API Management */}
+        <Route
+          path="/azure-api-management"
+          element={<AzureApiManagementQuestion />}
+        />
+
+        {/* Azure Service Bus */}
+        <Route
+          path="/azure-service-bus"
+          element={<AzureServiceBusQuestion />}
+        />
+
+        {/* Cosmos DB */}
+        <Route
+          path="/azure-cosmos-db"
+          element={<AzureCosmosDbQuestion />}
+        />
+
+        {/* Azure Cache for Redis */}
+        <Route
+          path="/azure-redis"
+          element={<AzureRedisQuestion />}
+        />
+
+        {/* Microsoft Entra ID */}
+        <Route
+          path="/azure-entra-id"
+          element={<AzureEntraIdQuestion />}
+        />
+
+        {/* Azure Key Vault */}
+        <Route
+          path="/azure-key-vault"
+          element={<AzureKeyVaultQuestion />}
+        />
+
+        {/* Azure Networking */}
+        <Route
+          path="/azure-networking"
+          element={<AzureNetworkingQuestion />}
+        />
+
+        {/* Azure Monitor / Application Insights */}
+        <Route
+          path="/azure-monitor"
+          element={<AzureMonitorQuestion />}
+        />
+
+        {/* Azure DevOps / CI/CD */}
+        <Route
+          path="/azure-devops"
+          element={<AzureDevOpsQuestion />}
         />
 
       </Routes>

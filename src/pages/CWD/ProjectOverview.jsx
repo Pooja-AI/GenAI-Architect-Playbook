@@ -8,7 +8,6 @@ import CurrentState from "../../assets/CWD/docs/cwd-current-state.md?raw";
 import TargetState from "../../assets/CWD/docs/cwd-target-state.md?raw";
 import WhyAgenticAI from "../../assets/CWD/docs/cwd-why-agentic-ai.md?raw";
 import BusinessBenefits from "../../assets/CWD/docs/cwd-business-benefits.md?raw";
-import AWS from "../../assets/CWD/docs/aws.md?raw";
 
 
 const CWDProjectOverview = [
