@@ -176,17 +176,6 @@ const cwdTopics = [
   { name: "28. Interview Preparation", path: "/cwd-interview" },
 
 ];
-  // =====================================================
-  // CODING & AI
-  // FEW TOPICS FOR NOW
-  // =====================================================
-
-  const codingTopics = [
-    {
-      name: "ArraysAndLists",
-      path: "/ArraysAndLists",
-    },
-  ];
 
 
 
@@ -395,15 +384,7 @@ const cwdTopics = [
           topics={cwdTopics}
         />
 
-        {/* =================================================
-            CODING & AI
-        ================================================= */}
-
-        <Dropdown
-          name="Coding & AI"
-          topics={codingTopics}
-        />
-
+     
         {/* =================================================
             Cloud AI
         ================================================= */}

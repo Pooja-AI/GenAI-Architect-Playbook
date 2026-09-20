@@ -90,7 +90,6 @@ import PrincipalArchitectQuestions from "./pages/CWD/29-CWDPrincipalArchitect";
 // COMPONENTS
 // =====================================================
 
-import ArraysAndLists from "./pages/Python/ArraysAndList"
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -284,11 +283,7 @@ function App() {
           element={<InterviewPreparation />}
         />
 
-        <Route 
-        path="/ArraysAndLists" element={<ArraysAndLists />}
-
-        />
-
+       
         <Route 
         path="/AWS" element={<AWS />}
 
