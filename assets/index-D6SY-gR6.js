@@ -92275,124 +92275,1004 @@ Salesforce / ServiceNow / SharePoint\r
 ### Strong 30-second interview answer\r
 \r
 > **"We used MCP because our Workers needed to interact with multiple enterprise systems in a standardized and governed way. MCP separated the agent logic from the underlying system integrations. It allowed us to expose Salesforce, ServiceNow, and SharePoint capabilities as reusable tools while centralizing authorization, parameter validation, auditing, timeout, and error handling. A2A handled communication between our agents, whereas MCP handled Worker-to-tool and Worker-to-enterprise-system communication."**\r
-`,code:``},{id:`139-what-problem-does-mcp-solve`,category:`MCP Deep Interview`,title:`What problem does MCP solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:`## What problem does MCP solve?\r
+`,code:``},{id:`139-what-problem-does-mcp-solve`,category:`MCP Deep Interview`,title:`What problem does MCP solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:`Absolutely. For your **CWD architecture**, MCP is the layer that solves the **Worker-to-enterprise-system integration problem**.\r
 \r
-The main problem MCP solves is **the lack of a standard way for AI agents to interact with external tools and enterprise systems**.\r
+The easiest way to remember it is:\r
 \r
-### Without MCP\r
+> **A2A connects agents to agents. MCP connects AI applications/Workers to tools and enterprise data.**\r
 \r
-Imagine your CWD has 20 Workers:\r
+# 1. What problem does MCP solve?\r
+\r
+Imagine your CWD has many Workers:\r
 \r
 \`\`\`text\r
-Worker 1 ──→ Salesforce API\r
-Worker 2 ──→ Salesforce API\r
-Worker 3 ──→ ServiceNow API\r
-Worker 4 ──→ SharePoint API\r
-Worker 5 ──→ Database\r
-...\r
+Sales Delegator\r
+   ├── Customer Worker\r
+   ├── Opportunity Worker\r
+   └── Account Worker\r
+\r
+IT Delegator\r
+   ├── Incident Worker\r
+   ├── Ticket Worker\r
+   └── Service Request Worker\r
 \`\`\`\r
 \r
-Each Worker may need to handle its own:\r
+Those Workers need to access:\r
 \r
-* API integration\r
-* authentication\r
-* parameter validation\r
-* error handling\r
-* retries/timeouts\r
-* logging\r
-* permissions\r
-* API-specific code\r
+\`\`\`text\r
+Salesforce\r
+ServiceNow\r
+SharePoint\r
+Oracle\r
+Snowflake\r
+SAP\r
+Internal APIs\r
+Databases\r
+\`\`\`\r
 \r
-This creates **duplicated code, tight coupling, and difficult maintenance**.\r
+Without MCP, every Worker may need its own custom integration:\r
+\r
+\`\`\`text\r
+Customer Worker ───── Salesforce API\r
+Opportunity Worker ── Salesforce API\r
+Incident Worker ───── ServiceNow API\r
+Ticket Worker ─────── ServiceNow API\r
+Document Worker ───── SharePoint API\r
+\`\`\`\r
+\r
+This creates:\r
+\r
+* duplicated integration code\r
+* inconsistent authentication\r
+* inconsistent authorization\r
+* difficult auditing\r
+* difficult tool discovery\r
+* difficult versioning\r
+* difficult maintenance\r
+* tight coupling between Workers and enterprise systems\r
+\r
+MCP gives you a **standardized tool-access layer**.\r
 \r
 ---\r
 \r
-### With MCP\r
+# 2. What MCP gives us\r
 \r
-MCP introduces a **standard tool-access layer**:\r
+Instead of this:\r
 \r
 \`\`\`text\r
-                     Workers\r
-                        │\r
-                        ▼\r
-                   MCP Client\r
-                        │\r
-                        ▼\r
-                   MCP Server\r
-                  /     |      \\\r
-                 /      |       \\\r
-                ▼       ▼        ▼\r
-          Salesforce ServiceNow SharePoint\r
+Worker → Salesforce SDK\r
+Worker → ServiceNow SDK\r
+Worker → SharePoint SDK\r
+Worker → Oracle SDK\r
 \`\`\`\r
 \r
-Now the Worker interacts with a standardized tool interface rather than implementing every enterprise integration itself.\r
+you can have:\r
 \r
-### The problems MCP addresses\r
-\r
-| Problem                        | MCP solution                            |\r
-| ------------------------------ | --------------------------------------- |\r
-| Different integration patterns | Standardized tool protocol              |\r
-| Duplicate integration code     | Reusable MCP tools                      |\r
-| Tight coupling to APIs         | Worker depends on tool contract         |\r
-| Uncontrolled tool access       | Centralized authorization/governance    |\r
-| Invalid parameters             | Tool/input validation                   |\r
-| Difficult auditing             | Centralized tool-call logging           |\r
-| Different error handling       | Consistent error handling               |\r
-| Changing backend APIs          | MCP server hides implementation details |\r
-| Tool discovery                 | MCP servers expose available tools      |\r
-\r
-### CWD example\r
-\r
-Suppose your Worker needs customer information.\r
-\r
-Instead of:\r
-\r
-\`\`\`python\r
-# Worker directly knows Salesforce API\r
-salesforce_client.get(\r
-    "/services/data/vXX.X/query",\r
-    params={"q": "..."}\r
-)\r
+\`\`\`text\r
+                 Workers\r
+                    │\r
+                    ▼\r
+                MCP Client\r
+                    │\r
+                    ▼\r
+                MCP Server\r
+             ┌──────┼──────┐\r
+             ▼      ▼      ▼\r
+        Salesforce ServiceNow SharePoint\r
 \`\`\`\r
 \r
-The Worker can work with a business-level tool:\r
+The Worker doesn't need to understand every enterprise API.\r
+\r
+It understands:\r
+\r
+> "I need the \`get_customer\` capability."\r
+\r
+The MCP Server handles the enterprise-system-specific integration.\r
+\r
+---\r
+\r
+# 3. MCP components\r
+\r
+For your CWD interview, remember these main components:\r
+\r
+\`\`\`text\r
+                MCP Host\r
+                   │\r
+                   ▼\r
+              MCP Client\r
+                   │\r
+             MCP Protocol\r
+                   │\r
+                   ▼\r
+              MCP Server\r
+             /    |     \\\r
+            /     |      \\\r
+        Tools   Resources  Prompts\r
+          │        │         │\r
+          ▼        ▼         ▼\r
+      Enterprise Systems / Data\r
+\`\`\`\r
+\r
+Let's map each one to CWD.\r
+\r
+---\r
+\r
+# 4. MCP Host\r
+\r
+The **host** is the AI application/runtime that is using MCP.\r
+\r
+In your architecture, conceptually:\r
+\r
+\`\`\`text\r
+CWD Worker Runtime\r
+       │\r
+       ▼\r
+    MCP Host\r
+\`\`\`\r
+\r
+The host manages the AI application and MCP client connections.\r
+\r
+For example, your Worker may be running inside:\r
+\r
+\`\`\`text\r
+AKS / Container Apps\r
+        │\r
+        ▼\r
+Worker application\r
+\`\`\`\r
+\r
+The Worker application acts as the environment in which the MCP client operates.\r
+\r
+---\r
+\r
+# 5. MCP Client\r
+\r
+The MCP Client maintains the connection between your Worker application and an MCP Server.\r
+\r
+Your CWD flow becomes:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+       │\r
+       ▼\r
+   MCP Client\r
+       │\r
+       ▼\r
+   MCP Server\r
+       │\r
+       ▼\r
+   Salesforce\r
+\`\`\`\r
+\r
+The important distinction is:\r
+\r
+> **The Worker uses the MCP Client; the MCP Client communicates with the MCP Server.**\r
+\r
+The Worker shouldn't directly implement Salesforce's API protocol.\r
+\r
+---\r
+\r
+# 6. MCP Server\r
+\r
+The MCP Server exposes enterprise capabilities as standardized MCP tools/resources.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Salesforce MCP Server\r
+\r
+Tools:\r
+    get_customer\r
+    get_opportunities\r
+    get_account\r
+\r
+Resources:\r
+    customer records\r
+    account information\r
+\`\`\`\r
+\r
+Another server:\r
+\r
+\`\`\`text\r
+ServiceNow MCP Server\r
+\r
+Tools:\r
+    get_incident\r
+    search_incidents\r
+    create_ticket\r
+    update_ticket\r
+\`\`\`\r
+\r
+So your architecture could be:\r
+\r
+\`\`\`text\r
+                    CWD\r
+                     │\r
+             ┌───────┴────────┐\r
+             │                │\r
+       Customer Worker    Incident Worker\r
+             │                │\r
+         MCP Client       MCP Client\r
+             │                │\r
+             ▼                ▼\r
+     Salesforce MCP    ServiceNow MCP\r
+         Server             Server\r
+             │                │\r
+             ▼                ▼\r
+        Salesforce         ServiceNow\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. MCP Tools\r
+\r
+This is probably the most important MCP component for your CWD.\r
+\r
+A **tool** represents an executable capability.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+get_customer\r
+\`\`\`\r
+\r
+could accept:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+and return:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": "C12345",\r
+  "name": "ABC Corp",\r
+  "industry": "Manufacturing"\r
+}\r
+\`\`\`\r
+\r
+Another tool:\r
+\r
+\`\`\`text\r
+get_incidents\r
+\`\`\`\r
+\r
+might accept:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": "C12345",\r
+  "status": "open"\r
+}\r
+\`\`\`\r
+\r
+and return:\r
+\r
+\`\`\`json\r
+{\r
+  "incidents": [\r
+    {\r
+      "id": "INC1001",\r
+      "priority": "P1",\r
+      "status": "open"\r
+    }\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 8. MCP Resources\r
+\r
+Resources are different from tools.\r
+\r
+A useful interview distinction is:\r
+\r
+> **Tools perform actions. Resources provide contextual data.**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Tool:\r
+get_customer(customer_id)\r
+\`\`\`\r
+\r
+versus:\r
+\r
+\`\`\`text\r
+Resource:\r
+customer://C12345/profile\r
+\`\`\`\r
+\r
+In your CWD, resources could expose things such as:\r
+\r
+\`\`\`text\r
+customer profile\r
+product documentation\r
+SharePoint documents\r
+knowledge-base information\r
+configuration data\r
+\`\`\`\r
+\r
+The exact use depends on how your MCP server is designed.\r
+\r
+---\r
+\r
+# 9. MCP Prompts\r
+\r
+MCP can also expose reusable prompt templates.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+customer_summary_prompt\r
+\`\`\`\r
+\r
+could provide a standardized template for creating a customer summary.\r
+\r
+However, for your CWD interview, don't make Prompts the centerpiece.\r
+\r
+Your most important MCP concepts are:\r
+\r
+\`\`\`text\r
+Client\r
+Server\r
+Tools\r
+Resources\r
+Protocol\r
+Security\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. What protocol does MCP use?\r
+\r
+MCP uses a standardized protocol based on **JSON-RPC 2.0** for messages between the MCP client and server.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Worker\r
+   │\r
+   ▼\r
+MCP Client\r
+   │\r
+   │ JSON-RPC message\r
+   ▼\r
+MCP Server\r
+\`\`\`\r
+\r
+For example, conceptually a tool invocation looks like:\r
+\r
+\`\`\`json\r
+{\r
+  "jsonrpc": "2.0",\r
+  "id": 101,\r
+  "method": "tools/call",\r
+  "params": {\r
+    "name": "get_customer",\r
+    "arguments": {\r
+      "customer_id": "C12345"\r
+    }\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The MCP Server processes the request and returns a JSON-RPC response.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "jsonrpc": "2.0",\r
+  "id": 101,\r
+  "result": {\r
+    "customer_id": "C12345",\r
+    "name": "ABC Corp"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. MCP transport\r
+\r
+MCP communication also needs a transport mechanism.\r
+\r
+Depending on the MCP deployment/version, you may encounter transports such as:\r
+\r
+\`\`\`text\r
+STDIO\r
+Streamable HTTP\r
+\`\`\`\r
+\r
+For your **enterprise CWD architecture**, the important one to understand is **HTTP-based MCP communication**, because your Workers and MCP servers can be independently deployed services.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+AKS Worker\r
+    │\r
+    │ HTTPS\r
+    ▼\r
+MCP Server\r
+    │\r
+    ▼\r
+Enterprise API\r
+\`\`\`\r
+\r
+For local processes, STDIO can be useful:\r
+\r
+\`\`\`text\r
+MCP Client\r
+    │\r
+    │ stdin/stdout\r
+    ▼\r
+MCP Server process\r
+\`\`\`\r
+\r
+For production distributed enterprise systems, HTTP-based deployment is much more natural.\r
+\r
+---\r
+\r
+# 12. How MCP works in your CWD — complete flow\r
+\r
+Let's take your actual example:\r
+\r
+> **"Give me a customer briefing for customer C12345."**\r
+\r
+### Step 1 — User\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ │ Customer Briefing\r
+ │ customer_id=C12345\r
+ ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 2 — Coordinator identifies Delegators\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── A2A → Sales Delegator\r
+     │\r
+     └── A2A → IT Delegator\r
+\`\`\`\r
+\r
+Remember:\r
+\r
+**This is A2A.**\r
+\r
+---\r
+\r
+### Step 3 — Sales Delegator selects Worker\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       │\r
+       ▼\r
+Customer Worker\r
+\`\`\`\r
+\r
+The Worker determines:\r
+\r
+> "I need customer information."\r
+\r
+---\r
+\r
+### Step 4 — Worker discovers/uses MCP tool\r
+\r
+The Worker has an MCP Client connection to the Salesforce MCP Server.\r
+\r
+\`\`\`text\r
+Customer Worker\r
+       │\r
+       ▼\r
+   MCP Client\r
+       │\r
+       ▼\r
+Salesforce MCP Server\r
+\`\`\`\r
+\r
+The server exposes:\r
+\r
+\`\`\`text\r
+get_customer\r
+get_account\r
+get_opportunities\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. How does the Worker select the tool?\r
+\r
+This is an important interview question.\r
+\r
+The Worker has access to the tools exposed by the MCP Server.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+MCP Server\r
+    │\r
+    ├── get_customer\r
+    ├── get_account\r
+    └── get_opportunities\r
+\`\`\`\r
+\r
+The Worker/LLM determines that:\r
+\r
+\`\`\`text\r
+customer_id = C12345\r
+\`\`\`\r
+\r
+requires:\r
+\r
+\`\`\`text\r
+get_customer\r
+\`\`\`\r
+\r
+Then the MCP Client sends the tool call.\r
+\r
+---\r
+\r
+# 14. Tool invocation\r
+\r
+Conceptually:\r
 \r
 \`\`\`python\r
 result = await mcp_client.call_tool(\r
     "get_customer",\r
-    {"customer_id": "C123"}\r
+    {\r
+        "customer_id": "C12345"\r
+    }\r
 )\r
 \`\`\`\r
 \r
-The MCP Server handles the underlying Salesforce integration:\r
+The MCP Client sends the request to the MCP Server.\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      │\r
+      │ tools/call\r
+      │ get_customer\r
+      │ customer_id=C12345\r
+      ▼\r
+MCP Server\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. MCP Server calls Salesforce\r
+\r
+Now the MCP Server performs the enterprise-specific integration:\r
+\r
+\`\`\`text\r
+MCP Server\r
+    │\r
+    ▼\r
+Salesforce API\r
+    │\r
+    ▼\r
+Customer record\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+async def get_customer(customer_id):\r
+\r
+    response = await salesforce_client.get(\r
+        f"/customers/{customer_id}"\r
+    )\r
+\r
+    return response.json()\r
+\`\`\`\r
+\r
+The Worker doesn't need to know this implementation.\r
+\r
+That's the abstraction MCP provides.\r
+\r
+---\r
+\r
+# 16. Response comes back\r
+\r
+The response flows backward:\r
+\r
+\`\`\`text\r
+Salesforce\r
+    │\r
+    ▼\r
+MCP Server\r
+    │\r
+    ▼\r
+MCP Client\r
+    │\r
+    ▼\r
+Customer Worker\r
+    │\r
+    ▼\r
+Sales Delegator\r
+    │\r
+    ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+Then the Coordinator combines it with the IT result.\r
+\r
+---\r
+\r
+# 17. Complete CWD flow\r
+\r
+This is the diagram I recommend memorizing:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │ Coordinator │\r
+                    └──────┬──────┘\r
+                           │\r
+                         A2A\r
+                           │\r
+              ┌────────────┴────────────┐\r
+              ▼                         ▼\r
+      ┌───────────────┐         ┌───────────────┐\r
+      │Sales Delegator│         │  IT Delegator │\r
+      └───────┬───────┘         └───────┬───────┘\r
+              │                         │\r
+              ▼                         ▼\r
+       Customer Worker            Incident Worker\r
+              │                         │\r
+              ▼                         ▼\r
+         MCP Client                MCP Client\r
+              │                         │\r
+              ▼                         ▼\r
+      Salesforce MCP             ServiceNow MCP\r
+          Server                     Server\r
+              │                         │\r
+              ▼                         ▼\r
+         Salesforce                ServiceNow\r
+\`\`\`\r
+\r
+And results flow back:\r
+\r
+\`\`\`text\r
+Salesforce ──► Sales Worker ──► Sales Delegator\r
+                                      │\r
+                                      │ A2A\r
+                                      ▼\r
+                                  Coordinator\r
+                                      ▲\r
+                                      │ A2A\r
+                                      │\r
+ServiceNow ─► Incident Worker ─► IT Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. Why not directly call Salesforce from Worker?\r
+\r
+This is a very common interviewer question.\r
+\r
+You can say:\r
+\r
+> **"We could directly integrate the Worker with Salesforce, but that would tightly couple every Worker to the enterprise API. With MCP, we separate the business agent logic from the tool integration layer. The Worker asks for a capability such as \`get_customer\`, while the MCP Server handles authentication, API details, validation, and integration with Salesforce."**\r
+\r
+This gives:\r
 \r
 \`\`\`text\r
 Worker\r
   │\r
-  │ get_customer(C123)\r
+  │ business logic\r
   ▼\r
-MCP Server\r
+MCP\r
   │\r
-  ├── Authenticate\r
-  ├── Authorize\r
-  ├── Validate parameters\r
-  ├── Call Salesforce API\r
-  ├── Log/audit\r
-  └── Return normalized result\r
-  │\r
+  │ integration logic\r
   ▼\r
-Worker\r
+Salesforce\r
 \`\`\`\r
 \r
-### The key interview point\r
+---\r
 \r
-**MCP doesn't replace Salesforce, ServiceNow, or APIs.**\r
+# 19. Why is this useful when you have many Workers?\r
 \r
-It provides a **standardized interface for AI applications to access those tools and systems**.\r
+Imagine 50 Workers.\r
 \r
-### 🎯 Short interview answer\r
+Without MCP:\r
 \r
-> **"MCP solves the integration and governance problem between AI agents and external tools. In our CWD architecture, instead of every Worker directly integrating with Salesforce, ServiceNow, or SharePoint, we exposed those capabilities through MCP tools. This gave us standardized tool invocation, reusable integrations, centralized authorization, validation, auditing, and consistent error handling, while keeping the Worker decoupled from the underlying enterprise APIs."**\r
+\`\`\`text\r
+50 Workers\r
+   │\r
+   ├── Salesforce integration\r
+   ├── ServiceNow integration\r
+   ├── SharePoint integration\r
+   ├── Oracle integration\r
+   └── Snowflake integration\r
+\`\`\`\r
+\r
+Potentially hundreds of integration combinations.\r
+\r
+With MCP:\r
+\r
+\`\`\`text\r
+                    MCP Layer\r
+                       │\r
+        ┌──────────────┼──────────────┐\r
+        ▼              ▼              ▼\r
+   Salesforce       ServiceNow     SharePoint\r
+     Server           Server          Server\r
+        ▲              ▲              ▲\r
+        │              │              │\r
+       Workers       Workers        Workers\r
+\`\`\`\r
+\r
+The enterprise integration logic is centralized behind MCP servers.\r
+\r
+---\r
+\r
+# 20. MCP security in your CWD\r
+\r
+This is especially important for your **enterprise AI architecture interview**.\r
+\r
+You should never say:\r
+\r
+> "The LLM can directly call Salesforce."\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+LLM\r
+ ↓\r
+Worker\r
+ ↓\r
+MCP Client\r
+ ↓\r
+Security validation\r
+ ↓\r
+MCP Server\r
+ ↓\r
+Authorization\r
+ ↓\r
+Enterprise API\r
+\`\`\`\r
+\r
+For example, before executing:\r
+\r
+\`\`\`text\r
+delete_customer\r
+\`\`\`\r
+\r
+you would validate:\r
+\r
+\`\`\`text\r
+1. User identity\r
+2. Agent identity\r
+3. Authorization\r
+4. Tool permission\r
+5. Input schema\r
+6. Customer entitlement\r
+7. Approval requirement\r
+8. Audit requirements\r
+\`\`\`\r
+\r
+Then execute.\r
+\r
+---\r
+\r
+# 21. Tool schema validation\r
+\r
+Suppose the tool expects:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": "string"\r
+}\r
+\`\`\`\r
+\r
+but the model generates:\r
+\r
+\`\`\`json\r
+{\r
+  "customer_id": 12345\r
+}\r
+\`\`\`\r
+\r
+Your MCP layer should validate the input schema.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+LLM generated arguments\r
+        │\r
+        ▼\r
+Schema validation\r
+        │\r
+    ┌───┴────┐\r
+    │        │\r
+ valid     invalid\r
+    │        │\r
+    ▼        ▼\r
+ execute    reject\r
+\`\`\`\r
+\r
+This protects the enterprise system from malformed requests.\r
+\r
+---\r
+\r
+# 22. MCP and your observability architecture\r
+\r
+You also wanted strong observability in your CWD.\r
+\r
+MCP calls should generate telemetry such as:\r
+\r
+\`\`\`text\r
+correlation_id\r
+task_id\r
+run_id\r
+worker_id\r
+tool_name\r
+tool_version\r
+start_time\r
+end_time\r
+latency\r
+status\r
+error\r
+user/agent identity\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+correlation_id = CORR-789\r
+\r
+Worker:\r
+    customer-worker\r
+\r
+MCP tool:\r
+    get_customer\r
+\r
+Latency:\r
+    320 ms\r
+\r
+Status:\r
+    success\r
+\`\`\`\r
+\r
+You can send this to:\r
+\r
+\`\`\`text\r
+Azure Application Insights\r
+Azure Monitor\r
+Log Analytics\r
+Langfuse\r
+\`\`\`\r
+\r
+depending on your observability design.\r
+\r
+---\r
+\r
+# 23. What happens if MCP Server fails?\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      │\r
+      ▼\r
+MCP Client\r
+      │\r
+      X\r
+MCP Server unavailable\r
+\`\`\`\r
+\r
+Your Worker should not hang indefinitely.\r
+\r
+You can implement:\r
+\r
+\`\`\`text\r
+Timeout\r
+   ↓\r
+Retry\r
+   ↓\r
+Exponential backoff\r
+   ↓\r
+Circuit breaker\r
+   ↓\r
+Fallback / partial result\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Attempt 1 → timeout\r
+Attempt 2 → timeout\r
+Attempt 3 → timeout\r
+              ↓\r
+       circuit breaker\r
+              ↓\r
+       return failure\r
+\`\`\`\r
+\r
+The Delegator informs the Coordinator.\r
+\r
+Then the Coordinator decides whether to:\r
+\r
+\`\`\`text\r
+retry\r
+return partial result\r
+use fallback\r
+request human intervention\r
+\`\`\`\r
+\r
+---\r
+\r
+# 24. MCP vs A2A in your CWD\r
+\r
+This is **the key table to memorize**:\r
+\r
+|                  | A2A                           | MCP                            |\r
+| ---------------- | ----------------------------- | ------------------------------ |\r
+| Purpose          | Agent communication           | Tool/data access               |\r
+| Communication    | Agent ↔ Agent                 | Worker/Agent ↔ Tool            |\r
+| CWD example      | Coordinator → Sales Delegator | Customer Worker → Salesforce   |\r
+| Carries          | Tasks, messages, results      | Tool calls, resources, results |\r
+| Main abstraction | Agent capability              | Tool capability                |\r
+| Example          | \`customer_briefing\` task      | \`get_customer(customer_id)\`    |\r
+| Failure          | Agent unavailable             | Tool/MCP server unavailable    |\r
+\r
+### Simple mental model\r
+\r
+\`\`\`text\r
+              CWD\r
+               │\r
+        ┌──────┴──────┐\r
+        │             │\r
+       A2A            MCP\r
+        │             │\r
+        ▼             ▼\r
+   Agent ↔ Agent   Worker ↔ Tool\r
+        │             │\r
+        ▼             ▼\r
+ Coordinator       Salesforce\r
+ Delegator         ServiceNow\r
+ Agent             SharePoint\r
+\`\`\`\r
+\r
+# 25. Interview-ready answer\r
+\r
+If the interviewer asks:\r
+\r
+### **"What problem does MCP solve in your CWD architecture?"**\r
+\r
+Say:\r
+\r
+> **"MCP solves the integration problem between our AI Workers and enterprise systems. In CWD, Workers need to access systems such as Salesforce, ServiceNow, and SharePoint. Instead of building custom integrations into every Worker, we use MCP as a standardized tool-access layer. The Worker uses an MCP Client, which communicates with an MCP Server. The MCP Server exposes capabilities such as \`get_customer\`, \`get_incidents\`, or \`search_documents\` and handles the underlying enterprise API integration."**\r
+>\r
+> **"MCP uses a standardized protocol based on JSON-RPC for client-server communication. In our CWD flow, the Coordinator communicates with Delegators using A2A, while Workers use MCP to access enterprise tools. This separation gives us loose coupling, centralized security, reusable tools, consistent validation, and better observability."**\r
+\r
+### And if they ask: **"Explain the flow in one sentence."**\r
+\r
+> **"In CWD, the Coordinator uses A2A to send a business task to a Delegator; the Delegator invokes its Worker; the Worker uses an MCP Client to call an MCP Server tool; the MCP Server accesses Salesforce or ServiceNow; and the result flows back through the Worker and Delegator to the Coordinator."**\r
+\r
+**Remember this:**\r
+\r
+\`\`\`text\r
+A2A = "I need another AGENT to do something."\r
+\r
+MCP = "I need a TOOL or enterprise capability to do something."\r
+\`\`\`\r
+\r
+That distinction will help you answer most of the A2A/MCP follow-up questions in your CWD interview.\r
 `,code:``},{id:`140-mcp-vs-rest`,category:`MCP Deep Interview`,title:`MCP vs REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:`## MCP vs REST\r
 \r
 The easiest way to remember it:\r
@@ -97072,7 +97952,4348 @@ Safe retry policy\r
 And for write operations:\r
 \r
 > **“Never blindly retry a transaction when you don't know whether the first attempt succeeded.”**\r
-`,code:``}];function Cp(){return(0,M.jsx)($,{data:Sp,title:`CWD MCP Deep Interview Cookbook`,subtitle:`MCP concepts, security, versioning, approvals and monitoring`,icon:`🔌`,patternLabel:`Questions`})}var wp=[{id:`161-why-did-you-use-a2a`,category:`A2A — Agent Communication`,title:`Why did you use A2A?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`162-what-problem-does-a2a-solve`,category:`A2A — Agent Communication`,title:`What problem does A2A solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`163-mcp-vs-a2a`,category:`A2A — Agent Communication`,title:`MCP vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`164-rest-vs-a2a`,category:`A2A — Agent Communication`,title:`REST vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`165-when-should-you-use-a2a`,category:`A2A — Agent Communication`,title:`When should you use A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`166-when-should-you-use-rest`,category:`A2A — Agent Communication`,title:`When should you use REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`167-how-delegators-communicate-with-the-coordinator`,category:`A2A — Agent Communication`,title:`How do Delegators communicate with the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`168-how-agents-exchange-task-context`,category:`A2A — Agent Communication`,title:`How do agents exchange task context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`169-how-to-maintain-agent-identity`,category:`A2A — Agent Communication`,title:`How do you maintain agent identity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`170-how-to-authenticate-agents`,category:`A2A — Agent Communication`,title:`How do you authenticate agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`171-how-to-authorize-agents`,category:`A2A — Agent Communication`,title:`How do you authorize agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`172-how-to-handle-asynchronous-agent-communication`,category:`A2A — Agent Communication`,title:`How do you handle asynchronous agent communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`173-how-to-handle-agent-failures`,category:`A2A — Agent Communication`,title:`How do you handle agent failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`174-how-to-correlate-a2a-requests`,category:`A2A — Agent Communication`,title:`How do you correlate A2A requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`175-how-to-trace-an-a2a-request-across-agents`,category:`A2A — Agent Communication`,title:`How do you trace an A2A request across agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``}];function Tp(){return(0,M.jsx)($,{data:wp,title:`CWD A2A — Agent Communication Cookbook`,subtitle:`Agent-to-agent communication, identity, tracing and failure handling`,icon:`🤝`,patternLabel:`Questions`})}var Ep=[{id:`176-why-langgraph`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`177-langgraph-vs-langchain`,category:`LangGraph`,title:`LangGraph vs LangChain?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`178-langgraph-vs-custom-python-orchestration`,category:`LangGraph`,title:`LangGraph vs custom Python orchestration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`179-what-is-a-stategraph`,category:`LangGraph`,title:`What is a StateGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`180-what-is-graph-state`,category:`LangGraph`,title:`What is graph state?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`181-what-are-nodes`,category:`LangGraph`,title:`What are nodes?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`182-what-are-edges`,category:`LangGraph`,title:`What are edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`183-what-are-conditional-edges`,category:`LangGraph`,title:`What are conditional edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`184-what-are-reducers`,category:`LangGraph`,title:`What are reducers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`185-how-langgraph-supports-parallel-execution`,category:`LangGraph`,title:`How does LangGraph support parallel execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`186-how-langgraph-supports-state-persistence`,category:`LangGraph`,title:`How does LangGraph support state persistence?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`187-how-langgraph-supports-human-in-the-loop`,category:`LangGraph`,title:`How does LangGraph support human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`188-how-langgraph-supports-retries`,category:`LangGraph`,title:`How does LangGraph support retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`189-how-langgraph-supports-checkpointing`,category:`LangGraph`,title:`How does LangGraph support checkpointing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`190-how-to-resume-a-failed-workflow`,category:`LangGraph`,title:`How do you resume a failed workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`191-how-to-prevent-infinite-loops`,category:`LangGraph`,title:`How do you prevent infinite loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`192-how-to-control-token-growth`,category:`LangGraph`,title:`How do you control token growth?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`193-how-to-manage-conversation-state`,category:`LangGraph`,title:`How do you manage conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`194-how-to-separate-session-state-and-workflow-state`,category:`LangGraph`,title:`How do you separate session state and workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`195-how-to-debug-a-langgraph-workflow`,category:`LangGraph`,title:`How do you debug a LangGraph workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`196-how-to-test-individual-graph-nodes`,category:`LangGraph`,title:`How do you test individual graph nodes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`197-how-to-test-the-complete-graph`,category:`LangGraph`,title:`How do you test the complete graph?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``}];function Dp(){return(0,M.jsx)($,{data:Ep,title:`CWD LangGraph Cookbook`,subtitle:`Graph state, nodes, edges, checkpointing, debugging and testing`,icon:`🕸️`,patternLabel:`Questions`})}var Op=[{id:`198-why-does-cwd-need-rag`,category:`RAG Architecture`,title:`Why does CWD need RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`199-what-data-sources-are-indexed`,category:`RAG Architecture`,title:`What data sources are indexed?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`200-how-to-ingest-enterprise-documents`,category:`RAG Architecture`,title:`How do you ingest enterprise documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`201-explain-your-ingestion-pipeline`,category:`RAG Architecture`,title:`Explain your ingestion pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`202-how-do-you-chunk-documents`,category:`RAG Architecture`,title:`How do you chunk documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`203-fixed-size-vs-semantic-chunking`,category:`RAG Architecture`,title:`Fixed-size vs semantic chunking?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`204-what-chunk-size-did-you-choose-and-why`,category:`RAG Architecture`,title:`What chunk size did you choose and why?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`205-what-overlap-did-you-choose`,category:`RAG Architecture`,title:`What overlap did you choose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`206-how-to-handle-tables`,category:`RAG Architecture`,title:`How do you handle tables?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`207-how-to-handle-pdfs`,category:`RAG Architecture`,title:`How do you handle PDFs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`208-how-to-handle-images`,category:`RAG Architecture`,title:`How do you handle images?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`209-how-to-handle-scanned-documents`,category:`RAG Architecture`,title:`How do you handle scanned documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`210-what-embedding-model-did-you-use`,category:`RAG Architecture`,title:`What embedding model did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`211-how-to-choose-an-embedding-model`,category:`RAG Architecture`,title:`How do you choose an embedding model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`212-what-vector-database-did-you-use`,category:`RAG Architecture`,title:`What vector database did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`213-why-azure-ai-search`,category:`RAG Architecture`,title:`Why Azure AI Search?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`214-how-does-hybrid-search-work`,category:`RAG Architecture`,title:`How does hybrid search work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`215-explain-bm25`,category:`RAG Architecture`,title:`Explain BM25.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`216-vector-search-vs-bm25`,category:`RAG Architecture`,title:`Vector search vs BM25?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`217-why-combine-both`,category:`RAG Architecture`,title:`Why combine both?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`218-what-is-semantic-ranking`,category:`RAG Architecture`,title:`What is semantic ranking?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`219-what-is-metadata-filtering`,category:`RAG Architecture`,title:`What is metadata filtering?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`220-how-to-implement-acl-filtering`,category:`RAG Architecture`,title:`How do you implement ACL filtering?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`221-how-to-prevent-unauthorized-documents-entering-llm-context`,category:`RAG Architecture`,title:`How do you prevent unauthorized documents from entering the LLM context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`222-what-is-your-retrieval-pipeline`,category:`RAG Architecture`,title:`What is your retrieval pipeline?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`223-how-to-measure-retrieval-quality`,category:`RAG Architecture`,title:`How do you measure retrieval quality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`224-what-is-recall-at-k`,category:`RAG Architecture`,title:`What is Recall@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`225-what-is-precision-at-k`,category:`RAG Architecture`,title:`What is Precision@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`226-what-is-mrr`,category:`RAG Architecture`,title:`What is MRR?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`227-what-is-ndcg`,category:`RAG Architecture`,title:`What is NDCG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`228-what-is-ragas`,category:`RAG Architecture`,title:`What is RAGAS?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`229-how-to-reduce-irrelevant-context`,category:`RAG Architecture`,title:`How do you reduce irrelevant context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`230-how-to-handle-stale-documents`,category:`RAG Architecture`,title:`How do you handle stale documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`231-how-to-handle-document-deletion`,category:`RAG Architecture`,title:`How do you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`232-how-to-re-index-documents`,category:`RAG Architecture`,title:`How do you re-index documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``}];function kp(){return(0,M.jsx)($,{data:Op,title:`CWD RAG Architecture Cookbook`,subtitle:`Ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation`,icon:`📚`,patternLabel:`Questions`})}var Ap=[{id:`233-which-llms-did-you-use`,category:`LLM Architecture`,title:`Which LLMs did you use?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`234-why-did-you-select-the-model`,category:`LLM Architecture`,title:`Why did you select the model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`235-how-to-select-between-large-and-small-models`,category:`LLM Architecture`,title:`How do you select between large and small models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`236-how-to-control-token-usage`,category:`LLM Architecture`,title:`How do you control token usage?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`237-what-happens-when-context-exceeds-model-limit`,category:`LLM Architecture`,title:`What happens when the context exceeds the model limit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`238-how-to-reduce-prompt-size`,category:`LLM Architecture`,title:`How do you reduce prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`239-how-to-summarize-conversation-history`,category:`LLM Architecture`,title:`How do you summarize conversation history?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`240-how-to-implement-model-fallback`,category:`LLM Architecture`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`241-what-happens-if-azure-openai-is-unavailable`,category:`LLM Architecture`,title:`What happens if Azure OpenAI is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`242-would-you-use-multiple-llm-providers`,category:`LLM Architecture`,title:`Would you use multiple LLM providers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`243-how-to-route-requests-between-models`,category:`LLM Architecture`,title:`How do you route requests between models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`244-how-to-control-temperature`,category:`LLM Architecture`,title:`How do you control temperature?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`245-how-to-control-hallucination`,category:`LLM Architecture`,title:`How do you control hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`246-how-to-enforce-structured-output`,category:`LLM Architecture`,title:`How do you enforce structured output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`247-how-to-validate-llm-output`,category:`LLM Architecture`,title:`How do you validate LLM output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`248-what-happens-when-json-output-is-invalid`,category:`LLM Architecture`,title:`What happens when JSON output is invalid?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`249-how-to-handle-model-timeouts`,category:`LLM Architecture`,title:`How do you handle model timeouts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`250-how-to-handle-rate-limits`,category:`LLM Architecture`,title:`How do you handle rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`251-how-to-handle-token-throttling`,category:`LLM Architecture`,title:`How do you handle token throttling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`252-how-to-monitor-model-cost`,category:`LLM Architecture`,title:`How do you monitor model cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``}];function jp(){return(0,M.jsx)($,{data:Ap,title:`CWD LLM Architecture Cookbook`,subtitle:`Model selection, token control, fallback, routing and structured output`,icon:`🧠`,patternLabel:`Questions`})}var Mp=[{id:`253-how-to-prevent-hallucinations`,category:`Hallucination & Grounding`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`254-can-you-completely-eliminate-hallucination`,category:`Hallucination & Grounding`,title:`Can you completely eliminate hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`255-how-to-ground-responses`,category:`Hallucination & Grounding`,title:`How do you ground responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`256-how-rag-improves-grounding`,category:`Hallucination & Grounding`,title:`How does RAG improve grounding?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`257-what-if-retrieved-documents-are-wrong`,category:`Hallucination & Grounding`,title:`What if retrieved documents are wrong?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`258-what-if-retrieval-returns-nothing`,category:`Hallucination & Grounding`,title:`What if retrieval returns nothing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`259-what-should-llm-do-when-evidence-is-insufficient`,category:`Hallucination & Grounding`,title:`What should the LLM do when evidence is insufficient?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`260-how-to-enforce-i-dont-know-behavior`,category:`Hallucination & Grounding`,title:`How do you enforce “I don't know” behavior?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`261-how-to-validate-factuality`,category:`Hallucination & Grounding`,title:`How do you validate factuality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`262-what-metrics-measure-hallucination`,category:`Hallucination & Grounding`,title:`What metrics measure hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`263-what-is-faithfulness`,category:`Hallucination & Grounding`,title:`What is faithfulness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`264-what-is-groundedness`,category:`Hallucination & Grounding`,title:`What is groundedness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`265-how-to-implement-citation-generation`,category:`Hallucination & Grounding`,title:`How do you implement citation generation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`266-how-to-detect-unsupported-claims`,category:`Hallucination & Grounding`,title:`How do you detect unsupported claims?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``}];function Np(){return(0,M.jsx)($,{data:Mp,title:`CWD Hallucination & Grounding Cookbook`,subtitle:`Grounding, faithfulness, citations and unsupported-claim detection`,icon:`🔍`,patternLabel:`Questions`})}var Pp=[{id:`267-how-do-you-evaluate-your-cwd-system`,category:`LLM Evaluation`,title:`How do you evaluate your CWD system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`268-what-is-offline-evaluation`,category:`LLM Evaluation`,title:`What is offline evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`269-what-is-online-evaluation`,category:`LLM Evaluation`,title:`What is online evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`270-what-is-a-golden-dataset`,category:`LLM Evaluation`,title:`What is a golden dataset?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`271-how-to-create-golden-test-cases`,category:`LLM Evaluation`,title:`How do you create golden test cases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`272-what-metrics-do-you-track`,category:`LLM Evaluation`,title:`What metrics do you track?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`273-retrieval-relevance`,category:`LLM Evaluation`,title:`Retrieval relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`274-context-precision`,category:`LLM Evaluation`,title:`Context precision?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`275-context-recall`,category:`LLM Evaluation`,title:`Context recall?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`276-faithfulness`,category:`LLM Evaluation`,title:`Faithfulness?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`277-answer-relevance`,category:`LLM Evaluation`,title:`Answer relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`278-tool-call-accuracy`,category:`LLM Evaluation`,title:`Tool-call accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`279-agent-routing-accuracy`,category:`LLM Evaluation`,title:`Agent routing accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`280-task-completion-rate`,category:`LLM Evaluation`,title:`Task completion rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`281-hallucination-rate`,category:`LLM Evaluation`,title:`Hallucination rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`282-latency`,category:`LLM Evaluation`,title:`Latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`283-cost-per-request`,category:`LLM Evaluation`,title:`Cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`284-how-to-evaluate-agent-trajectories`,category:`LLM Evaluation`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`285-how-to-evaluate-tool-selection`,category:`LLM Evaluation`,title:`How do you evaluate tool selection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`286-how-to-evaluate-final-answers`,category:`LLM Evaluation`,title:`How do you evaluate final answers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`287-how-to-perform-regression-testing`,category:`LLM Evaluation`,title:`How do you perform regression testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`288-what-happens-when-a-new-prompt-reduces-accuracy`,category:`LLM Evaluation`,title:`What happens when a new prompt reduces accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`289-how-to-compare-two-llm-versions`,category:`LLM Evaluation`,title:`How do you compare two LLM versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`290-how-to-implement-llm-evaluation-in-ci-cd`,category:`LLM Evaluation`,title:`How do you implement LLM evaluation in CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`291-what-is-your-production-evaluation-strategy`,category:`LLM Evaluation`,title:`What is your production evaluation strategy?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`292-how-human-evaluations-fit-into-the-system`,category:`LLM Evaluation`,title:`How do human evaluations fit into the system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``}];function Fp(){return(0,M.jsx)($,{data:Pp,title:`CWD LLM Evaluation Cookbook`,subtitle:`Offline and online evaluation, metrics, regression testing and CI/CD`,icon:`📊`,patternLabel:`Questions`})}var Ip=[{id:`293-how-is-cwd-authenticated`,category:`Security Architecture`,title:`How is CWD authenticated?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`294-how-is-authorization-implemented`,category:`Security Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`295-why-use-microsoft-entra-id`,category:`Security Architecture`,title:`Why use Microsoft Entra ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`296-what-is-managed-identity`,category:`Security Architecture`,title:`What is Managed Identity?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`297-managed-identity-vs-client-secret`,category:`Security Architecture`,title:`Managed Identity vs client secret?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`298-how-to-implement-rbac`,category:`Security Architecture`,title:`How do you implement RBAC?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`299-what-is-least-privilege`,category:`Security Architecture`,title:`What is least privilege?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`300-how-to-protect-enterprise-data`,category:`Security Architecture`,title:`How do you protect enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`301-how-to-protect-pii`,category:`Security Architecture`,title:`How do you protect PII?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`302-how-to-implement-dlp`,category:`Security Architecture`,title:`How do you implement DLP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`303-how-to-secure-prompts`,category:`Security Architecture`,title:`How do you secure prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`304-how-to-prevent-prompt-injection`,category:`Security Architecture`,title:`How do you prevent prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`305-how-to-prevent-indirect-prompt-injection`,category:`Security Architecture`,title:`How do you prevent indirect prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`306-how-to-prevent-data-exfiltration`,category:`Security Architecture`,title:`How do you prevent data exfiltration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`307-how-to-prevent-unauthorized-tool-access`,category:`Security Architecture`,title:`How do you prevent unauthorized tool access?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`308-how-to-secure-mcp`,category:`Security Architecture`,title:`How do you secure MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`309-how-to-secure-a2a`,category:`Security Architecture`,title:`How do you secure A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`310-how-to-secure-apis`,category:`Security Architecture`,title:`How do you secure APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`311-how-to-protect-secrets`,category:`Security Architecture`,title:`How do you protect secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`312-why-use-key-vault`,category:`Security Architecture`,title:`Why use Key Vault?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`313-how-to-rotate-secrets`,category:`Security Architecture`,title:`How do you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`314-how-to-encrypt-data-at-rest`,category:`Security Architecture`,title:`How do you encrypt data at rest?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`315-how-to-encrypt-data-in-transit`,category:`Security Architecture`,title:`How do you encrypt data in transit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`316-what-is-your-network-architecture`,category:`Security Architecture`,title:`What is your network architecture?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`317-why-private-endpoints`,category:`Security Architecture`,title:`Why private endpoints?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`318-why-private-vnet`,category:`Security Architecture`,title:`Why private VNet?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`319-how-to-implement-tenant-isolation`,category:`Security Architecture`,title:`How do you implement tenant isolation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`320-how-to-implement-entitlement-first-security`,category:`Security Architecture`,title:`How do you implement entitlement-first security?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`321-what-if-user-asks-for-confidential-hr-information`,category:`Security Architecture`,title:`What happens if a user asks for confidential HR information?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`322-can-the-llm-decide-whether-the-user-has-permission`,category:`Security Architecture`,title:`Can the LLM decide whether the user has permission?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``}];function Lp(){return(0,M.jsx)($,{data:Ip,title:`CWD Security Architecture Cookbook`,subtitle:`Identity, access control, data protection, prompt injection and network security`,icon:`🔐`,patternLabel:`Questions`})}var Rp=[{id:`341-what-does-observability-mean-in-genai`,category:`Observability`,title:`What does observability mean in GenAI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`342-monitoring-vs-observability`,category:`Observability`,title:`Monitoring vs observability?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`343-what-do-you-monitor-in-cwd`,category:`Observability`,title:`What do you monitor in CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`344-what-are-your-key-metrics`,category:`Observability`,title:`What are your key metrics?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`345-how-to-trace-request-across-coordinator-delegator-worker`,category:`Observability`,title:`How do you trace a request across Coordinator → Delegator → Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`346-what-is-a-correlation-id`,category:`Observability`,title:`What is a correlation ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`347-what-is-distributed-tracing`,category:`Observability`,title:`What is distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`348-what-information-do-you-log`,category:`Observability`,title:`What information do you log?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`349-what-information-should-never-be-logged`,category:`Observability`,title:`What information should never be logged?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`350-how-to-trace-llm-calls`,category:`Observability`,title:`How do you trace LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`351-how-to-trace-mcp-calls`,category:`Observability`,title:`How do you trace MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`352-how-to-trace-a2a-calls`,category:`Observability`,title:`How do you trace A2A calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`353-how-to-identify-the-slowest-worker`,category:`Observability`,title:`How do you identify the slowest Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`354-how-to-identify-expensive-llm-calls`,category:`Observability`,title:`How do you identify expensive LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`355-how-to-identify-retrieval-failures`,category:`Observability`,title:`How do you identify retrieval failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`356-how-to-detect-hallucination-increases`,category:`Observability`,title:`How do you detect hallucination increases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`357-how-to-monitor-token-consumption`,category:`Observability`,title:`How do you monitor token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`358-how-to-monitor-latency`,category:`Observability`,title:`How do you monitor latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`359-how-to-monitor-error-rates`,category:`Observability`,title:`How do you monitor error rates?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`360-what-tools-did-you-use`,category:`Observability`,title:`What tools did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`361-how-would-you-use-langfuse`,category:`Observability`,title:`How would you use Langfuse?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`362-how-would-you-use-cloudwatch`,category:`Observability`,title:`How would you use CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`363-how-would-you-use-azure-application-insights`,category:`Observability`,title:`How would you use Azure Application Insights?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`364-what-alerts-would-you-configure`,category:`Observability`,title:`What alerts would you configure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``}];function zp(){return(0,M.jsx)($,{data:Rp,title:`CWD Observability Cookbook`,subtitle:`Tracing, metrics, logging, alerting and GenAI monitoring`,icon:`📡`,patternLabel:`Questions`})}var Bp=[{id:`365-what-happens-if-the-coordinator-fails`,category:`Reliability & Failure Handling`,title:`What happens if the Coordinator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`366-what-happens-if-a-delegator-fails`,category:`Reliability & Failure Handling`,title:`What happens if a Delegator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`367-what-happens-if-worker-1-succeeds-and-worker-2-fails`,category:`Reliability & Failure Handling`,title:`What happens if Worker 1 succeeds and Worker 2 fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`368-what-happens-if-the-llm-times-out`,category:`Reliability & Failure Handling`,title:`What happens if the LLM times out?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`369-what-happens-if-salesforce-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if Salesforce is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`370-what-happens-if-servicenow-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if ServiceNow is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`371-what-happens-if-mcp-server-fails`,category:`Reliability & Failure Handling`,title:`What happens if MCP server fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`372-what-happens-if-the-database-fails`,category:`Reliability & Failure Handling`,title:`What happens if the database fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`373-what-happens-if-redis-fails`,category:`Reliability & Failure Handling`,title:`What happens if Redis fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`374-how-do-you-retry`,category:`Reliability & Failure Handling`,title:`How do you retry?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`375-how-many-retries`,category:`Reliability & Failure Handling`,title:`How many retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`376-what-is-exponential-backoff`,category:`Reliability & Failure Handling`,title:`What is exponential backoff?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`377-what-is-jitter`,category:`Reliability & Failure Handling`,title:`What is jitter?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`378-what-is-a-circuit-breaker`,category:`Reliability & Failure Handling`,title:`What is a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`379-where-would-you-implement-circuit-breakers`,category:`Reliability & Failure Handling`,title:`Where would you implement circuit breakers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`380-what-is-a-dead-letter-queue`,category:`Reliability & Failure Handling`,title:`What is a dead-letter queue?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`381-how-does-dlq-help-cwd`,category:`Reliability & Failure Handling`,title:`How does DLQ help CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`382-how-do-you-replay-failed-requests`,category:`Reliability & Failure Handling`,title:`How do you replay failed requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`383-how-do-you-guarantee-idempotency`,category:`Reliability & Failure Handling`,title:`How do you guarantee idempotency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`384-how-do-you-handle-duplicate-events`,category:`Reliability & Failure Handling`,title:`How do you handle duplicate events?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`385-how-do-you-handle-partial-completion`,category:`Reliability & Failure Handling`,title:`How do you handle partial completion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`386-how-do-you-implement-graceful-degradation`,category:`Reliability & Failure Handling`,title:`How do you implement graceful degradation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`387-how-do-you-implement-fallback`,category:`Reliability & Failure Handling`,title:`How do you implement fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`388-how-do-you-prevent-cascading-failures`,category:`Reliability & Failure Handling`,title:`How do you prevent cascading failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``}];function Vp(){return(0,M.jsx)($,{data:Bp,title:`CWD Reliability & Failure Handling Cookbook`,subtitle:`Failures, retries, circuit breakers, DLQs and graceful degradation`,icon:`♻️`,patternLabel:`Questions`})}var Hp=[{id:`389-how-many-concurrent-users-can-cwd-support`,category:`Scalability`,title:`How many concurrent users can CWD support?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`390-what-is-the-bottleneck`,category:`Scalability`,title:`What is the bottleneck?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`391-how-would-you-scale-coordinator`,category:`Scalability`,title:`How would you scale Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`392-how-would-you-scale-delegators`,category:`Scalability`,title:`How would you scale Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`393-how-would-you-scale-workers`,category:`Scalability`,title:`How would you scale Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`394-how-would-you-scale-mcp-servers`,category:`Scalability`,title:`How would you scale MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`395-how-would-you-scale-vector-search`,category:`Scalability`,title:`How would you scale vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`396-how-would-you-scale-llm-calls`,category:`Scalability`,title:`How would you scale LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`397-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`398-where-would-you-use-autoscaling`,category:`Scalability`,title:`Where would you use autoscaling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`399-how-would-you-implement-backpressure`,category:`Scalability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`400-how-would-you-implement-rate-limiting`,category:`Scalability`,title:`How would you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`401-how-would-you-prevent-one-customer-from-consuming-all-resources`,category:`Scalability`,title:`How would you prevent one customer from consuming all resources?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`402-how-would-you-implement-tenant-level-quotas`,category:`Scalability`,title:`How would you implement tenant-level quotas?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`403-how-would-you-design-multi-region`,category:`Scalability`,title:`How would you design multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`404-how-would-you-design-disaster-recovery`,category:`Scalability`,title:`How would you design disaster recovery?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`405-what-is-rto`,category:`Scalability`,title:`What is RTO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`406-what-is-rpo`,category:`Scalability`,title:`What is RPO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``}];function Up(){return(0,M.jsx)($,{data:Hp,title:`CWD Scalability Cookbook`,subtitle:`Scaling, backpressure, quotas, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wp=[{id:`407-what-is-the-end-to-end-latency`,category:`Performance & Optimization`,title:`What is the end-to-end latency?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`408-where-is-latency-introduced`,category:`Performance & Optimization`,title:`Where is latency introduced?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`409-how-do-you-reduce-llm-latency`,category:`Performance & Optimization`,title:`How do you reduce LLM latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`410-how-do-you-reduce-rag-latency`,category:`Performance & Optimization`,title:`How do you reduce RAG latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`411-how-do-you-reduce-tool-call-latency`,category:`Performance & Optimization`,title:`How do you reduce tool-call latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`412-how-do-you-parallelize-workers`,category:`Performance & Optimization`,title:`How do you parallelize Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`413-when-should-workers-execute-sequentially`,category:`Performance & Optimization`,title:`When should Workers execute sequentially?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`414-how-do-you-reduce-token-consumption`,category:`Performance & Optimization`,title:`How do you reduce token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`415-how-do-you-cache`,category:`Performance & Optimization`,title:`How do you cache?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`416-what-can-be-cached`,category:`Performance & Optimization`,title:`What can be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`417-what-should-not-be-cached`,category:`Performance & Optimization`,title:`What should not be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`418-how-do-you-implement-semantic-caching`,category:`Performance & Optimization`,title:`How do you implement semantic caching?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`419-how-do-you-reduce-unnecessary-llm-calls`,category:`Performance & Optimization`,title:`How do you reduce unnecessary LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`420-how-do-you-select-cheaper-models`,category:`Performance & Optimization`,title:`How do you select cheaper models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`421-how-do-you-optimize-prompt-size`,category:`Performance & Optimization`,title:`How do you optimize prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`422-how-do-you-optimize-embeddings`,category:`Performance & Optimization`,title:`How do you optimize embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`423-how-do-you-optimize-vector-search`,category:`Performance & Optimization`,title:`How do you optimize vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``}];function Gp(){return(0,M.jsx)($,{data:Wp,title:`CWD Performance & Optimization Cookbook`,subtitle:`Latency, caching, parallelism and token optimization`,icon:`⚡`,patternLabel:`Questions`})}var Kp=[{id:`424-what-is-the-biggest-cost-component`,category:`Cost Optimization`,title:`What is the biggest cost component?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`425-how-do-you-calculate-cost-per-request`,category:`Cost Optimization`,title:`How do you calculate cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`426-how-do-you-calculate-token-cost`,category:`Cost Optimization`,title:`How do you calculate token cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`427-how-do-you-reduce-llm-costs`,category:`Cost Optimization`,title:`How do you reduce LLM costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`428-how-do-you-reduce-embedding-costs`,category:`Cost Optimization`,title:`How do you reduce embedding costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`429-how-do-you-reduce-infrastructure-costs`,category:`Cost Optimization`,title:`How do you reduce infrastructure costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`430-how-would-you-implement-model-routing-based-on-cost`,category:`Cost Optimization`,title:`How would you implement model routing based on cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`431-when-would-you-use-a-smaller-model`,category:`Cost Optimization`,title:`When would you use a smaller model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`432-how-do-you-prevent-runaway-agent-loops`,category:`Cost Optimization`,title:`How do you prevent runaway agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`433-how-do-you-enforce-token-budgets`,category:`Cost Optimization`,title:`How do you enforce token budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`434-how-do-you-enforce-request-budgets`,category:`Cost Optimization`,title:`How do you enforce request budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`435-how-do-you-monitor-cost-by-tenant`,category:`Cost Optimization`,title:`How do you monitor cost by tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`436-how-do-you-monitor-cost-by-agent`,category:`Cost Optimization`,title:`How do you monitor cost by agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`437-how-do-you-monitor-cost-by-worker`,category:`Cost Optimization`,title:`How do you monitor cost by Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``}];function qp(){return(0,M.jsx)($,{data:Kp,title:`CWD Cost Optimization Cookbook`,subtitle:`Cost drivers, budgets, model routing and cost monitoring`,icon:`💰`,patternLabel:`Questions`})}var Jp=[{id:`438-what-data-does-cwd-store`,category:`Data Architecture`,title:`What data does CWD store?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`439-where-do-you-store-conversation-state`,category:`Data Architecture`,title:`Where do you store conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`440-where-do-you-store-workflow-state`,category:`Data Architecture`,title:`Where do you store workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`441-where-do-you-store-embeddings`,category:`Data Architecture`,title:`Where do you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`442-where-do-you-store-audit-logs`,category:`Data Architecture`,title:`Where do you store audit logs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`443-where-do-you-store-agent-metadata`,category:`Data Architecture`,title:`Where do you store agent metadata?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`444-where-do-you-store-prompts`,category:`Data Architecture`,title:`Where do you store prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`445-what-is-your-agent-registry`,category:`Data Architecture`,title:`What is your Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`446-what-is-your-prompt-registry`,category:`Data Architecture`,title:`What is your Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`447-how-do-you-version-prompts`,category:`Data Architecture`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`448-how-do-you-version-agents`,category:`Data Architecture`,title:`How do you version agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`449-how-do-you-handle-schema-changes`,category:`Data Architecture`,title:`How do you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`450-how-long-do-you-retain-conversations`,category:`Data Architecture`,title:`How long do you retain conversations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`451-how-do-you-implement-data-deletion`,category:`Data Architecture`,title:`How do you implement data deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`452-how-do-you-handle-gdpr-style-deletion-requirements`,category:`Data Architecture`,title:`How do you handle GDPR-style deletion requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`453-how-do-you-protect-sensitive-data`,category:`Data Architecture`,title:`How do you protect sensitive data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``}];function Yp(){return(0,M.jsx)($,{data:Jp,title:`CWD Data Architecture Cookbook`,subtitle:`State, registries, versioning, retention and data deletion`,icon:`🗄️`,patternLabel:`Questions`})}var Xp=[{id:`454-how-does-cwd-integrate-with-salesforce`,category:`Enterprise Integration`,title:`How does CWD integrate with Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`455-how-does-cwd-integrate-with-servicenow`,category:`Enterprise Integration`,title:`How does CWD integrate with ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`456-how-does-cwd-integrate-with-sharepoint`,category:`Enterprise Integration`,title:`How does CWD integrate with SharePoint?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`457-how-does-cwd-integrate-with-snowflake`,category:`Enterprise Integration`,title:`How does CWD integrate with Snowflake?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`458-how-does-cwd-integrate-with-oracle`,category:`Enterprise Integration`,title:`How does CWD integrate with Oracle?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`459-why-use-mcp-instead-of-directly-embedding-api-integrations-into-workers`,category:`Enterprise Integration`,title:`Why use MCP instead of directly embedding API integrations into Workers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`460-how-do-you-handle-authentication-to-each-enterprise-system`,category:`Enterprise Integration`,title:`How do you handle authentication to each enterprise system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`461-how-do-you-handle-api-rate-limits`,category:`Enterprise Integration`,title:`How do you handle API rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`462-how-do-you-handle-api-version-changes`,category:`Enterprise Integration`,title:`How do you handle API version changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`463-how-do-you-handle-downstream-outages`,category:`Enterprise Integration`,title:`How do you handle downstream outages?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`464-how-do-you-transform-external-responses-into-a-common-format`,category:`Enterprise Integration`,title:`How do you transform external responses into a common format?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`465-how-do-you-validate-external-data`,category:`Enterprise Integration`,title:`How do you validate external data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`466-how-do-you-handle-inconsistent-enterprise-data`,category:`Enterprise Integration`,title:`How do you handle inconsistent enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``}];function Zp(){return(0,M.jsx)($,{data:Xp,title:`CWD Enterprise Integration Cookbook`,subtitle:`Salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration`,icon:`🔗`,patternLabel:`Questions`})}var Qp=[{id:`467-why-fastapi`,category:`API & Backend Architecture`,title:`Why FastAPI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`468-why-not-flask`,category:`API & Backend Architecture`,title:`Why not Flask?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`469-what-apis-does-cwd-expose`,category:`API & Backend Architecture`,title:`What APIs does CWD expose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`470-how-is-authentication-implemented`,category:`API & Backend Architecture`,title:`How is authentication implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`471-how-is-authorization-implemented`,category:`API & Backend Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`472-how-do-you-validate-api-requests`,category:`API & Backend Architecture`,title:`How do you validate API requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`473-how-do-you-handle-api-versioning`,category:`API & Backend Architecture`,title:`How do you handle API versioning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`474-how-do-you-implement-rate-limiting`,category:`API & Backend Architecture`,title:`How do you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`475-how-do-you-implement-request-ids`,category:`API & Backend Architecture`,title:`How do you implement request IDs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`476-how-do-you-handle-asynchronous-apis`,category:`API & Backend Architecture`,title:`How do you handle asynchronous APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`477-how-do-you-handle-long-running-agent-workflows`,category:`API & Backend Architecture`,title:`How do you handle long-running agent workflows?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`478-why-might-you-return-202-accepted`,category:`API & Backend Architecture`,title:`Why might you return 202 Accepted?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`479-how-does-the-client-retrieve-workflow-status`,category:`API & Backend Architecture`,title:`How does the client retrieve workflow status?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`480-how-do-you-secure-api-endpoints`,category:`API & Backend Architecture`,title:`How do you secure API endpoints?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``}];function $p(){return(0,M.jsx)($,{data:Qp,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var em=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`482-explain-your-ci-cd-pipeline`,category:`Production Deployment / DevOps`,title:`Explain your CI/CD pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`483-how-do-you-deploy-prompts`,category:`Production Deployment / DevOps`,title:`How do you deploy prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`484-how-do-you-deploy-agents`,category:`Production Deployment / DevOps`,title:`How do you deploy agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`485-how-do-you-deploy-mcp-servers`,category:`Production Deployment / DevOps`,title:`How do you deploy MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`486-how-do-you-version-models`,category:`Production Deployment / DevOps`,title:`How do you version models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`487-how-do-you-version-prompts`,category:`Production Deployment / DevOps`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`488-how-do-you-perform-blue-green-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`489-how-do-you-perform-canary-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`490-how-do-you-roll-back-a-bad-prompt`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`491-how-do-you-roll-back-a-bad-model`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`492-how-do-you-test-before-production`,category:`Production Deployment / DevOps`,title:`How do you test before production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`493-what-are-your-quality-gates`,category:`Production Deployment / DevOps`,title:`What are your quality gates?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`494-how-do-you-integrate-llm-evaluation-into-ci-cd`,category:`Production Deployment / DevOps`,title:`How do you integrate LLM evaluation into CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`495-how-do-you-prevent-a-bad-prompt-from-reaching-production`,category:`Production Deployment / DevOps`,title:`How do you prevent a bad prompt from reaching production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`496-how-do-you-manage-environment-specific-configuration`,category:`Production Deployment / DevOps`,title:`How do you manage environment-specific configuration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``}];function tm(){return(0,M.jsx)($,{data:em,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var nm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function rm(){return(0,M.jsx)($,{data:nm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var im=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function am(){return(0,M.jsx)($,{data:im,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var om=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function sm(){return(0,M.jsx)($,{data:om,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var cm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function lm(){return(0,M.jsx)($,{data:cm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var um=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function dm(){return(0,M.jsx)($,{data:um,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var fm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function pm(){return(0,M.jsx)($,{data:fm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var mm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`004-why-did-you-choose-api-gateway`,category:`AWS Architecture`,title:`Why did you choose API Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`005-why-did-you-choose-lambda`,category:`AWS Architecture`,title:`Why did you choose Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`006-why-would-you-choose-ecs-fargate-instead-of-lambda`,category:`AWS Architecture`,title:`Why would you choose ECS/Fargate instead of Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`007-when-would-you-choose-eks`,category:`AWS Architecture`,title:`When would you choose EKS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`008-where-would-you-use-step-functions`,category:`AWS Architecture`,title:`Where would you use Step Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`009-where-would-you-use-sqs`,category:`AWS Architecture`,title:`Where would you use SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`010-where-would-you-use-eventbridge`,category:`AWS Architecture`,title:`Where would you use EventBridge?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`011-where-would-you-use-dynamodb`,category:`AWS Architecture`,title:`Where would you use DynamoDB?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`012-where-would-you-use-elasticache-redis`,category:`AWS Architecture`,title:`Where would you use ElastiCache/Redis?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`013-where-would-you-use-opensearch-serverless`,category:`AWS Architecture`,title:`Where would you use OpenSearch Serverless?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`014-where-would-you-use-s3`,category:`AWS Architecture`,title:`Where would you use S3?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``}];function hm(){return(0,M.jsx)($,{data:mm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var gm=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`017-which-bedrock-models-would-you-use-for-cwd-and-why`,category:`Amazon Bedrock`,title:`Which Bedrock models would you use for CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`018-how-do-you-select-a-bedrock-model`,category:`Amazon Bedrock`,title:`How do you select a Bedrock model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`019-how-do-you-handle-bedrock-throttling`,category:`Amazon Bedrock`,title:`How do you handle Bedrock throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`020-how-do-you-handle-bedrock-timeout`,category:`Amazon Bedrock`,title:`How do you handle Bedrock timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`021-how-do-you-implement-retries-for-bedrock`,category:`Amazon Bedrock`,title:`How do you implement retries for Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`022-how-do-you-control-bedrock-token-usage`,category:`Amazon Bedrock`,title:`How do you control Bedrock token usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`023-how-do-you-reduce-bedrock-cost`,category:`Amazon Bedrock`,title:`How do you reduce Bedrock cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`024-how-do-you-monitor-bedrock-usage`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`025-how-do-you-monitor-bedrock-latency`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`026-how-do-you-implement-model-fallback`,category:`Amazon Bedrock`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`027-how-would-you-switch-from-one-bedrock-model-to-another`,category:`Amazon Bedrock`,title:`How would you switch from one Bedrock model to another?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`028-how-do-you-version-model-configurations`,category:`Amazon Bedrock`,title:`How do you version model configurations?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`029-how-do-you-handle-model-specific-context-limits`,category:`Amazon Bedrock`,title:`How do you handle model-specific context limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`030-how-would-you-evaluate-a-new-bedrock-model-before-production`,category:`Amazon Bedrock`,title:`How would you evaluate a new Bedrock model before production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function _m(){return(0,M.jsx)($,{data:gm,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var vm=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`034-how-do-you-authorize-users`,category:`API Gateway`,title:`How do you authorize users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`035-how-do-you-implement-throttling`,category:`API Gateway`,title:`How do you implement throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`037-how-do-you-handle-api-gateway-timeout`,category:`API Gateway`,title:`How do you handle API Gateway timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`038-how-do-you-configure-request-validation`,category:`API Gateway`,title:`How do you configure request validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`039-how-do-you-version-cwd-apis`,category:`API Gateway`,title:`How do you version CWD APIs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`040-how-do-you-implement-api-gateway-logging`,category:`API Gateway`,title:`How do you implement API Gateway logging?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`041-how-do-you-monitor-api-gateway`,category:`API Gateway`,title:`How do you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`042-how-do-you-handle-high-request-volume`,category:`API Gateway`,title:`How do you handle high request volume?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`043-how-would-you-integrate-api-gateway-with-lambda`,category:`API Gateway`,title:`How would you integrate API Gateway with Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`044-how-would-you-integrate-api-gateway-with-ecs`,category:`API Gateway`,title:`How would you integrate API Gateway with ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`045-how-do-you-implement-waf-with-api-gateway`,category:`API Gateway`,title:`How do you implement WAF with API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function ym(){return(0,M.jsx)($,{data:vm,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var bm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`047-which-cwd-components-would-you-deploy-as-lambda`,category:`Lambda`,title:`Which CWD components would you deploy as Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`050-how-would-you-reduce-lambda-cold-start-latency`,category:`Lambda`,title:`How would you reduce Lambda cold-start latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`051-how-does-lambda-concurrency-work`,category:`Lambda`,title:`How does Lambda concurrency work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`053-how-would-you-prevent-lambda-concurrency-exhaustion`,category:`Lambda`,title:`How would you prevent Lambda concurrency exhaustion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`054-how-do-you-handle-lambda-failures`,category:`Lambda`,title:`How do you handle Lambda failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`055-how-do-you-retry-lambda-execution`,category:`Lambda`,title:`How do you retry Lambda execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`057-how-do-you-monitor-lambda`,category:`Lambda`,title:`How do you monitor Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`059-how-do-you-securely-access-secrets-from-lambda`,category:`Lambda`,title:`How do you securely access secrets from Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`060-what-are-lambdas-limitations-for-agentic-workloads`,category:`Lambda`,title:`What are Lambda's limitations for agentic workloads?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``}];function xm(){return(0,M.jsx)($,{data:bm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Sm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`062-ecs-vs-lambda-for-workers`,category:`ECS / Fargate / EKS`,title:`ECS vs Lambda for Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`063-ecs-vs-eks`,category:`ECS / Fargate / EKS`,title:`ECS vs EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`065-how-would-you-containerize-delegators`,category:`ECS / Fargate / EKS`,title:`How would you containerize Delegators?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`066-how-would-you-containerize-workers`,category:`ECS / Fargate / EKS`,title:`How would you containerize Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`068-how-do-you-implement-health-checks`,category:`ECS / Fargate / EKS`,title:`How do you implement health checks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`069-how-do-you-perform-zero-downtime-deployment`,category:`ECS / Fargate / EKS`,title:`How do you perform zero-downtime deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`070-how-do-you-handle-container-failures`,category:`ECS / Fargate / EKS`,title:`How do you handle container failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`071-how-do-you-distribute-traffic-across-containers`,category:`ECS / Fargate / EKS`,title:`How do you distribute traffic across containers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`072-how-would-you-implement-service-discovery`,category:`ECS / Fargate / EKS`,title:`How would you implement service discovery?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`073-how-would-you-configure-ecs-networking`,category:`ECS / Fargate / EKS`,title:`How would you configure ECS networking?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`074-how-would-you-secure-ecs-tasks`,category:`ECS / Fargate / EKS`,title:`How would you secure ECS tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`075-when-would-you-move-from-ecs-to-eks`,category:`ECS / Fargate / EKS`,title:`When would you move from ECS to EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Cm(){return(0,M.jsx)($,{data:Sm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var wm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`077-why-sqs-instead-of-synchronous-api-calls`,category:`SQS & Asynchronous Processing`,title:`Why SQS instead of synchronous API calls?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`079-how-would-you-process-worker-jobs-asynchronously`,category:`SQS & Asynchronous Processing`,title:`How would you process Worker jobs asynchronously?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`080-how-do-you-handle-message-duplication`,category:`SQS & Asynchronous Processing`,title:`How do you handle message duplication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`081-how-do-you-implement-idempotency`,category:`SQS & Asynchronous Processing`,title:`How do you implement idempotency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`083-how-do-you-configure-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`How do you configure visibility timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`084-what-happens-when-message-processing-fails`,category:`SQS & Asynchronous Processing`,title:`What happens when message processing fails?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`086-how-would-you-replay-failed-cwd-requests`,category:`SQS & Asynchronous Processing`,title:`How would you replay failed CWD requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`087-how-do-you-monitor-queue-depth`,category:`SQS & Asynchronous Processing`,title:`How do you monitor queue depth?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`089-how-does-sqs-help-cwd-scalability`,category:`SQS & Asynchronous Processing`,title:`How does SQS help CWD scalability?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`090-how-would-you-handle-a-sudden-100x-traffic-spike`,category:`SQS & Asynchronous Processing`,title:`How would you handle a sudden 100× traffic spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Tm(){return(0,M.jsx)($,{data:wm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Em=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`093-how-would-you-model-worker-dependencies-using-step-functions`,category:`Step Functions`,title:`How would you model Worker dependencies using Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`094-how-would-you-execute-workers-in-parallel`,category:`Step Functions`,title:`How would you execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`097-how-would-you-implement-timeout`,category:`Step Functions`,title:`How would you implement timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`098-how-would-you-resume-a-workflow`,category:`Step Functions`,title:`How would you resume a workflow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`099-how-would-you-handle-long-running-workflows`,category:`Step Functions`,title:`How would you handle long-running workflows?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`104-how-would-you-monitor-step-functions`,category:`Step Functions`,title:`How would you monitor Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`105-how-would-you-control-step-functions-cost`,category:`Step Functions`,title:`How would you control Step Functions cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Dm(){return(0,M.jsx)($,{data:Em,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var Om=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`107-what-cwd-data-would-you-store-in-dynamodb`,category:`DynamoDB`,title:`What CWD data would you store in DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`108-how-would-you-design-the-dynamodb-partition-key`,category:`DynamoDB`,title:`How would you design the DynamoDB partition key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`110-how-would-you-store-session-task-run-information`,category:`DynamoDB`,title:`How would you store session/task/run information?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`112-how-does-dynamodb-scale`,category:`DynamoDB`,title:`How does DynamoDB scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`117-how-would-you-implement-idempotency-using-dynamodb`,category:`DynamoDB`,title:`How would you implement idempotency using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`118-how-would-you-recover-from-a-failed-workflow-using-dynamodb`,category:`DynamoDB`,title:`How would you recover from a failed workflow using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function km(){return(0,M.jsx)($,{data:Om,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var Am=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`122-how-would-you-design-the-cwd-document-ingestion-pipeline`,category:`S3`,title:`How would you design the CWD document ingestion pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`129-how-would-you-encrypt-s3-data`,category:`S3`,title:`How would you encrypt S3 data?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`131-how-would-you-trigger-processing-when-a-document-arrives-in-s3`,category:`S3`,title:`How would you trigger processing when a document arrives in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function jm(){return(0,M.jsx)($,{data:Am,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Mm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`138-how-would-you-create-embeddings-using-aws`,category:`OpenSearch`,title:`How would you create embeddings using AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`139-how-would-you-implement-metadata-filtering`,category:`OpenSearch`,title:`How would you implement metadata filtering?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`140-how-would-you-implement-document-level-security`,category:`OpenSearch`,title:`How would you implement document-level security?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`141-how-does-opensearch-scale`,category:`OpenSearch`,title:`How does OpenSearch scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`145-how-would-you-monitor-opensearch`,category:`OpenSearch`,title:`How would you monitor OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`146-how-would-you-troubleshoot-slow-retrieval`,category:`OpenSearch`,title:`How would you troubleshoot slow retrieval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`147-how-would-you-optimize-opensearch-cost`,category:`OpenSearch`,title:`How would you optimize OpenSearch cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Nm(){return(0,M.jsx)($,{data:Mm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Pm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Fm(){return(0,M.jsx)($,{data:Pm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Im=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`166-how-would-you-encrypt-application-secrets`,category:`KMS & Secrets Manager`,title:`How would you encrypt application secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Lm(){return(0,M.jsx)($,{data:Im,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var Rm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function zm(){return(0,M.jsx)($,{data:Rm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Bm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Vm(){return(0,M.jsx)($,{data:Bm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Hm=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`204-how-would-you-scale-lambda`,category:`Scalability & High Availability`,title:`How would you scale Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`205-how-would-you-scale-ecs`,category:`Scalability & High Availability`,title:`How would you scale ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Um(){return(0,M.jsx)($,{data:Hm,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Gm(){return(0,M.jsx)($,{data:Wm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var Km=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function qm(){return(0,M.jsx)($,{data:Km,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Jm=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Ym(){return(0,M.jsx)($,{data:Jm,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Xm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Zm(){return(0,M.jsx)($,{data:Xm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var Qm=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete Azure architecture for CWD.
+`,code:``}];function Cp(){return(0,M.jsx)($,{data:Sp,title:`CWD MCP Deep Interview Cookbook`,subtitle:`MCP concepts, security, versioning, approvals and monitoring`,icon:`🔌`,patternLabel:`Questions`})}var wp=[{id:`161-why-did-you-use-a2a`,category:`A2A — Agent Communication`,title:`Why did you use A2A?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`Yes. In your **CWD (Coordinator → Delegator → Worker)** architecture, A2A is mainly used for **agent-to-agent communication**—especially when the Coordinator and Delegators are independent agent services.\r
+\r
+### 1. Why did we use A2A in CWD?\r
+\r
+The simple interview answer is:\r
+\r
+> **We used A2A to standardize communication between autonomous agents. In CWD, the Coordinator communicates with Delegators through A2A, and Delegators can communicate with other agents when needed. A2A carries the business-level task and agent response, while MCP is used by Workers to access enterprise tools such as Salesforce, ServiceNow, and SharePoint.**\r
+\r
+Think of it this way:\r
+\r
+\`\`\`text\r
+                    CWD\r
+                     │\r
+              User Request\r
+                     │\r
+                     ▼\r
+             ┌──────────────┐\r
+             │  Coordinator │\r
+             └──────┬───────┘\r
+                    │\r
+              A2A Task Message\r
+                    │\r
+          ┌─────────┴─────────┐\r
+          ▼                   ▼\r
+ ┌────────────────┐   ┌────────────────┐\r
+ │ Sales Delegator│   │ IT Delegator   │\r
+ └───────┬────────┘   └───────┬────────┘\r
+         │                    │\r
+      Workers              Workers\r
+         │                    │\r
+       MCP                  MCP\r
+         │                    │\r
+         ▼                    ▼\r
+ Salesforce             ServiceNow\r
+\`\`\`\r
+\r
+### 2. A2A vs MCP — very important\r
+\r
+This is one of the most important distinctions for your interview.\r
+\r
+| Communication | Purpose              | In CWD                                    |\r
+| ------------- | -------------------- | ----------------------------------------- |\r
+| **A2A**       | Agent ↔ Agent        | Coordinator ↔ Delegator                   |\r
+| **MCP**       | Agent ↔ Tool         | Worker ↔ Salesforce/ServiceNow/SharePoint |\r
+| **REST**      | Service ↔ Service    | APIs/internal services                    |\r
+| **LLM**       | Reasoning/generation | Intent, planning, summarization           |\r
+\r
+So:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     ▼\r
+Sales Delegator\r
+     │\r
+     │ invokes\r
+     ▼\r
+Customer Worker\r
+     │\r
+     │ MCP\r
+     ▼\r
+Salesforce\r
+\`\`\`\r
+\r
+**A2A doesn't replace MCP.**\r
+\r
+A2A answers:\r
+\r
+> "Which agent should I communicate with, and what task/result should I exchange?"\r
+\r
+MCP answers:\r
+\r
+> "Which tool should I invoke and how do I access the enterprise system?"\r
+\r
+---\r
+\r
+# 3. Example from your CWD Customer Briefing use case\r
+\r
+Suppose the user asks:\r
+\r
+\`\`\`text\r
+"Give me a briefing for customer C12345."\r
+\`\`\`\r
+\r
+The Coordinator determines:\r
+\r
+\`\`\`text\r
+Intent = CustomerBriefing\r
+\r
+customer_id = C12345\r
+\r
+Required capabilities:\r
+    - Customer information\r
+    - Support incidents\r
+\`\`\`\r
+\r
+It determines that two Delegators are required:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+IT/Service Delegator\r
+\`\`\`\r
+\r
+The Coordinator sends A2A messages.\r
+\r
+### Coordinator → Sales Delegator\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1001",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "sales-delegator",\r
+  "intent": "customer_briefing",\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+  "required_capability": "customer_information"\r
+}\r
+\`\`\`\r
+\r
+### Coordinator → IT Delegator\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1002",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "it-delegator",\r
+  "intent": "customer_briefing",\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+  "required_capability": "support_incidents"\r
+}\r
+\`\`\`\r
+\r
+The Delegators now execute their respective Workers.\r
+\r
+---\r
+\r
+# 4. Where MCP comes in\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+      ▼\r
+Customer Worker\r
+      │\r
+      ▼\r
+MCP Client\r
+      │\r
+      ▼\r
+MCP Server\r
+      │\r
+      ▼\r
+Salesforce\r
+\`\`\`\r
+\r
+The Worker might call:\r
+\r
+\`\`\`python\r
+result = await mcp_client.call_tool(\r
+    "get_customer",\r
+    {\r
+        "customer_id": "C12345"\r
+    }\r
+)\r
+\`\`\`\r
+\r
+The MCP server then interacts with Salesforce.\r
+\r
+Similarly:\r
+\r
+\`\`\`text\r
+IT Delegator\r
+      │\r
+      ▼\r
+Incident Worker\r
+      │\r
+      ▼\r
+MCP Client\r
+      │\r
+      ▼\r
+MCP Server\r
+      │\r
+      ▼\r
+ServiceNow\r
+\`\`\`\r
+\r
+So the complete flow becomes:\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ ▼\r
+Coordinator\r
+ │\r
+ │ A2A\r
+ ├──────────────────────┐\r
+ ▼                      ▼\r
+Sales Delegator       IT Delegator\r
+ │                      │\r
+ ▼                      ▼\r
+Customer Worker       Incident Worker\r
+ │                      │\r
+ │ MCP                  │ MCP\r
+ ▼                      ▼\r
+Salesforce             ServiceNow\r
+\`\`\`\r
+\r
+---\r
+\r
+# 5. What does A2A actually give us?\r
+\r
+### A. Agent discovery\r
+\r
+The Coordinator doesn't need to know the internal implementation of every Delegator.\r
+\r
+For example, the Sales Delegator can advertise capabilities such as:\r
+\r
+\`\`\`json\r
+{\r
+  "agent": "sales-delegator",\r
+  "capabilities": [\r
+    "customer_information",\r
+    "sales_history",\r
+    "opportunity_information"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The IT Delegator might advertise:\r
+\r
+\`\`\`json\r
+{\r
+  "agent": "it-delegator",\r
+  "capabilities": [\r
+    "support_incidents",\r
+    "service_requests",\r
+    "incident_status"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can route based on capabilities.\r
+\r
+---\r
+\r
+### B. Loose coupling\r
+\r
+Without A2A, you could end up with:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ ├── directly calls Sales code\r
+ ├── directly calls IT code\r
+ ├── directly calls HR code\r
+ ├── directly calls Finance code\r
+ └── directly calls Manufacturing code\r
+\`\`\`\r
+\r
+The Coordinator becomes tightly coupled to every domain.\r
+\r
+With A2A:\r
+\r
+\`\`\`text\r
+             Coordinator\r
+                  │\r
+             A2A protocol\r
+                  │\r
+     ┌────────────┼────────────┐\r
+     ▼            ▼            ▼\r
+   Sales          IT           HR\r
+  Agent          Agent        Agent\r
+\`\`\`\r
+\r
+Each agent can evolve independently.\r
+\r
+---\r
+\r
+# 6. A2A implementation concept\r
+\r
+At a simplified application level, you can expose an A2A endpoint on the Delegator.\r
+\r
+For example, using FastAPI:\r
+\r
+\`\`\`python\r
+from fastapi import FastAPI\r
+from pydantic import BaseModel\r
+\r
+app = FastAPI()\r
+\r
+\r
+class AgentTask(BaseModel):\r
+    task_id: str\r
+    from_agent: str\r
+    intent: str\r
+    entities: dict\r
+    required_capability: str\r
+\r
+\r
+@app.post("/a2a/tasks")\r
+async def receive_task(task: AgentTask):\r
+\r
+    if task.required_capability == "customer_information":\r
+\r
+        result = await execute_customer_workflow(\r
+            task.entities["customer_id"]\r
+        )\r
+\r
+        return {\r
+            "task_id": task.task_id,\r
+            "agent": "sales-delegator",\r
+            "status": "completed",\r
+            "result": result\r
+        }\r
+\r
+    return {\r
+        "task_id": task.task_id,\r
+        "status": "unsupported"\r
+    }\r
+\`\`\`\r
+\r
+The Coordinator can call the Delegator:\r
+\r
+\`\`\`python\r
+import httpx\r
+\r
+\r
+async def send_a2a_task(delegator_url, task):\r
+\r
+    async with httpx.AsyncClient() as client:\r
+\r
+        response = await client.post(\r
+            f"{delegator_url}/a2a/tasks",\r
+            json=task\r
+        )\r
+\r
+        response.raise_for_status()\r
+\r
+        return response.json()\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`python\r
+task = {\r
+    "task_id": "task-1001",\r
+    "from_agent": "coordinator",\r
+    "intent": "customer_briefing",\r
+    "entities": {\r
+        "customer_id": "C12345"\r
+    },\r
+    "required_capability": "customer_information"\r
+}\r
+\r
+result = await send_a2a_task(\r
+    "http://sales-delegator/a2a",\r
+    task\r
+)\r
+\`\`\`\r
+\r
+Conceptually, this is the **agent-to-agent boundary**.\r
+\r
+---\r
+\r
+# 7. How this fits into LangGraph\r
+\r
+Your Coordinator can be implemented as a LangGraph workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+START\r
+  │\r
+  ▼\r
+Understand Request\r
+  │\r
+  ▼\r
+Create Intent\r
+  │\r
+  ▼\r
+Identify Delegators\r
+  │\r
+  ▼\r
+Create A2A Tasks\r
+  │\r
+  ├───────────────┐\r
+  ▼               ▼\r
+Sales A2A       IT A2A\r
+  │               │\r
+  ▼               ▼\r
+Sales Result    IT Result\r
+  │               │\r
+  └───────┬───────┘\r
+          ▼\r
+   Validate Results\r
+          │\r
+          ▼\r
+    Aggregate Results\r
+          │\r
+          ▼\r
+    Generate Response\r
+          │\r
+          ▼\r
+         END\r
+\`\`\`\r
+\r
+The important point is:\r
+\r
+**LangGraph orchestrates the workflow. A2A transports the task between agents.**\r
+\r
+---\r
+\r
+# 8. What happens when the Delegator responds?\r
+\r
+Suppose Sales returns:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1001",\r
+  "status": "completed",\r
+  "result": {\r
+    "customer_name": "ABC Corp",\r
+    "revenue": "$20M",\r
+    "open_opportunities": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+IT returns:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1002",\r
+  "status": "completed",\r
+  "result": {\r
+    "open_incidents": 2,\r
+    "critical_incidents": 1\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator receives both.\r
+\r
+Then your Coordinator performs:\r
+\r
+\`\`\`text\r
+A2A responses\r
+      │\r
+      ▼\r
+Validation\r
+      │\r
+      ▼\r
+Aggregation\r
+      │\r
+      ▼\r
+LLM synthesis\r
+      │\r
+      ▼\r
+Customer Briefing\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer: ABC Corp\r
+\r
+Sales:\r
+- Revenue: $20M\r
+- Open opportunities: 3\r
+\r
+IT:\r
+- Open incidents: 2\r
+- Critical incidents: 1\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Why not just use REST?\r
+\r
+This is a common interview follow-up.\r
+\r
+You can say:\r
+\r
+> **REST could certainly be used for service-to-service communication, but A2A gives us an agent-oriented communication model with agent identity, capabilities, task semantics, and standardized agent interactions. In CWD, that makes the Coordinator less tightly coupled to individual Delegators and allows new autonomous agents to be added more easily.**\r
+\r
+So don't say:\r
+\r
+> "REST cannot do this."\r
+\r
+That's incorrect.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+REST\r
+=\r
+generic service communication\r
+\r
+A2A\r
+=\r
+standardized agent-to-agent communication\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. Why not have Coordinator directly call Workers?\r
+\r
+Because that violates your CWD hierarchy.\r
+\r
+You intentionally have:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      ↓\r
+Delegator\r
+      ↓\r
+Workers\r
+\`\`\`\r
+\r
+The Coordinator should not know:\r
+\r
+\`\`\`text\r
+Salesforce Worker\r
+ServiceNow Worker\r
+SharePoint Worker\r
+CRM Worker\r
+Incident Worker\r
+...\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ A2A\r
+    ▼\r
+Sales Delegator\r
+    │\r
+    ├── Customer Worker\r
+    ├── Opportunity Worker\r
+    └── Account Worker\r
+\`\`\`\r
+\r
+The Delegator owns the domain-specific worker orchestration.\r
+\r
+This is important for **separation of concerns, scalability, and maintainability**.\r
+\r
+---\r
+\r
+# 11. Interview-ready answer\r
+\r
+If the interviewer asks:\r
+\r
+### "Why did you use A2A in CWD?"\r
+\r
+You can answer:\r
+\r
+> **"In CWD, we used A2A for agent-to-agent communication between the Coordinator and Delegators. The Coordinator understands the user intent and determines which domain agents are required. It then sends task information such as the intent, customer ID, required capability, and correlation ID to the appropriate Delegator through A2A.**\r
+>\r
+> **The Delegator executes its Workers, and the Workers use MCP to access enterprise systems such as Salesforce, ServiceNow, or SharePoint. The Delegator sends the result back to the Coordinator through A2A. The Coordinator then validates, aggregates, and synthesizes the results.**\r
+>\r
+> **So, in our architecture, A2A handles agent-to-agent communication, while MCP handles agent-to-tool communication. This separation keeps the Coordinator loosely coupled from domain-specific agents and allows us to add new Delegators without significantly changing the Coordinator."**\r
+\r
+### One-line version to remember\r
+\r
+> **A2A connects our agents; MCP connects our agents to enterprise tools.**\r
+\r
+That distinction is probably the **most important thing to remember for your CWD interview**.\r
+`,code:``},{id:`162-what-problem-does-a2a-solve`,category:`A2A — Agent Communication`,title:`What problem does A2A solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`Absolutely. For your **CWD architecture**, the easiest way to understand A2A is:\r
+\r
+> **A2A solves the communication problem between independent AI agents. It gives agents a structured way to discover each other, send tasks, report progress/results, and coordinate without the Coordinator needing to know each agent's internal implementation.**\r
+\r
+## 1. What problem does A2A solve in CWD?\r
+\r
+Your CWD architecture is:\r
+\r
+\`\`\`text\r
+                         User\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │ Coordinator │\r
+                    └──────┬──────┘\r
+                           │\r
+                     A2A communication\r
+                           │\r
+              ┌────────────┴────────────┐\r
+              ▼                         ▼\r
+      ┌───────────────┐         ┌───────────────┐\r
+      │Sales Delegator │         │ IT Delegator  │\r
+      └───────┬───────┘         └───────┬───────┘\r
+              │                         │\r
+          Workers                    Workers\r
+              │                         │\r
+             MCP                       MCP\r
+              │                         │\r
+          Salesforce                ServiceNow\r
+\`\`\`\r
+\r
+Without an agent-to-agent communication mechanism, your Coordinator could become tightly coupled to every Delegator.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   │\r
+   ├── call_sales_delegator()\r
+   ├── call_it_delegator()\r
+   ├── call_hr_delegator()\r
+   ├── call_finance_delegator()\r
+   └── call_manufacturing_delegator()\r
+\`\`\`\r
+\r
+As the platform grows, this becomes difficult to maintain.\r
+\r
+With A2A:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ standardized agent communication\r
+     │\r
+     ├────────► Sales Agent\r
+     ├────────► IT Agent\r
+     ├────────► HR Agent\r
+     └────────► Manufacturing Agent\r
+\`\`\`\r
+\r
+The Coordinator only needs to know:\r
+\r
+> **What capability does this agent provide, and how do I send it a task?**\r
+\r
+It doesn't need to know how the Delegator internally executes its Workers.\r
+\r
+---\r
+\r
+# 2. What exactly does A2A solve?\r
+\r
+There are several problems.\r
+\r
+### Problem 1 — Agent discovery\r
+\r
+The Coordinator needs to know:\r
+\r
+\`\`\`text\r
+Who can handle customer information?\r
+Who can handle incidents?\r
+Who can handle sales opportunities?\r
+\`\`\`\r
+\r
+A2A provides an agent-oriented mechanism for discovering an agent's capabilities.\r
+\r
+For CWD:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+    capabilities:\r
+       customer_information\r
+       sales_history\r
+       opportunities\r
+\`\`\`\r
+\r
+\`\`\`text\r
+IT Delegator\r
+    capabilities:\r
+       incidents\r
+       service_requests\r
+       ticket_history\r
+\`\`\`\r
+\r
+The Coordinator can use this information for routing.\r
+\r
+---\r
+\r
+# 3. Problem 2 — Standard task communication\r
+\r
+Suppose the Coordinator needs customer information.\r
+\r
+Instead of knowing Sales Delegator's internal Python functions, it sends a structured task.\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1001",\r
+  "intent": "customer_briefing",\r
+  "capability": "customer_information",\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+  "correlation_id": "corr-789"\r
+}\r
+\`\`\`\r
+\r
+The Sales Delegator understands:\r
+\r
+\`\`\`text\r
+intent\r
+customer_id\r
+required capability\r
+task ID\r
+correlation ID\r
+\`\`\`\r
+\r
+It doesn't matter whether the Delegator internally uses:\r
+\r
+\`\`\`text\r
+LangGraph\r
+Python\r
+another agent framework\r
+multiple Workers\r
+MCP\r
+REST\r
+\`\`\`\r
+\r
+That implementation is hidden behind the agent boundary.\r
+\r
+---\r
+\r
+# 4. Problem 3 — Agent response\r
+\r
+The Delegator can return a structured result:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "task-1001",\r
+  "status": "completed",\r
+  "result": {\r
+    "customer_name": "ABC Corp",\r
+    "revenue": "$20M",\r
+    "open_opportunities": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator doesn't need to understand how Salesforce was queried.\r
+\r
+It only receives the business result.\r
+\r
+---\r
+\r
+# 5. Problem 4 — Long-running tasks\r
+\r
+This is particularly important for enterprise agents.\r
+\r
+Imagine:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Manufacturing Agent\r
+      │\r
+      ├── retrieve production data\r
+      ├── analyze failures\r
+      ├── run RCA\r
+      └── generate report\r
+\`\`\`\r
+\r
+That might take longer than a normal synchronous API call.\r
+\r
+Agent-to-agent communication needs to support the concept of a **task whose lifecycle can be tracked**.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+submitted\r
+    ↓\r
+working\r
+    ↓\r
+completed\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+submitted\r
+    ↓\r
+working\r
+    ↓\r
+failed\r
+\`\`\`\r
+\r
+The Coordinator can track the task instead of assuming everything happens instantly.\r
+\r
+---\r
+\r
+# 6. Problem 5 — Loose coupling\r
+\r
+This is one of your strongest interview points.\r
+\r
+Suppose today you have:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    ├── Sales Delegator\r
+    └── IT Delegator\r
+\`\`\`\r
+\r
+Tomorrow you add:\r
+\r
+\`\`\`text\r
+HR Delegator\r
+Finance Delegator\r
+Manufacturing Delegator\r
+Supply Chain Delegator\r
+\`\`\`\r
+\r
+The Coordinator doesn't need to implement all their internal workflows.\r
+\r
+It interacts through the agent communication boundary.\r
+\r
+So:\r
+\r
+\`\`\`text\r
+Coordinator\r
+      │\r
+      │ A2A\r
+      ▼\r
+Domain Agent\r
+      │\r
+      └── internal implementation\r
+\`\`\`\r
+\r
+This gives you **separation of concerns**.\r
+\r
+---\r
+\r
+# 7. A2A components you should understand\r
+\r
+For your interview, I would remember these major concepts:\r
+\r
+\`\`\`text\r
+                A2A\r
+                 │\r
+     ┌───────────┼────────────┐\r
+     │           │            │\r
+ Agent Identity  Discovery   Communication\r
+     │           │            │\r
+     │           │            ├── Message\r
+     │           │            ├── Task\r
+     │           │            └── Result\r
+     │           │\r
+     │           └── Capabilities\r
+     │\r
+     └── Agent endpoint\r
+\`\`\`\r
+\r
+Let's map these to CWD.\r
+\r
+---\r
+\r
+# 8. Component 1 — Agent\r
+\r
+An **Agent** is an autonomous software component that can perform a particular business capability.\r
+\r
+In your CWD:\r
+\r
+\`\`\`text\r
+Coordinator Agent\r
+Sales Delegator Agent\r
+IT Delegator Agent\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator Agent\r
+\r
+Responsibilities:\r
+- Understand sales-related tasks\r
+- Select appropriate Workers\r
+- Execute Workers\r
+- Aggregate domain results\r
+- Return result to Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. Component 2 — Agent identity / Agent Card\r
+\r
+An agent needs a way to describe itself.\r
+\r
+Conceptually, think:\r
+\r
+\`\`\`json\r
+{\r
+  "name": "sales-delegator",\r
+  "description": "Handles customer and sales information",\r
+  "url": "https://sales-agent.company.com",\r
+  "capabilities": [\r
+    "customer_information",\r
+    "sales_history",\r
+    "opportunities"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+This tells the Coordinator:\r
+\r
+> "I am the Sales agent, and these are the things I can do."\r
+\r
+### In CWD\r
+\r
+The Coordinator can determine:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       │\r
+       ├── customer information → Sales Agent\r
+       │\r
+       └── incidents → IT Agent\r
+\`\`\`\r
+\r
+---\r
+\r
+# 10. Component 3 — Agent endpoint\r
+\r
+The agent needs an endpoint through which another agent can communicate.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+https://sales-agent.company.com/a2a\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ HTTP\r
+     │ A2A message\r
+     ▼\r
+Sales Delegator endpoint\r
+\`\`\`\r
+\r
+The actual internal implementation could be FastAPI.\r
+\r
+\`\`\`python\r
+@app.post("/a2a/tasks")\r
+async def receive_task(task: AgentTask):\r
+\r
+    return await sales_delegator.execute(task)\r
+\`\`\`\r
+\r
+The important architectural point is:\r
+\r
+> **The endpoint represents the agent communication boundary, not the individual Worker.**\r
+\r
+---\r
+\r
+# 11. Component 4 — Message\r
+\r
+The message carries communication between agents.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ "Please handle customer briefing\r
+     │  for customer C12345"\r
+     ▼\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The message contains information such as:\r
+\r
+\`\`\`text\r
+sender\r
+receiver\r
+task\r
+context\r
+parameters\r
+correlation information\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "from": "coordinator",\r
+  "to": "sales-delegator",\r
+  "task_id": "T1001",\r
+  "context": {\r
+    "customer_id": "C12345"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. Component 5 — Task\r
+\r
+This is extremely important.\r
+\r
+A **task** represents the actual unit of work an agent needs to perform.\r
+\r
+In your CWD:\r
+\r
+\`\`\`text\r
+Task:\r
+    Customer Briefing\r
+    customer_id = C12345\r
+\`\`\`\r
+\r
+The lifecycle could conceptually be:\r
+\r
+\`\`\`text\r
+Task Created\r
+     │\r
+     ▼\r
+Submitted\r
+     │\r
+     ▼\r
+Working\r
+     │\r
+     ├──────────────┐\r
+     ▼              ▼\r
+Completed         Failed\r
+\`\`\`\r
+\r
+The Coordinator tracks the task using:\r
+\r
+\`\`\`text\r
+task_id = T1001\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Component 6 — Task status\r
+\r
+The Delegator needs to communicate task state.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+working\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+completed\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+failed\r
+\`\`\`\r
+\r
+This becomes useful in your CWD failure scenarios.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├── Sales Task → completed\r
+     │\r
+     └── IT Task → failed\r
+\`\`\`\r
+\r
+The Coordinator can then apply your business policy.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales result available\r
+IT result unavailable\r
+\r
+→ return partial response\r
+→ retry IT task\r
+→ or ask for human intervention\r
+\`\`\`\r
+\r
+---\r
+\r
+# 14. Component 7 — Result / Artifact\r
+\r
+The agent eventually produces a result.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "status": "completed",\r
+  "result": {\r
+      "customer": "ABC Corp",\r
+      "revenue": "$20M",\r
+      "opportunities": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+For larger outputs, the result could represent an artifact such as:\r
+\r
+\`\`\`text\r
+report\r
+document\r
+structured JSON\r
+analysis\r
+file\r
+\`\`\`\r
+\r
+In your CWD, the Coordinator receives the Delegator's domain result and then performs final aggregation.\r
+\r
+---\r
+\r
+# 15. Now let's connect all A2A components to your CWD\r
+\r
+Suppose the user asks:\r
+\r
+\`\`\`text\r
+Give me a customer briefing for C12345.\r
+\`\`\`\r
+\r
+### Step 1 — Coordinator understands request\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ ▼\r
+Coordinator\r
+ │\r
+ ├── Intent = Customer Briefing\r
+ └── customer_id = C12345\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 2 — Coordinator discovers required agents\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       │\r
+       ├── customer information\r
+       │          ↓\r
+       │     Sales Agent\r
+       │\r
+       └── incident information\r
+                  ↓\r
+             IT Agent\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 3 — Coordinator creates A2A tasks\r
+\r
+\`\`\`text\r
+Task T1001\r
+    → Sales Delegator\r
+\r
+Task T1002\r
+    → IT Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 4 — A2A sends tasks\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     ├──── A2A Task T1001 ────► Sales Delegator\r
+     │\r
+     └──── A2A Task T1002 ────► IT Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 16. What happens inside Sales Delegator?\r
+\r
+This is where your architecture becomes very important.\r
+\r
+The Coordinator **does not directly call Salesforce**.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+      ▼\r
+Determine Workers\r
+      │\r
+      ├── Customer Worker\r
+      └── Opportunity Worker\r
+             │\r
+             ▼\r
+            MCP\r
+             │\r
+             ▼\r
+         Salesforce\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`text\r
+A2A\r
+Coordinator ↔ Delegator\r
+\r
+MCP\r
+Worker ↔ Enterprise Tool\r
+\`\`\`\r
+\r
+---\r
+\r
+# 17. What happens inside IT Delegator?\r
+\r
+\`\`\`text\r
+IT Delegator\r
+      │\r
+      ▼\r
+Incident Worker\r
+      │\r
+      ▼\r
+     MCP\r
+      │\r
+      ▼\r
+ ServiceNow\r
+\`\`\`\r
+\r
+The result comes back:\r
+\r
+\`\`\`text\r
+ServiceNow\r
+   ↓\r
+MCP Server\r
+   ↓\r
+Incident Worker\r
+   ↓\r
+IT Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 18. Results return through A2A\r
+\r
+Now:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+       │\r
+       │ A2A result\r
+       ▼\r
+Coordinator\r
+\r
+IT Delegator\r
+       │\r
+       │ A2A result\r
+       ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+Coordinator receives:\r
+\r
+\`\`\`text\r
+Sales:\r
+customer information\r
+opportunities\r
+\r
+IT:\r
+incidents\r
+service requests\r
+\`\`\`\r
+\r
+---\r
+\r
+# 19. Coordinator validates and aggregates\r
+\r
+This matches the CWD design you've been using.\r
+\r
+\`\`\`text\r
+                Coordinator\r
+                     │\r
+              A2A responses\r
+                     │\r
+                     ▼\r
+              Validate results\r
+                     │\r
+                     ▼\r
+              Aggregate results\r
+                     │\r
+                     ▼\r
+               LLM synthesis\r
+                     │\r
+                     ▼\r
+              Final response\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+\r
+Customer: ABC Corp\r
+\r
+Sales:\r
+- Revenue: $20M\r
+- Opportunities: 3\r
+\r
+IT:\r
+- Open incidents: 2\r
+- Critical incidents: 1\r
+\`\`\`\r
+\r
+---\r
+\r
+# 20. The complete CWD + A2A + MCP architecture\r
+\r
+This is the diagram I would remember for your interview:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           ▼\r
+                  ┌────────────────┐\r
+                  │  COORDINATOR   │\r
+                  │   LangGraph    │\r
+                  └───────┬────────┘\r
+                          │\r
+                    A2A TASKS\r
+                          │\r
+             ┌────────────┴─────────────┐\r
+             │                          │\r
+             ▼                          ▼\r
+    ┌────────────────┐        ┌────────────────┐\r
+    │ Sales Delegator│        │  IT Delegator  │\r
+    │     Agent      │        │      Agent     │\r
+    └───────┬────────┘        └───────┬────────┘\r
+            │                         │\r
+            ▼                         ▼\r
+       ┌─────────┐               ┌─────────┐\r
+       │ Workers │               │ Workers │\r
+       └────┬────┘               └────┬────┘\r
+            │                         │\r
+           MCP                       MCP\r
+            │                         │\r
+            ▼                         ▼\r
+      ┌───────────┐             ┌────────────┐\r
+      │ Salesforce│             │ ServiceNow │\r
+      └───────────┘             └────────────┘\r
+            │                         │\r
+            └──────────┬──────────────┘\r
+                       │\r
+                    Results\r
+                       │\r
+                       ▼\r
+                 Coordinator\r
+                       │\r
+                Validate/Aggregate\r
+                       │\r
+                       ▼\r
+                  Final Answer\r
+\`\`\`\r
+\r
+## 21. A2A vs MCP — memorize this table\r
+\r
+|               | A2A                           | MCP                             |\r
+| ------------- | ----------------------------- | ------------------------------- |\r
+| Full form     | Agent-to-Agent                | Model Context Protocol          |\r
+| Communication | Agent ↔ Agent                 | Agent/Worker ↔ Tool             |\r
+| CWD example   | Coordinator → Sales Delegator | Worker → Salesforce             |\r
+| Main purpose  | Agent collaboration           | Tool/resource access            |\r
+| Carries       | Tasks, messages, results      | Tool calls, parameters, results |\r
+| Example       | "Get customer information"    | \`get_customer(customer_id)\`     |\r
+| Abstraction   | Business capability           | Enterprise tool capability      |\r
+\r
+### The strongest interview statement\r
+\r
+> **"A2A is the communication layer between autonomous agents, while MCP is the tool integration layer. In CWD, the Coordinator uses A2A to delegate business tasks to domain-specific Delegators. Each Delegator manages its Workers, and those Workers use MCP to securely access systems such as Salesforce, ServiceNow, and SharePoint. The Delegators return their results through A2A, and the Coordinator validates and aggregates them."**\r
+\r
+That gives you a clean separation:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓ A2A\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓ MCP\r
+Enterprise Tool\r
+\`\`\`\r
+\r
+**A2A = "Who should handle this business task?"**\r
+**MCP = "How does the Worker access the required enterprise capability?"**\r
+`,code:``},{id:`163-mcp-vs-a2a`,category:`A2A — Agent Communication`,title:`MCP vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`## MCP vs A2A\r
+\r
+The simplest way to remember it:\r
+\r
+> **A2A = Agent talks to another Agent**\r
+> **MCP = Agent/Worker talks to a Tool or Enterprise System**\r
+\r
+### CWD example\r
+\r
+\`\`\`text\r
+User\r
+  |\r
+  v\r
+Coordinator\r
+  |  A2A\r
+  v\r
+Sales Delegator\r
+  |  A2A\r
+  v\r
+Customer Worker\r
+  |  MCP\r
+  v\r
+MCP Server\r
+  |\r
+  +----> Salesforce\r
+  |\r
+  +----> ServiceNow\r
+  |\r
+  +----> SharePoint\r
+\`\`\`\r
+\r
+### What does A2A solve?\r
+\r
+A2A handles **communication and collaboration between agents**.\r
+\r
+For example, the Coordinator may say:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   | "Get customer information"\r
+   v\r
+Sales Delegator\r
+   |\r
+   | "Get CRM details"\r
+   v\r
+Customer Worker\r
+\`\`\`\r
+\r
+The agents exchange things like:\r
+\r
+* task\r
+* intent\r
+* context\r
+* instructions\r
+* status\r
+* results\r
+\r
+So in CWD:\r
+\r
+**Coordinator → Delegator → Worker = A2A**\r
+\r
+---\r
+\r
+### What does MCP solve?\r
+\r
+MCP handles **access to tools and enterprise systems**.\r
+\r
+For example, the Customer Worker needs Salesforce data:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      |\r
+      | MCP\r
+      v\r
+MCP Client\r
+      |\r
+      v\r
+Salesforce MCP Server\r
+      |\r
+      v\r
+Salesforce API\r
+      |\r
+      v\r
+Customer Data\r
+\`\`\`\r
+\r
+The Worker doesn't need to know the detailed Salesforce API implementation.\r
+\r
+It can call an MCP tool such as:\r
+\r
+\`\`\`python\r
+result = await mcp_client.call_tool(\r
+    "get_customer",\r
+    {"customer_id": "C123"}\r
+)\r
+\`\`\`\r
+\r
+---\r
+\r
+## Key differences\r
+\r
+| Area           | A2A                          | MCP                                            |\r
+| -------------- | ---------------------------- | ---------------------------------------------- |\r
+| Full form      | Agent-to-Agent               | Model Context Protocol                         |\r
+| Communication  | Agent ↔ Agent                | Agent/Worker ↔ Tool/System                     |\r
+| Purpose        | Agent collaboration          | Tool/data access                               |\r
+| CWD example    | Coordinator → Delegator      | Worker → Salesforce                            |\r
+| Handles        | Tasks, context, results      | Tools, resources, prompts                      |\r
+| Example        | "Please get CRM information" | \`get_customer(C123)\`                           |\r
+| Enterprise API | Not directly                 | Yes, through MCP Server                        |\r
+| Main question  | **Who should do the work?**  | **How does the Worker access the capability?** |\r
+\r
+### Very important interview point\r
+\r
+**A2A and MCP are not competitors. They operate at different layers.**\r
+\r
+In your CWD architecture:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+   A2A\r
+    v\r
+Delegator\r
+    |\r
+   A2A\r
+    v\r
+Worker\r
+    |\r
+   MCP\r
+    v\r
+MCP Server\r
+    |\r
+    +---- Salesforce\r
+    +---- ServiceNow\r
+    +---- SharePoint\r
+\`\`\`\r
+\r
+### 🎯 Strong interview answer\r
+\r
+> **“In CWD, we use A2A for agent-to-agent communication and MCP for agent-to-tool communication. A2A allows the Coordinator, Delegators, and Workers to exchange tasks, context, and results. MCP allows the Worker to securely discover and invoke enterprise capabilities such as Salesforce, ServiceNow, and SharePoint. So A2A handles agent collaboration, while MCP handles standardized tool and enterprise-system access.”**\r
+\r
+### Easy memory trick\r
+\r
+**A2A = Agent → Agent**\r
+**MCP = Agent → Tool**\r
+\r
+Or:\r
+\r
+> **A2A decides WHO does the work. MCP provides HOW the Worker accesses the tool.**\r
+`,code:``},{id:`164-rest-vs-a2a`,category:`A2A — Agent Communication`,title:`REST vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`## REST vs A2A\r
+\r
+The easiest way to remember:\r
+\r
+> **REST = system/API-to-system communication**\r
+> **A2A = agent-to-agent communication**\r
+\r
+### CWD example\r
+\r
+\`\`\`text\r
+User\r
+  |\r
+  v\r
+Coordinator Agent\r
+  |\r
+  | A2A\r
+  v\r
+Sales Delegator Agent\r
+  |\r
+  | A2A\r
+  v\r
+Customer Worker Agent\r
+  |\r
+  | REST / MCP\r
+  v\r
+Enterprise System\r
+\`\`\`\r
+\r
+### What does REST solve?\r
+\r
+REST is a **general-purpose API communication style**.\r
+\r
+For example, a Worker could directly call Salesforce:\r
+\r
+\`\`\`http\r
+GET /services/data/vXX.X/sobjects/Account/C123\r
+Authorization: Bearer <token>\r
+\`\`\`\r
+\r
+REST is mainly concerned with:\r
+\r
+* HTTP communication\r
+* endpoints\r
+* GET/POST/PUT/DELETE\r
+* request/response\r
+* authentication\r
+* status codes\r
+* JSON payloads\r
+\r
+REST doesn't inherently understand that the caller is an AI agent.\r
+\r
+---\r
+\r
+### What does A2A solve?\r
+\r
+A2A is designed for **communication between autonomous agents**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | A2A\r
+    | Task: Create customer briefing\r
+    v\r
+Sales Delegator\r
+    |\r
+    | A2A\r
+    | Task: Get CRM information\r
+    v\r
+Customer Worker\r
+\`\`\`\r
+\r
+The agent interaction can carry:\r
+\r
+* task\r
+* context\r
+* capabilities\r
+* status\r
+* progress\r
+* result\r
+* errors\r
+* delegation information\r
+\r
+The important point is that the receiving component is another **agent**, not simply an API endpoint.\r
+\r
+---\r
+\r
+## REST vs A2A\r
+\r
+| Area                       | REST                        | A2A                            |\r
+| -------------------------- | --------------------------- | ------------------------------ |\r
+| Purpose                    | API/system communication    | Agent-to-agent collaboration   |\r
+| Communication              | Client ↔ API                | Agent ↔ Agent                  |\r
+| Typical interface          | HTTP endpoint               | Agent/task interface           |\r
+| Understands agent concepts | No                          | Yes                            |\r
+| Task delegation            | Not inherently              | Yes                            |\r
+| Agent context              | Application-defined         | Designed for agent interaction |\r
+| Example in CWD             | Worker → Salesforce API     | Coordinator → Delegator        |\r
+| Main question              | **How do I call this API?** | **How do agents collaborate?** |\r
+\r
+### Important: A2A can use HTTP\r
+\r
+This is where interviewers sometimes try to confuse you.\r
+\r
+A2A does **not** mean "instead of HTTP."\r
+\r
+An A2A interaction can be transported over HTTP, while the **A2A protocol defines the agent-level communication semantics**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | HTTP + A2A protocol\r
+     v\r
+Sales Delegator\r
+\`\`\`\r
+\r
+Whereas a normal REST call is:\r
+\r
+\`\`\`text\r
+Worker\r
+   |\r
+   | HTTP REST\r
+   v\r
+Salesforce API\r
+\`\`\`\r
+\r
+So:\r
+\r
+> **HTTP is the transport. REST and A2A define different communication models/protocol semantics.**\r
+\r
+### In your CWD architecture\r
+\r
+\`\`\`text\r
+                 A2A\r
+Coordinator --------------> Sales Delegator\r
+                               |\r
+                               | A2A\r
+                               v\r
+                         Customer Worker\r
+                               |\r
+                               | MCP\r
+                               v\r
+                         Salesforce MCP Server\r
+                               |\r
+                               | REST\r
+                               v\r
+                          Salesforce\r
+\`\`\`\r
+\r
+Here you can explain the three layers clearly:\r
+\r
+* **A2A** → agent-to-agent collaboration\r
+* **MCP** → Worker-to-tool integration\r
+* **REST** → MCP Server-to-enterprise API communication\r
+\r
+### 🎯 Strong interview answer\r
+\r
+> **“REST is a general API communication model used for client-to-service or system-to-system communication, while A2A is designed for communication between autonomous agents. In our CWD architecture, we use A2A between the Coordinator, Delegators, and Workers to exchange tasks, context, and results. We use MCP when a Worker needs to access enterprise tools, and the MCP Server can internally use REST APIs to communicate with systems like Salesforce or ServiceNow. So REST handles API integration, while A2A handles agent collaboration.”**\r
+\r
+### Memory trick\r
+\r
+**REST → API communication**\r
+**A2A → Agent collaboration**\r
+**MCP → Tool access**\r
+`,code:``},{id:`165-when-should-you-use-a2a`,category:`A2A — Agent Communication`,title:`When should you use A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`## When should you use A2A?\r
+\r
+Use **A2A when one AI agent needs to communicate, delegate work to, or collaborate with another independent AI agent**.\r
+\r
+### In your CWD project\r
+\r
+You have:\r
+\r
+\`\`\`text\r
+User\r
+  |\r
+  v\r
+Coordinator Agent\r
+  |\r
+  | A2A\r
+  v\r
+Sales Delegator\r
+  |\r
+  | A2A\r
+  +------> Customer Worker\r
+  |\r
+  | A2A\r
+  +------> Opportunity Worker\r
+\`\`\`\r
+\r
+The Coordinator doesn't need to know the internal implementation of every Worker. It can delegate a business task to another agent.\r
+\r
+### Use A2A when:\r
+\r
+1. **You have multiple independent agents**\r
+\r
+   * Coordinator\r
+   * Sales Agent\r
+   * IT Agent\r
+   * Customer Agent\r
+\r
+2. **Agents need to delegate work**\r
+\r
+   \`\`\`text\r
+   Coordinator → Sales Delegator\r
+   \`\`\`\r
+\r
+3. **Agents need to exchange context and results**\r
+\r
+   \`\`\`text\r
+   Sales Delegator → Customer Worker\r
+                    customer_id = C123\r
+   \`\`\`\r
+\r
+4. **Different agents have different responsibilities**\r
+\r
+   \`\`\`text\r
+   Sales Agent → CRM\r
+   IT Agent    → ServiceNow\r
+   Knowledge Agent → SharePoint\r
+   \`\`\`\r
+\r
+5. **You want loosely coupled agents**\r
+\r
+   The Coordinator should not need to know the internal implementation of the Sales Agent.\r
+\r
+6. **Agents may be independently developed or deployed**\r
+\r
+   For example, the Sales Agent and IT Agent can evolve independently while still communicating through the agent interface.\r
+\r
+---\r
+\r
+## When NOT to use A2A\r
+\r
+Don't introduce A2A just because you have multiple Python functions or services.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Worker → Salesforce\r
+\`\`\`\r
+\r
+This is **not agent-to-agent communication**.\r
+\r
+Use:\r
+\r
+\`\`\`text\r
+Worker → MCP → Salesforce\r
+\`\`\`\r
+\r
+Similarly, if you simply need a traditional backend API:\r
+\r
+\`\`\`text\r
+Application → REST API → Database\r
+\`\`\`\r
+\r
+REST may be sufficient.\r
+\r
+---\r
+\r
+## A2A vs MCP in CWD\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     | A2A\r
+     v\r
+Delegator\r
+     |\r
+     | A2A\r
+     v\r
+Worker\r
+     |\r
+     | MCP\r
+     v\r
+MCP Server\r
+     |\r
+     +----> Salesforce\r
+     +----> ServiceNow\r
+     +----> SharePoint\r
+\`\`\`\r
+\r
+Think of it as:\r
+\r
+> **A2A = “I need another agent to do something.”**\r
+> **MCP = “I need a tool/system to do something.”**\r
+\r
+### 🎯 Strong interview answer\r
+\r
+> **“I use A2A when I have multiple autonomous agents that need to collaborate or delegate tasks. In CWD, the Coordinator communicates with Delegators and Delegators communicate with Workers using A2A. It allows us to exchange task context, status, and results without tightly coupling the agents. When the Worker needs to access Salesforce, ServiceNow, or SharePoint, I use MCP instead because that is agent-to-tool communication.”**\r
+\r
+### Easy memory trick\r
+\r
+**Agent → Agent = A2A**\r
+**Agent → Tool = MCP**\r
+**System → API = REST**\r
+`,code:``},{id:`166-when-should-you-use-rest`,category:`A2A — Agent Communication`,title:`When should you use REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`## When should you use REST?\r
+\r
+Use **REST when you need straightforward API communication between an application/service and another system or backend service**.\r
+\r
+### In your CWD architecture\r
+\r
+For example, the MCP Server may communicate with Salesforce through its REST API:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+   A2A\r
+    v\r
+Delegator\r
+    |\r
+   A2A\r
+    v\r
+Worker\r
+    |\r
+   MCP\r
+    v\r
+MCP Server\r
+    |\r
+   REST\r
+    v\r
+Salesforce\r
+\`\`\`\r
+\r
+The Worker doesn't need to directly know the Salesforce REST endpoint. The **MCP Server handles the enterprise API integration**.\r
+\r
+### Use REST when:\r
+\r
+1. **Calling a traditional enterprise API**\r
+\r
+\`\`\`text\r
+Application → REST API → Salesforce\r
+\`\`\`\r
+\r
+2. **Building backend microservices**\r
+\r
+\`\`\`text\r
+Order Service → REST → Customer Service\r
+\`\`\`\r
+\r
+3. **CRUD operations are straightforward**\r
+\r
+\`\`\`text\r
+GET    /customers/C123\r
+POST   /customers\r
+PUT    /customers/C123\r
+DELETE /customers/C123\r
+\`\`\`\r
+\r
+4. **You need synchronous request/response**\r
+\r
+\`\`\`text\r
+Request → API → Response\r
+\`\`\`\r
+\r
+5. **The other system already exposes REST APIs**\r
+\r
+For example, Salesforce, ServiceNow, or an internal enterprise service may provide REST endpoints.\r
+\r
+6. **You don't need agent-level collaboration**\r
+\r
+If the interaction is simply:\r
+\r
+\`\`\`text\r
+Service A → API → Service B\r
+\`\`\`\r
+\r
+you generally don't need A2A.\r
+\r
+---\r
+\r
+## REST vs A2A vs MCP\r
+\r
+| Requirement                                      | Use      |\r
+| ------------------------------------------------ | -------- |\r
+| Agent communicates with another agent            | **A2A**  |\r
+| Agent needs an enterprise tool                   | **MCP**  |\r
+| Application/service calls an API                 | **REST** |\r
+| CRUD operations against backend                  | **REST** |\r
+| Agent delegates a business task to another agent | **A2A**  |\r
+| Worker invokes \`get_customer\` tool               | **MCP**  |\r
+| MCP Server calls Salesforce API                  | **REST** |\r
+\r
+### Example from CWD\r
+\r
+Suppose the Customer Worker needs customer information.\r
+\r
+**A2A:**\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      |\r
+      | "Get customer information for C123"\r
+      v\r
+Customer Worker\r
+\`\`\`\r
+\r
+**MCP:**\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      |\r
+      | get_customer(C123)\r
+      v\r
+Salesforce MCP Server\r
+\`\`\`\r
+\r
+**REST:**\r
+\r
+\`\`\`text\r
+Salesforce MCP Server\r
+      |\r
+      | GET /customer/C123\r
+      v\r
+Salesforce API\r
+\`\`\`\r
+\r
+So the three technologies can work **together**, not replace each other.\r
+\r
+### 🎯 Strong interview answer\r
+\r
+> **“I use REST for traditional API-to-service communication, especially when calling enterprise systems or microservices that expose HTTP APIs. In our CWD architecture, the MCP Server can use Salesforce or ServiceNow REST APIs internally. I use A2A for agent-to-agent collaboration and MCP for standardized agent-to-tool access. So REST handles backend API integration, MCP provides the AI-facing tool abstraction, and A2A handles agent collaboration.”**\r
+\r
+### Easy memory trick\r
+\r
+**A2A → Agent ↔ Agent**\r
+**MCP → Agent ↔ Tool**\r
+**REST → Service ↔ API**\r
+`,code:``},{id:`167-how-delegators-communicate-with-the-coordinator`,category:`A2A — Agent Communication`,title:`How do Delegators communicate with the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In your **CWD architecture**, Delegators communicate with the Coordinator through **A2A messages**. The key idea is that the Delegator does not directly manipulate the Coordinator's LangGraph state; it sends a **structured task result/status back through the A2A interface**, and the Coordinator consumes that result.\r
+\r
+## 1. Simple flow\r
+\r
+\`\`\`text\r
+                         Coordinator\r
+                              │\r
+                    A2A Task Request\r
+                              │\r
+              ┌───────────────┴──────────────┐\r
+              ▼                              ▼\r
+       Sales Delegator                 IT Delegator\r
+              │                              │\r
+          Workers                         Workers\r
+              │                              │\r
+             MCP                            MCP\r
+              │                              │\r
+         Salesforce                      ServiceNow\r
+              │                              │\r
+              └──────────────┬───────────────┘\r
+                             │\r
+                        A2A Response\r
+                             │\r
+                             ▼\r
+                        Coordinator\r
+                             │\r
+                      Validate + Aggregate\r
+\`\`\`\r
+\r
+So there are actually **two directions**:\r
+\r
+\`\`\`text\r
+Coordinator → Delegator\r
+        A2A task\r
+\r
+Delegator → Coordinator\r
+        A2A result/status\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Example: Customer Briefing\r
+\r
+Suppose the user says:\r
+\r
+\`\`\`text\r
+"Give me a briefing for customer C12345."\r
+\`\`\`\r
+\r
+The Coordinator identifies:\r
+\r
+\`\`\`text\r
+Intent:\r
+    Customer Briefing\r
+\r
+customer_id:\r
+    C12345\r
+\r
+Required Delegators:\r
+    Sales Delegator\r
+    IT Delegator\r
+\`\`\`\r
+\r
+The Coordinator creates two A2A tasks.\r
+\r
+### Task 1 — Sales\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "sales-delegator",\r
+  "intent": "customer_briefing",\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+  "capability": "customer_information"\r
+}\r
+\`\`\`\r
+\r
+### Task 2 — IT\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1002",\r
+  "correlation_id": "C789",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "it-delegator",\r
+  "intent": "customer_briefing",\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+  "capability": "support_information"\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 3. How does the Delegator receive it?\r
+\r
+Each Delegator exposes an **A2A endpoint/interface**.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ HTTP + A2A message\r
+     ▼\r
+Sales Delegator\r
+     │\r
+     ▼\r
+A2A request handler\r
+\`\`\`\r
+\r
+A simplified FastAPI implementation could look like:\r
+\r
+\`\`\`python\r
+from fastapi import FastAPI\r
+\r
+app = FastAPI()\r
+\r
+@app.post("/a2a/tasks")\r
+async def receive_task(task: dict):\r
+\r
+    result = await sales_delegator.execute(task)\r
+\r
+    return result\r
+\`\`\`\r
+\r
+The important thing is that the endpoint is the **agent-to-agent boundary**.\r
+\r
+---\r
+\r
+# 4. What does the Delegator do with the task?\r
+\r
+The Sales Delegator receives:\r
+\r
+\`\`\`text\r
+intent = customer_briefing\r
+customer_id = C12345\r
+capability = customer_information\r
+\`\`\`\r
+\r
+It decides which Workers are needed.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      │\r
+      ├── Customer Worker\r
+      │       ↓\r
+      │      MCP\r
+      │       ↓\r
+      │   Salesforce\r
+      │\r
+      └── Opportunity Worker\r
+              ↓\r
+             MCP\r
+              ↓\r
+          Salesforce\r
+\`\`\`\r
+\r
+The Delegator is responsible for **domain-level orchestration**.\r
+\r
+---\r
+\r
+# 5. Workers return results to the Delegator\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+    → ABC Corp\r
+\r
+Opportunity Worker\r
+    → 3 open opportunities\r
+\`\`\`\r
+\r
+The Delegator aggregates its domain results:\r
+\r
+\`\`\`json\r
+{\r
+  "customer": {\r
+    "name": "ABC Corp"\r
+  },\r
+  "opportunities": {\r
+    "open_count": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+Now the Delegator needs to send this back to the Coordinator.\r
+\r
+That's where the **A2A response** comes in.\r
+\r
+---\r
+\r
+# 6. Delegator → Coordinator\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "from_agent": "sales-delegator",\r
+  "to_agent": "coordinator",\r
+  "status": "completed",\r
+  "result": {\r
+    "customer_name": "ABC Corp",\r
+    "open_opportunities": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator receives this response.\r
+\r
+The IT Delegator might return:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1002",\r
+  "correlation_id": "C789",\r
+  "from_agent": "it-delegator",\r
+  "to_agent": "coordinator",\r
+  "status": "completed",\r
+  "result": {\r
+    "open_incidents": 2,\r
+    "critical_incidents": 1\r
+  }\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. How does the Coordinator know which response belongs to which task?\r
+\r
+This is where **task ID and correlation ID** are important.\r
+\r
+\`\`\`text\r
+correlation_id = C789\r
+\`\`\`\r
+\r
+identifies the overall customer briefing workflow.\r
+\r
+\`\`\`text\r
+task_id = T1001\r
+\`\`\`\r
+\r
+identifies the Sales task.\r
+\r
+\`\`\`text\r
+task_id = T1002\r
+\`\`\`\r
+\r
+identifies the IT task.\r
+\r
+So:\r
+\r
+\`\`\`text\r
+                 Correlation C789\r
+                       │\r
+              Customer Briefing\r
+                       │\r
+             ┌─────────┴─────────┐\r
+             ▼                   ▼\r
+          T1001                 T1002\r
+           Sales                  IT\r
+\`\`\`\r
+\r
+This allows the Coordinator to correlate responses correctly.\r
+\r
+---\r
+\r
+# 8. What happens when one Delegator fails?\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Sales Delegator → completed\r
+IT Delegator    → failed\r
+\`\`\`\r
+\r
+The IT Delegator can return:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1002",\r
+  "correlation_id": "C789",\r
+  "status": "failed",\r
+  "error": {\r
+    "code": "SERVICENOW_TIMEOUT",\r
+    "message": "Incident service unavailable"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator now knows:\r
+\r
+\`\`\`text\r
+T1001 → SUCCESS\r
+T1002 → FAILED\r
+\`\`\`\r
+\r
+It can apply the CWD workflow policy:\r
+\r
+\`\`\`text\r
+Validate\r
+   ↓\r
+Retry failed task?\r
+   ↓\r
+If still failed:\r
+   ├── partial response\r
+   ├── fallback\r
+   └── human intervention\r
+\`\`\`\r
+\r
+---\r
+\r
+# 9. What happens when the Delegator is still working?\r
+\r
+The Delegator may not immediately have the final answer.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     ▼\r
+Sales Delegator\r
+     │\r
+     │ status = working\r
+     ▼\r
+Workers\r
+\`\`\`\r
+\r
+The Coordinator can track:\r
+\r
+\`\`\`text\r
+T1001\r
+status = working\r
+\`\`\`\r
+\r
+Later the final result becomes:\r
+\r
+\`\`\`text\r
+T1001\r
+status = completed\r
+\`\`\`\r
+\r
+This is useful for longer-running enterprise workflows.\r
+\r
+---\r
+\r
+# 10. How does this fit with LangGraph?\r
+\r
+This is an important distinction for your interview.\r
+\r
+Your **Coordinator's LangGraph** manages the overall workflow:\r
+\r
+\`\`\`text\r
+START\r
+  ↓\r
+Understand Request\r
+  ↓\r
+Create Intent\r
+  ↓\r
+Identify Delegators\r
+  ↓\r
+Create A2A Tasks\r
+  ↓\r
+Wait/Receive Results\r
+  ↓\r
+Validate\r
+  ↓\r
+Aggregate\r
+  ↓\r
+Generate Response\r
+  ↓\r
+END\r
+\`\`\`\r
+\r
+A2A is the communication mechanism across the agent boundary.\r
+\r
+So:\r
+\r
+> **LangGraph manages orchestration/state; A2A manages agent-to-agent communication.**\r
+\r
+---\r
+\r
+# 11. What does the actual communication look like?\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    │\r
+    │ A2A Request\r
+    │\r
+    │ task_id=T1001\r
+    │ intent=customer_briefing\r
+    │ customer_id=C12345\r
+    ▼\r
+Sales Delegator\r
+    │\r
+    │ execute Workers\r
+    │\r
+    ├── Customer Worker → MCP → Salesforce\r
+    └── Opportunity Worker → MCP → Salesforce\r
+    │\r
+    │ aggregate\r
+    ▼\r
+Sales Delegator\r
+    │\r
+    │ A2A Response\r
+    │\r
+    │ task_id=T1001\r
+    │ status=completed\r
+    │ result=...\r
+    ▼\r
+Coordinator\r
+\`\`\`\r
+\r
+---\r
+\r
+# 12. A simplified implementation\r
+\r
+### Coordinator\r
+\r
+\`\`\`python\r
+async def call_sales_delegator(customer_id):\r
+\r
+    task = {\r
+        "task_id": "T1001",\r
+        "correlation_id": "C789",\r
+        "from_agent": "coordinator",\r
+        "to_agent": "sales-delegator",\r
+        "intent": "customer_briefing",\r
+        "entities": {\r
+            "customer_id": customer_id\r
+        },\r
+        "capability": "customer_information"\r
+    }\r
+\r
+    response = await a2a_client.send_task(\r
+        "sales-delegator",\r
+        task\r
+    )\r
+\r
+    return response\r
+\`\`\`\r
+\r
+### Sales Delegator\r
+\r
+\`\`\`python\r
+async def execute(task):\r
+\r
+    customer_id = task["entities"]["customer_id"]\r
+\r
+    customer = await customer_worker(customer_id)\r
+\r
+    opportunities = await opportunity_worker(customer_id)\r
+\r
+    return {\r
+        "task_id": task["task_id"],\r
+        "correlation_id": task["correlation_id"],\r
+        "from_agent": "sales-delegator",\r
+        "to_agent": "coordinator",\r
+        "status": "completed",\r
+        "result": {\r
+            "customer": customer,\r
+            "opportunities": opportunities\r
+        }\r
+    }\r
+\`\`\`\r
+\r
+Then the Coordinator receives the response and updates its workflow state:\r
+\r
+\`\`\`python\r
+state["delegator_results"].append(response)\r
+\`\`\`\r
+\r
+Eventually:\r
+\r
+\`\`\`python\r
+final_result = aggregate_results(\r
+    state["delegator_results"]\r
+)\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Very important: A2A does NOT replace your Delegator hierarchy\r
+\r
+Your architecture remains:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ A2A\r
+     ▼\r
+Delegator\r
+     │\r
+     ├── Worker 1\r
+     ├── Worker 2\r
+     └── Worker 3\r
+            │\r
+            │ MCP\r
+            ▼\r
+      Enterprise Systems\r
+\`\`\`\r
+\r
+**A2A is between the agent boundaries.**\r
+\r
+**MCP is below the Delegator/Worker boundary.**\r
+\r
+So you can say:\r
+\r
+> **"The Coordinator communicates with Delegators through A2A. The Delegator then orchestrates its Workers internally, and the Workers use MCP to access enterprise tools. The Delegator sends the aggregated domain result back to the Coordinator through A2A, using task IDs and correlation IDs so the Coordinator can validate and combine results."**\r
+\r
+### Interview one-liner\r
+\r
+> **"A2A provides the communication contract between my Coordinator and Delegator agents: the Coordinator sends a structured task, the Delegator executes its Workers, tracks task status, and returns a structured result or error. The Coordinator then validates and aggregates those Delegator responses in its LangGraph workflow."**\r
+`,code:``},{id:`168-how-agents-exchange-task-context`,category:`A2A — Agent Communication`,title:`How do agents exchange task context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In your **CWD architecture**, agents exchange task context through the **A2A task message**. The context is carried as structured data so the receiving Delegator knows **what to do, for whom, why, and how the task relates to the overall workflow**.\r
+\r
+## 1. Simple flow\r
+\r
+\`\`\`text\r
+User\r
+  │\r
+  ▼\r
+Coordinator\r
+  │\r
+  │ A2A Task + Context\r
+  ▼\r
+Sales Delegator\r
+  │\r
+  ├── Customer Worker\r
+  └── Opportunity Worker\r
+\`\`\`\r
+\r
+The Coordinator does **not** just send:\r
+\r
+\`\`\`text\r
+"Get customer information"\r
+\`\`\`\r
+\r
+It sends structured context such as:\r
+\r
+\`\`\`text\r
+Task ID\r
+Correlation ID\r
+Intent\r
+Customer ID\r
+Required capability\r
+User/request context\r
+Constraints\r
+Security context\r
+\`\`\`\r
+\r
+---\r
+\r
+# 2. Example from your CWD\r
+\r
+User asks:\r
+\r
+\`\`\`text\r
+"Give me a customer briefing for customer C12345."\r
+\`\`\`\r
+\r
+The Coordinator creates structured context:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "sales-delegator",\r
+\r
+  "intent": "customer_briefing",\r
+\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  },\r
+\r
+  "required_capability": "customer_information",\r
+\r
+  "constraints": {\r
+    "max_latency_ms": 5000\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This is the **task context** exchanged with the Delegator.\r
+\r
+---\r
+\r
+# 3. What does each field mean?\r
+\r
+### \`task_id\`\r
+\r
+Identifies the specific task.\r
+\r
+\`\`\`text\r
+T1001\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer briefing → T1001\r
+\`\`\`\r
+\r
+If the Coordinator has multiple tasks:\r
+\r
+\`\`\`text\r
+T1001 → Sales\r
+T1002 → IT\r
+T1003 → Manufacturing\r
+\`\`\`\r
+\r
+the Coordinator can distinguish them.\r
+\r
+---\r
+\r
+### \`correlation_id\`\r
+\r
+Identifies the **overall business request/workflow**.\r
+\r
+\`\`\`text\r
+C789\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+C789\r
+Customer Briefing\r
+   │\r
+   ├── T1001 Sales\r
+   └── T1002 IT\r
+\`\`\`\r
+\r
+So even though there are multiple tasks, the Coordinator knows they belong to the same user request.\r
+\r
+---\r
+\r
+# 4. Intent\r
+\r
+The Coordinator passes the business intent.\r
+\r
+\`\`\`json\r
+{\r
+  "intent": "customer_briefing"\r
+}\r
+\`\`\`\r
+\r
+The Delegator knows:\r
+\r
+> "This is a customer briefing request."\r
+\r
+It doesn't have to reconstruct the user's original natural-language request.\r
+\r
+---\r
+\r
+# 5. Entities\r
+\r
+This is where your **customer ID** is passed.\r
+\r
+\`\`\`json\r
+{\r
+  "entities": {\r
+    "customer_id": "C12345"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Sales Delegator can pass that context to its Workers.\r
+\r
+\`\`\`text\r
+Coordinator\r
+     │\r
+     │ customer_id=C12345\r
+     ▼\r
+Sales Delegator\r
+     │\r
+     ├── Customer Worker\r
+     │       │\r
+     │       └── customer_id=C12345\r
+     │\r
+     └── Opportunity Worker\r
+             │\r
+             └── customer_id=C12345\r
+\`\`\`\r
+\r
+---\r
+\r
+# 6. Required capability\r
+\r
+The Coordinator can tell the Delegator what capability is required:\r
+\r
+\`\`\`json\r
+{\r
+  "required_capability": "customer_information"\r
+}\r
+\`\`\`\r
+\r
+This helps the Delegator determine which Worker(s) should execute.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+customer_information\r
+        ↓\r
+Customer Worker\r
+\`\`\`\r
+\r
+while:\r
+\r
+\`\`\`text\r
+support_information\r
+        ↓\r
+Incident Worker\r
+\`\`\`\r
+\r
+---\r
+\r
+# 7. Context can also contain constraints\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "constraints": {\r
+    "max_latency_ms": 5000,\r
+    "response_format": "structured_json"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Delegator can use this information when executing the task.\r
+\r
+---\r
+\r
+# 8. Security context\r
+\r
+In your enterprise CWD, you should **not blindly pass sensitive information through the LLM context**.\r
+\r
+Instead, pass or reference the necessary security context, such as:\r
+\r
+\`\`\`text\r
+user identity\r
+tenant\r
+roles/claims\r
+entitlements\r
+correlation ID\r
+\`\`\`\r
+\r
+Conceptually:\r
+\r
+\`\`\`json\r
+{\r
+  "security_context": {\r
+    "user_id": "user-123",\r
+    "tenant": "onsemi",\r
+    "roles": [\r
+      "sales-read"\r
+    ]\r
+  }\r
+}\r
+\`\`\`\r
+\r
+But in a production implementation, sensitive credentials such as:\r
+\r
+\`\`\`text\r
+password\r
+client secret\r
+API key\r
+access token\r
+\`\`\`\r
+\r
+should **not** be placed into an LLM-generated task payload.\r
+\r
+Instead, the MCP/enterprise integration layer obtains credentials securely through mechanisms such as managed identity, OAuth, Key Vault, etc.\r
+\r
+---\r
+\r
+# 9. How context flows through the whole CWD\r
+\r
+This is the important picture:\r
+\r
+\`\`\`text\r
+                         USER\r
+                           │\r
+                           │\r
+                "Brief customer C12345"\r
+                           │\r
+                           ▼\r
+                    ┌─────────────┐\r
+                    │ Coordinator │\r
+                    └──────┬──────┘\r
+                           │\r
+                  Creates task context\r
+                           │\r
+                           │ A2A\r
+                           ▼\r
+                  ┌─────────────────┐\r
+                  │ Sales Delegator │\r
+                  └────────┬────────┘\r
+                           │\r
+                    extracts context\r
+                           │\r
+              customer_id = C12345\r
+                           │\r
+              ┌────────────┴────────────┐\r
+              ▼                         ▼\r
+       Customer Worker          Opportunity Worker\r
+              │                         │\r
+             MCP                       MCP\r
+              │                         │\r
+         Salesforce                Salesforce\r
+\`\`\`\r
+\r
+The Delegator doesn't need the entire original conversation.\r
+\r
+It gets the **relevant structured context** needed to perform its task.\r
+\r
+---\r
+\r
+# 10. How does the result carry context back?\r
+\r
+The Delegator returns the task ID and correlation ID along with the result.\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "from_agent": "sales-delegator",\r
+  "to_agent": "coordinator",\r
+  "status": "completed",\r
+\r
+  "result": {\r
+    "customer_name": "ABC Corp",\r
+    "open_opportunities": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can then correlate:\r
+\r
+\`\`\`text\r
+C789\r
+Customer Briefing\r
+     │\r
+     ├── T1001 → Sales result\r
+     └── T1002 → IT result\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. What if the task is long-running?\r
+\r
+The context remains associated with the task.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+T1001\r
+  │\r
+  ├── submitted\r
+  ├── working\r
+  └── completed\r
+\`\`\`\r
+\r
+The Delegator can send:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "status": "working"\r
+}\r
+\`\`\`\r
+\r
+Later:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "status": "completed",\r
+  "result": {}\r
+}\r
+\`\`\`\r
+\r
+The IDs allow the Coordinator to associate the response with the correct workflow.\r
+\r
+---\r
+\r
+# 12. Very important: Context ≠ entire conversation\r
+\r
+An interviewer may ask this follow-up.\r
+\r
+Don't say:\r
+\r
+> "We send the entire conversation history to every agent."\r
+\r
+Instead say:\r
+\r
+> **"We propagate only the context required for the delegated task. The Coordinator converts the user's request into structured task context such as intent, entities, task ID, correlation ID, constraints, and relevant authorization context. This minimizes unnecessary data transfer and reduces token usage and data-exposure risk."**\r
+\r
+For example, if the Sales Delegator only needs:\r
+\r
+\`\`\`text\r
+customer_id = C12345\r
+\`\`\`\r
+\r
+you don't need to send:\r
+\r
+\`\`\`text\r
+10 turns of unrelated conversation\r
+\`\`\`\r
+\r
+---\r
+\r
+# 13. Where does LangGraph state fit?\r
+\r
+This is another important distinction.\r
+\r
+Your **LangGraph state** can contain the broader workflow state:\r
+\r
+\`\`\`python\r
+state = {\r
+    "intent": "customer_briefing",\r
+    "customer_id": "C12345",\r
+    "delegator_results": [],\r
+    "errors": [],\r
+    "task_ids": []\r
+}\r
+\`\`\`\r
+\r
+But you don't send the entire LangGraph state to every agent.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+LangGraph State\r
+       │\r
+       ▼\r
+Select relevant context\r
+       │\r
+       ▼\r
+A2A Task\r
+       │\r
+       ▼\r
+Delegator\r
+\`\`\`\r
+\r
+So:\r
+\r
+> **LangGraph manages workflow state; A2A carries the relevant task context across the agent boundary.**\r
+\r
+---\r
+\r
+# 14. Context inside the Delegator\r
+\r
+The Delegator can create its own internal state:\r
+\r
+\`\`\`python\r
+delegator_state = {\r
+    "task_id": "T1001",\r
+    "customer_id": "C12345",\r
+    "intent": "customer_briefing",\r
+    "worker_results": [],\r
+    "errors": []\r
+}\r
+\`\`\`\r
+\r
+Then Workers receive only what they need:\r
+\r
+\`\`\`python\r
+worker_input = {\r
+    "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+So the context becomes progressively more focused:\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Coordinator Context\r
+     ↓\r
+A2A Task Context\r
+     ↓\r
+Delegator State\r
+     ↓\r
+Worker Input\r
+     ↓\r
+MCP Tool Arguments\r
+\`\`\`\r
+\r
+For your example:\r
+\r
+\`\`\`text\r
+"Give customer briefing for C12345"\r
+            ↓\r
+intent=customer_briefing\r
+            ↓\r
+A2A task\r
+            ↓\r
+customer_id=C12345\r
+            ↓\r
+Customer Worker\r
+            ↓\r
+MCP: get_customer(C12345)\r
+\`\`\`\r
+\r
+---\r
+\r
+# 15. Interview-ready answer\r
+\r
+If they ask:\r
+\r
+### **"How do agents exchange task context?"**\r
+\r
+Say:\r
+\r
+> **"In CWD, agents exchange task context through the A2A task message. The Coordinator converts the user's request into structured context containing the task ID, correlation ID, intent, entities such as customer ID, required capability, constraints, and relevant authorization context. It sends this context to the appropriate Delegator through A2A. The Delegator uses that context to select and execute its Workers. The Delegator then returns the result, status, task ID, and correlation ID through A2A. The Coordinator uses those IDs to correlate the response with the correct workflow, validate it, and aggregate the results."**\r
+\r
+### Short version to memorize:\r
+\r
+> **"We don't pass the entire conversation between agents. We pass only the required structured task context—intent, entities, task ID, correlation ID, constraints, and security context—through A2A."**\r
+\r
+And the flow to remember is:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Structured Context\r
+ ↓ A2A\r
+Delegator\r
+ ↓\r
+Worker\r
+ ↓ MCP\r
+Enterprise Tool\r
+ ↓\r
+Result\r
+ ↓ A2A\r
+Coordinator\r
+ ↓\r
+Validate + Aggregate\r
+\`\`\`\r
+`,code:``},{id:`169-how-to-maintain-agent-identity`,category:`A2A — Agent Communication`,title:`How do you maintain agent identity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, we maintain agent identity so every Coordinator, Delegator, and Worker can be **uniquely identified, authenticated, authorized, and audited**.\r
+\r
+### Simple flow\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓ A2A\r
+Sales Delegator\r
+  ↓\r
+Customer Worker\r
+  ↓ MCP\r
+Salesforce\r
+\`\`\`\r
+\r
+Each agent has its own identity.\r
+\r
+### 1. Give every agent a unique identity\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator       → agent-coordinator\r
+Sales Delegator   → agent-sales-delegator\r
+IT Delegator      → agent-it-delegator\r
+Customer Worker   → agent-customer-worker\r
+Incident Worker   → agent-incident-worker\r
+\`\`\`\r
+\r
+We don't rely on the agent's name alone. The identity is backed by an enterprise identity system such as **Microsoft Entra ID** in Azure.\r
+\r
+---\r
+\r
+### 2. Authenticate the agent\r
+\r
+When the Coordinator calls the Sales Delegator through A2A, the request carries an authenticated identity.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   |\r
+   | A2A request + identity credential\r
+   ↓\r
+Sales Delegator\r
+   |\r
+   | Validate identity\r
+   ↓\r
+Accept / Reject\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "from_agent": "agent-coordinator",\r
+  "to_agent": "agent-sales-delegator",\r
+  "intent": "customer_briefing"\r
+}\r
+\`\`\`\r
+\r
+The identity credential/token is validated by the security layer rather than trusting the \`from_agent\` field.\r
+\r
+---\r
+\r
+### 3. Authorize what the agent can do\r
+\r
+Authentication answers:\r
+\r
+> **Who are you?**\r
+\r
+Authorization answers:\r
+\r
+> **What are you allowed to do?**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓\r
+Allowed → call Sales Delegator\r
+\r
+Sales Delegator\r
+   ↓\r
+Allowed → call Customer Worker\r
+\r
+Customer Worker\r
+   ↓\r
+Allowed → get_customer\r
+\`\`\`\r
+\r
+But:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+   ↓\r
+Not allowed → delete_customer\r
+\`\`\`\r
+\r
+We enforce this using **RBAC/claims/permissions** and tool-level authorization.\r
+\r
+---\r
+\r
+### 4. Preserve identity across the CWD flow\r
+\r
+We also propagate a correlation and identity context:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓ A2A\r
+Sales Delegator\r
+ ↓\r
+Customer Worker\r
+ ↓ MCP\r
+Salesforce\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "C789",\r
+  "task_id": "T1001",\r
+  "user_id": "U123",\r
+  "agent_id": "agent-sales-delegator",\r
+  "tenant_id": "ONSEMI",\r
+  "intent": "customer_briefing",\r
+  "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+We **do not put passwords, API keys, or secrets into this context**.\r
+\r
+---\r
+\r
+### 5. Maintain identity in audit logs\r
+\r
+Every agent action is logged with its identity:\r
+\r
+\`\`\`text\r
+correlation_id = C789\r
+task_id        = T1001\r
+agent_id       = agent-sales-delegator\r
+worker_id      = customer-worker\r
+tool            = get_customer\r
+timestamp       = ...\r
+status          = SUCCESS\r
+latency_ms      = 320\r
+\`\`\`\r
+\r
+This gives us traceability:\r
+\r
+> **Which user → which agent → which worker → which tool → which enterprise system?**\r
+\r
+---\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, we maintain agent identity using enterprise identity such as Microsoft Entra ID. Each Coordinator, Delegator, and Worker has a unique service identity. When agents communicate through A2A, we authenticate the calling agent and authorize it based on its roles and capabilities. We propagate the identity and correlation context across the workflow for traceability, while keeping secrets out of the agent payload. Every A2A and MCP operation is also audited with agent ID, task ID, correlation ID, tool, status, and timestamp. This gives us authentication, authorization, and end-to-end agent accountability.”**\r
+\r
+### Easy way to remember\r
+\r
+**Agent Identity = Identify → Authenticate → Authorize → Audit**\r
+\r
+And in CWD:\r
+\r
+**A2A identifies who is calling another agent; MCP controls what that agent/worker can do with enterprise tools.**\r
+`,code:``},{id:`170-how-to-authenticate-agents`,category:`A2A — Agent Communication`,title:`How do you authenticate agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, we authenticate agents using **enterprise workload identity**, not by trusting the agent name in the A2A message.\r
+\r
+### CWD flow\r
+\r
+\`\`\`text\r
+Coordinator\r
+    |\r
+    | A2A request + authentication token\r
+    ↓\r
+Sales Delegator\r
+    |\r
+    | Validate token\r
+    ↓\r
+Authorization\r
+    ↓\r
+Execute task\r
+\`\`\`\r
+\r
+### 1. Give each agent a service identity\r
+\r
+For Azure CWD, I would use **Microsoft Entra ID** with managed/workload identities.\r
+\r
+\`\`\`text\r
+Coordinator       → coordinator-agent identity\r
+Sales Delegator   → sales-delegator identity\r
+IT Delegator      → it-delegator identity\r
+Customer Worker   → customer-worker identity\r
+\`\`\`\r
+\r
+Each identity has its own permissions.\r
+\r
+---\r
+\r
+### 2. Coordinator gets an access token\r
+\r
+Before calling the Sales Delegator, the Coordinator obtains an OAuth 2.0 access token for the target service.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+token = credential.get_token(\r
+    "api://sales-delegator/.default"\r
+)\r
+\`\`\`\r
+\r
+Then the Coordinator sends:\r
+\r
+\`\`\`http\r
+Authorization: Bearer <access_token>\r
+\`\`\`\r
+\r
+with the A2A request.\r
+\r
+---\r
+\r
+### 3. Sales Delegator validates the token\r
+\r
+The Sales Delegator validates:\r
+\r
+\`\`\`text\r
+✓ Token signature\r
+✓ Issuer\r
+✓ Audience\r
+✓ Expiration\r
+✓ Agent/service identity\r
+✓ Required claims/scopes\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+iss  → trusted Entra ID tenant\r
+aud  → sales-delegator API\r
+exp  → token not expired\r
+scp  → required scope\r
+\`\`\`\r
+\r
+If validation fails:\r
+\r
+\`\`\`text\r
+401 Unauthorized\r
+\`\`\`\r
+\r
+---\r
+\r
+### 4. Authentication is different from authorization\r
+\r
+This is an important interview point.\r
+\r
+**Authentication:**\r
+\r
+> "Who is calling me?"\r
+\r
+\`\`\`text\r
+Coordinator → authenticated as coordinator-agent\r
+\`\`\`\r
+\r
+**Authorization:**\r
+\r
+> "Is coordinator-agent allowed to call me?"\r
+\r
+\`\`\`text\r
+coordinator-agent\r
+       ↓\r
+sales-delegator\r
+       ↓\r
+Allowed\r
+\`\`\`\r
+\r
+Even if the Coordinator is authenticated, it may not automatically have permission to execute every operation.\r
+\r
+---\r
+\r
+### 5. Don't trust this field\r
+\r
+For example, this:\r
+\r
+\`\`\`json\r
+{\r
+  "from_agent": "coordinator"\r
+}\r
+\`\`\`\r
+\r
+is only **metadata**.\r
+\r
+We don't say:\r
+\r
+> "\`from_agent=coordinator\`, therefore I trust it."\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+A2A request\r
+    +\r
+Bearer token\r
+    ↓\r
+Identity validation\r
+    ↓\r
+Authenticated agent\r
+    ↓\r
+RBAC / scope validation\r
+\`\`\`\r
+\r
+The trusted identity comes from the validated credential.\r
+\r
+---\r
+\r
+### 6. Worker authentication to MCP\r
+\r
+The same principle applies when a Worker calls an MCP Server.\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      ↓\r
+MCP Client\r
+      ↓ OAuth / workload identity\r
+Salesforce MCP Server\r
+      ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+The MCP Server authenticates the Worker and then checks whether that Worker is allowed to call:\r
+\r
+\`\`\`text\r
+get_customer\r
+\`\`\`\r
+\r
+but perhaps not:\r
+\r
+\`\`\`text\r
+delete_customer\r
+\`\`\`\r
+\r
+---\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, we authenticate agents using enterprise workload identity. In Azure, we use Microsoft Entra ID with managed or workload identities. Each Coordinator and Delegator has its own service identity. When the Coordinator sends an A2A request, it obtains an OAuth access token for the target agent and sends it with the request. The receiving Delegator validates the token's issuer, audience, signature, expiration, and required scopes. After authentication, RBAC or scope-based authorization determines whether that agent is allowed to perform the requested operation. We apply the same identity and authorization model when Workers access MCP tools.”**\r
+\r
+**Easy interview line:**\r
+\r
+> **“We don't authenticate an agent by its name; we authenticate its workload identity and then authorize its permissions.”**\r
+`,code:``},{id:`171-how-to-authorize-agents`,category:`A2A — Agent Communication`,title:`How do you authorize agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, authorization determines **what an authenticated agent is allowed to do**.\r
+\r
+### Simple flow\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓ A2A + identity\r
+Sales Delegator\r
+    ↓\r
+Authenticate → Who are you?\r
+    ↓\r
+Authorize → What are you allowed to do?\r
+    ↓\r
+Execute\r
+\`\`\`\r
+\r
+### 1. Define permissions for each agent\r
+\r
+For example:\r
+\r
+| Agent           | Allowed                   |\r
+| --------------- | ------------------------- |\r
+| Coordinator     | Invoke Delegators         |\r
+| Sales Delegator | Invoke Sales Workers      |\r
+| IT Delegator    | Invoke IT Workers         |\r
+| Customer Worker | Read customer information |\r
+| Incident Worker | Read ServiceNow incidents |\r
+\r
+So, for example:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+   ✓ get_customer\r
+   ✓ get_customer_history\r
+   ✗ delete_customer\r
+   ✗ update_customer\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Use RBAC / scopes\r
+\r
+In Azure CWD, we can use **Microsoft Entra ID roles/scopes**.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+agent-sales-delegator\r
+        ↓\r
+Role: SalesAgent\r
+        ↓\r
+Permissions:\r
+  customer.read\r
+  opportunity.read\r
+  account.read\r
+\`\`\`\r
+\r
+The Worker can then invoke only operations covered by its permissions.\r
+\r
+---\r
+\r
+### 3. Check authorization before execution\r
+\r
+Suppose the Sales Delegator receives:\r
+\r
+\`\`\`json\r
+{\r
+  "intent": "customer_briefing",\r
+  "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+Before executing a Worker:\r
+\r
+\`\`\`python\r
+if not authz.is_allowed(\r
+    agent_id="sales-delegator",\r
+    action="customer.read",\r
+    resource="customer:C12345"\r
+):\r
+    raise PermissionError("Not authorized")\r
+\`\`\`\r
+\r
+Only after authorization succeeds:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      ↓\r
+Authorization check\r
+      ↓ allowed\r
+Customer Worker\r
+      ↓\r
+MCP\r
+      ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+---\r
+\r
+### 4. Resource-level authorization\r
+\r
+Authorization shouldn't only check **what operation** the agent can perform.\r
+\r
+It can also check **which data** it can access.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Action: customer.read\r
+Resource: customer:C12345\r
+Agent: sales-delegator\r
+\`\`\`\r
+\r
+The authorization layer checks:\r
+\r
+\`\`\`text\r
+✓ Agent has customer.read\r
+✓ Agent belongs to correct tenant\r
+✓ Customer is within agent's entitlement\r
+✓ Request is allowed\r
+\`\`\`\r
+\r
+Then the Worker proceeds.\r
+\r
+---\r
+\r
+### 5. MCP authorization is another layer\r
+\r
+In CWD:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓ A2A\r
+Sales Delegator\r
+   ↓\r
+Customer Worker\r
+   ↓ MCP\r
+Salesforce MCP Server\r
+\`\`\`\r
+\r
+Even if the Worker is authorized to run, the **MCP Server independently checks** whether that Worker can call the requested tool.\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      ↓\r
+MCP: get_customer\r
+      ↓\r
+Tool authorization\r
+      ↓ allowed\r
+Salesforce API\r
+\`\`\`\r
+\r
+This gives **defense in depth**.\r
+\r
+---\r
+\r
+### Authentication vs Authorization\r
+\r
+|                            | Question                  | CWD example             |\r
+| -------------------------- | ------------------------- | ----------------------- |\r
+| **Authentication**         | Who are you?              | \`agent-sales-delegator\` |\r
+| **Authorization**          | What can you do?          | \`customer.read\`         |\r
+| **Resource authorization** | What data can you access? | \`customer:C12345\`       |\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, authorization is performed after agent authentication. Each Coordinator, Delegator, and Worker has defined roles or scopes that determine which agents, workers, tools, and resources they can access. For example, the Sales Delegator can invoke customer-related Workers, while a Customer Worker may have \`customer.read\` permission but not \`customer.delete\`. Before executing a task, we validate the agent's role, scope, tenant, resource entitlement, and required action. The MCP layer performs another authorization check before allowing access to enterprise tools such as Salesforce or ServiceNow. This gives us least-privilege and defense-in-depth security.”**\r
+\r
+**Easy way to remember:**\r
+\r
+> **Authentication = Who are you?**\r
+> **Authorization = What are you allowed to do?**\r
+> **Entitlement = Which data are you allowed to access?**\r
+`,code:``},{id:`172-how-to-handle-asynchronous-agent-communication`,category:`A2A — Agent Communication`,title:`How do you handle asynchronous agent communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, we handle asynchronous agent communication when a task may take longer than a normal synchronous API call—for example, a Delegator may need multiple Workers to query Salesforce, ServiceNow, and SharePoint.\r
+\r
+### CWD asynchronous flow\r
+\r
+\`\`\`text\r
+User\r
+  ↓\r
+Coordinator\r
+  ↓ A2A\r
+Sales Delegator\r
+  ↓\r
+Queue / async task\r
+  ↓\r
+Workers\r
+  ├── Customer Worker → Salesforce\r
+  ├── Opportunity Worker → Salesforce\r
+  └── Incident Worker → ServiceNow\r
+          ↓\r
+     Results / events\r
+          ↓\r
+Sales Delegator\r
+  ↓ A2A\r
+Coordinator\r
+  ↓\r
+Final response\r
+\`\`\`\r
+\r
+### 1. Coordinator creates a task\r
+\r
+Instead of waiting for the Delegator to finish:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "intent": "customer_briefing",\r
+  "customer_id": "C12345",\r
+  "mode": "async"\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can receive an acknowledgement such as:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "status": "accepted"\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Use a queue for asynchronous execution\r
+\r
+In our Azure implementation, we can use **Azure Service Bus**.\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+A2A\r
+    ↓\r
+Sales Delegator\r
+    ↓\r
+Service Bus\r
+    ↓\r
+Workers\r
+\`\`\`\r
+\r
+The queue decouples the sender from the receiver.\r
+\r
+If the Worker is temporarily unavailable, the message can remain in the queue instead of losing the task.\r
+\r
+---\r
+\r
+### 3. Workers process independently\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Briefing T1001\r
+       |\r
+       +-- Customer Worker\r
+       |      ↓\r
+       |   Salesforce\r
+       |\r
+       +-- Incident Worker\r
+       |      ↓\r
+       |   ServiceNow\r
+       |\r
+       +-- Document Worker\r
+              ↓\r
+           SharePoint\r
+\`\`\`\r
+\r
+These can execute **in parallel** when there are no dependencies.\r
+\r
+---\r
+\r
+### 4. Track task state\r
+\r
+We maintain durable state such as:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "status": "working",\r
+  "workers": {\r
+    "customer": "completed",\r
+    "incident": "completed",\r
+    "document": "working"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+This can be stored in **Cosmos DB / DynamoDB** depending on the cloud implementation.\r
+\r
+LangGraph can also maintain the workflow state and checkpoint progress.\r
+\r
+---\r
+\r
+### 5. Results are sent back asynchronously\r
+\r
+When a Worker completes:\r
+\r
+\`\`\`text\r
+Worker\r
+  ↓\r
+Result Event\r
+  ↓\r
+Delegator\r
+  ↓ A2A\r
+Coordinator\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "worker_id": "incident-worker",\r
+  "status": "completed",\r
+  "result": {\r
+    "open_incidents": 3\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator correlates the result using \`task_id\` and \`correlation_id\`.\r
+\r
+---\r
+\r
+### 6. Handle failures without losing the whole workflow\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Worker   → SUCCESS\r
+Incident Worker   → SUCCESS\r
+Document Worker   → FAILED\r
+\`\`\`\r
+\r
+We don't necessarily restart everything.\r
+\r
+The persisted workflow state allows us to:\r
+\r
+\`\`\`text\r
+T1001\r
+ ├── Customer ✓\r
+ ├── Incident ✓\r
+ └── Document ✗\r
+          ↓\r
+       Retry\r
+          ↓\r
+       Resume\r
+\`\`\`\r
+\r
+If retry limits are exceeded, we can send the failed message to a **DLQ** and return a partial result or request human intervention depending on the business requirement.\r
+\r
+---\r
+\r
+### Synchronous vs asynchronous\r
+\r
+| Synchronous               | Asynchronous                    |\r
+| ------------------------- | ------------------------------- |\r
+| Caller waits              | Caller doesn't wait             |\r
+| Good for quick operations | Good for long-running tasks     |\r
+| Direct request/response   | Queue/event-based               |\r
+| Timeout is important      | Durable task state is important |\r
+| Simple                    | More resilient/scalable         |\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, we use asynchronous communication for long-running or independent agent tasks. The Coordinator creates an A2A task with a task ID and correlation ID and sends it to the appropriate Delegator. The Delegator can place work on a durable queue such as Azure Service Bus, and Workers process the tasks independently, often in parallel. We persist task and worker state so we can track progress and resume from the last successful step. Workers return results asynchronously, and the Delegator sends the aggregated result back to the Coordinator through A2A. For failures, we use retries, timeouts, DLQ, and checkpoint-based resume rather than restarting the entire workflow.”**\r
+\r
+**Easy interview line:**\r
+\r
+> **“A2A handles the agent-to-agent task communication; Service Bus provides durable asynchronous delivery; LangGraph manages workflow state and resume.”**\r
+`,code:``},{id:`173-how-to-handle-agent-failures`,category:`A2A — Agent Communication`,title:`How do you handle agent failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, we handle agent failures using **timeout, retry, checkpointing, circuit breaker, fallback, DLQ, and observability**. The key idea is: **one agent failure should not unnecessarily restart the entire workflow.**\r
+\r
+### CWD failure flow\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓ A2A\r
+Sales Delegator\r
+    ↓\r
+Workers\r
+ ├── Customer Worker  ✓\r
+ ├── Opportunity Worker ✓\r
+ └── Incident Worker   ✗\r
+          ↓\r
+       Retry\r
+          ↓\r
+      Still failed?\r
+          ↓\r
+        DLQ / Fallback\r
+          ↓\r
+Coordinator\r
+\`\`\`\r
+\r
+### 1. Detect the failure\r
+\r
+We detect failures through:\r
+\r
+* Request timeout\r
+* HTTP/API errors\r
+* MCP tool failure\r
+* Invalid response\r
+* Agent unavailable\r
+* LLM failure\r
+* Queue/message failure\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Incident Worker\r
+      ↓\r
+ServiceNow MCP call\r
+      ↓\r
+Timeout after 5 seconds\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Retry transient failures\r
+\r
+For temporary failures, we use **exponential backoff**:\r
+\r
+\`\`\`text\r
+Attempt 1 → immediately\r
+Attempt 2 → 1 sec\r
+Attempt 3 → 2 sec\r
+Attempt 4 → 4 sec\r
+\`\`\`\r
+\r
+But we don't retry everything.\r
+\r
+\`\`\`text\r
+Timeout / 503      → retry\r
+Rate limit         → retry with backoff\r
+Invalid parameters → don't retry\r
+Unauthorized       → don't retry\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Use timeout and circuit breaker\r
+\r
+If an agent continuously fails:\r
+\r
+\`\`\`text\r
+Sales Delegator\r
+      ↓\r
+Incident Worker\r
+      ↓\r
+ServiceNow\r
+      ↓\r
+Repeated failures\r
+      ↓\r
+Circuit OPEN\r
+\`\`\`\r
+\r
+The circuit breaker temporarily stops sending more requests to the unhealthy dependency.\r
+\r
+This prevents **cascading failures**.\r
+\r
+---\r
+\r
+### 4. Persist workflow state\r
+\r
+This is very important in CWD.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Worker    ✓\r
+Incident Worker    ✓\r
+Document Worker    ✗\r
+\`\`\`\r
+\r
+We persist:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "workers": {\r
+    "customer": "completed",\r
+    "incident": "completed",\r
+    "document": "failed"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+After fixing the Document Worker, we resume from that failed step instead of executing Customer and Incident Workers again.\r
+\r
+This is where **LangGraph checkpointing + durable storage** is useful.\r
+\r
+---\r
+\r
+### 5. Use DLQ for persistent failures\r
+\r
+If retries are exhausted:\r
+\r
+\`\`\`text\r
+Worker\r
+  ↓\r
+Retry 1\r
+  ↓\r
+Retry 2\r
+  ↓\r
+Retry 3\r
+  ↓\r
+Failed\r
+  ↓\r
+Service Bus DLQ\r
+\`\`\`\r
+\r
+The DLQ allows us to investigate and replay the failed task later.\r
+\r
+---\r
+\r
+### 6. Return partial results when appropriate\r
+\r
+Suppose the customer briefing requires three Workers:\r
+\r
+\`\`\`text\r
+Customer Worker   ✓\r
+Sales Worker      ✓\r
+Incident Worker   ✗\r
+\`\`\`\r
+\r
+If the business allows partial results, Coordinator can return:\r
+\r
+\`\`\`text\r
+Customer information: available\r
+Sales information: available\r
+Incident information: temporarily unavailable\r
+\`\`\`\r
+\r
+We **don't fabricate the missing incident information**.\r
+\r
+---\r
+\r
+### 7. A2A task status\r
+\r
+The Delegator communicates the task state back to the Coordinator:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "status": "failed",\r
+  "agent_id": "incident-worker",\r
+  "error": {\r
+    "type": "TIMEOUT",\r
+    "retryable": true\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The Coordinator can then decide whether to:\r
+\r
+\`\`\`text\r
+retry → fallback → partial result → human intervention\r
+\`\`\`\r
+\r
+---\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, I handle agent failures using multiple layers. First, I detect failures through timeout, errors, invalid responses, or dependency failures. For transient failures, I use limited retries with exponential backoff. I use circuit breakers to prevent repeated calls to an unhealthy agent or service. The workflow state is checkpointed, so if one Worker fails while others succeed, we don't restart the entire workflow—we retry or resume only the failed step. After retry limits are exceeded, we move the task to a DLQ for investigation or replay. Depending on the business requirement, the Coordinator can return a clearly marked partial result or escalate to human intervention. All failures are tracked using task ID, correlation ID, agent ID, and error details for observability.”**\r
+\r
+### Easy way to remember\r
+\r
+**Detect → Timeout → Retry → Circuit Breaker → Checkpoint → DLQ → Resume/Fallback**\r
+\r
+And the key CWD principle:\r
+\r
+> **“Failure of one Worker should not automatically mean failure of the entire workflow.”**\r
+`,code:``},{id:`174-how-to-correlate-a2a-requests`,category:`A2A — Agent Communication`,title:`How do you correlate A2A requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, we correlate A2A requests using a **\`correlation_id\` + \`task_id\`**, and sometimes a **\`parent_task_id\`** for child tasks.\r
+\r
+### 1. \`correlation_id\` — tracks the whole business request\r
+\r
+Suppose the user asks:\r
+\r
+> “Give me a customer briefing for C12345.”\r
+\r
+Coordinator creates:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "C789",\r
+  "intent": "customer_briefing",\r
+  "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+Everything related to this request uses \`C789\`.\r
+\r
+\`\`\`text\r
+C789 = Customer Briefing\r
+ ├── Sales task\r
+ ├── IT task\r
+ └── Document task\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. \`task_id\` — identifies one specific agent task\r
+\r
+The Coordinator creates separate A2A tasks:\r
+\r
+\`\`\`text\r
+C789\r
+ ├── T1001 → Sales Delegator\r
+ └── T1002 → IT Delegator\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001",\r
+  "correlation_id": "C789",\r
+  "from_agent": "coordinator",\r
+  "to_agent": "sales-delegator",\r
+  "intent": "customer_briefing",\r
+  "customer_id": "C12345"\r
+}\r
+\`\`\`\r
+\r
+So:\r
+\r
+* **\`correlation_id\`** → entire workflow\r
+* **\`task_id\`** → individual task\r
+\r
+---\r
+\r
+### 3. Propagate IDs through the workflow\r
+\r
+The IDs travel through the CWD layers:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ correlation_id = C789\r
+ ↓ A2A\r
+Sales Delegator\r
+ task_id = T1001\r
+ ↓\r
+Customer Worker\r
+ ↓ MCP\r
+Salesforce\r
+\`\`\`\r
+\r
+When Salesforce returns a result, the Worker keeps the same context:\r
+\r
+\`\`\`json\r
+{\r
+  "correlation_id": "C789",\r
+  "task_id": "T1001",\r
+  "worker_id": "customer-worker",\r
+  "status": "completed"\r
+}\r
+\`\`\`\r
+\r
+The Delegator sends that result back through A2A.\r
+\r
+---\r
+\r
+### 4. \`parent_task_id\` helps with nested tasks\r
+\r
+Suppose the Sales Delegator creates two Worker tasks:\r
+\r
+\`\`\`text\r
+C789\r
+  └── T1001 Sales Delegator\r
+       ├── T1001-1 Customer Worker\r
+       └── T1001-2 Opportunity Worker\r
+\`\`\`\r
+\r
+We can maintain:\r
+\r
+\`\`\`json\r
+{\r
+  "task_id": "T1001-1",\r
+  "parent_task_id": "T1001",\r
+  "correlation_id": "C789"\r
+}\r
+\`\`\`\r
+\r
+This lets us reconstruct the complete execution tree.\r
+\r
+---\r
+\r
+### 5. Why correlation is important\r
+\r
+It helps us answer:\r
+\r
+> **“Which response belongs to which request?”**\r
+\r
+For example, imagine 100 customer briefings are running simultaneously:\r
+\r
+\`\`\`text\r
+C789  → Customer C12345\r
+C790  → Customer C56789\r
+C791  → Customer C99999\r
+\`\`\`\r
+\r
+A response:\r
+\r
+\`\`\`text\r
+task_id = T1001\r
+correlation_id = C789\r
+\`\`\`\r
+\r
+can be matched to the correct workflow without relying on timing or customer name.\r
+\r
+---\r
+\r
+### 6. It also helps troubleshooting\r
+\r
+Our observability system can search:\r
+\r
+\`\`\`text\r
+correlation_id = C789\r
+\`\`\`\r
+\r
+and show:\r
+\r
+\`\`\`text\r
+C789\r
+ ├── Coordinator\r
+ ├── Sales Delegator\r
+ │    ├── Customer Worker\r
+ │    └── Opportunity Worker\r
+ ├── IT Delegator\r
+ │    └── Incident Worker\r
+ └── Final aggregation\r
+\`\`\`\r
+\r
+We can then see **where the request spent time, which agent failed, which MCP tool was called, and what the final status was.**\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, I correlate A2A requests using a correlation ID and task ID. The correlation ID represents the complete business workflow, while the task ID uniquely identifies an individual agent task. When the Coordinator sends tasks to Sales and IT Delegators, each task gets its own task ID but shares the same correlation ID. We propagate these IDs through Delegators, Workers, MCP calls, and responses. For nested tasks, we can also use a parent task ID. This allows us to correctly match asynchronous responses, support retries and resume, and provide end-to-end distributed tracing.”**\r
+\r
+**Easy way to remember:**\r
+\r
+> **Correlation ID = whole journey**\r
+> **Task ID = one task**\r
+> **Parent Task ID = task hierarchy**\r
+`,code:``},{id:`175-how-to-trace-an-a2a-request-across-agents`,category:`A2A — Agent Communication`,title:`How do you trace an A2A request across agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`In **CWD**, I trace an A2A request using **distributed tracing + correlation IDs + task IDs**. The goal is to follow one customer request across the Coordinator, Delegators, Workers, and MCP tools.\r
+\r
+### 1. Start with a trace ID\r
+\r
+For a request such as:\r
+\r
+> “Give me a customer briefing for C12345.”\r
+\r
+the Coordinator creates:\r
+\r
+\`\`\`text\r
+trace_id        = TR-9001\r
+correlation_id  = C789\r
+\`\`\`\r
+\r
+Then it creates A2A tasks:\r
+\r
+\`\`\`text\r
+TR-9001 / C789\r
+      |\r
+      +-- T1001 → Sales Delegator\r
+      |\r
+      +-- T1002 → IT Delegator\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Propagate the context\r
+\r
+The tracing context is propagated across every service:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator\r
+ ↓ A2A\r
+Sales Delegator\r
+ ↓\r
+Customer Worker\r
+ ↓ MCP\r
+Salesforce\r
+\`\`\`\r
+\r
+Each component records the same trace/correlation context.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "trace_id": "TR-9001",\r
+  "correlation_id": "C789",\r
+  "task_id": "T1001",\r
+  "agent_id": "sales-delegator"\r
+}\r
+\`\`\`\r
+\r
+The Worker creates its own child span while retaining the parent trace.\r
+\r
+---\r
+\r
+### 3. Create spans for each operation\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+TR-9001\r
+│\r
+├── Coordinator.process_request\r
+│\r
+├── A2A.send_to_sales_delegator\r
+│     │\r
+│     └── SalesDelegator.execute_task\r
+│            │\r
+│            ├── CustomerWorker.execute\r
+│            │      └── MCP.get_customer\r
+│            │             └── Salesforce API\r
+│            │\r
+│            └── OpportunityWorker.execute\r
+│\r
+└── Coordinator.aggregate_results\r
+\`\`\`\r
+\r
+Each span records things such as:\r
+\r
+\`\`\`text\r
+start_time\r
+end_time\r
+duration\r
+agent_id\r
+task_id\r
+operation\r
+status\r
+error\r
+\`\`\`\r
+\r
+---\r
+\r
+### 4. Trace asynchronous communication\r
+\r
+This is particularly important when using Service Bus.\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓\r
+A2A\r
+   ↓\r
+Service Bus\r
+   ↓\r
+Sales Delegator\r
+\`\`\`\r
+\r
+The tracing context is included with the message so the consumer can continue the same distributed trace rather than creating an unrelated trace.\r
+\r
+So even if the Delegator processes the message several seconds later, we can still connect it to:\r
+\r
+\`\`\`text\r
+TR-9001\r
+\`\`\`\r
+\r
+---\r
+\r
+### 5. Trace MCP calls too\r
+\r
+The trace continues down to enterprise tools:\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓ A2A\r
+Sales Delegator\r
+   ↓\r
+Customer Worker\r
+   ↓ MCP\r
+Salesforce MCP Server\r
+   ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+TR-9001\r
+ └─ T1001\r
+     └─ customer-worker\r
+         └─ MCP.get_customer\r
+             └─ Salesforce\r
+\`\`\`\r
+\r
+This helps answer:\r
+\r
+> “Was the delay caused by the agent, MCP server, or Salesforce?”\r
+\r
+---\r
+\r
+### 6. Use observability tools\r
+\r
+In the Azure CWD implementation, I would use:\r
+\r
+* **Application Insights**\r
+* **Azure Monitor / Log Analytics**\r
+* **OpenTelemetry** for distributed tracing\r
+* **Langfuse** for LLM/agent-specific traces\r
+\r
+We can search by:\r
+\r
+\`\`\`text\r
+trace_id = TR-9001\r
+\`\`\`\r
+\r
+and see the complete execution path.\r
+\r
+---\r
+\r
+### Example troubleshooting\r
+\r
+Suppose the final response took **8 seconds**.\r
+\r
+The trace might show:\r
+\r
+\`\`\`text\r
+Coordinator                 500 ms\r
+Sales Delegator             200 ms\r
+Customer Worker             300 ms\r
+Salesforce MCP call         150 ms\r
+Incident Worker             6,500 ms  ← bottleneck\r
+ServiceNow MCP call        6,200 ms\r
+\`\`\`\r
+\r
+Now we know the problem isn't the Coordinator or A2A communication—the ServiceNow path is consuming most of the latency.\r
+\r
+---\r
+\r
+### Interview-ready answer\r
+\r
+> **“In CWD, I use distributed tracing with a trace ID, correlation ID, and task ID. The Coordinator creates the initial trace context, and that context is propagated through A2A calls to Delegators, Workers, asynchronous queues, and MCP calls. Each component creates a child span while maintaining the same parent trace. We capture agent ID, task ID, operation, latency, status, and errors. In Azure, we can implement this with OpenTelemetry and visualize it through Application Insights and Log Analytics, while Langfuse provides additional LLM and agent-level tracing. This gives us end-to-end visibility from the user's request all the way to Salesforce or ServiceNow.”**\r
+\r
+### Easy way to remember\r
+\r
+**Trace ID → entire request**\r
+\r
+**Correlation ID → business workflow**\r
+\r
+**Task ID → individual agent task**\r
+\r
+**Span → one operation**\r
+\r
+**OpenTelemetry → connects the whole execution path**\r
+`,code:``}];function Tp(){return(0,M.jsx)($,{data:wp,title:`CWD A2A — Agent Communication Cookbook`,subtitle:`Agent-to-agent communication, identity, tracing and failure handling`,icon:`🤝`,patternLabel:`Questions`})}var Ep=[{id:`176-why-langgraph`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`177-langgraph-vs-langchain`,category:`LangGraph`,title:`LangGraph vs LangChain?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`178-langgraph-vs-custom-python-orchestration`,category:`LangGraph`,title:`LangGraph vs custom Python orchestration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`179-what-is-a-stategraph`,category:`LangGraph`,title:`What is a StateGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`180-what-is-graph-state`,category:`LangGraph`,title:`What is graph state?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`181-what-are-nodes`,category:`LangGraph`,title:`What are nodes?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`182-what-are-edges`,category:`LangGraph`,title:`What are edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`183-what-are-conditional-edges`,category:`LangGraph`,title:`What are conditional edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`184-what-are-reducers`,category:`LangGraph`,title:`What are reducers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`185-how-langgraph-supports-parallel-execution`,category:`LangGraph`,title:`How does LangGraph support parallel execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`186-how-langgraph-supports-state-persistence`,category:`LangGraph`,title:`How does LangGraph support state persistence?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`187-how-langgraph-supports-human-in-the-loop`,category:`LangGraph`,title:`How does LangGraph support human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`188-how-langgraph-supports-retries`,category:`LangGraph`,title:`How does LangGraph support retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`189-how-langgraph-supports-checkpointing`,category:`LangGraph`,title:`How does LangGraph support checkpointing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`190-how-to-resume-a-failed-workflow`,category:`LangGraph`,title:`How do you resume a failed workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`191-how-to-prevent-infinite-loops`,category:`LangGraph`,title:`How do you prevent infinite loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`192-how-to-control-token-growth`,category:`LangGraph`,title:`How do you control token growth?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`193-how-to-manage-conversation-state`,category:`LangGraph`,title:`How do you manage conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`194-how-to-separate-session-state-and-workflow-state`,category:`LangGraph`,title:`How do you separate session state and workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`195-how-to-debug-a-langgraph-workflow`,category:`LangGraph`,title:`How do you debug a LangGraph workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`196-how-to-test-individual-graph-nodes`,category:`LangGraph`,title:`How do you test individual graph nodes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`197-how-to-test-the-complete-graph`,category:`LangGraph`,title:`How do you test the complete graph?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``}];function Dp(){return(0,M.jsx)($,{data:Ep,title:`CWD LangGraph Cookbook`,subtitle:`Graph state, nodes, edges, checkpointing, debugging and testing`,icon:`🕸️`,patternLabel:`Questions`})}var Op=[{id:`198-why-does-cwd-need-rag`,category:`RAG Architecture`,title:`Why does CWD need RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`199-what-data-sources-are-indexed`,category:`RAG Architecture`,title:`What data sources are indexed?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`200-how-to-ingest-enterprise-documents`,category:`RAG Architecture`,title:`How do you ingest enterprise documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`201-explain-your-ingestion-pipeline`,category:`RAG Architecture`,title:`Explain your ingestion pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`202-how-do-you-chunk-documents`,category:`RAG Architecture`,title:`How do you chunk documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`203-fixed-size-vs-semantic-chunking`,category:`RAG Architecture`,title:`Fixed-size vs semantic chunking?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`204-what-chunk-size-did-you-choose-and-why`,category:`RAG Architecture`,title:`What chunk size did you choose and why?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`205-what-overlap-did-you-choose`,category:`RAG Architecture`,title:`What overlap did you choose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`206-how-to-handle-tables`,category:`RAG Architecture`,title:`How do you handle tables?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`207-how-to-handle-pdfs`,category:`RAG Architecture`,title:`How do you handle PDFs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`208-how-to-handle-images`,category:`RAG Architecture`,title:`How do you handle images?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`209-how-to-handle-scanned-documents`,category:`RAG Architecture`,title:`How do you handle scanned documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`210-what-embedding-model-did-you-use`,category:`RAG Architecture`,title:`What embedding model did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`211-how-to-choose-an-embedding-model`,category:`RAG Architecture`,title:`How do you choose an embedding model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`212-what-vector-database-did-you-use`,category:`RAG Architecture`,title:`What vector database did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`213-why-azure-ai-search`,category:`RAG Architecture`,title:`Why Azure AI Search?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`214-how-does-hybrid-search-work`,category:`RAG Architecture`,title:`How does hybrid search work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`215-explain-bm25`,category:`RAG Architecture`,title:`Explain BM25.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`216-vector-search-vs-bm25`,category:`RAG Architecture`,title:`Vector search vs BM25?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`217-why-combine-both`,category:`RAG Architecture`,title:`Why combine both?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`218-what-is-semantic-ranking`,category:`RAG Architecture`,title:`What is semantic ranking?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`219-what-is-metadata-filtering`,category:`RAG Architecture`,title:`What is metadata filtering?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`220-how-to-implement-acl-filtering`,category:`RAG Architecture`,title:`How do you implement ACL filtering?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`221-how-to-prevent-unauthorized-documents-entering-llm-context`,category:`RAG Architecture`,title:`How do you prevent unauthorized documents from entering the LLM context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`222-what-is-your-retrieval-pipeline`,category:`RAG Architecture`,title:`What is your retrieval pipeline?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`223-how-to-measure-retrieval-quality`,category:`RAG Architecture`,title:`How do you measure retrieval quality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`224-what-is-recall-at-k`,category:`RAG Architecture`,title:`What is Recall@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`225-what-is-precision-at-k`,category:`RAG Architecture`,title:`What is Precision@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`226-what-is-mrr`,category:`RAG Architecture`,title:`What is MRR?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`227-what-is-ndcg`,category:`RAG Architecture`,title:`What is NDCG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`228-what-is-ragas`,category:`RAG Architecture`,title:`What is RAGAS?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`229-how-to-reduce-irrelevant-context`,category:`RAG Architecture`,title:`How do you reduce irrelevant context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`230-how-to-handle-stale-documents`,category:`RAG Architecture`,title:`How do you handle stale documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`231-how-to-handle-document-deletion`,category:`RAG Architecture`,title:`How do you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`232-how-to-re-index-documents`,category:`RAG Architecture`,title:`How do you re-index documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``}];function kp(){return(0,M.jsx)($,{data:Op,title:`CWD RAG Architecture Cookbook`,subtitle:`Ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation`,icon:`📚`,patternLabel:`Questions`})}var Ap=[{id:`233-which-llms-did-you-use`,category:`LLM Architecture`,title:`Which LLMs did you use?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`234-why-did-you-select-the-model`,category:`LLM Architecture`,title:`Why did you select the model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`235-how-to-select-between-large-and-small-models`,category:`LLM Architecture`,title:`How do you select between large and small models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`236-how-to-control-token-usage`,category:`LLM Architecture`,title:`How do you control token usage?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`237-what-happens-when-context-exceeds-model-limit`,category:`LLM Architecture`,title:`What happens when the context exceeds the model limit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`238-how-to-reduce-prompt-size`,category:`LLM Architecture`,title:`How do you reduce prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`239-how-to-summarize-conversation-history`,category:`LLM Architecture`,title:`How do you summarize conversation history?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`240-how-to-implement-model-fallback`,category:`LLM Architecture`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`241-what-happens-if-azure-openai-is-unavailable`,category:`LLM Architecture`,title:`What happens if Azure OpenAI is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`242-would-you-use-multiple-llm-providers`,category:`LLM Architecture`,title:`Would you use multiple LLM providers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`243-how-to-route-requests-between-models`,category:`LLM Architecture`,title:`How do you route requests between models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`244-how-to-control-temperature`,category:`LLM Architecture`,title:`How do you control temperature?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`245-how-to-control-hallucination`,category:`LLM Architecture`,title:`How do you control hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`246-how-to-enforce-structured-output`,category:`LLM Architecture`,title:`How do you enforce structured output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`247-how-to-validate-llm-output`,category:`LLM Architecture`,title:`How do you validate LLM output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`248-what-happens-when-json-output-is-invalid`,category:`LLM Architecture`,title:`What happens when JSON output is invalid?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`249-how-to-handle-model-timeouts`,category:`LLM Architecture`,title:`How do you handle model timeouts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`250-how-to-handle-rate-limits`,category:`LLM Architecture`,title:`How do you handle rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`251-how-to-handle-token-throttling`,category:`LLM Architecture`,title:`How do you handle token throttling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`252-how-to-monitor-model-cost`,category:`LLM Architecture`,title:`How do you monitor model cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``}];function jp(){return(0,M.jsx)($,{data:Ap,title:`CWD LLM Architecture Cookbook`,subtitle:`Model selection, token control, fallback, routing and structured output`,icon:`🧠`,patternLabel:`Questions`})}var Mp=[{id:`253-how-to-prevent-hallucinations`,category:`Hallucination & Grounding`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`254-can-you-completely-eliminate-hallucination`,category:`Hallucination & Grounding`,title:`Can you completely eliminate hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`255-how-to-ground-responses`,category:`Hallucination & Grounding`,title:`How do you ground responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`256-how-rag-improves-grounding`,category:`Hallucination & Grounding`,title:`How does RAG improve grounding?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`257-what-if-retrieved-documents-are-wrong`,category:`Hallucination & Grounding`,title:`What if retrieved documents are wrong?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`258-what-if-retrieval-returns-nothing`,category:`Hallucination & Grounding`,title:`What if retrieval returns nothing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`259-what-should-llm-do-when-evidence-is-insufficient`,category:`Hallucination & Grounding`,title:`What should the LLM do when evidence is insufficient?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`260-how-to-enforce-i-dont-know-behavior`,category:`Hallucination & Grounding`,title:`How do you enforce “I don't know” behavior?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`261-how-to-validate-factuality`,category:`Hallucination & Grounding`,title:`How do you validate factuality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`262-what-metrics-measure-hallucination`,category:`Hallucination & Grounding`,title:`What metrics measure hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`263-what-is-faithfulness`,category:`Hallucination & Grounding`,title:`What is faithfulness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`264-what-is-groundedness`,category:`Hallucination & Grounding`,title:`What is groundedness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`265-how-to-implement-citation-generation`,category:`Hallucination & Grounding`,title:`How do you implement citation generation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`266-how-to-detect-unsupported-claims`,category:`Hallucination & Grounding`,title:`How do you detect unsupported claims?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``}];function Np(){return(0,M.jsx)($,{data:Mp,title:`CWD Hallucination & Grounding Cookbook`,subtitle:`Grounding, faithfulness, citations and unsupported-claim detection`,icon:`🔍`,patternLabel:`Questions`})}var Pp=[{id:`267-how-do-you-evaluate-your-cwd-system`,category:`LLM Evaluation`,title:`How do you evaluate your CWD system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`268-what-is-offline-evaluation`,category:`LLM Evaluation`,title:`What is offline evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`269-what-is-online-evaluation`,category:`LLM Evaluation`,title:`What is online evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`270-what-is-a-golden-dataset`,category:`LLM Evaluation`,title:`What is a golden dataset?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`271-how-to-create-golden-test-cases`,category:`LLM Evaluation`,title:`How do you create golden test cases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`272-what-metrics-do-you-track`,category:`LLM Evaluation`,title:`What metrics do you track?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`273-retrieval-relevance`,category:`LLM Evaluation`,title:`Retrieval relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`274-context-precision`,category:`LLM Evaluation`,title:`Context precision?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`275-context-recall`,category:`LLM Evaluation`,title:`Context recall?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`276-faithfulness`,category:`LLM Evaluation`,title:`Faithfulness?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`277-answer-relevance`,category:`LLM Evaluation`,title:`Answer relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`278-tool-call-accuracy`,category:`LLM Evaluation`,title:`Tool-call accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`279-agent-routing-accuracy`,category:`LLM Evaluation`,title:`Agent routing accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`280-task-completion-rate`,category:`LLM Evaluation`,title:`Task completion rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`281-hallucination-rate`,category:`LLM Evaluation`,title:`Hallucination rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`282-latency`,category:`LLM Evaluation`,title:`Latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`283-cost-per-request`,category:`LLM Evaluation`,title:`Cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`284-how-to-evaluate-agent-trajectories`,category:`LLM Evaluation`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`285-how-to-evaluate-tool-selection`,category:`LLM Evaluation`,title:`How do you evaluate tool selection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`286-how-to-evaluate-final-answers`,category:`LLM Evaluation`,title:`How do you evaluate final answers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`287-how-to-perform-regression-testing`,category:`LLM Evaluation`,title:`How do you perform regression testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`288-what-happens-when-a-new-prompt-reduces-accuracy`,category:`LLM Evaluation`,title:`What happens when a new prompt reduces accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`289-how-to-compare-two-llm-versions`,category:`LLM Evaluation`,title:`How do you compare two LLM versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`290-how-to-implement-llm-evaluation-in-ci-cd`,category:`LLM Evaluation`,title:`How do you implement LLM evaluation in CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`291-what-is-your-production-evaluation-strategy`,category:`LLM Evaluation`,title:`What is your production evaluation strategy?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`292-how-human-evaluations-fit-into-the-system`,category:`LLM Evaluation`,title:`How do human evaluations fit into the system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``}];function Fp(){return(0,M.jsx)($,{data:Pp,title:`CWD LLM Evaluation Cookbook`,subtitle:`Offline and online evaluation, metrics, regression testing and CI/CD`,icon:`📊`,patternLabel:`Questions`})}var Ip=[{id:`293-how-is-cwd-authenticated`,category:`Security Architecture`,title:`How is CWD authenticated?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`294-how-is-authorization-implemented`,category:`Security Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`295-why-use-microsoft-entra-id`,category:`Security Architecture`,title:`Why use Microsoft Entra ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`296-what-is-managed-identity`,category:`Security Architecture`,title:`What is Managed Identity?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`297-managed-identity-vs-client-secret`,category:`Security Architecture`,title:`Managed Identity vs client secret?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`298-how-to-implement-rbac`,category:`Security Architecture`,title:`How do you implement RBAC?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`299-what-is-least-privilege`,category:`Security Architecture`,title:`What is least privilege?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`300-how-to-protect-enterprise-data`,category:`Security Architecture`,title:`How do you protect enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`301-how-to-protect-pii`,category:`Security Architecture`,title:`How do you protect PII?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`302-how-to-implement-dlp`,category:`Security Architecture`,title:`How do you implement DLP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`303-how-to-secure-prompts`,category:`Security Architecture`,title:`How do you secure prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`304-how-to-prevent-prompt-injection`,category:`Security Architecture`,title:`How do you prevent prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`305-how-to-prevent-indirect-prompt-injection`,category:`Security Architecture`,title:`How do you prevent indirect prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`306-how-to-prevent-data-exfiltration`,category:`Security Architecture`,title:`How do you prevent data exfiltration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`307-how-to-prevent-unauthorized-tool-access`,category:`Security Architecture`,title:`How do you prevent unauthorized tool access?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`308-how-to-secure-mcp`,category:`Security Architecture`,title:`How do you secure MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`309-how-to-secure-a2a`,category:`Security Architecture`,title:`How do you secure A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`310-how-to-secure-apis`,category:`Security Architecture`,title:`How do you secure APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`311-how-to-protect-secrets`,category:`Security Architecture`,title:`How do you protect secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`312-why-use-key-vault`,category:`Security Architecture`,title:`Why use Key Vault?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`313-how-to-rotate-secrets`,category:`Security Architecture`,title:`How do you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`314-how-to-encrypt-data-at-rest`,category:`Security Architecture`,title:`How do you encrypt data at rest?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`315-how-to-encrypt-data-in-transit`,category:`Security Architecture`,title:`How do you encrypt data in transit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`316-what-is-your-network-architecture`,category:`Security Architecture`,title:`What is your network architecture?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`317-why-private-endpoints`,category:`Security Architecture`,title:`Why private endpoints?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`318-why-private-vnet`,category:`Security Architecture`,title:`Why private VNet?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`319-how-to-implement-tenant-isolation`,category:`Security Architecture`,title:`How do you implement tenant isolation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`320-how-to-implement-entitlement-first-security`,category:`Security Architecture`,title:`How do you implement entitlement-first security?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`321-what-if-user-asks-for-confidential-hr-information`,category:`Security Architecture`,title:`What happens if a user asks for confidential HR information?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`322-can-the-llm-decide-whether-the-user-has-permission`,category:`Security Architecture`,title:`Can the LLM decide whether the user has permission?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``}];function Lp(){return(0,M.jsx)($,{data:Ip,title:`CWD Security Architecture Cookbook`,subtitle:`Identity, access control, data protection, prompt injection and network security`,icon:`🔐`,patternLabel:`Questions`})}var Rp=[{id:`341-what-does-observability-mean-in-genai`,category:`Observability`,title:`What does observability mean in GenAI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`342-monitoring-vs-observability`,category:`Observability`,title:`Monitoring vs observability?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`343-what-do-you-monitor-in-cwd`,category:`Observability`,title:`What do you monitor in CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`344-what-are-your-key-metrics`,category:`Observability`,title:`What are your key metrics?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`345-how-to-trace-request-across-coordinator-delegator-worker`,category:`Observability`,title:`How do you trace a request across Coordinator → Delegator → Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`346-what-is-a-correlation-id`,category:`Observability`,title:`What is a correlation ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`347-what-is-distributed-tracing`,category:`Observability`,title:`What is distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`348-what-information-do-you-log`,category:`Observability`,title:`What information do you log?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`349-what-information-should-never-be-logged`,category:`Observability`,title:`What information should never be logged?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`350-how-to-trace-llm-calls`,category:`Observability`,title:`How do you trace LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`351-how-to-trace-mcp-calls`,category:`Observability`,title:`How do you trace MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`352-how-to-trace-a2a-calls`,category:`Observability`,title:`How do you trace A2A calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`353-how-to-identify-the-slowest-worker`,category:`Observability`,title:`How do you identify the slowest Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`354-how-to-identify-expensive-llm-calls`,category:`Observability`,title:`How do you identify expensive LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`355-how-to-identify-retrieval-failures`,category:`Observability`,title:`How do you identify retrieval failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`356-how-to-detect-hallucination-increases`,category:`Observability`,title:`How do you detect hallucination increases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`357-how-to-monitor-token-consumption`,category:`Observability`,title:`How do you monitor token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`358-how-to-monitor-latency`,category:`Observability`,title:`How do you monitor latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`359-how-to-monitor-error-rates`,category:`Observability`,title:`How do you monitor error rates?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`360-what-tools-did-you-use`,category:`Observability`,title:`What tools did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`361-how-would-you-use-langfuse`,category:`Observability`,title:`How would you use Langfuse?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`362-how-would-you-use-cloudwatch`,category:`Observability`,title:`How would you use CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`363-how-would-you-use-azure-application-insights`,category:`Observability`,title:`How would you use Azure Application Insights?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`364-what-alerts-would-you-configure`,category:`Observability`,title:`What alerts would you configure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``}];function zp(){return(0,M.jsx)($,{data:Rp,title:`CWD Observability Cookbook`,subtitle:`Tracing, metrics, logging, alerting and GenAI monitoring`,icon:`📡`,patternLabel:`Questions`})}var Bp=[{id:`365-what-happens-if-the-coordinator-fails`,category:`Reliability & Failure Handling`,title:`What happens if the Coordinator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`366-what-happens-if-a-delegator-fails`,category:`Reliability & Failure Handling`,title:`What happens if a Delegator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`367-what-happens-if-worker-1-succeeds-and-worker-2-fails`,category:`Reliability & Failure Handling`,title:`What happens if Worker 1 succeeds and Worker 2 fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`368-what-happens-if-the-llm-times-out`,category:`Reliability & Failure Handling`,title:`What happens if the LLM times out?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`369-what-happens-if-salesforce-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if Salesforce is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`370-what-happens-if-servicenow-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if ServiceNow is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`371-what-happens-if-mcp-server-fails`,category:`Reliability & Failure Handling`,title:`What happens if MCP server fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`372-what-happens-if-the-database-fails`,category:`Reliability & Failure Handling`,title:`What happens if the database fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`373-what-happens-if-redis-fails`,category:`Reliability & Failure Handling`,title:`What happens if Redis fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`374-how-do-you-retry`,category:`Reliability & Failure Handling`,title:`How do you retry?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`375-how-many-retries`,category:`Reliability & Failure Handling`,title:`How many retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`376-what-is-exponential-backoff`,category:`Reliability & Failure Handling`,title:`What is exponential backoff?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`377-what-is-jitter`,category:`Reliability & Failure Handling`,title:`What is jitter?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`378-what-is-a-circuit-breaker`,category:`Reliability & Failure Handling`,title:`What is a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`379-where-would-you-implement-circuit-breakers`,category:`Reliability & Failure Handling`,title:`Where would you implement circuit breakers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`380-what-is-a-dead-letter-queue`,category:`Reliability & Failure Handling`,title:`What is a dead-letter queue?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`381-how-does-dlq-help-cwd`,category:`Reliability & Failure Handling`,title:`How does DLQ help CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`382-how-do-you-replay-failed-requests`,category:`Reliability & Failure Handling`,title:`How do you replay failed requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`383-how-do-you-guarantee-idempotency`,category:`Reliability & Failure Handling`,title:`How do you guarantee idempotency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`384-how-do-you-handle-duplicate-events`,category:`Reliability & Failure Handling`,title:`How do you handle duplicate events?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`385-how-do-you-handle-partial-completion`,category:`Reliability & Failure Handling`,title:`How do you handle partial completion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`386-how-do-you-implement-graceful-degradation`,category:`Reliability & Failure Handling`,title:`How do you implement graceful degradation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`387-how-do-you-implement-fallback`,category:`Reliability & Failure Handling`,title:`How do you implement fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`388-how-do-you-prevent-cascading-failures`,category:`Reliability & Failure Handling`,title:`How do you prevent cascading failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``}];function Vp(){return(0,M.jsx)($,{data:Bp,title:`CWD Reliability & Failure Handling Cookbook`,subtitle:`Failures, retries, circuit breakers, DLQs and graceful degradation`,icon:`♻️`,patternLabel:`Questions`})}var Hp=[{id:`389-how-many-concurrent-users-can-cwd-support`,category:`Scalability`,title:`How many concurrent users can CWD support?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`390-what-is-the-bottleneck`,category:`Scalability`,title:`What is the bottleneck?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`391-how-would-you-scale-coordinator`,category:`Scalability`,title:`How would you scale Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`392-how-would-you-scale-delegators`,category:`Scalability`,title:`How would you scale Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`393-how-would-you-scale-workers`,category:`Scalability`,title:`How would you scale Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`394-how-would-you-scale-mcp-servers`,category:`Scalability`,title:`How would you scale MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`395-how-would-you-scale-vector-search`,category:`Scalability`,title:`How would you scale vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`396-how-would-you-scale-llm-calls`,category:`Scalability`,title:`How would you scale LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`397-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`398-where-would-you-use-autoscaling`,category:`Scalability`,title:`Where would you use autoscaling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`399-how-would-you-implement-backpressure`,category:`Scalability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`400-how-would-you-implement-rate-limiting`,category:`Scalability`,title:`How would you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`401-how-would-you-prevent-one-customer-from-consuming-all-resources`,category:`Scalability`,title:`How would you prevent one customer from consuming all resources?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`402-how-would-you-implement-tenant-level-quotas`,category:`Scalability`,title:`How would you implement tenant-level quotas?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`403-how-would-you-design-multi-region`,category:`Scalability`,title:`How would you design multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`404-how-would-you-design-disaster-recovery`,category:`Scalability`,title:`How would you design disaster recovery?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`405-what-is-rto`,category:`Scalability`,title:`What is RTO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`406-what-is-rpo`,category:`Scalability`,title:`What is RPO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``}];function Up(){return(0,M.jsx)($,{data:Hp,title:`CWD Scalability Cookbook`,subtitle:`Scaling, backpressure, quotas, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wp=[{id:`407-what-is-the-end-to-end-latency`,category:`Performance & Optimization`,title:`What is the end-to-end latency?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`408-where-is-latency-introduced`,category:`Performance & Optimization`,title:`Where is latency introduced?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`409-how-do-you-reduce-llm-latency`,category:`Performance & Optimization`,title:`How do you reduce LLM latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`410-how-do-you-reduce-rag-latency`,category:`Performance & Optimization`,title:`How do you reduce RAG latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`411-how-do-you-reduce-tool-call-latency`,category:`Performance & Optimization`,title:`How do you reduce tool-call latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`412-how-do-you-parallelize-workers`,category:`Performance & Optimization`,title:`How do you parallelize Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`413-when-should-workers-execute-sequentially`,category:`Performance & Optimization`,title:`When should Workers execute sequentially?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`414-how-do-you-reduce-token-consumption`,category:`Performance & Optimization`,title:`How do you reduce token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`415-how-do-you-cache`,category:`Performance & Optimization`,title:`How do you cache?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`416-what-can-be-cached`,category:`Performance & Optimization`,title:`What can be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`417-what-should-not-be-cached`,category:`Performance & Optimization`,title:`What should not be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`418-how-do-you-implement-semantic-caching`,category:`Performance & Optimization`,title:`How do you implement semantic caching?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`419-how-do-you-reduce-unnecessary-llm-calls`,category:`Performance & Optimization`,title:`How do you reduce unnecessary LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`420-how-do-you-select-cheaper-models`,category:`Performance & Optimization`,title:`How do you select cheaper models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`421-how-do-you-optimize-prompt-size`,category:`Performance & Optimization`,title:`How do you optimize prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`422-how-do-you-optimize-embeddings`,category:`Performance & Optimization`,title:`How do you optimize embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`423-how-do-you-optimize-vector-search`,category:`Performance & Optimization`,title:`How do you optimize vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``}];function Gp(){return(0,M.jsx)($,{data:Wp,title:`CWD Performance & Optimization Cookbook`,subtitle:`Latency, caching, parallelism and token optimization`,icon:`⚡`,patternLabel:`Questions`})}var Kp=[{id:`424-what-is-the-biggest-cost-component`,category:`Cost Optimization`,title:`What is the biggest cost component?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`425-how-do-you-calculate-cost-per-request`,category:`Cost Optimization`,title:`How do you calculate cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`426-how-do-you-calculate-token-cost`,category:`Cost Optimization`,title:`How do you calculate token cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`427-how-do-you-reduce-llm-costs`,category:`Cost Optimization`,title:`How do you reduce LLM costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`428-how-do-you-reduce-embedding-costs`,category:`Cost Optimization`,title:`How do you reduce embedding costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`429-how-do-you-reduce-infrastructure-costs`,category:`Cost Optimization`,title:`How do you reduce infrastructure costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`430-how-would-you-implement-model-routing-based-on-cost`,category:`Cost Optimization`,title:`How would you implement model routing based on cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`431-when-would-you-use-a-smaller-model`,category:`Cost Optimization`,title:`When would you use a smaller model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`432-how-do-you-prevent-runaway-agent-loops`,category:`Cost Optimization`,title:`How do you prevent runaway agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`433-how-do-you-enforce-token-budgets`,category:`Cost Optimization`,title:`How do you enforce token budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`434-how-do-you-enforce-request-budgets`,category:`Cost Optimization`,title:`How do you enforce request budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`435-how-do-you-monitor-cost-by-tenant`,category:`Cost Optimization`,title:`How do you monitor cost by tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`436-how-do-you-monitor-cost-by-agent`,category:`Cost Optimization`,title:`How do you monitor cost by agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`437-how-do-you-monitor-cost-by-worker`,category:`Cost Optimization`,title:`How do you monitor cost by Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``}];function qp(){return(0,M.jsx)($,{data:Kp,title:`CWD Cost Optimization Cookbook`,subtitle:`Cost drivers, budgets, model routing and cost monitoring`,icon:`💰`,patternLabel:`Questions`})}var Jp=[{id:`438-what-data-does-cwd-store`,category:`Data Architecture`,title:`What data does CWD store?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`439-where-do-you-store-conversation-state`,category:`Data Architecture`,title:`Where do you store conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`440-where-do-you-store-workflow-state`,category:`Data Architecture`,title:`Where do you store workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`441-where-do-you-store-embeddings`,category:`Data Architecture`,title:`Where do you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`442-where-do-you-store-audit-logs`,category:`Data Architecture`,title:`Where do you store audit logs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`443-where-do-you-store-agent-metadata`,category:`Data Architecture`,title:`Where do you store agent metadata?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`444-where-do-you-store-prompts`,category:`Data Architecture`,title:`Where do you store prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`445-what-is-your-agent-registry`,category:`Data Architecture`,title:`What is your Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`446-what-is-your-prompt-registry`,category:`Data Architecture`,title:`What is your Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`447-how-do-you-version-prompts`,category:`Data Architecture`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`448-how-do-you-version-agents`,category:`Data Architecture`,title:`How do you version agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`449-how-do-you-handle-schema-changes`,category:`Data Architecture`,title:`How do you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`450-how-long-do-you-retain-conversations`,category:`Data Architecture`,title:`How long do you retain conversations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`451-how-do-you-implement-data-deletion`,category:`Data Architecture`,title:`How do you implement data deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`452-how-do-you-handle-gdpr-style-deletion-requirements`,category:`Data Architecture`,title:`How do you handle GDPR-style deletion requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`453-how-do-you-protect-sensitive-data`,category:`Data Architecture`,title:`How do you protect sensitive data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``}];function Yp(){return(0,M.jsx)($,{data:Jp,title:`CWD Data Architecture Cookbook`,subtitle:`State, registries, versioning, retention and data deletion`,icon:`🗄️`,patternLabel:`Questions`})}var Xp=[{id:`454-how-does-cwd-integrate-with-salesforce`,category:`Enterprise Integration`,title:`How does CWD integrate with Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`455-how-does-cwd-integrate-with-servicenow`,category:`Enterprise Integration`,title:`How does CWD integrate with ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`456-how-does-cwd-integrate-with-sharepoint`,category:`Enterprise Integration`,title:`How does CWD integrate with SharePoint?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`457-how-does-cwd-integrate-with-snowflake`,category:`Enterprise Integration`,title:`How does CWD integrate with Snowflake?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`458-how-does-cwd-integrate-with-oracle`,category:`Enterprise Integration`,title:`How does CWD integrate with Oracle?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`459-why-use-mcp-instead-of-directly-embedding-api-integrations-into-workers`,category:`Enterprise Integration`,title:`Why use MCP instead of directly embedding API integrations into Workers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`460-how-do-you-handle-authentication-to-each-enterprise-system`,category:`Enterprise Integration`,title:`How do you handle authentication to each enterprise system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`461-how-do-you-handle-api-rate-limits`,category:`Enterprise Integration`,title:`How do you handle API rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`462-how-do-you-handle-api-version-changes`,category:`Enterprise Integration`,title:`How do you handle API version changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`463-how-do-you-handle-downstream-outages`,category:`Enterprise Integration`,title:`How do you handle downstream outages?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`464-how-do-you-transform-external-responses-into-a-common-format`,category:`Enterprise Integration`,title:`How do you transform external responses into a common format?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`465-how-do-you-validate-external-data`,category:`Enterprise Integration`,title:`How do you validate external data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`466-how-do-you-handle-inconsistent-enterprise-data`,category:`Enterprise Integration`,title:`How do you handle inconsistent enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``}];function Zp(){return(0,M.jsx)($,{data:Xp,title:`CWD Enterprise Integration Cookbook`,subtitle:`Salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration`,icon:`🔗`,patternLabel:`Questions`})}var Qp=[{id:`467-why-fastapi`,category:`API & Backend Architecture`,title:`Why FastAPI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`468-why-not-flask`,category:`API & Backend Architecture`,title:`Why not Flask?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`469-what-apis-does-cwd-expose`,category:`API & Backend Architecture`,title:`What APIs does CWD expose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`470-how-is-authentication-implemented`,category:`API & Backend Architecture`,title:`How is authentication implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`471-how-is-authorization-implemented`,category:`API & Backend Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`472-how-do-you-validate-api-requests`,category:`API & Backend Architecture`,title:`How do you validate API requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`473-how-do-you-handle-api-versioning`,category:`API & Backend Architecture`,title:`How do you handle API versioning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`474-how-do-you-implement-rate-limiting`,category:`API & Backend Architecture`,title:`How do you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`475-how-do-you-implement-request-ids`,category:`API & Backend Architecture`,title:`How do you implement request IDs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`476-how-do-you-handle-asynchronous-apis`,category:`API & Backend Architecture`,title:`How do you handle asynchronous APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`477-how-do-you-handle-long-running-agent-workflows`,category:`API & Backend Architecture`,title:`How do you handle long-running agent workflows?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`478-why-might-you-return-202-accepted`,category:`API & Backend Architecture`,title:`Why might you return 202 Accepted?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`479-how-does-the-client-retrieve-workflow-status`,category:`API & Backend Architecture`,title:`How does the client retrieve workflow status?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`480-how-do-you-secure-api-endpoints`,category:`API & Backend Architecture`,title:`How do you secure API endpoints?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``}];function $p(){return(0,M.jsx)($,{data:Qp,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var em=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`482-explain-your-ci-cd-pipeline`,category:`Production Deployment / DevOps`,title:`Explain your CI/CD pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`483-how-do-you-deploy-prompts`,category:`Production Deployment / DevOps`,title:`How do you deploy prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`484-how-do-you-deploy-agents`,category:`Production Deployment / DevOps`,title:`How do you deploy agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`485-how-do-you-deploy-mcp-servers`,category:`Production Deployment / DevOps`,title:`How do you deploy MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`486-how-do-you-version-models`,category:`Production Deployment / DevOps`,title:`How do you version models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`487-how-do-you-version-prompts`,category:`Production Deployment / DevOps`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`488-how-do-you-perform-blue-green-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`489-how-do-you-perform-canary-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`490-how-do-you-roll-back-a-bad-prompt`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`491-how-do-you-roll-back-a-bad-model`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`492-how-do-you-test-before-production`,category:`Production Deployment / DevOps`,title:`How do you test before production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`493-what-are-your-quality-gates`,category:`Production Deployment / DevOps`,title:`What are your quality gates?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`494-how-do-you-integrate-llm-evaluation-into-ci-cd`,category:`Production Deployment / DevOps`,title:`How do you integrate LLM evaluation into CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`495-how-do-you-prevent-a-bad-prompt-from-reaching-production`,category:`Production Deployment / DevOps`,title:`How do you prevent a bad prompt from reaching production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`496-how-do-you-manage-environment-specific-configuration`,category:`Production Deployment / DevOps`,title:`How do you manage environment-specific configuration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``}];function tm(){return(0,M.jsx)($,{data:em,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var nm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function rm(){return(0,M.jsx)($,{data:nm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var im=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function am(){return(0,M.jsx)($,{data:im,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var om=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function sm(){return(0,M.jsx)($,{data:om,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var cm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function lm(){return(0,M.jsx)($,{data:cm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var um=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function dm(){return(0,M.jsx)($,{data:um,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var fm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function pm(){return(0,M.jsx)($,{data:fm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var mm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`004-why-did-you-choose-api-gateway`,category:`AWS Architecture`,title:`Why did you choose API Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`005-why-did-you-choose-lambda`,category:`AWS Architecture`,title:`Why did you choose Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`006-why-would-you-choose-ecs-fargate-instead-of-lambda`,category:`AWS Architecture`,title:`Why would you choose ECS/Fargate instead of Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`007-when-would-you-choose-eks`,category:`AWS Architecture`,title:`When would you choose EKS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`008-where-would-you-use-step-functions`,category:`AWS Architecture`,title:`Where would you use Step Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`009-where-would-you-use-sqs`,category:`AWS Architecture`,title:`Where would you use SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`010-where-would-you-use-eventbridge`,category:`AWS Architecture`,title:`Where would you use EventBridge?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`011-where-would-you-use-dynamodb`,category:`AWS Architecture`,title:`Where would you use DynamoDB?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`012-where-would-you-use-elasticache-redis`,category:`AWS Architecture`,title:`Where would you use ElastiCache/Redis?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`013-where-would-you-use-opensearch-serverless`,category:`AWS Architecture`,title:`Where would you use OpenSearch Serverless?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`014-where-would-you-use-s3`,category:`AWS Architecture`,title:`Where would you use S3?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``}];function hm(){return(0,M.jsx)($,{data:mm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var gm=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`017-which-bedrock-models-would-you-use-for-cwd-and-why`,category:`Amazon Bedrock`,title:`Which Bedrock models would you use for CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`018-how-do-you-select-a-bedrock-model`,category:`Amazon Bedrock`,title:`How do you select a Bedrock model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`019-how-do-you-handle-bedrock-throttling`,category:`Amazon Bedrock`,title:`How do you handle Bedrock throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`020-how-do-you-handle-bedrock-timeout`,category:`Amazon Bedrock`,title:`How do you handle Bedrock timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`021-how-do-you-implement-retries-for-bedrock`,category:`Amazon Bedrock`,title:`How do you implement retries for Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`022-how-do-you-control-bedrock-token-usage`,category:`Amazon Bedrock`,title:`How do you control Bedrock token usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`023-how-do-you-reduce-bedrock-cost`,category:`Amazon Bedrock`,title:`How do you reduce Bedrock cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`024-how-do-you-monitor-bedrock-usage`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`025-how-do-you-monitor-bedrock-latency`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`026-how-do-you-implement-model-fallback`,category:`Amazon Bedrock`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`027-how-would-you-switch-from-one-bedrock-model-to-another`,category:`Amazon Bedrock`,title:`How would you switch from one Bedrock model to another?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`028-how-do-you-version-model-configurations`,category:`Amazon Bedrock`,title:`How do you version model configurations?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`029-how-do-you-handle-model-specific-context-limits`,category:`Amazon Bedrock`,title:`How do you handle model-specific context limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`030-how-would-you-evaluate-a-new-bedrock-model-before-production`,category:`Amazon Bedrock`,title:`How would you evaluate a new Bedrock model before production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function _m(){return(0,M.jsx)($,{data:gm,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var vm=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`034-how-do-you-authorize-users`,category:`API Gateway`,title:`How do you authorize users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`035-how-do-you-implement-throttling`,category:`API Gateway`,title:`How do you implement throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`037-how-do-you-handle-api-gateway-timeout`,category:`API Gateway`,title:`How do you handle API Gateway timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`038-how-do-you-configure-request-validation`,category:`API Gateway`,title:`How do you configure request validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`039-how-do-you-version-cwd-apis`,category:`API Gateway`,title:`How do you version CWD APIs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`040-how-do-you-implement-api-gateway-logging`,category:`API Gateway`,title:`How do you implement API Gateway logging?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`041-how-do-you-monitor-api-gateway`,category:`API Gateway`,title:`How do you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`042-how-do-you-handle-high-request-volume`,category:`API Gateway`,title:`How do you handle high request volume?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`043-how-would-you-integrate-api-gateway-with-lambda`,category:`API Gateway`,title:`How would you integrate API Gateway with Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`044-how-would-you-integrate-api-gateway-with-ecs`,category:`API Gateway`,title:`How would you integrate API Gateway with ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`045-how-do-you-implement-waf-with-api-gateway`,category:`API Gateway`,title:`How do you implement WAF with API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function ym(){return(0,M.jsx)($,{data:vm,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var bm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`047-which-cwd-components-would-you-deploy-as-lambda`,category:`Lambda`,title:`Which CWD components would you deploy as Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`050-how-would-you-reduce-lambda-cold-start-latency`,category:`Lambda`,title:`How would you reduce Lambda cold-start latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`051-how-does-lambda-concurrency-work`,category:`Lambda`,title:`How does Lambda concurrency work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`053-how-would-you-prevent-lambda-concurrency-exhaustion`,category:`Lambda`,title:`How would you prevent Lambda concurrency exhaustion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`054-how-do-you-handle-lambda-failures`,category:`Lambda`,title:`How do you handle Lambda failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`055-how-do-you-retry-lambda-execution`,category:`Lambda`,title:`How do you retry Lambda execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`057-how-do-you-monitor-lambda`,category:`Lambda`,title:`How do you monitor Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`059-how-do-you-securely-access-secrets-from-lambda`,category:`Lambda`,title:`How do you securely access secrets from Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`060-what-are-lambdas-limitations-for-agentic-workloads`,category:`Lambda`,title:`What are Lambda's limitations for agentic workloads?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``}];function xm(){return(0,M.jsx)($,{data:bm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Sm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`062-ecs-vs-lambda-for-workers`,category:`ECS / Fargate / EKS`,title:`ECS vs Lambda for Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`063-ecs-vs-eks`,category:`ECS / Fargate / EKS`,title:`ECS vs EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`065-how-would-you-containerize-delegators`,category:`ECS / Fargate / EKS`,title:`How would you containerize Delegators?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`066-how-would-you-containerize-workers`,category:`ECS / Fargate / EKS`,title:`How would you containerize Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`068-how-do-you-implement-health-checks`,category:`ECS / Fargate / EKS`,title:`How do you implement health checks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`069-how-do-you-perform-zero-downtime-deployment`,category:`ECS / Fargate / EKS`,title:`How do you perform zero-downtime deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`070-how-do-you-handle-container-failures`,category:`ECS / Fargate / EKS`,title:`How do you handle container failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`071-how-do-you-distribute-traffic-across-containers`,category:`ECS / Fargate / EKS`,title:`How do you distribute traffic across containers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`072-how-would-you-implement-service-discovery`,category:`ECS / Fargate / EKS`,title:`How would you implement service discovery?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`073-how-would-you-configure-ecs-networking`,category:`ECS / Fargate / EKS`,title:`How would you configure ECS networking?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`074-how-would-you-secure-ecs-tasks`,category:`ECS / Fargate / EKS`,title:`How would you secure ECS tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`075-when-would-you-move-from-ecs-to-eks`,category:`ECS / Fargate / EKS`,title:`When would you move from ECS to EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Cm(){return(0,M.jsx)($,{data:Sm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var wm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`077-why-sqs-instead-of-synchronous-api-calls`,category:`SQS & Asynchronous Processing`,title:`Why SQS instead of synchronous API calls?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`079-how-would-you-process-worker-jobs-asynchronously`,category:`SQS & Asynchronous Processing`,title:`How would you process Worker jobs asynchronously?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`080-how-do-you-handle-message-duplication`,category:`SQS & Asynchronous Processing`,title:`How do you handle message duplication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`081-how-do-you-implement-idempotency`,category:`SQS & Asynchronous Processing`,title:`How do you implement idempotency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`083-how-do-you-configure-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`How do you configure visibility timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`084-what-happens-when-message-processing-fails`,category:`SQS & Asynchronous Processing`,title:`What happens when message processing fails?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`086-how-would-you-replay-failed-cwd-requests`,category:`SQS & Asynchronous Processing`,title:`How would you replay failed CWD requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`087-how-do-you-monitor-queue-depth`,category:`SQS & Asynchronous Processing`,title:`How do you monitor queue depth?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`089-how-does-sqs-help-cwd-scalability`,category:`SQS & Asynchronous Processing`,title:`How does SQS help CWD scalability?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`090-how-would-you-handle-a-sudden-100x-traffic-spike`,category:`SQS & Asynchronous Processing`,title:`How would you handle a sudden 100× traffic spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Tm(){return(0,M.jsx)($,{data:wm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Em=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`093-how-would-you-model-worker-dependencies-using-step-functions`,category:`Step Functions`,title:`How would you model Worker dependencies using Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`094-how-would-you-execute-workers-in-parallel`,category:`Step Functions`,title:`How would you execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`097-how-would-you-implement-timeout`,category:`Step Functions`,title:`How would you implement timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`098-how-would-you-resume-a-workflow`,category:`Step Functions`,title:`How would you resume a workflow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`099-how-would-you-handle-long-running-workflows`,category:`Step Functions`,title:`How would you handle long-running workflows?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`104-how-would-you-monitor-step-functions`,category:`Step Functions`,title:`How would you monitor Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`105-how-would-you-control-step-functions-cost`,category:`Step Functions`,title:`How would you control Step Functions cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Dm(){return(0,M.jsx)($,{data:Em,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var Om=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`107-what-cwd-data-would-you-store-in-dynamodb`,category:`DynamoDB`,title:`What CWD data would you store in DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`108-how-would-you-design-the-dynamodb-partition-key`,category:`DynamoDB`,title:`How would you design the DynamoDB partition key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`110-how-would-you-store-session-task-run-information`,category:`DynamoDB`,title:`How would you store session/task/run information?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`112-how-does-dynamodb-scale`,category:`DynamoDB`,title:`How does DynamoDB scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`117-how-would-you-implement-idempotency-using-dynamodb`,category:`DynamoDB`,title:`How would you implement idempotency using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`118-how-would-you-recover-from-a-failed-workflow-using-dynamodb`,category:`DynamoDB`,title:`How would you recover from a failed workflow using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function km(){return(0,M.jsx)($,{data:Om,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var Am=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`122-how-would-you-design-the-cwd-document-ingestion-pipeline`,category:`S3`,title:`How would you design the CWD document ingestion pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`129-how-would-you-encrypt-s3-data`,category:`S3`,title:`How would you encrypt S3 data?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`131-how-would-you-trigger-processing-when-a-document-arrives-in-s3`,category:`S3`,title:`How would you trigger processing when a document arrives in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function jm(){return(0,M.jsx)($,{data:Am,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Mm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`138-how-would-you-create-embeddings-using-aws`,category:`OpenSearch`,title:`How would you create embeddings using AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`139-how-would-you-implement-metadata-filtering`,category:`OpenSearch`,title:`How would you implement metadata filtering?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`140-how-would-you-implement-document-level-security`,category:`OpenSearch`,title:`How would you implement document-level security?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`141-how-does-opensearch-scale`,category:`OpenSearch`,title:`How does OpenSearch scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`145-how-would-you-monitor-opensearch`,category:`OpenSearch`,title:`How would you monitor OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`146-how-would-you-troubleshoot-slow-retrieval`,category:`OpenSearch`,title:`How would you troubleshoot slow retrieval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`147-how-would-you-optimize-opensearch-cost`,category:`OpenSearch`,title:`How would you optimize OpenSearch cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Nm(){return(0,M.jsx)($,{data:Mm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Pm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Fm(){return(0,M.jsx)($,{data:Pm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Im=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`166-how-would-you-encrypt-application-secrets`,category:`KMS & Secrets Manager`,title:`How would you encrypt application secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Lm(){return(0,M.jsx)($,{data:Im,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var Rm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function zm(){return(0,M.jsx)($,{data:Rm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Bm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Vm(){return(0,M.jsx)($,{data:Bm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Hm=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`204-how-would-you-scale-lambda`,category:`Scalability & High Availability`,title:`How would you scale Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`205-how-would-you-scale-ecs`,category:`Scalability & High Availability`,title:`How would you scale ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Um(){return(0,M.jsx)($,{data:Hm,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Gm(){return(0,M.jsx)($,{data:Wm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var Km=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function qm(){return(0,M.jsx)($,{data:Km,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Jm=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Ym(){return(0,M.jsx)($,{data:Jm,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Xm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Zm(){return(0,M.jsx)($,{data:Xm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var Qm=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete Azure architecture for CWD.
 
 ## Short answer
 CWD on Azure is a layered, private, identity-based architecture: edge and API, orchestration, agents and tools, AI and data services, state and messaging, and a platform layer for security, observability and DevOps.
