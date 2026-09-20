@@ -61197,988 +61197,1678 @@ Say:\r
 ### One line to memorize\r
 \r
 **“Validate before execution, validate Worker outputs at the Delegator boundary, validate the aggregated context at the Coordinator, and evaluate the final LLM response for grounding.”**\r
-`,mp=`In **CWD**, if one Worker fails, we **do not automatically fail the entire request**. The behavior depends on whether that Worker is independent or a dependency for other Workers.\r
+`,mp=`### What happens if one Worker fails?\r
 \r
-### Example\r
+The Delegator first identifies whether the failure is retryable or non-retryable. For a transient failure, such as a timeout, we retry with exponential backoff. If it still fails, we can use a fallback or mark that Worker as failed and continue if the task is not mandatory. The failure is recorded for observability and passed to the Coordinator. " can you explain in depth "\r
 \r
-Suppose the **Sales Delegator** has 3 Workers:\r
+\r
+### Example scenario\r
+\r
+Suppose the **Sales Delegator** has three Workers:\r
 \r
 \`\`\`text\r
 Sales Delegator\r
-   ├── W1: Salesforce Customer Profile\r
-   ├── W2: Salesforce Opportunities\r
-   └── W3: Salesforce Orders\r
+   ├── Customer Profile Worker → Salesforce\r
+   ├── Support History Worker  → ServiceNow\r
+   └── Contract Worker         → Contract DB\r
 \`\`\`\r
 \r
-The user asks:\r
+User asks:\r
 \r
-> “Give me a complete customer briefing for customer 12345.”\r
+> "Prepare a customer briefing for customer C123."\r
 \r
-All three Workers need the same \`customer_id\`, so they can execute in parallel.\r
-\r
-If:\r
+The Delegator executes:\r
 \r
 \`\`\`text\r
-W1 → SUCCESS\r
-W2 → SUCCESS\r
-W3 → TIMEOUT\r
+Customer Profile Worker  → SUCCESS\r
+Support History Worker   → TIMEOUT ❌\r
+Contract Worker          → SUCCESS\r
 \`\`\`\r
 \r
-CWD handles it like this:\r
+Now the failure-handling flow looks like this:\r
 \r
 \`\`\`text\r
-                 Sales Delegator\r
-                       |\r
-             ┌─────────┼─────────┐\r
-             ↓         ↓         ↓\r
-            W1        W2        W3\r
-          SUCCESS   SUCCESS    FAILED\r
-             |         |         |\r
-             └─────────┼─────────┘\r
-                       ↓\r
-              Validate Results\r
-                       ↓\r
-             Partial Domain Result\r
-                       ↓\r
-                 Coordinator\r
-                       ↓\r
-             Final Validation\r
-                       ↓\r
-              LLM Synthesis\r
+                Coordinator\r
+                     │\r
+                     ▼\r
+              Sales Delegator\r
+               /      |       \\\r
+              ▼       ▼        ▼\r
+          Profile   Support   Contract\r
+           Worker    Worker     Worker\r
+             │         │          │\r
+          SUCCESS   TIMEOUT     SUCCESS\r
+                       │\r
+                       ▼\r
+                Error Handler\r
+                       │\r
+                classify error\r
+                       │\r
+             ┌─────────┴─────────┐\r
+             │                   │\r
+          Retryable          Non-Retryable\r
+             │                   │\r
+       Retry + backoff      Fallback / Fail\r
+             │\r
+          Success?\r
+          /     \\\r
+        Yes      No\r
+         │        │\r
+         ▼        ▼\r
+      Result    FAILED\r
+                   │\r
+                   ▼\r
+              Delegator\r
+                   │\r
+                   ▼\r
+              Coordinator\r
 \`\`\`\r
 \r
-### 1. Worker reports a structured failure\r
+## 1. First, the Worker detects the failure\r
 \r
-The Worker should not simply return:\r
+The Worker is responsible for calling its underlying tool/API.\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+result = await salesforce_tool.get_customer(customer_id)\r
+\`\`\`\r
+\r
+Suppose Salesforce responds within 2 seconds:\r
 \r
 \`\`\`text\r
-"Something went wrong"\r
+200 OK\r
 \`\`\`\r
 \r
-It returns something structured:\r
+No problem.\r
 \r
-\`\`\`json\r
+But suppose ServiceNow doesn't respond:\r
+\r
+\`\`\`text\r
+Timeout after 10 seconds\r
+\`\`\`\r
+\r
+The Worker should **not simply crash the entire workflow**.\r
+\r
+Instead, it returns a structured error:\r
+\r
+\`\`\`python\r
 {\r
-  "worker_id": "salesforce_order_worker",\r
-  "status": "FAILED",\r
-  "error_type": "TIMEOUT",\r
-  "retryable": true,\r
-  "source": "Salesforce",\r
-  "execution_id": "exec-123",\r
-  "correlation_id": "corr-456"\r
+    "worker": "support_history_worker",\r
+    "status": "FAILED",\r
+    "error_type": "TIMEOUT",\r
+    "retryable": True,\r
+    "message": "ServiceNow API timeout",\r
+    "correlation_id": "run-123"\r
 }\r
 \`\`\`\r
 \r
-This allows the orchestration layer to understand **what failed and whether it can retry**.\r
+This structured result is important because the Delegator needs to make a decision.\r
 \r
 ---\r
 \r
-### 2. Delegator determines whether to retry\r
+# 2. Delegator classifies the failure\r
 \r
-For a temporary failure:\r
+The Delegator's error-handling logic determines:\r
+\r
+> "Is this failure temporary, or is retrying useless?"\r
+\r
+There are generally two categories.\r
+\r
+### Retryable failures\r
+\r
+Examples:\r
 \r
 \`\`\`text\r
 Timeout\r
-429 rate limit\r
-Temporary 5xx\r
-Network failure\r
+Connection reset\r
+HTTP 429\r
+Temporary network error\r
+HTTP 502\r
+HTTP 503\r
+Transient database connection failure\r
 \`\`\`\r
 \r
-the Delegator can retry with exponential backoff:\r
+These may succeed if we try again.\r
+\r
+### Non-retryable failures\r
+\r
+Examples:\r
 \r
 \`\`\`text\r
-Attempt 1 → failed\r
-     ↓\r
-wait 1 sec\r
-     ↓\r
-Attempt 2 → failed\r
-     ↓\r
-wait 2 sec\r
-     ↓\r
-Attempt 3 → SUCCESS\r
+Invalid customer_id\r
+Authentication failure\r
+Authorization denied\r
+Malformed request\r
+Required data does not exist\r
+Business validation failure\r
+Unsupported operation\r
 \`\`\`\r
 \r
-But for something like:\r
+Retrying these usually won't solve the problem.\r
+\r
+For example:\r
 \r
 \`\`\`text\r
-Invalid customer ID\r
-Unauthorized\r
-Forbidden\r
-Invalid request\r
+customer_id = ABC999\r
 \`\`\`\r
 \r
-we normally **don't blindly retry**.\r
+If the customer doesn't exist, making the same API call five times doesn't help.\r
 \r
 ---\r
 \r
-### 3. What if retry also fails?\r
+# 3. Retryable failure → exponential backoff\r
+\r
+Suppose the Support History Worker receives:\r
+\r
+\`\`\`text\r
+HTTP 503 Service Unavailable\r
+\`\`\`\r
+\r
+The Delegator classifies it as retryable.\r
+\r
+Instead of immediately calling ServiceNow repeatedly:\r
+\r
+\`\`\`text\r
+Attempt 1 → fail\r
+Attempt 2 → fail\r
+Attempt 3 → fail\r
+Attempt 4 → fail\r
+\`\`\`\r
+\r
+we use **exponential backoff**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Attempt 1 → immediate\r
+Attempt 2 → wait 1 second\r
+Attempt 3 → wait 2 seconds\r
+Attempt 4 → wait 4 seconds\r
+\`\`\`\r
+\r
+Usually we also add **jitter** so that many workers don't retry at exactly the same time.\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+delay = min(\r
+    base_delay * (2 ** retry_count),\r
+    max_delay\r
+)\r
+\`\`\`\r
+\r
+With jitter:\r
+\r
+\`\`\`python\r
+delay = exponential_delay + random_jitter\r
+\`\`\`\r
+\r
+This protects downstream systems from a **retry storm**.\r
+\r
+---\r
+\r
+# 4. What if retry succeeds?\r
 \r
 Suppose:\r
 \r
 \`\`\`text\r
-W1 → SUCCESS\r
-W2 → SUCCESS\r
-W3 → FAILED after retries\r
+Attempt 1 → Timeout\r
+Attempt 2 → Timeout\r
+Attempt 3 → SUCCESS\r
 \`\`\`\r
 \r
-The Delegator marks W3 as failed and returns a **partial domain result**.\r
-\r
-Important:\r
-\r
-> **Failure is not treated as “no data.”**\r
-\r
-For example, we should NOT tell the LLM:\r
-\r
-\`\`\`text\r
-orders = []\r
-\`\`\`\r
-\r
-because that could mean:\r
-\r
-> “The customer has no orders.”\r
-\r
-Instead:\r
+Then the Worker returns:\r
 \r
 \`\`\`json\r
 {\r
-  "customer": {...},\r
-  "opportunities": [...],\r
-  "orders": {\r
-    "status": "UNAVAILABLE",\r
-    "reason": "Salesforce order worker failed"\r
+  "worker": "support_history_worker",\r
+  "status": "SUCCESS",\r
+  "attempt": 3,\r
+  "data": {\r
+    "open_cases": 2,\r
+    "resolved_cases": 17\r
   }\r
 }\r
 \`\`\`\r
 \r
-This prevents the LLM from hallucinating that there are no orders.\r
+The Delegator now has:\r
+\r
+\`\`\`text\r
+Profile Worker   → SUCCESS\r
+Support Worker   → SUCCESS\r
+Contract Worker  → SUCCESS\r
+\`\`\`\r
+\r
+So the Delegator aggregates these results and sends them to the Coordinator.\r
 \r
 ---\r
 \r
-## 4. What if another Worker depends on the failed Worker?\r
-\r
-This is more important.\r
+# 5. What if all retries fail?\r
 \r
 Suppose:\r
 \r
 \`\`\`text\r
-W1: Get Customer\r
-       ↓\r
-W2: Get Opportunities\r
-       ↓\r
-W3: Get Contracts\r
+Attempt 1 → Timeout\r
+Attempt 2 → Timeout\r
+Attempt 3 → Timeout\r
 \`\`\`\r
 \r
-If W2 fails:\r
+Now we don't retry forever.\r
+\r
+We have a configured retry policy:\r
 \r
 \`\`\`text\r
-W1 → SUCCESS\r
-W2 → FAILED\r
-W3 → BLOCKED\r
+max_retries = 3\r
 \`\`\`\r
 \r
-W3 should **not execute**, because it needs the opportunity IDs produced by W2.\r
-\r
-Notice the difference:\r
+After the maximum attempts:\r
 \r
 \`\`\`text\r
-W2 = FAILED\r
-W3 = BLOCKED\r
+Worker status = FAILED\r
 \`\`\`\r
 \r
-**Failed** means the Worker executed but couldn't complete.\r
+The Delegator then determines whether that Worker is **mandatory or optional**.\r
 \r
-**Blocked** means the Worker could not safely execute because a required dependency was unavailable.\r
+This is a very important part of your interview answer.\r
 \r
 ---\r
 \r
-## 5. LangGraph manages this state\r
+# 6. Mandatory vs optional Worker\r
 \r
-In our CWD architecture, LangGraph maintains the workflow state.\r
-\r
-For example:\r
-\r
-\`\`\`python\r
-state = {\r
-    "customer_id": "12345",\r
-    "worker_results": {},\r
-    "errors": [],\r
-    "blocked_workers": []\r
-}\r
-\`\`\`\r
-\r
-After W1:\r
-\r
-\`\`\`python\r
-state["worker_results"]["W1"] = {\r
-    "status": "SUCCESS",\r
-    "data": customer_data\r
-}\r
-\`\`\`\r
-\r
-After W2 failure:\r
-\r
-\`\`\`python\r
-state["worker_results"]["W2"] = {\r
-    "status": "FAILED",\r
-    "error": "Salesforce timeout",\r
-    "retryable": True\r
-}\r
-\`\`\`\r
-\r
-The graph then evaluates dependencies:\r
+Imagine your customer briefing requires:\r
 \r
 \`\`\`text\r
-W2 failed\r
-   ↓\r
-Does W3 require W2 output?\r
-   ↓\r
-YES\r
-   ↓\r
-W3 = BLOCKED\r
+Customer Profile → mandatory\r
+Contract Details → mandatory\r
+Support History  → optional\r
 \`\`\`\r
 \r
-LangGraph controls the transition rather than allowing W3 to run with incomplete inputs.\r
+If Support History fails:\r
 \r
----\r
+\`\`\`text\r
+Profile     → SUCCESS\r
+Contract    → SUCCESS\r
+Support     → FAILED\r
+\`\`\`\r
 \r
-## 6. Coordinator receives the partial result\r
+The Delegator can continue because Support History is optional.\r
 \r
-The Delegator sends something like:\r
+It might produce:\r
 \r
 \`\`\`json\r
 {\r
-  "delegator": "Sales",\r
-  "status": "PARTIAL",\r
-  "results": {\r
-    "customer": {...},\r
-    "opportunities": [...]\r
-  },\r
-  "failed_workers": [\r
-    {\r
-      "worker": "salesforce_order_worker",\r
-      "reason": "timeout"\r
-    }\r
+  "customer_profile": {...},\r
+  "contract": {...},\r
+  "support_history": null,\r
+  "warnings": [\r
+    "Support history unavailable"\r
   ]\r
 }\r
 \`\`\`\r
 \r
-The Coordinator combines this with results from other Delegators.\r
+But if the **Contract Worker** fails:\r
+\r
+\`\`\`text\r
+Contract Worker → FAILED\r
+\`\`\`\r
+\r
+and contract information is mandatory, the Delegator should not pretend that the briefing is complete.\r
+\r
+It could return:\r
+\r
+\`\`\`json\r
+{\r
+  "status": "PARTIAL_FAILURE",\r
+  "completed_workers": [\r
+    "customer_profile",\r
+    "support_history"\r
+  ],\r
+  "failed_workers": [\r
+    "contract"\r
+  ],\r
+  "blocking_failure": true\r
+}\r
+\`\`\`\r
+\r
+The Coordinator then decides what the final response should be.\r
+\r
+---\r
+\r
+# 7. What happens to the successful Workers?\r
+\r
+This is another important point.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+W1 → SUCCESS\r
+W2 → SUCCESS\r
+W3 → FAILED\r
+\`\`\`\r
+\r
+We **do not execute W1 and W2 again** just because W3 failed.\r
+\r
+Their results are persisted.\r
 \r
 For example:\r
 \r
 \`\`\`text\r
-Coordinator\r
-     |\r
-     ├── Sales Delegator\r
-     │      ├── Customer → SUCCESS\r
-     │      ├── Opportunity → SUCCESS\r
-     │      └── Orders → FAILED\r
-     │\r
-     └── Service Delegator\r
-            └── Incidents → SUCCESS\r
+Workflow State\r
+\r
+W1:\r
+status = SUCCESS\r
+result = Customer Profile\r
+\r
+W2:\r
+status = SUCCESS\r
+result = Support History\r
+\r
+W3:\r
+status = FAILED\r
+error = ServiceNow timeout\r
 \`\`\`\r
 \r
-The Coordinator can still produce a useful response.\r
+This is where **LangGraph state persistence/checkpointing** becomes important in your CWD architecture.\r
+\r
+The workflow knows:\r
+\r
+\`\`\`text\r
+W1 completed\r
+W2 completed\r
+W3 failed\r
+\`\`\`\r
+\r
+So if the workflow resumes, it can continue from W3 rather than restarting everything.\r
 \r
 ---\r
 \r
-## 7. Final response clearly communicates partial availability\r
+# 8. Where does LangGraph come into this?\r
 \r
-The LLM receives the **validated structured context**, including the failure information.\r
+In your CWD implementation, **LangGraph manages the workflow state and transitions**.\r
 \r
-It should generate something like:\r
-\r
-> Customer 12345 has three active opportunities and two recent ServiceNow incidents. Order information could not be retrieved because the Salesforce order service timed out.\r
-\r
-It should **not** say:\r
-\r
-> Customer 12345 has no orders.\r
-\r
-because we don't actually know that.\r
-\r
----\r
-\r
-# What if the Worker failure is critical?\r
-\r
-Some Workers may be marked as **mandatory**.\r
-\r
-For example:\r
+Conceptually:\r
 \r
 \`\`\`text\r
-Customer Identity Worker → mandatory\r
-Salesforce Opportunity Worker → optional\r
-Order Worker → optional\r
+START\r
+  ↓\r
+Delegator Planning\r
+  ↓\r
+Execute Workers\r
+  ↓\r
+Worker Result\r
+  ↓\r
+Evaluate Result\r
+  ├── SUCCESS → Continue\r
+  ├── RETRY   → Retry Worker\r
+  ├── FALLBACK → Execute fallback\r
+  └── FAILURE → Mark Failed\r
+  ↓\r
+Aggregate Results\r
+  ↓\r
+Coordinator Validation\r
+  ↓\r
+END\r
 \`\`\`\r
 \r
-If the mandatory Worker fails:\r
+You could have nodes such as:\r
 \r
 \`\`\`text\r
-Customer Identity Worker\r
-          ↓\r
-       FAILED\r
-          ↓\r
-Entire task cannot safely continue\r
+plan_workers\r
+      ↓\r
+execute_worker\r
+      ↓\r
+handle_worker_result\r
+      ↓\r
+retry_worker\r
+      ↓\r
+aggregate_results\r
 \`\`\`\r
 \r
-The Coordinator may stop the workflow and return:\r
-\r
-\`\`\`text\r
-REQUEST_FAILED\r
-reason = "Required customer identity data unavailable"\r
-\`\`\`\r
-\r
-Whereas an optional Worker failure results in:\r
-\r
-\`\`\`text\r
-PARTIAL_SUCCESS\r
-\`\`\`\r
-\r
-So CWD can distinguish:\r
-\r
-| Situation                   | Action                            |\r
-| --------------------------- | --------------------------------- |\r
-| Temporary timeout           | Retry                             |\r
-| 429 / rate limit            | Retry with backoff                |\r
-| Temporary 5xx               | Retry                             |\r
-| Invalid input               | Fail                              |\r
-| Authorization failure       | Fail/deny                         |\r
-| Optional Worker fails       | Continue with partial result      |\r
-| Required Worker fails       | Stop dependent workflow           |\r
-| Dependency Worker fails     | Downstream Worker becomes BLOCKED |\r
-| All required data available | Continue normally                 |\r
-\r
-### Interview answer\r
-\r
-> **“In CWD, a Worker failure doesn't automatically fail the entire request. The Worker returns a structured status containing the error type, retryability, source, and execution metadata. The Delegator retries transient failures such as timeouts, 429s, or temporary 5xx errors using backoff. If the Worker still fails, we check whether it is optional or a dependency for another Worker. Independent optional failures are represented as partial results, while downstream Workers that depend on the failed Worker are marked BLOCKED rather than executed with incomplete data. LangGraph maintains the execution state and allows the workflow to resume from the last successful checkpoint. The Delegator returns the partial domain result and failure metadata to the Coordinator, which performs final validation and decides whether to return a partial response or fail the overall request. Most importantly, we never interpret missing data as negative data.”**\r
-\r
-### The key architecture principle\r
-\r
-\`\`\`text\r
-Worker fails\r
-     ↓\r
-Classify failure\r
-     ↓\r
-Retry if retryable\r
-     ↓\r
-Still failing?\r
-     ↓\r
-Check dependencies\r
-     ├── Independent → continue\r
-     ├── Dependent → block downstream\r
-     └── Critical → fail workflow\r
-     ↓\r
-Persist state\r
-     ↓\r
-Coordinator aggregates successful + failed results\r
-     ↓\r
-Final response explicitly indicates unavailable data\r
-\`\`\`\r
-\r
-**Interview one-liner:**\r
-\r
-> “We use failure isolation, retries, dependency-aware blocking, checkpointed state, and partial-result handling so one Worker failure doesn't unnecessarily bring down the entire multi-agent workflow.”\r
-\r
-For **CWD Worker failure handling**, no single technology handles everything. Each layer has a specific responsibility.\r
-\r
-### CWD failure-handling tech stack\r
-\r
-| Responsibility              | Technology                                      | What it handles                                                        |\r
-| --------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |\r
-| **Workflow orchestration**  | **LangGraph**                                   | Worker states, transitions, dependencies, retries, conditional routing |\r
-| **Durable execution/state** | **LangGraph checkpointer + Redis/PostgreSQL**   | Saves workflow state so execution can resume                           |\r
-| **Retry / backoff**         | **LangGraph logic + application retry library** | Retries transient failures                                             |\r
-| **Async messaging**         | **Azure Service Bus**                           | Queuing, retries, DLQ, decoupling Workers                              |\r
-| **Dead-letter handling**    | **Azure Service Bus DLQ**                       | Stores messages that repeatedly fail                                   |\r
-| **Worker execution**        | **FastAPI + Python services**                   | Executes Worker business logic                                         |\r
-| **Tool integration**        | **MCP**                                         | Standardized access to Salesforce, ServiceNow, databases, APIs         |\r
-| **Authorization**           | **Microsoft Entra ID + RBAC/ACL**               | Prevents unauthorized Worker execution                                 |\r
-| **Timeout/circuit breaker** | **Python resilience logic / service layer**     | Prevents cascading failures                                            |\r
-| **Monitoring**              | **Azure App Insights + Log Analytics**          | Errors, latency, retries, traces                                       |\r
-| **Distributed tracing**     | **OpenTelemetry + App Insights**                | Tracks Coordinator → Delegator → Worker                                |\r
-| **Secrets**                 | **Azure Key Vault**                             | Credentials/API secrets                                                |\r
-| **Container runtime**       | **AKS / Azure Container Apps**                  | Runs Worker services                                                   |\r
-\r
-### The most important one: LangGraph\r
-\r
-For your interview, emphasize:\r
-\r
-\`\`\`text\r
-Coordinator\r
-     ↓\r
-Delegator\r
-     ↓\r
-LangGraph execution graph\r
-     ↓\r
-Worker 1 ──→ SUCCESS\r
-Worker 2 ──→ FAILED ──→ RETRY\r
-Worker 3 ──→ BLOCKED\r
-     ↓\r
-Persist State / Checkpoint\r
-     ↓\r
-Delegator\r
-     ↓\r
-Coordinator\r
-\`\`\`\r
-\r
-**LangGraph** handles the **workflow state and decision logic**:\r
+The graph's state might contain:\r
 \r
 \`\`\`python\r
-Worker 1 → success\r
-Worker 2 → retry\r
-Worker 2 → failed\r
-        ↓\r
-Does Worker 3 depend on Worker 2?\r
-        ↓\r
-      YES\r
-        ↓\r
-Worker 3 → BLOCKED\r
+class CWDState(TypedDict):\r
+    request_id: str\r
+    worker_results: dict\r
+    worker_status: dict\r
+    retry_count: dict\r
+    failures: list\r
+    errors: list\r
 \`\`\`\r
 \r
-### Where Azure Service Bus fits\r
+For example:\r
 \r
-Service Bus is more for **reliable asynchronous messaging**, especially when Workers are independently deployed:\r
-\r
-\`\`\`text\r
-Delegator\r
-   ↓\r
-Service Bus Queue\r
-   ↓\r
-Worker\r
-   ↓\r
-Success\r
-   │\r
-   └── Failure → Retry\r
-                    ↓\r
-              Max retries\r
-                    ↓\r
-                  DLQ\r
+\`\`\`python\r
+state["worker_status"] = {\r
+    "customer_profile": "SUCCESS",\r
+    "support_history": "FAILED",\r
+    "contract": "SUCCESS"\r
+}\r
 \`\`\`\r
 \r
-So don't say **“Service Bus handles Worker dependencies.”**\r
+---\r
 \r
-Instead:\r
+# 9. What if there is a fallback?\r
 \r
-> **LangGraph handles workflow dependencies and state; Service Bus provides reliable asynchronous messaging, retry delivery, and dead-letter handling.**\r
-\r
-### Where MCP fits\r
-\r
-MCP does **not** manage failure orchestration.\r
+Sometimes retry isn't enough.\r
 \r
 For example:\r
 \r
 \`\`\`text\r
-Salesforce Worker\r
-       ↓\r
-MCP Client\r
-       ↓\r
-MCP Server\r
-       ↓\r
-Salesforce API\r
+Primary:\r
+ServiceNow API\r
 \`\`\`\r
 \r
-If Salesforce times out:\r
+fails repeatedly.\r
+\r
+You might have:\r
 \r
 \`\`\`text\r
-MCP/tool call\r
-     ↓\r
-timeout\r
-     ↓\r
-Worker catches error\r
-     ↓\r
-LangGraph retry policy\r
-     ↓\r
-retry\r
+Fallback:\r
+ServiceNow cached data\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Primary database\r
+       ↓ failure\r
+Read replica\r
+       ↓ failure\r
+Cached result\r
 \`\`\`\r
 \r
 So:\r
 \r
-> **MCP standardizes tool access; LangGraph manages the workflow response to the failure.**\r
+\`\`\`text\r
+Support Worker\r
+      │\r
+      ▼\r
+ServiceNow\r
+      │\r
+   failure\r
+      ▼\r
+Retry\r
+      │\r
+   failure\r
+      ▼\r
+Fallback\r
+      │\r
+      ├── success → continue\r
+      │\r
+      └── failure → mark failed\r
+\`\`\`\r
 \r
-### Best interview summary\r
+However, the fallback must be **business-safe**. You shouldn't return stale or incomplete data as if it were current.\r
 \r
-> **“In our CWD architecture, LangGraph is the primary orchestration layer for Worker failure handling. It maintains execution state, models dependencies, controls conditional transitions, and supports retry/resume behavior. Service Bus is used for asynchronous decoupling and reliable message delivery, including retries and dead-letter queues. Workers are implemented as Python/FastAPI services, and MCP standardizes their access to enterprise systems such as Salesforce and ServiceNow. App Insights, Log Analytics, and OpenTelemetry provide observability and distributed tracing. So LangGraph handles workflow recovery, Service Bus handles messaging reliability, and the Worker/service layer handles the actual business and tool-level errors.”**\r
-`,hp=`## Why Agentic AI?\r
+---\r
 \r
-CWD adopts Agentic AI because enterprise business problems are not single-step question-and-answer problems. They are multi-step workflows that require reasoning, planning, data retrieval, tool execution, collaboration between specialized agents, and controlled decision-making.\r
+# 10. How does the Coordinator know there was a failure?\r
 \r
-Traditional GenAI is primarily focused on generating a response.\r
-\r
-Agentic AI extends this capability by enabling the system to:\r
-\r
-- Understand the business objective\r
-- Determine what needs to be done\r
-- Break the objective into tasks\r
-- Select the appropriate agent or capability\r
-- Retrieve required enterprise data\r
-- Execute tools and business operations\r
-- Evaluate intermediate results\r
-- Continue, retry, or redirect execution when required\r
-- Coordinate multiple specialized agents\r
-- Maintain context across the workflow\r
-- Escalate to humans when necessary\r
-- Produce a traceable business outcome\r
-\r
-This is the fundamental reason Agentic AI is the foundation of CWD.\r
-\r
-### 1. Enterprise Requests Are Multi-Step\r
-\r
-A typical enterprise request rarely belongs to a single system or capability.\r
+The Delegator sends a structured response.\r
 \r
 For example:\r
 \r
-> "Prepare a customer briefing for the upcoming customer meeting."\r
+\`\`\`json\r
+{\r
+  "delegator": "sales_delegator",\r
+  "status": "PARTIAL_SUCCESS",\r
 \r
-This may require:\r
+  "workers": {\r
+    "customer_profile": {\r
+      "status": "SUCCESS",\r
+      "data": {...}\r
+    },\r
 \r
-1. Identify the customer\r
-2. Retrieve customer information\r
-3. Retrieve sales opportunity information\r
-4. Retrieve recent interactions\r
-5. Retrieve relevant product information\r
-6. Search enterprise knowledge\r
-7. Analyze the information\r
-8. Generate the briefing\r
-9. Validate the output\r
-10. Return the final business artifact\r
+    "support_history": {\r
+      "status": "FAILED",\r
+      "error_type": "TIMEOUT",\r
+      "retry_count": 3\r
+    },\r
 \r
-A traditional chatbot can generate the response, but it does not naturally provide the enterprise execution model required to coordinate all these activities.\r
+    "contract": {\r
+      "status": "SUCCESS",\r
+      "data": {...}\r
+    }\r
+  },\r
 \r
-Agentic AI enables CWD to manage the complete workflow.\r
+  "warnings": [\r
+    "Support history could not be retrieved"\r
+  ]\r
+}\r
+\`\`\`\r
+\r
+The Coordinator then performs its own validation.\r
 \r
 ---\r
 \r
-### 2. Move From "Answer" to "Action"\r
+# 11. Coordinator validation is different from failure handling\r
 \r
-The evolution is:\r
+This distinction is important for interviews.\r
 \r
-**Traditional AI**\r
+### Worker\r
 \r
-\`\`\`text\r
-User\r
-  ↓\r
-Prompt\r
-  ↓\r
-LLM\r
-  ↓\r
-Answer\r
-\`\`\`\r
-\r
-**Agentic AI**\r
+Responsible for:\r
 \r
 \`\`\`text\r
-User\r
-  ↓\r
-Understand Objective\r
-  ↓\r
-Plan\r
-  ↓\r
-Select Capability\r
-  ↓\r
-Retrieve Context\r
-  ↓\r
-Execute Tools\r
-  ↓\r
-Evaluate Result\r
-  ↓\r
-Continue / Retry / Delegate\r
-  ↓\r
-Business Outcome\r
+Calling tool/API\r
+Processing response\r
+Returning worker result/error\r
 \`\`\`\r
 \r
-The important change is that the AI becomes capable of participating in the execution of the business process rather than only generating text.\r
+### Delegator\r
+\r
+Responsible for:\r
+\r
+\`\`\`text\r
+Worker execution\r
+Retry\r
+Backoff\r
+Failure classification\r
+Fallback\r
+Dependency management\r
+Partial execution\r
+Worker-level aggregation\r
+\`\`\`\r
+\r
+### Coordinator\r
+\r
+Responsible for:\r
+\r
+\`\`\`text\r
+Cross-delegator orchestration\r
+Final validation\r
+Result aggregation\r
+Business-level response\r
+User-facing response\r
+\`\`\`\r
+\r
+So don't say:\r
+\r
+> "The Coordinator retries the Worker."\r
+\r
+In your architecture, a better answer is:\r
+\r
+> **The Delegator owns Worker-level failure handling and retry policies, while the Coordinator handles workflow-level validation and aggregation.**\r
 \r
 ---\r
 \r
-### 3. Enable Multi-Agent Collaboration\r
+# 12. Observability\r
 \r
-Enterprise capabilities are naturally specialized.\r
+Every failure should be traceable.\r
 \r
 For example:\r
 \r
 \`\`\`text\r
-                    Coordinator\r
-                         |\r
-        +----------------+----------------+\r
-        |                |                |\r
-   Sales Agent       Finance Agent    Knowledge Agent\r
-        |                |                |\r
-    CRM Data        Financial Data    Enterprise RAG\r
+correlation_id = req-789\r
+run_id         = run-456\r
+delegator      = sales_delegator\r
+worker         = support_history_worker\r
+attempt        = 3\r
+tool           = ServiceNow\r
+error          = timeout\r
+latency        = 10.2 sec\r
 \`\`\`\r
 \r
-Each agent can specialize in a particular domain while CWD provides the coordination layer.\r
-\r
-This is why the **Coordinator–Delegator–Worker (CWD)** model is important.\r
+You can send this telemetry to:\r
 \r
 \`\`\`text\r
+Azure Application Insights\r
+Azure Log Analytics\r
+Langfuse\r
+\`\`\`\r
+\r
+For your AWS architecture, the equivalent monitoring stack could include:\r
+\r
+\`\`\`text\r
+CloudWatch\r
+X-Ray\r
+OpenTelemetry\r
+Langfuse\r
+\`\`\`\r
+\r
+This allows you to answer:\r
+\r
+> Which Worker failed?\r
+> Why did it fail?\r
+> How many times was it retried?\r
+> Which tool caused the failure?\r
+> How long did it take?\r
+> Did the workflow eventually recover?\r
+\r
+---\r
+\r
+# 13. Complete CWD example\r
+\r
+Imagine:\r
+\r
+\`\`\`text\r
+User\r
+ │\r
+ │ "Prepare customer briefing for C123"\r
+ ▼\r
 Coordinator\r
-     |\r
-     | decides\r
-     ↓\r
-Delegator\r
-     |\r
-     | decomposes / assigns\r
-     ↓\r
-Workers\r
-     |\r
-     | execute\r
-     ↓\r
-Enterprise Systems\r
+ │\r
+ ▼\r
+Sales Delegator\r
+ │\r
+ ├───────────────┬────────────────┐\r
+ ▼               ▼                ▼\r
+Profile        Support          Contract\r
+Worker         Worker            Worker\r
+ │               │                │\r
+ ▼               ▼                ▼\r
+Salesforce     ServiceNow       Contract DB\r
+SUCCESS        TIMEOUT          SUCCESS\r
+                 │\r
+                 ▼\r
+           Classify Failure\r
+                 │\r
+              RETRYABLE\r
+                 │\r
+                 ▼\r
+          Exponential Backoff\r
+                 │\r
+                 ▼\r
+              Retry #1\r
+                 │\r
+              TIMEOUT\r
+                 │\r
+                 ▼\r
+              Retry #2\r
+                 │\r
+              TIMEOUT\r
+                 │\r
+                 ▼\r
+              Retry #3\r
+                 │\r
+              TIMEOUT\r
+                 │\r
+                 ▼\r
+             Max Retries\r
+                 │\r
+                 ▼\r
+          Mark Worker FAILED\r
+                 │\r
+                 ▼\r
+       Is Worker Mandatory?\r
+             /          \\\r
+           No            Yes\r
+           │              │\r
+           ▼              ▼\r
+     Continue        Block workflow\r
+           │\r
+           ▼\r
+    Aggregate results\r
+           │\r
+           ▼\r
+       Coordinator\r
+           │\r
+           ▼\r
+     Validate results\r
+           │\r
+           ▼\r
+      Final response\r
 \`\`\`\r
 \r
-This allows domain expertise to remain decentralized while execution governance remains centralized.\r
+If Support History is optional, the final response might say:\r
 \r
-Modern enterprise-agent architectures similarly use orchestration to coordinate multiple agents, tools, systems, and workflows rather than allowing agents to operate independently.\r
+> Customer profile and contract information were retrieved successfully. Support history was temporarily unavailable after multiple attempts.\r
+\r
+That's much better than returning a fabricated support history or failing the entire customer briefing.\r
 \r
 ---\r
 \r
-### 4. Solve Cross-System Business Problems\r
+## Interview answer — 60 seconds\r
 \r
-Enterprise information is distributed across multiple platforms.\r
+If the interviewer asks **"What happens if one Worker fails?"**, I would answer:\r
 \r
-For CWD, a business workflow may need to interact with systems such as:\r
+> "In CWD, Worker-level failure handling is primarily managed by the Delegator. When a Worker fails, we first classify the error as retryable or non-retryable. For transient failures such as timeout, 429, or 503, we retry using exponential backoff with jitter and a maximum retry limit. If retries are exhausted, we can use a defined fallback or mark the Worker as failed. The Delegator also determines whether that Worker is mandatory or optional. If it is optional, the workflow can continue with a partial result and a warning; if it is mandatory, the workflow can be blocked or moved to a failure state. Successful Worker results are persisted, so we don't re-execute completed Workers unnecessarily. LangGraph manages the workflow state and checkpointing, while the failure details, retry count, correlation ID, latency, and error information are captured through our observability stack. Finally, the Delegator sends the structured result to the Coordinator, and the Coordinator performs final validation and aggregation before generating the response."\r
 \r
-* Salesforce\r
-* Snowflake\r
-* Oracle\r
-* SharePoint\r
-* Microsoft 365\r
-* Enterprise APIs\r
-* Knowledge repositories\r
-* Internal AI services\r
+### The key architecture sentence to remember\r
 \r
-The business user should not need to understand where the information resides.\r
+**Worker detects → Delegator classifies/retries/recoveries → LangGraph persists state → Delegator aggregates → Coordinator validates and produces the final result.**\r
 \r
-The user expresses the **business objective**.\r
+### What happens if two Workers succeed and one fails?\r
 \r
-CWD determines:\r
+CWD supports partial success. The Delegator collects the two successful results and records the failed Worker separately. If the failed Worker provides optional information, the workflow can continue and the final response clearly indicates that information was unavailable. If it is a mandatory dependency, the workflow can pause, retry, or fail gracefully.\r
 \r
-\`\`\`text\r
-What information is required?\r
-        ↓\r
-Which capability provides it?\r
-        ↓\r
-Which agent should execute it?\r
-        ↓\r
-Which tools can be used?\r
-        ↓\r
-What sequence should be followed?\r
-        ↓\r
-How should the results be combined?\r
-\`\`\`\r
+### How does CWD resume a partially completed workflow?\r
 \r
-This creates an **outcome-oriented AI experience** rather than a system-oriented experience.\r
+We persist the LangGraph workflow state/checkpoint after important execution steps. If a Worker fails, the completed results and current workflow state are already stored. After recovery, CWD resumes from the last successful checkpoint instead of starting the entire workflow again.\r
+`,hp=`### How do you maintain state?\r
+\r
+The easiest way to understand state is:\r
+\r
+> **State is the memory of what is happening in the current request/workflow.**\r
+\r
+Without state, CWD would not know **what the user asked, what Workers were selected, what already completed, what failed, what needs to run next, or what results have already been produced.**\r
 \r
 ---\r
 \r
-### 5. Reduce Manual Coordination\r
+# 1. First: What does "state" mean?\r
 \r
-Without Agentic AI:\r
+Imagine you ask CWD:\r
 \r
-\`\`\`text\r
-Employee\r
-   ↓\r
-Open CRM\r
-   ↓\r
-Search Customer\r
-   ↓\r
-Open Snowflake\r
-   ↓\r
-Find Data\r
-   ↓\r
-Search SharePoint\r
-   ↓\r
-Read Documents\r
-   ↓\r
-Analyze Information\r
-   ↓\r
-Create Report\r
-   ↓\r
-Send Report\r
-\`\`\`\r
+> **"Prepare a customer briefing for customer C123."**\r
 \r
-With CWD:\r
+CWD starts working.\r
+\r
+At the beginning, it might know:\r
 \r
 \`\`\`text\r
-Employee\r
-   ↓\r
-"Prepare the customer briefing"\r
-   ↓\r
-CWD\r
-   ↓\r
-Multiple Agents + Enterprise Systems\r
-   ↓\r
-Customer Briefing\r
+User request = customer briefing\r
+Customer ID = C123\r
 \`\`\`\r
 \r
-The objective is not to eliminate the employee.\r
+Then the Coordinator decides:\r
 \r
-The objective is to move the employee from **manually coordinating systems** to **managing business outcomes**.\r
+\`\`\`text\r
+Sales Delegator is required\r
+\`\`\`\r
+\r
+Then the Sales Delegator decides:\r
+\r
+\`\`\`text\r
+Customer Profile Worker\r
+Support History Worker\r
+Contract Worker\r
+\`\`\`\r
+\r
+Then execution starts:\r
+\r
+\`\`\`text\r
+Customer Profile → SUCCESS\r
+Support History  → SUCCESS\r
+Contract         → RUNNING\r
+\`\`\`\r
+\r
+Then Contract fails:\r
+\r
+\`\`\`text\r
+Contract → FAILED\r
+Retry → 1\r
+Retry → 2\r
+Retry → 3\r
+\`\`\`\r
+\r
+At this point, the system needs to **remember all of this information**.\r
+\r
+That information is the **state**.\r
 \r
 ---\r
 \r
-### 6. Enable Dynamic Decision-Making\r
+# 2. Think about state like a notebook\r
 \r
-Traditional workflow automation follows a predefined path:\r
+This is the simplest mental model.\r
 \r
-\`\`\`text\r
-Step 1 → Step 2 → Step 3 → Step 4\r
-\`\`\`\r
-\r
-Agentic workflows can adapt based on runtime conditions:\r
+Imagine a person manually managing your CWD workflow with a notebook:\r
 \r
 \`\`\`text\r
-                    Request\r
-                       |\r
-                    Analyze\r
-                       |\r
-                +------+------+\r
-                |             |\r
-             Path A         Path B\r
-                |             |\r
-             Result         Result\r
-                |             |\r
-                +------+------+\r
-                       |\r
-                    Evaluate\r
-                       |\r
-              Continue / Retry /\r
-              Delegate / Escalate\r
+REQUEST\r
+-------------------------\r
+Customer: C123\r
+Request: Customer Briefing\r
+\r
+PLAN\r
+-------------------------\r
+Sales Delegator\r
+  ├── Customer Profile\r
+  ├── Support History\r
+  └── Contract\r
+\r
+STATUS\r
+-------------------------\r
+Customer Profile → DONE\r
+Support History  → DONE\r
+Contract         → FAILED\r
+\r
+RETRY\r
+-------------------------\r
+Contract → 3 attempts\r
+\r
+CURRENT STEP\r
+-------------------------\r
+Contract failure handling\r
+\r
+RESULTS\r
+-------------------------\r
+Customer Profile → data\r
+Support History  → data\r
+\r
+ERRORS\r
+-------------------------\r
+Contract → timeout\r
 \`\`\`\r
 \r
-This is particularly important when:\r
+That notebook is basically your **workflow state**.\r
 \r
-* The required information varies by request\r
-* Different business domains are involved\r
-* A tool fails\r
-* Additional information is required\r
-* Results require validation\r
-* Human approval is necessary\r
-\r
-Workflow-orchestration agents are specifically designed to maintain execution context, delegate work, track intermediate results, and adapt execution based on runtime results.\r
+LangGraph provides a structured way to manage that notebook programmatically.\r
 \r
 ---\r
 \r
-### 7. Establish a Common Enterprise AI Execution Model\r
+# 3. What happens without state?\r
 \r
-Without a common architecture, every business team may build its own agent:\r
-\r
-\`\`\`text\r
-Sales Agent ──────────┐\r
-Finance Agent ────────┤\r
-HR Agent ─────────────┤\r
-Supply Chain Agent ───┤──→ Different frameworks\r
-Quality Agent ────────┤\r
-Customer Agent ───────┘\r
-\`\`\`\r
-\r
-This creates:\r
-\r
-* Duplicate implementations\r
-* Different security models\r
-* Different integration patterns\r
-* Different observability\r
-* Different agent communication mechanisms\r
-* Difficult maintenance\r
-* Agent sprawl\r
-\r
-CWD provides the common execution model:\r
+Suppose you have:\r
 \r
 \`\`\`text\r
-                    CWD Platform\r
-                         |\r
-       +-----------------+-----------------+\r
-       |                 |                 |\r
-     Sales            Finance             HR\r
-    Agents             Agents            Agents\r
-       |                 |                 |\r
-       +-----------------+-----------------+\r
-                         |\r
-              Common Enterprise Controls\r
-                         |\r
-        Security | Governance | Observability\r
-        Registry | Memory    | A2A | RAG\r
+W1 → Customer Profile\r
+W2 → Support History\r
+W3 → Contract\r
 \`\`\`\r
 \r
-The enterprise therefore builds **agents as business capabilities**, while CWD provides the common platform for operating them.\r
+W1 completes:\r
+\r
+\`\`\`text\r
+W1 → SUCCESS\r
+\`\`\`\r
+\r
+W2 completes:\r
+\r
+\`\`\`text\r
+W2 → SUCCESS\r
+\`\`\`\r
+\r
+Then the application crashes.\r
+\r
+If you don't have persistent state, after restart the system may not know:\r
+\r
+\`\`\`text\r
+Did W1 finish?\r
+Did W2 finish?\r
+Was W3 started?\r
+How many times did W3 retry?\r
+What were W1 and W2's results?\r
+\`\`\`\r
+\r
+It might start everything again:\r
+\r
+\`\`\`text\r
+W1 → execute again\r
+W2 → execute again\r
+W3 → execute again\r
+\`\`\`\r
+\r
+That's bad.\r
+\r
+With state:\r
+\r
+\`\`\`text\r
+W1 → SUCCESS\r
+W2 → SUCCESS\r
+W3 → FAILED\r
+\`\`\`\r
+\r
+is saved.\r
+\r
+After restart:\r
+\r
+\`\`\`text\r
+Load state\r
+   ↓\r
+W1 already completed\r
+W2 already completed\r
+W3 failed\r
+   ↓\r
+Continue/recover from W3\r
+\`\`\`\r
+\r
+That's why state management is important.\r
 \r
 ---\r
 \r
-### 8. Security Must Follow the Agent\r
+# 4. What does your CWD state contain?\r
 \r
-An important architectural reason for Agentic AI in CWD is that agents can perform actions, not merely generate text.\r
+For your architecture, I would divide state into **8 major pieces**.\r
 \r
-Therefore, security must be part of execution.\r
+## A. Request state\r
 \r
-\`\`\`text\r
-User Identity\r
-     ↓\r
-Authorization\r
-     ↓\r
-Coordinator\r
-     ↓\r
-Delegator\r
-     ↓\r
-Worker\r
-     ↓\r
-Authorized Tool\r
-     ↓\r
-Enterprise Data\r
+What did the user ask?\r
+\r
+\`\`\`python\r
+request_id = "REQ-123"\r
+\r
+user_request = \\\r
+    "Prepare customer briefing for customer C123"\r
+\r
+customer_id = "C123"\r
 \`\`\`\r
 \r
-The agent should not receive unrestricted access to enterprise systems.\r
-\r
-CWD therefore applies principles such as:\r
-\r
-* Identity propagation\r
-* RBAC\r
-* Least-privilege access\r
-* Entitlement validation\r
-* Controlled tools\r
-* Data access policies\r
-* Input/output validation\r
-* DLP and redaction\r
-* Auditability\r
-* Human approval where required\r
-\r
-This is a critical distinction between an enterprise Agentic AI platform and a simple LLM chatbot.\r
+This is the original context.\r
 \r
 ---\r
 \r
-### 9. Create End-to-End Observability\r
+# 5. B. Planning state\r
 \r
-When multiple agents collaborate, simply logging the final answer is not enough.\r
+The Coordinator determines what needs to happen.\r
 \r
-CWD needs to understand:\r
+\`\`\`python\r
+execution_plan = {\r
+    "delegators": [\r
+        "sales_delegator"\r
+    ],\r
+\r
+    "workers": [\r
+        "customer_profile",\r
+        "support_history",\r
+        "contract_details"\r
+    ]\r
+}\r
+\`\`\`\r
+\r
+Now the system knows:\r
+\r
+> "These are the components I need to execute."\r
+\r
+---\r
+\r
+# 6. C. Worker status state\r
+\r
+This is extremely important.\r
+\r
+Initially:\r
+\r
+\`\`\`python\r
+worker_status = {\r
+    "customer_profile": "PENDING",\r
+    "support_history": "PENDING",\r
+    "contract_details": "PENDING"\r
+}\r
+\`\`\`\r
+\r
+After execution:\r
+\r
+\`\`\`python\r
+worker_status = {\r
+    "customer_profile": "SUCCESS",\r
+    "support_history": "SUCCESS",\r
+    "contract_details": "RUNNING"\r
+}\r
+\`\`\`\r
+\r
+If Contract fails:\r
+\r
+\`\`\`python\r
+worker_status = {\r
+    "customer_profile": "SUCCESS",\r
+    "support_history": "SUCCESS",\r
+    "contract_details": "FAILED"\r
+}\r
+\`\`\`\r
+\r
+Now CWD knows exactly what happened.\r
+\r
+---\r
+\r
+# 7. D. Worker results\r
+\r
+Status tells us **whether something succeeded**.\r
+\r
+But we also need the actual result.\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+worker_results = {\r
+    "customer_profile": {\r
+        "name": "ABC Corp",\r
+        "industry": "Semiconductor"\r
+    },\r
+\r
+    "support_history": {\r
+        "open_cases": 2,\r
+        "resolved_cases": 15\r
+    },\r
+\r
+    "contract_details": {\r
+        "status": "FAILED"\r
+    }\r
+}\r
+\`\`\`\r
+\r
+Now the system has both:\r
 \r
 \`\`\`text\r
-User Request\r
-     ↓\r
-Session\r
-     ↓\r
-Task\r
-     ↓\r
-Run\r
-     ↓\r
-Turn\r
-     ↓\r
-Step\r
-     ↓\r
-Agent\r
-     ↓\r
-Tool\r
-     ↓\r
-Data\r
-     ↓\r
+Status\r
++\r
 Result\r
 \`\`\`\r
 \r
-This enables the platform to answer:\r
-\r
-* Which agent handled the request?\r
-* Why was that agent selected?\r
-* Which tools were called?\r
-* Which data was retrieved?\r
-* How long did each step take?\r
-* Where did an error occur?\r
-* How many retries occurred?\r
-* What was the final outcome?\r
-* What did the workflow cost?\r
-\r
-Agent orchestration is therefore also an **operational control mechanism**, not just an AI design pattern.\r
-\r
 ---\r
 \r
-### 10. Scale AI From Individual Use Cases to Enterprise Capability\r
+# 8. E. Failure state\r
 \r
-The strategic objective is not to build one successful AI application.\r
+Suppose Contract failed because of timeout.\r
 \r
-The objective is:\r
+We maintain:\r
 \r
-\`\`\`text\r
-One Agent\r
-    ↓\r
-Multiple Agents\r
-    ↓\r
-Multi-Agent Workflows\r
-    ↓\r
-Business Domains\r
-    ↓\r
-Cross-Domain Workflows\r
-    ↓\r
-Enterprise AI Execution Platform\r
+\`\`\`python\r
+failures = {\r
+    "contract_details": {\r
+        "error_type": "TIMEOUT",\r
+        "message": "Contract API timeout",\r
+        "retryable": True\r
+    }\r
+}\r
 \`\`\`\r
 \r
-This is where CWD becomes strategically important.\r
+This is important because the next node needs to know:\r
 \r
-Instead of repeatedly solving:\r
-\r
-> "How do we build this AI application?"\r
-\r
-the organization can solve:\r
-\r
-> "How do we onboard this new business capability into the enterprise AI execution platform?"\r
-\r
-That is a fundamentally different scaling model.\r
+> "Why did it fail?"\r
 \r
 ---\r
 \r
-## Why Agentic AI Specifically for CWD?\r
+# 9. F. Retry state\r
 \r
-| Business Need | Traditional GenAI | Agentic AI + CWD |\r
-| --- | --- | --- |\r
-| Answer questions | ✓ | ✓ |\r
-| Generate content | ✓ | ✓ |\r
-| Multi-step reasoning | Limited | ✓ |\r
-| Task decomposition | Limited | ✓ |\r
-| Tool execution | Limited | ✓ |\r
-| Multi-agent collaboration | ✗ | ✓ |\r
-| Cross-system workflows | Limited | ✓ |\r
-| Dynamic routing | Limited | ✓ |\r
-| Runtime decision-making | Limited | ✓ |\r
-| Context propagation | Limited | ✓ |\r
-| Retry/recovery | Limited | ✓ |\r
-| Human escalation | Limited | ✓ |\r
-| Enterprise governance | External layer required | Built into platform architecture |\r
-| End-to-end execution tracking | Limited | ✓ |\r
-| Reusable enterprise agent ecosystem | ✗ | ✓ |\r
+Suppose we allow 3 retries.\r
 \r
----\r
+We maintain:\r
 \r
-## Architect's View\r
-\r
-The key architectural decision is:\r
-\r
-> **CWD is not being built simply to host LLMs. CWD is being built to operationalize AI agents as governed enterprise business capabilities.**\r
-\r
-Agentic AI provides the **intelligence and autonomy**.\r
-\r
-CWD provides the **coordination, governance, security, execution, integration, and operational control**.\r
-\r
-\`\`\`text\r
-                 AGENTIC AI\r
-                     |\r
-        Reason • Plan • Decide • Act\r
-                     |\r
-                     ↓\r
-              +--------------+\r
-              |     CWD      |\r
-              |              |\r
-              | Coordinate   |\r
-              | Delegate     |\r
-              | Execute      |\r
-              | Govern       |\r
-              | Observe      |\r
-              +--------------+\r
-                     |\r
-          +----------+----------+\r
-          |          |          |\r
-        Agents     Tools      Data\r
-          |          |          |\r
-          +----------+----------+\r
-                     |\r
-              Business Outcome\r
+\`\`\`python\r
+retry_count = {\r
+    "contract_details": 2\r
+}\r
 \`\`\`\r
 \r
+The system knows:\r
+\r
+\`\`\`text\r
+Attempt 1 → failed\r
+Attempt 2 → failed\r
+Attempt 3 → next\r
+\`\`\`\r
+\r
+Without retry state, the system wouldn't know how many times it has already tried.\r
+\r
+---\r
+\r
+# 10. G. Dependency state\r
+\r
+This becomes important in your CWD because Workers can depend on other Workers.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Customer Profile\r
+       ↓\r
+Customer Contract\r
+       ↓\r
+Renewal Analysis\r
+\`\`\`\r
+\r
+You cannot execute Renewal Analysis until Contract succeeds.\r
+\r
+State can represent:\r
+\r
+\`\`\`python\r
+dependencies = {\r
+    "contract_details": [\r
+        "customer_profile"\r
+    ],\r
+\r
+    "renewal_analysis": [\r
+        "contract_details"\r
+    ]\r
+}\r
+\`\`\`\r
+\r
+Now CWD knows:\r
+\r
+\`\`\`text\r
+Customer Profile → SUCCESS\r
+        ↓\r
+Contract → can execute\r
+        ↓\r
+Contract → SUCCESS\r
+        ↓\r
+Renewal Analysis → can execute\r
+\`\`\`\r
+\r
+---\r
+\r
+# 11. H. Current execution position\r
+\r
+This is another important part.\r
+\r
+The state can tell the graph:\r
+\r
+\`\`\`python\r
+current_step = "contract_details"\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+current node = contract_worker\r
+\`\`\`\r
+\r
+So after recovery, CWD knows where it was.\r
+\r
+---\r
+\r
+# 12. Put everything together\r
+\r
+Your CWD state could conceptually look like:\r
+\r
+\`\`\`python\r
+state = {\r
+\r
+    # Request\r
+    "request_id": "REQ-123",\r
+    "customer_id": "C123",\r
+    "user_request": "Prepare customer briefing",\r
+\r
+    # Planning\r
+    "intent": "customer_briefing",\r
+    "delegator": "sales_delegator",\r
+\r
+    # Workers\r
+    "worker_status": {\r
+        "customer_profile": "SUCCESS",\r
+        "support_history": "SUCCESS",\r
+        "contract_details": "FAILED"\r
+    },\r
+\r
+    # Results\r
+    "worker_results": {\r
+        "customer_profile": {...},\r
+        "support_history": {...}\r
+    },\r
+\r
+    # Failures\r
+    "failures": [\r
+        {\r
+            "worker": "contract_details",\r
+            "error": "TIMEOUT"\r
+        }\r
+    ],\r
+\r
+    # Retry\r
+    "retry_counts": {\r
+        "contract_details": 3\r
+    },\r
+\r
+    # Execution position\r
+    "current_step": "contract_details",\r
+\r
+    # Final\r
+    "final_status": "PARTIAL_FAILURE"\r
+}\r
+\`\`\`\r
+\r
+This is your **workflow state**.\r
+\r
+---\r
+\r
+# 13. Now let's understand LangGraph\r
+\r
+This is where many people get confused.\r
+\r
+**LangGraph is not the database.**\r
+\r
+Think:\r
+\r
+\`\`\`text\r
+LangGraph\r
+   ↓\r
+manages workflow execution + state transitions\r
+\`\`\`\r
+\r
+And:\r
+\r
+\`\`\`text\r
+Checkpoint Store\r
+   ↓\r
+persists the state so it can be recovered\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`text\r
+             LangGraph\r
+                 │\r
+                 │ manages\r
+                 ▼\r
+          Workflow State\r
+                 │\r
+                 │ checkpoint\r
+                 ▼\r
+          Durable Storage\r
+\`\`\`\r
+\r
+---\r
+\r
+# 14. What does "state transition" mean?\r
+\r
+Suppose initial state is:\r
+\r
+\`\`\`text\r
+W1 = PENDING\r
+W2 = PENDING\r
+W3 = PENDING\r
+\`\`\`\r
+\r
+Coordinator executes W1.\r
+\r
+State becomes:\r
+\r
+\`\`\`text\r
+W1 = SUCCESS\r
+W2 = PENDING\r
+W3 = PENDING\r
+\`\`\`\r
+\r
+Then W2 executes.\r
+\r
+State becomes:\r
+\r
+\`\`\`text\r
+W1 = SUCCESS\r
+W2 = SUCCESS\r
+W3 = PENDING\r
+\`\`\`\r
+\r
+Then W3 executes and fails.\r
+\r
+State becomes:\r
+\r
+\`\`\`text\r
+W1 = SUCCESS\r
+W2 = SUCCESS\r
+W3 = FAILED\r
+\`\`\`\r
+\r
+These changes are called **state transitions**.\r
+\r
+LangGraph is essentially controlling these transitions through graph nodes and edges.\r
+\r
+---\r
+\r
+# 15. Very simple LangGraph example\r
+\r
+Conceptually:\r
+\r
+\`\`\`python\r
+class CWDState(TypedDict):\r
+    request: str\r
+    worker_status: dict\r
+    worker_results: dict\r
+    retry_count: dict\r
+\`\`\`\r
+\r
+Then you create nodes:\r
+\r
+\`\`\`text\r
+Coordinator Node\r
+       ↓\r
+Delegator Node\r
+       ↓\r
+Worker Node\r
+       ↓\r
+Failure Handler\r
+       ↓\r
+Aggregation Node\r
+\`\`\`\r
+\r
+Each node reads the state and updates it.\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+def execute_worker(state):\r
+\r
+    result = call_worker()\r
+\r
+    return {\r
+        "worker_status": {\r
+            "contract": "SUCCESS"\r
+        },\r
+        "worker_results": {\r
+            "contract": result\r
+        }\r
+    }\r
+\`\`\`\r
+\r
+The important concept is:\r
+\r
+> **Nodes don't have to carry everything manually from one function to another. They operate on the shared workflow state.**\r
+\r
+---\r
+\r
+# 16. What is checkpointing?\r
+\r
+This is probably the most important word to understand.\r
+\r
+Imagine the workflow reaches:\r
+\r
+\`\`\`text\r
+W1 → SUCCESS\r
+W2 → SUCCESS\r
+W3 → FAILED\r
+\`\`\`\r
+\r
+LangGraph can create a **checkpoint**.\r
+\r
+Think of it as taking a snapshot:\r
+\r
+\`\`\`text\r
+CHECKPOINT #1\r
+\r
+request = C123\r
+\r
+W1 = SUCCESS\r
+W2 = SUCCESS\r
+W3 = FAILED\r
+\r
+retry_count = 3\r
+\r
+current_step = W3\r
+\`\`\`\r
+\r
+That snapshot is persisted.\r
+\r
+---\r
+\r
+# 17. Why checkpointing matters\r
+\r
+Now suppose your application crashes:\r
+\r
+\`\`\`text\r
+💥 Application crash\r
+\`\`\`\r
+\r
+Without checkpoint:\r
+\r
+\`\`\`text\r
+State lost\r
+   ↓\r
+Start again\r
+\`\`\`\r
+\r
+With checkpoint:\r
+\r
+\`\`\`text\r
+Application crash\r
+       ↓\r
+Application restarts\r
+       ↓\r
+Load checkpoint\r
+       ↓\r
+Recover state\r
+       ↓\r
+W1 = already SUCCESS\r
+W2 = already SUCCESS\r
+W3 = FAILED\r
+       ↓\r
+Resume/retry/recover W3\r
+\`\`\`\r
+\r
+That's **durable state management**.\r
+\r
+---\r
+\r
+# 18. State vs database\r
+\r
+This is another common interview question.\r
+\r
+Don't say:\r
+\r
+> "We store the state in LangGraph."\r
+\r
+A better explanation is:\r
+\r
+> **"LangGraph manages the workflow state, and we persist checkpoints using a durable persistence layer."**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Azure deployment\r
+      ↓\r
+LangGraph\r
+      ↓\r
+Checkpoint persistence\r
+      ↓\r
+Redis / PostgreSQL / Cosmos DB\r
+\`\`\`\r
+\r
+or in an AWS architecture:\r
+\r
+\`\`\`text\r
+AWS deployment\r
+      ↓\r
+LangGraph\r
+      ↓\r
+Checkpoint persistence\r
+      ↓\r
+DynamoDB / PostgreSQL / Redis\r
+\`\`\`\r
+\r
+The exact database depends on your production design.\r
+\r
+---\r
+\r
+# 19. What about conversation memory?\r
+\r
+Don't confuse this with workflow state.\r
+\r
+Suppose the user says:\r
+\r
+> User: Prepare customer briefing for C123.\r
+\r
+Then:\r
+\r
+> User: Also include contract information.\r
+\r
+That's **conversation context**.\r
+\r
+But:\r
+\r
+\`\`\`text\r
+W1 SUCCESS\r
+W2 SUCCESS\r
+W3 FAILED\r
+retry_count = 2\r
+\`\`\`\r
+\r
+is **workflow state**.\r
+\r
+You can have:\r
+\r
+\`\`\`text\r
+Conversation Memory\r
+        +\r
+Workflow State\r
+        +\r
+Long-term Data\r
+\`\`\`\r
+\r
+They are different concepts.\r
+\r
+---\r
+\r
+# 20. What happens in your CWD from start to finish?\r
+\r
+Let's walk through the entire thing.\r
+\r
+### Step 1 — User request\r
+\r
+\`\`\`text\r
+"Prepare customer briefing for C123."\r
+\`\`\`\r
+\r
+State:\r
+\r
+\`\`\`text\r
+request = customer briefing\r
+customer = C123\r
+\`\`\`\r
+\r
+### Step 2 — Coordinator\r
+\r
+\`\`\`text\r
+intent = customer_briefing\r
+delegator = sales\r
+\`\`\`\r
+\r
+State updated.\r
+\r
+### Step 3 — Delegator plans Workers\r
+\r
+\`\`\`text\r
+W1 = Customer Profile\r
+W2 = Support History\r
+W3 = Contract\r
+\`\`\`\r
+\r
+State updated.\r
+\r
+### Step 4 — W1 executes\r
+\r
+\`\`\`text\r
+W1 = SUCCESS\r
+\`\`\`\r
+\r
+State updated.\r
+\r
+### Step 5 — W2 executes\r
+\r
+\`\`\`text\r
+W2 = SUCCESS\r
+\`\`\`\r
+\r
+State updated.\r
+\r
+### Step 6 — W3 executes\r
+\r
+\`\`\`text\r
+W3 = TIMEOUT\r
+\`\`\`\r
+\r
+State updated:\r
+\r
+\`\`\`text\r
+W3 = FAILED\r
+retry_count = 1\r
+\`\`\`\r
+\r
+### Step 7 — Retry\r
+\r
+\`\`\`text\r
+W3 = TIMEOUT\r
+retry_count = 2\r
+\`\`\`\r
+\r
+### Step 8 — Retry again\r
+\r
+\`\`\`text\r
+W3 = TIMEOUT\r
+retry_count = 3\r
+\`\`\`\r
+\r
+### Step 9 — Policy check\r
+\r
+\`\`\`text\r
+W3 = mandatory\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+\`\`\`text\r
+Workflow = BLOCKED / INCOMPLETE\r
+\`\`\`\r
+\r
+### Step 10 — Coordinator\r
+\r
+Coordinator receives:\r
+\r
+\`\`\`text\r
+W1 = SUCCESS\r
+W2 = SUCCESS\r
+W3 = FAILED\r
+\`\`\`\r
+\r
+It validates the result and generates the appropriate final response.\r
+\r
+**Every one of those steps is represented in state.**\r
+\r
+---\r
+\r
+# 21. The easiest way to remember state management\r
+\r
+Think of CWD as a **project manager's checklist**.\r
+\r
+\`\`\`text\r
+REQUEST\r
+   ↓\r
+What does the user want?\r
+\r
+PLAN\r
+   ↓\r
+What needs to be done?\r
+\r
+WORKERS\r
+   ↓\r
+Which Workers are running?\r
+\r
+STATUS\r
+   ↓\r
+Which Workers succeeded/failed?\r
+\r
+RESULTS\r
+   ↓\r
+What did they return?\r
+\r
+ERRORS\r
+   ↓\r
+What went wrong?\r
+\r
+RETRIES\r
+   ↓\r
+How many times did we try?\r
+\r
+DEPENDENCIES\r
+   ↓\r
+What must finish before something else?\r
+\r
+CURRENT STEP\r
+   ↓\r
+Where are we now?\r
+\r
+CHECKPOINT\r
+   ↓\r
+What was the last known state?\r
+\r
+FINAL RESULT\r
+   ↓\r
+Can we complete the request?\r
+\`\`\`\r
+\r
+That's **state management**.\r
+\r
+---\r
+\r
+# 22. Strong interview answer\r
+\r
+If an interviewer asks:\r
+\r
+> **"How do you maintain state in your CWD system?"**\r
+\r
+Don't just say "we use LangGraph."\r
+\r
+Say:\r
+\r
+> **"In CWD, state represents the complete execution context of a request. It includes the original request and identifiers, Coordinator's execution plan, selected Delegators and Workers, Worker statuses, results, dependencies, retry counts, failures, and the current workflow position. LangGraph manages this state as the workflow moves from one node to another. We use checkpoint persistence to durably save the state at important execution points. So if a Worker or application fails, we can restore the latest checkpoint, identify which Workers already completed, and resume from the appropriate point instead of restarting the entire workflow. Large Worker outputs can be stored externally with references in the state. Observability is handled separately through tracing and logging systems."**\r
+\r
+### And if they ask, "Why do you need state?"\r
+\r
+Answer:\r
+\r
+> **"Because a multi-agent workflow is not a single API call. It is a long-running sequence of dependent operations. The system needs to remember what was planned, what completed, what failed, what needs to retry, and where execution should resume. State provides that execution memory."**\r
+\r
+**The one sentence I want you to remember for interviews:**\r
+\r
+> **State is the execution memory of CWD; LangGraph manages the state transitions, checkpoint storage makes the state durable, and the Coordinator/Delegators use that state to know what has happened and what should happen next.**\r
 `,gp=`### 16.	How does CWD handle dependencies between Workers?\r
 \r
 # 1. What does “dependency between Workers” mean?\r
@@ -63748,7 +64438,7 @@ while AWS provides the production platform underneath it:\r
 **API Gateway → ECS/EKS/Lambda → Bedrock → S3/OpenSearch → DynamoDB/Redis/Aurora → SQS/EventBridge → IAM/KMS/Secrets Manager → CloudWatch/X-Ray/CloudTrail.**\r
 \r
 That gives you a **cloud-native, scalable, reliable, secure, observable and maintainable production CWD**, while keeping the architecture portable enough that the same logical CWD design can run on Azure.\r
-`,vp=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Explain the CWD project end-to-end.`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`,concept:cp,code:``},{id:`what-is-cwd`,category:`Project Overview`,title:`Explain the Coordinator → Delegator → Worker architecture.?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:lp,code:``},{id:`cwd-business-context`,category:`Project Overview`,title:`How do you decide which Delegator should handle a request?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise environment that led to CWD, including fragmented data, multiple business systems, growing AI adoption, domain-specific workflows, and the need for a scalable and governed enterprise AI platform.`,concept:up,code:``},{id:`cwd-business-problem`,category:`Project Overview`,title:`How does a Delegator decide which Workers to invoke?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business and technical challenges CWD is designed to solve, including disconnected enterprise knowledge, manual workflows, limited automation, inconsistent AI experiences, difficult system integrations, and lack of centralized governance.`,concept:dp,code:``},{id:`cwd-business-benefits`,category:`Project Overview`,title:`How do you decide which Delegator should handle a request?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.`,concept:gp,code:``},{id:`cwd-project-objectives`,category:`Project Overview`,title:`What does “result aggregation” mean?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the primary objectives of CWD, including creating a reusable enterprise AI platform, enabling multi-agent orchestration, integrating enterprise data and tools, improving automation, enforcing security and governance, and providing scalable AI capabilities.`,concept:fp,code:``},{id:`cwd-current-state`,category:`Project Overview`,title:`Where does validation happen?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise AI capabilities that existed before CWD, including traditional RAG, individual AI applications, point-to-point integrations, manual workflows, and the limitations of operating isolated AI solutions.`,concept:pp,code:``},{id:`cwd-target-state`,category:`Project Overview`,title:`Target / End State`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the target CWD architecture and capabilities, including centralized orchestration, Coordinator–Delegator–Worker agents, enterprise data integration, MCP tools, A2A communication, RAG, state management, observability, security, and scalable deployment.`,concept:mp,code:``},{id:`cwd-why-agentic-ai`,category:`Project Overview`,title:`Why Agentic AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why CWD moves beyond traditional chatbots and standalone RAG by using agentic AI for planning, reasoning, task decomposition, domain routing, tool execution, multi-step workflows, autonomous coordination, and controlled interaction with enterprise systems.`,concept:hp,code:``},{id:`aws`,category:`aws Project Overview`,title:`AWS`,difficulty:`Intermediate`,time:`~10 min`,description:` aws`,concept:_p,code:``}];function yp(){return(0,M.jsx)($,{data:vp,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var bp=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`,concept:`# CWD Architecture\r
+`,vp=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Explain the CWD project end-to-end.`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`,concept:cp,code:``},{id:`what-is-cwd`,category:`Project Overview`,title:`Explain the Coordinator → Delegator → Worker architecture.?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:lp,code:``},{id:`cwd-business-context`,category:`Project Overview`,title:`How do you decide which Delegator should handle a request?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise environment that led to CWD, including fragmented data, multiple business systems, growing AI adoption, domain-specific workflows, and the need for a scalable and governed enterprise AI platform.`,concept:up,code:``},{id:`cwd-business-problem`,category:`Project Overview`,title:`How does a Delegator decide which Workers to invoke?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business and technical challenges CWD is designed to solve, including disconnected enterprise knowledge, manual workflows, limited automation, inconsistent AI experiences, difficult system integrations, and lack of centralized governance.`,concept:dp,code:``},{id:`cwd-business-benefits`,category:`Project Overview`,title:`How do you decide which Delegator should handle a request?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the key business benefits of CWD, including improved employee productivity, faster access to enterprise knowledge, workflow automation, reusable AI capabilities, reduced integration complexity, better governance, scalable adoption, and improved decision support.`,concept:gp,code:``},{id:`cwd-project-objectives`,category:`Project Overview`,title:`What does “result aggregation” mean?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the primary objectives of CWD, including creating a reusable enterprise AI platform, enabling multi-agent orchestration, integrating enterprise data and tools, improving automation, enforcing security and governance, and providing scalable AI capabilities.`,concept:fp,code:``},{id:`cwd-current-state`,category:`Project Overview`,title:`Where does validation happen?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the enterprise AI capabilities that existed before CWD, including traditional RAG, individual AI applications, point-to-point integrations, manual workflows, and the limitations of operating isolated AI solutions.`,concept:pp,code:``},{id:`cwd-target-state`,category:`Project Overview`,title:`What happens if one Worker fails?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the target CWD architecture and capabilities, including centralized orchestration, Coordinator–Delegator–Worker agents, enterprise data integration, MCP tools, A2A communication, RAG, state management, observability, security, and scalable deployment.`,concept:mp,code:``},{id:`cwd-why-agentic-ai`,category:`Project Overview`,title:`How do you maintain state?`,difficulty:`Advanced`,time:`~15 min`,description:`Understand why CWD moves beyond traditional chatbots and standalone RAG by using agentic AI for planning, reasoning, task decomposition, domain routing, tool execution, multi-step workflows, autonomous coordination, and controlled interaction with enterprise systems.`,concept:hp,code:``}];function yp(){return(0,M.jsx)($,{data:vp,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var bp=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`,concept:`# CWD Architecture\r
 \r
 ## 1. Architectural Overview\r
 \r
@@ -390169,7 +390859,7 @@ The biggest architectural challenge was balancing the intelligence of the agents
 The main value of CWD was that it provided a modular enterprise AI architecture. New business capabilities and Workers could be added without redesigning the entire system, while the Coordinator and Delegator layers provided controlled orchestration.\r
 \r
 So overall, CWD was an end-to-end enterprise Agentic AI platform, and my involvement covered **business analysis, solution architecture, hands-on development, integration, testing, deployment, and production readiness**.\r
-`}];function lh(){return(0,M.jsx)($,{data:ch,title:`AboutPooja Communication Cookbook`,subtitle:`AboutPooja`,icon:`🧩`,patternLabel:`Topics`})}var uh=[{id:`what-is-azure-ai-search`,category:`Azure AI Search`,title:`What is Azure AI Search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Azure AI Search and how it provides enterprise search, vector retrieval, semantic ranking, and RAG capabilities.`},{id:`what-is-an-index`,category:`Azure AI Search`,title:`What is an index?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand the role of an Azure AI Search index and how documents and searchable fields are organized.`},{id:`what-is-an-indexer`,category:`Azure AI Search`,title:`What is an indexer?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how Azure AI Search indexers extract data from supported sources and populate search indexes.`},{id:`what-is-a-data-source`,category:`Azure AI Search`,title:`What is a data source?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how Azure AI Search connects to enterprise data sources such as Blob Storage, SQL, and Cosmos DB.`},{id:`what-is-a-skillset`,category:`Azure AI Search`,title:`What is a skillset?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand AI enrichment pipelines, built-in skills, custom skills, and how skillsets transform enterprise content.`},{id:`what-is-vector-search`,category:`Azure AI Search`,title:`What is vector search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand embeddings, vector indexes, similarity search, and how vector retrieval supports semantic RAG.`},{id:`what-is-hybrid-search`,category:`Azure AI Search`,title:`What is hybrid search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how keyword and vector search can be combined to improve enterprise retrieval accuracy.`},{id:`what-is-semantic-search`,category:`Azure AI Search`,title:`What is semantic search?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand semantic ranking and how Azure AI Search improves relevance beyond traditional keyword matching.`},{id:`azure-ai-search-security-trimming`,category:`Azure AI Search`,title:`How do you implement security trimming?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to enforce document-level authorization so users retrieve only enterprise content they are entitled to access.`},{id:`troubleshoot-poor-search-results`,category:`Azure AI Search`,title:`How would you troubleshoot poor search results?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn a systematic approach to diagnosing poor retrieval quality, including chunking, embeddings, filters, ranking, and query design.`},{id:`what-is-azure-openai`,category:`Azure OpenAI`,title:`What is Azure OpenAI?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Azure OpenAI and how enterprise applications consume OpenAI models through Microsoft Azure.`},{id:`azure-openai-vs-openai-api`,category:`Azure OpenAI`,title:`Azure OpenAI vs OpenAI API?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare Azure OpenAI and the OpenAI API from enterprise security, networking, governance, deployment, and operational perspectives.`},{id:`how-select-an-llm`,category:`Azure OpenAI`,title:`How do you select an LLM?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to select models based on quality, reasoning, latency, cost, context window, multimodal capabilities, and enterprise requirements.`},{id:`gpt-vs-small-language-models`,category:`Azure OpenAI`,title:`GPT vs smaller language models?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare large and smaller language models for enterprise workloads, including cost, latency, accuracy, and deployment tradeoffs.`},{id:`what-is-temperature`,category:`Azure OpenAI`,title:`What is temperature?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how temperature affects randomness and response variation during LLM generation.`},{id:`what-is-top-p`,category:`Azure OpenAI`,title:`What is top-p?`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand nucleus sampling and how top-p controls the token probability distribution used during generation.`},{id:`what-is-context-window`,category:`Azure OpenAI`,title:`What is a context window?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand input and output token limits and why context-window management matters in enterprise LLM applications.`},{id:`what-is-tokenization`,category:`Azure OpenAI`,title:`What is tokenization?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how text is converted into tokens and why tokenization impacts cost, latency, and context limits.`},{id:`what-is-prompt-engineering`,category:`Azure OpenAI`,title:`What is prompt engineering?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how prompts are designed and optimized to improve reliability, consistency, and task performance.`},{id:`what-is-structured-output`,category:`Azure OpenAI`,title:`What is structured output?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how LLMs can generate predictable JSON or schema-constrained responses for enterprise applications.`},{id:`what-is-function-tool-calling`,category:`Azure OpenAI`,title:`What is function/tool calling?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLMs select tools and generate structured arguments to interact with enterprise APIs and systems.`},{id:`reduce-llm-latency`,category:`Azure OpenAI`,title:`How do you reduce LLM latency?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn techniques such as model selection, prompt optimization, streaming, caching, parallel execution, and token reduction.`},{id:`what-is-azure-ai-foundry`,category:`Azure AI Foundry`,title:`What is Azure AI Foundry?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Azure AI Foundry as Microsoft's platform for building, evaluating, deploying, governing, and operating AI applications.`},{id:`azure-ai-foundry-capabilities`,category:`Azure AI Foundry`,title:`What capabilities does Azure AI Foundry provide?`,difficulty:`Intermediate`,time:`~10 min`,description:`Explore model catalog, agents, evaluation, tracing, prompt management, deployments, monitoring, and enterprise AI development capabilities.`},{id:`azure-ai-foundry-vs-azure-ml`,category:`Azure AI Foundry`,title:`Azure AI Foundry vs Azure Machine Learning?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Azure AI Foundry and Azure Machine Learning across generative AI, ML lifecycle, experimentation, evaluation, deployment, and governance.`},{id:`azure-ai-foundry-vs-azure-openai`,category:`Azure AI Foundry`,title:`Azure AI Foundry vs Azure OpenAI?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the difference between the broader AI development platform and Azure's managed OpenAI model service.`},{id:`deploy-models-in-foundry`,category:`Azure AI Foundry`,title:`How do you deploy models?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand model deployment patterns, managed endpoints, serverless inference, and production model serving.`},{id:`evaluate-llms-in-foundry`,category:`Azure AI Foundry`,title:`How do you evaluate LLMs?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to evaluate model quality, groundedness, relevance, coherence, safety, and task-specific performance.`},{id:`monitor-ai-applications-foundry`,category:`Azure AI Foundry`,title:`How do you monitor AI applications?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tracing, application telemetry, token usage, latency, failures, model behavior, and production monitoring.`},{id:`manage-prompts-foundry`,category:`Azure AI Foundry`,title:`How do you manage prompts?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand prompt versioning, templates, configuration, experimentation, and lifecycle management.`},{id:`perform-model-evaluation`,category:`Azure AI Foundry`,title:`How do you perform model evaluation?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to establish datasets, evaluation criteria, automated metrics, human review, and regression testing.`},{id:`what-is-model-catalog`,category:`Azure AI Foundry`,title:`What is model catalog?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how the model catalog helps organizations discover and select foundation and specialized models.`},{id:`ai-agents-in-foundry`,category:`Azure AI Foundry`,title:`What are AI agents in Foundry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise agents, instructions, tools, knowledge, orchestration, evaluation, and deployment.`},{id:`enterprise-ai-platform-using-foundry`,category:`Azure AI Foundry`,title:`How would you build an enterprise AI platform using Foundry?`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise AI platform covering models, agents, RAG, identity, networking, governance, evaluation, observability, and deployment.`},{id:`what-is-copilot-studio`,category:`Microsoft Copilot Studio`,title:`What is Microsoft Copilot Studio?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Copilot Studio and its low-code platform for building and extending enterprise copilots and agents.`},{id:`copilot-studio-vs-azure-ai-foundry`,category:`Microsoft Copilot Studio`,title:`Copilot Studio vs Azure AI Foundry?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare low-code business agent development in Copilot Studio with pro-code enterprise AI engineering in Azure AI Foundry.`},{id:`copilot-studio-vs-custom-agent`,category:`Microsoft Copilot Studio`,title:`Copilot Studio vs custom agent?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand when to use Copilot Studio and when a fully custom agent platform is more appropriate.`},{id:`what-are-copilot-topics`,category:`Microsoft Copilot Studio`,title:`What are topics?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand topics, triggers, conversation flows, conditions, and responses in Copilot Studio.`},{id:`what-are-copilot-actions`,category:`Microsoft Copilot Studio`,title:`What are actions?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how actions allow copilots to invoke APIs, workflows, connectors, and enterprise operations.`},{id:`what-are-copilot-connectors`,category:`Microsoft Copilot Studio`,title:`What are connectors?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand standard and custom connectors for accessing enterprise systems from Copilot Studio.`},{id:`what-are-generative-answers`,category:`Microsoft Copilot Studio`,title:`What are generative answers?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how generative answers use enterprise knowledge sources to dynamically produce responses.`},{id:`copilot-enterprise-data`,category:`Microsoft Copilot Studio`,title:`How does Copilot Studio connect to enterprise data?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how Copilot Studio integrates with SharePoint, Dataverse, connectors, APIs, and other enterprise data sources.`},{id:`copilot-user-authentication`,category:`Microsoft Copilot Studio`,title:`How do you authenticate users?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand authentication, Entra ID, user identity, permissions, and enterprise access control.`},{id:`copilot-teams-integration`,category:`Microsoft Copilot Studio`,title:`How do you integrate Copilot Studio with Teams?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Copilot Studio agents are published and consumed through Microsoft Teams.`},{id:`custom-api-from-copilot-studio`,category:`Microsoft Copilot Studio`,title:`How do you call a custom API from Copilot Studio?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how custom connectors and APIs can extend Copilot Studio agents with enterprise capabilities.`},{id:`copilot-power-platform-integration`,category:`Microsoft Copilot Studio`,title:`How do you integrate Power Platform?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand integration with Power Automate, Power Apps, Dataverse, connectors, and other Power Platform services.`},{id:`what-is-dataverse`,category:`Microsoft Copilot Studio`,title:`What is Dataverse?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand Microsoft Dataverse as a governed data platform for Power Platform applications and business data.`},{id:`when-not-to-use-copilot-studio`,category:`Microsoft Copilot Studio`,title:`When would you NOT use Copilot Studio?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand scenarios where custom agent orchestration, advanced RAG, complex workflows, or infrastructure control require a pro-code platform.`},{id:`enterprise-copilot-studio-architecture`,category:`Microsoft Copilot Studio`,title:`Design a Copilot Studio architecture for a large enterprise.`,difficulty:`Expert`,time:`~15 min`,description:`Design a secure enterprise Copilot architecture covering Teams, identity, data, APIs, connectors, governance, monitoring, and DLP.`},{id:`integrate-ai-agent-with-teams`,category:`Microsoft Teams Integration`,title:`How do you integrate an AI agent with Teams?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Teams can act as the user interface for enterprise AI agents and connect to an orchestration backend.`},{id:`teams-authentication`,category:`Microsoft Teams Integration`,title:`How does authentication work in Teams?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand Teams identity, Entra ID authentication, tokens, permissions, and enterprise access control.`},{id:`teams-sso`,category:`Microsoft Teams Integration`,title:`How do you implement SSO?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how Entra ID and Teams SSO can provide seamless authenticated access to enterprise agents.`},{id:`entra-id-teams`,category:`Microsoft Teams Integration`,title:`How does Entra ID integrate with Teams?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the relationship between Teams identities, Entra ID applications, permissions, and enterprise resources.`},{id:`teams-backend-apis`,category:`Microsoft Teams Integration`,title:`How do you call backend APIs from Teams?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand secure communication between Teams applications, bot services, APIs, and agent orchestration layers.`},{id:`adaptive-cards`,category:`Microsoft Teams Integration`,title:`How do you implement Adaptive Cards?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Adaptive Cards provide interactive enterprise UI elements inside Teams conversations.`},{id:`teams-agent-orchestration`,category:`Microsoft Teams Integration`,title:`How would Teams communicate with an agent orchestration layer?`,difficulty:`Expert`,time:`~12 min`,description:`Design the communication flow between Teams, gateway services, coordinator agents, delegated agents, workers, and enterprise systems.`},{id:`secure-teams-enterprise-agents`,category:`Microsoft Teams Integration`,title:`How would you secure Teams-based enterprise agents?`,difficulty:`Expert`,time:`~12 min`,description:`Design authentication, authorization, identity propagation, network security, DLP, auditing, and tool-level controls.`},{id:`what-is-microsoft-fabric`,category:`Microsoft Fabric`,title:`What is Microsoft Fabric?`,difficulty:`Beginner`,time:`~8 min`,description:`Understand Microsoft Fabric as an integrated analytics platform covering data engineering, data science, warehousing, real-time analytics, and BI.`},{id:`what-is-onelake`,category:`Microsoft Fabric`,title:`What is OneLake?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand OneLake as Fabric's unified logical data lake and how it simplifies enterprise data management.`},{id:`onelake-vs-adls`,category:`Microsoft Fabric`,title:`OneLake vs ADLS?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare OneLake and Azure Data Lake Storage across architecture, governance, access, and Fabric integration.`},{id:`fabric-lakehouse`,category:`Microsoft Fabric`,title:`What is Fabric Lakehouse?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the Fabric Lakehouse architecture for storing and processing structured and semi-structured enterprise data.`},{id:`fabric-warehouse`,category:`Microsoft Fabric`,title:`What is Fabric Warehouse?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Fabric Warehouse and when SQL-based analytical workloads should use it.`},{id:`fabric-data-factory`,category:`Microsoft Fabric`,title:`What is Fabric Data Factory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand pipelines, ingestion, transformation, orchestration, and connectivity in Fabric Data Factory.`},{id:`fabric-notebooks`,category:`Microsoft Fabric`,title:`What are Fabric notebooks?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how notebooks are used for Spark-based data engineering, analytics, and data science in Fabric.`},{id:`what-is-direct-lake`,category:`Microsoft Fabric`,title:`What is Direct Lake?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand how Power BI can query data stored in OneLake with Direct Lake for high-performance analytics.`},{id:`fabric-semantic-model`,category:`Microsoft Fabric`,title:`What is a semantic model in Fabric?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand semantic models, business definitions, relationships, measures, and their role in Power BI.`},{id:`fabric-vs-databricks`,category:`Microsoft Fabric`,title:`Fabric vs Databricks?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Microsoft Fabric and Databricks across data engineering, lakehouse architecture, AI, governance, and BI.`},{id:`fabric-vs-synapse`,category:`Microsoft Fabric`,title:`Fabric vs Synapse?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand the differences between Microsoft Fabric and Azure Synapse and when each architecture is appropriate.`},{id:`power-bi-fabric`,category:`Microsoft Fabric`,title:`How does Power BI integrate with Fabric?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how Fabric data engineering and analytics capabilities integrate with Power BI semantic models and reports.`},{id:`ai-data-platform-fabric`,category:`Microsoft Fabric`,title:`How would you build an AI data platform using Fabric?`,difficulty:`Expert`,time:`~12 min`,description:`Design a Fabric-based AI data platform covering ingestion, lakehouse, governance, vectorization, analytics, and agent consumption.`},{id:`agents-consume-fabric-data`,category:`Microsoft Fabric`,title:`How would agents consume Fabric data?`,difficulty:`Expert`,time:`~12 min`,description:`Understand how enterprise agents can securely retrieve and analyze Fabric data through APIs, semantic models, SQL, and governed tools.`},{id:`enterprise-fabric-architecture`,category:`Microsoft Fabric`,title:`Design an enterprise Fabric architecture.`,difficulty:`Expert`,time:`~15 min`,description:`Design a complete enterprise Fabric architecture covering OneLake, ingestion, Lakehouse, Warehouse, governance, Power BI, security, and AI.`},{id:`what-is-databricks`,category:`Databricks / Delta Lake`,title:`What is Databricks?`,difficulty:`Beginner`,time:`~8 min`,description:`Understand Databricks as a cloud data and AI platform built around Apache Spark and lakehouse architecture.`},{id:`what-is-delta-lake`,category:`Databricks / Delta Lake`,title:`What is Delta Lake?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Delta Lake and how it adds transactional reliability and data-management capabilities to data lakes.`},{id:`delta-lake-vs-parquet`,category:`Databricks / Delta Lake`,title:`Delta Lake vs Parquet?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare Delta Lake and Parquet and understand how Delta builds transactional capabilities on top of file-based storage.`},{id:`delta-acid`,category:`Databricks / Delta Lake`,title:`What is ACID in Delta Lake?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand atomicity, consistency, isolation, and durability in Delta Lake transactions.`},{id:`delta-schema-evolution`,category:`Databricks / Delta Lake`,title:`What is schema evolution?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Delta Lake handles controlled changes to data schemas over time.`},{id:`delta-schema-enforcement`,category:`Databricks / Delta Lake`,title:`What is schema enforcement?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Delta Lake protects tables from incompatible or invalid data writes.`},{id:`delta-time-travel`,category:`Databricks / Delta Lake`,title:`What is time travel?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Delta Lake enables querying historical versions of data for auditing and recovery.`},{id:`bronze-silver-gold`,category:`Databricks / Delta Lake`,title:`What are Bronze/Silver/Gold layers?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the medallion architecture and how raw, refined, and business-ready data layers are separated.`},{id:`unity-catalog`,category:`Databricks / Delta Lake`,title:`What is Unity Catalog?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand centralized data governance, permissions, lineage, discovery, and auditing through Unity Catalog.`},{id:`databricks-vs-fabric`,category:`Databricks / Delta Lake`,title:`Databricks vs Fabric?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Databricks and Fabric across data engineering, lakehouse, AI, governance, analytics, and enterprise integration.`},{id:`optimize-spark-job`,category:`Databricks / Delta Lake`,title:`How do you optimize a Spark job?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn Spark optimization techniques involving partitioning, joins, caching, file sizes, shuffles, and cluster configuration.`},{id:`databricks-agentic-ai`,category:`Databricks / Delta Lake`,title:`How would you integrate Databricks with an Agentic AI platform?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure integration between Databricks data platforms, RAG pipelines, vector search, agents, governance, and enterprise tools.`},{id:`enterprise-data-pipeline`,category:`Data Engineering`,title:`Explain an enterprise data pipeline.`,difficulty:`Advanced`,time:`~10 min`,description:`Explain ingestion, validation, transformation, storage, governance, serving, monitoring, and consumption in an enterprise pipeline.`},{id:`batch-vs-streaming`,category:`Data Engineering`,title:`Batch vs streaming?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare batch and real-time data processing and understand when each approach should be used.`},{id:`etl-vs-elt`,category:`Data Engineering`,title:`ETL vs ELT?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the difference between extract-transform-load and extract-load-transform architectures.`},{id:`what-is-cdc`,category:`Data Engineering`,title:`What is CDC?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Change Data Capture and how incremental database changes are propagated into modern data platforms.`},{id:`data-lineage`,category:`Data Engineering`,title:`What is data lineage?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how data lineage tracks the origin, transformation, movement, and consumption of enterprise data.`},{id:`data-quality`,category:`Data Engineering`,title:`What is data quality?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand completeness, accuracy, consistency, validity, uniqueness, and timeliness in enterprise data.`},{id:`data-profiling`,category:`Data Engineering`,title:`What is data profiling?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how data profiling analyzes distributions, nulls, duplicates, patterns, and anomalies.`},{id:`data-cataloging`,category:`Data Engineering`,title:`What is data cataloging?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how catalogs help organizations discover, classify, understand, and govern enterprise data.`},{id:`data-governance`,category:`Data Engineering`,title:`What is data governance?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand policies, ownership, stewardship, security, compliance, quality, lineage, and lifecycle management.`},{id:`master-data`,category:`Data Engineering`,title:`What is master data?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand master data management and how organizations maintain trusted entities such as customers, products, and suppliers.`},{id:`dimensional-modeling`,category:`Data Engineering`,title:`What is dimensional modeling?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand facts, dimensions, measures, relationships, and analytical data modeling.`},{id:`star-vs-snowflake-schema`,category:`Data Engineering`,title:`Star schema vs snowflake schema?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare star and snowflake schemas and understand their analytical performance and modeling tradeoffs.`},{id:`what-is-fact-table`,category:`Data Engineering`,title:`What is a fact table?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand fact tables, measures, grain, and relationships in analytical data models.`},{id:`what-is-dimension-table`,category:`Data Engineering`,title:`What is a dimension table?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand dimensions, descriptive attributes, surrogate keys, and their role in analytical systems.`},{id:`legacy-modern-data-platforms`,category:`Data Engineering`,title:`How would you integrate legacy and modern data platforms?`,difficulty:`Expert`,time:`~12 min`,description:`Design an integration strategy connecting legacy databases and applications with cloud data lakes, warehouses, APIs, and AI platforms.`},{id:`sql-server-vs-azure-sql`,category:`SQL Server / Azure SQL / Synapse`,title:`SQL Server vs Azure SQL?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare on-premises SQL Server with Azure SQL deployment options across management, scalability, networking, and operations.`},{id:`azure-sql-vs-synapse`,category:`SQL Server / Azure SQL / Synapse`,title:`Azure SQL vs Synapse?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare transactional Azure SQL workloads with analytical workloads in Azure Synapse.`},{id:`oltp-vs-olap`,category:`SQL Server / Azure SQL / Synapse`,title:`OLTP vs OLAP?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the architectural differences between transactional and analytical database workloads.`},{id:`clustered-index`,category:`SQL Server / Azure SQL / Synapse`,title:`What is a clustered index?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand clustered indexes and how they affect physical data organization and query performance.`},{id:`nonclustered-index`,category:`SQL Server / Azure SQL / Synapse`,title:`What is a nonclustered index?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand nonclustered indexes and how they accelerate data retrieval.`},{id:`sql-ctes`,category:`SQL Server / Azure SQL / Synapse`,title:`What are CTEs?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Common Table Expressions and their use in readable and recursive SQL queries.`},{id:`sql-window-functions`,category:`SQL Server / Azure SQL / Synapse`,title:`What are window functions?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand analytical SQL functions that calculate values across related rows without collapsing the result set.`},{id:`row-number-rank-dense-rank`,category:`SQL Server / Azure SQL / Synapse`,title:`ROW_NUMBER vs RANK vs DENSE_RANK?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand the differences between common SQL ranking functions and when to use each one.`},{id:`optimize-slow-sql-query`,category:`SQL Server / Azure SQL / Synapse`,title:`How do you optimize a slow SQL query?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn query optimization techniques involving execution plans, indexes, joins, statistics, partitioning, and query design.`},{id:`sql-partitioning`,category:`SQL Server / Azure SQL / Synapse`,title:`What is partitioning?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand table partitioning and how it improves manageability and performance for large datasets.`},{id:`database-normalization`,category:`SQL Server / Azure SQL / Synapse`,title:`What is database normalization?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand normalization principles and how they reduce data duplication and improve data integrity.`},{id:`secure-ai-agent-sql-query`,category:`SQL Server / Azure SQL / Synapse`,title:`How would an AI agent securely query SQL Server?`,difficulty:`Expert`,time:`~12 min`,description:`Design a secure text-to-SQL architecture using identity, read-only access, query validation, row-level security, and tool authorization.`},{id:`what-is-pyspark`,category:`PySpark`,title:`What is PySpark?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand PySpark and how Python applications use Apache Spark for distributed data processing.`},{id:`dataframe-vs-rdd`,category:`PySpark`,title:`DataFrame vs RDD?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare Spark DataFrames and RDDs in terms of abstraction, optimization, performance, and use cases.`},{id:`lazy-evaluation`,category:`PySpark`,title:`What is lazy evaluation?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Spark delays execution of transformations until an action requires results.`},{id:`spark-transformation`,category:`PySpark`,title:`What is a transformation?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand Spark transformations such as map, filter, select, join, and groupBy.`},{id:`spark-action`,category:`PySpark`,title:`What is an action?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand Spark actions such as count, collect, show, and write that trigger execution.`},{id:`spark-repartition`,category:`PySpark`,title:`What is repartition?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how repartition changes the number and distribution of Spark partitions.`},{id:`repartition-vs-coalesce`,category:`PySpark`,title:`Repartition vs coalesce?`,difficulty:`Intermediate`,time:`~6 min`,description:`Compare repartition and coalesce and understand when each should be used.`},{id:`broadcast-join`,category:`PySpark`,title:`What is a broadcast join?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand how Spark broadcasts small datasets to reduce expensive shuffle operations during joins.`},{id:`pyspark-optimize-job`,category:`PySpark`,title:`How do you optimize a Spark job?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn practical Spark optimization techniques involving partitions, joins, caching, shuffles, and file formats.`},{id:`enterprise-pyspark-pipeline`,category:`PySpark`,title:`Write a PySpark pipeline to process enterprise data.`,difficulty:`Expert`,time:`~15 min`,description:`Design a production PySpark pipeline covering ingestion, cleansing, transformation, validation, storage, and monitoring.`},{id:`sap-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate SAP with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure integration between SAP enterprise processes, APIs, identity, agent tools, and orchestration layers.`},{id:`salesforce-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate Salesforce with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design an agent integration with Salesforce using secure APIs, OAuth, tool authorization, and enterprise workflows.`},{id:`oracle-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate Oracle with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure Oracle integration through APIs, database access, identity, authorization, and agent tools.`},{id:`rest-vs-soap`,category:`Enterprise Integration`,title:`REST vs SOAP?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare REST and SOAP for enterprise integration, interoperability, security, and API design.`},{id:`api-gateway-vs-direct-api`,category:`Enterprise Integration`,title:`API Gateway vs direct API calls?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand why enterprise agents should typically access backend systems through governed API gateways.`},{id:`what-is-oauth2`,category:`Enterprise Integration`,title:`What is OAuth 2.0?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand OAuth 2.0 roles, flows, access tokens, scopes, and enterprise authorization.`},{id:`oauth-vs-api-key`,category:`Enterprise Integration`,title:`OAuth vs API key?`,difficulty:`Beginner`,time:`~6 min`,description:`Compare OAuth-based delegated authorization with simpler API-key authentication mechanisms.`},{id:`client-credentials-flow`,category:`Enterprise Integration`,title:`What is client credentials flow?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand machine-to-machine authentication and when client credentials are appropriate.`},{id:`authorization-code-flow`,category:`Enterprise Integration`,title:`What is authorization code flow?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand user-delegated OAuth authentication and authorization code flow.`},{id:`secure-access-tokens`,category:`Enterprise Integration`,title:`How do you securely store access tokens?`,difficulty:`Advanced`,time:`~7 min`,description:`Learn secure token storage, secret management, token lifetimes, rotation, and managed identity patterns.`},{id:`what-is-idempotency`,category:`Enterprise Integration`,title:`What is idempotency?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand idempotent operations and why they are critical for reliable agent-driven enterprise writes.`},{id:`api-rate-limits`,category:`Enterprise Integration`,title:`How do you handle API rate limits?`,difficulty:`Advanced`,time:`~7 min`,description:`Learn throttling strategies including backoff, retry-after handling, queues, caching, and concurrency control.`},{id:`api-failures`,category:`Enterprise Integration`,title:`How do you handle API failures?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand timeout handling, retries, fallback, circuit breakers, dead-letter queues, and graceful degradation.`},{id:`api-retries`,category:`Enterprise Integration`,title:`How do you implement retries?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand exponential backoff, jitter, retry limits, transient errors, and idempotency.`},{id:`prevent-agent-unauthorized-writes`,category:`Enterprise Integration`,title:`How do you prevent an agent from making unauthorized writes?`,difficulty:`Expert`,time:`~12 min`,description:`Design tool-level authorization, identity propagation, policy enforcement, approval workflows, and audit controls.`},{id:`what-is-microsoft-graph`,category:`Microsoft Graph / Power Platform`,title:`What is Microsoft Graph?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Graph as the unified API layer for Microsoft 365 and related enterprise resources.`},{id:`graph-connectors`,category:`Microsoft Graph / Power Platform`,title:`What are Graph Connectors?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Graph Connectors bring external enterprise data into Microsoft Graph experiences.`},{id:`graph-api-vs-connector`,category:`Microsoft Graph / Power Platform`,title:`Graph API vs Graph Connector?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare Graph API access with Graph Connector indexing and discovery patterns.`},{id:`agent-access-m365`,category:`Microsoft Graph / Power Platform`,title:`How would an agent access Microsoft 365 data?`,difficulty:`Advanced`,time:`~10 min`,description:`Design secure agent access to Microsoft 365 resources using Graph APIs, delegated permissions, application permissions, and identity.`},{id:`agent-access-sharepoint`,category:`Microsoft Graph / Power Platform`,title:`How would an agent access SharePoint?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand secure SharePoint access through Microsoft Graph, search, permissions, ACLs, and identity propagation.`},{id:`what-is-power-automate`,category:`Microsoft Graph / Power Platform`,title:`What is Power Automate?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand Power Automate for workflow orchestration, approvals, system integration, and business automation.`},{id:`power-automate-vs-functions`,category:`Microsoft Graph / Power Platform`,title:`Power Automate vs Azure Functions?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare low-code workflow automation with code-based serverless compute.`},{id:`custom-connectors`,category:`Microsoft Graph / Power Platform`,title:`What are custom connectors?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how custom connectors expose enterprise APIs to Power Platform applications and workflows.`},{id:`secure-power-platform-connectors`,category:`Microsoft Graph / Power Platform`,title:`How do you secure Power Platform connectors?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand authentication, permissions, DLP policies, environment governance, and least privilege for connectors.`},{id:`sharepoint-to-salesforce-agent`,category:`Microsoft Graph / Power Platform`,title:`Design an agent that reads SharePoint and writes to Salesforce.`,difficulty:`Expert`,time:`~15 min`,description:`Design an end-to-end secure agent workflow connecting SharePoint, Microsoft Graph, orchestration, authorization, and Salesforce.`},{id:`secure-enterprise-agentic-ai`,category:`Security`,title:`How do you secure an enterprise Agentic AI platform?`,difficulty:`Expert`,time:`~15 min`,description:`Design defense-in-depth security across identity, APIs, tools, data, networks, models, agents, memory, and observability.`},{id:`what-is-entra-id`,category:`Security`,title:`What is Microsoft Entra ID?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Entra ID for authentication, authorization, application identity, users, groups, and enterprise access management.`},{id:`authentication-vs-authorization`,category:`Security`,title:`Authentication vs authorization?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand the difference between proving identity and determining what an identity is allowed to do.`},{id:`rbac-vs-abac`,category:`Security`,title:`RBAC vs ABAC?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare role-based and attribute-based authorization for enterprise AI applications.`},{id:`what-is-managed-identity`,category:`Security`,title:`What is Managed Identity?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Azure Managed Identity and passwordless authentication between Azure resources.`},{id:`why-managed-identity`,category:`Security`,title:`Why use Managed Identity?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand why managed identities reduce secret management and improve enterprise security.`},{id:`what-is-key-vault`,category:`Security`,title:`What is Azure Key Vault?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand secure management of secrets, keys, and certificates in Azure.`},{id:`what-is-private-endpoint`,category:`Security`,title:`What is a Private Endpoint?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand private network connectivity to Azure services through private IP addresses.`},{id:`what-is-vnet-integration`,category:`Security`,title:`What is VNet integration?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how application services communicate securely with resources inside private networks.`},{id:`what-is-api-management`,category:`Security`,title:`What is API Management?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand API gateway capabilities including authentication, policies, throttling, transformation, and observability.`},{id:`secure-apis`,category:`Security`,title:`How do you secure APIs?`,difficulty:`Advanced`,time:`~10 min`,description:`Design API security using identity, OAuth, JWT validation, scopes, RBAC, rate limits, network controls, and auditing.`},{id:`what-is-oauth`,category:`Security`,title:`What is OAuth?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand OAuth as an authorization framework and its role in enterprise applications.`},{id:`what-is-jwt`,category:`Security`,title:`What is JWT?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand JWT structure, claims, signatures, validation, expiration, and authorization.`},{id:`security-tokenization`,category:`Security`,title:`What is tokenization?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand tokenization as a technique for replacing sensitive values with controlled tokens.`},{id:`data-masking`,category:`Security`,title:`What is data masking?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how sensitive values can be hidden or transformed before being exposed to users or AI systems.`},{id:`encryption-at-rest`,category:`Security`,title:`What is encryption at rest?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how stored enterprise data is protected through encryption.`},{id:`encryption-in-transit`,category:`Security`,title:`What is encryption in transit?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand TLS and other mechanisms used to protect data while moving between systems.`},{id:`least-privilege`,category:`Security`,title:`What is least privilege?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how enterprise systems grant only the minimum permissions required to perform an operation.`},{id:`identity-propagation-agents`,category:`Security`,title:`How do you implement identity propagation through agents?`,difficulty:`Expert`,time:`~12 min`,description:`Design user identity propagation across coordinator, delegator, worker, APIs, and enterprise data sources.`},{id:`tool-level-authorization`,category:`Security`,title:`How do you implement authorization at the tool level?`,difficulty:`Expert`,time:`~12 min`,description:`Design policy enforcement that evaluates user identity, roles, permissions, tool sensitivity, and target resources before execution.`},{id:`what-is-microsoft-purview`,category:`Microsoft Purview / Governance`,title:`What is Microsoft Purview?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Purview for enterprise data governance, discovery, classification, lineage, and compliance.`},{id:`data-classification`,category:`Microsoft Purview / Governance`,title:`What is data classification?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how enterprise data is categorized based on sensitivity, business value, and compliance requirements.`},{id:`sensitivity-labels`,category:`Microsoft Purview / Governance`,title:`What are sensitivity labels?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand sensitivity labels and how they help protect and govern sensitive enterprise content.`},{id:`purview-data-lineage`,category:`Microsoft Purview / Governance`,title:`What is data lineage?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Purview tracks the movement and transformation of enterprise data.`},{id:`purview-genai-governance`,category:`Microsoft Purview / Governance`,title:`How does Purview support GenAI governance?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how governance, classification, compliance, discovery, and protection controls can be applied to AI workloads.`},{id:`identify-sensitive-data`,category:`Microsoft Purview / Governance`,title:`How do you identify sensitive enterprise data?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how sensitive information types, classification, metadata, labels, and scanning can identify protected data.`},{id:`prevent-sensitive-data-llm`,category:`Microsoft Purview / Governance`,title:`How do you prevent sensitive data from entering an LLM?`,difficulty:`Expert`,time:`~12 min`,description:`Design data classification, DLP, masking, filtering, authorization, and prompt inspection controls.`},{id:`what-is-dlp`,category:`Microsoft Purview / Governance`,title:`What is DLP?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Data Loss Prevention and how policies prevent sensitive information from being improperly shared.`},{id:`dlp-for-ai`,category:`Microsoft Purview / Governance`,title:`How do you implement DLP for AI applications?`,difficulty:`Expert`,time:`~12 min`,description:`Design DLP controls across prompts, retrieved documents, tool inputs, model outputs, and downstream systems.`},{id:`enterprise-genai-governance-framework`,category:`Microsoft Purview / Governance`,title:`Design a governance framework for enterprise GenAI.`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise governance framework covering data, models, agents, identity, security, compliance, evaluation, monitoring, and lifecycle management.`},{id:`what-is-ai-guardrail`,category:`AI Guardrails / Responsible AI`,title:`What is an AI guardrail?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand preventive and detective controls that constrain AI behavior and protect enterprise applications.`},{id:`prevent-prompt-injection`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent prompt injection?`,difficulty:`Expert`,time:`~12 min`,description:`Design layered defenses against malicious instructions attempting to manipulate LLM or agent behavior.`},{id:`indirect-prompt-injection`,category:`AI Guardrails / Responsible AI`,title:`What is indirect prompt injection?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand attacks where malicious instructions are embedded in external content retrieved by an agent.`},{id:`what-is-jailbreak`,category:`AI Guardrails / Responsible AI`,title:`What is jailbreak?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand jailbreak attempts and how attackers try to bypass model safety constraints.`},{id:`detect-harmful-content`,category:`AI Guardrails / Responsible AI`,title:`How do you detect harmful content?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand content safety classifiers, policy filters, moderation, and human review.`},{id:`azure-ai-content-safety`,category:`AI Guardrails / Responsible AI`,title:`What is Azure AI Content Safety?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Microsoft's service for detecting harmful or unsafe content in AI applications.`},{id:`prevent-data-leakage`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent data leakage?`,difficulty:`Expert`,time:`~10 min`,description:`Design controls covering data access, retrieval, prompts, model inputs, outputs, tools, logs, and downstream systems.`},{id:`prevent-hallucinations`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn grounding, RAG, constrained generation, validation, citations, confidence checks, and human review strategies.`},{id:`validate-llm-output`,category:`AI Guardrails / Responsible AI`,title:`How do you validate LLM output?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand schema validation, policy checks, factuality checks, business rules, and deterministic validators.`},{id:`tool-authorization`,category:`AI Guardrails / Responsible AI`,title:`How do you enforce tool authorization?`,difficulty:`Expert`,time:`~10 min`,description:`Design authorization policies that validate user identity and permissions before every sensitive tool operation.`},{id:`restrict-agent-autonomy`,category:`AI Guardrails / Responsible AI`,title:`How do you restrict agent autonomy?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn approval gates, tool allowlists, budgets, timeouts, action limits, and policy enforcement for agent autonomy.`},{id:`human-approval`,category:`AI Guardrails / Responsible AI`,title:`How do you implement human approval?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand human-in-the-loop patterns for high-risk actions such as financial, HR, or destructive operations.`},{id:`audit-agent-actions`,category:`AI Guardrails / Responsible AI`,title:`How do you audit agent actions?`,difficulty:`Advanced`,time:`~8 min`,description:`Design audit logging for prompts, decisions, tool calls, identity, outputs, approvals, and enterprise transactions.`},{id:`protect-pii`,category:`AI Guardrails / Responsible AI`,title:`How do you protect PII?`,difficulty:`Expert`,time:`~10 min`,description:`Design PII detection, masking, encryption, access controls, DLP, retention, and secure processing strategies.`},{id:`enterprise-ai-safety-architecture`,category:`AI Guardrails / Responsible AI`,title:`How would you design an enterprise AI safety architecture?`,difficulty:`Expert`,time:`~15 min`,description:`Design a layered AI safety architecture covering input controls, identity, RAG security, tool authorization, content safety, output validation, and auditing.`},{id:`short-term-memory`,category:`Agent Memory`,title:`What is short-term memory?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand short-lived conversational state maintained during an active agent session.`},{id:`long-term-memory`,category:`Agent Memory`,title:`What is long-term memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand persistent information retained across conversations or sessions.`},{id:`conversational-memory`,category:`Agent Memory`,title:`What is conversational memory?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how previous conversation turns can be maintained and used by agents.`},{id:`semantic-memory`,category:`Agent Memory`,title:`What is semantic memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand memory that stores facts and knowledge retrieved through semantic similarity.`},{id:`episodic-memory`,category:`Agent Memory`,title:`What is episodic memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand memory representing previous experiences, events, tasks, and interactions.`},{id:`redis-vs-vector-memory`,category:`Agent Memory`,title:`Redis vs vector database for memory?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare Redis and vector databases for session state, semantic memory, caching, and persistent agent memory.`},{id:`prevent-memory-poisoning`,category:`Agent Memory`,title:`How do you prevent memory poisoning?`,difficulty:`Expert`,time:`~10 min`,description:`Design controls to prevent malicious or incorrect information from becoming trusted persistent agent memory.`},{id:`memory-expiration`,category:`Agent Memory`,title:`How do you manage memory expiration?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand TTLs, retention policies, archival, deletion, and lifecycle management for agent memory.`},{id:`secure-agent-memory`,category:`Agent Memory`,title:`How do you secure agent memory?`,difficulty:`Expert`,time:`~10 min`,description:`Design authorization, encryption, tenant isolation, retention, access controls, and auditing for agent memory.`},{id:`enterprise-agent-memory-architecture`,category:`Agent Memory`,title:`Design an enterprise agent memory architecture.`,difficulty:`Expert`,time:`~15 min`,description:`Design session, task, run, turn, step, semantic, episodic, and long-term memory with enterprise security and governance.`},{id:`monitor-agentic-ai`,category:`Observability / LLMOps`,title:`How do you monitor an Agentic AI application?`,difficulty:`Expert`,time:`~12 min`,description:`Design monitoring across application health, agents, LLMs, tools, data retrieval, latency, cost, and business outcomes.`},{id:`agentic-ai-metrics`,category:`Observability / LLMOps`,title:`What metrics do you capture?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand technical, model, agent, retrieval, tool, cost, security, and business metrics.`},{id:`what-is-llm-observability`,category:`Observability / LLMOps`,title:`What is LLM observability?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand visibility into prompts, responses, tokens, latency, model behavior, tools, and agent workflows.`},{id:`what-is-tracing`,category:`Observability / LLMOps`,title:`What is tracing?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand distributed tracing across API gateways, agents, LLM calls, tools, databases, and external systems.`},{id:`token-usage-monitoring`,category:`Observability / LLMOps`,title:`What is token usage monitoring?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand tracking input and output tokens for cost, capacity, performance, and optimization.`},{id:`what-is-ttft`,category:`Observability / LLMOps`,title:`What is TTFT?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Time to First Token and why it is a critical user-perceived latency metric.`},{id:`ttft-vs-total-latency`,category:`Observability / LLMOps`,title:`TTFT vs total latency?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand the difference between time to first token and complete response latency.`},{id:`monitor-tool-calls`,category:`Observability / LLMOps`,title:`How do you monitor tool calls?`,difficulty:`Advanced`,time:`~8 min`,description:`Track tool latency, success rate, failures, authorization decisions, retries, payloads, and business outcomes.`},{id:`monitor-agent-to-agent-calls`,category:`Observability / LLMOps`,title:`How do you monitor agent-to-agent calls?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand distributed tracing and correlation IDs across coordinator, delegator, worker, and external agent calls.`},{id:`identify-expensive-agents`,category:`Observability / LLMOps`,title:`How do you identify expensive agents?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how to attribute token, model, tool, compute, and retry costs to individual agents and workflows.`},{id:`troubleshoot-agent-hallucinations`,category:`Observability / LLMOps`,title:`How do you troubleshoot hallucinations?`,difficulty:`Expert`,time:`~10 min`,description:`Trace prompts, retrieved context, model responses, tool results, and agent decisions to identify hallucination root causes.`},{id:`llmops-azure-ml-mlflow-langfuse`,category:`Observability / LLMOps`,title:`How would you implement LLMOps using Azure ML/MLflow/Langfuse?`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise LLMOps architecture covering experimentation, prompt versions, evaluations, tracing, monitoring, deployment, and governance.`},{id:`evaluate-llm-application`,category:`Evaluation`,title:`How do you evaluate an LLM application?`,difficulty:`Expert`,time:`~10 min`,description:`Understand offline and online evaluation across accuracy, relevance, groundedness, safety, latency, cost, and business outcomes.`},{id:`rag-evaluation`,category:`Evaluation`,title:`What is RAG evaluation?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand how retrieval and generation quality are evaluated separately and together.`},{id:`what-is-faithfulness`,category:`Evaluation`,title:`What is faithfulness?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand whether an answer is supported by the retrieved context rather than fabricated by the model.`},{id:`answer-relevance`,category:`Evaluation`,title:`What is answer relevance?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand whether generated answers directly address the user's question.`},{id:`context-precision`,category:`Evaluation`,title:`What is context precision?`,difficulty:`Advanced`,time:`~6 min`,description:`Understand how accurately retrieved context contains information relevant to answering the query.`},{id:`context-recall`,category:`Evaluation`,title:`What is context recall?`,difficulty:`Advanced`,time:`~6 min`,description:`Understand whether retrieval successfully captures the information needed to answer a question.`},{id:`hallucination-rate`,category:`Evaluation`,title:`What is hallucination rate?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how hallucination frequency can be measured and tracked as a production quality metric.`},{id:`golden-dataset`,category:`Evaluation`,title:`How do you create a golden dataset?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how to create representative questions, expected answers, contexts, edge cases, and evaluation criteria.`},{id:`offline-vs-online-evaluation`,category:`Evaluation`,title:`Offline vs online evaluation?`,difficulty:`Advanced`,time:`~7 min`,description:`Compare pre-production benchmark evaluation with production monitoring and continuous evaluation.`},{id:`production-ai-kpis`,category:`Evaluation`,title:`What KPIs would you establish before production?`,difficulty:`Expert`,time:`~10 min`,description:`Define quality, retrieval, latency, cost, reliability, safety, adoption, and business KPIs before production rollout.`},{id:`scale-agentic-ai-system`,category:`Scalability / Reliability`,title:`How do you scale an Agentic AI system?`,difficulty:`Expert`,time:`~12 min`,description:`Design horizontal scaling across gateways, orchestration services, workers, queues, model endpoints, databases, and caches.`},{id:`horizontal-vs-vertical-scaling`,category:`Scalability / Reliability`,title:`Horizontal vs vertical scaling?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the difference between adding resources to a machine and adding more service instances.`},{id:`stateless-vs-stateful`,category:`Scalability / Reliability`,title:`Stateless vs stateful architecture for scaling?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand why stateless services scale more easily and how external state stores support scalable agent platforms.`},{id:`10000-concurrent-users`,category:`Scalability / Reliability`,title:`How do you handle 10,000 concurrent users?`,difficulty:`Expert`,time:`~15 min`,description:`Design load balancing, autoscaling, queues, caching, rate limits, model capacity, state management, and resilience.`},{id:`llm-rate-limits`,category:`Scalability / Reliability`,title:`How do you handle LLM rate limits?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand throttling, retries, exponential backoff, workload distribution, quotas, and capacity planning.`},{id:`azure-openai-throttling`,category:`Scalability / Reliability`,title:`How do you handle Azure OpenAI throttling?`,difficulty:`Advanced`,time:`~8 min`,description:`Design quota management, retry strategies, model routing, deployment distribution, caching, and workload controls.`},{id:`what-is-caching`,category:`Scalability / Reliability`,title:`What is caching?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand caching and how it reduces latency, load, and cost in enterprise AI applications.`},{id:`semantic-caching`,category:`Scalability / Reliability`,title:`What is semantic caching?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand caching based on semantic similarity rather than exact request matching.`},{id:`reduce-token-costs`,category:`Scalability / Reliability`,title:`How do you reduce token costs?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn prompt compression, context optimization, model routing, caching, summarization, and smaller-model strategies.`},{id:`reduce-ai-latency`,category:`Scalability / Reliability`,title:`How do you reduce latency?`,difficulty:`Advanced`,time:`~8 min`,description:`Optimize model selection, prompts, retrieval, network paths, parallel execution, streaming, caching, and tool calls.`},{id:`what-is-circuit-breaker`,category:`Scalability / Reliability`,title:`What is circuit breaker?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand the circuit breaker pattern for preventing cascading failures in distributed systems.`},{id:`high-availability-agent-platform`,category:`Scalability / Reliability`,title:`How do you design high availability for an agent platform?`,difficulty:`Expert`,time:`~15 min`,description:`Design multi-instance, zone-aware, resilient agent services with queues, failover, health checks, retries, and disaster recovery.`},{id:`azure-functions-vs-container-apps`,category:`Azure Infrastructure`,title:`Azure Functions vs Container Apps?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare event-driven serverless functions with containerized microservices and agent backends.`},{id:`container-apps-vs-aks`,category:`Azure Infrastructure`,title:`Container Apps vs AKS?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare Azure Container Apps and AKS in terms of Kubernetes control, operational complexity, scaling, and workload requirements.`},{id:`when-use-aks`,category:`Azure Infrastructure`,title:`When would you use AKS?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand when enterprise workloads require Kubernetes-level control, networking, orchestration, or customization.`},{id:`when-use-functions`,category:`Azure Infrastructure`,title:`When would you use Azure Functions?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand event-driven serverless workloads and when Functions are appropriate.`},{id:`azure-api-management`,category:`Azure Infrastructure`,title:`What is Azure API Management?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand API gateway, security, throttling, transformation, subscription, policy, and observability capabilities.`},{id:`what-is-azure-service-bus`,category:`Azure Infrastructure`,title:`What is Azure Service Bus?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand reliable enterprise messaging using queues, topics, subscriptions, retries, dead-letter queues, and transactions.`},{id:`service-bus-vs-event-grid`,category:`Azure Infrastructure`,title:`Service Bus vs Event Grid?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare enterprise messaging and event notification patterns and when each Azure service should be used.`},{id:`when-use-kafka`,category:`Azure Infrastructure`,title:`When would you use Kafka?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand Kafka's event-streaming architecture and when high-throughput, durable event streams are appropriate.`},{id:`deploy-agent-backend`,category:`Azure Infrastructure`,title:`How would you deploy an agent backend?`,difficulty:`Advanced`,time:`~10 min`,description:`Design CI/CD, containers, networking, identity, secrets, scaling, observability, and deployment strategies for an agent backend.`},{id:`production-azure-agentic-ai-architecture`,category:`Azure Infrastructure`,title:`Design a production Azure architecture for Agentic AI.`,difficulty:`Expert`,time:`~15 min`,description:`Design a complete production architecture covering Teams, Front Door, APIM, agents, Azure OpenAI, AI Search, data, Service Bus, security, monitoring, and governance.`}];function dh(){return(0,M.jsx)($,{data:uh,title:`AzureEnterpriseQuestions Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var fh=[{id:`arr-q1`,category:`Arrays - Basic Operations`,title:`Find the Largest Element`,difficulty:`Beginner`,time:`~10 min`,description:`Traverse a list once to find its maximum value without using max().`,concept:`
+`}];function lh(){return(0,M.jsx)($,{data:ch,title:`AboutPooja Communication Cookbook`,subtitle:`AboutPooja`,icon:`🧩`,patternLabel:`Topics`})}var uh=[{id:`what-is-azure-ai-search`,category:`Azure AI Search`,title:`What is Azure AI Search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Azure AI Search and how it provides enterprise search, vector retrieval, semantic ranking, and RAG capabilities.`},{id:`what-is-an-index`,category:`Azure AI Search`,title:`What is an index?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand the role of an Azure AI Search index and how documents and searchable fields are organized.`},{id:`what-is-an-indexer`,category:`Azure AI Search`,title:`What is an indexer?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how Azure AI Search indexers extract data from supported sources and populate search indexes.`},{id:`what-is-a-data-source`,category:`Azure AI Search`,title:`What is a data source?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how Azure AI Search connects to enterprise data sources such as Blob Storage, SQL, and Cosmos DB.`},{id:`what-is-a-skillset`,category:`Azure AI Search`,title:`What is a skillset?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand AI enrichment pipelines, built-in skills, custom skills, and how skillsets transform enterprise content.`},{id:`what-is-vector-search`,category:`Azure AI Search`,title:`What is vector search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand embeddings, vector indexes, similarity search, and how vector retrieval supports semantic RAG.`},{id:`what-is-hybrid-search`,category:`Azure AI Search`,title:`What is hybrid search?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how keyword and vector search can be combined to improve enterprise retrieval accuracy.`},{id:`what-is-semantic-search`,category:`Azure AI Search`,title:`What is semantic search?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand semantic ranking and how Azure AI Search improves relevance beyond traditional keyword matching.`},{id:`azure-ai-search-security-trimming`,category:`Azure AI Search`,title:`How do you implement security trimming?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to enforce document-level authorization so users retrieve only enterprise content they are entitled to access.`},{id:`troubleshoot-poor-search-results`,category:`Azure AI Search`,title:`How would you troubleshoot poor search results?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn a systematic approach to diagnosing poor retrieval quality, including chunking, embeddings, filters, ranking, and query design.`},{id:`what-is-azure-openai`,category:`Azure OpenAI`,title:`What is Azure OpenAI?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Azure OpenAI and how enterprise applications consume OpenAI models through Microsoft Azure.`},{id:`azure-openai-vs-openai-api`,category:`Azure OpenAI`,title:`Azure OpenAI vs OpenAI API?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare Azure OpenAI and the OpenAI API from enterprise security, networking, governance, deployment, and operational perspectives.`},{id:`how-select-an-llm`,category:`Azure OpenAI`,title:`How do you select an LLM?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to select models based on quality, reasoning, latency, cost, context window, multimodal capabilities, and enterprise requirements.`},{id:`gpt-vs-small-language-models`,category:`Azure OpenAI`,title:`GPT vs smaller language models?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare large and smaller language models for enterprise workloads, including cost, latency, accuracy, and deployment tradeoffs.`},{id:`what-is-temperature`,category:`Azure OpenAI`,title:`What is temperature?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how temperature affects randomness and response variation during LLM generation.`},{id:`what-is-top-p`,category:`Azure OpenAI`,title:`What is top-p?`,difficulty:`Intermediate`,time:`~5 min`,description:`Understand nucleus sampling and how top-p controls the token probability distribution used during generation.`},{id:`what-is-context-window`,category:`Azure OpenAI`,title:`What is a context window?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand input and output token limits and why context-window management matters in enterprise LLM applications.`},{id:`what-is-tokenization`,category:`Azure OpenAI`,title:`What is tokenization?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how text is converted into tokens and why tokenization impacts cost, latency, and context limits.`},{id:`what-is-prompt-engineering`,category:`Azure OpenAI`,title:`What is prompt engineering?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how prompts are designed and optimized to improve reliability, consistency, and task performance.`},{id:`what-is-structured-output`,category:`Azure OpenAI`,title:`What is structured output?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how LLMs can generate predictable JSON or schema-constrained responses for enterprise applications.`},{id:`what-is-function-tool-calling`,category:`Azure OpenAI`,title:`What is function/tool calling?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how LLMs select tools and generate structured arguments to interact with enterprise APIs and systems.`},{id:`reduce-llm-latency`,category:`Azure OpenAI`,title:`How do you reduce LLM latency?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn techniques such as model selection, prompt optimization, streaming, caching, parallel execution, and token reduction.`},{id:`what-is-azure-ai-foundry`,category:`Azure AI Foundry`,title:`What is Azure AI Foundry?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Azure AI Foundry as Microsoft's platform for building, evaluating, deploying, governing, and operating AI applications.`},{id:`azure-ai-foundry-capabilities`,category:`Azure AI Foundry`,title:`What capabilities does Azure AI Foundry provide?`,difficulty:`Intermediate`,time:`~10 min`,description:`Explore model catalog, agents, evaluation, tracing, prompt management, deployments, monitoring, and enterprise AI development capabilities.`},{id:`azure-ai-foundry-vs-azure-ml`,category:`Azure AI Foundry`,title:`Azure AI Foundry vs Azure Machine Learning?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Azure AI Foundry and Azure Machine Learning across generative AI, ML lifecycle, experimentation, evaluation, deployment, and governance.`},{id:`azure-ai-foundry-vs-azure-openai`,category:`Azure AI Foundry`,title:`Azure AI Foundry vs Azure OpenAI?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the difference between the broader AI development platform and Azure's managed OpenAI model service.`},{id:`deploy-models-in-foundry`,category:`Azure AI Foundry`,title:`How do you deploy models?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand model deployment patterns, managed endpoints, serverless inference, and production model serving.`},{id:`evaluate-llms-in-foundry`,category:`Azure AI Foundry`,title:`How do you evaluate LLMs?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to evaluate model quality, groundedness, relevance, coherence, safety, and task-specific performance.`},{id:`monitor-ai-applications-foundry`,category:`Azure AI Foundry`,title:`How do you monitor AI applications?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand tracing, application telemetry, token usage, latency, failures, model behavior, and production monitoring.`},{id:`manage-prompts-foundry`,category:`Azure AI Foundry`,title:`How do you manage prompts?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand prompt versioning, templates, configuration, experimentation, and lifecycle management.`},{id:`perform-model-evaluation`,category:`Azure AI Foundry`,title:`How do you perform model evaluation?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how to establish datasets, evaluation criteria, automated metrics, human review, and regression testing.`},{id:`what-is-model-catalog`,category:`Azure AI Foundry`,title:`What is model catalog?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how the model catalog helps organizations discover and select foundation and specialized models.`},{id:`ai-agents-in-foundry`,category:`Azure AI Foundry`,title:`What are AI agents in Foundry?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand enterprise agents, instructions, tools, knowledge, orchestration, evaluation, and deployment.`},{id:`enterprise-ai-platform-using-foundry`,category:`Azure AI Foundry`,title:`How would you build an enterprise AI platform using Foundry?`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise AI platform covering models, agents, RAG, identity, networking, governance, evaluation, observability, and deployment.`},{id:`what-is-copilot-studio`,category:`Microsoft Copilot Studio`,title:`What is Microsoft Copilot Studio?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Copilot Studio and its low-code platform for building and extending enterprise copilots and agents.`},{id:`copilot-studio-vs-azure-ai-foundry`,category:`Microsoft Copilot Studio`,title:`Copilot Studio vs Azure AI Foundry?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare low-code business agent development in Copilot Studio with pro-code enterprise AI engineering in Azure AI Foundry.`},{id:`copilot-studio-vs-custom-agent`,category:`Microsoft Copilot Studio`,title:`Copilot Studio vs custom agent?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand when to use Copilot Studio and when a fully custom agent platform is more appropriate.`},{id:`what-are-copilot-topics`,category:`Microsoft Copilot Studio`,title:`What are topics?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand topics, triggers, conversation flows, conditions, and responses in Copilot Studio.`},{id:`what-are-copilot-actions`,category:`Microsoft Copilot Studio`,title:`What are actions?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how actions allow copilots to invoke APIs, workflows, connectors, and enterprise operations.`},{id:`what-are-copilot-connectors`,category:`Microsoft Copilot Studio`,title:`What are connectors?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand standard and custom connectors for accessing enterprise systems from Copilot Studio.`},{id:`what-are-generative-answers`,category:`Microsoft Copilot Studio`,title:`What are generative answers?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how generative answers use enterprise knowledge sources to dynamically produce responses.`},{id:`copilot-enterprise-data`,category:`Microsoft Copilot Studio`,title:`How does Copilot Studio connect to enterprise data?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how Copilot Studio integrates with SharePoint, Dataverse, connectors, APIs, and other enterprise data sources.`},{id:`copilot-user-authentication`,category:`Microsoft Copilot Studio`,title:`How do you authenticate users?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand authentication, Entra ID, user identity, permissions, and enterprise access control.`},{id:`copilot-teams-integration`,category:`Microsoft Copilot Studio`,title:`How do you integrate Copilot Studio with Teams?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Copilot Studio agents are published and consumed through Microsoft Teams.`},{id:`custom-api-from-copilot-studio`,category:`Microsoft Copilot Studio`,title:`How do you call a custom API from Copilot Studio?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how custom connectors and APIs can extend Copilot Studio agents with enterprise capabilities.`},{id:`copilot-power-platform-integration`,category:`Microsoft Copilot Studio`,title:`How do you integrate Power Platform?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand integration with Power Automate, Power Apps, Dataverse, connectors, and other Power Platform services.`},{id:`what-is-dataverse`,category:`Microsoft Copilot Studio`,title:`What is Dataverse?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand Microsoft Dataverse as a governed data platform for Power Platform applications and business data.`},{id:`when-not-to-use-copilot-studio`,category:`Microsoft Copilot Studio`,title:`When would you NOT use Copilot Studio?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand scenarios where custom agent orchestration, advanced RAG, complex workflows, or infrastructure control require a pro-code platform.`},{id:`enterprise-copilot-studio-architecture`,category:`Microsoft Copilot Studio`,title:`Design a Copilot Studio architecture for a large enterprise.`,difficulty:`Expert`,time:`~15 min`,description:`Design a secure enterprise Copilot architecture covering Teams, identity, data, APIs, connectors, governance, monitoring, and DLP.`},{id:`integrate-ai-agent-with-teams`,category:`Microsoft Teams Integration`,title:`How do you integrate an AI agent with Teams?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how Teams can act as the user interface for enterprise AI agents and connect to an orchestration backend.`},{id:`teams-authentication`,category:`Microsoft Teams Integration`,title:`How does authentication work in Teams?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand Teams identity, Entra ID authentication, tokens, permissions, and enterprise access control.`},{id:`teams-sso`,category:`Microsoft Teams Integration`,title:`How do you implement SSO?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn how Entra ID and Teams SSO can provide seamless authenticated access to enterprise agents.`},{id:`entra-id-teams`,category:`Microsoft Teams Integration`,title:`How does Entra ID integrate with Teams?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the relationship between Teams identities, Entra ID applications, permissions, and enterprise resources.`},{id:`teams-backend-apis`,category:`Microsoft Teams Integration`,title:`How do you call backend APIs from Teams?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand secure communication between Teams applications, bot services, APIs, and agent orchestration layers.`},{id:`adaptive-cards`,category:`Microsoft Teams Integration`,title:`How do you implement Adaptive Cards?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Adaptive Cards provide interactive enterprise UI elements inside Teams conversations.`},{id:`teams-agent-orchestration`,category:`Microsoft Teams Integration`,title:`How would Teams communicate with an agent orchestration layer?`,difficulty:`Expert`,time:`~12 min`,description:`Design the communication flow between Teams, gateway services, coordinator agents, delegated agents, workers, and enterprise systems.`},{id:`secure-teams-enterprise-agents`,category:`Microsoft Teams Integration`,title:`How would you secure Teams-based enterprise agents?`,difficulty:`Expert`,time:`~12 min`,description:`Design authentication, authorization, identity propagation, network security, DLP, auditing, and tool-level controls.`},{id:`what-is-microsoft-fabric`,category:`Microsoft Fabric`,title:`What is Microsoft Fabric?`,difficulty:`Beginner`,time:`~8 min`,description:`Understand Microsoft Fabric as an integrated analytics platform covering data engineering, data science, warehousing, real-time analytics, and BI.`},{id:`what-is-onelake`,category:`Microsoft Fabric`,title:`What is OneLake?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand OneLake as Fabric's unified logical data lake and how it simplifies enterprise data management.`},{id:`onelake-vs-adls`,category:`Microsoft Fabric`,title:`OneLake vs ADLS?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare OneLake and Azure Data Lake Storage across architecture, governance, access, and Fabric integration.`},{id:`fabric-lakehouse`,category:`Microsoft Fabric`,title:`What is Fabric Lakehouse?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the Fabric Lakehouse architecture for storing and processing structured and semi-structured enterprise data.`},{id:`fabric-warehouse`,category:`Microsoft Fabric`,title:`What is Fabric Warehouse?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Fabric Warehouse and when SQL-based analytical workloads should use it.`},{id:`fabric-data-factory`,category:`Microsoft Fabric`,title:`What is Fabric Data Factory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand pipelines, ingestion, transformation, orchestration, and connectivity in Fabric Data Factory.`},{id:`fabric-notebooks`,category:`Microsoft Fabric`,title:`What are Fabric notebooks?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how notebooks are used for Spark-based data engineering, analytics, and data science in Fabric.`},{id:`what-is-direct-lake`,category:`Microsoft Fabric`,title:`What is Direct Lake?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand how Power BI can query data stored in OneLake with Direct Lake for high-performance analytics.`},{id:`fabric-semantic-model`,category:`Microsoft Fabric`,title:`What is a semantic model in Fabric?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand semantic models, business definitions, relationships, measures, and their role in Power BI.`},{id:`fabric-vs-databricks`,category:`Microsoft Fabric`,title:`Fabric vs Databricks?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Microsoft Fabric and Databricks across data engineering, lakehouse architecture, AI, governance, and BI.`},{id:`fabric-vs-synapse`,category:`Microsoft Fabric`,title:`Fabric vs Synapse?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand the differences between Microsoft Fabric and Azure Synapse and when each architecture is appropriate.`},{id:`power-bi-fabric`,category:`Microsoft Fabric`,title:`How does Power BI integrate with Fabric?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand how Fabric data engineering and analytics capabilities integrate with Power BI semantic models and reports.`},{id:`ai-data-platform-fabric`,category:`Microsoft Fabric`,title:`How would you build an AI data platform using Fabric?`,difficulty:`Expert`,time:`~12 min`,description:`Design a Fabric-based AI data platform covering ingestion, lakehouse, governance, vectorization, analytics, and agent consumption.`},{id:`agents-consume-fabric-data`,category:`Microsoft Fabric`,title:`How would agents consume Fabric data?`,difficulty:`Expert`,time:`~12 min`,description:`Understand how enterprise agents can securely retrieve and analyze Fabric data through APIs, semantic models, SQL, and governed tools.`},{id:`enterprise-fabric-architecture`,category:`Microsoft Fabric`,title:`Design an enterprise Fabric architecture.`,difficulty:`Expert`,time:`~15 min`,description:`Design a complete enterprise Fabric architecture covering OneLake, ingestion, Lakehouse, Warehouse, governance, Power BI, security, and AI.`},{id:`what-is-databricks`,category:`Databricks / Delta Lake`,title:`What is Databricks?`,difficulty:`Beginner`,time:`~8 min`,description:`Understand Databricks as a cloud data and AI platform built around Apache Spark and lakehouse architecture.`},{id:`what-is-delta-lake`,category:`Databricks / Delta Lake`,title:`What is Delta Lake?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand Delta Lake and how it adds transactional reliability and data-management capabilities to data lakes.`},{id:`delta-lake-vs-parquet`,category:`Databricks / Delta Lake`,title:`Delta Lake vs Parquet?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare Delta Lake and Parquet and understand how Delta builds transactional capabilities on top of file-based storage.`},{id:`delta-acid`,category:`Databricks / Delta Lake`,title:`What is ACID in Delta Lake?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand atomicity, consistency, isolation, and durability in Delta Lake transactions.`},{id:`delta-schema-evolution`,category:`Databricks / Delta Lake`,title:`What is schema evolution?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Delta Lake handles controlled changes to data schemas over time.`},{id:`delta-schema-enforcement`,category:`Databricks / Delta Lake`,title:`What is schema enforcement?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Delta Lake protects tables from incompatible or invalid data writes.`},{id:`delta-time-travel`,category:`Databricks / Delta Lake`,title:`What is time travel?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Delta Lake enables querying historical versions of data for auditing and recovery.`},{id:`bronze-silver-gold`,category:`Databricks / Delta Lake`,title:`What are Bronze/Silver/Gold layers?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand the medallion architecture and how raw, refined, and business-ready data layers are separated.`},{id:`unity-catalog`,category:`Databricks / Delta Lake`,title:`What is Unity Catalog?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand centralized data governance, permissions, lineage, discovery, and auditing through Unity Catalog.`},{id:`databricks-vs-fabric`,category:`Databricks / Delta Lake`,title:`Databricks vs Fabric?`,difficulty:`Advanced`,time:`~10 min`,description:`Compare Databricks and Fabric across data engineering, lakehouse, AI, governance, analytics, and enterprise integration.`},{id:`optimize-spark-job`,category:`Databricks / Delta Lake`,title:`How do you optimize a Spark job?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn Spark optimization techniques involving partitioning, joins, caching, file sizes, shuffles, and cluster configuration.`},{id:`databricks-agentic-ai`,category:`Databricks / Delta Lake`,title:`How would you integrate Databricks with an Agentic AI platform?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure integration between Databricks data platforms, RAG pipelines, vector search, agents, governance, and enterprise tools.`},{id:`enterprise-data-pipeline`,category:`Data Engineering`,title:`Explain an enterprise data pipeline.`,difficulty:`Advanced`,time:`~10 min`,description:`Explain ingestion, validation, transformation, storage, governance, serving, monitoring, and consumption in an enterprise pipeline.`},{id:`batch-vs-streaming`,category:`Data Engineering`,title:`Batch vs streaming?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare batch and real-time data processing and understand when each approach should be used.`},{id:`etl-vs-elt`,category:`Data Engineering`,title:`ETL vs ELT?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the difference between extract-transform-load and extract-load-transform architectures.`},{id:`what-is-cdc`,category:`Data Engineering`,title:`What is CDC?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Change Data Capture and how incremental database changes are propagated into modern data platforms.`},{id:`data-lineage`,category:`Data Engineering`,title:`What is data lineage?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how data lineage tracks the origin, transformation, movement, and consumption of enterprise data.`},{id:`data-quality`,category:`Data Engineering`,title:`What is data quality?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand completeness, accuracy, consistency, validity, uniqueness, and timeliness in enterprise data.`},{id:`data-profiling`,category:`Data Engineering`,title:`What is data profiling?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how data profiling analyzes distributions, nulls, duplicates, patterns, and anomalies.`},{id:`data-cataloging`,category:`Data Engineering`,title:`What is data cataloging?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how catalogs help organizations discover, classify, understand, and govern enterprise data.`},{id:`data-governance`,category:`Data Engineering`,title:`What is data governance?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand policies, ownership, stewardship, security, compliance, quality, lineage, and lifecycle management.`},{id:`master-data`,category:`Data Engineering`,title:`What is master data?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand master data management and how organizations maintain trusted entities such as customers, products, and suppliers.`},{id:`dimensional-modeling`,category:`Data Engineering`,title:`What is dimensional modeling?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand facts, dimensions, measures, relationships, and analytical data modeling.`},{id:`star-vs-snowflake-schema`,category:`Data Engineering`,title:`Star schema vs snowflake schema?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare star and snowflake schemas and understand their analytical performance and modeling tradeoffs.`},{id:`what-is-fact-table`,category:`Data Engineering`,title:`What is a fact table?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand fact tables, measures, grain, and relationships in analytical data models.`},{id:`what-is-dimension-table`,category:`Data Engineering`,title:`What is a dimension table?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand dimensions, descriptive attributes, surrogate keys, and their role in analytical systems.`},{id:`legacy-modern-data-platforms`,category:`Data Engineering`,title:`How would you integrate legacy and modern data platforms?`,difficulty:`Expert`,time:`~12 min`,description:`Design an integration strategy connecting legacy databases and applications with cloud data lakes, warehouses, APIs, and AI platforms.`},{id:`sql-server-vs-azure-sql`,category:`SQL Server / Azure SQL / Synapse`,title:`SQL Server vs Azure SQL?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare on-premises SQL Server with Azure SQL deployment options across management, scalability, networking, and operations.`},{id:`azure-sql-vs-synapse`,category:`SQL Server / Azure SQL / Synapse`,title:`Azure SQL vs Synapse?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare transactional Azure SQL workloads with analytical workloads in Azure Synapse.`},{id:`oltp-vs-olap`,category:`SQL Server / Azure SQL / Synapse`,title:`OLTP vs OLAP?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the architectural differences between transactional and analytical database workloads.`},{id:`clustered-index`,category:`SQL Server / Azure SQL / Synapse`,title:`What is a clustered index?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand clustered indexes and how they affect physical data organization and query performance.`},{id:`nonclustered-index`,category:`SQL Server / Azure SQL / Synapse`,title:`What is a nonclustered index?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand nonclustered indexes and how they accelerate data retrieval.`},{id:`sql-ctes`,category:`SQL Server / Azure SQL / Synapse`,title:`What are CTEs?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Common Table Expressions and their use in readable and recursive SQL queries.`},{id:`sql-window-functions`,category:`SQL Server / Azure SQL / Synapse`,title:`What are window functions?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand analytical SQL functions that calculate values across related rows without collapsing the result set.`},{id:`row-number-rank-dense-rank`,category:`SQL Server / Azure SQL / Synapse`,title:`ROW_NUMBER vs RANK vs DENSE_RANK?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand the differences between common SQL ranking functions and when to use each one.`},{id:`optimize-slow-sql-query`,category:`SQL Server / Azure SQL / Synapse`,title:`How do you optimize a slow SQL query?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn query optimization techniques involving execution plans, indexes, joins, statistics, partitioning, and query design.`},{id:`sql-partitioning`,category:`SQL Server / Azure SQL / Synapse`,title:`What is partitioning?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand table partitioning and how it improves manageability and performance for large datasets.`},{id:`database-normalization`,category:`SQL Server / Azure SQL / Synapse`,title:`What is database normalization?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand normalization principles and how they reduce data duplication and improve data integrity.`},{id:`secure-ai-agent-sql-query`,category:`SQL Server / Azure SQL / Synapse`,title:`How would an AI agent securely query SQL Server?`,difficulty:`Expert`,time:`~12 min`,description:`Design a secure text-to-SQL architecture using identity, read-only access, query validation, row-level security, and tool authorization.`},{id:`what-is-pyspark`,category:`PySpark`,title:`What is PySpark?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand PySpark and how Python applications use Apache Spark for distributed data processing.`},{id:`dataframe-vs-rdd`,category:`PySpark`,title:`DataFrame vs RDD?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare Spark DataFrames and RDDs in terms of abstraction, optimization, performance, and use cases.`},{id:`lazy-evaluation`,category:`PySpark`,title:`What is lazy evaluation?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Spark delays execution of transformations until an action requires results.`},{id:`spark-transformation`,category:`PySpark`,title:`What is a transformation?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand Spark transformations such as map, filter, select, join, and groupBy.`},{id:`spark-action`,category:`PySpark`,title:`What is an action?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand Spark actions such as count, collect, show, and write that trigger execution.`},{id:`spark-repartition`,category:`PySpark`,title:`What is repartition?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how repartition changes the number and distribution of Spark partitions.`},{id:`repartition-vs-coalesce`,category:`PySpark`,title:`Repartition vs coalesce?`,difficulty:`Intermediate`,time:`~6 min`,description:`Compare repartition and coalesce and understand when each should be used.`},{id:`broadcast-join`,category:`PySpark`,title:`What is a broadcast join?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand how Spark broadcasts small datasets to reduce expensive shuffle operations during joins.`},{id:`pyspark-optimize-job`,category:`PySpark`,title:`How do you optimize a Spark job?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn practical Spark optimization techniques involving partitions, joins, caching, shuffles, and file formats.`},{id:`enterprise-pyspark-pipeline`,category:`PySpark`,title:`Write a PySpark pipeline to process enterprise data.`,difficulty:`Expert`,time:`~15 min`,description:`Design a production PySpark pipeline covering ingestion, cleansing, transformation, validation, storage, and monitoring.`},{id:`sap-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate SAP with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure integration between SAP enterprise processes, APIs, identity, agent tools, and orchestration layers.`},{id:`salesforce-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate Salesforce with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design an agent integration with Salesforce using secure APIs, OAuth, tool authorization, and enterprise workflows.`},{id:`oracle-ai-agent`,category:`Enterprise Integration`,title:`How would you integrate Oracle with an AI agent?`,difficulty:`Expert`,time:`~12 min`,description:`Design secure Oracle integration through APIs, database access, identity, authorization, and agent tools.`},{id:`rest-vs-soap`,category:`Enterprise Integration`,title:`REST vs SOAP?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare REST and SOAP for enterprise integration, interoperability, security, and API design.`},{id:`api-gateway-vs-direct-api`,category:`Enterprise Integration`,title:`API Gateway vs direct API calls?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand why enterprise agents should typically access backend systems through governed API gateways.`},{id:`what-is-oauth2`,category:`Enterprise Integration`,title:`What is OAuth 2.0?`,difficulty:`Intermediate`,time:`~8 min`,description:`Understand OAuth 2.0 roles, flows, access tokens, scopes, and enterprise authorization.`},{id:`oauth-vs-api-key`,category:`Enterprise Integration`,title:`OAuth vs API key?`,difficulty:`Beginner`,time:`~6 min`,description:`Compare OAuth-based delegated authorization with simpler API-key authentication mechanisms.`},{id:`client-credentials-flow`,category:`Enterprise Integration`,title:`What is client credentials flow?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand machine-to-machine authentication and when client credentials are appropriate.`},{id:`authorization-code-flow`,category:`Enterprise Integration`,title:`What is authorization code flow?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand user-delegated OAuth authentication and authorization code flow.`},{id:`secure-access-tokens`,category:`Enterprise Integration`,title:`How do you securely store access tokens?`,difficulty:`Advanced`,time:`~7 min`,description:`Learn secure token storage, secret management, token lifetimes, rotation, and managed identity patterns.`},{id:`what-is-idempotency`,category:`Enterprise Integration`,title:`What is idempotency?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand idempotent operations and why they are critical for reliable agent-driven enterprise writes.`},{id:`api-rate-limits`,category:`Enterprise Integration`,title:`How do you handle API rate limits?`,difficulty:`Advanced`,time:`~7 min`,description:`Learn throttling strategies including backoff, retry-after handling, queues, caching, and concurrency control.`},{id:`api-failures`,category:`Enterprise Integration`,title:`How do you handle API failures?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand timeout handling, retries, fallback, circuit breakers, dead-letter queues, and graceful degradation.`},{id:`api-retries`,category:`Enterprise Integration`,title:`How do you implement retries?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand exponential backoff, jitter, retry limits, transient errors, and idempotency.`},{id:`prevent-agent-unauthorized-writes`,category:`Enterprise Integration`,title:`How do you prevent an agent from making unauthorized writes?`,difficulty:`Expert`,time:`~12 min`,description:`Design tool-level authorization, identity propagation, policy enforcement, approval workflows, and audit controls.`},{id:`what-is-microsoft-graph`,category:`Microsoft Graph / Power Platform`,title:`What is Microsoft Graph?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Graph as the unified API layer for Microsoft 365 and related enterprise resources.`},{id:`graph-connectors`,category:`Microsoft Graph / Power Platform`,title:`What are Graph Connectors?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how Graph Connectors bring external enterprise data into Microsoft Graph experiences.`},{id:`graph-api-vs-connector`,category:`Microsoft Graph / Power Platform`,title:`Graph API vs Graph Connector?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare Graph API access with Graph Connector indexing and discovery patterns.`},{id:`agent-access-m365`,category:`Microsoft Graph / Power Platform`,title:`How would an agent access Microsoft 365 data?`,difficulty:`Advanced`,time:`~10 min`,description:`Design secure agent access to Microsoft 365 resources using Graph APIs, delegated permissions, application permissions, and identity.`},{id:`agent-access-sharepoint`,category:`Microsoft Graph / Power Platform`,title:`How would an agent access SharePoint?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand secure SharePoint access through Microsoft Graph, search, permissions, ACLs, and identity propagation.`},{id:`what-is-power-automate`,category:`Microsoft Graph / Power Platform`,title:`What is Power Automate?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand Power Automate for workflow orchestration, approvals, system integration, and business automation.`},{id:`power-automate-vs-functions`,category:`Microsoft Graph / Power Platform`,title:`Power Automate vs Azure Functions?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare low-code workflow automation with code-based serverless compute.`},{id:`custom-connectors`,category:`Microsoft Graph / Power Platform`,title:`What are custom connectors?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how custom connectors expose enterprise APIs to Power Platform applications and workflows.`},{id:`secure-power-platform-connectors`,category:`Microsoft Graph / Power Platform`,title:`How do you secure Power Platform connectors?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand authentication, permissions, DLP policies, environment governance, and least privilege for connectors.`},{id:`sharepoint-to-salesforce-agent`,category:`Microsoft Graph / Power Platform`,title:`Design an agent that reads SharePoint and writes to Salesforce.`,difficulty:`Expert`,time:`~15 min`,description:`Design an end-to-end secure agent workflow connecting SharePoint, Microsoft Graph, orchestration, authorization, and Salesforce.`},{id:`secure-enterprise-agentic-ai`,category:`Security`,title:`How do you secure an enterprise Agentic AI platform?`,difficulty:`Expert`,time:`~15 min`,description:`Design defense-in-depth security across identity, APIs, tools, data, networks, models, agents, memory, and observability.`},{id:`what-is-entra-id`,category:`Security`,title:`What is Microsoft Entra ID?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Entra ID for authentication, authorization, application identity, users, groups, and enterprise access management.`},{id:`authentication-vs-authorization`,category:`Security`,title:`Authentication vs authorization?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand the difference between proving identity and determining what an identity is allowed to do.`},{id:`rbac-vs-abac`,category:`Security`,title:`RBAC vs ABAC?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare role-based and attribute-based authorization for enterprise AI applications.`},{id:`what-is-managed-identity`,category:`Security`,title:`What is Managed Identity?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Azure Managed Identity and passwordless authentication between Azure resources.`},{id:`why-managed-identity`,category:`Security`,title:`Why use Managed Identity?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand why managed identities reduce secret management and improve enterprise security.`},{id:`what-is-key-vault`,category:`Security`,title:`What is Azure Key Vault?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand secure management of secrets, keys, and certificates in Azure.`},{id:`what-is-private-endpoint`,category:`Security`,title:`What is a Private Endpoint?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand private network connectivity to Azure services through private IP addresses.`},{id:`what-is-vnet-integration`,category:`Security`,title:`What is VNet integration?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand how application services communicate securely with resources inside private networks.`},{id:`what-is-api-management`,category:`Security`,title:`What is API Management?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand API gateway capabilities including authentication, policies, throttling, transformation, and observability.`},{id:`secure-apis`,category:`Security`,title:`How do you secure APIs?`,difficulty:`Advanced`,time:`~10 min`,description:`Design API security using identity, OAuth, JWT validation, scopes, RBAC, rate limits, network controls, and auditing.`},{id:`what-is-oauth`,category:`Security`,title:`What is OAuth?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand OAuth as an authorization framework and its role in enterprise applications.`},{id:`what-is-jwt`,category:`Security`,title:`What is JWT?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand JWT structure, claims, signatures, validation, expiration, and authorization.`},{id:`security-tokenization`,category:`Security`,title:`What is tokenization?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand tokenization as a technique for replacing sensitive values with controlled tokens.`},{id:`data-masking`,category:`Security`,title:`What is data masking?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how sensitive values can be hidden or transformed before being exposed to users or AI systems.`},{id:`encryption-at-rest`,category:`Security`,title:`What is encryption at rest?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how stored enterprise data is protected through encryption.`},{id:`encryption-in-transit`,category:`Security`,title:`What is encryption in transit?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand TLS and other mechanisms used to protect data while moving between systems.`},{id:`least-privilege`,category:`Security`,title:`What is least privilege?`,difficulty:`Beginner`,time:`~5 min`,description:`Understand how enterprise systems grant only the minimum permissions required to perform an operation.`},{id:`identity-propagation-agents`,category:`Security`,title:`How do you implement identity propagation through agents?`,difficulty:`Expert`,time:`~12 min`,description:`Design user identity propagation across coordinator, delegator, worker, APIs, and enterprise data sources.`},{id:`tool-level-authorization`,category:`Security`,title:`How do you implement authorization at the tool level?`,difficulty:`Expert`,time:`~12 min`,description:`Design policy enforcement that evaluates user identity, roles, permissions, tool sensitivity, and target resources before execution.`},{id:`what-is-microsoft-purview`,category:`Microsoft Purview / Governance`,title:`What is Microsoft Purview?`,difficulty:`Beginner`,time:`~7 min`,description:`Understand Microsoft Purview for enterprise data governance, discovery, classification, lineage, and compliance.`},{id:`data-classification`,category:`Microsoft Purview / Governance`,title:`What is data classification?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how enterprise data is categorized based on sensitivity, business value, and compliance requirements.`},{id:`sensitivity-labels`,category:`Microsoft Purview / Governance`,title:`What are sensitivity labels?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand sensitivity labels and how they help protect and govern sensitive enterprise content.`},{id:`purview-data-lineage`,category:`Microsoft Purview / Governance`,title:`What is data lineage?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how Purview tracks the movement and transformation of enterprise data.`},{id:`purview-genai-governance`,category:`Microsoft Purview / Governance`,title:`How does Purview support GenAI governance?`,difficulty:`Advanced`,time:`~10 min`,description:`Understand how governance, classification, compliance, discovery, and protection controls can be applied to AI workloads.`},{id:`identify-sensitive-data`,category:`Microsoft Purview / Governance`,title:`How do you identify sensitive enterprise data?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how sensitive information types, classification, metadata, labels, and scanning can identify protected data.`},{id:`prevent-sensitive-data-llm`,category:`Microsoft Purview / Governance`,title:`How do you prevent sensitive data from entering an LLM?`,difficulty:`Expert`,time:`~12 min`,description:`Design data classification, DLP, masking, filtering, authorization, and prompt inspection controls.`},{id:`what-is-dlp`,category:`Microsoft Purview / Governance`,title:`What is DLP?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Data Loss Prevention and how policies prevent sensitive information from being improperly shared.`},{id:`dlp-for-ai`,category:`Microsoft Purview / Governance`,title:`How do you implement DLP for AI applications?`,difficulty:`Expert`,time:`~12 min`,description:`Design DLP controls across prompts, retrieved documents, tool inputs, model outputs, and downstream systems.`},{id:`enterprise-genai-governance-framework`,category:`Microsoft Purview / Governance`,title:`Design a governance framework for enterprise GenAI.`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise governance framework covering data, models, agents, identity, security, compliance, evaluation, monitoring, and lifecycle management.`},{id:`what-is-ai-guardrail`,category:`AI Guardrails / Responsible AI`,title:`What is an AI guardrail?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand preventive and detective controls that constrain AI behavior and protect enterprise applications.`},{id:`prevent-prompt-injection`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent prompt injection?`,difficulty:`Expert`,time:`~12 min`,description:`Design layered defenses against malicious instructions attempting to manipulate LLM or agent behavior.`},{id:`indirect-prompt-injection`,category:`AI Guardrails / Responsible AI`,title:`What is indirect prompt injection?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand attacks where malicious instructions are embedded in external content retrieved by an agent.`},{id:`what-is-jailbreak`,category:`AI Guardrails / Responsible AI`,title:`What is jailbreak?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand jailbreak attempts and how attackers try to bypass model safety constraints.`},{id:`detect-harmful-content`,category:`AI Guardrails / Responsible AI`,title:`How do you detect harmful content?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand content safety classifiers, policy filters, moderation, and human review.`},{id:`azure-ai-content-safety`,category:`AI Guardrails / Responsible AI`,title:`What is Azure AI Content Safety?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand Microsoft's service for detecting harmful or unsafe content in AI applications.`},{id:`prevent-data-leakage`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent data leakage?`,difficulty:`Expert`,time:`~10 min`,description:`Design controls covering data access, retrieval, prompts, model inputs, outputs, tools, logs, and downstream systems.`},{id:`prevent-hallucinations`,category:`AI Guardrails / Responsible AI`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~10 min`,description:`Learn grounding, RAG, constrained generation, validation, citations, confidence checks, and human review strategies.`},{id:`validate-llm-output`,category:`AI Guardrails / Responsible AI`,title:`How do you validate LLM output?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand schema validation, policy checks, factuality checks, business rules, and deterministic validators.`},{id:`tool-authorization`,category:`AI Guardrails / Responsible AI`,title:`How do you enforce tool authorization?`,difficulty:`Expert`,time:`~10 min`,description:`Design authorization policies that validate user identity and permissions before every sensitive tool operation.`},{id:`restrict-agent-autonomy`,category:`AI Guardrails / Responsible AI`,title:`How do you restrict agent autonomy?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn approval gates, tool allowlists, budgets, timeouts, action limits, and policy enforcement for agent autonomy.`},{id:`human-approval`,category:`AI Guardrails / Responsible AI`,title:`How do you implement human approval?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand human-in-the-loop patterns for high-risk actions such as financial, HR, or destructive operations.`},{id:`audit-agent-actions`,category:`AI Guardrails / Responsible AI`,title:`How do you audit agent actions?`,difficulty:`Advanced`,time:`~8 min`,description:`Design audit logging for prompts, decisions, tool calls, identity, outputs, approvals, and enterprise transactions.`},{id:`protect-pii`,category:`AI Guardrails / Responsible AI`,title:`How do you protect PII?`,difficulty:`Expert`,time:`~10 min`,description:`Design PII detection, masking, encryption, access controls, DLP, retention, and secure processing strategies.`},{id:`enterprise-ai-safety-architecture`,category:`AI Guardrails / Responsible AI`,title:`How would you design an enterprise AI safety architecture?`,difficulty:`Expert`,time:`~15 min`,description:`Design a layered AI safety architecture covering input controls, identity, RAG security, tool authorization, content safety, output validation, and auditing.`},{id:`short-term-memory`,category:`Agent Memory`,title:`What is short-term memory?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand short-lived conversational state maintained during an active agent session.`},{id:`long-term-memory`,category:`Agent Memory`,title:`What is long-term memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand persistent information retained across conversations or sessions.`},{id:`conversational-memory`,category:`Agent Memory`,title:`What is conversational memory?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand how previous conversation turns can be maintained and used by agents.`},{id:`semantic-memory`,category:`Agent Memory`,title:`What is semantic memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand memory that stores facts and knowledge retrieved through semantic similarity.`},{id:`episodic-memory`,category:`Agent Memory`,title:`What is episodic memory?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand memory representing previous experiences, events, tasks, and interactions.`},{id:`redis-vs-vector-memory`,category:`Agent Memory`,title:`Redis vs vector database for memory?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare Redis and vector databases for session state, semantic memory, caching, and persistent agent memory.`},{id:`prevent-memory-poisoning`,category:`Agent Memory`,title:`How do you prevent memory poisoning?`,difficulty:`Expert`,time:`~10 min`,description:`Design controls to prevent malicious or incorrect information from becoming trusted persistent agent memory.`},{id:`memory-expiration`,category:`Agent Memory`,title:`How do you manage memory expiration?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand TTLs, retention policies, archival, deletion, and lifecycle management for agent memory.`},{id:`secure-agent-memory`,category:`Agent Memory`,title:`How do you secure agent memory?`,difficulty:`Expert`,time:`~10 min`,description:`Design authorization, encryption, tenant isolation, retention, access controls, and auditing for agent memory.`},{id:`enterprise-agent-memory-architecture`,category:`Agent Memory`,title:`Design an enterprise agent memory architecture.`,difficulty:`Expert`,time:`~15 min`,description:`Design session, task, run, turn, step, semantic, episodic, and long-term memory with enterprise security and governance.`},{id:`monitor-agentic-ai`,category:`Observability / LLMOps`,title:`How do you monitor an Agentic AI application?`,difficulty:`Expert`,time:`~12 min`,description:`Design monitoring across application health, agents, LLMs, tools, data retrieval, latency, cost, and business outcomes.`},{id:`agentic-ai-metrics`,category:`Observability / LLMOps`,title:`What metrics do you capture?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand technical, model, agent, retrieval, tool, cost, security, and business metrics.`},{id:`what-is-llm-observability`,category:`Observability / LLMOps`,title:`What is LLM observability?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand visibility into prompts, responses, tokens, latency, model behavior, tools, and agent workflows.`},{id:`what-is-tracing`,category:`Observability / LLMOps`,title:`What is tracing?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand distributed tracing across API gateways, agents, LLM calls, tools, databases, and external systems.`},{id:`token-usage-monitoring`,category:`Observability / LLMOps`,title:`What is token usage monitoring?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand tracking input and output tokens for cost, capacity, performance, and optimization.`},{id:`what-is-ttft`,category:`Observability / LLMOps`,title:`What is TTFT?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand Time to First Token and why it is a critical user-perceived latency metric.`},{id:`ttft-vs-total-latency`,category:`Observability / LLMOps`,title:`TTFT vs total latency?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand the difference between time to first token and complete response latency.`},{id:`monitor-tool-calls`,category:`Observability / LLMOps`,title:`How do you monitor tool calls?`,difficulty:`Advanced`,time:`~8 min`,description:`Track tool latency, success rate, failures, authorization decisions, retries, payloads, and business outcomes.`},{id:`monitor-agent-to-agent-calls`,category:`Observability / LLMOps`,title:`How do you monitor agent-to-agent calls?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand distributed tracing and correlation IDs across coordinator, delegator, worker, and external agent calls.`},{id:`identify-expensive-agents`,category:`Observability / LLMOps`,title:`How do you identify expensive agents?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how to attribute token, model, tool, compute, and retry costs to individual agents and workflows.`},{id:`troubleshoot-agent-hallucinations`,category:`Observability / LLMOps`,title:`How do you troubleshoot hallucinations?`,difficulty:`Expert`,time:`~10 min`,description:`Trace prompts, retrieved context, model responses, tool results, and agent decisions to identify hallucination root causes.`},{id:`llmops-azure-ml-mlflow-langfuse`,category:`Observability / LLMOps`,title:`How would you implement LLMOps using Azure ML/MLflow/Langfuse?`,difficulty:`Expert`,time:`~15 min`,description:`Design an enterprise LLMOps architecture covering experimentation, prompt versions, evaluations, tracing, monitoring, deployment, and governance.`},{id:`evaluate-llm-application`,category:`Evaluation`,title:`How do you evaluate an LLM application?`,difficulty:`Expert`,time:`~10 min`,description:`Understand offline and online evaluation across accuracy, relevance, groundedness, safety, latency, cost, and business outcomes.`},{id:`rag-evaluation`,category:`Evaluation`,title:`What is RAG evaluation?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand how retrieval and generation quality are evaluated separately and together.`},{id:`what-is-faithfulness`,category:`Evaluation`,title:`What is faithfulness?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand whether an answer is supported by the retrieved context rather than fabricated by the model.`},{id:`answer-relevance`,category:`Evaluation`,title:`What is answer relevance?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand whether generated answers directly address the user's question.`},{id:`context-precision`,category:`Evaluation`,title:`What is context precision?`,difficulty:`Advanced`,time:`~6 min`,description:`Understand how accurately retrieved context contains information relevant to answering the query.`},{id:`context-recall`,category:`Evaluation`,title:`What is context recall?`,difficulty:`Advanced`,time:`~6 min`,description:`Understand whether retrieval successfully captures the information needed to answer a question.`},{id:`hallucination-rate`,category:`Evaluation`,title:`What is hallucination rate?`,difficulty:`Intermediate`,time:`~6 min`,description:`Understand how hallucination frequency can be measured and tracked as a production quality metric.`},{id:`golden-dataset`,category:`Evaluation`,title:`How do you create a golden dataset?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn how to create representative questions, expected answers, contexts, edge cases, and evaluation criteria.`},{id:`offline-vs-online-evaluation`,category:`Evaluation`,title:`Offline vs online evaluation?`,difficulty:`Advanced`,time:`~7 min`,description:`Compare pre-production benchmark evaluation with production monitoring and continuous evaluation.`},{id:`production-ai-kpis`,category:`Evaluation`,title:`What KPIs would you establish before production?`,difficulty:`Expert`,time:`~10 min`,description:`Define quality, retrieval, latency, cost, reliability, safety, adoption, and business KPIs before production rollout.`},{id:`scale-agentic-ai-system`,category:`Scalability / Reliability`,title:`How do you scale an Agentic AI system?`,difficulty:`Expert`,time:`~12 min`,description:`Design horizontal scaling across gateways, orchestration services, workers, queues, model endpoints, databases, and caches.`},{id:`horizontal-vs-vertical-scaling`,category:`Scalability / Reliability`,title:`Horizontal vs vertical scaling?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand the difference between adding resources to a machine and adding more service instances.`},{id:`stateless-vs-stateful`,category:`Scalability / Reliability`,title:`Stateless vs stateful architecture for scaling?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand why stateless services scale more easily and how external state stores support scalable agent platforms.`},{id:`10000-concurrent-users`,category:`Scalability / Reliability`,title:`How do you handle 10,000 concurrent users?`,difficulty:`Expert`,time:`~15 min`,description:`Design load balancing, autoscaling, queues, caching, rate limits, model capacity, state management, and resilience.`},{id:`llm-rate-limits`,category:`Scalability / Reliability`,title:`How do you handle LLM rate limits?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand throttling, retries, exponential backoff, workload distribution, quotas, and capacity planning.`},{id:`azure-openai-throttling`,category:`Scalability / Reliability`,title:`How do you handle Azure OpenAI throttling?`,difficulty:`Advanced`,time:`~8 min`,description:`Design quota management, retry strategies, model routing, deployment distribution, caching, and workload controls.`},{id:`what-is-caching`,category:`Scalability / Reliability`,title:`What is caching?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand caching and how it reduces latency, load, and cost in enterprise AI applications.`},{id:`semantic-caching`,category:`Scalability / Reliability`,title:`What is semantic caching?`,difficulty:`Advanced`,time:`~7 min`,description:`Understand caching based on semantic similarity rather than exact request matching.`},{id:`reduce-token-costs`,category:`Scalability / Reliability`,title:`How do you reduce token costs?`,difficulty:`Advanced`,time:`~8 min`,description:`Learn prompt compression, context optimization, model routing, caching, summarization, and smaller-model strategies.`},{id:`reduce-ai-latency`,category:`Scalability / Reliability`,title:`How do you reduce latency?`,difficulty:`Advanced`,time:`~8 min`,description:`Optimize model selection, prompts, retrieval, network paths, parallel execution, streaming, caching, and tool calls.`},{id:`what-is-circuit-breaker`,category:`Scalability / Reliability`,title:`What is circuit breaker?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand the circuit breaker pattern for preventing cascading failures in distributed systems.`},{id:`high-availability-agent-platform`,category:`Scalability / Reliability`,title:`How do you design high availability for an agent platform?`,difficulty:`Expert`,time:`~15 min`,description:`Design multi-instance, zone-aware, resilient agent services with queues, failover, health checks, retries, and disaster recovery.`},{id:`azure-functions-vs-container-apps`,category:`Azure Infrastructure`,title:`Azure Functions vs Container Apps?`,difficulty:`Intermediate`,time:`~8 min`,description:`Compare event-driven serverless functions with containerized microservices and agent backends.`},{id:`container-apps-vs-aks`,category:`Azure Infrastructure`,title:`Container Apps vs AKS?`,difficulty:`Advanced`,time:`~8 min`,description:`Compare Azure Container Apps and AKS in terms of Kubernetes control, operational complexity, scaling, and workload requirements.`},{id:`when-use-aks`,category:`Azure Infrastructure`,title:`When would you use AKS?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand when enterprise workloads require Kubernetes-level control, networking, orchestration, or customization.`},{id:`when-use-functions`,category:`Azure Infrastructure`,title:`When would you use Azure Functions?`,difficulty:`Beginner`,time:`~6 min`,description:`Understand event-driven serverless workloads and when Functions are appropriate.`},{id:`azure-api-management`,category:`Azure Infrastructure`,title:`What is Azure API Management?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand API gateway, security, throttling, transformation, subscription, policy, and observability capabilities.`},{id:`what-is-azure-service-bus`,category:`Azure Infrastructure`,title:`What is Azure Service Bus?`,difficulty:`Intermediate`,time:`~7 min`,description:`Understand reliable enterprise messaging using queues, topics, subscriptions, retries, dead-letter queues, and transactions.`},{id:`service-bus-vs-event-grid`,category:`Azure Infrastructure`,title:`Service Bus vs Event Grid?`,difficulty:`Intermediate`,time:`~7 min`,description:`Compare enterprise messaging and event notification patterns and when each Azure service should be used.`},{id:`when-use-kafka`,category:`Azure Infrastructure`,title:`When would you use Kafka?`,difficulty:`Advanced`,time:`~8 min`,description:`Understand Kafka's event-streaming architecture and when high-throughput, durable event streams are appropriate.`},{id:`deploy-agent-backend`,category:`Azure Infrastructure`,title:`How would you deploy an agent backend?`,difficulty:`Advanced`,time:`~10 min`,description:`Design CI/CD, containers, networking, identity, secrets, scaling, observability, and deployment strategies for an agent backend.`},{id:`production-azure-agentic-ai-architecture`,category:`Azure Infrastructure`,title:`Design a production Azure architecture for Agentic AI.`,difficulty:`Expert`,time:`~15 min`,description:`Design a complete production architecture covering Teams, Front Door, APIM, agents, Azure OpenAI, AI Search, data, Service Bus, security, monitoring, and governance.`}];function dh(){return(0,M.jsx)($,{data:uh,title:`AzureEnterpriseQuestions Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var fh=[{id:`25-what-makes-cwd-enterprise-architecture-not-simple-chatbot`,category:`Architecture`,title:`What makes CWD an enterprise architecture rather than a simple chatbot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`26-major-architectural-trade-offs`,category:`Architecture`,title:`What are the major architectural trade-offs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`27-biggest-risks-in-this-architecture`,category:`Architecture`,title:`What are the biggest risks in this architecture?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`28-architectural-decisions-i-personally-made`,category:`Architecture`,title:`What architectural decisions did you personally make?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`29-synchronous-components`,category:`Architecture`,title:`Which components are synchronous?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`30-asynchronous-components`,category:`Architecture`,title:`Which components are asynchronous?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`31-where-to-introduce-queues`,category:`Architecture`,title:`Where would you introduce queues?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`32-where-to-introduce-caching`,category:`Architecture`,title:`Where would you introduce caching?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`33-where-to-introduce-persistence`,category:`Architecture`,title:`Where would you introduce persistence?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`34-single-points-of-failure`,category:`Architecture`,title:`What are the single points of failure?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``},{id:`35-how-to-remove-single-points-of-failure`,category:`Architecture`,title:`How would you remove those single points of failure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:``,code:``}];function ph(){return(0,M.jsx)($,{data:fh,title:`CWD Architecture Cookbook`,subtitle:`Enterprise architecture, trade-offs, risks and failure points`,icon:`🧭`,patternLabel:`Questions`})}var mh=[{id:`61-what-exactly-is-the-coordinator`,category:`Coordinator Agent`,title:`What exactly is the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`62-how-coordinator-understands-user-intent`,category:`Coordinator Agent`,title:`How does the Coordinator understand user intent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`63-how-llm-performs-intent-classification`,category:`Coordinator Agent`,title:`How does the LLM perform intent classification?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`64-is-intent-classification-completely-llm-based`,category:`Coordinator Agent`,title:`Is intent classification completely LLM-based?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`65-would-you-use-a-traditional-classifier`,category:`Coordinator Agent`,title:`Would you use a traditional classifier?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`66-when-to-use-rules-instead-of-llm`,category:`Coordinator Agent`,title:`When would you use rules instead of an LLM?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`67-how-coordinator-creates-execution-plan`,category:`Coordinator Agent`,title:`How does the Coordinator create an execution plan?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`68-what-does-the-execution-plan-contain`,category:`Coordinator Agent`,title:`What does the execution plan contain?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`69-how-coordinator-identifies-correct-delegator`,category:`Coordinator Agent`,title:`How does the Coordinator identify the correct Delegator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`70-how-it-knows-which-delegator-is-available`,category:`Coordinator Agent`,title:`How does it know which Delegator is available?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`71-how-coordinator-prevents-hallucinated-delegators`,category:`Coordinator Agent`,title:`How does the Coordinator prevent hallucinated Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`72-where-is-agent-registry-stored`,category:`Coordinator Agent`,title:`Where is the Agent Registry stored?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`73-what-metadata-does-agent-registry-contain`,category:`Coordinator Agent`,title:`What metadata does an Agent Registry contain?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`74-how-coordinator-validates-selected-agent`,category:`Coordinator Agent`,title:`How does the Coordinator validate the selected agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`75-langgraph-nodes-in-the-coordinator`,category:`Coordinator Agent`,title:`What LangGraph nodes would you create in the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`76-what-is-the-coordinator-state`,category:`Coordinator Agent`,title:`What is the Coordinator state?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`77-why-use-langgraph-for-coordinator`,category:`Coordinator Agent`,title:`Why use LangGraph for the Coordinator?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`78-what-if-implemented-without-langgraph`,category:`Coordinator Agent`,title:`What would happen if you implemented it without LangGraph?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`79-how-conditional-edges-work`,category:`Coordinator Agent`,title:`How do conditional edges work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`80-how-reducers-work-in-coordinator`,category:`Coordinator Agent`,title:`How do reducers work in your Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`81-how-to-handle-parallel-execution`,category:`Coordinator Agent`,title:`How do you handle parallel execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`82-how-to-handle-retries`,category:`Coordinator Agent`,title:`How do you handle retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`83-how-to-handle-timeouts`,category:`Coordinator Agent`,title:`How do you handle timeouts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`84-how-to-persist-coordinator-state`,category:`Coordinator Agent`,title:`How do you persist Coordinator state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`85-how-to-resume-a-failed-graph`,category:`Coordinator Agent`,title:`How do you resume a failed graph?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`86-how-to-prevent-infinite-agent-loops`,category:`Coordinator Agent`,title:`How do you prevent infinite agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`87-how-to-define-termination-conditions`,category:`Coordinator Agent`,title:`How do you define termination conditions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`88-how-to-validate-the-final-response`,category:`Coordinator Agent`,title:`How do you validate the final response?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``},{id:`89-how-coordinator-aggregates-multiple-delegator-results`,category:`Coordinator Agent`,title:`How does the Coordinator aggregate multiple Delegator results?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:``,code:``}];function hh(){return(0,M.jsx)($,{data:mh,title:`CWD Coordinator Agent Cookbook`,subtitle:`Intent understanding, planning, routing, state and orchestration`,icon:`🎯`,patternLabel:`Questions`})}var gh=[{id:`90-why-introduce-delegators`,category:`Delegator Architecture`,title:`Why did you introduce Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`91-difference-between-coordinator-and-delegator`,category:`Delegator Architecture`,title:`What is the difference between Coordinator and Delegator?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`92-difference-between-delegator-and-worker`,category:`Delegator Architecture`,title:`What is the difference between Delegator and Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`93-can-a-delegator-call-another-delegator`,category:`Delegator Architecture`,title:`Can a Delegator call another Delegator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`94-can-a-worker-call-another-worker`,category:`Delegator Architecture`,title:`Can a Worker call another Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`95-should-workers-know-about-other-workers`,category:`Delegator Architecture`,title:`Should Workers know about other Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`96-how-delegator-discovers-its-workers`,category:`Delegator Architecture`,title:`How does a Delegator discover its Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`97-does-the-delegator-use-an-llm`,category:`Delegator Architecture`,title:`Does the Delegator use an LLM?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`98-if-yes-what-does-the-llm-decide`,category:`Delegator Architecture`,title:`If yes, what does the LLM decide?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`99-if-no-how-are-workers-selected`,category:`Delegator Architecture`,title:`If no, how are Workers selected?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`100-how-to-prevent-unauthorized-worker-calls`,category:`Delegator Architecture`,title:`How do you prevent a Delegator from calling unauthorized Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`101-how-delegator-passes-context-to-workers`,category:`Delegator Architecture`,title:`How does a Delegator pass context to Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`102-how-delegator-handles-worker-failures`,category:`Delegator Architecture`,title:`How does a Delegator handle Worker failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`103-how-delegator-aggregates-worker-results`,category:`Delegator Architecture`,title:`How does it aggregate Worker results?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`104-how-delegator-validates-worker-responses`,category:`Delegator Architecture`,title:`How does it validate Worker responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`105-how-delegator-handles-partial-success`,category:`Delegator Architecture`,title:`How does it handle partial success?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`106-how-delegator-handles-conflicting-worker-results`,category:`Delegator Architecture`,title:`How does it handle conflicting Worker results?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`107-how-delegator-enforces-execution-order`,category:`Delegator Architecture`,title:`How does it enforce execution order?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`108-how-delegator-executes-workers-in-parallel`,category:`Delegator Architecture`,title:`How does it execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`109-how-delegator-implements-fan-out-fan-in`,category:`Delegator Architecture`,title:`How does it implement fan-out/fan-in?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`110-how-delegator-handles-worker-timeouts`,category:`Delegator Architecture`,title:`How does it handle Worker timeouts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`111-how-delegator-handles-duplicate-worker-execution`,category:`Delegator Architecture`,title:`How does it handle duplicate Worker execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``},{id:`112-how-delegator-guarantees-idempotency`,category:`Delegator Architecture`,title:`How does it guarantee idempotency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:``,code:``}];function _h(){return(0,M.jsx)($,{data:gh,title:`CWD Delegator Architecture Cookbook`,subtitle:`Delegator responsibilities, worker orchestration, aggregation and idempotency`,icon:`🧩`,patternLabel:`Questions`})}var vh=[{id:`113-what-exactly-is-a-worker`,category:`Worker Architecture`,title:`What exactly is a Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`114-responsibility-of-a-worker`,category:`Worker Architecture`,title:`What is the responsibility of a Worker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`115-should-workers-contain-business-logic`,category:`Worker Architecture`,title:`Should Workers contain business logic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`116-should-workers-contain-llm-logic`,category:`Worker Architecture`,title:`Should Workers contain LLM logic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`117-should-every-worker-have-its-own-prompt`,category:`Worker Architecture`,title:`Should every Worker have its own prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`118-how-worker-receives-customer-id`,category:`Worker Architecture`,title:`How does a Worker receive customer ID?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`119-how-worker-knows-which-enterprise-system-to-access`,category:`Worker Architecture`,title:`How does a Worker know which enterprise system to access?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`120-how-worker-calls-salesforce`,category:`Worker Architecture`,title:`How does a Worker call Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`121-how-worker-calls-servicenow`,category:`Worker Architecture`,title:`How does a Worker call ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`122-why-not-hardcode-salesforce-inside-every-worker`,category:`Worker Architecture`,title:`Why don't you hardcode Salesforce inside every Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`123-where-mcp-fits-into-worker-architecture`,category:`Worker Architecture`,title:`Where does MCP fit into your Worker architecture?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`124-explain-worker-mcp-client-mcp-server-enterprise-tool-flow`,category:`Worker Architecture`,title:`Explain the flow: Worker → MCP Client → MCP Server → Enterprise Tool → Salesforce / ServiceNow / SharePoint / etc.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`125-who-owns-the-mcp-server`,category:`Worker Architecture`,title:`Who owns the MCP server?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`126-how-mcp-discovers-tools`,category:`Worker Architecture`,title:`How does MCP discover tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`127-how-worker-selects-an-mcp-tool`,category:`Worker Architecture`,title:`How does the Worker select an MCP tool?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`128-how-worker-passes-parameters`,category:`Worker Architecture`,title:`How does the Worker pass parameters?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`129-how-to-validate-tool-parameters`,category:`Worker Architecture`,title:`How do you validate tool parameters?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`130-how-to-prevent-unauthorized-tool-execution`,category:`Worker Architecture`,title:`How do you prevent unauthorized tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`131-how-to-handle-mcp-server-failure`,category:`Worker Architecture`,title:`How do you handle MCP server failure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`132-how-to-retry-mcp-calls`,category:`Worker Architecture`,title:`How do you retry MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`133-how-to-prevent-duplicate-transactions`,category:`Worker Architecture`,title:`How do you prevent duplicate transactions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`134-how-to-audit-mcp-calls`,category:`Worker Architecture`,title:`How do you audit MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`135-how-to-timeout-mcp-calls`,category:`Worker Architecture`,title:`How do you timeout MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``},{id:`136-how-to-handle-malformed-mcp-responses`,category:`Worker Architecture`,title:`How do you handle malformed MCP responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:``,code:``}];function yh(){return(0,M.jsx)($,{data:vh,title:`CWD Worker Architecture Cookbook`,subtitle:`Worker design, MCP integration, tool safety and enterprise systems`,icon:`⚙️`,patternLabel:`Questions`})}var bh=[{id:`137-what-is-mcp`,category:`MCP Deep Interview`,title:`What is MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`138-why-did-you-use-mcp`,category:`MCP Deep Interview`,title:`Why did you use MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`139-what-problem-does-mcp-solve`,category:`MCP Deep Interview`,title:`What problem does MCP solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`140-mcp-vs-rest`,category:`MCP Deep Interview`,title:`MCP vs REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`141-mcp-vs-a2a`,category:`MCP Deep Interview`,title:`MCP vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`142-mcp-vs-function-calling`,category:`MCP Deep Interview`,title:`MCP vs function calling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`143-mcp-client-vs-mcp-server`,category:`MCP Deep Interview`,title:`MCP Client vs MCP Server?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`144-what-is-an-mcp-tool`,category:`MCP Deep Interview`,title:`What is an MCP Tool?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`145-what-is-an-mcp-resource`,category:`MCP Deep Interview`,title:`What is an MCP Resource?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`146-what-is-an-mcp-prompt`,category:`MCP Deep Interview`,title:`What is an MCP Prompt?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`147-how-tool-discovery-works`,category:`MCP Deep Interview`,title:`How does tool discovery work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`148-how-authentication-works`,category:`MCP Deep Interview`,title:`How does authentication work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`149-how-authorization-works`,category:`MCP Deep Interview`,title:`How does authorization work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`150-how-to-secure-mcp`,category:`MCP Deep Interview`,title:`How do you secure MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`151-how-to-prevent-prompt-injection-through-mcp`,category:`MCP Deep Interview`,title:`How do you prevent prompt injection through MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`152-how-to-prevent-malicious-tool-arguments`,category:`MCP Deep Interview`,title:`How do you prevent malicious tool arguments?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`153-how-to-enforce-least-privilege`,category:`MCP Deep Interview`,title:`How do you enforce least privilege?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`154-how-to-implement-delete-customer-mcp-tool-securely`,category:`MCP Deep Interview`,title:`How would you implement a delete_customer MCP tool securely?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`155-how-to-require-approval-before-destructive-operations`,category:`MCP Deep Interview`,title:`How would you require approval before destructive operations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`156-how-to-audit-mcp-execution`,category:`MCP Deep Interview`,title:`How do you audit MCP execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`157-how-to-version-mcp-tools`,category:`MCP Deep Interview`,title:`How do you version MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`158-how-to-handle-backward-compatibility`,category:`MCP Deep Interview`,title:`How do you handle backward compatibility?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`159-how-to-monitor-mcp`,category:`MCP Deep Interview`,title:`How do you monitor MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``},{id:`160-what-happens-when-mcp-server-becomes-unavailable`,category:`MCP Deep Interview`,title:`What happens when an MCP server becomes unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:``,code:``}];function xh(){return(0,M.jsx)($,{data:bh,title:`CWD MCP Deep Interview Cookbook`,subtitle:`MCP concepts, security, versioning, approvals and monitoring`,icon:`🔌`,patternLabel:`Questions`})}var Sh=[{id:`161-why-did-you-use-a2a`,category:`A2A — Agent Communication`,title:`Why did you use A2A?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`162-what-problem-does-a2a-solve`,category:`A2A — Agent Communication`,title:`What problem does A2A solve?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`163-mcp-vs-a2a`,category:`A2A — Agent Communication`,title:`MCP vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`164-rest-vs-a2a`,category:`A2A — Agent Communication`,title:`REST vs A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`165-when-should-you-use-a2a`,category:`A2A — Agent Communication`,title:`When should you use A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`166-when-should-you-use-rest`,category:`A2A — Agent Communication`,title:`When should you use REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`167-how-delegators-communicate-with-the-coordinator`,category:`A2A — Agent Communication`,title:`How do Delegators communicate with the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`168-how-agents-exchange-task-context`,category:`A2A — Agent Communication`,title:`How do agents exchange task context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`169-how-to-maintain-agent-identity`,category:`A2A — Agent Communication`,title:`How do you maintain agent identity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`170-how-to-authenticate-agents`,category:`A2A — Agent Communication`,title:`How do you authenticate agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`171-how-to-authorize-agents`,category:`A2A — Agent Communication`,title:`How do you authorize agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`172-how-to-handle-asynchronous-agent-communication`,category:`A2A — Agent Communication`,title:`How do you handle asynchronous agent communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`173-how-to-handle-agent-failures`,category:`A2A — Agent Communication`,title:`How do you handle agent failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`174-how-to-correlate-a2a-requests`,category:`A2A — Agent Communication`,title:`How do you correlate A2A requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``},{id:`175-how-to-trace-an-a2a-request-across-agents`,category:`A2A — Agent Communication`,title:`How do you trace an A2A request across agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:``,code:``}];function Ch(){return(0,M.jsx)($,{data:Sh,title:`CWD A2A — Agent Communication Cookbook`,subtitle:`Agent-to-agent communication, identity, tracing and failure handling`,icon:`🤝`,patternLabel:`Questions`})}var wh=[{id:`176-why-langgraph`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`177-langgraph-vs-langchain`,category:`LangGraph`,title:`LangGraph vs LangChain?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`178-langgraph-vs-custom-python-orchestration`,category:`LangGraph`,title:`LangGraph vs custom Python orchestration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`179-what-is-a-stategraph`,category:`LangGraph`,title:`What is a StateGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`180-what-is-graph-state`,category:`LangGraph`,title:`What is graph state?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`181-what-are-nodes`,category:`LangGraph`,title:`What are nodes?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`182-what-are-edges`,category:`LangGraph`,title:`What are edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`183-what-are-conditional-edges`,category:`LangGraph`,title:`What are conditional edges?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`184-what-are-reducers`,category:`LangGraph`,title:`What are reducers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`185-how-langgraph-supports-parallel-execution`,category:`LangGraph`,title:`How does LangGraph support parallel execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`186-how-langgraph-supports-state-persistence`,category:`LangGraph`,title:`How does LangGraph support state persistence?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`187-how-langgraph-supports-human-in-the-loop`,category:`LangGraph`,title:`How does LangGraph support human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`188-how-langgraph-supports-retries`,category:`LangGraph`,title:`How does LangGraph support retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`189-how-langgraph-supports-checkpointing`,category:`LangGraph`,title:`How does LangGraph support checkpointing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`190-how-to-resume-a-failed-workflow`,category:`LangGraph`,title:`How do you resume a failed workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`191-how-to-prevent-infinite-loops`,category:`LangGraph`,title:`How do you prevent infinite loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`192-how-to-control-token-growth`,category:`LangGraph`,title:`How do you control token growth?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`193-how-to-manage-conversation-state`,category:`LangGraph`,title:`How do you manage conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`194-how-to-separate-session-state-and-workflow-state`,category:`LangGraph`,title:`How do you separate session state and workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`195-how-to-debug-a-langgraph-workflow`,category:`LangGraph`,title:`How do you debug a LangGraph workflow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`196-how-to-test-individual-graph-nodes`,category:`LangGraph`,title:`How do you test individual graph nodes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``},{id:`197-how-to-test-the-complete-graph`,category:`LangGraph`,title:`How do you test the complete graph?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:``,code:``}];function Th(){return(0,M.jsx)($,{data:wh,title:`CWD LangGraph Cookbook`,subtitle:`Graph state, nodes, edges, checkpointing, debugging and testing`,icon:`🕸️`,patternLabel:`Questions`})}var Eh=[{id:`198-why-does-cwd-need-rag`,category:`RAG Architecture`,title:`Why does CWD need RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`199-what-data-sources-are-indexed`,category:`RAG Architecture`,title:`What data sources are indexed?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`200-how-to-ingest-enterprise-documents`,category:`RAG Architecture`,title:`How do you ingest enterprise documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`201-explain-your-ingestion-pipeline`,category:`RAG Architecture`,title:`Explain your ingestion pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`202-how-do-you-chunk-documents`,category:`RAG Architecture`,title:`How do you chunk documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`203-fixed-size-vs-semantic-chunking`,category:`RAG Architecture`,title:`Fixed-size vs semantic chunking?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`204-what-chunk-size-did-you-choose-and-why`,category:`RAG Architecture`,title:`What chunk size did you choose and why?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`205-what-overlap-did-you-choose`,category:`RAG Architecture`,title:`What overlap did you choose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`206-how-to-handle-tables`,category:`RAG Architecture`,title:`How do you handle tables?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`207-how-to-handle-pdfs`,category:`RAG Architecture`,title:`How do you handle PDFs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`208-how-to-handle-images`,category:`RAG Architecture`,title:`How do you handle images?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`209-how-to-handle-scanned-documents`,category:`RAG Architecture`,title:`How do you handle scanned documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`210-what-embedding-model-did-you-use`,category:`RAG Architecture`,title:`What embedding model did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`211-how-to-choose-an-embedding-model`,category:`RAG Architecture`,title:`How do you choose an embedding model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`212-what-vector-database-did-you-use`,category:`RAG Architecture`,title:`What vector database did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`213-why-azure-ai-search`,category:`RAG Architecture`,title:`Why Azure AI Search?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`214-how-does-hybrid-search-work`,category:`RAG Architecture`,title:`How does hybrid search work?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`215-explain-bm25`,category:`RAG Architecture`,title:`Explain BM25.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`216-vector-search-vs-bm25`,category:`RAG Architecture`,title:`Vector search vs BM25?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`217-why-combine-both`,category:`RAG Architecture`,title:`Why combine both?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`218-what-is-semantic-ranking`,category:`RAG Architecture`,title:`What is semantic ranking?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`219-what-is-metadata-filtering`,category:`RAG Architecture`,title:`What is metadata filtering?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`220-how-to-implement-acl-filtering`,category:`RAG Architecture`,title:`How do you implement ACL filtering?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`221-how-to-prevent-unauthorized-documents-entering-llm-context`,category:`RAG Architecture`,title:`How do you prevent unauthorized documents from entering the LLM context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`222-what-is-your-retrieval-pipeline`,category:`RAG Architecture`,title:`What is your retrieval pipeline?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`223-how-to-measure-retrieval-quality`,category:`RAG Architecture`,title:`How do you measure retrieval quality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`224-what-is-recall-at-k`,category:`RAG Architecture`,title:`What is Recall@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`225-what-is-precision-at-k`,category:`RAG Architecture`,title:`What is Precision@K?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`226-what-is-mrr`,category:`RAG Architecture`,title:`What is MRR?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`227-what-is-ndcg`,category:`RAG Architecture`,title:`What is NDCG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`228-what-is-ragas`,category:`RAG Architecture`,title:`What is RAGAS?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`229-how-to-reduce-irrelevant-context`,category:`RAG Architecture`,title:`How do you reduce irrelevant context?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`230-how-to-handle-stale-documents`,category:`RAG Architecture`,title:`How do you handle stale documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`231-how-to-handle-document-deletion`,category:`RAG Architecture`,title:`How do you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``},{id:`232-how-to-re-index-documents`,category:`RAG Architecture`,title:`How do you re-index documents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:``,code:``}];function Dh(){return(0,M.jsx)($,{data:Eh,title:`CWD RAG Architecture Cookbook`,subtitle:`Ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation`,icon:`📚`,patternLabel:`Questions`})}var Oh=[{id:`233-which-llms-did-you-use`,category:`LLM Architecture`,title:`Which LLMs did you use?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`234-why-did-you-select-the-model`,category:`LLM Architecture`,title:`Why did you select the model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`235-how-to-select-between-large-and-small-models`,category:`LLM Architecture`,title:`How do you select between large and small models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`236-how-to-control-token-usage`,category:`LLM Architecture`,title:`How do you control token usage?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`237-what-happens-when-context-exceeds-model-limit`,category:`LLM Architecture`,title:`What happens when the context exceeds the model limit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`238-how-to-reduce-prompt-size`,category:`LLM Architecture`,title:`How do you reduce prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`239-how-to-summarize-conversation-history`,category:`LLM Architecture`,title:`How do you summarize conversation history?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`240-how-to-implement-model-fallback`,category:`LLM Architecture`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`241-what-happens-if-azure-openai-is-unavailable`,category:`LLM Architecture`,title:`What happens if Azure OpenAI is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`242-would-you-use-multiple-llm-providers`,category:`LLM Architecture`,title:`Would you use multiple LLM providers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`243-how-to-route-requests-between-models`,category:`LLM Architecture`,title:`How do you route requests between models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`244-how-to-control-temperature`,category:`LLM Architecture`,title:`How do you control temperature?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`245-how-to-control-hallucination`,category:`LLM Architecture`,title:`How do you control hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`246-how-to-enforce-structured-output`,category:`LLM Architecture`,title:`How do you enforce structured output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`247-how-to-validate-llm-output`,category:`LLM Architecture`,title:`How do you validate LLM output?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`248-what-happens-when-json-output-is-invalid`,category:`LLM Architecture`,title:`What happens when JSON output is invalid?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`249-how-to-handle-model-timeouts`,category:`LLM Architecture`,title:`How do you handle model timeouts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`250-how-to-handle-rate-limits`,category:`LLM Architecture`,title:`How do you handle rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`251-how-to-handle-token-throttling`,category:`LLM Architecture`,title:`How do you handle token throttling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``},{id:`252-how-to-monitor-model-cost`,category:`LLM Architecture`,title:`How do you monitor model cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:``,code:``}];function kh(){return(0,M.jsx)($,{data:Oh,title:`CWD LLM Architecture Cookbook`,subtitle:`Model selection, token control, fallback, routing and structured output`,icon:`🧠`,patternLabel:`Questions`})}var Ah=[{id:`253-how-to-prevent-hallucinations`,category:`Hallucination & Grounding`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`254-can-you-completely-eliminate-hallucination`,category:`Hallucination & Grounding`,title:`Can you completely eliminate hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`255-how-to-ground-responses`,category:`Hallucination & Grounding`,title:`How do you ground responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`256-how-rag-improves-grounding`,category:`Hallucination & Grounding`,title:`How does RAG improve grounding?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`257-what-if-retrieved-documents-are-wrong`,category:`Hallucination & Grounding`,title:`What if retrieved documents are wrong?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`258-what-if-retrieval-returns-nothing`,category:`Hallucination & Grounding`,title:`What if retrieval returns nothing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`259-what-should-llm-do-when-evidence-is-insufficient`,category:`Hallucination & Grounding`,title:`What should the LLM do when evidence is insufficient?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`260-how-to-enforce-i-dont-know-behavior`,category:`Hallucination & Grounding`,title:`How do you enforce “I don't know” behavior?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`261-how-to-validate-factuality`,category:`Hallucination & Grounding`,title:`How do you validate factuality?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`262-what-metrics-measure-hallucination`,category:`Hallucination & Grounding`,title:`What metrics measure hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`263-what-is-faithfulness`,category:`Hallucination & Grounding`,title:`What is faithfulness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`264-what-is-groundedness`,category:`Hallucination & Grounding`,title:`What is groundedness?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`265-how-to-implement-citation-generation`,category:`Hallucination & Grounding`,title:`How do you implement citation generation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``},{id:`266-how-to-detect-unsupported-claims`,category:`Hallucination & Grounding`,title:`How do you detect unsupported claims?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:``,code:``}];function jh(){return(0,M.jsx)($,{data:Ah,title:`CWD Hallucination & Grounding Cookbook`,subtitle:`Grounding, faithfulness, citations and unsupported-claim detection`,icon:`🔍`,patternLabel:`Questions`})}var Mh=[{id:`267-how-do-you-evaluate-your-cwd-system`,category:`LLM Evaluation`,title:`How do you evaluate your CWD system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`268-what-is-offline-evaluation`,category:`LLM Evaluation`,title:`What is offline evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`269-what-is-online-evaluation`,category:`LLM Evaluation`,title:`What is online evaluation?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`270-what-is-a-golden-dataset`,category:`LLM Evaluation`,title:`What is a golden dataset?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`271-how-to-create-golden-test-cases`,category:`LLM Evaluation`,title:`How do you create golden test cases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`272-what-metrics-do-you-track`,category:`LLM Evaluation`,title:`What metrics do you track?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`273-retrieval-relevance`,category:`LLM Evaluation`,title:`Retrieval relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`274-context-precision`,category:`LLM Evaluation`,title:`Context precision?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`275-context-recall`,category:`LLM Evaluation`,title:`Context recall?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`276-faithfulness`,category:`LLM Evaluation`,title:`Faithfulness?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`277-answer-relevance`,category:`LLM Evaluation`,title:`Answer relevance?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`278-tool-call-accuracy`,category:`LLM Evaluation`,title:`Tool-call accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`279-agent-routing-accuracy`,category:`LLM Evaluation`,title:`Agent routing accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`280-task-completion-rate`,category:`LLM Evaluation`,title:`Task completion rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`281-hallucination-rate`,category:`LLM Evaluation`,title:`Hallucination rate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`282-latency`,category:`LLM Evaluation`,title:`Latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`283-cost-per-request`,category:`LLM Evaluation`,title:`Cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`284-how-to-evaluate-agent-trajectories`,category:`LLM Evaluation`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`285-how-to-evaluate-tool-selection`,category:`LLM Evaluation`,title:`How do you evaluate tool selection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`286-how-to-evaluate-final-answers`,category:`LLM Evaluation`,title:`How do you evaluate final answers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`287-how-to-perform-regression-testing`,category:`LLM Evaluation`,title:`How do you perform regression testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`288-what-happens-when-a-new-prompt-reduces-accuracy`,category:`LLM Evaluation`,title:`What happens when a new prompt reduces accuracy?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`289-how-to-compare-two-llm-versions`,category:`LLM Evaluation`,title:`How do you compare two LLM versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`290-how-to-implement-llm-evaluation-in-ci-cd`,category:`LLM Evaluation`,title:`How do you implement LLM evaluation in CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`291-what-is-your-production-evaluation-strategy`,category:`LLM Evaluation`,title:`What is your production evaluation strategy?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``},{id:`292-how-human-evaluations-fit-into-the-system`,category:`LLM Evaluation`,title:`How do human evaluations fit into the system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:``,code:``}];function Nh(){return(0,M.jsx)($,{data:Mh,title:`CWD LLM Evaluation Cookbook`,subtitle:`Offline and online evaluation, metrics, regression testing and CI/CD`,icon:`📊`,patternLabel:`Questions`})}var Ph=[{id:`293-how-is-cwd-authenticated`,category:`Security Architecture`,title:`How is CWD authenticated?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`294-how-is-authorization-implemented`,category:`Security Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`295-why-use-microsoft-entra-id`,category:`Security Architecture`,title:`Why use Microsoft Entra ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`296-what-is-managed-identity`,category:`Security Architecture`,title:`What is Managed Identity?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`297-managed-identity-vs-client-secret`,category:`Security Architecture`,title:`Managed Identity vs client secret?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`298-how-to-implement-rbac`,category:`Security Architecture`,title:`How do you implement RBAC?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`299-what-is-least-privilege`,category:`Security Architecture`,title:`What is least privilege?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`300-how-to-protect-enterprise-data`,category:`Security Architecture`,title:`How do you protect enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`301-how-to-protect-pii`,category:`Security Architecture`,title:`How do you protect PII?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`302-how-to-implement-dlp`,category:`Security Architecture`,title:`How do you implement DLP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`303-how-to-secure-prompts`,category:`Security Architecture`,title:`How do you secure prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`304-how-to-prevent-prompt-injection`,category:`Security Architecture`,title:`How do you prevent prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`305-how-to-prevent-indirect-prompt-injection`,category:`Security Architecture`,title:`How do you prevent indirect prompt injection?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`306-how-to-prevent-data-exfiltration`,category:`Security Architecture`,title:`How do you prevent data exfiltration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`307-how-to-prevent-unauthorized-tool-access`,category:`Security Architecture`,title:`How do you prevent unauthorized tool access?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`308-how-to-secure-mcp`,category:`Security Architecture`,title:`How do you secure MCP?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`309-how-to-secure-a2a`,category:`Security Architecture`,title:`How do you secure A2A?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`310-how-to-secure-apis`,category:`Security Architecture`,title:`How do you secure APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`311-how-to-protect-secrets`,category:`Security Architecture`,title:`How do you protect secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`312-why-use-key-vault`,category:`Security Architecture`,title:`Why use Key Vault?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`313-how-to-rotate-secrets`,category:`Security Architecture`,title:`How do you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`314-how-to-encrypt-data-at-rest`,category:`Security Architecture`,title:`How do you encrypt data at rest?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`315-how-to-encrypt-data-in-transit`,category:`Security Architecture`,title:`How do you encrypt data in transit?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`316-what-is-your-network-architecture`,category:`Security Architecture`,title:`What is your network architecture?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`317-why-private-endpoints`,category:`Security Architecture`,title:`Why private endpoints?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`318-why-private-vnet`,category:`Security Architecture`,title:`Why private VNet?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`319-how-to-implement-tenant-isolation`,category:`Security Architecture`,title:`How do you implement tenant isolation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`320-how-to-implement-entitlement-first-security`,category:`Security Architecture`,title:`How do you implement entitlement-first security?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`321-what-if-user-asks-for-confidential-hr-information`,category:`Security Architecture`,title:`What happens if a user asks for confidential HR information?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``},{id:`322-can-the-llm-decide-whether-the-user-has-permission`,category:`Security Architecture`,title:`Can the LLM decide whether the user has permission?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:``,code:``}];function Fh(){return(0,M.jsx)($,{data:Ph,title:`CWD Security Architecture Cookbook`,subtitle:`Identity, access control, data protection, prompt injection and network security`,icon:`🔐`,patternLabel:`Questions`})}var Ih=[{id:`341-what-does-observability-mean-in-genai`,category:`Observability`,title:`What does observability mean in GenAI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`342-monitoring-vs-observability`,category:`Observability`,title:`Monitoring vs observability?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`343-what-do-you-monitor-in-cwd`,category:`Observability`,title:`What do you monitor in CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`344-what-are-your-key-metrics`,category:`Observability`,title:`What are your key metrics?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`345-how-to-trace-request-across-coordinator-delegator-worker`,category:`Observability`,title:`How do you trace a request across Coordinator → Delegator → Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`346-what-is-a-correlation-id`,category:`Observability`,title:`What is a correlation ID?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`347-what-is-distributed-tracing`,category:`Observability`,title:`What is distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`348-what-information-do-you-log`,category:`Observability`,title:`What information do you log?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`349-what-information-should-never-be-logged`,category:`Observability`,title:`What information should never be logged?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`350-how-to-trace-llm-calls`,category:`Observability`,title:`How do you trace LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`351-how-to-trace-mcp-calls`,category:`Observability`,title:`How do you trace MCP calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`352-how-to-trace-a2a-calls`,category:`Observability`,title:`How do you trace A2A calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`353-how-to-identify-the-slowest-worker`,category:`Observability`,title:`How do you identify the slowest Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`354-how-to-identify-expensive-llm-calls`,category:`Observability`,title:`How do you identify expensive LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`355-how-to-identify-retrieval-failures`,category:`Observability`,title:`How do you identify retrieval failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`356-how-to-detect-hallucination-increases`,category:`Observability`,title:`How do you detect hallucination increases?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`357-how-to-monitor-token-consumption`,category:`Observability`,title:`How do you monitor token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`358-how-to-monitor-latency`,category:`Observability`,title:`How do you monitor latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`359-how-to-monitor-error-rates`,category:`Observability`,title:`How do you monitor error rates?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`360-what-tools-did-you-use`,category:`Observability`,title:`What tools did you use?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`361-how-would-you-use-langfuse`,category:`Observability`,title:`How would you use Langfuse?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`362-how-would-you-use-cloudwatch`,category:`Observability`,title:`How would you use CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`363-how-would-you-use-azure-application-insights`,category:`Observability`,title:`How would you use Azure Application Insights?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``},{id:`364-what-alerts-would-you-configure`,category:`Observability`,title:`What alerts would you configure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:``,code:``}];function Lh(){return(0,M.jsx)($,{data:Ih,title:`CWD Observability Cookbook`,subtitle:`Tracing, metrics, logging, alerting and GenAI monitoring`,icon:`📡`,patternLabel:`Questions`})}var Rh=[{id:`365-what-happens-if-the-coordinator-fails`,category:`Reliability & Failure Handling`,title:`What happens if the Coordinator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`366-what-happens-if-a-delegator-fails`,category:`Reliability & Failure Handling`,title:`What happens if a Delegator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`367-what-happens-if-worker-1-succeeds-and-worker-2-fails`,category:`Reliability & Failure Handling`,title:`What happens if Worker 1 succeeds and Worker 2 fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`368-what-happens-if-the-llm-times-out`,category:`Reliability & Failure Handling`,title:`What happens if the LLM times out?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`369-what-happens-if-salesforce-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if Salesforce is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`370-what-happens-if-servicenow-is-unavailable`,category:`Reliability & Failure Handling`,title:`What happens if ServiceNow is unavailable?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`371-what-happens-if-mcp-server-fails`,category:`Reliability & Failure Handling`,title:`What happens if MCP server fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`372-what-happens-if-the-database-fails`,category:`Reliability & Failure Handling`,title:`What happens if the database fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`373-what-happens-if-redis-fails`,category:`Reliability & Failure Handling`,title:`What happens if Redis fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`374-how-do-you-retry`,category:`Reliability & Failure Handling`,title:`How do you retry?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`375-how-many-retries`,category:`Reliability & Failure Handling`,title:`How many retries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`376-what-is-exponential-backoff`,category:`Reliability & Failure Handling`,title:`What is exponential backoff?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`377-what-is-jitter`,category:`Reliability & Failure Handling`,title:`What is jitter?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`378-what-is-a-circuit-breaker`,category:`Reliability & Failure Handling`,title:`What is a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`379-where-would-you-implement-circuit-breakers`,category:`Reliability & Failure Handling`,title:`Where would you implement circuit breakers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`380-what-is-a-dead-letter-queue`,category:`Reliability & Failure Handling`,title:`What is a dead-letter queue?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`381-how-does-dlq-help-cwd`,category:`Reliability & Failure Handling`,title:`How does DLQ help CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`382-how-do-you-replay-failed-requests`,category:`Reliability & Failure Handling`,title:`How do you replay failed requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`383-how-do-you-guarantee-idempotency`,category:`Reliability & Failure Handling`,title:`How do you guarantee idempotency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`384-how-do-you-handle-duplicate-events`,category:`Reliability & Failure Handling`,title:`How do you handle duplicate events?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`385-how-do-you-handle-partial-completion`,category:`Reliability & Failure Handling`,title:`How do you handle partial completion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`386-how-do-you-implement-graceful-degradation`,category:`Reliability & Failure Handling`,title:`How do you implement graceful degradation?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`387-how-do-you-implement-fallback`,category:`Reliability & Failure Handling`,title:`How do you implement fallback?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``},{id:`388-how-do-you-prevent-cascading-failures`,category:`Reliability & Failure Handling`,title:`How do you prevent cascading failures?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:``,code:``}];function zh(){return(0,M.jsx)($,{data:Rh,title:`CWD Reliability & Failure Handling Cookbook`,subtitle:`Failures, retries, circuit breakers, DLQs and graceful degradation`,icon:`♻️`,patternLabel:`Questions`})}var Bh=[{id:`389-how-many-concurrent-users-can-cwd-support`,category:`Scalability`,title:`How many concurrent users can CWD support?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`390-what-is-the-bottleneck`,category:`Scalability`,title:`What is the bottleneck?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`391-how-would-you-scale-coordinator`,category:`Scalability`,title:`How would you scale Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`392-how-would-you-scale-delegators`,category:`Scalability`,title:`How would you scale Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`393-how-would-you-scale-workers`,category:`Scalability`,title:`How would you scale Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`394-how-would-you-scale-mcp-servers`,category:`Scalability`,title:`How would you scale MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`395-how-would-you-scale-vector-search`,category:`Scalability`,title:`How would you scale vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`396-how-would-you-scale-llm-calls`,category:`Scalability`,title:`How would you scale LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`397-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`398-where-would-you-use-autoscaling`,category:`Scalability`,title:`Where would you use autoscaling?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`399-how-would-you-implement-backpressure`,category:`Scalability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`400-how-would-you-implement-rate-limiting`,category:`Scalability`,title:`How would you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`401-how-would-you-prevent-one-customer-from-consuming-all-resources`,category:`Scalability`,title:`How would you prevent one customer from consuming all resources?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`402-how-would-you-implement-tenant-level-quotas`,category:`Scalability`,title:`How would you implement tenant-level quotas?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`403-how-would-you-design-multi-region`,category:`Scalability`,title:`How would you design multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`404-how-would-you-design-disaster-recovery`,category:`Scalability`,title:`How would you design disaster recovery?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`405-what-is-rto`,category:`Scalability`,title:`What is RTO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``},{id:`406-what-is-rpo`,category:`Scalability`,title:`What is RPO?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:``,code:``}];function Vh(){return(0,M.jsx)($,{data:Bh,title:`CWD Scalability Cookbook`,subtitle:`Scaling, backpressure, quotas, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Hh=[{id:`407-what-is-the-end-to-end-latency`,category:`Performance & Optimization`,title:`What is the end-to-end latency?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`408-where-is-latency-introduced`,category:`Performance & Optimization`,title:`Where is latency introduced?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`409-how-do-you-reduce-llm-latency`,category:`Performance & Optimization`,title:`How do you reduce LLM latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`410-how-do-you-reduce-rag-latency`,category:`Performance & Optimization`,title:`How do you reduce RAG latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`411-how-do-you-reduce-tool-call-latency`,category:`Performance & Optimization`,title:`How do you reduce tool-call latency?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`412-how-do-you-parallelize-workers`,category:`Performance & Optimization`,title:`How do you parallelize Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`413-when-should-workers-execute-sequentially`,category:`Performance & Optimization`,title:`When should Workers execute sequentially?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`414-how-do-you-reduce-token-consumption`,category:`Performance & Optimization`,title:`How do you reduce token consumption?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`415-how-do-you-cache`,category:`Performance & Optimization`,title:`How do you cache?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`416-what-can-be-cached`,category:`Performance & Optimization`,title:`What can be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`417-what-should-not-be-cached`,category:`Performance & Optimization`,title:`What should not be cached?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`418-how-do-you-implement-semantic-caching`,category:`Performance & Optimization`,title:`How do you implement semantic caching?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`419-how-do-you-reduce-unnecessary-llm-calls`,category:`Performance & Optimization`,title:`How do you reduce unnecessary LLM calls?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`420-how-do-you-select-cheaper-models`,category:`Performance & Optimization`,title:`How do you select cheaper models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`421-how-do-you-optimize-prompt-size`,category:`Performance & Optimization`,title:`How do you optimize prompt size?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`422-how-do-you-optimize-embeddings`,category:`Performance & Optimization`,title:`How do you optimize embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``},{id:`423-how-do-you-optimize-vector-search`,category:`Performance & Optimization`,title:`How do you optimize vector search?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:``,code:``}];function Uh(){return(0,M.jsx)($,{data:Hh,title:`CWD Performance & Optimization Cookbook`,subtitle:`Latency, caching, parallelism and token optimization`,icon:`⚡`,patternLabel:`Questions`})}var Wh=[{id:`424-what-is-the-biggest-cost-component`,category:`Cost Optimization`,title:`What is the biggest cost component?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`425-how-do-you-calculate-cost-per-request`,category:`Cost Optimization`,title:`How do you calculate cost per request?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`426-how-do-you-calculate-token-cost`,category:`Cost Optimization`,title:`How do you calculate token cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`427-how-do-you-reduce-llm-costs`,category:`Cost Optimization`,title:`How do you reduce LLM costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`428-how-do-you-reduce-embedding-costs`,category:`Cost Optimization`,title:`How do you reduce embedding costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`429-how-do-you-reduce-infrastructure-costs`,category:`Cost Optimization`,title:`How do you reduce infrastructure costs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`430-how-would-you-implement-model-routing-based-on-cost`,category:`Cost Optimization`,title:`How would you implement model routing based on cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`431-when-would-you-use-a-smaller-model`,category:`Cost Optimization`,title:`When would you use a smaller model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`432-how-do-you-prevent-runaway-agent-loops`,category:`Cost Optimization`,title:`How do you prevent runaway agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`433-how-do-you-enforce-token-budgets`,category:`Cost Optimization`,title:`How do you enforce token budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`434-how-do-you-enforce-request-budgets`,category:`Cost Optimization`,title:`How do you enforce request budgets?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`435-how-do-you-monitor-cost-by-tenant`,category:`Cost Optimization`,title:`How do you monitor cost by tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`436-how-do-you-monitor-cost-by-agent`,category:`Cost Optimization`,title:`How do you monitor cost by agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``},{id:`437-how-do-you-monitor-cost-by-worker`,category:`Cost Optimization`,title:`How do you monitor cost by Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:``,code:``}];function Gh(){return(0,M.jsx)($,{data:Wh,title:`CWD Cost Optimization Cookbook`,subtitle:`Cost drivers, budgets, model routing and cost monitoring`,icon:`💰`,patternLabel:`Questions`})}var Kh=[{id:`438-what-data-does-cwd-store`,category:`Data Architecture`,title:`What data does CWD store?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`439-where-do-you-store-conversation-state`,category:`Data Architecture`,title:`Where do you store conversation state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`440-where-do-you-store-workflow-state`,category:`Data Architecture`,title:`Where do you store workflow state?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`441-where-do-you-store-embeddings`,category:`Data Architecture`,title:`Where do you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`442-where-do-you-store-audit-logs`,category:`Data Architecture`,title:`Where do you store audit logs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`443-where-do-you-store-agent-metadata`,category:`Data Architecture`,title:`Where do you store agent metadata?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`444-where-do-you-store-prompts`,category:`Data Architecture`,title:`Where do you store prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`445-what-is-your-agent-registry`,category:`Data Architecture`,title:`What is your Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`446-what-is-your-prompt-registry`,category:`Data Architecture`,title:`What is your Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`447-how-do-you-version-prompts`,category:`Data Architecture`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`448-how-do-you-version-agents`,category:`Data Architecture`,title:`How do you version agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`449-how-do-you-handle-schema-changes`,category:`Data Architecture`,title:`How do you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`450-how-long-do-you-retain-conversations`,category:`Data Architecture`,title:`How long do you retain conversations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`451-how-do-you-implement-data-deletion`,category:`Data Architecture`,title:`How do you implement data deletion?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`452-how-do-you-handle-gdpr-style-deletion-requirements`,category:`Data Architecture`,title:`How do you handle GDPR-style deletion requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``},{id:`453-how-do-you-protect-sensitive-data`,category:`Data Architecture`,title:`How do you protect sensitive data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:``,code:``}];function qh(){return(0,M.jsx)($,{data:Kh,title:`CWD Data Architecture Cookbook`,subtitle:`State, registries, versioning, retention and data deletion`,icon:`🗄️`,patternLabel:`Questions`})}var Jh=[{id:`454-how-does-cwd-integrate-with-salesforce`,category:`Enterprise Integration`,title:`How does CWD integrate with Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`455-how-does-cwd-integrate-with-servicenow`,category:`Enterprise Integration`,title:`How does CWD integrate with ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`456-how-does-cwd-integrate-with-sharepoint`,category:`Enterprise Integration`,title:`How does CWD integrate with SharePoint?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`457-how-does-cwd-integrate-with-snowflake`,category:`Enterprise Integration`,title:`How does CWD integrate with Snowflake?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`458-how-does-cwd-integrate-with-oracle`,category:`Enterprise Integration`,title:`How does CWD integrate with Oracle?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`459-why-use-mcp-instead-of-directly-embedding-api-integrations-into-workers`,category:`Enterprise Integration`,title:`Why use MCP instead of directly embedding API integrations into Workers?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`460-how-do-you-handle-authentication-to-each-enterprise-system`,category:`Enterprise Integration`,title:`How do you handle authentication to each enterprise system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`461-how-do-you-handle-api-rate-limits`,category:`Enterprise Integration`,title:`How do you handle API rate limits?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`462-how-do-you-handle-api-version-changes`,category:`Enterprise Integration`,title:`How do you handle API version changes?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`463-how-do-you-handle-downstream-outages`,category:`Enterprise Integration`,title:`How do you handle downstream outages?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`464-how-do-you-transform-external-responses-into-a-common-format`,category:`Enterprise Integration`,title:`How do you transform external responses into a common format?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`465-how-do-you-validate-external-data`,category:`Enterprise Integration`,title:`How do you validate external data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``},{id:`466-how-do-you-handle-inconsistent-enterprise-data`,category:`Enterprise Integration`,title:`How do you handle inconsistent enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:``,code:``}];function Yh(){return(0,M.jsx)($,{data:Jh,title:`CWD Enterprise Integration Cookbook`,subtitle:`Salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration`,icon:`🔗`,patternLabel:`Questions`})}var Xh=[{id:`467-why-fastapi`,category:`API & Backend Architecture`,title:`Why FastAPI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`468-why-not-flask`,category:`API & Backend Architecture`,title:`Why not Flask?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`469-what-apis-does-cwd-expose`,category:`API & Backend Architecture`,title:`What APIs does CWD expose?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`470-how-is-authentication-implemented`,category:`API & Backend Architecture`,title:`How is authentication implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`471-how-is-authorization-implemented`,category:`API & Backend Architecture`,title:`How is authorization implemented?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`472-how-do-you-validate-api-requests`,category:`API & Backend Architecture`,title:`How do you validate API requests?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`473-how-do-you-handle-api-versioning`,category:`API & Backend Architecture`,title:`How do you handle API versioning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`474-how-do-you-implement-rate-limiting`,category:`API & Backend Architecture`,title:`How do you implement rate limiting?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`475-how-do-you-implement-request-ids`,category:`API & Backend Architecture`,title:`How do you implement request IDs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`476-how-do-you-handle-asynchronous-apis`,category:`API & Backend Architecture`,title:`How do you handle asynchronous APIs?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`477-how-do-you-handle-long-running-agent-workflows`,category:`API & Backend Architecture`,title:`How do you handle long-running agent workflows?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`478-why-might-you-return-202-accepted`,category:`API & Backend Architecture`,title:`Why might you return 202 Accepted?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`479-how-does-the-client-retrieve-workflow-status`,category:`API & Backend Architecture`,title:`How does the client retrieve workflow status?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``},{id:`480-how-do-you-secure-api-endpoints`,category:`API & Backend Architecture`,title:`How do you secure API endpoints?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:``,code:``}];function Zh(){return(0,M.jsx)($,{data:Xh,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var Qh=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`482-explain-your-ci-cd-pipeline`,category:`Production Deployment / DevOps`,title:`Explain your CI/CD pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`483-how-do-you-deploy-prompts`,category:`Production Deployment / DevOps`,title:`How do you deploy prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`484-how-do-you-deploy-agents`,category:`Production Deployment / DevOps`,title:`How do you deploy agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`485-how-do-you-deploy-mcp-servers`,category:`Production Deployment / DevOps`,title:`How do you deploy MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`486-how-do-you-version-models`,category:`Production Deployment / DevOps`,title:`How do you version models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`487-how-do-you-version-prompts`,category:`Production Deployment / DevOps`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`488-how-do-you-perform-blue-green-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`489-how-do-you-perform-canary-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`490-how-do-you-roll-back-a-bad-prompt`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`491-how-do-you-roll-back-a-bad-model`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`492-how-do-you-test-before-production`,category:`Production Deployment / DevOps`,title:`How do you test before production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`493-what-are-your-quality-gates`,category:`Production Deployment / DevOps`,title:`What are your quality gates?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`494-how-do-you-integrate-llm-evaluation-into-ci-cd`,category:`Production Deployment / DevOps`,title:`How do you integrate LLM evaluation into CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`495-how-do-you-prevent-a-bad-prompt-from-reaching-production`,category:`Production Deployment / DevOps`,title:`How do you prevent a bad prompt from reaching production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`496-how-do-you-manage-environment-specific-configuration`,category:`Production Deployment / DevOps`,title:`How do you manage environment-specific configuration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``}];function $h(){return(0,M.jsx)($,{data:Qh,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var eg=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function tg(){return(0,M.jsx)($,{data:eg,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var ng=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function rg(){return(0,M.jsx)($,{data:ng,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var ig=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function ag(){return(0,M.jsx)($,{data:ig,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var og=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function sg(){return(0,M.jsx)($,{data:og,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var cg=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function lg(){return(0,M.jsx)($,{data:cg,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var ug=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function dg(){return(0,M.jsx)($,{data:ug,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var fg=[{id:`arr-q1`,category:`Arrays - Basic Operations`,title:`Find the Largest Element`,difficulty:`Beginner`,time:`~10 min`,description:`Traverse a list once to find its maximum value without using max().`,concept:`
 Logic:
 Start by assuming the first element is the largest, then walk through every other element once. Whenever a value is bigger than the current largest, replace it. After the single pass, whatever remains is the maximum.
 
@@ -391826,4 +392516,4 @@ def max_subarray_xor(nums):
             current_xor ^= nums[j]
             max_xor = max(max_xor, current_xor)
     return max_xor
-`}];function ph(){return(0,M.jsx)($,{data:fh,title:`ArraysBasicOps Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var mh=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function hh(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`CWD Top Questions`,path:`/cwd-top-questions`},{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`ArraysAndLists`,path:`/ArraysAndLists`}],c=[{name:`Cloud Top Questions`,path:`/cloud-top-questions`},{name:`Azure`,path:`/Azure`},{name:`AWS`,path:`/AWS`},{name:`GCP`,path:`/GCP`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let l=e=>{t(t=>t===e?null:e)},u=()=>{t(null)},d=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>l(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:u,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:mh,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(d,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(d,{name:`AgenticAI`,topics:a}),(0,M.jsx)(d,{name:`CWD Project`,topics:o}),(0,M.jsx)(d,{name:`Coding & AI`,topics:s}),(0,M.jsx)(d,{name:`Cloud & AI`,topics:c})]})]})}function gh(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(hh,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(Af,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Mf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(ap,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(yp,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(xp,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Cp,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Tp,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Dp,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(jp,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(Np,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(Fp,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(Lp,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(zp,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(Vp,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(Up,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(Gp,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(qp,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(Yp,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)($p,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(tm,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(rm,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(am,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(sm,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(lm,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(dm,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(pm,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(hm,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(_m,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/ArraysAndLists`,element:(0,M.jsx)(ph,{})}),(0,M.jsx)(j,{path:`/AWS`,element:(0,M.jsx)(xm,{})}),(0,M.jsx)(j,{path:`/GCP`,element:(0,M.jsx)(Cm,{})}),(0,M.jsx)(j,{path:`/Azure`,element:(0,M.jsx)(sh,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/cwd-top-questions`,element:(0,M.jsx)(dh,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(gh,{})}));
+`}];function pg(){return(0,M.jsx)($,{data:fg,title:`ArraysBasicOps Cookbook`,subtitle:`Tracing, logging, metrics, AI telemetry, dashboards and alerting`,icon:`📈`,patternLabel:`Topics`})}var mg=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function hg(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`CWD Top Questions`,path:`/cwd-top-questions`},{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`},{name:`02. CWD Architecture`,path:`/cwd-architecture`},{name:`03. Coordinator Agent`,path:`/cwd-coordinator`},{name:`04. Delegator Agents`,path:`/cwd-delegator`},{name:`05. Worker Agents`,path:`/cwd-workers`},{name:`06. CWD Orchestration Flow`,path:`/cwd-orchestration`},{name:`07. LangGraph`,path:`/cwd-langgraph`},{name:`08. MCP`,path:`/cwd-mcp`},{name:`09. A2A Communication`,path:`/cwd-a2a`},{name:`10. Agent Registry`,path:`/cwd-agent-registry`},{name:`11. Prompt Registry`,path:`/cwd-prompt-registry`},{name:`12. RAG Architecture`,path:`/cwd-rag`},{name:`13. Memory & State Management`,path:`/cwd-memory`},{name:`14. Enterprise Data Integration`,path:`/cwd-data-integration`},{name:`15. Security & Governance`,path:`/cwd-security`},{name:`16. Observability`,path:`/cwd-observability`},{name:`17. Messaging Architecture`,path:`/cwd-messaging`},{name:`18. Enterprise Gateway`,path:`/cwd-gateway`},{name:`19. Infrastructure & Cloud`,path:`/cwd-cloud`},{name:`20. End-to-End CWD Scenario`,path:`/cwd-cbd-scenario`},{name:`21. CWD State & Execution Model`,path:`/cwd-execution-model`},{name:`22. Reliability & Failure Handling`,path:`/cwd-reliability`},{name:`23. Agent Evaluation`,path:`/cwd-evaluation`},{name:`24. LLMOps / MLOps`,path:`/cwd-llmops`},{name:`25. Architecture Decisions & Trade-offs`,path:`/cwd-decisions`},{name:`26. Challenges & Solutions`,path:`/cwd-challenges`},{name:`27. Current State vs Future State`,path:`/cwd-current-future-state`},{name:`28. Interview Preparation`,path:`/cwd-interview`}],s=[{name:`ArraysAndLists`,path:`/ArraysAndLists`}],c=[{name:`Cloud Top Questions`,path:`/cloud-top-questions`},{name:`Azure`,path:`/Azure`},{name:`AWS`,path:`/AWS`},{name:`GCP`,path:`/GCP`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let l=e=>{t(t=>t===e?null:e)},u=()=>{t(null)},d=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>l(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:u,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:mg,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(d,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(d,{name:`AgenticAI`,topics:a}),(0,M.jsx)(d,{name:`CWD Project`,topics:o}),(0,M.jsx)(d,{name:`Coding & AI`,topics:s}),(0,M.jsx)(d,{name:`Cloud & AI`,topics:c})]})]})}function gg(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(hg,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(Af,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Mf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(ap,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(yp,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(xp,{})}),(0,M.jsx)(j,{path:`/cwd-coordinator`,element:(0,M.jsx)(Cp,{})}),(0,M.jsx)(j,{path:`/cwd-delegator`,element:(0,M.jsx)(Tp,{})}),(0,M.jsx)(j,{path:`/cwd-workers`,element:(0,M.jsx)(Dp,{})}),(0,M.jsx)(j,{path:`/cwd-orchestration`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/cwd-langgraph`,element:(0,M.jsx)(jp,{})}),(0,M.jsx)(j,{path:`/cwd-mcp`,element:(0,M.jsx)(Np,{})}),(0,M.jsx)(j,{path:`/cwd-a2a`,element:(0,M.jsx)(Fp,{})}),(0,M.jsx)(j,{path:`/cwd-agent-registry`,element:(0,M.jsx)(Lp,{})}),(0,M.jsx)(j,{path:`/cwd-prompt-registry`,element:(0,M.jsx)(zp,{})}),(0,M.jsx)(j,{path:`/cwd-rag`,element:(0,M.jsx)(Vp,{})}),(0,M.jsx)(j,{path:`/cwd-memory`,element:(0,M.jsx)(Up,{})}),(0,M.jsx)(j,{path:`/cwd-data-integration`,element:(0,M.jsx)(Gp,{})}),(0,M.jsx)(j,{path:`/cwd-security`,element:(0,M.jsx)(qp,{})}),(0,M.jsx)(j,{path:`/cwd-observability`,element:(0,M.jsx)(Yp,{})}),(0,M.jsx)(j,{path:`/cwd-messaging`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/cwd-gateway`,element:(0,M.jsx)($p,{})}),(0,M.jsx)(j,{path:`/cwd-cloud`,element:(0,M.jsx)(tm,{})}),(0,M.jsx)(j,{path:`/cwd-cbd-scenario`,element:(0,M.jsx)(rm,{})}),(0,M.jsx)(j,{path:`/cwd-execution-model`,element:(0,M.jsx)(am,{})}),(0,M.jsx)(j,{path:`/cwd-reliability`,element:(0,M.jsx)(sm,{})}),(0,M.jsx)(j,{path:`/cwd-evaluation`,element:(0,M.jsx)(lm,{})}),(0,M.jsx)(j,{path:`/cwd-llmops`,element:(0,M.jsx)(dm,{})}),(0,M.jsx)(j,{path:`/cwd-decisions`,element:(0,M.jsx)(pm,{})}),(0,M.jsx)(j,{path:`/cwd-challenges`,element:(0,M.jsx)(hm,{})}),(0,M.jsx)(j,{path:`/cwd-current-future-state`,element:(0,M.jsx)(_m,{})}),(0,M.jsx)(j,{path:`/cwd-interview`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/ArraysAndLists`,element:(0,M.jsx)(pg,{})}),(0,M.jsx)(j,{path:`/AWS`,element:(0,M.jsx)(xm,{})}),(0,M.jsx)(j,{path:`/GCP`,element:(0,M.jsx)(Cm,{})}),(0,M.jsx)(j,{path:`/Azure`,element:(0,M.jsx)(sh,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/cwd-top-questions`,element:(0,M.jsx)(dh,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(ph,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(hh,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(_h,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(xh,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ch,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Th,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Dh,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(kh,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(jh,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Nh,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Fh,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Lh,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(zh,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Vh,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Uh,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Gh,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(qh,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Yh,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(Zh,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)($h,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(tg,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(rg,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(ag,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(sg,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(lg,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(dg,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(gg,{})}));
