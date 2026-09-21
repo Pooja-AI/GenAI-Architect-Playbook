@@ -1,41 +1,196 @@
-**Agent routing accuracy** measures how often the router sends a request to the correct agent. In CWD, the router is the Coordinator choosing a Delegator, and a Delegator choosing its Workers.
+## What is Agent Routing Accuracy?
 
-**How it's calculated**
-1. Build a labelled dataset of requests, each with the correct agent (or set of agents) recorded.
-2. Run the requests through the router.
-3. Score = correctly routed requests ÷ total requests.
+**Agent routing accuracy measures whether the Coordinator sends a user's request to the correct Delegator/Agent based on the user's intent and required capability.**
 
-**Levels worth measuring separately**
-- **Coordinator → Delegator:** Did the request reach the right domain (CRM, ITSM, knowledge and so on)?
-- **Delegator → Worker:** Did it pick the right Workers?
-- **Multi-agent requests:** If a request needs two Delegators, score precision and recall on the set, not a single yes or no.
-- **No-route cases:** Out-of-scope or unsafe requests should be refused or escalated. Count these as correct only if the router does that.
+In CWD:
 
-**Useful breakdowns**
-- A confusion matrix, showing which agents get mistaken for which.
-- Accuracy per intent, tenant type and difficulty.
-- Ambiguous requests, where the right behaviour is to ask a clarifying question.
-- Hallucinated routes, meaning a Delegator that isn't in the Agent Registry.
+> **“Did the Coordinator choose the right Delegator for this request?”**
 
-**Example**
-- Request: "Why is my ServiceNow ticket still open, and what's our escalation policy?"
-- Correct route: the ITSM Delegator for the ticket, plus the knowledge Delegator for the policy.
-- The router sends it only to knowledge. It has lost the ticket part, so recall on that request is 0.5.
+### CWD example
 
-**How it differs from related metrics**
-- **Tool-call accuracy:** Checks the tools and arguments inside an agent. Routing accuracy checks which agent gets the work.
-- **Task completion:** A wrong route usually fails the task, but a right route can still fail later. Measuring routing separately shows where the failure started.
-- **Intent classification accuracy:** Closely related. Routing also depends on availability, permissions and the registry.
+User asks:
 
-**Why it matters for CWD**
-Routing errors are costly because they waste LLM calls, produce off-topic answers and can send a request to an agent that shouldn't see the data. It is also cheap to test, since you don't need to run the full workflow.
+> **“Give me the customer information and open incidents for C12345.”**
 
-**Ways to improve it**
-- Clear capability descriptions in the Agent Registry.
-- A rules layer for obvious cases, with the LLM only for ambiguous ones.
-- Few-shot examples or a small trained classifier for intent.
-- Validate the chosen agent against the registry and the user's permissions.
-- Turn every production misroute into a new test case.
+The Coordinator identifies:
 
-**Caveat:** Labels can be subjective when a request could go to two agents. Agree on the labelling rules first, and accept a set of valid routes where several are reasonable.
+```text id="8x3m2p"
+Intent = Customer Briefing
+customer_id = C12345
+```
 
+It should route to:
+
+```text id="j7k4qa"
+Coordinator
+    │
+    ├──→ Sales Delegator ✅
+    │       └── Customer Worker
+    │
+    └──→ IT Delegator ✅
+            └── Incident Worker
+```
+
+If it sends the request only to the **Manufacturing Delegator**, that's a routing error.
+
+---
+
+## How do I measure it?
+
+I create golden routing cases with expected Delegators.
+
+Example:
+
+```json id="d3p8zn"
+{
+  "input": "Show me open incidents for C12345",
+  "expected_delegators": ["it"]
+}
+```
+
+The actual system returns:
+
+```text id="q9m2vx"
+actual_delegators = ["it"]
+```
+
+So:
+
+```text id="f5r7kc"
+Correct routing = 1
+Total routing cases = 1
+
+Accuracy = 100%
+```
+
+Across 1,000 cases:
+
+```text id="u1z6ab"
+950 correctly routed
+────────────────────
+1000 total cases
+
+= 95% routing accuracy
+```
+
+---
+
+## Multi-agent routing
+
+CWD can have multiple Delegators:
+
+```text id="4z8n2c"
+Coordinator
+   ├── Sales Delegator
+   ├── IT Delegator
+   └── Manufacturing Delegator
+```
+
+A request may require **multiple Delegators**.
+
+For example:
+
+> "Give me a complete customer briefing."
+
+Expected:
+
+```text id="m6v9qt"
+Sales + IT
+```
+
+If the Coordinator selects:
+
+```text id="k2p7ws"
+Sales + IT + Manufacturing
+```
+
+then the routing isn't necessarily fully correct because it invoked an unnecessary Delegator.
+
+So I can measure:
+
+* Correct Delegator selection
+* Missing Delegators
+* Unnecessary Delegators
+* Multi-agent routing accuracy
+
+---
+
+## Routing accuracy vs Worker selection
+
+Don't confuse these.
+
+### Agent/Delegator routing
+
+```text
+Coordinator
+    ↓
+Which Delegator?
+```
+
+### Worker selection
+
+```text
+Delegator
+    ↓
+Which Worker?
+```
+
+Example:
+
+```text id="9x2q4m"
+Customer Briefing
+       ↓
+Coordinator
+       ↓
+Sales Delegator       ← Agent routing
+       ↓
+Customer Worker       ← Worker selection
+```
+
+So in CWD:
+
+> **Coordinator → Delegator = Agent routing**
+
+> **Delegator → Worker = Worker routing/selection**
+
+---
+
+## How I improve routing accuracy
+
+If routing accuracy is low, I analyze:
+
+```text id="r4m8ks"
+Low Routing Accuracy
+       ↓
+Check intent classification
+       ↓
+Check entity extraction
+       ↓
+Check Agent/Delegator descriptions
+       ↓
+Improve routing rules/prompts
+       ↓
+Add examples
+       ↓
+Add confidence threshold
+       ↓
+Evaluate again
+```
+
+For ambiguous requests, I don't force a route.
+
+Example:
+
+> “I need information about ABC.”
+
+If the system cannot determine whether the user wants **Sales**, **IT**, or **Manufacturing**, it can ask a clarification question.
+
+---
+
+## Interview-ready answer
+
+> **“Agent routing accuracy measures whether the Coordinator selects the correct Delegator or agent for a user's request. In CWD, I create golden test cases containing the expected Delegator or Delegators. For example, a Customer Briefing request may require both Sales and IT Delegators. I compare the actual routing with the expected routing and measure correct, missing, and unnecessary Delegator selections. I separately measure Worker selection accuracy because Delegator routing and Worker selection happen at different layers.”**
+
+### Easy memory
+
+**Agent routing accuracy = “Did the Coordinator send the task to the right Delegator?”**

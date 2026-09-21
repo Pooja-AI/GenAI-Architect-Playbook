@@ -1,35 +1,205 @@
-**Task completion rate** is the share of tasks the agent finished successfully from the user's point of view. Where routing and tool-call accuracy check the steps, this checks whether the goal was achieved.
+## What is Task Completion Rate?
 
-**How it's calculated**
-Task completion rate = successfully completed tasks ÷ total tasks attempted.
+**Task completion rate measures the percentage of CWD requests that successfully complete the intended business workflow and produce an acceptable result.**
 
-Decide what counts as success before measuring:
-- **Outcome checks:** the ticket really is closed, the record was updated, or the answer contains the required facts. Where possible verify the state in the target system rather than trusting the agent's message.
-- **LLM-as-judge:** a judge compares the final result with the task's success criteria.
-- **Human review:** for a sample, especially ambiguous or high-risk tasks.
+In simple terms:
 
-**Useful variants**
-- **Strict vs partial completion:** score 1, 0.5 and 0, or count partial completions separately, for multi-step tasks.
-- **First-attempt completion:** without retries, fallbacks or human help.
-- **Completion within limits:** within the latency, cost and step budget.
-- **Escalation rate:** correctly handing off to a human counts differently from failing silently.
+> **“Did CWD actually finish the user's task successfully?”**
 
-**Example**
-- Task: "Create a ServiceNow incident for customer X and email them the ticket number."
-- The incident is created but the email is never sent. Under strict scoring this is a failure. Under partial scoring it is 0.5.
+### CWD example
 
-**How it differs from related metrics**
-- **Routing accuracy and tool-call accuracy:** diagnose why a task failed.
-- **Answer relevance and faithfulness:** score the text, not whether the goal was met.
-- **Agent trajectory evaluation:** judges the path. An agent can complete a task by a wasteful or unsafe path, so read completion together with trajectory and safety.
+User asks:
 
-**Why it matters for CWD**
-It is the headline outcome metric for an agentic system, and the one business owners understand. Slice it by intent, Delegator and tenant to find where CWD is weak. Track the completion rate alongside cost and latency per task.
+> **“Give me a customer briefing for C12345.”**
 
-**Ways to improve it**
-- Fix the biggest failure cause found in the breakdown (routing, tool arguments, timeouts, missing permissions).
-- Add validation and retries for transient errors, with idempotent tools.
-- Ask clarifying questions instead of guessing.
-- Resume from checkpoints instead of restarting failed runs.
+The expected workflow is:
 
-**Caveat:** Reported success can be wrong, because an agent may claim it finished when it hasn't. Verify against the real system state, and audit a sample by hand.
+```text id="x7k3pm"
+User
+ ↓
+Coordinator
+ ↓
+Sales Delegator ──→ Customer Worker ──→ Salesforce
+ ↓
+IT Delegator ─────→ Incident Worker ──→ ServiceNow
+ ↓
+Validate + Aggregate
+ ↓
+Customer Briefing
+```
+
+If both required branches complete and the final response passes validation:
+
+```text id="p8q2md"
+Task = SUCCESS ✅
+```
+
+If the workflow fails before producing the required result:
+
+```text id="z5n7rx"
+Task = FAILED ❌
+```
+
+---
+
+## How do I calculate it?
+
+```text id="c4v8na"
+Task Completion Rate =
+Successfully completed tasks
+───────────────────────────
+Total tasks started
+× 100
+```
+
+Example:
+
+```text id="m3q9fk"
+1,000 CWD tasks started
+950 successfully completed
+
+Completion Rate = 950 / 1000 × 100
+                = 95%
+```
+
+---
+
+## What counts as "completed"?
+
+This is important.
+
+I don't consider a task successful merely because the LLM returned a response.
+
+For CWD, I define success criteria.
+
+For example, Customer Briefing requires:
+
+```text id="h6s2wp"
+Intent correctly identified       ✅
+Required Delegators executed     ✅
+Required Workers executed        ✅
+Enterprise data retrieved        ✅
+Authorization passed             ✅
+Results validated                ✅
+Required facts present           ✅
+Final response generated         ✅
+```
+
+Only then do I mark the task as successfully completed.
+
+---
+
+## Partial completion
+
+Suppose:
+
+```text id="q1m8vc"
+Sales Delegator → SUCCESS ✅
+IT Delegator    → FAILED  ❌
+```
+
+The system might return a partial result if the business allows it.
+
+```text id="f9r2kd"
+Sales information → Available
+IT incident data  → Unavailable
+```
+
+I would **not automatically count that as a fully completed task**.
+
+I can separately track:
+
+* Full completion rate
+* Partial completion rate
+* Failed task rate
+
+This gives a more accurate picture of CWD reliability.
+
+---
+
+## Task completion vs agent routing accuracy
+
+These are different metrics.
+
+### Routing accuracy
+
+> Did I choose the correct Delegator?
+
+### Task completion rate
+
+> Did the entire workflow successfully finish?
+
+Example:
+
+```text id="8j4q2n"
+Correct routing ✅
+       ↓
+MCP timeout ❌
+       ↓
+Workflow fails ❌
+```
+
+Here:
+
+* Routing accuracy → ✅
+* Task completion → ❌
+
+---
+
+## Task completion vs tool success
+
+Similarly:
+
+```text id="d7p3ax"
+Correct MCP call
+      ↓
+ServiceNow unavailable
+      ↓
+Retry
+      ↓
+Success
+```
+
+The initial tool call may fail, but the **overall CWD task can still complete successfully** after recovery.
+
+That's why task completion is an **end-to-end metric**.
+
+---
+
+## What I monitor in production
+
+I break task completion down by:
+
+```text id="v4m8qn"
+Overall completion rate
+       │
+       ├── Sales tasks
+       ├── IT tasks
+       ├── Customer Briefing
+       ├── Incident Investigation
+       ├── RAG tasks
+       └── MCP tasks
+```
+
+I also investigate failures by root cause:
+
+* Coordinator failure
+* Delegator failure
+* Worker failure
+* MCP failure
+* Salesforce/ServiceNow failure
+* RAG failure
+* LLM timeout
+* Validation failure
+* Authorization failure
+* Human approval timeout
+
+---
+
+## Interview-ready answer
+
+> **“Task completion rate is the percentage of CWD workflows that successfully complete the intended business task. I don't consider simply generating an LLM response as success. For example, for a Customer Briefing, the required Delegators and Workers must execute, enterprise data must be retrieved and authorized, results must pass validation, and the final response must satisfy the business requirements. I calculate successful completed tasks divided by total tasks started. I also separately track partial completions and failures so we can identify where the workflow is breaking.”**
+
+### Easy memory
+
+**Task Completion Rate = “Did the entire CWD business task actually finish successfully?”**

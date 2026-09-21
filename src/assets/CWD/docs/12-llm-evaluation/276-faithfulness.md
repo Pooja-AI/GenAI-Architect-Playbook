@@ -1,28 +1,174 @@
-**Faithfulness** measures whether an LLM's answer is supported by the context it was given, such as the retrieved documents in RAG. A faithful answer makes no claims that go beyond that context or contradict it.
+## What is Faithfulness?
 
-**How it's calculated (the RAGAS approach)**
-1. Break the answer into individual claims.
-2. Check each claim against the retrieved context, usually with an LLM judge.
-3. Score = supported claims ÷ total claims (0 to 1).
+**Faithfulness measures whether the LLM's answer is supported by the context/evidence that was provided to it.**
 
-**Example**
-- Context: "The refund window is 30 days from delivery."
-- Answer: "You can get a refund within 30 days, and shipping is free."
-- The first claim is supported and the second is not, so faithfulness is 1/2 = 0.5.
+In simple terms:
 
-**How it differs from related metrics**
-- **Faithfulness / groundedness:** Is the answer backed by the context? Some tools treat the two terms as the same thing, others define them slightly differently.
-- **Factual correctness:** Is the answer true in the real world? A faithful answer can still be wrong if the retrieved document is wrong.
-- **Answer relevance:** Does the answer actually address the question?
-- **Context precision and recall:** Did retrieval return the right documents?
+> **“Did the LLM stay faithful to the evidence, or did it invent something?”**
 
-**Why it matters for CWD**
-It is your main hallucination metric for RAG. Low faithfulness with good retrieval points to a prompt or model problem. Low faithfulness with poor retrieval points to a retrieval problem.
+### CWD example
 
-**Ways to improve it**
-- Better retrieval and reranking, and less irrelevant context.
-- Prompts like "answer only from the context; say you don't know otherwise".
-- Required citations.
-- A grounding check on the output, such as Bedrock Guardrails' contextual grounding check or Azure's groundedness detection.
+Suppose the Worker retrieves this from ServiceNow:
 
-**Caveat:** LLM judges are noisy, so use a fixed judge model and check a sample by hand. Also, a very cautious answer can score well on faithfulness while being unhelpful, so read it alongside answer relevance.
+```text
+INC1001
+Status: Open
+Priority: High
+Description: Network connectivity issue
+```
+
+The LLM responds:
+
+> **“INC1001 is an open, high-priority network connectivity incident.”**
+
+✅ **Faithful** — every factual claim is supported by the evidence.
+
+But if it responds:
+
+> **“INC1001 is a critical database failure caused by a hardware problem.”**
+
+❌ **Not faithful** — the evidence doesn't contain those facts.
+
+---
+
+## How do I measure it?
+
+I break the answer into factual claims and compare each claim against the retrieved evidence.
+
+```text id="qf7m2k"
+LLM Answer
+    ↓
+Extract factual claims
+    ↓
+Compare claims with evidence
+    ↓
+Supported?
+ ├── Yes → Faithful
+ └── No  → Unsupported
+```
+
+For example:
+
+```text id="4m9k1a"
+5 factual claims
+4 supported by evidence
+
+Faithfulness ≈ 4 / 5 = 80%
+```
+
+In practice, I can use automated evaluators/LLM-as-judge methods, plus deterministic validation for critical fields.
+
+---
+
+## Faithfulness vs Context Precision vs Context Recall
+
+These three are easy to confuse:
+
+| Metric                | Question                                            |
+| --------------------- | --------------------------------------------------- |
+| **Context Precision** | Is the retrieved context mostly relevant?           |
+| **Context Recall**    | Did we retrieve enough of the relevant information? |
+| **Faithfulness**      | Did the LLM answer based on that evidence?          |
+
+Example:
+
+```text
+User
+ ↓
+RAG retrieves relevant evidence
+ ↓
+Context Precision / Recall
+ ↓
+LLM generates answer
+ ↓
+Faithfulness check
+```
+
+### Important example
+
+Suppose RAG retrieves the correct ServiceNow incident:
+
+```text
+Status = Open
+Priority = High
+```
+
+But the LLM says:
+
+> “The incident is resolved.”
+
+Then:
+
+* Retrieval relevance → ✅
+* Context recall → potentially ✅
+* **Faithfulness → ❌**
+
+The problem occurred during **generation**, not retrieval.
+
+---
+
+## Faithfulness ≠ factual accuracy
+
+This is an important interview distinction.
+
+Suppose the retrieved document incorrectly says:
+
+```text
+INC1001 → Status: Resolved
+```
+
+The LLM says:
+
+> “INC1001 is resolved.”
+
+The answer is **faithful to the retrieved context**, even if the underlying document is wrong.
+
+Therefore:
+
+> **Faithfulness checks whether the answer is supported by the provided evidence. Factual accuracy checks whether the evidence itself is correct according to the source of truth.**
+
+For critical CWD data, I validate against authoritative systems such as **ServiceNow or Salesforce**.
+
+---
+
+## How I improve faithfulness in CWD
+
+```text id="b6h3zq"
+Trusted Sources
+      ↓
+RAG / MCP
+      ↓
+Relevant Evidence
+      ↓
+Grounded Prompt
+      ↓
+Structured Output
+      ↓
+Claim/Evidence Validation
+      ↓
+Final Answer
+```
+
+I also instruct the model:
+
+> “Answer only using the provided evidence. If evidence is insufficient, do not guess.”
+
+And if the validation detects an unsupported claim:
+
+```text id="p0x7dy"
+Unsupported claim
+      ↓
+Regenerate with evidence
+      ↓
+If still unsupported
+      ↓
+Abstain
+```
+
+### Interview-ready answer
+
+> **“Faithfulness measures whether the claims in the LLM response are supported by the retrieved evidence. In CWD, I compare generated claims against RAG or MCP evidence and flag unsupported claims. For example, if ServiceNow says an incident is Open and High priority, the response should not claim it is Resolved or caused by a database failure. I use structured outputs, evidence or citation mapping, grounding evaluation, and deterministic validation for critical fields. Faithfulness tells me whether the model stayed true to the evidence; factual accuracy additionally requires checking that evidence against the system of record.”**
+
+### Easy memory
+
+**Faithfulness = Evidence → Answer → Are the claims supported?**
