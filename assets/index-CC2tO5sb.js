@@ -166211,7 +166211,8726 @@ I avoid logging secrets, tokens, and unnecessary sensitive payloads.\r
 ### Strong interview line\r
 \r
 > **“Authentication establishes identity; authorization determines access, and I enforce authorization again at the MCP and enterprise boundaries.”**\r
-`,code:``}];function $p(){return(0,M.jsx)($,{data:Qp,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var em=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`482-explain-your-ci-cd-pipeline`,category:`Production Deployment / DevOps`,title:`Explain your CI/CD pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`483-how-do-you-deploy-prompts`,category:`Production Deployment / DevOps`,title:`How do you deploy prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`484-how-do-you-deploy-agents`,category:`Production Deployment / DevOps`,title:`How do you deploy agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`485-how-do-you-deploy-mcp-servers`,category:`Production Deployment / DevOps`,title:`How do you deploy MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`486-how-do-you-version-models`,category:`Production Deployment / DevOps`,title:`How do you version models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`487-how-do-you-version-prompts`,category:`Production Deployment / DevOps`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`488-how-do-you-perform-blue-green-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`489-how-do-you-perform-canary-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`490-how-do-you-roll-back-a-bad-prompt`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`491-how-do-you-roll-back-a-bad-model`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`492-how-do-you-test-before-production`,category:`Production Deployment / DevOps`,title:`How do you test before production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`493-what-are-your-quality-gates`,category:`Production Deployment / DevOps`,title:`What are your quality gates?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`494-how-do-you-integrate-llm-evaluation-into-ci-cd`,category:`Production Deployment / DevOps`,title:`How do you integrate LLM evaluation into CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`495-how-do-you-prevent-a-bad-prompt-from-reaching-production`,category:`Production Deployment / DevOps`,title:`How do you prevent a bad prompt from reaching production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``},{id:`496-how-do-you-manage-environment-specific-configuration`,category:`Production Deployment / DevOps`,title:`How do you manage environment-specific configuration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:``,code:``}];function tm(){return(0,M.jsx)($,{data:em,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var nm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function rm(){return(0,M.jsx)($,{data:nm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var im=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function am(){return(0,M.jsx)($,{data:im,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var om=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function sm(){return(0,M.jsx)($,{data:om,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var cm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function lm(){return(0,M.jsx)($,{data:cm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var um=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function dm(){return(0,M.jsx)($,{data:um,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var fm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function pm(){return(0,M.jsx)($,{data:fm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var mm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`004-why-did-you-choose-api-gateway`,category:`AWS Architecture`,title:`Why did you choose API Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`005-why-did-you-choose-lambda`,category:`AWS Architecture`,title:`Why did you choose Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`006-why-would-you-choose-ecs-fargate-instead-of-lambda`,category:`AWS Architecture`,title:`Why would you choose ECS/Fargate instead of Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`007-when-would-you-choose-eks`,category:`AWS Architecture`,title:`When would you choose EKS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`008-where-would-you-use-step-functions`,category:`AWS Architecture`,title:`Where would you use Step Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`009-where-would-you-use-sqs`,category:`AWS Architecture`,title:`Where would you use SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`010-where-would-you-use-eventbridge`,category:`AWS Architecture`,title:`Where would you use EventBridge?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`011-where-would-you-use-dynamodb`,category:`AWS Architecture`,title:`Where would you use DynamoDB?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`012-where-would-you-use-elasticache-redis`,category:`AWS Architecture`,title:`Where would you use ElastiCache/Redis?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`013-where-would-you-use-opensearch-serverless`,category:`AWS Architecture`,title:`Where would you use OpenSearch Serverless?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`014-where-would-you-use-s3`,category:`AWS Architecture`,title:`Where would you use S3?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``}];function hm(){return(0,M.jsx)($,{data:mm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var gm=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`017-which-bedrock-models-would-you-use-for-cwd-and-why`,category:`Amazon Bedrock`,title:`Which Bedrock models would you use for CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`018-how-do-you-select-a-bedrock-model`,category:`Amazon Bedrock`,title:`How do you select a Bedrock model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`019-how-do-you-handle-bedrock-throttling`,category:`Amazon Bedrock`,title:`How do you handle Bedrock throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`020-how-do-you-handle-bedrock-timeout`,category:`Amazon Bedrock`,title:`How do you handle Bedrock timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`021-how-do-you-implement-retries-for-bedrock`,category:`Amazon Bedrock`,title:`How do you implement retries for Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`022-how-do-you-control-bedrock-token-usage`,category:`Amazon Bedrock`,title:`How do you control Bedrock token usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`023-how-do-you-reduce-bedrock-cost`,category:`Amazon Bedrock`,title:`How do you reduce Bedrock cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`024-how-do-you-monitor-bedrock-usage`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock usage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`025-how-do-you-monitor-bedrock-latency`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`026-how-do-you-implement-model-fallback`,category:`Amazon Bedrock`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`027-how-would-you-switch-from-one-bedrock-model-to-another`,category:`Amazon Bedrock`,title:`How would you switch from one Bedrock model to another?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`028-how-do-you-version-model-configurations`,category:`Amazon Bedrock`,title:`How do you version model configurations?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`029-how-do-you-handle-model-specific-context-limits`,category:`Amazon Bedrock`,title:`How do you handle model-specific context limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`030-how-would-you-evaluate-a-new-bedrock-model-before-production`,category:`Amazon Bedrock`,title:`How would you evaluate a new Bedrock model before production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function _m(){return(0,M.jsx)($,{data:gm,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var vm=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`034-how-do-you-authorize-users`,category:`API Gateway`,title:`How do you authorize users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`035-how-do-you-implement-throttling`,category:`API Gateway`,title:`How do you implement throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`037-how-do-you-handle-api-gateway-timeout`,category:`API Gateway`,title:`How do you handle API Gateway timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`038-how-do-you-configure-request-validation`,category:`API Gateway`,title:`How do you configure request validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`039-how-do-you-version-cwd-apis`,category:`API Gateway`,title:`How do you version CWD APIs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`040-how-do-you-implement-api-gateway-logging`,category:`API Gateway`,title:`How do you implement API Gateway logging?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`041-how-do-you-monitor-api-gateway`,category:`API Gateway`,title:`How do you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`042-how-do-you-handle-high-request-volume`,category:`API Gateway`,title:`How do you handle high request volume?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`043-how-would-you-integrate-api-gateway-with-lambda`,category:`API Gateway`,title:`How would you integrate API Gateway with Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`044-how-would-you-integrate-api-gateway-with-ecs`,category:`API Gateway`,title:`How would you integrate API Gateway with ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`045-how-do-you-implement-waf-with-api-gateway`,category:`API Gateway`,title:`How do you implement WAF with API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function ym(){return(0,M.jsx)($,{data:vm,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var bm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`047-which-cwd-components-would-you-deploy-as-lambda`,category:`Lambda`,title:`Which CWD components would you deploy as Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`050-how-would-you-reduce-lambda-cold-start-latency`,category:`Lambda`,title:`How would you reduce Lambda cold-start latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`051-how-does-lambda-concurrency-work`,category:`Lambda`,title:`How does Lambda concurrency work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`053-how-would-you-prevent-lambda-concurrency-exhaustion`,category:`Lambda`,title:`How would you prevent Lambda concurrency exhaustion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`054-how-do-you-handle-lambda-failures`,category:`Lambda`,title:`How do you handle Lambda failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`055-how-do-you-retry-lambda-execution`,category:`Lambda`,title:`How do you retry Lambda execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`057-how-do-you-monitor-lambda`,category:`Lambda`,title:`How do you monitor Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`059-how-do-you-securely-access-secrets-from-lambda`,category:`Lambda`,title:`How do you securely access secrets from Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`060-what-are-lambdas-limitations-for-agentic-workloads`,category:`Lambda`,title:`What are Lambda's limitations for agentic workloads?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``}];function xm(){return(0,M.jsx)($,{data:bm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Sm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`062-ecs-vs-lambda-for-workers`,category:`ECS / Fargate / EKS`,title:`ECS vs Lambda for Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`063-ecs-vs-eks`,category:`ECS / Fargate / EKS`,title:`ECS vs EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`065-how-would-you-containerize-delegators`,category:`ECS / Fargate / EKS`,title:`How would you containerize Delegators?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`066-how-would-you-containerize-workers`,category:`ECS / Fargate / EKS`,title:`How would you containerize Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`068-how-do-you-implement-health-checks`,category:`ECS / Fargate / EKS`,title:`How do you implement health checks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`069-how-do-you-perform-zero-downtime-deployment`,category:`ECS / Fargate / EKS`,title:`How do you perform zero-downtime deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`070-how-do-you-handle-container-failures`,category:`ECS / Fargate / EKS`,title:`How do you handle container failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`071-how-do-you-distribute-traffic-across-containers`,category:`ECS / Fargate / EKS`,title:`How do you distribute traffic across containers?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`072-how-would-you-implement-service-discovery`,category:`ECS / Fargate / EKS`,title:`How would you implement service discovery?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`073-how-would-you-configure-ecs-networking`,category:`ECS / Fargate / EKS`,title:`How would you configure ECS networking?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`074-how-would-you-secure-ecs-tasks`,category:`ECS / Fargate / EKS`,title:`How would you secure ECS tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`075-when-would-you-move-from-ecs-to-eks`,category:`ECS / Fargate / EKS`,title:`When would you move from ECS to EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Cm(){return(0,M.jsx)($,{data:Sm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var wm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`077-why-sqs-instead-of-synchronous-api-calls`,category:`SQS & Asynchronous Processing`,title:`Why SQS instead of synchronous API calls?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`079-how-would-you-process-worker-jobs-asynchronously`,category:`SQS & Asynchronous Processing`,title:`How would you process Worker jobs asynchronously?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`080-how-do-you-handle-message-duplication`,category:`SQS & Asynchronous Processing`,title:`How do you handle message duplication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`081-how-do-you-implement-idempotency`,category:`SQS & Asynchronous Processing`,title:`How do you implement idempotency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`083-how-do-you-configure-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`How do you configure visibility timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`084-what-happens-when-message-processing-fails`,category:`SQS & Asynchronous Processing`,title:`What happens when message processing fails?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`086-how-would-you-replay-failed-cwd-requests`,category:`SQS & Asynchronous Processing`,title:`How would you replay failed CWD requests?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`087-how-do-you-monitor-queue-depth`,category:`SQS & Asynchronous Processing`,title:`How do you monitor queue depth?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`089-how-does-sqs-help-cwd-scalability`,category:`SQS & Asynchronous Processing`,title:`How does SQS help CWD scalability?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`090-how-would-you-handle-a-sudden-100x-traffic-spike`,category:`SQS & Asynchronous Processing`,title:`How would you handle a sudden 100× traffic spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Tm(){return(0,M.jsx)($,{data:wm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Em=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`093-how-would-you-model-worker-dependencies-using-step-functions`,category:`Step Functions`,title:`How would you model Worker dependencies using Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`094-how-would-you-execute-workers-in-parallel`,category:`Step Functions`,title:`How would you execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`097-how-would-you-implement-timeout`,category:`Step Functions`,title:`How would you implement timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`098-how-would-you-resume-a-workflow`,category:`Step Functions`,title:`How would you resume a workflow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`099-how-would-you-handle-long-running-workflows`,category:`Step Functions`,title:`How would you handle long-running workflows?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`104-how-would-you-monitor-step-functions`,category:`Step Functions`,title:`How would you monitor Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`105-how-would-you-control-step-functions-cost`,category:`Step Functions`,title:`How would you control Step Functions cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Dm(){return(0,M.jsx)($,{data:Em,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var Om=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`107-what-cwd-data-would-you-store-in-dynamodb`,category:`DynamoDB`,title:`What CWD data would you store in DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`108-how-would-you-design-the-dynamodb-partition-key`,category:`DynamoDB`,title:`How would you design the DynamoDB partition key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`110-how-would-you-store-session-task-run-information`,category:`DynamoDB`,title:`How would you store session/task/run information?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`112-how-does-dynamodb-scale`,category:`DynamoDB`,title:`How does DynamoDB scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`117-how-would-you-implement-idempotency-using-dynamodb`,category:`DynamoDB`,title:`How would you implement idempotency using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`118-how-would-you-recover-from-a-failed-workflow-using-dynamodb`,category:`DynamoDB`,title:`How would you recover from a failed workflow using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function km(){return(0,M.jsx)($,{data:Om,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var Am=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`122-how-would-you-design-the-cwd-document-ingestion-pipeline`,category:`S3`,title:`How would you design the CWD document ingestion pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`129-how-would-you-encrypt-s3-data`,category:`S3`,title:`How would you encrypt S3 data?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`131-how-would-you-trigger-processing-when-a-document-arrives-in-s3`,category:`S3`,title:`How would you trigger processing when a document arrives in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function jm(){return(0,M.jsx)($,{data:Am,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Mm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`138-how-would-you-create-embeddings-using-aws`,category:`OpenSearch`,title:`How would you create embeddings using AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`139-how-would-you-implement-metadata-filtering`,category:`OpenSearch`,title:`How would you implement metadata filtering?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`140-how-would-you-implement-document-level-security`,category:`OpenSearch`,title:`How would you implement document-level security?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`141-how-does-opensearch-scale`,category:`OpenSearch`,title:`How does OpenSearch scale?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`145-how-would-you-monitor-opensearch`,category:`OpenSearch`,title:`How would you monitor OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`146-how-would-you-troubleshoot-slow-retrieval`,category:`OpenSearch`,title:`How would you troubleshoot slow retrieval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`147-how-would-you-optimize-opensearch-cost`,category:`OpenSearch`,title:`How would you optimize OpenSearch cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Nm(){return(0,M.jsx)($,{data:Mm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Pm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Fm(){return(0,M.jsx)($,{data:Pm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Im=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`166-how-would-you-encrypt-application-secrets`,category:`KMS & Secrets Manager`,title:`How would you encrypt application secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Lm(){return(0,M.jsx)($,{data:Im,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var Rm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function zm(){return(0,M.jsx)($,{data:Rm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Bm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Vm(){return(0,M.jsx)($,{data:Bm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Hm=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`204-how-would-you-scale-lambda`,category:`Scalability & High Availability`,title:`How would you scale Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`205-how-would-you-scale-ecs`,category:`Scalability & High Availability`,title:`How would you scale ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Um(){return(0,M.jsx)($,{data:Hm,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Gm(){return(0,M.jsx)($,{data:Wm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var Km=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function qm(){return(0,M.jsx)($,{data:Km,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Jm=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Ym(){return(0,M.jsx)($,{data:Jm,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Xm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:``,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:``,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:``,code:``}];function Zm(){return(0,M.jsx)($,{data:Xm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var Qm=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete Azure architecture for CWD.
+`,code:``}];function $p(){return(0,M.jsx)($,{data:Qp,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var em=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy CWD?\r
+\r
+For CWD, I deploy it as **containerized microservices** with separate deployment units for the API, Coordinator/Delegators/Workers, and MCP services.\r
+\r
+### CWD deployment architecture\r
+\r
+\`\`\`text\r
+                    Client\r
+                      ↓\r
+              Azure Front Door\r
+                      ↓\r
+               Azure API Management\r
+                      ↓\r
+             FastAPI / API Service\r
+                      ↓\r
+             Coordinator Service\r
+                      ↓ A2A\r
+               Delegator Services\r
+                      ↓\r
+                 Worker Services\r
+                      ↓ MCP\r
+                MCP Services\r
+             ↙       ↓        ↘\r
+        Salesforce ServiceNow Snowflake\r
+                      ↓\r
+              Enterprise Systems\r
+\`\`\`\r
+\r
+### 1. Containerize the application\r
+\r
+I package the FastAPI/CWD services into Docker containers.\r
+\r
+For example:\r
+\r
+\`\`\`dockerfile\r
+FROM python:3.12-slim\r
+\r
+WORKDIR /app\r
+\r
+COPY requirements.txt .\r
+RUN pip install --no-cache-dir -r requirements.txt\r
+\r
+COPY . .\r
+\r
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]\r
+\`\`\`\r
+\r
+I would typically have separate images/deployments for:\r
+\r
+\`\`\`text\r
+cwd-api\r
+coordinator\r
+sales-delegator\r
+it-delegator\r
+customer-worker\r
+incident-worker\r
+mcp-salesforce\r
+mcp-servicenow\r
+\`\`\`\r
+\r
+Depending on the implementation, some lightweight components can also be deployed together rather than as separate services.\r
+\r
+---\r
+\r
+### 2. Push images to a container registry\r
+\r
+I build and scan the Docker images and push them to **Azure Container Registry (ACR)**.\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Git\r
+   ↓\r
+CI Pipeline\r
+   ↓\r
+Build Docker Image\r
+   ↓\r
+Security Scan\r
+   ↓\r
+Azure Container Registry\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Deploy to Azure\r
+\r
+For CWD, I can deploy containerized services using **Azure Container Apps** or **AKS**.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+                    Azure\r
+                      |\r
+          ┌───────────┴───────────┐\r
+          ↓                       ↓\r
+   Container Apps                AKS\r
+          ↓                       ↓\r
+ FastAPI / Workers       Agent/MCP workloads\r
+\`\`\`\r
+\r
+For a production platform with more complex orchestration, scaling, networking, and workload isolation, **AKS** is a strong fit.\r
+\r
+---\r
+\r
+### 4. CI/CD pipeline\r
+\r
+My deployment pipeline would look like:\r
+\r
+\`\`\`text\r
+Code Commit\r
+    ↓\r
+Build\r
+    ↓\r
+Unit Tests\r
+    ↓\r
+Integration Tests\r
+    ↓\r
+Security / Dependency Scan\r
+    ↓\r
+Docker Build\r
+    ↓\r
+Push to ACR\r
+    ↓\r
+Deploy Dev\r
+    ↓\r
+Automated Tests\r
+    ↓\r
+Deploy QA\r
+    ↓\r
+LLM / RAG / Agent Evaluation\r
+    ↓\r
+Approval\r
+    ↓\r
+Production\r
+\`\`\`\r
+\r
+For GenAI, I would add **LLM evaluation** before production promotion rather than relying only on traditional unit tests.\r
+\r
+---\r
+\r
+### 5. Configuration and secrets\r
+\r
+I don't put secrets inside Docker images or source code.\r
+\r
+\`\`\`text\r
+CWD Container\r
+     ↓\r
+Managed Identity\r
+     ↓\r
+Azure Key Vault\r
+     ↓\r
+Secrets / certificates\r
+\`\`\`\r
+\r
+Configuration such as:\r
+\r
+\`\`\`text\r
+MODEL_NAME\r
+SEARCH_ENDPOINT\r
+MCP_ENDPOINT\r
+ENVIRONMENT\r
+\`\`\`\r
+\r
+can be injected through environment/configuration management, while sensitive credentials remain in Key Vault.\r
+\r
+---\r
+\r
+### 6. Networking\r
+\r
+For production, I use private networking where appropriate:\r
+\r
+\`\`\`text\r
+Internet\r
+   ↓\r
+Front Door\r
+   ↓\r
+APIM\r
+   ↓\r
+Private CWD Services\r
+   ↓\r
+Private MCP / Enterprise Services\r
+\`\`\`\r
+\r
+I restrict inbound and outbound access and use appropriate network security controls.\r
+\r
+---\r
+\r
+### 7. Scaling\r
+\r
+I scale components independently.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+FastAPI             → horizontal replicas\r
+Coordinator         → horizontal replicas\r
+Sales Workers       → capability-based scaling\r
+Incident Workers    → capability-based scaling\r
+MCP Services        → downstream-aware scaling\r
+\`\`\`\r
+\r
+For sudden traffic:\r
+\r
+\`\`\`text\r
+APIM\r
+ ↓\r
+Rate limiting\r
+ ↓\r
+Queue / Service Bus\r
+ ↓\r
+Workers\r
+ ↓\r
+Enterprise APIs\r
+\`\`\`\r
+\r
+This prevents a traffic spike from overwhelming Salesforce, ServiceNow, or the LLM.\r
+\r
+---\r
+\r
+### 8. Long-running workflows\r
+\r
+For long-running workflows, I don't depend on the API container staying alive.\r
+\r
+\`\`\`text\r
+POST /customer-briefing\r
+        ↓\r
+FastAPI\r
+        ↓\r
+202 Accepted\r
++ workflow_id\r
+        ↓\r
+Azure Service Bus\r
+        ↓\r
+Coordinator\r
+        ↓\r
+LangGraph\r
+        ↓\r
+Checkpoint → Cosmos DB\r
+\`\`\`\r
+\r
+If a container crashes, another instance can load the checkpoint and resume the workflow.\r
+\r
+---\r
+\r
+### 9. Deployment strategies\r
+\r
+For production releases, I prefer **blue/green or canary deployment** depending on the service.\r
+\r
+For GenAI, I also compare:\r
+\r
+\`\`\`text\r
+Old Agent Version\r
+        vs\r
+New Agent Version\r
+\`\`\`\r
+\r
+using the same evaluation dataset.\r
+\r
+I monitor:\r
+\r
+* Task completion\r
+* Tool-call success\r
+* Hallucination/grounding\r
+* Latency\r
+* Token usage\r
+* Cost\r
+* Error rate\r
+* RAG relevance\r
+\r
+before fully moving traffic to the new version.\r
+\r
+---\r
+\r
+### 10. Observability after deployment\r
+\r
+After deployment, I use:\r
+\r
+\`\`\`text\r
+OpenTelemetry\r
+      ↓\r
+Application Insights / Log Analytics\r
+      ↓\r
+Langfuse\r
+\`\`\`\r
+\r
+I propagate:\r
+\r
+\`\`\`text\r
+request_id\r
+workflow_id\r
+task_id\r
+run_id\r
+trace_id\r
+\`\`\`\r
+\r
+across:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ → Delegator\r
+ → Worker\r
+ → MCP\r
+ → Enterprise API\r
+\`\`\`\r
+\r
+So if an incident occurs, I can identify **where and why** the workflow failed.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I deploy CWD as containerized services. I package the FastAPI API, Coordinator, Delegators, Workers, and MCP services as Docker images and push them to Azure Container Registry. Production workloads can run on AKS or Azure Container Apps depending on the required orchestration and scale. My CI/CD pipeline performs unit, integration, security, and GenAI evaluation tests before promotion across environments. I use Managed Identity and Key Vault for secrets, private networking for enterprise connectivity, and independent autoscaling for different Worker and MCP workloads. For long-running workflows, I use Service Bus and durable LangGraph checkpoints in Cosmos DB, so a failed container doesn't lose workflow state. Finally, I use OpenTelemetry, Application Insights, Log Analytics, and Langfuse for end-to-end observability.”**\r
+\r
+### Easy memory\r
+\r
+**CWD deployment =**\r
+\r
+**Code → Test → Docker → ACR → AKS/Container Apps → Secure → Scale → Observe**\r
+\r
+### Strong interview line\r
+\r
+> **“I deploy CWD as independently scalable, containerized services with CI/CD, secure identity, durable workflow state, and end-to-end observability—not as one monolithic Agent application.”**\r
+`,code:``},{id:`482-explain-your-ci-cd-pipeline`,category:`Production Deployment / DevOps`,title:`Explain your CI/CD pipeline.`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## Explain your CI/CD pipeline\r
+\r
+For **CWD**, my CI/CD pipeline automates the journey from developer code to a tested and production-ready Agentic AI deployment.\r
+\r
+### Overall flow\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Git Repository\r
+   ↓\r
+Pull Request\r
+   ↓\r
+Build\r
+   ↓\r
+Unit Tests\r
+   ↓\r
+Code Quality + Security Scan\r
+   ↓\r
+Docker Build\r
+   ↓\r
+Container/Image Scan\r
+   ↓\r
+Push to Azure Container Registry\r
+   ↓\r
+Deploy DEV\r
+   ↓\r
+Integration Tests\r
+   ↓\r
+LLM / RAG / Agent Evaluation\r
+   ↓\r
+Deploy QA / Staging\r
+   ↓\r
+Approval\r
+   ↓\r
+Canary / Blue-Green Production\r
+   ↓\r
+Monitoring\r
+\`\`\`\r
+\r
+### 1. Developer commits code\r
+\r
+A developer pushes changes to Git.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+feature/cwd-worker-retry\r
+        ↓\r
+Pull Request\r
+        ↓\r
+Code Review\r
+\`\`\`\r
+\r
+I use branch protection and require review before merging production-bound changes.\r
+\r
+---\r
+\r
+### 2. Build and unit testing\r
+\r
+The pipeline first installs dependencies and runs unit tests.\r
+\r
+\`\`\`bash\r
+pip install -r requirements.txt\r
+pytest tests/unit\r
+\`\`\`\r
+\r
+I test components such as:\r
+\r
+\`\`\`text\r
+Coordinator logic\r
+Delegator routing\r
+Worker logic\r
+MCP tool handling\r
+Validation\r
+Retry logic\r
+API endpoints\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Code quality and security\r
+\r
+Then I run checks such as:\r
+\r
+\`\`\`text\r
+Linting\r
+Type checking\r
+Dependency vulnerability scanning\r
+Secret scanning\r
+SAST\r
+\`\`\`\r
+\r
+The important point is that **credentials should never be committed to Git**.\r
+\r
+---\r
+\r
+### 4. Build Docker image\r
+\r
+Once the application passes validation:\r
+\r
+\`\`\`bash\r
+docker build -t cwd-api:<version> .\r
+\`\`\`\r
+\r
+I use an immutable version/tag rather than relying only on \`latest\`.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+cwd-api:1.4.2\r
+\`\`\`\r
+\r
+---\r
+\r
+### 5. Container security scan\r
+\r
+Before deployment, I scan the image for vulnerabilities.\r
+\r
+\`\`\`text\r
+Docker Image\r
+     ↓\r
+Container Security Scan\r
+     ↓\r
+Pass? ── No → Stop pipeline\r
+     ↓\r
+    Yes\r
+\`\`\`\r
+\r
+---\r
+\r
+### 6. Push to Azure Container Registry\r
+\r
+The approved image is pushed to **Azure Container Registry**.\r
+\r
+\`\`\`text\r
+CI Pipeline\r
+     ↓\r
+Docker Image\r
+     ↓\r
+ACR\r
+\`\`\`\r
+\r
+The deployment environment pulls the exact approved image version.\r
+\r
+---\r
+\r
+### 7. Deploy to DEV\r
+\r
+The pipeline deploys the image to the development environment.\r
+\r
+\`\`\`text\r
+ACR\r
+ ↓\r
+DEV\r
+ ↓\r
+FastAPI\r
+Coordinator\r
+Delegators\r
+Workers\r
+MCP\r
+\`\`\`\r
+\r
+Environment-specific configuration is injected separately.\r
+\r
+I don't bake environment-specific secrets into the Docker image.\r
+\r
+---\r
+\r
+### 8. Integration testing\r
+\r
+Now I test the complete CWD flow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+FastAPI\r
+   ↓\r
+Coordinator\r
+   ↓ A2A\r
+Sales Delegator\r
+   ↓\r
+Customer Worker\r
+   ↓ MCP\r
+Salesforce\r
+\`\`\`\r
+\r
+I also test:\r
+\r
+* Authentication\r
+* Authorization\r
+* MCP tools\r
+* Enterprise API integration\r
+* Retry/timeout\r
+* Error handling\r
+* Queue processing\r
+* Checkpoint/resume\r
+\r
+---\r
+\r
+### 9. GenAI evaluation — very important\r
+\r
+For CWD, traditional tests aren't enough.\r
+\r
+I run a **golden evaluation dataset** containing normal, edge, ambiguous, failure, and security scenarios.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Input\r
+  ↓\r
+New Agent Version\r
+  ↓\r
+Expected behavior\r
+  ↓\r
+Evaluate\r
+\`\`\`\r
+\r
+Metrics can include:\r
+\r
+\`\`\`text\r
+Task completion\r
+Agent routing accuracy\r
+Tool-call accuracy\r
+RAG relevance\r
+Groundedness\r
+Hallucination rate\r
+Latency\r
+Token usage\r
+Cost\r
+\`\`\`\r
+\r
+If the new prompt/model/workflow causes unacceptable regression, the pipeline stops.\r
+\r
+---\r
+\r
+### 10. Deploy to staging/QA\r
+\r
+After automated tests and evaluations pass:\r
+\r
+\`\`\`text\r
+DEV\r
+ ↓\r
+QA / Staging\r
+ ↓\r
+Production approval\r
+\`\`\`\r
+\r
+In staging I perform broader integration, performance, security, and end-to-end tests.\r
+\r
+---\r
+\r
+### 11. Production deployment\r
+\r
+For production, I prefer a controlled rollout such as:\r
+\r
+\`\`\`text\r
+New Version\r
+    ↓\r
+Canary\r
+    ↓\r
+Small percentage of traffic\r
+    ↓\r
+Monitor\r
+    ↓\r
+Healthy?\r
+   / \\\r
+ No   Yes\r
+ ↓     ↓\r
+Rollback  Gradual rollout\r
+\`\`\`\r
+\r
+This is particularly useful for Agentic AI because a deployment can be technically healthy while the **agent behavior has degraded**.\r
+\r
+---\r
+\r
+### 12. Monitor and rollback\r
+\r
+After deployment I monitor:\r
+\r
+\`\`\`text\r
+API errors\r
+P95/P99 latency\r
+Worker failures\r
+A2A failures\r
+MCP failures\r
+LLM timeouts/429s\r
+RAG failures\r
+Token usage\r
+Cost\r
+Task completion\r
+Groundedness\r
+\`\`\`\r
+\r
+If the new version has problems:\r
+\r
+\`\`\`text\r
+Production\r
+    ↓\r
+Detect regression\r
+    ↓\r
+Rollback to previous image/version\r
+\`\`\`\r
+\r
+Because images and Agent configurations are versioned, rollback is controlled.\r
+\r
+---\r
+\r
+## Example pipeline\r
+\r
+\`\`\`yaml id="j6j3gq"\r
+stages:\r
+  - build\r
+  - test\r
+  - security\r
+  - docker\r
+  - deploy-dev\r
+  - integration\r
+  - genai-evaluation\r
+  - deploy-staging\r
+  - approval\r
+  - deploy-production\r
+\`\`\`\r
+\r
+The exact CI/CD platform can vary; the important part is the **gates and promotion strategy**.\r
+\r
+---\r
+\r
+## What makes a GenAI CI/CD pipeline different?\r
+\r
+Traditional CI/CD asks:\r
+\r
+> **“Does the software work?”**\r
+\r
+For CWD, I also ask:\r
+\r
+> **“Does the Agent still behave correctly?”**\r
+\r
+So I include:\r
+\r
+\`\`\`text\r
+Code Tests\r
+     +\r
+Security Tests\r
+     +\r
+Integration Tests\r
+     +\r
+LLM Evaluation\r
+     +\r
+RAG Evaluation\r
+     +\r
+Agent Trajectory/Tool Evaluation\r
+\`\`\`\r
+\r
+This is an important point to emphasize in an **AI Architect interview**.\r
+\r
+## Interview-ready answer\r
+\r
+> **“My CWD CI/CD pipeline starts with a Git pull request and code review, followed by unit tests, linting, type checking, dependency and security scanning. I then build an immutable Docker image, scan it, and push it to Azure Container Registry. The image is deployed progressively through Dev, QA and staging environments. For CWD, I add GenAI-specific evaluation gates using a golden dataset to validate agent routing, tool-call accuracy, RAG relevance, groundedness, task completion, latency and cost. After the automated gates pass, production is deployed using a controlled canary or blue-green strategy. I continuously monitor the new version and can roll back to the previous immutable version if application or Agent behavior regresses.”**\r
+\r
+### Easy memory\r
+\r
+**PR → Test → Scan → Docker → ACR → DEV → Integration → GenAI Eval → QA → Approval → Canary → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“For Agentic AI, CI/CD is not just code deployment; it is behavior validation plus controlled deployment.”**\r
+`,code:``},{id:`483-how-do-you-deploy-prompts`,category:`Production Deployment / DevOps`,title:`How do you deploy prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy prompts?\r
+\r
+In CWD, I **treat prompts as versioned production artifacts**, not as hardcoded strings inside Python code.\r
+\r
+### CWD prompt deployment flow\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Prompt Change\r
+   ↓\r
+Git / Prompt Registry\r
+   ↓\r
+Review\r
+   ↓\r
+Golden Dataset Evaluation\r
+   ↓\r
+Security / Regression Tests\r
+   ↓\r
+DEV\r
+   ↓\r
+QA / Staging\r
+   ↓\r
+Approval\r
+   ↓\r
+Production\r
+   ↓\r
+Monitor\r
+   ↓\r
+Rollback if needed\r
+\`\`\`\r
+\r
+### 1. Store prompts separately\r
+\r
+Instead of:\r
+\r
+\`\`\`python\r
+prompt = "You are a customer briefing agent..."\r
+\`\`\`\r
+\r
+inside the Worker code, I maintain a versioned prompt:\r
+\r
+\`\`\`text\r
+customer_briefing_prompt\r
+    ├── v1.0\r
+    ├── v1.1\r
+    └── v2.0\r
+\`\`\`\r
+\r
+A prompt configuration might contain:\r
+\r
+\`\`\`json\r
+{\r
+  "prompt_id": "customer_briefing",\r
+  "version": "2.1",\r
+  "model": "gpt-4.x",\r
+  "temperature": 0.1,\r
+  "max_tokens": 2000,\r
+  "status": "approved"\r
+}\r
+\`\`\`\r
+\r
+The actual model/version depends on the production configuration.\r
+\r
+---\r
+\r
+### 2. Prompt Registry\r
+\r
+I use a centralized **Prompt Registry** so Workers don't each maintain their own copy.\r
+\r
+\`\`\`text\r
+Customer Briefing Worker\r
+        ↓\r
+Prompt ID + Version\r
+        ↓\r
+Prompt Registry\r
+        ↓\r
+Approved Prompt\r
+        ↓\r
+Azure OpenAI\r
+\`\`\`\r
+\r
+The registry could be implemented using a configuration store such as Cosmos DB, with Git as the source-controlled authoring/review layer.\r
+\r
+---\r
+\r
+### 3. Evaluate before deployment\r
+\r
+Suppose I change:\r
+\r
+\`\`\`text\r
+customer_briefing_prompt v1.0\r
+                ↓\r
+customer_briefing_prompt v1.1\r
+\`\`\`\r
+\r
+I run the same golden dataset against both versions.\r
+\r
+I evaluate:\r
+\r
+\`\`\`text\r
+Groundedness\r
+Answer relevance\r
+Hallucination\r
+Tool selection\r
+Task completion\r
+Latency\r
+Token usage\r
+Cost\r
+Safety\r
+\`\`\`\r
+\r
+If v1.1 causes unacceptable regression, **I don't promote it**.\r
+\r
+---\r
+\r
+### 4. Deploy through environments\r
+\r
+\`\`\`text\r
+Prompt v1.1\r
+    ↓\r
+DEV\r
+    ↓\r
+Automated evaluation\r
+    ↓\r
+QA / Staging\r
+    ↓\r
+Approval\r
+    ↓\r
+Production\r
+\`\`\`\r
+\r
+The prompt is promoted independently or together with the Agent version, depending on how tightly coupled the change is.\r
+\r
+---\r
+\r
+### 5. Runtime resolution\r
+\r
+The Worker doesn't need to know the complete prompt.\r
+\r
+It requests:\r
+\r
+\`\`\`python\r
+prompt = prompt_registry.get(\r
+    prompt_id="customer_briefing",\r
+    version="2.1"\r
+)\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`python\r
+response = await llm.generate(\r
+    prompt=prompt,\r
+    context=validated_context\r
+)\r
+\`\`\`\r
+\r
+This gives us centralized prompt management.\r
+\r
+---\r
+\r
+### 6. Don't blindly change production prompts\r
+\r
+For production, I use controlled rollout:\r
+\r
+\`\`\`text\r
+v2.1\r
+ ↓\r
+Canary\r
+ ↓\r
+Monitor\r
+ ↓\r
+Gradual rollout\r
+\`\`\`\r
+\r
+For example, a small portion of eligible traffic can use the new prompt while the existing version remains available.\r
+\r
+I monitor:\r
+\r
+* Task completion\r
+* Groundedness\r
+* Hallucination\r
+* Tool-call success\r
+* Latency\r
+* Token usage\r
+* Cost\r
+* Error rate\r
+\r
+---\r
+\r
+### 7. Prompt rollback\r
+\r
+Because every prompt is versioned:\r
+\r
+\`\`\`text\r
+Production\r
+    ↓\r
+Prompt v2.1\r
+    ↓\r
+Regression detected\r
+    ↓\r
+Rollback\r
+    ↓\r
+Prompt v2.0\r
+\`\`\`\r
+\r
+No code rollback is necessarily required for a prompt-only change.\r
+\r
+---\r
+\r
+### 8. Auditability\r
+\r
+For every LLM request, I record metadata such as:\r
+\r
+\`\`\`json\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "worker_id": "customer_worker",\r
+  "prompt_id": "customer_briefing",\r
+  "prompt_version": "2.1",\r
+  "model_version": "production-model",\r
+  "timestamp": "..."\r
+}\r
+\`\`\`\r
+\r
+This is extremely useful when someone asks:\r
+\r
+> **“Why did the Agent produce this answer yesterday but a different answer today?”**\r
+\r
+I can identify the exact prompt/model/configuration used.\r
+\r
+---\r
+\r
+## Important interview distinction\r
+\r
+### Prompt deployment ≠ code deployment\r
+\r
+You can have:\r
+\r
+\`\`\`text\r
+Agent Code v5\r
+Prompt v2.1\r
+Model v3\r
+MCP Contract v1.4\r
+RAG Index v8\r
+\`\`\`\r
+\r
+These versions should be traceable together.\r
+\r
+For a long-running workflow, I also prefer to **pin the prompt/agent version used by that workflow**, so a workflow doesn't unexpectedly change behavior halfway through execution.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I treat prompts as versioned production artifacts rather than hardcoding them inside the Worker. We maintain prompts in a centralized Prompt Registry with prompt ID, version, model configuration and approval status. Any prompt change goes through code review, golden-dataset evaluation, security and regression testing before promotion from Dev to QA and production. For production, I use controlled rollout and monitor groundedness, hallucination, task completion, tool-call success, latency, tokens and cost. Every request records the prompt and model versions for traceability, and because prompts are immutable and versioned, I can quickly roll back to the previous approved version if we see a regression.”**\r
+\r
+### Easy memory\r
+\r
+**Prompt = Version → Evaluate → Approve → Deploy → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“A prompt is a production dependency, so I version it, evaluate it, audit it, and roll it back just like code.”**\r
+`,code:``},{id:`484-how-do-you-deploy-agents`,category:`Production Deployment / DevOps`,title:`How do you deploy agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy agents?\r
+\r
+In CWD, I treat each **Coordinator, Delegator, and Worker as a versioned deployable Agent service**. I don't deploy an Agent as just a prompt; I deploy its **code + workflow + prompt + model configuration + tool permissions + dependencies** together.\r
+\r
+### CWD Agent deployment flow\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Git Repository\r
+   ↓\r
+Unit + Integration Tests\r
+   ↓\r
+Agent / LLM Evaluation\r
+   ↓\r
+Security + Container Scan\r
+   ↓\r
+Docker Image\r
+   ↓\r
+Azure Container Registry\r
+   ↓\r
+Deploy to DEV\r
+   ↓\r
+QA / Staging\r
+   ↓\r
+Canary / Blue-Green\r
+   ↓\r
+Production\r
+   ↓\r
+Monitor + Rollback\r
+\`\`\`\r
+\r
+### 1. Package the Agent\r
+\r
+For example, my **Customer Worker** contains:\r
+\r
+\`\`\`text\r
+customer-worker/\r
+├── agent.py\r
+├── workflow.py\r
+├── tools.py\r
+├── prompts/\r
+├── models.py\r
+├── config.py\r
+└── tests/\r
+\`\`\`\r
+\r
+The Agent includes:\r
+\r
+* Agent logic\r
+* LangGraph workflow\r
+* Prompt reference/version\r
+* Model configuration\r
+* MCP tool configuration\r
+* Guardrails\r
+* Input/output schemas\r
+* Retry/timeout policies\r
+\r
+---\r
+\r
+### 2. Version the Agent\r
+\r
+I maintain an immutable Agent version.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+   ├── v1.0\r
+   ├── v1.1\r
+   └── v2.0\r
+\`\`\`\r
+\r
+And I record its dependencies:\r
+\r
+\`\`\`json id="1zxy0s"\r
+{\r
+  "agent_id": "customer_worker",\r
+  "agent_version": "2.0",\r
+  "prompt_version": "3.1",\r
+  "model": "production-model",\r
+  "mcp_version": "1.4"\r
+}\r
+\`\`\`\r
+\r
+This gives me reproducibility.\r
+\r
+---\r
+\r
+### 3. Run Agent-specific evaluation\r
+\r
+This is especially important for Agentic AI.\r
+\r
+For example, before deploying a new Customer Worker:\r
+\r
+\`\`\`text\r
+Golden Dataset\r
+      ↓\r
+Agent v1\r
+      ↓\r
+Agent v2\r
+      ↓\r
+Compare\r
+\`\`\`\r
+\r
+I evaluate:\r
+\r
+\`\`\`text\r
+Routing accuracy\r
+Tool selection\r
+Tool-call parameters\r
+Task completion\r
+Groundedness\r
+Hallucination\r
+Safety\r
+Latency\r
+Token usage\r
+Cost\r
+\`\`\`\r
+\r
+If the new Agent fails the required evaluation gates, I don't promote it.\r
+\r
+---\r
+\r
+### 4. Build a Docker image\r
+\r
+\`\`\`bash id="z3lqci"\r
+docker build -t customer-worker:2.0 .\r
+\`\`\`\r
+\r
+Then scan the image and push it to **Azure Container Registry**.\r
+\r
+\`\`\`text\r
+Agent Code\r
+   ↓\r
+Docker\r
+   ↓\r
+Security Scan\r
+   ↓\r
+ACR\r
+\`\`\`\r
+\r
+---\r
+\r
+### 5. Deploy the Agent\r
+\r
+The container can run on **AKS or Azure Container Apps**, depending on the workload.\r
+\r
+For example:\r
+\r
+\`\`\`text id="x8nd0d"\r
+AKS\r
+ ├── Coordinator\r
+ ├── Sales Delegator\r
+ ├── IT Delegator\r
+ ├── Customer Worker\r
+ ├── Opportunity Worker\r
+ └── Incident Worker\r
+\`\`\`\r
+\r
+I can scale Workers independently.\r
+\r
+If Customer Briefing traffic increases, I don't necessarily scale every component equally.\r
+\r
+---\r
+\r
+### 6. Agent registration\r
+\r
+I maintain an **Agent Registry** containing information such as:\r
+\r
+\`\`\`text id="j09y8m"\r
+Agent ID\r
+Agent version\r
+Domain\r
+Capabilities\r
+Supported intents\r
+Allowed MCP tools\r
+Prompt version\r
+Model\r
+Endpoint\r
+Security scopes\r
+Resource limits\r
+Status\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text id="a0lq2u"\r
+customer_worker\r
+    Capability: Customer information\r
+    Tools:\r
+      ├── get_customer\r
+      └── get_customer_contacts\r
+    Prompt: customer_briefing_v3.1\r
+    Version: 2.0\r
+\`\`\`\r
+\r
+The Coordinator can use this information to determine which Delegator/Worker capability is available.\r
+\r
+---\r
+\r
+### 7. Secure the Agent\r
+\r
+I don't give every Agent access to every enterprise tool.\r
+\r
+For example:\r
+\r
+\`\`\`text id="8h3u0v"\r
+Customer Worker\r
+   ├── get_customer       ✓\r
+   ├── get_contacts       ✓\r
+   ├── get_incidents      ✗\r
+   └── delete_customer    ✗\r
+\`\`\`\r
+\r
+The MCP layer independently enforces authorization.\r
+\r
+Secrets are accessed through **Managed Identity + Key Vault**, not stored in the Agent container.\r
+\r
+---\r
+\r
+### 8. Production rollout\r
+\r
+I use controlled deployment:\r
+\r
+\`\`\`text id="r4j2s1"\r
+Agent v2\r
+   ↓\r
+Canary\r
+   ↓\r
+Monitor\r
+   ↓\r
+Healthy?\r
+  /   \\\r
+No     Yes\r
+↓       ↓\r
+Rollback  Gradual rollout\r
+\`\`\`\r
+\r
+For Agentic AI, "container is healthy" isn't enough.\r
+\r
+I also monitor Agent behavior:\r
+\r
+\`\`\`text\r
+Task completion\r
+Tool success\r
+Groundedness\r
+Hallucination\r
+Latency\r
+Token usage\r
+Cost\r
+Error rate\r
+\`\`\`\r
+\r
+---\r
+\r
+### 9. Long-running workflows\r
+\r
+This is an important CWD point.\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Workflow WF-1001\r
+Agent version = 2.0\r
+\`\`\`\r
+\r
+is already running.\r
+\r
+I don't want a new deployment to unexpectedly change its behavior to Agent v3.0 halfway through.\r
+\r
+So I persist:\r
+\r
+\`\`\`json id="k9p9rd"\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_version": "2.0",\r
+  "prompt_version": "3.1",\r
+  "status": "RUNNING"\r
+}\r
+\`\`\`\r
+\r
+The workflow can therefore continue with its pinned version or follow an explicitly defined migration policy.\r
+\r
+---\r
+\r
+## Agent deployment vs Prompt deployment\r
+\r
+This distinction is useful in interviews:\r
+\r
+| Prompt deployment   | Agent deployment             |\r
+| ------------------- | ---------------------------- |\r
+| Prompt version      | Code/workflow version        |\r
+| Prompt template     | LangGraph workflow           |\r
+| Model configuration | Prompt + model               |\r
+| Evaluation          | Evaluation                   |\r
+| Rollback            | Rollback                     |\r
+| Usually lightweight | Container/service deployment |\r
+\r
+An Agent may reference a prompt rather than containing the prompt directly.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“For CWD, I deploy Agents as versioned containerized services. An Agent version includes the implementation, LangGraph workflow, prompt version, model configuration, MCP tool permissions, schemas and guardrails. The CI/CD pipeline runs unit and integration tests, security scans, and Agent-specific golden-dataset evaluations covering routing, tool selection, task completion, groundedness, hallucination, latency, tokens and cost. I then build and scan the Docker image, push it to Azure Container Registry, and deploy it to AKS or Azure Container Apps. In production I use canary or blue-green deployment and monitor both infrastructure health and Agent behavior. I also persist the Agent and prompt versions with the workflow state so long-running workflows remain reproducible and can be safely resumed or rolled back.”**\r
+\r
+### Easy memory\r
+\r
+**Agent = Code + Workflow + Prompt + Model + Tools + Guardrails**\r
+\r
+**Deploy = Test → Evaluate → Containerize → Registry → Deploy → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“I don't consider an Agent deployed just because its container is running; I need versioned behavior, governed tools, evaluation gates, observability, and rollback.”**\r
+`,code:``},{id:`485-how-do-you-deploy-mcp-servers`,category:`Production Deployment / DevOps`,title:`How do you deploy MCP servers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy MCP servers?\r
+\r
+In CWD, I deploy **MCP servers as independent, containerized services**. Each MCP server provides controlled access to a specific enterprise system or group of tools.\r
+\r
+For example:\r
+\r
+\`\`\`text id="y7j0x8"\r
+Customer Worker\r
+      ↓\r
+   MCP Client\r
+      ↓\r
+Salesforce MCP Server\r
+      ↓\r
+Salesforce API\r
+\`\`\`\r
+\r
+and:\r
+\r
+\`\`\`text id="s0i4x8"\r
+Incident Worker\r
+      ↓\r
+   MCP Client\r
+      ↓\r
+ServiceNow MCP Server\r
+      ↓\r
+ServiceNow API\r
+\`\`\`\r
+\r
+### 1. MCP server contains the integration logic\r
+\r
+For example:\r
+\r
+\`\`\`text id="7m2qf6"\r
+salesforce-mcp/\r
+├── server.py\r
+├── tools/\r
+│   ├── customer.py\r
+│   └── opportunity.py\r
+├── schemas/\r
+├── auth/\r
+├── adapters/\r
+└── tests/\r
+\`\`\`\r
+\r
+The MCP server exposes controlled tools such as:\r
+\r
+\`\`\`text id="v1p6t8"\r
+get_customer()\r
+get_customer_contacts()\r
+get_opportunities()\r
+\`\`\`\r
+\r
+The Worker doesn't contain Salesforce SDK/API integration logic.\r
+\r
+---\r
+\r
+### 2. Define strict tool schemas\r
+\r
+For example:\r
+\r
+\`\`\`python id="9b8w0c"\r
+class CustomerRequest(BaseModel):\r
+    customer_id: str = Field(min_length=1)\r
+\r
+@mcp.tool()\r
+async def get_customer(request: CustomerRequest):\r
+    ...\r
+\`\`\`\r
+\r
+This gives me deterministic input validation before calling Salesforce.\r
+\r
+---\r
+\r
+### 3. Authenticate the MCP server\r
+\r
+The MCP server runs with its own **workload identity**.\r
+\r
+For Azure-hosted CWD:\r
+\r
+\`\`\`text id="0i8w2y"\r
+MCP Server\r
+    ↓\r
+Managed Identity\r
+    ↓\r
+Key Vault / Enterprise Identity\r
+    ↓\r
+Salesforce / ServiceNow\r
+\`\`\`\r
+\r
+Credentials aren't stored in the Docker image or Worker code.\r
+\r
+---\r
+\r
+### 4. Authorization happens inside MCP\r
+\r
+This is a critical security boundary.\r
+\r
+For example:\r
+\r
+\`\`\`text id="7j6r1d"\r
+Incident Worker\r
+       ↓\r
+MCP Server\r
+       ↓\r
+Is this Worker allowed\r
+to call get_open_incidents?\r
+       ↓\r
+      YES\r
+       ↓\r
+Is user authorized for C12345?\r
+       ↓\r
+      YES\r
+       ↓\r
+ServiceNow\r
+\`\`\`\r
+\r
+The LLM doesn't get to decide whether the tool is authorized.\r
+\r
+---\r
+\r
+### 5. Containerize the MCP server\r
+\r
+I package it as a Docker image:\r
+\r
+\`\`\`dockerfile id="z9j9w4"\r
+FROM python:3.12-slim\r
+\r
+WORKDIR /app\r
+\r
+COPY requirements.txt .\r
+RUN pip install --no-cache-dir -r requirements.txt\r
+\r
+COPY . .\r
+\r
+CMD ["python", "server.py"]\r
+\`\`\`\r
+\r
+Then:\r
+\r
+\`\`\`text id="f4n2lh"\r
+MCP Code\r
+   ↓\r
+Docker Build\r
+   ↓\r
+Security Scan\r
+   ↓\r
+Azure Container Registry\r
+\`\`\`\r
+\r
+---\r
+\r
+### 6. Deploy to AKS / Container Apps\r
+\r
+The MCP server can then run as a scalable service:\r
+\r
+\`\`\`text id="k5m7m4"\r
+                    AKS\r
+                     |\r
+       ┌─────────────┼─────────────┐\r
+       ↓             ↓             ↓\r
+Salesforce MCP  ServiceNow MCP  SharePoint MCP\r
+       ↓             ↓             ↓\r
+ Salesforce      ServiceNow     Microsoft Graph\r
+\`\`\`\r
+\r
+I can scale each MCP server independently based on its workload.\r
+\r
+---\r
+\r
+### 7. Network security\r
+\r
+For enterprise integrations, I use controls such as:\r
+\r
+\`\`\`text id="h5n7b8"\r
+Private networking\r
+TLS\r
+Firewall rules\r
+Outbound allowlists\r
+Network segmentation\r
+\`\`\`\r
+\r
+The MCP server should only be able to reach the enterprise endpoints it actually needs.\r
+\r
+---\r
+\r
+### 8. Resilience\r
+\r
+MCP servers also need production resilience.\r
+\r
+For example:\r
+\r
+\`\`\`text id="9u4r7v"\r
+Worker\r
+  ↓\r
+MCP Server\r
+  ↓\r
+Salesforce\r
+  ↓\r
+Timeout / 503\r
+  ↓\r
+Retry + exponential backoff\r
+  ↓\r
+Circuit breaker\r
+  ↓\r
+Structured error\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json id="5q9j4m"\r
+{\r
+  "status": "DEPENDENCY_UNAVAILABLE",\r
+  "dependency": "Salesforce",\r
+  "operation": "get_customer",\r
+  "retryable": true\r
+}\r
+\`\`\`\r
+\r
+I don't return fabricated data to the Worker.\r
+\r
+---\r
+\r
+### 9. CI/CD for MCP servers\r
+\r
+MCP servers follow their own deployment pipeline:\r
+\r
+\`\`\`text id="v7w3c1"\r
+Code\r
+ ↓\r
+Unit Tests\r
+ ↓\r
+Tool Schema Tests\r
+ ↓\r
+Integration Tests\r
+ ↓\r
+Security Scan\r
+ ↓\r
+Docker Build\r
+ ↓\r
+Container Scan\r
+ ↓\r
+ACR\r
+ ↓\r
+DEV\r
+ ↓\r
+QA\r
+ ↓\r
+Production\r
+\`\`\`\r
+\r
+I specifically test:\r
+\r
+* Tool input/output schemas\r
+* Authentication\r
+* Authorization\r
+* Enterprise API integration\r
+* Timeouts\r
+* Retries\r
+* Rate limits\r
+* Error mapping\r
+* Idempotency for writes\r
+* Audit logging\r
+\r
+---\r
+\r
+### 10. Version MCP contracts\r
+\r
+I version the MCP server and tool contracts.\r
+\r
+For example:\r
+\r
+\`\`\`text id="1b1xw4"\r
+Salesforce MCP\r
+    v1.0\r
+    v1.1\r
+    v2.0\r
+\`\`\`\r
+\r
+The Worker calls a stable business tool:\r
+\r
+\`\`\`python id="e6h9qy"\r
+await mcp_client.call_tool(\r
+    "get_customer",\r
+    {"customer_id": "C12345"}\r
+)\r
+\`\`\`\r
+\r
+The MCP adapter handles Salesforce API versions behind the boundary.\r
+\r
+---\r
+\r
+### 11. Observability\r
+\r
+I trace:\r
+\r
+\`\`\`text id="w4r7x1"\r
+Workflow\r
+  ↓\r
+Worker\r
+  ↓\r
+MCP Client\r
+  ↓\r
+MCP Server\r
+  ↓\r
+Tool\r
+  ↓\r
+Salesforce / ServiceNow\r
+\`\`\`\r
+\r
+I capture:\r
+\r
+\`\`\`text\r
+request_id\r
+workflow_id\r
+task_id\r
+worker_id\r
+mcp_server\r
+mcp_version\r
+tool_name\r
+latency\r
+status\r
+error\r
+\`\`\`\r
+\r
+I don't log credentials, access tokens, or unnecessary sensitive payloads.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I deploy MCP servers as independently scalable, containerized services. Each MCP server exposes a controlled set of business tools for an enterprise system such as Salesforce or ServiceNow. The server validates tool inputs, authenticates to the enterprise system using managed or workload identity, enforces authorization, handles retries, timeouts, rate limits and error mapping, and audits every tool invocation. I package the MCP server into Docker, scan the image, push it to Azure Container Registry, and deploy it to AKS or Azure Container Apps through CI/CD. I version the MCP tool contracts so Worker logic isn't tightly coupled to vendor API versions. Finally, I use distributed tracing and metrics to monitor MCP latency, failures, throttling and tool success.”**\r
+\r
+### Easy memory\r
+\r
+**MCP deployment =**\r
+\r
+**Tool → Validate → Secure → Containerize → Registry → Deploy → Scale → Observe**\r
+\r
+### Strong interview line\r
+\r
+> **“The Worker owns the business capability; the MCP server owns the secure integration with the enterprise system.”**\r
+`,code:``},{id:`486-how-do-you-version-models`,category:`Production Deployment / DevOps`,title:`How do you version models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you version models?\r
+\r
+In CWD, I treat the **model as a versioned production dependency**. I don't simply change the model name in code and deploy it.\r
+\r
+I track the **model ID/version + prompt version + Agent version + evaluation results** together.\r
+\r
+### CWD model versioning flow\r
+\r
+\`\`\`text id="m3h8k2"\r
+Model Version\r
+     ↓\r
+Golden Dataset Evaluation\r
+     ↓\r
+Compare with Current Model\r
+     ↓\r
+Approve\r
+     ↓\r
+Register Version\r
+     ↓\r
+Deploy to DEV\r
+     ↓\r
+QA / Staging\r
+     ↓\r
+Canary\r
+     ↓\r
+Production\r
+     ↓\r
+Monitor\r
+     ↓\r
+Rollback if needed\r
+\`\`\`\r
+\r
+### 1. Record the exact model version\r
+\r
+For example:\r
+\r
+\`\`\`json id="5p7n1a"\r
+{\r
+  "agent_id": "customer_worker",\r
+  "agent_version": "2.3",\r
+  "model_provider": "Azure OpenAI",\r
+  "model_name": "production-model",\r
+  "model_version": "2026-08",\r
+  "prompt_version": "3.1",\r
+  "mcp_version": "1.4"\r
+}\r
+\`\`\`\r
+\r
+The exact model identifier/version depends on what the provider exposes.\r
+\r
+---\r
+\r
+### 2. Keep model configuration outside Agent code\r
+\r
+Instead of hardcoding:\r
+\r
+\`\`\`python id="q4n8x2"\r
+model = "some-model-version"\r
+\`\`\`\r
+\r
+I maintain configuration such as:\r
+\r
+\`\`\`yaml id="n5v3k9"\r
+model:\r
+  provider: azure_openai\r
+  deployment: customer-briefing-prod\r
+  version: "2026-08"\r
+  temperature: 0.1\r
+  max_tokens: 2000\r
+\`\`\`\r
+\r
+This allows model changes without rewriting the Worker.\r
+\r
+---\r
+\r
+### 3. Evaluate the new model\r
+\r
+Suppose production uses:\r
+\r
+\`\`\`text\r
+Model A\r
+\`\`\`\r
+\r
+and I want to move to:\r
+\r
+\`\`\`text\r
+Model B\r
+\`\`\`\r
+\r
+I run both against the **same golden dataset**.\r
+\r
+\`\`\`text id="v8k4q2"\r
+             Golden Dataset\r
+              /         \\\r
+          Model A      Model B\r
+              \\         /\r
+               Compare\r
+\`\`\`\r
+\r
+I compare:\r
+\r
+* Task completion\r
+* Answer relevance\r
+* Groundedness\r
+* Hallucination\r
+* Tool selection\r
+* Tool-call accuracy\r
+* Safety\r
+* Latency\r
+* Token usage\r
+* Cost\r
+\r
+The goal isn't simply to select the model with the lowest cost or latency; I first establish that it meets the required quality and reliability thresholds.\r
+\r
+---\r
+\r
+### 4. Register the approved version\r
+\r
+I maintain a model registry/configuration record:\r
+\r
+\`\`\`text id="c7m2x4"\r
+Model\r
+ ├── provider\r
+ ├── model/deployment ID\r
+ ├── version\r
+ ├── evaluation result\r
+ ├── approved status\r
+ └── deployment status\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+customer_worker\r
+    ↓\r
+model deployment: customer-briefing-prod\r
+model version: 2026-08\r
+status: APPROVED\r
+\`\`\`\r
+\r
+---\r
+\r
+### 5. Canary deployment\r
+\r
+I don't immediately replace the production model for all traffic.\r
+\r
+\`\`\`text id="q6b1r8"\r
+                Production\r
+                    |\r
+             ┌──────┴──────┐\r
+             ↓             ↓\r
+        Model A         Model B\r
+        current          new\r
+             \\             /\r
+              Monitor\r
+\`\`\`\r
+\r
+I monitor the new model for:\r
+\r
+\`\`\`text\r
+Task success\r
+Groundedness\r
+Hallucination\r
+Tool failures\r
+Latency\r
+Token usage\r
+Cost\r
+Errors\r
+\`\`\`\r
+\r
+If behavior is acceptable, I gradually increase traffic.\r
+\r
+---\r
+\r
+### 6. Rollback\r
+\r
+If Model B causes a regression:\r
+\r
+\`\`\`text id="k8d4s2"\r
+Model B\r
+   ↓\r
+Regression detected\r
+   ↓\r
+Rollback\r
+   ↓\r
+Model A\r
+\`\`\`\r
+\r
+Because the previous model configuration remains registered, rollback is controlled.\r
+\r
+---\r
+\r
+### 7. Pin the model for long-running workflows\r
+\r
+This is particularly important for your CWD architecture.\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="x5p9c3"\r
+WF-1001 started\r
+Model = Version A\r
+\`\`\`\r
+\r
+Then tomorrow I deploy Version B.\r
+\r
+I don't want WF-1001 to unexpectedly switch models halfway through execution.\r
+\r
+So I persist:\r
+\r
+\`\`\`json id="r7m3k1"\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_version": "2.3",\r
+  "model_version": "2026-08",\r
+  "prompt_version": "3.1",\r
+  "status": "RUNNING"\r
+}\r
+\`\`\`\r
+\r
+The workflow continues using the pinned configuration, according to the platform's defined compatibility/migration policy.\r
+\r
+---\r
+\r
+## What exactly should you version?\r
+\r
+For an Agentic AI system, I would track more than just the model:\r
+\r
+\`\`\`text id="u2k7m5"\r
+Agent Version\r
+      +\r
+Model Version\r
+      +\r
+Prompt Version\r
+      +\r
+MCP/Tool Version\r
+      +\r
+RAG Index Version\r
+      +\r
+Evaluation Dataset Version\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Agent      = v2.3\r
+Model      = 2026-08\r
+Prompt     = v3.1\r
+MCP        = v1.4\r
+RAG Index  = v8\r
+Eval Set   = v5\r
+\`\`\`\r
+\r
+This gives you **reproducibility**.\r
+\r
+---\r
+\r
+## Model versioning vs model deployment\r
+\r
+A useful interview distinction:\r
+\r
+\`\`\`text\r
+Model\r
+   ↓\r
+Provider model/deployment\r
+   ↓\r
+Your application configuration\r
+\`\`\`\r
+\r
+For example, the provider may expose a model through a deployment/endpoint. Your CWD configuration should record the deployment identifier and any provider-supported model/version metadata so you know exactly what was used.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I treat the model as a versioned production dependency. I maintain the model or deployment identifier and provider-supported version metadata in configuration rather than hardcoding it in the Agent. Before promoting a new model, I evaluate it against the same golden dataset used for the current production model, comparing task completion, tool-call accuracy, groundedness, hallucination, safety, latency, tokens and cost. Once it passes the required evaluation gates, I deploy it through staging and a controlled canary rollout. I record the model version together with the Agent, prompt, MCP and RAG versions for traceability. For long-running CWD workflows, I persist the model configuration used by the workflow so it remains reproducible. If the new model regresses, I can roll back to the previous approved version.”**\r
+\r
+### Easy memory\r
+\r
+**Model versioning =**\r
+\r
+**Record → Evaluate → Register → Canary → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“Model upgrades are production changes, so I treat them like software releases—with evaluation, controlled rollout, observability, and rollback.”**\r
+`,code:``},{id:`487-how-do-you-version-prompts`,category:`Production Deployment / DevOps`,title:`How do you version prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you version prompts?\r
+\r
+In CWD, I treat **prompts as versioned production artifacts**, similar to code and model configurations. Every prompt change gets a new version and goes through evaluation before production.\r
+\r
+### 1. Give every prompt a unique ID and version\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+customer_briefing_prompt\r
+    ├── v1.0\r
+    ├── v1.1\r
+    └── v2.0\r
+\`\`\`\r
+\r
+A registry record could look like:\r
+\r
+\`\`\`json\r
+{\r
+  "prompt_id": "customer_briefing",\r
+  "version": "2.0",\r
+  "agent_id": "customer_worker",\r
+  "model": "customer-briefing-prod",\r
+  "status": "APPROVED"\r
+}\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Store prompts outside the Agent code\r
+\r
+I don't hardcode the production prompt inside the Worker:\r
+\r
+\`\`\`python\r
+# Avoid\r
+prompt = "You are a customer briefing agent..."\r
+\`\`\`\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Customer Worker\r
+      ↓\r
+Prompt ID + Version\r
+      ↓\r
+Prompt Registry\r
+      ↓\r
+Approved Prompt\r
+      ↓\r
+LLM\r
+\`\`\`\r
+\r
+The Prompt Registry can use a version-controlled repository for authoring/review and a runtime configuration store for approved production prompts.\r
+\r
+---\r
+\r
+### 3. Every change creates a new version\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+v1.0 → v1.1\r
+\`\`\`\r
+\r
+If I change instructions, output format, guardrails, examples, or other behavior-affecting content, I create a new version rather than overwriting v1.0.\r
+\r
+That gives me:\r
+\r
+\`\`\`text\r
+v1.0 → previous production\r
+v1.1 → candidate\r
+\`\`\`\r
+\r
+and makes rollback easy.\r
+\r
+---\r
+\r
+### 4. Evaluate the new prompt\r
+\r
+Before deploying \`v1.1\`, I run the same golden dataset against both versions.\r
+\r
+\`\`\`text\r
+              Golden Dataset\r
+                 /       \\\r
+              v1.0       v1.1\r
+                 \\       /\r
+                  Compare\r
+\`\`\`\r
+\r
+I evaluate:\r
+\r
+* Groundedness\r
+* Answer relevance\r
+* Hallucination\r
+* Task completion\r
+* Tool-call accuracy\r
+* Safety\r
+* Latency\r
+* Token usage\r
+* Cost\r
+\r
+If the new prompt causes unacceptable regression, I don't promote it.\r
+\r
+---\r
+\r
+### 5. Deploy through environments\r
+\r
+\`\`\`text\r
+Prompt v1.1\r
+    ↓\r
+DEV\r
+    ↓\r
+Evaluation\r
+    ↓\r
+QA / Staging\r
+    ↓\r
+Approval\r
+    ↓\r
+Production\r
+\`\`\`\r
+\r
+For production, I can use a controlled rollout rather than immediately switching every request.\r
+\r
+---\r
+\r
+### 6. Track prompt version in every workflow\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_id": "customer_worker",\r
+  "agent_version": "2.3",\r
+  "prompt_id": "customer_briefing",\r
+  "prompt_version": "1.1",\r
+  "model_version": "2026-08"\r
+}\r
+\`\`\`\r
+\r
+This is important for troubleshooting.\r
+\r
+If someone asks:\r
+\r
+> "Why did the Customer Briefing behavior change?"\r
+\r
+I can determine exactly which prompt and model were used.\r
+\r
+---\r
+\r
+### 7. Pin the prompt for long-running workflows\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+WF-1001\r
+Prompt = v1.1\r
+\`\`\`\r
+\r
+is already running.\r
+\r
+Tomorrow I deploy:\r
+\r
+\`\`\`text\r
+Prompt = v1.2\r
+\`\`\`\r
+\r
+I don't want WF-1001 to unexpectedly switch prompts halfway through its execution.\r
+\r
+So the workflow state keeps the prompt version:\r
+\r
+\`\`\`text\r
+WF-1001\r
+ ├── Agent v2.3\r
+ ├── Prompt v1.1\r
+ └── Model 2026-08\r
+\`\`\`\r
+\r
+New workflows can use v1.2 according to the rollout policy.\r
+\r
+---\r
+\r
+### 8. Rollback\r
+\r
+If production monitoring shows a regression:\r
+\r
+\`\`\`text\r
+v1.2\r
+ ↓\r
+Regression\r
+ ↓\r
+Rollback\r
+ ↓\r
+v1.1\r
+\`\`\`\r
+\r
+Because v1.1 was never overwritten, rollback is straightforward.\r
+\r
+---\r
+\r
+## Prompt versioning vs Git versioning\r
+\r
+Git tells me **what changed in the source**.\r
+\r
+Prompt versioning tells me **which prompt behavior was actually approved and used in production**.\r
+\r
+I use both.\r
+\r
+\`\`\`text\r
+Git\r
+ ↓\r
+Prompt change\r
+ ↓\r
+Review\r
+ ↓\r
+Evaluation\r
+ ↓\r
+Prompt Registry\r
+ ↓\r
+Approved version\r
+\`\`\`\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I version prompts independently rather than hardcoding them inside the Agent. Each prompt has a unique prompt ID and immutable version. Prompt changes go through Git review, golden-dataset evaluation, security and regression testing, and then promotion through Dev, QA and production. I record the prompt version along with the Agent and model versions for complete traceability. For long-running workflows, I persist the prompt version so the workflow remains reproducible even when a newer prompt is deployed. If the new prompt causes a regression, I can roll back to the previous approved version.”**\r
+\r
+### Easy memory\r
+\r
+**Prompt = ID → Version → Evaluate → Approve → Deploy → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“I never overwrite a production prompt; I create a new version so every Agent response is reproducible and auditable.”**\r
+`,code:``},{id:`488-how-do-you-perform-blue-green-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you perform blue-green deployment?\r
+\r
+**Blue-green deployment** means I maintain **two production environments**:\r
+\r
+* **Blue** = current stable version\r
+* **Green** = new version\r
+\r
+I deploy and test the new version in Green **without disturbing Blue**. Once Green is validated, I switch traffic from Blue to Green.\r
+\r
+### CWD example\r
+\r
+Suppose CWD currently runs:\r
+\r
+\`\`\`text id="8p9q2m"\r
+                    APIM\r
+                     |\r
+                  Blue v1\r
+                     |\r
+          Coordinator v1\r
+          Delegators v1\r
+          Workers v1\r
+\`\`\`\r
+\r
+I deploy the new Agent version separately:\r
+\r
+\`\`\`text id="3x7k1n"\r
+                    APIM\r
+                   /    \\\r
+              Blue v1   Green v2\r
+                         |\r
+                  Coordinator v2\r
+                  Delegators v2\r
+                  Workers v2\r
+\`\`\`\r
+\r
+### Step 1 — Blue is serving production\r
+\r
+\`\`\`text id="1m5q7r"\r
+Blue = Production\r
+Green = New/Idle\r
+\`\`\`\r
+\r
+All production traffic goes to Blue.\r
+\r
+---\r
+\r
+### Step 2 — Deploy Green\r
+\r
+I deploy the new CWD version to Green.\r
+\r
+\`\`\`text id="g6v2p4"\r
+Green\r
+ ├── FastAPI v2\r
+ ├── Coordinator v2\r
+ ├── Delegators v2\r
+ ├── Workers v2\r
+ └── MCP-compatible configuration\r
+\`\`\`\r
+\r
+The Green environment uses the same required infrastructure contracts but the new application/Agent versions.\r
+\r
+---\r
+\r
+### Step 3 — Run validation\r
+\r
+Before sending real production traffic, I test Green.\r
+\r
+\`\`\`text id="w8j3s6"\r
+Green\r
+ ↓\r
+Smoke Tests\r
+ ↓\r
+Integration Tests\r
+ ↓\r
+Security Tests\r
+ ↓\r
+Agent Evaluation\r
+ ↓\r
+Performance Tests\r
+\`\`\`\r
+\r
+For CWD, I specifically test:\r
+\r
+\`\`\`text id="5x4v8n"\r
+✓ Coordinator routing\r
+✓ Delegator selection\r
+✓ Worker execution\r
+✓ MCP tool calls\r
+✓ Salesforce / ServiceNow integration\r
+✓ RAG quality\r
+✓ Agent task completion\r
+✓ Groundedness\r
+✓ Tool-call accuracy\r
+✓ Latency\r
+✓ Error handling\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 4 — Switch traffic\r
+\r
+Once Green passes the gates:\r
+\r
+\`\`\`text id="n6q4r2"\r
+Before:\r
+\r
+APIM → Blue v1\r
+\r
+\r
+After:\r
+\r
+APIM → Green v2\r
+\`\`\`\r
+\r
+The traffic switch can be controlled through the gateway/traffic-routing layer.\r
+\r
+The key point is that **the switch is quick and reversible**.\r
+\r
+---\r
+\r
+### Step 5 — Monitor Green\r
+\r
+After switching:\r
+\r
+\`\`\`text id="c8f2m7"\r
+Users\r
+  ↓\r
+Green v2\r
+  ↓\r
+Monitor\r
+\`\`\`\r
+\r
+I watch:\r
+\r
+* HTTP 4xx/5xx\r
+* P95/P99 latency\r
+* Agent failures\r
+* A2A failures\r
+* MCP failures\r
+* Tool-call success\r
+* Task completion\r
+* Groundedness\r
+* Hallucination/regression signals\r
+* Token usage\r
+* Cost\r
+\r
+For Agentic AI, infrastructure health alone isn't sufficient.\r
+\r
+---\r
+\r
+### Step 6 — Roll back if necessary\r
+\r
+If Green has a regression:\r
+\r
+\`\`\`text id="a9r5x1"\r
+Green v2\r
+   ↓\r
+Problem detected\r
+   ↓\r
+Switch traffic back\r
+   ↓\r
+Blue v1\r
+\`\`\`\r
+\r
+Because Blue was kept intact, rollback is fast.\r
+\r
+\`\`\`text id="2f6m8q"\r
+APIM → Blue v1\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 7 — Decommission old Blue later\r
+\r
+After Green has been stable for the defined observation period:\r
+\r
+\`\`\`text id="s3k7p1"\r
+Green v2 = Production\r
+Blue v1  = Previous version\r
+\`\`\`\r
+\r
+I don't immediately destroy Blue. I retain the previous version for a controlled rollback window, then retire it according to the deployment/retention policy.\r
+\r
+---\r
+\r
+## Important CWD consideration: long-running workflows\r
+\r
+This is a good **Architect-level interview point**.\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="p4z8k2"\r
+WF-1001 started on Blue\r
+Agent = v1\r
+Prompt = v3.1\r
+\`\`\`\r
+\r
+Then I switch new traffic to Green:\r
+\r
+\`\`\`text id="r7m1c5"\r
+New workflows → Green\r
+\`\`\`\r
+\r
+I need a clear compatibility/versioning strategy for **WF-1001**.\r
+\r
+The workflow should retain its execution metadata:\r
+\r
+\`\`\`json id="j8q3v6"\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_version": "v1",\r
+  "prompt_version": "3.1",\r
+  "model_version": "2026-08"\r
+}\r
+\`\`\`\r
+\r
+So a deployment doesn't accidentally change the behavior of an already-running workflow.\r
+\r
+---\r
+\r
+## Blue-Green vs Canary\r
+\r
+A common interview question:\r
+\r
+| Blue-Green                           | Canary                                                          |\r
+| ------------------------------------ | --------------------------------------------------------------- |\r
+| Two environments                     | Usually same production infrastructure with versioned instances |\r
+| Switch traffic between environments  | Gradually increase traffic to new version                       |\r
+| Fast rollback                        | Gradual rollback                                                |\r
+| Good for clean environment isolation | Good for observing new version with limited traffic             |\r
+| Higher infrastructure cost           | Usually more incremental                                        |\r
+\r
+For **CWD Agent changes**, canary can be especially useful when I want to observe new Agent behavior with limited traffic before full rollout.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“For CWD, I use blue-green deployment by maintaining two production-capable environments. Blue contains the currently stable version, while Green contains the new version. I deploy the new Agent and application versions to Green, run smoke, integration, security, performance, and GenAI evaluation tests, and validate MCP and enterprise integrations. Once Green passes the gates, I switch traffic at the API gateway layer from Blue to Green. I then monitor both infrastructure and Agent-specific metrics such as task completion, tool-call success, groundedness, latency, errors, tokens and cost. If we detect a regression, I immediately route traffic back to Blue. I also preserve Agent, prompt and model versions for long-running workflows so deployment doesn't unexpectedly change an existing workflow.”**\r
+\r
+### Easy memory\r
+\r
+**Blue = current → Green = new → Test → Switch → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“The main advantage of blue-green is that I can validate the new production version before exposing it to users and roll back quickly without rebuilding the previous version.”**\r
+`,code:``},{id:`489-how-do-you-perform-canary-deployment`,category:`Production Deployment / DevOps`,title:`How do you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you perform canary deployment?\r
+\r
+**Canary deployment** means I release the new version to a **small percentage of production traffic first**, monitor its behavior, and gradually increase traffic if the new version remains healthy.\r
+\r
+For CWD, this is especially useful for **Agent, prompt, model, or workflow changes**.\r
+\r
+### CWD example\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Current → Agent v1\r
+New     → Agent v2\r
+\`\`\`\r
+\r
+Instead of sending everyone to v2:\r
+\r
+\`\`\`text\r
+                    APIM\r
+                      |\r
+              Traffic Router\r
+                 /        \\\r
+                ↓          ↓\r
+          Agent v1       Agent v2\r
+           95%             5%\r
+\`\`\`\r
+\r
+---\r
+\r
+### Step 1 — Deploy the new version\r
+\r
+I deploy Agent v2 alongside the existing production version.\r
+\r
+\`\`\`text id="j7k2m4"\r
+Production\r
+ ├── v1 → 95%\r
+ └── v2 → 5%\r
+\`\`\`\r
+\r
+The exact percentage is a deployment decision based on risk and traffic volume; it isn't a fixed requirement.\r
+\r
+---\r
+\r
+### Step 2 — Route a small amount of traffic\r
+\r
+I configure the traffic-routing layer, such as APIM/ingress, to send a small percentage of eligible requests to v2.\r
+\r
+For example:\r
+\r
+\`\`\`text id="f3m8q1"\r
+100 requests\r
+   ↓\r
+95 → v1\r
+ 5 → v2\r
+\`\`\`\r
+\r
+I can also target the canary by controlled criteria such as a test tenant or internal users rather than only using percentages.\r
+\r
+---\r
+\r
+### Step 3 — Monitor the canary\r
+\r
+For CWD, I monitor both **technical and Agentic AI metrics**.\r
+\r
+### Technical\r
+\r
+\`\`\`text id="x5r9p2"\r
+4xx / 5xx\r
+P95 / P99 latency\r
+CPU / memory\r
+Timeouts\r
+A2A failures\r
+MCP failures\r
+\`\`\`\r
+\r
+### Agent behavior\r
+\r
+\`\`\`text id="v6n3k8"\r
+Task completion\r
+Tool-call accuracy\r
+Routing accuracy\r
+Groundedness\r
+Hallucination\r
+RAG relevance\r
+Token usage\r
+Cost\r
+\`\`\`\r
+\r
+This is important because an Agent can return HTTP 200 while still producing incorrect behavior.\r
+\r
+---\r
+\r
+### Step 4 — Compare v1 vs v2\r
+\r
+I compare the canary against the existing production version using the **same traffic characteristics and evaluation criteria**.\r
+\r
+\`\`\`text id="c2m7x9"\r
+             Production traffic\r
+                    |\r
+             ┌──────┴──────┐\r
+             ↓             ↓\r
+          Agent v1       Agent v2\r
+             ↓             ↓\r
+          Metrics       Metrics\r
+             └──────┬──────┘\r
+                    ↓\r
+                 Compare\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Task completion       v1 vs v2\r
+Tool success          v1 vs v2\r
+P95 latency           v1 vs v2\r
+Groundedness          v1 vs v2\r
+Error rate            v1 vs v2\r
+\`\`\`\r
+\r
+I use predefined acceptance thresholds rather than making an ad-hoc decision from one metric.\r
+\r
+---\r
+\r
+### Step 5 — Gradually increase traffic\r
+\r
+If v2 remains healthy:\r
+\r
+\`\`\`text id="p8m4z6"\r
+5%\r
+ ↓\r
+10%\r
+ ↓\r
+25%\r
+ ↓\r
+50%\r
+ ↓\r
+100%\r
+\`\`\`\r
+\r
+The actual steps and observation periods depend on traffic volume and risk.\r
+\r
+---\r
+\r
+### Step 6 — Roll back if there is a regression\r
+\r
+Suppose MCP failures or hallucination increase:\r
+\r
+\`\`\`text id="q4k8n1"\r
+Agent v2\r
+   ↓\r
+Regression detected\r
+   ↓\r
+Traffic → v1\r
+\`\`\`\r
+\r
+\`\`\`text\r
+v1 → 100%\r
+v2 → 0%\r
+\`\`\`\r
+\r
+Because v1 is still running, rollback is fast.\r
+\r
+---\r
+\r
+## Canary for prompts\r
+\r
+The same approach can be used for prompt changes.\r
+\r
+\`\`\`text id="m5x2r7"\r
+Prompt v3.1 → 95%\r
+Prompt v3.2 → 5%\r
+\`\`\`\r
+\r
+I monitor:\r
+\r
+* Groundedness\r
+* Answer relevance\r
+* Hallucination\r
+* Task completion\r
+* Tool-call behavior\r
+* Tokens\r
+* Cost\r
+\r
+---\r
+\r
+## Canary for models\r
+\r
+For a model upgrade:\r
+\r
+\`\`\`text id="k3p8w5"\r
+Model A → 95%\r
+Model B → 5%\r
+\`\`\`\r
+\r
+I compare the same production metrics plus model-specific quality evaluation.\r
+\r
+---\r
+\r
+## Canary in your CWD architecture\r
+\r
+A particularly good way to explain this in an interview:\r
+\r
+\`\`\`text id="z8c4m2"\r
+                    APIM\r
+                      ↓\r
+               Traffic Routing\r
+                  /       \\\r
+                 ↓         ↓\r
+          CWD v1          CWD v2\r
+             ↓               ↓\r
+        Coordinator       Coordinator\r
+             ↓               ↓\r
+         Delegators        Delegators\r
+             ↓               ↓\r
+          Workers          Workers\r
+             ↓               ↓\r
+            MCP             MCP\r
+             ↓               ↓\r
+        Enterprise Systems\r
+\`\`\`\r
+\r
+The **MCP and enterprise contracts must remain compatible** with the canary version, or the canary must use a compatible MCP contract/version.\r
+\r
+---\r
+\r
+## Canary vs Blue-Green\r
+\r
+\`\`\`text\r
+Blue-Green:\r
+100% → Blue\r
+       ↓\r
+100% → Green\r
+\r
+Canary:\r
+95% → Blue\r
+ 5% → Green\r
+       ↓\r
+10% → Green\r
+       ↓\r
+25% → Green\r
+       ↓\r
+100% → Green\r
+\`\`\`\r
+\r
+**Blue-green** focuses on switching between two environments.\r
+\r
+**Canary** focuses on **gradual exposure and observation**.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“For canary deployment, I run the new CWD version alongside the existing production version and initially route a small, controlled percentage of traffic to it. I monitor infrastructure metrics as well as Agent-specific metrics such as task completion, tool-call accuracy, groundedness, hallucination, latency, token usage, cost, A2A and MCP failures. I compare the canary against the current version using predefined acceptance thresholds. If it remains healthy, I gradually increase traffic until it reaches 100%. If I detect a regression, I immediately route traffic back to the stable version. The same strategy can be applied to Agent, prompt, model, or workflow changes.”**\r
+\r
+### Easy memory\r
+\r
+**Deploy → Small traffic → Monitor → Compare → Increase → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“For Agentic AI, canary deployment lets me validate not only whether the new version is technically healthy, but whether its behavior is healthy under real production conditions.”**\r
+`,code:``},{id:`490-how-do-you-roll-back-a-bad-prompt`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad prompt?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you roll back a bad prompt?\r
+\r
+In CWD, I **never overwrite the existing production prompt**. Every prompt is immutable and versioned, so if a new prompt causes a regression, I can quickly switch the Agent back to the last approved version.\r
+\r
+### Example\r
+\r
+Suppose production is:\r
+\r
+\`\`\`text id="n8v4k2"\r
+Customer Briefing Worker\r
+        ↓\r
+Prompt v3.1  ← current production\r
+\`\`\`\r
+\r
+I deploy:\r
+\r
+\`\`\`text id="r5m2x7"\r
+Prompt v3.2  ← new version\r
+\`\`\`\r
+\r
+After deployment, monitoring shows increased hallucination or reduced task completion.\r
+\r
+### Rollback flow\r
+\r
+\`\`\`text id="w7p3q9"\r
+Prompt v3.2\r
+     ↓\r
+Regression detected\r
+     ↓\r
+Disable / stop rollout\r
+     ↓\r
+Activate Prompt v3.1\r
+     ↓\r
+Verify metrics\r
+     ↓\r
+Continue production with v3.1\r
+\`\`\`\r
+\r
+### 1. Detect the regression\r
+\r
+I monitor both technical and GenAI metrics:\r
+\r
+\`\`\`text id="a6k4m1"\r
+Groundedness ↓\r
+Task completion ↓\r
+Tool-call accuracy ↓\r
+Hallucination ↑\r
+Latency ↑\r
+Token usage ↑\r
+Cost ↑\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text id="t3q8v6"\r
+v3.1 → Task completion = healthy\r
+v3.2 → Task completion = regression\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Stop further rollout\r
+\r
+If I'm doing a canary:\r
+\r
+\`\`\`text id="y5r9c2"\r
+Prompt v3.1 → 95%\r
+Prompt v3.2 → 5%\r
+\`\`\`\r
+\r
+I immediately stop increasing v3.2 traffic.\r
+\r
+If necessary:\r
+\r
+\`\`\`text id="m4k7p1"\r
+v3.1 → 100%\r
+v3.2 → 0%\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Change the active prompt version\r
+\r
+The Agent configuration points back to the previously approved version:\r
+\r
+\`\`\`json id="j6x2v8"\r
+{\r
+  "prompt_id": "customer_briefing",\r
+  "active_version": "3.1"\r
+}\r
+\`\`\`\r
+\r
+I don't need to rebuild the Agent container for a prompt-only rollback if prompt configuration is independently managed.\r
+\r
+---\r
+\r
+### 4. Verify the rollback\r
+\r
+After switching back, I verify:\r
+\r
+\`\`\`text id="c8m3r5"\r
+API errors\r
+Task completion\r
+Groundedness\r
+Tool success\r
+Latency\r
+Token usage\r
+Cost\r
+\`\`\`\r
+\r
+I also run a targeted regression/golden dataset to confirm the bad behavior is no longer present.\r
+\r
+---\r
+\r
+### 5. Investigate v3.2\r
+\r
+I keep v3.2 for investigation rather than deleting it.\r
+\r
+\`\`\`text id="p7n2w4"\r
+Prompt v3.2\r
+   ↓\r
+Root-cause analysis\r
+   ↓\r
+Fix\r
+   ↓\r
+Create v3.3\r
+   ↓\r
+Evaluate\r
+   ↓\r
+Canary\r
+\`\`\`\r
+\r
+This preserves auditability.\r
+\r
+---\r
+\r
+## Important: Long-running workflows\r
+\r
+Suppose:\r
+\r
+\`\`\`text id="e5x8m2"\r
+WF-1001\r
+Prompt = v3.1\r
+\`\`\`\r
+\r
+was already running when v3.2 was deployed.\r
+\r
+I keep the workflow's prompt version pinned:\r
+\r
+\`\`\`json id="v2q9k7"\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_version": "2.3",\r
+  "prompt_version": "3.1",\r
+  "status": "RUNNING"\r
+}\r
+\`\`\`\r
+\r
+So the new deployment doesn't unexpectedly change the behavior of an already-running workflow.\r
+\r
+New workflows can use the rolled-back production version according to the deployment policy.\r
+\r
+---\r
+\r
+## Prompt rollback vs code rollback\r
+\r
+This is a good interview distinction:\r
+\r
+\`\`\`text\r
+Prompt-only problem\r
+       ↓\r
+Rollback prompt version\r
+       ↓\r
+No application rebuild required\r
+\`\`\`\r
+\r
+But if the problem is in Agent code:\r
+\r
+\`\`\`text\r
+Agent code problem\r
+       ↓\r
+Rollback container/image\r
+       ↓\r
+Previous Agent version\r
+\`\`\`\r
+\r
+If the problem involves **prompt + model + code compatibility**, I roll back the complete compatible configuration.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I treat prompts as immutable, versioned production artifacts. If a new prompt causes a regression, I stop the rollout and change the active prompt configuration back to the last approved version. Because the prompt is independently versioned, I don't need to rebuild the Agent for a prompt-only rollback. I then verify task completion, groundedness, tool-call accuracy, hallucination, latency, tokens and cost, and run targeted regression tests. I keep the bad version for root-cause analysis and create a new version after fixing the issue. For long-running workflows, I persist the prompt version with the workflow state so an in-progress workflow remains reproducible.”**\r
+\r
+### Easy memory\r
+\r
+**Detect → Stop → Revert → Verify → Investigate → Fix → Re-evaluate**\r
+\r
+### Strong interview line\r
+\r
+> **“I don't delete a bad prompt—I deactivate it and roll back to the last known-good immutable version.”**\r
+`,code:``},{id:`491-how-do-you-roll-back-a-bad-model`,category:`Production Deployment / DevOps`,title:`How do you roll back a bad model?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you roll back a bad model?\r
+\r
+In CWD, I treat the **LLM/model as a versioned production dependency**, just like code and prompts. I don't simply change the model name in production without evaluation.\r
+\r
+Suppose the current model is healthy:\r
+\r
+\`\`\`text\r
+Customer Briefing Agent\r
+        ↓\r
+Model v1\r
+\`\`\`\r
+\r
+I deploy a new model:\r
+\r
+\`\`\`text\r
+Model v2  ← new\r
+\`\`\`\r
+\r
+If v2 causes quality or reliability regressions, I switch production traffic back to v1.\r
+\r
+### Rollback flow\r
+\r
+\`\`\`text\r
+Model v2\r
+   ↓\r
+Regression detected\r
+   ↓\r
+Stop rollout\r
+   ↓\r
+Route traffic back to Model v1\r
+   ↓\r
+Verify metrics\r
+   ↓\r
+Keep v2 disabled\r
+   ↓\r
+Investigate and fix\r
+\`\`\`\r
+\r
+### 1. Detect the problem\r
+\r
+I monitor both technical and GenAI metrics:\r
+\r
+\`\`\`text\r
+Task completion ↓\r
+Groundedness ↓\r
+Tool-call accuracy ↓\r
+Hallucination ↑\r
+P95 latency ↑\r
+Token usage ↑\r
+Cost ↑\r
+Safety violations ↑\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Model v1 → Task completion: 94%\r
+Model v2 → Task completion: 81%\r
+\`\`\`\r
+\r
+That would trigger investigation/rollback according to the predefined release thresholds.\r
+\r
+---\r
+\r
+### 2. Stop the canary\r
+\r
+If I deployed v2 using canary:\r
+\r
+\`\`\`text\r
+Model v1 → 95%\r
+Model v2 → 5%\r
+\`\`\`\r
+\r
+I stop increasing v2 traffic.\r
+\r
+If the regression is significant:\r
+\r
+\`\`\`text\r
+Model v1 → 100%\r
+Model v2 → 0%\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Switch the active model\r
+\r
+I keep model configuration outside the application code.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_id": "customer_briefing_agent",\r
+  "model": "approved-model-v1",\r
+  "model_version": "v1"\r
+}\r
+\`\`\`\r
+\r
+Rollback means changing the approved deployment/configuration back to v1.\r
+\r
+The exact mechanism depends on the model platform—for example, the Azure OpenAI deployment configuration or the model-routing layer.\r
+\r
+---\r
+\r
+### 4. Verify after rollback\r
+\r
+I don't assume rollback worked just because traffic changed.\r
+\r
+I verify:\r
+\r
+\`\`\`text\r
+API error rate\r
+Task completion\r
+Groundedness\r
+Tool-call success\r
+Hallucination\r
+P95/P99 latency\r
+Token consumption\r
+Cost\r
+Safety metrics\r
+\`\`\`\r
+\r
+I also run the relevant **golden evaluation dataset**.\r
+\r
+---\r
+\r
+### 5. Preserve model versions\r
+\r
+I don't delete v2.\r
+\r
+I record:\r
+\r
+\`\`\`text\r
+Agent Version\r
+Prompt Version\r
+Model Version\r
+MCP Version\r
+RAG Index Version\r
+Evaluation Dataset Version\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "agent_version": "2.4",\r
+  "prompt_version": "3.1",\r
+  "model_version": "v2",\r
+  "mcp_version": "1.8",\r
+  "rag_index_version": "2026-09-20"\r
+}\r
+\`\`\`\r
+\r
+This makes the failure reproducible.\r
+\r
+---\r
+\r
+## Important: Long-running CWD workflows\r
+\r
+Suppose a workflow started with Model v1:\r
+\r
+\`\`\`text\r
+WF-1001\r
+Model = v1\r
+Status = RUNNING\r
+\`\`\`\r
+\r
+Then I deploy v2 and later roll it back.\r
+\r
+I don't arbitrarily change WF-1001 to v2 or another model halfway through.\r
+\r
+I persist the model configuration with the workflow:\r
+\r
+\`\`\`json\r
+{\r
+  "workflow_id": "WF-1001",\r
+  "agent_version": "2.3",\r
+  "prompt_version": "3.1",\r
+  "model_version": "v1"\r
+}\r
+\`\`\`\r
+\r
+That provides **reproducibility and consistent behavior** for the workflow.\r
+\r
+For new workflows, the active approved model is used.\r
+\r
+---\r
+\r
+## What if the model itself is unavailable?\r
+\r
+That's slightly different from a **bad model**.\r
+\r
+If the model endpoint is unavailable:\r
+\r
+\`\`\`text\r
+Model timeout / 5xx / throttling\r
+        ↓\r
+Retry with bounded backoff\r
+        ↓\r
+Circuit breaker\r
+        ↓\r
+Approved fallback model\r
+\`\`\`\r
+\r
+A fallback model should already be **evaluated and approved**. I wouldn't dynamically switch to an arbitrary model simply because the primary model failed.\r
+\r
+---\r
+\r
+## Model rollback vs prompt rollback\r
+\r
+| Problem             | Rollback                 |\r
+| ------------------- | ------------------------ |\r
+| Bad prompt          | Previous prompt version  |\r
+| Bad model           | Previous approved model  |\r
+| Bad Agent code      | Previous container/image |\r
+| Bad MCP integration | Previous MCP version     |\r
+| Bad RAG index       | Previous approved index  |\r
+\r
+Sometimes the issue is caused by an incompatible combination, so I roll back the **entire approved configuration bundle** rather than only one component.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I treat model changes as versioned production releases. Before production, I evaluate the new model against the same golden dataset and then deploy it gradually using canary traffic. In production I monitor task completion, groundedness, hallucination, tool-call accuracy, latency, token usage, cost and safety metrics. If the new model shows regression, I stop the rollout and route traffic back to the last approved model. I verify the rollback with both production metrics and regression tests. I also persist the model version with each workflow so long-running workflows remain reproducible. The failed model remains registered for investigation rather than being deleted.”**\r
+\r
+### Easy memory\r
+\r
+**Evaluate → Canary → Monitor → Detect → Roll back → Verify → Investigate**\r
+\r
+### Strong interview line\r
+\r
+> **“A model upgrade is a production change, not just a configuration change, so I use evaluation, controlled rollout, observability and fast rollback.”**\r
+`,code:``},{id:`492-how-do-you-test-before-production`,category:`Production Deployment / DevOps`,title:`How do you test before production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you test before production?\r
+\r
+For **CWD Agentic AI**, I don't rely only on unit testing. Before production, I test **code, integrations, security, Agent behavior, RAG quality, performance, and failure scenarios**.\r
+\r
+### Overall flow\r
+\r
+\`\`\`text\r
+Code Change\r
+    ↓\r
+Unit Tests\r
+    ↓\r
+Integration Tests\r
+    ↓\r
+API / Contract Tests\r
+    ↓\r
+Security Tests\r
+    ↓\r
+Agent / LLM Evaluation\r
+    ↓\r
+RAG Evaluation\r
+    ↓\r
+Failure & Resilience Tests\r
+    ↓\r
+Performance / Load Tests\r
+    ↓\r
+Staging / End-to-End Tests\r
+    ↓\r
+Approval\r
+    ↓\r
+Canary Production\r
+\`\`\`\r
+\r
+### 1. Unit testing\r
+\r
+I test individual components independently.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+ ├── Intent extraction\r
+ ├── Delegator routing\r
+ └── Result aggregation\r
+\r
+Delegator\r
+ └── Worker selection\r
+\r
+Worker\r
+ ├── Input validation\r
+ ├── MCP tool selection\r
+ └── Response validation\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`python\r
+def test_customer_briefing_routes_to_sales():\r
+    result = coordinator.route(\r
+        intent="customer_briefing",\r
+        customer_id="C12345"\r
+    )\r
+\r
+    assert "sales_delegator" in result\r
+\`\`\`\r
+\r
+---\r
+\r
+### 2. Integration testing\r
+\r
+I test the actual component interactions:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓ A2A\r
+Sales Delegator\r
+    ↓\r
+Customer Worker\r
+    ↓ MCP\r
+Salesforce MCP Server\r
+    ↓\r
+Salesforce\r
+\`\`\`\r
+\r
+I verify:\r
+\r
+* A2A communication\r
+* MCP tool calls\r
+* authentication\r
+* authorization\r
+* request/response schemas\r
+* retries/timeouts\r
+* error handling\r
+\r
+For external systems, I can use test/sandbox environments rather than production data.\r
+\r
+---\r
+\r
+### 3. API and contract testing\r
+\r
+For FastAPI:\r
+\r
+\`\`\`text\r
+POST /api/v1/customer-briefing\r
+GET  /api/v1/workflows/{workflow_id}\r
+\`\`\`\r
+\r
+I test:\r
+\r
+* valid request\r
+* missing \`customer_id\`\r
+* invalid data types\r
+* unauthorized user\r
+* invalid token\r
+* 404 workflow\r
+* 429 rate limit\r
+* 500/503/504 scenarios\r
+* response schema\r
+\r
+I also test contracts between:\r
+\r
+\`\`\`text\r
+Coordinator ↔ Delegator\r
+Delegator ↔ Worker\r
+Worker ↔ MCP\r
+MCP ↔ Enterprise API\r
+\`\`\`\r
+\r
+---\r
+\r
+### 4. Security testing\r
+\r
+I test:\r
+\r
+\`\`\`text\r
+Authentication\r
+Authorization\r
+Tenant isolation\r
+RBAC\r
+Tool allowlists\r
+Prompt injection\r
+Data exfiltration\r
+Secrets exposure\r
+PII leakage\r
+\`\`\`\r
+\r
+For example, if a user is not authorized for \`customer_id=C12345\`, the Worker must not retrieve Salesforce data simply because the LLM requested it.\r
+\r
+---\r
+\r
+### 5. LLM / Agent evaluation\r
+\r
+This is especially important for CWD.\r
+\r
+I maintain a **golden evaluation dataset** containing:\r
+\r
+\`\`\`text\r
+Normal requests\r
+Edge cases\r
+Ambiguous requests\r
+No-data scenarios\r
+Hallucination cases\r
+Tool failure cases\r
+Authorization cases\r
+Prompt-injection cases\r
+Multi-worker workflows\r
+\`\`\`\r
+\r
+For each case, I evaluate:\r
+\r
+\`\`\`text\r
+Intent accuracy\r
+Delegator routing\r
+Worker selection\r
+Tool-call accuracy\r
+Task completion\r
+Groundedness\r
+Answer relevance\r
+Hallucination\r
+Safety\r
+Latency\r
+Token usage\r
+Cost\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Input:\r
+"Give me a complete briefing for customer C12345"\r
+\r
+Expected:\r
+Sales Delegator ✓\r
+IT Delegator ✓\r
+Customer Worker ✓\r
+Incident Worker ✓\r
+Correct customer_id ✓\r
+Grounded response ✓\r
+\`\`\`\r
+\r
+---\r
+\r
+### 6. RAG testing\r
+\r
+For the SharePoint/RAG portion, I test:\r
+\r
+\`\`\`text\r
+Retrieval relevance\r
+Context precision\r
+Context recall\r
+Groundedness\r
+ACL filtering\r
+Tenant filtering\r
+No-result behavior\r
+Index freshness\r
+\`\`\`\r
+\r
+I specifically verify that a user cannot retrieve documents belonging to another tenant or unauthorized customer.\r
+\r
+---\r
+\r
+### 7. Failure and resilience testing\r
+\r
+I deliberately simulate failures.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Salesforce → timeout\r
+ServiceNow → 503\r
+MCP Server → unavailable\r
+LLM → 429\r
+Worker → failure\r
+Redis → unavailable\r
+Queue → delayed\r
+\`\`\`\r
+\r
+Then verify:\r
+\r
+\`\`\`text\r
+Retry\r
+   ↓\r
+Backoff\r
+   ↓\r
+Circuit breaker\r
+   ↓\r
+Structured error\r
+   ↓\r
+Partial result / resume / HITL\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Customer Worker ✓\r
+Opportunity Worker ✓\r
+Incident Worker ✗\r
+        ↓\r
+Checkpoint\r
+        ↓\r
+Retry Incident Worker\r
+        ↓\r
+Aggregate\r
+\`\`\`\r
+\r
+---\r
+\r
+### 8. Performance/load testing\r
+\r
+I test realistic concurrency before production.\r
+\r
+I measure:\r
+\r
+\`\`\`text\r
+Requests/sec\r
+Concurrent workflows\r
+P50/P95/P99 latency\r
+CPU/memory\r
+Queue depth\r
+MCP latency\r
+LLM latency\r
+Token consumption\r
+Error rate\r
+\`\`\`\r
+\r
+I also test downstream limits because CWD may be healthy while Salesforce, ServiceNow, or the model endpoint becomes the bottleneck.\r
+\r
+---\r
+\r
+### 9. End-to-end staging test\r
+\r
+Finally, I run the complete workflow in a production-like environment:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+APIM\r
+ ↓\r
+FastAPI\r
+ ↓\r
+Coordinator\r
+ ↓ A2A\r
+Delegators\r
+ ↓\r
+Workers\r
+ ↓ MCP\r
+Enterprise Systems\r
+ ↓\r
+Validation\r
+ ↓\r
+Aggregation\r
+ ↓\r
+Final Response\r
+\`\`\`\r
+\r
+I verify the complete trace using:\r
+\r
+\`\`\`text\r
+request_id\r
+workflow_id\r
+task_id\r
+trace_id\r
+\`\`\`\r
+\r
+---\r
+\r
+### 10. Production approval\r
+\r
+Only after the tests pass do I promote the release.\r
+\r
+\`\`\`text\r
+DEV\r
+ ↓\r
+QA\r
+ ↓\r
+STAGING\r
+ ↓\r
+Evaluation Gate\r
+ ↓\r
+Approval\r
+ ↓\r
+Canary\r
+ ↓\r
+Gradual rollout\r
+\`\`\`\r
+\r
+For a **new model or prompt**, I compare it against the current production version using the same golden dataset before allowing production traffic.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“Before production, I use multiple testing layers. I start with unit tests for Coordinator, Delegator and Worker logic, followed by integration and contract testing for A2A, MCP and enterprise APIs. Then I perform security testing, RAG evaluation, Agent and LLM evaluation using a golden dataset, and resilience testing for timeouts, 429s, MCP failures and downstream outages. I also run load and performance tests and complete end-to-end tests in a production-like staging environment. For model, prompt or Agent changes, I compare the new version against the approved version on the same evaluation dataset. Only after these gates pass do I deploy through canary and monitor it.”**\r
+\r
+### Easy memory\r
+\r
+**Code → Integration → Security → AI Eval → RAG → Failure → Performance → E2E → Canary**\r
+\r
+### Strong interview line\r
+\r
+> **“For Agentic AI, passing unit tests is not enough. I need to prove that the Agent makes the right decisions, selects the right tools, produces grounded results, and behaves safely under failure conditions before I expose it to production.”**\r
+`,code:``},{id:`493-what-are-your-quality-gates`,category:`Production Deployment / DevOps`,title:`What are your quality gates?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## What are your quality gates?\r
+\r
+For **CWD**, quality gates are checkpoints in the CI/CD pipeline that must pass before a release can move to the next environment.\r
+\r
+I use gates across **code quality, security, APIs, Agent behavior, RAG, performance, and production readiness**.\r
+\r
+### CWD quality-gate flow\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Code Quality Gate\r
+   ↓\r
+Unit Test Gate\r
+   ↓\r
+Security Gate\r
+   ↓\r
+API / Contract Gate\r
+   ↓\r
+Integration Gate\r
+   ↓\r
+Agent / LLM Evaluation Gate\r
+   ↓\r
+RAG Quality Gate\r
+   ↓\r
+Performance Gate\r
+   ↓\r
+Resilience Gate\r
+   ↓\r
+Staging / E2E Gate\r
+   ↓\r
+Approval Gate\r
+   ↓\r
+Canary\r
+\`\`\`\r
+\r
+### 1. Code quality gate\r
+\r
+Before merging:\r
+\r
+\`\`\`text\r
+✓ Linting\r
+✓ Formatting\r
+✓ Type checking\r
+✓ Code coverage\r
+✓ Static analysis\r
+\`\`\`\r
+\r
+For Python, tools could include:\r
+\r
+\`\`\`text\r
+Ruff\r
+Pyright / mypy\r
+pytest\r
+\`\`\`\r
+\r
+I don't use a single universal coverage number; the threshold is defined by the project's risk and testing policy.\r
+\r
+---\r
+\r
+### 2. Unit-test gate\r
+\r
+I verify:\r
+\r
+\`\`\`text\r
+Coordinator routing\r
+Delegator selection\r
+Worker logic\r
+Validation\r
+Reducers\r
+Error handling\r
+Retry logic\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+       ↓\r
+Sales Delegator ✓\r
+IT Delegator ✓\r
+\`\`\`\r
+\r
+If the routing logic fails → **pipeline stops**.\r
+\r
+---\r
+\r
+### 3. Security gate\r
+\r
+I check:\r
+\r
+\`\`\`text\r
+✓ Dependency vulnerabilities\r
+✓ Container vulnerabilities\r
+✓ Secret scanning\r
+✓ SAST\r
+✓ Authentication\r
+✓ Authorization\r
+✓ RBAC\r
+✓ Tenant isolation\r
+✓ MCP tool permissions\r
+\`\`\`\r
+\r
+For example, a Worker attempting to call an unauthorized MCP tool must fail the test.\r
+\r
+---\r
+\r
+### 4. API / contract gate\r
+\r
+I verify that contracts haven't unexpectedly changed:\r
+\r
+\`\`\`text\r
+FastAPI ↔ Client\r
+Coordinator ↔ Delegator\r
+Delegator ↔ Worker\r
+Worker ↔ MCP\r
+MCP ↔ Enterprise API\r
+\`\`\`\r
+\r
+I validate:\r
+\r
+* request schemas\r
+* response schemas\r
+* required fields\r
+* error codes\r
+* backward compatibility\r
+\r
+---\r
+\r
+### 5. Integration gate\r
+\r
+I test the actual CWD flow:\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓ A2A\r
+Delegator\r
+    ↓\r
+Worker\r
+    ↓ MCP\r
+Salesforce / ServiceNow / Snowflake / SharePoint\r
+\`\`\`\r
+\r
+Authentication, authorization, timeout, retry and response normalization must work.\r
+\r
+---\r
+\r
+## 6. Agent / LLM quality gate\r
+\r
+This is one of my most important gates.\r
+\r
+I run the **golden dataset** against the new Agent/prompt/model version.\r
+\r
+I measure:\r
+\r
+\`\`\`text\r
+Intent accuracy\r
+Delegator routing\r
+Worker selection\r
+Tool-call accuracy\r
+Task completion\r
+Groundedness\r
+Hallucination\r
+Safety\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Current model → 94% task completion\r
+New model     → 82%\r
+\`\`\`\r
+\r
+If the new version violates the project's approved quality threshold, **it does not move to production**.\r
+\r
+---\r
+\r
+## 7. RAG quality gate\r
+\r
+For CWD's SharePoint/RAG workflows:\r
+\r
+\`\`\`text\r
+Retrieval relevance\r
+Context precision\r
+Context recall\r
+Groundedness\r
+ACL filtering\r
+Tenant filtering\r
+No-result handling\r
+Index freshness\r
+\`\`\`\r
+\r
+A retrieval regression can block the release even if the API and code tests pass.\r
+\r
+---\r
+\r
+## 8. Performance gate\r
+\r
+I verify:\r
+\r
+\`\`\`text\r
+P95/P99 latency\r
+Throughput\r
+Concurrent workflows\r
+LLM latency\r
+MCP latency\r
+Queue depth\r
+Token consumption\r
+Cost\r
+\`\`\`\r
+\r
+I compare against the application's agreed SLOs/budgets rather than using arbitrary universal numbers.\r
+\r
+---\r
+\r
+## 9. Resilience gate\r
+\r
+I intentionally test failures:\r
+\r
+\`\`\`text\r
+LLM → 429\r
+MCP → timeout\r
+Salesforce → 503\r
+ServiceNow → unavailable\r
+Worker → failure\r
+Queue → delay\r
+\`\`\`\r
+\r
+Expected behavior:\r
+\r
+\`\`\`text\r
+Retry → Backoff → Circuit breaker\r
+              ↓\r
+       Partial result /\r
+       Resume / HITL\r
+\`\`\`\r
+\r
+No uncontrolled retry loops and no hallucinated fallback data.\r
+\r
+---\r
+\r
+## 10. End-to-end gate\r
+\r
+I execute a complete Customer Briefing:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+APIM\r
+ ↓\r
+FastAPI\r
+ ↓\r
+Coordinator\r
+ ↓ A2A\r
+Sales Delegator + IT Delegator\r
+ ↓\r
+Workers\r
+ ↓ MCP\r
+Salesforce + ServiceNow\r
+ ↓\r
+Validation\r
+ ↓\r
+Aggregation\r
+ ↓\r
+Final Response\r
+\`\`\`\r
+\r
+I verify the complete trace and workflow state.\r
+\r
+---\r
+\r
+## 11. Production-readiness gate\r
+\r
+Before production, I also verify:\r
+\r
+\`\`\`text\r
+✓ Monitoring configured\r
+✓ Alerts configured\r
+✓ Dashboards available\r
+✓ Logs/traces available\r
+✓ Rollback tested\r
+✓ Secrets configured\r
+✓ Autoscaling configured\r
+✓ Health/readiness probes\r
+✓ Runbooks available\r
+✓ Disaster-recovery considerations\r
+\`\`\`\r
+\r
+---\r
+\r
+## What actually blocks deployment?\r
+\r
+A useful interview distinction:\r
+\r
+| Gate                 | Example failure                 | Action |\r
+| -------------------- | ------------------------------- | ------ |\r
+| Code                 | Type/test failure               | Block  |\r
+| Security             | Critical vulnerability          | Block  |\r
+| Contract             | Breaking API change             | Block  |\r
+| Integration          | MCP failure                     | Block  |\r
+| Agent quality        | Routing/task-quality regression | Block  |\r
+| RAG                  | ACL/retrieval regression        | Block  |\r
+| Performance          | SLO violation                   | Block  |\r
+| Resilience           | Unhandled dependency failure    | Block  |\r
+| E2E                  | Customer Briefing fails         | Block  |\r
+| Production readiness | No rollback/monitoring          | Block  |\r
+\r
+Not every metric must be perfect, but **predefined release criteria must be satisfied**.\r
+\r
+### Interview-ready answer\r
+\r
+> **“My quality gates are layered. I start with code quality and unit tests, then security and API contract tests, followed by integration testing for A2A, MCP and enterprise systems. For Agentic AI, I have additional gates for Agent routing, tool selection, task completion, groundedness, hallucination and safety using a golden evaluation dataset. I also gate RAG quality, performance, resilience and end-to-end behavior. Finally, I verify observability, alerting and rollback readiness. If a release violates a predefined critical threshold, the pipeline stops and it doesn't reach production.”**\r
+\r
+### Strong interview line\r
+\r
+> **“For CWD, quality gates validate not just whether the code works, but whether the Agent behaves correctly, safely, reliably and within its production SLOs.”**\r
+`,code:``},{id:`494-how-do-you-integrate-llm-evaluation-into-ci-cd`,category:`Production Deployment / DevOps`,title:`How do you integrate LLM evaluation into CI/CD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you integrate LLM evaluation into CI/CD?\r
+\r
+For **CWD**, I treat LLM evaluation as a **release gate**, not as something I do manually after deployment.\r
+\r
+Whenever I change the **prompt, model, Agent workflow, RAG configuration, or tool-selection logic**, the CI/CD pipeline automatically runs the same golden evaluation dataset and compares the new version against the approved baseline.\r
+\r
+### Overall flow\r
+\r
+\`\`\`text id="5c0xqf"\r
+Code / Prompt / Model / RAG Change\r
+              ↓\r
+         Git Pull Request\r
+              ↓\r
+        Build + Unit Tests\r
+              ↓\r
+        Security Tests\r
+              ↓\r
+       Integration Tests\r
+              ↓\r
+       Golden Dataset Eval\r
+              ↓\r
+      Compare with Baseline\r
+              ↓\r
+        Quality Gate\r
+          ↙       ↘\r
+       FAIL        PASS\r
+        ↓           ↓\r
+      Block       Deploy\r
+                    ↓\r
+                 Staging\r
+                    ↓\r
+                 Canary\r
+                    ↓\r
+                Production\r
+\`\`\`\r
+\r
+---\r
+\r
+## 1. Maintain a golden evaluation dataset\r
+\r
+I maintain a versioned dataset containing representative CWD scenarios.\r
+\r
+For example:\r
+\r
+\`\`\`json id="3f1q8p"\r
+{\r
+  "input": "Give me a customer briefing for C12345",\r
+  "expected_intent": "customer_briefing",\r
+  "expected_delegators": [\r
+    "sales_delegator",\r
+    "it_delegator"\r
+  ],\r
+  "expected_entities": {\r
+    "customer_id": "C12345"\r
+  }\r
+}\r
+\`\`\`\r
+\r
+The dataset also contains:\r
+\r
+\`\`\`text id="6z8m2k"\r
+Normal cases\r
+Edge cases\r
+Ambiguous requests\r
+No-data cases\r
+Hallucination cases\r
+Tool failures\r
+Authorization failures\r
+Prompt-injection cases\r
+Multi-worker workflows\r
+\`\`\`\r
+\r
+I version this dataset because changing the evaluation dataset itself can change the evaluation result.\r
+\r
+---\r
+\r
+## 2. Trigger evaluation from CI/CD\r
+\r
+Suppose I change:\r
+\r
+\`\`\`text\r
+Prompt v3.1 → v3.2\r
+\`\`\`\r
+\r
+or:\r
+\r
+\`\`\`text\r
+Model v1 → Model v2\r
+\`\`\`\r
+\r
+The pipeline automatically runs the evaluation suite.\r
+\r
+For example:\r
+\r
+\`\`\`text id="h9k4w2"\r
+Pull Request\r
+    ↓\r
+Build\r
+    ↓\r
+pytest\r
+    ↓\r
+Agent Evaluation\r
+    ↓\r
+Quality Gate\r
+\`\`\`\r
+\r
+This can run in GitHub Actions, Azure DevOps, GitLab CI, etc.\r
+\r
+---\r
+\r
+## 3. Evaluate multiple dimensions\r
+\r
+I don't evaluate only the final answer.\r
+\r
+For CWD I evaluate:\r
+\r
+### Agent behavior\r
+\r
+\`\`\`text\r
+Intent accuracy\r
+Delegator routing\r
+Worker selection\r
+Tool-call accuracy\r
+Task completion\r
+\`\`\`\r
+\r
+### RAG\r
+\r
+\`\`\`text\r
+Retrieval relevance\r
+Context precision\r
+Context recall\r
+Groundedness\r
+\`\`\`\r
+\r
+### Answer quality\r
+\r
+\`\`\`text\r
+Answer relevance\r
+Factual correctness\r
+Hallucination\r
+\`\`\`\r
+\r
+### Production characteristics\r
+\r
+\`\`\`text\r
+Latency\r
+Token usage\r
+Cost\r
+Error rate\r
+\`\`\`\r
+\r
+### Safety\r
+\r
+\`\`\`text\r
+Prompt injection\r
+Unauthorized tool use\r
+Data leakage\r
+Policy violations\r
+\`\`\`\r
+\r
+---\r
+\r
+## 4. Compare against a baseline\r
+\r
+Suppose the current production version produces:\r
+\r
+\`\`\`text id="8y2nq4"\r
+Task completion       94%\r
+Groundedness          96%\r
+Tool-call accuracy    97%\r
+Hallucination          2%\r
+P95 latency           4.2 sec\r
+\`\`\`\r
+\r
+The new version produces:\r
+\r
+\`\`\`text id="4k7m1p"\r
+Task completion       91%\r
+Groundedness          95%\r
+Tool-call accuracy    96%\r
+Hallucination          6%\r
+P95 latency           4.5 sec\r
+\`\`\`\r
+\r
+The pipeline compares the new version against the **approved baseline and predefined acceptance criteria**.\r
+\r
+---\r
+\r
+## 5. Apply quality gates\r
+\r
+For example, the project might define rules such as:\r
+\r
+\`\`\`text id="7r5x3m"\r
+Task completion   → must meet minimum threshold\r
+Groundedness      → must meet minimum threshold\r
+Tool accuracy     → must meet minimum threshold\r
+Safety            → zero critical violations\r
+Hallucination     → must remain within allowed threshold\r
+Latency           → must remain within SLO\r
+Cost              → must remain within budget\r
+\`\`\`\r
+\r
+The exact thresholds should be established from business requirements and baseline performance rather than invented universally.\r
+\r
+If a critical gate fails:\r
+\r
+\`\`\`text id="w3p6j9"\r
+Evaluation FAILED\r
+       ↓\r
+CI/CD pipeline STOPPED\r
+       ↓\r
+No production deployment\r
+\`\`\`\r
+\r
+---\r
+\r
+## 6. Example CWD evaluation\r
+\r
+Suppose I change the Coordinator prompt.\r
+\r
+The evaluation might test:\r
+\r
+\`\`\`text id="3k6r8w"\r
+Input\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Expected Delegator routing\r
+ ↓\r
+Expected Workers\r
+ ↓\r
+MCP calls\r
+ ↓\r
+Final response\r
+\`\`\`\r
+\r
+For:\r
+\r
+> "Give me a complete customer briefing for C12345."\r
+\r
+Expected:\r
+\r
+\`\`\`text\r
+Customer ID = C12345\r
+        ↓\r
+Sales Delegator ✓\r
+        ↓\r
+Customer Worker ✓\r
+Opportunity Worker ✓\r
+\r
+IT Delegator ✓\r
+        ↓\r
+Incident Worker ✓\r
+\`\`\`\r
+\r
+If the new prompt incorrectly routes the request only to Sales:\r
+\r
+\`\`\`text\r
+Sales Delegator ✓\r
+IT Delegator ✗\r
+\`\`\`\r
+\r
+the evaluation catches the regression **before production**.\r
+\r
+---\r
+\r
+## 7. Use LLM-as-a-judge carefully\r
+\r
+For subjective dimensions such as answer relevance or helpfulness, I can use an LLM evaluator.\r
+\r
+Example:\r
+\r
+\`\`\`text id="n2m7x4"\r
+Candidate Answer\r
+       ↓\r
+Evaluation Model\r
+       ↓\r
+Groundedness / Relevance / Completeness\r
+       ↓\r
+Score\r
+\`\`\`\r
+\r
+But I don't rely entirely on an LLM judge.\r
+\r
+I combine:\r
+\r
+\`\`\`text\r
+Deterministic tests\r
++\r
+Reference-based evaluation\r
++\r
+LLM-as-a-judge\r
++\r
+Business metrics\r
+\`\`\`\r
+\r
+For example, whether the correct \`customer_id\` was used or whether the correct MCP tool was called can often be validated deterministically.\r
+\r
+---\r
+\r
+## 8. Store evaluation results\r
+\r
+I record:\r
+\r
+\`\`\`text id="p5v8r2"\r
+agent_version\r
+model_version\r
+prompt_version\r
+rag_index_version\r
+evaluation_dataset_version\r
+evaluation_timestamp\r
+metrics\r
+failed_cases\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`json id="9q3m6v"\r
+{\r
+  "agent_version": "2.4",\r
+  "model_version": "v2",\r
+  "prompt_version": "3.2",\r
+  "dataset_version": "2026.09",\r
+  "task_completion": 0.94,\r
+  "groundedness": 0.96,\r
+  "tool_accuracy": 0.97,\r
+  "status": "PASSED"\r
+}\r
+\`\`\`\r
+\r
+This gives me reproducibility.\r
+\r
+---\r
+\r
+## 9. Failed production cases become regression tests\r
+\r
+This is a strong production practice.\r
+\r
+Suppose production discovers:\r
+\r
+\`\`\`text id="u7k2m9"\r
+Agent selected wrong Worker\r
+\`\`\`\r
+\r
+I add that scenario to the golden dataset:\r
+\r
+\`\`\`text id="v3p8n1"\r
+Production Failure\r
+       ↓\r
+New Regression Test\r
+       ↓\r
+Golden Dataset\r
+       ↓\r
+Future CI/CD Runs\r
+\`\`\`\r
+\r
+That prevents the same issue from silently returning in a future model or prompt release.\r
+\r
+---\r
+\r
+## 10. Evaluation continues after deployment\r
+\r
+CI/CD evaluation is the **pre-production gate**, but I also monitor production.\r
+\r
+\`\`\`text id="b8x4q2"\r
+Offline Evaluation\r
+       ↓\r
+Canary\r
+       ↓\r
+Online Evaluation\r
+       ↓\r
+Production Monitoring\r
+\`\`\`\r
+\r
+During canary, I compare:\r
+\r
+\`\`\`text\r
+v1 vs v2\r
+\`\`\`\r
+\r
+for:\r
+\r
+* task completion\r
+* tool success\r
+* groundedness\r
+* hallucination\r
+* latency\r
+* token usage\r
+* cost\r
+* errors\r
+\r
+If the canary regresses, I roll back.\r
+\r
+---\r
+\r
+# Interview-ready answer\r
+\r
+> **“I integrate LLM evaluation into CI/CD as an automated quality gate. Whenever we change the model, prompt, Agent workflow, RAG configuration or tool-selection logic, the pipeline runs a versioned golden dataset. I evaluate intent and routing accuracy, Worker and tool selection, task completion, groundedness, hallucination, RAG retrieval quality, safety, latency, token usage and cost. I compare the results against the approved baseline and predefined release thresholds. Critical regressions fail the pipeline and prevent deployment. After deployment, I continue the same evaluation dimensions during canary and production monitoring. Any production failure is converted into a regression test and added back to the golden dataset.”**\r
+\r
+### Easy memory\r
+\r
+**Change → Evaluate → Compare → Gate → Deploy → Monitor → Learn**\r
+\r
+### Strong interview line\r
+\r
+> **“For Agentic AI, CI/CD should validate behavior, not just code. A build can be technically successful while the Agent is making the wrong decisions, so LLM evaluation becomes a first-class deployment gate.”**\r
+`,code:``},{id:`495-how-do-you-prevent-a-bad-prompt-from-reaching-production`,category:`Production Deployment / DevOps`,title:`How do you prevent a bad prompt from reaching production?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you prevent a bad prompt from reaching production?\r
+\r
+In CWD, I treat prompts as **versioned production artifacts**. A prompt cannot go directly from development to production. It has to pass **evaluation, security, regression, and approval gates**.\r
+\r
+### Flow\r
+\r
+\`\`\`text\r
+Prompt Change\r
+     ↓\r
+Git / Prompt Registry\r
+     ↓\r
+Pull Request\r
+     ↓\r
+Prompt Validation\r
+     ↓\r
+Security Tests\r
+     ↓\r
+Golden Dataset Evaluation\r
+     ↓\r
+Regression Comparison\r
+     ↓\r
+Human Approval\r
+     ↓\r
+Staging\r
+     ↓\r
+Canary\r
+     ↓\r
+Production\r
+\`\`\`\r
+\r
+### 1. Never overwrite the production prompt\r
+\r
+Suppose production is:\r
+\r
+\`\`\`text\r
+customer_briefing_prompt v3.1\r
+\`\`\`\r
+\r
+A developer creates:\r
+\r
+\`\`\`text\r
+customer_briefing_prompt v3.2\r
+\`\`\`\r
+\r
+I keep v3.1 unchanged.\r
+\r
+\`\`\`text\r
+v3.1 → ACTIVE\r
+v3.2 → CANDIDATE\r
+\`\`\`\r
+\r
+This gives me an immediate rollback option.\r
+\r
+---\r
+\r
+### 2. Run automated validation\r
+\r
+Before evaluation, I validate the prompt itself:\r
+\r
+\`\`\`text\r
+✓ Required variables exist\r
+✓ Template syntax is valid\r
+✓ Expected output format is defined\r
+✓ No secrets\r
+✓ No credentials\r
+✓ No prohibited instructions\r
+✓ Correct prompt version\r
+\`\`\`\r
+\r
+For example, if the prompt requires:\r
+\r
+\`\`\`text\r
+{customer_id}\r
+{context}\r
+\`\`\`\r
+\r
+the pipeline verifies those variables exist.\r
+\r
+---\r
+\r
+### 3. Run security checks\r
+\r
+I test for things such as:\r
+\r
+\`\`\`text\r
+Prompt injection\r
+Unsafe instructions\r
+Data exfiltration\r
+Secret leakage\r
+Unauthorized tool instructions\r
+System-prompt conflicts\r
+\`\`\`\r
+\r
+A prompt should never be allowed to bypass CWD authorization.\r
+\r
+For example, a prompt saying:\r
+\r
+> "Always call the Salesforce delete tool."\r
+\r
+doesn't grant permission to call that tool.\r
+\r
+**Authorization remains outside the prompt and LLM.**\r
+\r
+---\r
+\r
+### 4. Run the golden dataset\r
+\r
+This is the most important gate.\r
+\r
+I run the new prompt against representative CWD scenarios:\r
+\r
+\`\`\`text\r
+Normal requests\r
+Edge cases\r
+Ambiguous requests\r
+No-data cases\r
+Tool failures\r
+Authorization cases\r
+Prompt injection\r
+Multi-worker workflows\r
+\`\`\`\r
+\r
+For Customer Briefing:\r
+\r
+\`\`\`text\r
+Input\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Sales Delegator + IT Delegator\r
+ ↓\r
+Workers\r
+ ↓\r
+MCP tools\r
+ ↓\r
+Final answer\r
+\`\`\`\r
+\r
+I verify that the new prompt doesn't change expected behavior incorrectly.\r
+\r
+---\r
+\r
+### 5. Compare against the production prompt\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+             v3.1       v3.2\r
+Task completion  95%       91%\r
+Groundedness     96%       94%\r
+Tool accuracy    97%       92%\r
+Hallucination     2%        7%\r
+\`\`\`\r
+\r
+If v3.2 violates the predefined quality gates:\r
+\r
+\`\`\`text\r
+❌ Evaluation failed\r
+       ↓\r
+❌ Deployment blocked\r
+\`\`\`\r
+\r
+It never reaches production.\r
+\r
+---\r
+\r
+### 6. Use deterministic checks + LLM evaluation\r
+\r
+I don't rely only on an LLM judge.\r
+\r
+I combine:\r
+\r
+\`\`\`text\r
+Deterministic tests\r
+        +\r
+Golden/reference evaluation\r
+        +\r
+LLM-as-a-judge\r
+        +\r
+Security tests\r
+        +\r
+Business validation\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Expected Worker = incident_worker\r
+Actual Worker   = customer_worker\r
+\`\`\`\r
+\r
+That can be checked deterministically.\r
+\r
+For answer quality or completeness, an evaluation model can provide additional assessment.\r
+\r
+---\r
+\r
+### 7. Require approval\r
+\r
+After automated gates pass:\r
+\r
+\`\`\`text\r
+Developer\r
+   ↓\r
+Automated Evaluation\r
+   ↓\r
+Reviewer Approval\r
+   ↓\r
+Staging\r
+\`\`\`\r
+\r
+For high-risk changes, I require explicit approval before production.\r
+\r
+---\r
+\r
+### 8. Deploy through canary\r
+\r
+I don't immediately expose the new prompt to 100% of users.\r
+\r
+\`\`\`text\r
+v3.1 → 95%\r
+v3.2 → 5%\r
+\`\`\`\r
+\r
+Then monitor:\r
+\r
+\`\`\`text\r
+Task completion\r
+Groundedness\r
+Hallucination\r
+Tool success\r
+Latency\r
+Tokens\r
+Cost\r
+Safety\r
+\`\`\`\r
+\r
+If v3.2 behaves badly:\r
+\r
+\`\`\`text\r
+v3.2 → 0%\r
+v3.1 → 100%\r
+\`\`\`\r
+\r
+---\r
+\r
+### 9. Make the prompt version traceable\r
+\r
+Every CWD workflow records:\r
+\r
+\`\`\`text\r
+workflow_id\r
+agent_version\r
+prompt_version\r
+model_version\r
+mcp_version\r
+rag_index_version\r
+\`\`\`\r
+\r
+So if a bad response occurs, I can determine exactly which prompt produced it.\r
+\r
+---\r
+\r
+### 10. Production failures become regression tests\r
+\r
+If a prompt causes a production failure:\r
+\r
+\`\`\`text\r
+Production failure\r
+       ↓\r
+Capture sanitized scenario\r
+       ↓\r
+Add to golden dataset\r
+       ↓\r
+Fix prompt\r
+       ↓\r
+Run CI/CD evaluation again\r
+\`\`\`\r
+\r
+This prevents the same regression from coming back.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I prevent bad prompts from reaching production by treating prompts as versioned artifacts with CI/CD quality gates. A new prompt goes through syntax and security validation, deterministic tests, golden-dataset evaluation, regression comparison against the current production prompt, and human approval. For Agentic AI, I specifically evaluate routing, tool selection, task completion, groundedness, hallucination and safety—not just text quality. After staging, I use canary deployment and monitor the new prompt against the production baseline. If any critical gate fails, the pipeline blocks the release; if a regression appears during canary, I immediately roll back to the previous approved prompt.”**\r
+\r
+### Easy memory\r
+\r
+**Version → Validate → Evaluate → Compare → Approve → Canary → Monitor → Rollback**\r
+\r
+### Strong interview line\r
+\r
+> **“A prompt is production code from a governance perspective, so I never let an untested prompt reach production.”**\r
+`,code:``},{id:`496-how-do-you-manage-environment-specific-configuration`,category:`Production Deployment / DevOps`,title:`How do you manage environment-specific configuration?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you manage environment-specific configuration?\r
+\r
+In CWD, I **separate configuration from application code** and maintain different configuration values for **DEV, QA, STAGING, and PROD**.\r
+\r
+I never hardcode environment-specific values such as endpoints, model deployments, database connections, or secrets inside the Agent/Worker code.\r
+\r
+### CWD configuration flow\r
+\r
+\`\`\`text id="7m4r2p"\r
+Application Code\r
+       ↓\r
+Environment Configuration\r
+       ↓\r
+DEV / QA / STAGING / PROD\r
+       ↓\r
+Secrets → Key Vault\r
+\`\`\`\r
+\r
+### 1. Separate configuration from code\r
+\r
+For example, the Worker code stays the same:\r
+\r
+\`\`\`python id="m8x3q1"\r
+class AppConfig(BaseSettings):\r
+    environment: str\r
+    azure_openai_endpoint: str\r
+    model_deployment: str\r
+    mcp_salesforce_url: str\r
+    mcp_servicenow_url: str\r
+    workflow_timeout: int\r
+\`\`\`\r
+\r
+The values change by environment.\r
+\r
+\`\`\`text id="q4v7n2"\r
+DEV\r
+├── Model = dev-model\r
+├── MCP = dev-mcp\r
+└── DB = dev-db\r
+\r
+QA\r
+├── Model = qa-model\r
+├── MCP = qa-mcp\r
+└── DB = qa-db\r
+\r
+PROD\r
+├── Model = prod-approved-model\r
+├── MCP = prod-mcp\r
+└── DB = prod-db\r
+\`\`\`\r
+\r
+The application code doesn't change.\r
+\r
+---\r
+\r
+## 2. Separate normal configuration from secrets\r
+\r
+This is important.\r
+\r
+### Normal configuration\r
+\r
+Examples:\r
+\r
+\`\`\`text id="z6p2k8"\r
+Environment name\r
+API URLs\r
+Model deployment name\r
+Timeouts\r
+Retry limits\r
+Feature flags\r
+Log level\r
+Worker concurrency\r
+\`\`\`\r
+\r
+These can come from environment configuration or a centralized configuration service.\r
+\r
+### Secrets\r
+\r
+Examples:\r
+\r
+\`\`\`text id="x8m3q5"\r
+API keys\r
+OAuth secrets\r
+Certificates\r
+Database credentials\r
+Encryption keys\r
+\`\`\`\r
+\r
+I store these in **Azure Key Vault**, not Git or environment files committed to the repository.\r
+\r
+---\r
+\r
+## 3. Use Managed Identity\r
+\r
+In Azure:\r
+\r
+\`\`\`text id="h4k9s2"\r
+CWD Service\r
+    ↓\r
+Managed Identity\r
+    ↓\r
+Azure Key Vault\r
+    ↓\r
+Secret / Certificate\r
+\`\`\`\r
+\r
+The Worker doesn't contain:\r
+\r
+\`\`\`python\r
+# ❌ Don't do this\r
+SALESFORCE_PASSWORD = "secret123"\r
+\`\`\`\r
+\r
+Instead, the workload identity retrieves the required secret from Key Vault.\r
+\r
+---\r
+\r
+## 4. Environment-specific model configuration\r
+\r
+This is particularly important for GenAI.\r
+\r
+For example:\r
+\r
+\`\`\`text id="v7n2c4"\r
+DEV\r
+ → cheaper/test model\r
+\r
+STAGING\r
+ → production-like approved model\r
+\r
+PROD\r
+ → approved production model\r
+\`\`\`\r
+\r
+I also version:\r
+\r
+\`\`\`text id="c9x4m7"\r
+Agent version\r
+Prompt version\r
+Model version\r
+MCP version\r
+RAG index version\r
+\`\`\`\r
+\r
+So I know exactly which configuration produced a response.\r
+\r
+---\r
+\r
+## 5. Environment-specific MCP endpoints\r
+\r
+For example:\r
+\r
+\`\`\`text id="b5q8n3"\r
+DEV\r
+Worker → dev Salesforce MCP\r
+\r
+QA\r
+Worker → QA Salesforce MCP\r
+\r
+PROD\r
+Worker → production Salesforce MCP\r
+\`\`\`\r
+\r
+The Worker code remains:\r
+\r
+\`\`\`python id="s3j7k2"\r
+result = await mcp_client.call_tool(\r
+    "get_customer",\r
+    {"customer_id": customer_id}\r
+)\r
+\`\`\`\r
+\r
+Only the MCP endpoint/configuration changes.\r
+\r
+---\r
+\r
+## 6. Environment-specific databases/state\r
+\r
+For example:\r
+\r
+\`\`\`text id="w8p2r6"\r
+DEV       → CWD-Dev Cosmos DB\r
+QA        → CWD-QA Cosmos DB\r
+STAGING   → CWD-Staging Cosmos DB\r
+PROD      → CWD-Prod Cosmos DB\r
+\`\`\`\r
+\r
+I avoid accidentally allowing a development deployment to connect to production data.\r
+\r
+---\r
+\r
+## 7. Use configuration validation\r
+\r
+At application startup, I validate required configuration.\r
+\r
+For example:\r
+\r
+\`\`\`python id="n4k6p9"\r
+from pydantic_settings import BaseSettings\r
+\r
+class Settings(BaseSettings):\r
+    environment: str\r
+    model_deployment: str\r
+    mcp_endpoint: str\r
+    workflow_timeout: int\r
+\`\`\`\r
+\r
+If required configuration is missing:\r
+\r
+\`\`\`text id="q7x3m1"\r
+Application startup\r
+       ↓\r
+Configuration validation\r
+       ↓\r
+Missing required value\r
+       ↓\r
+FAIL FAST\r
+\`\`\`\r
+\r
+This is better than discovering the problem after receiving production traffic.\r
+\r
+---\r
+\r
+## 8. Prevent configuration drift\r
+\r
+I manage configuration through:\r
+\r
+\`\`\`text id="a2m7v5"\r
+Git / IaC\r
+   ↓\r
+CI/CD\r
+   ↓\r
+Environment-specific configuration\r
+   ↓\r
+Deployment\r
+\`\`\`\r
+\r
+For example, infrastructure can be managed with Terraform/Bicep, while application configuration is injected during deployment.\r
+\r
+I also audit configuration changes.\r
+\r
+---\r
+\r
+## 9. Feature flags\r
+\r
+For risky Agent features, I use feature flags rather than changing code repeatedly.\r
+\r
+For example:\r
+\r
+\`\`\`text id="u8k3w6"\r
+enable_new_routing = false\r
+enable_semantic_cache = true\r
+enable_model_v2 = false\r
+\`\`\`\r
+\r
+Then I can enable a feature for staging or a small canary population before full production rollout.\r
+\r
+---\r
+\r
+## 10. Never put secrets into prompts or Agent state\r
+\r
+This is particularly important for CWD.\r
+\r
+I never put:\r
+\r
+\`\`\`text\r
+API keys\r
+access tokens\r
+passwords\r
+client secrets\r
+\`\`\`\r
+\r
+into:\r
+\r
+\`\`\`text\r
+Prompt\r
+A2A message\r
+MCP parameters\r
+LangGraph state\r
+Redis\r
+Logs\r
+\`\`\`\r
+\r
+The Agent receives the minimum trusted context it needs.\r
+\r
+---\r
+\r
+## Interview-ready answer\r
+\r
+> **“I manage environment-specific configuration separately from application code. The same CWD code is deployed across DEV, QA, staging and production, while environment-specific values such as API endpoints, model deployments, MCP endpoints, timeouts and feature flags are injected through deployment configuration. Secrets such as API credentials and certificates are stored in Azure Key Vault and accessed using Managed Identity. I validate configuration at startup, manage infrastructure and configuration through CI/CD and IaC, and prevent environment drift through controlled deployments. I also version the Agent, prompt, model, MCP and RAG configuration so every workflow is reproducible.”**\r
+\r
+### Easy memory\r
+\r
+**Code same → Config changes → Secrets in Key Vault → Inject → Validate → Audit**\r
+\r
+### Strong interview line\r
+\r
+> **“I build once and configure per environment; I don't maintain separate application codebases for DEV, QA and PROD.”**\r
+`,code:``}];function tm(){return(0,M.jsx)($,{data:em,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var nm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function rm(){return(0,M.jsx)($,{data:nm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var im=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function am(){return(0,M.jsx)($,{data:im,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var om=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function sm(){return(0,M.jsx)($,{data:om,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var cm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function lm(){return(0,M.jsx)($,{data:cm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var um=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function dm(){return(0,M.jsx)($,{data:um,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var fm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function pm(){return(0,M.jsx)($,{data:fm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var mm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete AWS architecture for CWD.
+
+## Short answer
+CWD on AWS is a layered, private, IAM-based architecture: edge and API, orchestration and agents, tools, AI and data services, state and messaging, and a platform layer for security, observability and delivery.
+
+## Key points
+- Edge: optional CloudFront and AWS WAF → API Gateway (JWT or Cognito authorisation, throttling, validation) → VPC Link to a private ALB.
+- Orchestration: Coordinator (LangGraph) on ECS Fargate, routing to Delegators and Workers; Lambda for light, short paths.
+- Tools: Workers call MCP servers (ECS) that wrap Salesforce, ServiceNow, SharePoint, Snowflake and Oracle.
+- AI and data: Amazon Bedrock (LLMs, embeddings, Guardrails), OpenSearch Serverless (RAG), S3 plus Glue for ingestion, SageMaker for custom models.
+- State and async: DynamoDB, ElastiCache (Redis/Valkey), SQS, Step Functions, EventBridge.
+- Platform: IAM roles, KMS, Secrets Manager, private subnets with VPC endpoints, CloudWatch / X-Ray / CloudTrail, CodePipeline / CodeBuild / ECR, infrastructure as code.
+
+## CWD context
+Everything sits in private subnets across multiple AZs; only API Gateway (and CloudFront) face the internet.
+
+## Interview tip
+Walk one request left to right and name the job of each box.
+`,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which AWS services did you use in CWD and why?
+
+## Short answer
+Each service does one job, and the design favours managed, serverless and private-by-default options.
+
+## Key points
+- Bedrock: LLM reasoning, embeddings and guardrails through one IAM-secured API.
+- API Gateway: secured, throttled front door. Lambda: event-driven glue. ECS Fargate: long-running Coordinator, Delegators, Workers and MCP servers.
+- SQS and Step Functions: async work, retries and durable workflows. EventBridge: event routing.
+- DynamoDB: durable state. ElastiCache: cache. OpenSearch Serverless: hybrid retrieval. S3: document lake.
+- IAM, KMS, Secrets Manager, VPC endpoints: security. CloudWatch, X-Ray, CloudTrail: observability. CodePipeline, CodeBuild, ECR: delivery.
+
+## CWD context
+Be ready to say what you rejected for each (Lambda vs Fargate, Step Functions vs LangGraph, and so on).
+
+## Interview tip
+Lead with the job each service does, not the product name.
+`,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose Amazon Bedrock?
+
+## Short answer
+Bedrock provides managed access to foundation models from several providers through one API, secured with IAM and PrivateLink.
+
+## Key points
+- No model infrastructure to run; pay per token, with optional Provisioned Throughput.
+- Guardrails, Knowledge Bases, prompt management, batch inference and model evaluation are built in.
+- IAM authentication, CloudTrail audit, invocation logging; AWS states customer prompts are not used to train the models.
+- Model choice can change without a platform change.
+
+## CWD context
+It keeps LLM access inside the same identity, network and audit model as the rest of CWD.
+`,code:``},{id:`004-why-did-you-choose-api-gateway`,category:`AWS Architecture`,title:`Why did you choose API Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose API Gateway?
+
+## Short answer
+API Gateway is the managed front door that offloads authentication, throttling, validation and logging from the CWD backend.
+
+## Key points
+- Cognito or JWT authorisers, Lambda authorisers, IAM (SigV4).
+- Throttling, usage plans, request validation and WAF integration (REST APIs).
+- Custom domains, stages, access logs and metrics.
+- Private integrations to ECS through VPC Link.
+
+## CWD context
+The backend receives only authenticated, validated, rate-limited traffic.
+`,code:``},{id:`005-why-did-you-choose-lambda`,category:`AWS Architecture`,title:`Why did you choose Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose Lambda?
+
+## Short answer
+Lambda suits short, stateless, event-driven work with automatic scaling and pay-per-use pricing.
+
+## Key points
+- API authorisers, S3 event handlers, SQS consumers for light Workers, small tool endpoints, glue between services.
+- Scales automatically from zero; minimal operations.
+- Limited by a 15-minute maximum duration and statelessness.
+
+## CWD context
+Lambda is glue and small tasks; the long-running agent runtime is not on Lambda.
+`,code:``},{id:`006-why-would-you-choose-ecs-fargate-instead-of-lambda`,category:`AWS Architecture`,title:`Why would you choose ECS/Fargate instead of Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you choose ECS/Fargate instead of Lambda?
+
+## Short answer
+Choose ECS Fargate over Lambda for long-running, connection-heavy or steady workloads.
+
+## Key points
+- Runs longer than 15 minutes, streaming and persistent connections.
+- Larger images and dependencies; predictable latency without cold starts.
+- Cost is often lower at sustained load; consistent runtime for the LangGraph service.
+- Fargate has no GPU; use EC2-backed ECS or SageMaker for GPU needs.
+
+## CWD context
+Coordinator, Delegators, Workers and MCP servers run on Fargate; event glue stays on Lambda.
+`,code:``},{id:`007-when-would-you-choose-eks`,category:`AWS Architecture`,title:`When would you choose EKS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# When would you choose EKS?
+
+## Short answer
+Choose EKS when you genuinely need the Kubernetes ecosystem and can afford its operational load.
+
+## Key points
+- Kubernetes APIs, operators, CRDs and service mesh.
+- Portability or multi-cloud standardisation; advanced scheduling and GPU pools.
+- An existing platform team with Kubernetes skills.
+
+## CWD context
+Otherwise ECS Fargate is simpler and sufficient.
+`,code:``},{id:`008-where-would-you-use-step-functions`,category:`AWS Architecture`,title:`Where would you use Step Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use Step Functions?
+
+## Short answer
+Use Step Functions for durable, visible orchestration of multi-step workflows across AWS services.
+
+## Key points
+- Ingestion pipelines, fan-out and fan-in of Workers, long-running approval flows using task tokens.
+- Built-in retry, catch, timeout and service integrations (SQS, Lambda, ECS, Bedrock, DynamoDB).
+- Not a replacement for LangGraph, which handles LLM reasoning graphs inside the agent.
+
+## CWD context
+Step Functions orchestrates infrastructure workflows; LangGraph orchestrates agent reasoning.
+`,code:``},{id:`009-where-would-you-use-sqs`,category:`AWS Architecture`,title:`Where would you use SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS?
+
+## Short answer
+Use SQS wherever work is slow, bursty, needs retries or must survive a crash.
+
+## Key points
+- Between Delegators and long-running or write Workers.
+- Ingestion tasks and re-index jobs; audit events.
+- Buffering and backpressure per tenant; every queue gets a DLQ.
+
+## CWD context
+Do not queue short read-only calls; it only adds latency.
+`,code:``},{id:`010-where-would-you-use-eventbridge`,category:`AWS Architecture`,title:`Where would you use EventBridge?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use EventBridge?
+
+## Short answer
+Use EventBridge as the event bus that routes events between services without tight coupling.
+
+## Key points
+- S3 object events, Glue job state changes and Step Functions state changes.
+- EventBridge Scheduler for timed jobs; SaaS and cross-account events.
+- Rules, archive and replay.
+
+## CWD context
+EventBridge says "something happened"; SQS says "please do this".
+`,code:``},{id:`011-where-would-you-use-dynamodb`,category:`AWS Architecture`,title:`Where would you use DynamoDB?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use DynamoDB?
+
+## Short answer
+Use DynamoDB for durable, key-based operational state.
+
+## Key points
+- Sessions, workflow state and checkpoints, run and step records.
+- Agent and prompt registries, idempotency keys, quotas and counters, audit metadata.
+- Not for large documents, vectors or ad-hoc analytics.
+
+## CWD context
+Access patterns decide the table design, so define them first.
+`,code:``},{id:`012-where-would-you-use-elasticache-redis`,category:`AWS Architecture`,title:`Where would you use ElastiCache/Redis?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use ElastiCache/Redis?
+
+## Short answer
+Use ElastiCache (Redis or Valkey) as a low-latency cache and counter store, never as the source of truth.
+
+## Key points
+- Embeddings, retrieval results, tool schemas and the session window.
+- Rate-limit counters, locks and optional semantic cache.
+- MemoryDB if a durable in-memory store is needed.
+
+## CWD context
+If the cache fails, CWD slows down but keeps working.
+`,code:``},{id:`013-where-would-you-use-opensearch-serverless`,category:`AWS Architecture`,title:`Where would you use OpenSearch Serverless?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use OpenSearch Serverless?
+
+## Short answer
+Use OpenSearch Serverless as the retrieval index for RAG.
+
+## Key points
+- Vector, keyword (BM25) and hybrid search with metadata filters.
+- Serverless collections scale in OCUs without cluster management.
+- Not for transactional state.
+
+## CWD context
+The index is derived from S3 and can be rebuilt.
+`,code:``},{id:`014-where-would-you-use-s3`,category:`AWS Architecture`,title:`Where would you use S3?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use S3?
+
+## Short answer
+Use S3 as the document lake and general object store.
+
+## Key points
+- Raw and curated documents, extracted text and chunks.
+- Model artifacts, evaluation datasets, Bedrock batch input and output, log archives.
+- Event source that triggers ingestion.
+
+## CWD context
+S3 is the source of truth for documents; OpenSearch is a derived index.
+`,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete AWS request flow from API Gateway to final response.
+
+## Short answer
+A request flows from the client through API Gateway to the Coordinator, out to Workers and tools, and back through validation.
+
+## Key points
+- Client → CloudFront/WAF → API Gateway (authoriser, throttling, validation, request ID) → VPC Link → ALB → ECS Coordinator.
+- The Coordinator loads state (DynamoDB / Redis), classifies intent with a small Bedrock model and builds a plan.
+- Delegators call Workers: short reads synchronously; long or write jobs through SQS or Step Functions.
+- Workers query OpenSearch with ACL filters or call MCP tools; results are validated and aggregated.
+- Bedrock (with Guardrails) generates the grounded answer; state is saved; traces go to X-Ray and CloudWatch; long work returns 202 and a status endpoint.
+
+## CWD context
+The synchronous path is the user-facing critical path; everything slow goes async.
+`,code:``}];function hm(){return(0,M.jsx)($,{data:mm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var gm=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Amazon Bedrock instead of directly calling an LLM API?
+
+## Short answer
+Bedrock gives multiple models behind IAM, PrivateLink and CloudTrail, rather than a separate vendor API with keys and a separate trust boundary.
+
+## Key points
+- IAM authentication instead of API keys; private connectivity through VPC endpoints.
+- One Converse API across providers, so models are swappable.
+- Guardrails, logging, quotas, Provisioned Throughput and cross-region inference.
+- Trade-off: new model versions can appear later than at the model provider, and quotas are per region.
+
+## CWD context
+The security and audit story is the main reason, not convenience.
+`,code:``},{id:`017-which-bedrock-models-would-you-use-for-cwd-and-why`,category:`Amazon Bedrock`,title:`Which Bedrock models would you use for CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which Bedrock models would you use for CWD and why?
+
+## Short answer
+Use a tier of models by task rather than one model for everything; verify current availability in your region.
+
+## Key points
+- Flagship model (for example Claude Sonnet class or Amazon Nova Pro) for planning and final synthesis.
+- Small, fast model (Claude Haiku class or Nova Lite/Micro) for intent, routing, extraction and summarisation.
+- Embedding model (Titan Text Embeddings or Cohere Embed) for RAG.
+
+## CWD context
+The task-to-model mapping is configuration, not code.
+`,code:``},{id:`018-how-do-you-select-a-bedrock-model`,category:`Amazon Bedrock`,title:`How do you select a Bedrock model?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you select a Bedrock model?
+
+## Short answer
+Select the smallest model that meets the quality bar for each task, proven on your own data.
+
+## Key points
+- Criteria: quality, latency, cost per token, context window, tool use and structured output, region and quota, Guardrails support.
+- Run the golden dataset per candidate; compare quality, latency and cost.
+- Use the Converse API to keep the choice swappable.
+
+## CWD context
+Start larger, then downshift tasks that stay above threshold.
+`,code:``},{id:`019-how-do-you-handle-bedrock-throttling`,category:`Amazon Bedrock`,title:`How do you handle Bedrock throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Bedrock throttling?
+
+## Short answer
+Bedrock returns ThrottlingException when you exceed the model's request or token quota.
+
+## Key points
+- Retry with exponential backoff and jitter (SDK adaptive retry mode).
+- Cross-region inference profiles for more throughput; quota increases; Provisioned Throughput for steady baseline.
+- Queue non-interactive work in SQS; enforce per-tenant limits; reduce tokens.
+
+## CWD context
+Throttling is a capacity-planning signal, not just an error to retry.
+`,code:``},{id:`020-how-do-you-handle-bedrock-timeout`,category:`Amazon Bedrock`,title:`How do you handle Bedrock timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Bedrock timeout?
+
+## Short answer
+Handle Bedrock timeouts with explicit client timeouts, streaming and a fallback.
+
+## Key points
+- Raise the SDK read timeout above the default for long generations.
+- Stream responses so users see progress; measure time to first token.
+- Retry transient failures once, then use another region or a smaller model.
+- Remember API Gateway's 29-second limit; long work goes async.
+
+## CWD context
+Return a partial or degraded answer with a clear message rather than hanging.
+`,code:``},{id:`021-how-do-you-implement-retries-for-bedrock`,category:`Amazon Bedrock`,title:`How do you implement retries for Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement retries for Bedrock?
+
+## Short answer
+Retry only transient failures, with backoff, jitter and an overall deadline.
+
+## Key points
+- Retry throttling, service-unavailable, internal-server and timeout errors.
+- Do not retry validation, access-denied or guardrail-blocked calls.
+- SDK standard or adaptive retry modes with a capped attempt count.
+- Retry at one layer only; inference calls are read-only and safe to repeat.
+
+## CWD context
+Tool calls with side effects need idempotency keys before retrying.
+`,code:``},{id:`022-how-do-you-control-bedrock-token-usage`,category:`Amazon Bedrock`,title:`How do you control Bedrock token usage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you control Bedrock token usage?
+
+## Short answer
+Control token usage before the call, and measure it after.
+
+## Key points
+- Set maxTokens and stop sequences; count or estimate input tokens.
+- Trim history with a rolling summary; limit retrieved chunks by rerank score.
+- Read the usage field in each response and record it; per-tenant budgets in DynamoDB or Redis.
+- Prompt caching for stable prefixes.
+
+## CWD context
+Track prompt tokens per stage to see where they go.
+`,code:``},{id:`023-how-do-you-reduce-bedrock-cost`,category:`Amazon Bedrock`,title:`How do you reduce Bedrock cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you reduce Bedrock cost?
+
+## Short answer
+Reduce cost with fewer, smaller and cheaper calls and the right pricing model.
+
+## Key points
+- Model tiering; Intelligent Prompt Routing where suitable.
+- Prompt caching, response caching, batch inference for offline work.
+- Provisioned Throughput only for steady high load; distillation for narrow tasks.
+- Application inference profiles and tags for cost attribution.
+
+## CWD context
+Measure cost per request first; model routing is usually the biggest lever.
+`,code:``},{id:`024-how-do-you-monitor-bedrock-usage`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock usage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Bedrock usage?
+
+## Short answer
+Monitor Bedrock with CloudWatch metrics, invocation logging and cost attribution.
+
+## Key points
+- Metrics: invocations, input and output tokens, latency, throttles, errors.
+- Model invocation logging to S3 or CloudWatch Logs, with care for sensitive content.
+- Application inference profiles and tags for per-tenant or per-agent cost; custom metrics from response usage.
+- AWS Budgets and Cost Explorer alerts.
+
+## CWD context
+Tag every call so cost and quality can be sliced later.
+`,code:``},{id:`025-how-do-you-monitor-bedrock-latency`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Bedrock latency?
+
+## Short answer
+Monitor latency per stage, and separate time to first token from total time.
+
+## Key points
+- InvocationLatency metric plus application-side timing around streaming.
+- X-Ray spans for each model call; percentiles rather than averages.
+- Compare models and regions; consider latency-optimised inference where offered.
+- Alarms on p95 and on changes after a release.
+
+## CWD context
+A latency jump after a deployment usually points to a prompt or model change.
+`,code:``},{id:`026-how-do-you-implement-model-fallback`,category:`Amazon Bedrock`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement model fallback?
+
+## Short answer
+Implement fallback as an ordered chain from best quality to safest availability.
+
+## Key points
+- Primary model → cross-region inference profile or other region → smaller or alternate provider model → cached or degraded response.
+- The Converse API keeps calls uniform; a circuit breaker stops repeated failures.
+- Evaluate fallback models so their quality is known; log every fallback.
+
+## CWD context
+Prompts must work across the models in the chain.
+`,code:``},{id:`027-how-would-you-switch-from-one-bedrock-model-to-another`,category:`Amazon Bedrock`,title:`How would you switch from one Bedrock model to another?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you switch from one Bedrock model to another?
+
+## Short answer
+Switch models through configuration, evaluation and a gradual rollout.
+
+## Key points
+- Model IDs in AppConfig or Parameter Store; Converse API for a uniform interface.
+- Evaluate on the golden set and adjust prompts, since providers behave differently.
+- Canary by percentage or tenant; keep rollback ready.
+- Check quota and regional availability before cutover; watch model lifecycle and end-of-life dates.
+
+## CWD context
+Never change the model for all traffic at once.
+`,code:``},{id:`028-how-do-you-version-model-configurations`,category:`Amazon Bedrock`,title:`How do you version model configurations?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you version model configurations?
+
+## Short answer
+Version the whole model configuration as one immutable unit.
+
+## Key points
+- Model or inference-profile ARN, temperature, max tokens, system-prompt version, guardrail ID and version.
+- Store in AppConfig, Parameter Store or Git; Bedrock Prompt Management versions prompts; guardrail versions are immutable.
+- Stamp the config version on every trace.
+
+## CWD context
+This lets you reproduce exactly what produced a given answer.
+`,code:``},{id:`029-how-do-you-handle-model-specific-context-limits`,category:`Amazon Bedrock`,title:`How do you handle model-specific context limits?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle model-specific context limits?
+
+## Short answer
+Treat context limits as per-model configuration and enforce them before the call.
+
+## Key points
+- Store context window and maximum output per model.
+- Count tokens; summarise or truncate by priority; map-reduce for very long documents.
+- Choose a long-context model for large inputs; catch validation errors and fall back.
+
+## CWD context
+Switching models can silently change limits, so test them.
+`,code:``},{id:`030-how-would-you-evaluate-a-new-bedrock-model-before-production`,category:`Amazon Bedrock`,title:`How would you evaluate a new Bedrock model before production?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you evaluate a new Bedrock model before production?
+
+## Short answer
+Evaluate a new model on your data, with quality, safety, latency, cost and quota all measured.
+
+## Key points
+- Bedrock model evaluation (automatic, LLM-as-judge or human) or your own harness on the golden dataset.
+- RAG evaluation for groundedness and relevance; guardrail and red-team tests.
+- Shadow traffic, then canary; CI/CD gate; add the model to the approved allow-list only after passing.
+
+## CWD context
+The evaluation report is an artifact attached to the release approval.
+`,code:``}];function _m(){return(0,M.jsx)($,{data:gm,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var vm=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use API Gateway for CWD?
+
+## Short answer
+API Gateway centralises security and traffic control so the CWD backend stays simple.
+
+## Key points
+- Authentication, throttling, validation, WAF, logging and metrics in one managed layer.
+- Private integration to ECS; custom domains and stages.
+- Removes cross-cutting code from the application.
+
+## CWD context
+Clients never see backend addresses.
+`,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:`# REST API vs HTTP API—which would you choose?
+
+## Short answer
+HTTP APIs are cheaper and simpler; REST APIs are richer.
+
+## Key points
+- HTTP API: lower cost and latency, JWT authorisers, simple proxying; no direct WAF association.
+- REST API: usage plans and API keys, request validation models, WAF, caching, resource policies, private APIs.
+- Choose REST for external CWD needing WAF, usage plans and validation; HTTP for simple internal JWT proxying.
+
+## CWD context
+If using HTTP APIs externally, put CloudFront with WAF in front.
+`,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authenticate API Gateway requests?
+
+## Short answer
+Authenticate with a JWT or Cognito authoriser against your identity provider.
+
+## Key points
+- HTTP API JWT authoriser or REST Cognito authoriser validate signature, issuer, audience and expiry.
+- Lambda authoriser for custom logic; IAM (SigV4) for service-to-service; mutual TLS on custom domains.
+- API keys identify clients for usage plans but are not authentication.
+
+## CWD context
+Federate enterprise identity (for example Entra ID or Okta) through OIDC.
+`,code:``},{id:`034-how-do-you-authorize-users`,category:`API Gateway`,title:`How do you authorize users?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authorize users?
+
+## Short answer
+Authorise coarsely at the gateway and finely in CWD.
+
+## Key points
+- Scopes and claims in the JWT; Lambda authoriser returns a cached policy and context.
+- Customer-level and document-level entitlements are enforced in the backend and in OpenSearch filters.
+- Amazon Verified Permissions (Cedar) is an option for central policy.
+
+## CWD context
+Forward the validated identity to the backend as request context.
+`,code:``},{id:`035-how-do-you-implement-throttling`,category:`API Gateway`,title:`How do you implement throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement throttling?
+
+## Short answer
+Throttle at account, stage, method and usage-plan levels.
+
+## Key points
+- Account default is a steady rate plus burst per region; override per stage or method.
+- Usage plans give per-key rate, burst and quota (REST APIs); excess requests get 429.
+- Add WAF rate-based rules for abusive clients.
+
+## CWD context
+Gateway throttling protects the backend; token quotas protect Bedrock.
+`,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you protect APIs from abuse?
+
+## Short answer
+Protect APIs with layered controls.
+
+## Key points
+- AWS WAF managed rule groups, bot control, rate-based rules and geo rules.
+- Throttling and usage plans; request validation and size limits; authorisers.
+- CloudFront and Shield; resource policy IP allow-lists; monitor 4XX spikes.
+- Cap prompt length to control cost and abuse.
+
+## CWD context
+Assume the public endpoint is constantly probed.
+`,code:``},{id:`037-how-do-you-handle-api-gateway-timeout`,category:`API Gateway`,title:`How do you handle API Gateway timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle API Gateway timeout?
+
+## Short answer
+API Gateway integrations time out at roughly 29 seconds for REST APIs (limits can sometimes be raised) and about 30 seconds for HTTP APIs.
+
+## Key points
+- Design long agent runs asynchronously: return 202 with a job ID.
+- Process through SQS or Step Functions; client polls a status endpoint or receives a push.
+- Streaming options exist for token streaming; check current support.
+
+## CWD context
+Never let a long LLM workflow depend on a single synchronous API call.
+`,code:``},{id:`038-how-do-you-configure-request-validation`,category:`API Gateway`,title:`How do you configure request validation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you configure request validation?
+
+## Short answer
+Validate requests at the gateway before the backend runs.
+
+## Key points
+- REST API request validators and JSON Schema models for body, parameters and headers; 400 on failure.
+- Payload size limits; reject unknown fields.
+- Application-level schema validation (for example Pydantic) as a second layer.
+
+## CWD context
+Rejected requests cost almost nothing.
+`,code:``},{id:`039-how-do-you-version-cwd-apis`,category:`API Gateway`,title:`How do you version CWD APIs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you version CWD APIs?
+
+## Short answer
+Use stages for environments and path or header versions for API versions.
+
+## Key points
+- Stages (dev, prod) are environments, not API versions.
+- Version in the path (/v1) or a header; custom-domain base-path mappings.
+- Canary releases per stage; announce deprecations; keep backward compatibility.
+
+## CWD context
+The contract is public; treat changes with care.
+`,code:``},{id:`040-how-do-you-implement-api-gateway-logging`,category:`API Gateway`,title:`How do you implement API Gateway logging?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement API Gateway logging?
+
+## Short answer
+Enable structured access logging and be careful with execution logs.
+
+## Key points
+- Access logs in JSON to CloudWatch Logs: request ID, status, latency, integration latency, identity.
+- Execution logs at ERROR level in production, since data logging can leak sensitive content.
+- X-Ray tracing; log retention; Logs Insights queries.
+
+## CWD context
+Return the request ID to clients so support can find the trace.
+`,code:``},{id:`041-how-do-you-monitor-api-gateway`,category:`API Gateway`,title:`How do you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor API Gateway?
+
+## Short answer
+Monitor API Gateway with its CloudWatch metrics and alarms.
+
+## Key points
+- Count, 4XX, 5XX, Latency and IntegrationLatency (the gap shows gateway overhead).
+- Cache hit metrics; detailed per-method metrics.
+- Alarms on 5XX rate, p95 latency and throttling.
+
+## CWD context
+Compare Latency with IntegrationLatency to locate delay.
+`,code:``},{id:`042-how-do-you-handle-high-request-volume`,category:`API Gateway`,title:`How do you handle high request volume?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle high request volume?
+
+## Short answer
+Handle high volume with automatic gateway scaling plus protection of the backend.
+
+## Key points
+- Raise account quotas in advance; cache idempotent GET responses; CloudFront in front.
+- Throttle to protect backends; buffer with SQS for async work.
+- Scale ECS behind it; load test.
+
+## CWD context
+The gateway scales; the bottlenecks are usually Bedrock quota and backend capacity.
+`,code:``},{id:`043-how-would-you-integrate-api-gateway-with-lambda`,category:`API Gateway`,title:`How would you integrate API Gateway with Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate API Gateway with Lambda?
+
+## Short answer
+Integrate with Lambda through proxy integration and resource permissions.
+
+## Key points
+- Lambda proxy passes the request event and returns the response.
+- Grant invoke permission to API Gateway; use aliases for traffic shifting.
+- Synchronous payload limit and the 29-second timeout apply.
+
+## CWD context
+Use it for light endpoints such as auth hooks and status checks.
+`,code:``},{id:`044-how-would-you-integrate-api-gateway-with-ecs`,category:`API Gateway`,title:`How would you integrate API Gateway with ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate API Gateway with ECS?
+
+## Short answer
+Integrate with ECS privately through a VPC Link to an internal load balancer.
+
+## Key points
+- VPC Link connects API Gateway to a private ALB or NLB (or Cloud Map for HTTP APIs).
+- ECS tasks stay in private subnets with security groups allowing only the load balancer.
+- Health checks and TLS between layers.
+
+## CWD context
+The backend has no public IP.
+`,code:``},{id:`045-how-do-you-implement-waf-with-api-gateway`,category:`API Gateway`,title:`How do you implement WAF with API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement WAF with API Gateway?
+
+## Short answer
+Attach AWS WAF to REST API stages, or place WAF on CloudFront or an ALB in front of HTTP APIs.
+
+## Key points
+- Managed rule groups, known-bad-input and IP-reputation rules, rate-based rules, bot control.
+- WAF logs to S3, CloudWatch or Firehose.
+- Start in count mode, tune, then block.
+
+## CWD context
+Tune rules against real traffic to avoid blocking legitimate long prompts.
+`,code:``}];function ym(){return(0,M.jsx)($,{data:vm,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var bm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Lambda in CWD?
+
+## Short answer
+Lambda gives CWD serverless, event-driven compute for short, stateless tasks.
+
+## Key points
+- Scales automatically from zero and charges per use.
+- Good for authorisers, S3 and SQS event handlers, schedules and small adapters.
+- Minimal operations; native integration with EventBridge, SQS, S3 and Step Functions.
+
+## CWD context
+Use it as glue around the agent runtime, not as the runtime.
+`,code:``},{id:`047-which-cwd-components-would-you-deploy-as-lambda`,category:`Lambda`,title:`Which CWD components would you deploy as Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which CWD components would you deploy as Lambda?
+
+## Short answer
+Deploy short, event-triggered components as Lambda functions.
+
+## Key points
+- API Gateway authoriser and small status or health endpoints.
+- S3-triggered ingestion steps and EventBridge-scheduled maintenance such as reconciliation and cache warm-up.
+- SQS consumers for short Workers, webhook receivers, DLQ redrive and replay tools.
+- Task steps inside Step Functions workflows.
+
+## CWD context
+The Coordinator's agent loop does not run on Lambda.
+`,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Lambda vs ECS/Fargate?
+
+## Short answer
+Lambda is best for short, bursty, event-driven work; ECS Fargate is best for long-running or steady services.
+
+## Key points
+- Lambda: 15-minute limit, scale to zero, cold starts, pay per invocation.
+- Fargate: no duration limit, persistent connections, no cold start on running tasks, pay per running task.
+- Cost crossover: Lambda is cheaper when idle or spiky; Fargate is often cheaper at sustained load.
+
+## CWD context
+Choose per component, and it is normal to use both.
+`,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Lambda cold start?
+
+## Short answer
+A cold start is the extra latency when Lambda creates a new execution environment.
+
+## Key points
+- Lambda downloads the code, starts the runtime and runs your initialisation before the handler.
+- Happens on the first invocation and when scaling out; warm environments are reused.
+- Impact grows with large packages, heavy imports and VPC setup.
+
+## CWD context
+Cold starts matter on user-facing paths and hardly at all in background jobs.
+`,code:``},{id:`050-how-would-you-reduce-lambda-cold-start-latency`,category:`Lambda`,title:`How would you reduce Lambda cold-start latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Lambda cold-start latency?
+
+## Short answer
+Reduce cold starts by keeping environments warm and initialisation light.
+
+## Key points
+- Provisioned concurrency for critical functions; SnapStart where supported.
+- Small packages and layers; lazy or module-level initialisation of heavy clients.
+- ARM/Graviton runtimes; avoid heavy imports.
+- Keep cold-start-sensitive calls off the user path.
+
+## CWD context
+Warm capacity costs money, so apply it only where latency justifies it.
+`,code:``},{id:`051-how-does-lambda-concurrency-work`,category:`Lambda`,title:`How does Lambda concurrency work?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does Lambda concurrency work?
+
+## Short answer
+Lambda concurrency is the number of invocations running at the same time.
+
+## Key points
+- Concurrency ≈ requests per second × average duration.
+- Each concurrent request uses its own execution environment.
+- The account has a regional concurrency quota (default about 1,000, raisable) and a scaling-rate limit.
+
+## CWD context
+Estimate concurrency for peak load before launch.
+`,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Reserved vs provisioned concurrency?
+
+## Short answer
+Reserved concurrency guarantees and caps a function's share; provisioned concurrency keeps environments pre-initialised.
+
+## Key points
+- Reserved: no extra charge; protects critical functions and caps noisy ones and downstream systems.
+- Provisioned: extra cost; removes cold starts.
+- They can be combined.
+
+## CWD context
+Use reserved concurrency to protect Bedrock and MCP servers from Lambda fan-out.
+`,code:``},{id:`053-how-would-you-prevent-lambda-concurrency-exhaustion`,category:`Lambda`,title:`How would you prevent Lambda concurrency exhaustion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent Lambda concurrency exhaustion?
+
+## Short answer
+Prevent concurrency exhaustion with caps, queues and monitoring.
+
+## Key points
+- Reserved concurrency on critical functions; maximum concurrency on SQS event source mappings.
+- Buffer bursts in SQS; request quota increases early.
+- Alarms on ConcurrentExecutions and Throttles.
+
+## CWD context
+One runaway function should never starve the authoriser.
+`,code:``},{id:`054-how-do-you-handle-lambda-failures`,category:`Lambda`,title:`How do you handle Lambda failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Lambda failures?
+
+## Short answer
+Failure handling depends on how the function is invoked.
+
+## Key points
+- Synchronous: the error returns to the caller.
+- Asynchronous: automatic retries, then an on-failure destination or DLQ.
+- SQS trigger: the message reappears after the visibility timeout and moves to a DLQ after maxReceiveCount; use partial batch responses.
+- Step Functions adds Retry and Catch.
+
+## CWD context
+Alarm on Errors, Throttles and DLQ depth.
+`,code:``},{id:`055-how-do-you-retry-lambda-execution`,category:`Lambda`,title:`How do you retry Lambda execution?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you retry Lambda execution?
+
+## Short answer
+Configure retries deliberately for each invocation type.
+
+## Key points
+- Asynchronous: set maximum retry attempts and maximum event age.
+- SQS: retries come from the visibility timeout and redrive policy.
+- Step Functions: Retry with backoff and Catch.
+- Retry only transient errors; keep handlers idempotent.
+
+## CWD context
+Do not stack retries at several layers.
+`,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you make Lambda execution idempotent?
+
+## Short answer
+Make Lambda idempotent with a stored idempotency key and a conditional write.
+
+## Key points
+- DynamoDB conditional put (attribute_not_exists) keyed by request or message ID, with TTL.
+- Powertools for AWS Lambda provides an idempotency utility.
+- Pass idempotency tokens or use upserts downstream.
+
+## CWD context
+Assume every event can be delivered more than once.
+`,code:``},{id:`057-how-do-you-monitor-lambda`,category:`Lambda`,title:`How do you monitor Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Lambda?
+
+## Short answer
+Monitor Lambda with CloudWatch metrics, structured logs and tracing.
+
+## Key points
+- Invocations, Errors, Throttles, Duration, ConcurrentExecutions, async event age, iterator age.
+- Structured JSON logs; Lambda Insights; X-Ray or OpenTelemetry.
+- Alarms on errors, throttles and duration; Powertools for metrics.
+
+## CWD context
+Track p95 duration against the function timeout.
+`,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you manage Lambda environment variables?
+
+## Short answer
+Use environment variables for non-secret configuration, managed per environment through IaC.
+
+## Key points
+- Encrypted at rest with KMS; size-limited.
+- Dynamic or feature-flag configuration belongs in AppConfig or Parameter Store.
+- Do not put secrets in plain environment variables.
+
+## CWD context
+Aliases and separate accounts keep environments apart.
+`,code:``},{id:`059-how-do-you-securely-access-secrets-from-lambda`,category:`Lambda`,title:`How do you securely access secrets from Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you securely access secrets from Lambda?
+
+## Short answer
+Fetch secrets from Secrets Manager at runtime, with a scoped role and caching.
+
+## Key points
+- Execution role allows GetSecretValue on the specific secret and kms:Decrypt.
+- Use the SDK with caching or the Parameters and Secrets Lambda Extension.
+- Reach Secrets Manager through a VPC endpoint when the function is in a VPC.
+- Never log secret values.
+
+## CWD context
+Cache at initialisation to reduce latency and cost.
+`,code:``},{id:`060-what-are-lambdas-limitations-for-agentic-workloads`,category:`Lambda`,title:`What are Lambda's limitations for agentic workloads?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are Lambda's limitations for agentic workloads?
+
+## Short answer
+Lambda's limits make it a poor host for long-running agent loops.
+
+## Key points
+- 15-minute maximum duration; synchronous API Gateway calls end at about 29 seconds.
+- Stateless: state must live in DynamoDB or Redis.
+- Payload limits (about 6 MB synchronous), no GPU, cold starts and concurrency limits.
+- Cost is higher at sustained high load.
+
+## CWD context
+Use Fargate for the agent runtime and Step Functions for long workflows.
+`,code:``}];function xm(){return(0,M.jsx)($,{data:bm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Sm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you deploy CWD on ECS/Fargate?
+
+## Short answer
+ECS Fargate runs containers without managing servers, with per-task IAM and networking.
+
+## Key points
+- Task roles, awsvpc networking with security groups per task.
+- ALB integration, Service Auto Scaling, CodeDeploy blue-green.
+- Secrets injected from Secrets Manager; logs to CloudWatch.
+
+## CWD context
+A natural fit for FastAPI, LangGraph and MCP servers.
+`,code:``},{id:`062-ecs-vs-lambda-for-workers`,category:`ECS / Fargate / EKS`,title:`ECS vs Lambda for Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# ECS vs Lambda for Workers?
+
+## Short answer
+Use ECS for Workers that are long, variable, dependency-heavy or steady; use Lambda for short, simple, spiky tasks.
+
+## Key points
+- ECS: no 15-minute limit, persistent connections, larger images.
+- Lambda: fast to build, scale to zero, but limited duration and concurrency control.
+- Scale ECS Workers on queue backlog per task.
+
+## CWD context
+Decide per Worker type, not for all Workers.
+`,code:``},{id:`063-ecs-vs-eks`,category:`ECS / Fargate / EKS`,title:`ECS vs EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# ECS vs EKS?
+
+## Short answer
+ECS is simpler and AWS-native; EKS gives the full Kubernetes ecosystem.
+
+## Key points
+- ECS: less operational overhead, tight AWS integration.
+- EKS: Kubernetes APIs, Helm and operators, portability; control-plane cost and upgrade work.
+
+## CWD context
+Default to ECS; choose EKS for a specific requirement.
+`,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize the Coordinator?
+
+## Short answer
+Containerise the Coordinator as a stateless FastAPI and LangGraph service.
+
+## Key points
+- Slim, non-root image with pinned dependencies; health endpoint; graceful SIGTERM.
+- Checkpoints in DynamoDB so any task can resume a run.
+- ECS service with two or more tasks across AZs behind a private ALB.
+- Task role limited to approved Bedrock models, its DynamoDB table and its queues.
+
+## CWD context
+Statelessness is what makes scaling and restarts safe.
+`,code:``},{id:`065-how-would-you-containerize-delegators`,category:`ECS / Fargate / EKS`,title:`How would you containerize Delegators?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize Delegators?
+
+## Short answer
+Run each Delegator as its own ECS service, per domain.
+
+## Key points
+- Own task role with least privilege; internal load balancer or Service Connect.
+- Registered in the Agent Registry with capabilities and endpoint.
+- Scale on requests or CPU.
+
+## CWD context
+A fault in one domain must not stop the others.
+`,code:``},{id:`066-how-would-you-containerize-workers`,category:`ECS / Fargate / EKS`,title:`How would you containerize Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize Workers?
+
+## Short answer
+Run Workers as ECS services that consume SQS queues, or as tasks started by Step Functions.
+
+## Key points
+- One queue and service per Worker type; scale on backlog per task.
+- Own task role; Fargate Spot for non-critical work.
+- Idempotent handlers and graceful shutdown so in-flight messages return to the queue.
+
+## CWD context
+Workers call MCP servers rather than embedding system integrations.
+`,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does ECS service auto scaling work?
+
+## Short answer
+ECS Service Auto Scaling uses Application Auto Scaling policies on metrics.
+
+## Key points
+- Target tracking on CPU, memory or ALB requests per target.
+- Custom metric such as SQS backlog per running task.
+- Set minimum and maximum capacity, cooldowns and scale-in protection.
+
+## CWD context
+Scale Workers on backlog, the API on request count.
+`,code:``},{id:`068-how-do-you-implement-health-checks`,category:`ECS / Fargate / EKS`,title:`How do you implement health checks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement health checks?
+
+## Short answer
+Combine load balancer and container health checks, with a startup grace period.
+
+## Key points
+- ALB target-group health checks on a shallow /health endpoint.
+- Container health check command in the task definition.
+- healthCheckGracePeriodSeconds for slow start; keep dependency checks shallow.
+
+## CWD context
+Deep dependency checks in health endpoints can cause cascading restarts.
+`,code:``},{id:`069-how-do-you-perform-zero-downtime-deployment`,category:`ECS / Fargate / EKS`,title:`How do you perform zero-downtime deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you perform zero-downtime deployment?
+
+## Short answer
+Achieve zero downtime with rolling or blue-green deployments and connection draining.
+
+## Key points
+- Rolling: minimum healthy 100 percent, maximum 200 percent; deployment circuit breaker with automatic rollback.
+- Blue-green through CodeDeploy with a test listener and traffic shifting.
+- Deregistration delay and SIGTERM handling; backward-compatible schema changes.
+
+## CWD context
+In-flight workflows resume from checkpoints.
+`,code:``},{id:`070-how-do-you-handle-container-failures`,category:`ECS / Fargate / EKS`,title:`How do you handle container failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle container failures?
+
+## Short answer
+ECS replaces failed tasks automatically, so design for tasks disappearing at any time.
+
+## Key points
+- Tasks spread across AZs; the scheduler maintains the desired count.
+- In-flight SQS messages return after the visibility timeout; state is checkpointed.
+- Alarms on running task count and stopped-task reasons (for example out-of-memory exits).
+
+## CWD context
+Investigate crash loops; do not just let them restart.
+`,code:``},{id:`071-how-do-you-distribute-traffic-across-containers`,category:`ECS / Fargate / EKS`,title:`How do you distribute traffic across containers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you distribute traffic across containers?
+
+## Short answer
+Distribute traffic with an Application Load Balancer across AZs.
+
+## Key points
+- Path- and host-based routing, weighted target groups, connection draining.
+- Cross-zone balancing; NLB for TCP needs.
+- Service-to-service traffic through Service Connect or an internal ALB.
+
+## CWD context
+Keep external and internal load balancers separate.
+`,code:``},{id:`072-how-would-you-implement-service-discovery`,category:`ECS / Fargate / EKS`,title:`How would you implement service discovery?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement service discovery?
+
+## Short answer
+Use ECS Service Connect or Cloud Map for network discovery, and the Agent Registry for capability discovery.
+
+## Key points
+- Service Connect gives short service names, client-side load balancing and metrics.
+- Cloud Map provides DNS-based discovery.
+- The registry answers "which agent can do this and where is it".
+
+## CWD context
+Never hard-code Delegator endpoints.
+`,code:``},{id:`073-how-would-you-configure-ecs-networking`,category:`ECS / Fargate / EKS`,title:`How would you configure ECS networking?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you configure ECS networking?
+
+## Short answer
+Run tasks in awsvpc mode in private subnets with security groups and endpoints.
+
+## Key points
+- One ENI and security group per task; subnets across AZs; no public IPs.
+- VPC endpoints for ECR, S3, CloudWatch Logs, Secrets Manager, STS and Bedrock; NAT only for what needs the internet.
+- Security group rules only from the load balancer and to required endpoints.
+
+## CWD context
+Endpoints reduce NAT cost and keep traffic private.
+`,code:``},{id:`074-how-would-you-secure-ecs-tasks`,category:`ECS / Fargate / EKS`,title:`How would you secure ECS tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure ECS tasks?
+
+## Short answer
+Secure ECS tasks with separate roles, hardened images and restricted access.
+
+## Key points
+- Task role (application permissions) separate from execution role (pull image, read secrets, write logs).
+- Secrets injected from Secrets Manager; read-only root filesystem, non-root user.
+- Image scanning (ECR, Inspector), immutable tags, GuardDuty runtime monitoring.
+- Restrict and audit ECS Exec.
+
+## CWD context
+Least privilege applies per Worker type.
+`,code:``},{id:`075-when-would-you-move-from-ecs-to-eks`,category:`ECS / Fargate / EKS`,title:`When would you move from ECS to EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you move from ECS to EKS?
+
+## Short answer
+Move from ECS to EKS only when a concrete requirement demands it.
+
+## Key points
+- Need for Kubernetes tooling, operators or service mesh.
+- Multi-cloud portability, complex scheduling or GPU pools.
+- Organisation standard on Kubernetes, with a team able to run it.
+
+## CWD context
+Simplicity is a feature; do not migrate for fashion.
+`,code:``}];function Cm(){return(0,M.jsx)($,{data:Sm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var wm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS in CWD?
+
+## Short answer
+Use SQS between components wherever work is slow, bursty or needs retries.
+
+## Key points
+- Delegator to Worker job queues and reply queues.
+- Ingestion tasks, audit events, retry buffers.
+- A rate-limited buffer in front of Bedrock or MCP servers.
+
+## CWD context
+Every queue has a DLQ and an owner.
+`,code:``},{id:`077-why-sqs-instead-of-synchronous-api-calls`,category:`SQS & Asynchronous Processing`,title:`Why SQS instead of synchronous API calls?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why SQS instead of synchronous API calls?
+
+## Short answer
+SQS decouples producers from consumers, absorbing spikes and surviving failures.
+
+## Key points
+- Durable buffering; retries; independent scaling.
+- Avoids the API Gateway timeout for long work.
+- Trade-offs: extra latency, eventual consistency and the need to track job status.
+
+## CWD context
+Use it for long or side-effecting work, not short reads.
+`,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Standard queue vs FIFO queue?
+
+## Short answer
+Standard queues favour throughput; FIFO queues favour ordering and deduplication.
+
+## Key points
+- Standard: very high throughput, at-least-once, best-effort ordering.
+- FIFO: ordering per message group, deduplication within a window, lower throughput.
+
+## CWD context
+Default to standard with idempotent consumers; use FIFO only for per-entity ordering.
+`,code:``},{id:`079-how-would-you-process-worker-jobs-asynchronously`,category:`SQS & Asynchronous Processing`,title:`How would you process Worker jobs asynchronously?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you process Worker jobs asynchronously?
+
+## Short answer
+Process Worker jobs asynchronously with a job message, a result store and a completion signal.
+
+## Key points
+- Delegator sends a message with correlation ID, idempotency key, tenant and a payload pointer; the API returns 202 and a job ID.
+- Worker long-polls, runs the task through MCP, stores the result and signals completion.
+- The LangGraph run resumes from its checkpoint; failures go to the DLQ.
+
+## CWD context
+Put large payloads in S3 and send the reference.
+`,code:``},{id:`080-how-do-you-handle-message-duplication`,category:`SQS & Asynchronous Processing`,title:`How do you handle message duplication?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle message duplication?
+
+## Short answer
+Standard SQS delivers at least once, so duplicates can occur.
+
+## Key points
+- Causes: retries, and visibility timeout expiring before processing finishes.
+- FIFO deduplication IDs help within a window.
+- Always make consumers idempotent.
+
+## CWD context
+Broker features reduce duplicates; only idempotency removes their effect.
+`,code:``},{id:`081-how-do-you-implement-idempotency`,category:`SQS & Asynchronous Processing`,title:`How do you implement idempotency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement idempotency?
+
+## Short answer
+Implement idempotency by recording the operation ID before the side effect.
+
+## Key points
+- DynamoDB conditional put keyed by message or business operation ID, with TTL.
+- Powertools idempotency utility; downstream idempotency tokens or upserts.
+- Mark complete after success.
+
+## CWD context
+Critical for write tools such as creating tickets.
+`,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a visibility timeout?
+
+## Short answer
+The visibility timeout hides a received message from other consumers for a period.
+
+## Key points
+- If the message is not deleted before the timeout ends, it becomes visible again and is redelivered.
+- Default 30 seconds, maximum 12 hours.
+
+## CWD context
+It is a lease on the message, not a delivery guarantee.
+`,code:``},{id:`083-how-do-you-configure-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`How do you configure visibility timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you configure visibility timeout?
+
+## Short answer
+Set the visibility timeout above the maximum processing time, and extend it for long jobs.
+
+## Key points
+- For Lambda consumers use several times the function timeout.
+- Use ChangeMessageVisibility as a heartbeat for long tasks.
+- Too short causes duplicates; too long slows recovery after a crash.
+
+## CWD context
+Measure real processing times before choosing.
+`,code:``},{id:`084-what-happens-when-message-processing-fails`,category:`SQS & Asynchronous Processing`,title:`What happens when message processing fails?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What happens when message processing fails?
+
+## Short answer
+A failed message is not deleted, so it reappears and is retried until it reaches the DLQ.
+
+## Key points
+- The redrive policy moves it to the DLQ after maxReceiveCount.
+- Use partial batch failure responses to avoid retrying successes.
+- Increase the timeout on each failure for backoff; alert on DLQ growth.
+
+## CWD context
+Distinguish transient from permanent failures.
+`,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Dead Letter Queue?
+
+## Short answer
+A dead-letter queue collects messages that repeatedly fail processing.
+
+## Key points
+- Configured through a redrive policy with maxReceiveCount.
+- Set retention longer than the source queue; FIFO needs a FIFO DLQ.
+- Alarm when visible messages exceed zero; investigate, then redrive.
+
+## CWD context
+A DLQ with no owner is hidden data loss.
+`,code:``},{id:`086-how-would-you-replay-failed-cwd-requests`,category:`SQS & Asynchronous Processing`,title:`How would you replay failed CWD requests?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you replay failed CWD requests?
+
+## Short answer
+Replay failed requests by redriving from the DLQ after fixing the cause.
+
+## Key points
+- SQS DLQ redrive moves messages back to the source queue.
+- Rate-limit the redrive; handlers must be idempotent.
+- Keep original IDs and attempt counts; archive requests older than DLQ retention.
+
+## CWD context
+Replay should be a controlled, audited action.
+`,code:``},{id:`087-how-do-you-monitor-queue-depth`,category:`SQS & Asynchronous Processing`,title:`How do you monitor queue depth?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor queue depth?
+
+## Short answer
+Monitor queue depth and message age, not just counts.
+
+## Key points
+- Visible and in-flight messages, age of the oldest message, messages sent and deleted.
+- DLQ visible messages above zero should alarm.
+- Backlog per task drives auto scaling.
+
+## CWD context
+Oldest-message age is the best SLO signal.
+`,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is backpressure?
+
+## Short answer
+Backpressure is slowing producers or consumption when downstream systems cannot keep up.
+
+## Key points
+- SQS buffers naturally; add consumer concurrency limits.
+- Queue-depth-based admission control (429 or "accepted, wait" responses).
+- Per-tenant limits, rate limits toward Bedrock and MCP, shedding low-priority work.
+
+## CWD context
+Without backpressure a buffer just delays the overload.
+`,code:``},{id:`089-how-does-sqs-help-cwd-scalability`,category:`SQS & Asynchronous Processing`,title:`How does SQS help CWD scalability?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does SQS help CWD scalability?
+
+## Short answer
+SQS helps scalability by decoupling and smoothing load.
+
+## Key points
+- Near-unlimited standard-queue throughput; multi-AZ durability.
+- Consumers scale independently on backlog.
+- Per-tenant queues or message groups protect fairness.
+
+## CWD context
+Producers are not blocked by slow consumers.
+`,code:``},{id:`090-how-would-you-handle-a-sudden-100x-traffic-spike`,category:`SQS & Asynchronous Processing`,title:`How would you handle a sudden 100× traffic spike?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle a sudden 100× traffic spike?
+
+## Short answer
+Survive a 100× spike by absorbing, scaling, protecting and degrading gracefully.
+
+## Key points
+- Absorb: WAF and API throttling, then the async pattern with SQS as a buffer.
+- Scale: consumers on backlog; DynamoDB on-demand; OpenSearch OCUs; request quota increases in advance.
+- Protect Bedrock: cross-region inference, token budgets per tenant, smaller model or cache fallback.
+- Pre-scale for known events; shed non-critical work; load test.
+
+## CWD context
+Say which limit breaks first (usually Bedrock quota) and how you would handle it.
+`,code:``}];function Tm(){return(0,M.jsx)($,{data:wm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Em=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use AWS Step Functions in CWD?
+
+## Short answer
+Step Functions gives durable, visual, code-light orchestration for multi-step workflows across AWS services.
+
+## Key points
+- Built-in retry, catch, timeout, parallel and Map states.
+- Direct service integrations reduce glue Lambdas; long waits cost no compute.
+- Execution history supports audit and debugging.
+
+## CWD context
+Use it for ingestion pipelines, Worker fan-out and human-approval flows.
+`,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions Standard vs Express?
+
+## Short answer
+Standard workflows are long-running and fully auditable; Express workflows are short and high-volume.
+
+## Key points
+- Standard: up to a year, exactly-once execution, full history, task-token callbacks, billed per state transition.
+- Express: up to five minutes, at-least-once (async) or at-most-once (sync), very high rate, billed by requests and duration.
+
+## CWD context
+Standard for CWD business workflows; Express for high-volume short transformations.
+`,code:``},{id:`093-how-would-you-model-worker-dependencies-using-step-functions`,category:`Step Functions`,title:`How would you model Worker dependencies using Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you model Worker dependencies using Step Functions?
+
+## Short answer
+Model dependencies as sequential Task states, Choice branches and Parallel or Map fan-out.
+
+## Key points
+- Independent Workers in Parallel branches; dynamic lists with Map.
+- Data passes through state input and output; large results go to S3 or DynamoDB because of payload limits.
+
+## CWD context
+The state machine expresses the dependency graph, not the Worker logic.
+`,code:``},{id:`094-how-would-you-execute-workers-in-parallel`,category:`Step Functions`,title:`How would you execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you execute Workers in parallel?
+
+## Short answer
+Run Workers in parallel with a Parallel state (fixed branches) or a Map state (dynamic items).
+
+## Key points
+- Each branch calls SQS, Lambda or ECS; the state waits for all branches.
+- MaxConcurrency limits load; Distributed Map handles very large fan-outs.
+- ToleratedFailure supports partial success.
+
+## CWD context
+Cap concurrency so downstream MCP servers and Bedrock are not overwhelmed.
+`,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle Worker failure?
+
+## Short answer
+Handle Worker failure with Retry for transient errors and Catch for fallback paths.
+
+## Key points
+- Retry with backoff and jitter; Catch routes to compensation, notification or partial-result states.
+- Preserve the original input in the error path.
+- Alarm on failed executions.
+
+## CWD context
+Decide which failures abort the whole workflow and which allow partial completion.
+`,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement retry and catch?
+
+## Short answer
+Configure Retry and Catch per state, with specific error names.
+
+## Key points
+- Retry transient errors (service exceptions, throttling, timeouts) with interval, backoff rate, maximum attempts and jitter.
+- Do not retry permanent errors; place States.ALL last.
+- Catch with ResultPath so the input and error both reach the handler.
+
+## CWD context
+Retries and Catch make failure handling visible in the workflow definition.
+`,code:``},{id:`097-how-would-you-implement-timeout`,category:`Step Functions`,title:`How would you implement timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement timeout?
+
+## Short answer
+Set TimeoutSeconds on tasks and the execution, plus heartbeats for long tasks.
+
+## Key points
+- A timeout raises States.Timeout, which Retry or Catch can handle.
+- HeartbeatSeconds detects stalled long-running tasks.
+- Choose values from measured durations.
+
+## CWD context
+No task should be able to hang a workflow forever.
+`,code:``},{id:`098-how-would-you-resume-a-workflow`,category:`Step Functions`,title:`How would you resume a workflow?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you resume a workflow?
+
+## Short answer
+Resume by using Standard workflow durability and redrive.
+
+## Key points
+- Redrive restarts a failed execution from the failed state, reusing successful steps.
+- Callback tasks resume when SendTaskSuccess arrives with the task token.
+- Otherwise start a new execution using an idempotency key and stored progress.
+
+## CWD context
+Redrive works only within its time limit, so operate promptly.
+`,code:``},{id:`099-how-would-you-handle-long-running-workflows`,category:`Step Functions`,title:`How would you handle long-running workflows?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle long-running workflows?
+
+## Short answer
+Standard workflows can run for up to a year and wait without cost.
+
+## Key points
+- Wait states and waitForTaskToken for human approvals and external systems.
+- Heartbeats for stall detection; do not hold Lambdas open while waiting.
+- Cost depends on state transitions, not duration.
+
+## CWD context
+Use callbacks instead of polling loops.
+`,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs SQS?
+
+## Short answer
+Step Functions orchestrates a multi-step flow; SQS buffers messages between two components.
+
+## Key points
+- Step Functions: state, branching, retries, visibility.
+- SQS: decoupling, buffering, load levelling.
+- Combine them: Step Functions sends a message and waits for a task-token callback.
+
+## CWD context
+They solve different problems and work well together.
+`,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs Lambda orchestration?
+
+## Short answer
+Step Functions is better than Lambda calling Lambda for orchestration.
+
+## Key points
+- Lambda orchestration couples functions, hits the 15-minute limit and pays for waiting.
+- Step Functions manages state, retries and waits and gives a visual trace.
+- Keep Lambdas for business logic only.
+
+## CWD context
+Avoid custom retry and state code in functions.
+`,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs application-level orchestration?
+
+## Short answer
+Application-level orchestration (LangGraph) is flexible for agent reasoning; Step Functions is durable for deterministic workflows.
+
+## Key points
+- LangGraph: dynamic LLM-driven loops, in-code state.
+- Step Functions: declarative, auditable, long waits, per-transition cost.
+- Hybrid: a LangGraph node starts a Step Functions workflow for long jobs.
+
+## CWD context
+Do not force dynamic agent loops into a state machine.
+`,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you visualize workflow execution?
+
+## Short answer
+Visualise executions in the Step Functions console and correlate with traces.
+
+## Key points
+- Graph view with per-state status and input and output.
+- Workflow Studio for design; X-Ray service map.
+- Add correlation IDs to logs to link with the rest of CWD.
+
+## CWD context
+The execution graph is useful for support and audits.
+`,code:``},{id:`104-how-would-you-monitor-step-functions`,category:`Step Functions`,title:`How would you monitor Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Step Functions?
+
+## Short answer
+Monitor Step Functions with metrics, logs, traces and event notifications.
+
+## Key points
+- Executions started, succeeded, failed, timed out, throttled; execution time.
+- Logging at error level to CloudWatch Logs (required for Express); X-Ray.
+- Alarms on failures, timeouts and throttling; EventBridge on status changes.
+
+## CWD context
+Alert on stuck executions as well as failed ones.
+`,code:``},{id:`105-how-would-you-control-step-functions-cost`,category:`Step Functions`,title:`How would you control Step Functions cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you control Step Functions cost?
+
+## Short answer
+Control cost by reducing state transitions and choosing the right workflow type.
+
+## Key points
+- Combine steps; avoid polling loops by using callbacks and synchronous service integrations.
+- Express for high-volume short workflows; log at error level, not all.
+- Distributed Map only when the volume needs it; limit payloads.
+
+## CWD context
+Set budgets and alerts on Step Functions spend.
+`,code:``}];function Dm(){return(0,M.jsx)($,{data:Em,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var Om=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use DynamoDB for CWD state?
+
+## Short answer
+DynamoDB offers serverless, low-latency, key-based storage that fits CWD's operational state.
+
+## Key points
+- Single-digit millisecond access at any scale; multi-AZ durability.
+- Conditional writes, TTL, streams, global tables and point-in-time recovery.
+- Fine-grained IAM access control.
+
+## CWD context
+A natural store for session state, checkpoints and idempotency keys.
+`,code:``},{id:`107-what-cwd-data-would-you-store-in-dynamodb`,category:`DynamoDB`,title:`What CWD data would you store in DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What CWD data would you store in DynamoDB?
+
+## Short answer
+Store durable, key-addressed operational data in DynamoDB.
+
+## Key points
+- Sessions, turns, steps, workflow state and checkpoints, run records.
+- Agent and prompt registries, idempotency keys, quotas and counters, tenant configuration, audit metadata.
+- Not large blobs (400 KB item limit; use S3), vectors or analytics.
+
+## CWD context
+Keep items small and store big payloads in S3 with pointers.
+`,code:``},{id:`108-how-would-you-design-the-dynamodb-partition-key`,category:`DynamoDB`,title:`How would you design the DynamoDB partition key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the DynamoDB partition key?
+
+## Short answer
+Choose a high-cardinality partition key that spreads load and matches your access pattern.
+
+## Key points
+- Example: SESSION#{sessionId}, optionally prefixed by tenant.
+- Avoid a tenant-only key for large tenants.
+- Use write sharding for unavoidable hot keys.
+
+## CWD context
+Design from the queries backwards.
+`,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the sort key?
+
+## Short answer
+Use the sort key to group related items and support range queries.
+
+## Key points
+- Example: RUN#{runId}#STEP#{sequence}, TURN#…, CKPT#…, META.
+- Zero-padded sequences or ISO timestamps keep ordering; begins_with queries fetch a subset.
+- GSIs provide alternate access such as tenant plus status or correlation ID.
+
+## CWD context
+One Query call can fetch a whole session.
+`,code:``},{id:`110-how-would-you-store-session-task-run-information`,category:`DynamoDB`,title:`How would you store session/task/run information?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you store session/task/run information?
+
+## Short answer
+Model a session and its runs, turns and steps as items in one item collection.
+
+## Key points
+- PK = SESSION#id; SK = META, RUN#r, RUN#r#TURN#t, RUN#r#STEP#n, CKPT#…
+- Attributes: status, version, updatedAt, ttl; pointers to S3 for large payloads.
+- GSI on tenant and updatedAt for listing.
+
+## CWD context
+Add TTL on ephemeral items to control storage.
+`,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent hot partitions?
+
+## Short answer
+Prevent hot partitions with good key design, and detect them early.
+
+## Key points
+- High-cardinality keys, write-sharding suffixes, no monotonic time-based partition keys.
+- Adaptive capacity helps but has per-partition limits.
+- Cache hot reads (DAX or Redis); use Contributor Insights and throttling metrics.
+
+## CWD context
+One huge tenant is the classic hot-key trap.
+`,code:``},{id:`112-how-does-dynamodb-scale`,category:`DynamoDB`,title:`How does DynamoDB scale?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does DynamoDB scale?
+
+## Short answer
+DynamoDB scales horizontally by splitting partitions automatically.
+
+## Key points
+- On-demand mode absorbs spikes; provisioned mode uses auto scaling.
+- Global tables replicate across regions.
+- Practical scale depends on key distribution.
+
+## CWD context
+For known extreme spikes, pre-warm capacity or plan ahead.
+`,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:`# On-demand vs provisioned capacity?
+
+## Short answer
+On-demand suits spiky or unknown traffic; provisioned suits steady, predictable traffic.
+
+## Key points
+- On-demand: pay per request, no capacity planning.
+- Provisioned: cheaper at steady load with auto scaling and reserved capacity.
+- Mode switching is limited in frequency.
+
+## CWD context
+Start on-demand, then move stable tables to provisioned.
+`,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement TTL?
+
+## Short answer
+TTL expires items automatically, without consuming write capacity.
+
+## Key points
+- Store an expiry timestamp in epoch seconds on a designated attribute.
+- Deletion is background and not instant, so filter expired items in queries.
+- Use for idempotency keys, old checkpoints and sessions; streams show TTL deletions.
+
+## CWD context
+Align TTL with retention and privacy commitments.
+`,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle concurrent updates?
+
+## Short answer
+Handle concurrent updates with conditional writes and optimistic locking.
+
+## Key points
+- Version attribute with a condition that it equals the expected value.
+- Atomic counters through update expressions; transactions for multi-item atomicity.
+- On conflict, re-read and retry.
+
+## CWD context
+Needed when several Workers update the same run.
+`,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are conditional writes?
+
+## Short answer
+A conditional write succeeds only if a condition on the existing item is true.
+
+## Key points
+- ConditionExpression such as attribute_not_exists(pk) or a version or status check.
+- Failure returns ConditionalCheckFailedException.
+- Enables idempotency, locks and safe state transitions without extra reads.
+
+## CWD context
+The building block for exactly-once effects.
+`,code:``},{id:`117-how-would-you-implement-idempotency-using-dynamodb`,category:`DynamoDB`,title:`How would you implement idempotency using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement idempotency using DynamoDB?
+
+## Short answer
+Implement idempotency with a conditional put keyed by the operation ID.
+
+## Key points
+- attribute_not_exists on the key so the first writer wins.
+- Store in-progress or completed status, the result and a TTL; duplicates return the stored result.
+- Handle expired in-progress locks; Powertools uses this pattern.
+
+## CWD context
+Use it for all write tools.
+`,code:``},{id:`118-how-would-you-recover-from-a-failed-workflow-using-dynamodb`,category:`DynamoDB`,title:`How would you recover from a failed workflow using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you recover from a failed workflow using DynamoDB?
+
+## Short answer
+Recover a failed workflow from its last checkpoint stored in DynamoDB.
+
+## Key points
+- Find failed runs through a status GSI or DynamoDB Streams.
+- Load the last checkpoint and resume; increment an attempt counter with a condition.
+- Side effects must be idempotent; mark permanently failed after N attempts.
+
+## CWD context
+Route unrecoverable runs to a human queue.
+`,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs RDS?
+
+## Short answer
+DynamoDB suits key-based operational state; RDS or Aurora suits relational data and ad-hoc queries.
+
+## Key points
+- DynamoDB: massive scale, serverless, flexible schema, limited query flexibility.
+- RDS: joins, SQL, cross-table transactions, reporting.
+
+## CWD context
+Runtime state in DynamoDB; analytics in Athena, Redshift or Aurora.
+`,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs ElastiCache?
+
+## Short answer
+DynamoDB is a durable system of record; ElastiCache is a fast, volatile cache.
+
+## Key points
+- DynamoDB: durable, queryable, millisecond latency (DAX for microseconds).
+- ElastiCache: in-memory, sub-millisecond, cache and counters.
+- MemoryDB is a durable in-memory alternative.
+
+## CWD context
+Use both: DynamoDB for truth, ElastiCache for speed.
+`,code:``}];function km(){return(0,M.jsx)($,{data:Om,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var Am=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What would you store in S3?
+
+## Short answer
+Store documents, artifacts and payloads that are too large or too durable for other stores.
+
+## Key points
+- Raw and curated documents, extracted text and chunks.
+- Model artifacts, evaluation and golden datasets, Bedrock batch input and output, Glue outputs.
+- Log archives and large payload references.
+
+## CWD context
+S3 is the source of truth for documents.
+`,code:``},{id:`122-how-would-you-design-the-cwd-document-ingestion-pipeline`,category:`S3`,title:`How would you design the CWD document ingestion pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the CWD document ingestion pipeline?
+
+## Short answer
+The ingestion pipeline is event-driven: land, validate, extract, chunk, embed, index and record.
+
+## Key points
+- Sources land in a raw S3 prefix; an S3 event through EventBridge starts a Step Functions workflow.
+- Extract text (Textract for scans and tables), chunk, add metadata and ACLs, embed with Bedrock, bulk upsert into OpenSearch.
+- Record status in a DynamoDB manifest; failures go to a DLQ; Glue handles large batches.
+
+## CWD context
+Every step is idempotent so reruns are safe.
+`,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure S3?
+
+## Short answer
+Secure S3 with layered controls.
+
+## Key points
+- Block Public Access, TLS-only and VPC-endpoint conditions in bucket policies.
+- Least-privilege IAM, SSE-KMS, versioning and Object Lock for critical data.
+- CloudTrail data events, Macie for sensitive data discovery, access points.
+
+## CWD context
+Assume misconfiguration is the main risk and automate detection.
+`,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement bucket policies?
+
+## Short answer
+Bucket policies are resource-based rules that define who may access a bucket and under which conditions.
+
+## Key points
+- Deny requests that are not over TLS; restrict to a VPC endpoint or organisation.
+- Allow specific roles and prefixes; require encryption headers or a specific KMS key.
+- Explicit deny overrides allow; validate with IAM Access Analyzer.
+
+## CWD context
+Keep policies in IaC and review them.
+`,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent public access?
+
+## Short answer
+Prevent public access with account-level and bucket-level controls plus detection.
+
+## Key points
+- S3 Block Public Access on all four settings; disable ACLs with bucket-owner-enforced ownership.
+- SCP to prevent disabling it; Access Analyzer and Config rules for detection.
+- Serve public content only through CloudFront with origin access control.
+
+## CWD context
+Enforce at the account level so one bucket cannot opt out.
+`,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is S3 versioning?
+
+## Short answer
+S3 versioning keeps every version of an object, protecting against overwrites and deletes.
+
+## Key points
+- Deletes create delete markers; older versions can be restored.
+- Lifecycle rules expire non-current versions to control cost.
+- Required for cross-region replication.
+
+## CWD context
+Useful for audit and rollback of documents.
+`,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document updates?
+
+## Short answer
+Handle updates by detecting the change, re-processing and replacing old chunks.
+
+## Key points
+- S3 event on the new version; compare ETag, version ID or hash.
+- Deterministic chunk IDs (documentId#n) so upserts replace; delete chunks no longer present.
+- ACL-only changes update metadata without re-embedding.
+
+## CWD context
+Record document version and ingest time on each chunk.
+`,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion?
+
+## Short answer
+Handle deletions with events and a reconciliation safety net.
+
+## Key points
+- ObjectRemoved events trigger deletion of chunks in OpenSearch by document ID and manifest cleanup.
+- Permanently delete versions for erasure requests; purge caches.
+- Periodic reconciliation between the S3 listing and the index.
+
+## CWD context
+Fast index deletion matters most for confidentiality.
+`,code:``},{id:`129-how-would-you-encrypt-s3-data`,category:`S3`,title:`How would you encrypt S3 data?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt S3 data?
+
+## Short answer
+Encrypt S3 data at rest with SSE-KMS using customer-managed keys, and in transit with TLS.
+
+## Key points
+- Default bucket encryption; Bucket Keys reduce KMS request cost.
+- Key policies limit who can decrypt; separate keys per data classification.
+- Enforce encryption through bucket policy.
+
+## CWD context
+Encryption is the default; access control is the real protection.
+`,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# S3 SSE-S3 vs SSE-KMS?
+
+## Short answer
+SSE-S3 is simple and free; SSE-KMS gives control and auditability.
+
+## Key points
+- SSE-S3: AWS-managed keys, no per-key control or audit trail.
+- SSE-KMS: key policies, CloudTrail audit of key use, revocation and cross-account control; KMS request cost and quotas (reduced with Bucket Keys).
+
+## CWD context
+Use SSE-KMS for sensitive enterprise documents.
+`,code:``},{id:`131-how-would-you-trigger-processing-when-a-document-arrives-in-s3`,category:`S3`,title:`How would you trigger processing when a document arrives in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you trigger processing when a document arrives in S3?
+
+## Short answer
+Trigger processing with S3 event notifications, preferably through EventBridge or SQS.
+
+## Key points
+- EventBridge gives richer filtering, multiple targets and replay; SQS adds buffering.
+- Filter by prefix and suffix; expect duplicates and out-of-order events.
+- Add a DLQ.
+
+## CWD context
+Idempotent handlers make event duplication harmless.
+`,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you control access to documents?
+
+## Short answer
+Control access to documents at several layers.
+
+## Key points
+- IAM roles per component with prefix-scoped policies, or S3 Access Points.
+- Short-lived presigned URLs issued only after an entitlement check.
+- Document-level entitlements enforced in retrieval through ACL metadata, not by S3 alone.
+- CloudTrail data events for audit.
+
+## CWD context
+Users never get direct bucket access.
+`,code:``}];function jm(){return(0,M.jsx)($,{data:Am,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Mm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why OpenSearch Serverless for CWD?
+
+## Short answer
+OpenSearch Serverless gives managed vector, keyword and hybrid search with no cluster to operate.
+
+## Key points
+- Capacity scales automatically in OCUs; collections of type vector search.
+- IAM data access policies, VPC endpoints and encryption; works with Bedrock Knowledge Bases.
+- Trade-offs: a baseline OCU cost, fewer tuning options and no document-level security.
+
+## CWD context
+Good for variable RAG workloads where operations should be minimal.
+`,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement vector search?
+
+## Short answer
+Implement vector search with a knn_vector field, HNSW and embeddings from Bedrock.
+
+## Key points
+- Vector search collection; index mapping with dimension matching the embedding model and a similarity space such as cosine.
+- Embed chunks at ingestion, embed the query with the same model, and run a k-NN query.
+- Tune k, ef_search and use filters; consider quantisation to cut memory.
+
+## CWD context
+Record the embedding model version in each document.
+`,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement hybrid search?
+
+## Short answer
+Hybrid search combines a BM25 query and a vector query and merges their scores.
+
+## Key points
+- Use a hybrid query with a search pipeline that normalises and combines scores with weights (or fuse ranks with RRF in the application).
+- Filters apply to both parts.
+- Verify feature support for your OpenSearch version and Serverless.
+
+## CWD context
+Hybrid is the default mode because enterprise questions mix codes and natural language.
+`,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement BM25 search?
+
+## Short answer
+BM25 is the default lexical relevance scoring in OpenSearch for text fields.
+
+## Key points
+- Combines term frequency, inverse document frequency and length normalisation.
+- Use match and multi_match queries; tune analyzers, synonyms and field boosts.
+
+## CWD context
+BM25 finds exact terms such as ticket IDs that embeddings can blur.
+`,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you store embeddings?
+
+## Short answer
+Store embeddings as a knn_vector field in the same document as the chunk text and metadata.
+
+## Key points
+- Dimension must match the model; keep the model name and version in metadata.
+- Keep a source copy in S3 so the index is rebuildable.
+- Lower dimensions or quantisation reduce memory cost.
+
+## CWD context
+The index is derived; S3 is the source of truth.
+`,code:``},{id:`138-how-would-you-create-embeddings-using-aws`,category:`OpenSearch`,title:`How would you create embeddings using AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create embeddings using AWS?
+
+## Short answer
+Create embeddings with Bedrock embedding models, at ingestion and at query time.
+
+## Key points
+- Titan Text Embeddings (configurable dimensions) or Cohere Embed; call through the Bedrock runtime API.
+- Batch calls and handle throttling with backoff; Knowledge Bases can do this automatically.
+- A custom embedding model can be hosted on SageMaker.
+
+## CWD context
+Use the same model and version for documents and queries.
+`,code:``},{id:`139-how-would-you-implement-metadata-filtering`,category:`OpenSearch`,title:`How would you implement metadata filtering?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement metadata filtering?
+
+## Short answer
+Metadata filtering narrows retrieval to the right slice before ranking.
+
+## Key points
+- Keyword fields such as tenant_id, source, doc_type, department, dates and ACL principals.
+- Apply filters inside the k-NN query so filtering happens during the search, not after.
+- Decide filterable fields at design time.
+
+## CWD context
+Filters give both relevance and tenant isolation.
+`,code:``},{id:`140-how-would-you-implement-document-level-security`,category:`OpenSearch`,title:`How would you implement document-level security?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement document-level security?
+
+## Short answer
+OpenSearch Serverless access policies work at collection or index level, so document-level security is implemented as query filters.
+
+## Key points
+- Store allowed users or groups on each chunk and filter with a terms query built from the validated identity.
+- Managed OpenSearch Service offers engine-enforced document-level security through fine-grained access control if required.
+- Test negative cases.
+
+## CWD context
+Trusted server code builds the filter; the LLM never does.
+`,code:``},{id:`141-how-does-opensearch-scale`,category:`OpenSearch`,title:`How does OpenSearch scale?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does OpenSearch scale?
+
+## Short answer
+OpenSearch scales by adding capacity for indexing and search separately.
+
+## Key points
+- Serverless: automatic OCU scaling with configurable limits.
+- Managed: more data nodes, shards and replicas; shard sizing matters.
+- Vector memory footprint often drives sizing.
+
+## CWD context
+Set OCU limits to cap cost as well as protect capacity.
+`,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch Serverless vs traditional OpenSearch?
+
+## Short answer
+Serverless removes cluster operations; managed OpenSearch Service gives more control.
+
+## Key points
+- Serverless: auto-scaling, pay per OCU with a baseline, limited tuning, no document-level security.
+- Managed: instance control, tuning, fine-grained access control, possibly cheaper at steady large scale.
+
+## CWD context
+Choose serverless for variable or simple needs; managed for control or engine-enforced document security.
+`,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs DynamoDB?
+
+## Short answer
+OpenSearch is a search and retrieval engine; DynamoDB is a primary key-value store.
+
+## Key points
+- OpenSearch: relevance ranking, vectors, aggregations; near-real-time and not the source of truth.
+- DynamoDB: transactions, conditional writes, key-based access.
+
+## CWD context
+DynamoDB for state, OpenSearch for retrieval.
+`,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs Bedrock Knowledge Bases?
+
+## Short answer
+Knowledge Bases is a managed RAG pipeline; direct OpenSearch gives full control.
+
+## Key points
+- Knowledge Bases: managed ingestion, chunking, embedding, vector store and retrieval APIs; fast to build, less control.
+- Direct OpenSearch: custom chunking, ACL filters, ranking and evaluation; more to build and operate.
+
+## CWD context
+Choose direct OpenSearch when entitlement-first control matters; Knowledge Bases for simpler cases or prototypes.
+`,code:``},{id:`145-how-would-you-monitor-opensearch`,category:`OpenSearch`,title:`How would you monitor OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor OpenSearch?
+
+## Short answer
+Monitor OpenSearch with CloudWatch metrics and alarms, plus retrieval-quality measurement.
+
+## Key points
+- Search and indexing OCU usage, request latency, success and error counts, throttling.
+- Alarms on latency, OCU near the limit and errors.
+- Recall and precision from evaluation runs.
+
+## CWD context
+Healthy infrastructure does not prove good retrieval.
+`,code:``},{id:`146-how-would-you-troubleshoot-slow-retrieval`,category:`OpenSearch`,title:`How would you troubleshoot slow retrieval?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot slow retrieval?
+
+## Short answer
+Troubleshoot slow retrieval by splitting the time into stages.
+
+## Key points
+- Query embedding (Bedrock), search execution, reranking and network.
+- Check OCU saturation or throttling, index size, k and ef_search, filter selectivity and returned fields.
+- Compare with and without filters and hybrid; use slow logs or the profile API.
+
+## CWD context
+Use the trace ID to see the retrieval span inside the full request.
+`,code:``},{id:`147-how-would-you-optimize-opensearch-cost`,category:`OpenSearch`,title:`How would you optimize OpenSearch cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize OpenSearch cost?
+
+## Short answer
+Reduce OpenSearch cost by capping capacity and shrinking what is stored.
+
+## Key points
+- Set OCU limits; reduced redundancy for dev and test.
+- Lower embedding dimensions, quantisation or disk-based vectors; store only needed fields.
+- Share collections sensibly; delete stale documents; cache frequent queries.
+- Consider a managed cluster with reserved instances for steady load.
+
+## CWD context
+The OCU baseline makes small workloads relatively expensive.
+`,code:``}];function Nm(){return(0,M.jsx)($,{data:Mm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Pm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain IAM architecture for CWD.
+
+## Short answer
+IAM architecture is multi-account, role-based and least-privilege, with guardrails at the organisation level.
+
+## Key points
+- AWS Organizations with separate dev, test, prod, security and log-archive accounts; SCPs as guardrails.
+- Humans through IAM Identity Center federated to the corporate IdP; workloads through IAM roles.
+- Separate roles per component: Lambda execution, ECS task and execution, Glue, SageMaker.
+- Resource policies, permission boundaries, tags for ABAC, Access Analyzer, CloudTrail.
+
+## CWD context
+End-user login to CWD (Cognito or OIDC) is separate from IAM.
+`,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:`# IAM user vs IAM role?
+
+## Short answer
+An IAM user has long-term credentials; an IAM role provides temporary credentials to whoever assumes it.
+
+## Key points
+- Users: avoid for workloads and people.
+- Roles: assumed by services, federated users or other accounts through STS; trust policy controls who can assume.
+
+## CWD context
+Use roles everywhere.
+`,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use IAM roles instead of access keys?
+
+## Short answer
+Use roles because they provide short-lived, automatically rotated credentials with nothing to leak.
+
+## Key points
+- No access keys in code, logs or repositories.
+- Scoped by trust and permission policies; every assumption is logged in CloudTrail.
+- Native for Lambda, ECS, EC2 and other compute.
+
+## CWD context
+Any long-lived access key is a finding.
+`,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Lambda access S3 securely?
+
+## Short answer
+Give the Lambda execution role read access only to the specific bucket and prefix.
+
+## Key points
+- s3:GetObject on the exact ARN; kms:Decrypt on the bucket's key.
+- Bucket policy also restricts access; use a gateway VPC endpoint when the function is in a VPC.
+- No keys or broad wildcards.
+
+## CWD context
+Both sides (role and bucket policy) express the same least privilege.
+`,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would ECS access Bedrock securely?
+
+## Short answer
+Give the ECS task role permission to invoke only approved Bedrock models, over a VPC endpoint.
+
+## Key points
+- bedrock:InvokeModel and streaming actions scoped to approved model or inference-profile ARNs; permission to apply the specific guardrail.
+- Interface VPC endpoint for the Bedrock runtime with an endpoint policy.
+- Security groups; no internet path.
+
+## CWD context
+This makes "only approved models" a technical control.
+`,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Workers access AWS services?
+
+## Short answer
+Each Worker type gets its own task role with only the permissions it needs.
+
+## Key points
+- Receive from its own queue, write to its own table items, read its own secrets.
+- IAM condition keys (for example leading keys on DynamoDB) support tenant isolation.
+- Enterprise-system credentials stay with the MCP servers, not the Workers.
+
+## CWD context
+Blast radius equals one Worker type.
+`,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement least privilege?
+
+## Short answer
+Implement least privilege by starting minimal and tightening with evidence.
+
+## Key points
+- Specific actions and resource ARNs, not wildcards; conditions for VPC, tags or MFA.
+- Separate roles per function; permission boundaries and SCPs.
+- Access Analyzer policy generation from CloudTrail activity and unused-access findings; regular reviews.
+
+## CWD context
+Applies to agents and tools as much as to people.
+`,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you secure cross-service communication?
+
+## Short answer
+Secure cross-service communication with identity, resource policies and private paths.
+
+## Key points
+- SigV4 IAM authentication between services; resource policies on queues, buckets and keys.
+- VPC endpoints with endpoint policies; TLS.
+- aws:SourceArn and SourceAccount conditions prevent confused-deputy problems.
+
+## CWD context
+Do not rely on network position alone.
+`,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement resource-based policies?
+
+## Short answer
+Resource-based policies attach to the resource and name who may access it.
+
+## Key points
+- Examples: S3 buckets, SQS queues, KMS keys, Lambda functions, secrets, ECR.
+- Enable cross-account access without role switching.
+- Evaluated together with identity-based policies.
+
+## CWD context
+Use them to add a second lock on sensitive resources.
+`,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Identity-based vs resource-based policies?
+
+## Short answer
+Identity-based policies say what a principal can do; resource-based policies say who can use a resource.
+
+## Key points
+- Identity-based: attached to users, roles and groups.
+- Resource-based: include a Principal; cross-account access needs both sides to allow.
+- Permission boundaries and SCPs cap identity-based permissions.
+
+## CWD context
+Know how they combine when debugging access denied errors.
+`,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you prevent privilege escalation?
+
+## Short answer
+Prevent privilege escalation by restricting who can create or change permissions.
+
+## Key points
+- Restrict iam:PassRole to specific roles and services; deny policy-editing actions to non-admins.
+- Permission boundaries required for role creation; SCP guardrails.
+- Review trust policies; admin roles with MFA.
+
+## CWD context
+A workload that can edit its own permissions can grant itself anything.
+`,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you audit IAM activity?
+
+## Short answer
+Audit IAM with CloudTrail, Access Analyzer and alerting on sensitive changes.
+
+## Key points
+- Organisation trail to an immutable S3 bucket with log file validation.
+- Access Analyzer for external and unused access; credential reports and last-used data.
+- EventBridge alerts on CreateAccessKey, AttachRolePolicy and similar; GuardDuty findings.
+
+## CWD context
+Review findings on a schedule, not only after incidents.
+`,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does AWS CloudTrail help?
+
+## Short answer
+CloudTrail records AWS API activity: who did what, when and from where.
+
+## Key points
+- Management events by default; optional data events for S3, Lambda and DynamoDB.
+- Supports forensics, compliance and detection through EventBridge and GuardDuty.
+- Log file integrity validation; organisation-wide trails.
+
+## CWD context
+It is an audit trail of AWS actions, not application logging.
+`,code:``}];function Fm(){return(0,M.jsx)($,{data:Pm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Im=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use AWS KMS?
+
+## Short answer
+Use KMS wherever data at rest or secrets need controlled, auditable encryption.
+
+## Key points
+- S3, DynamoDB, SQS, OpenSearch, CloudWatch Logs, Secrets Manager, ECR, SageMaker volumes and artifacts.
+- Envelope encryption for application-level fields; asymmetric keys for signing.
+
+## CWD context
+One key per data classification keeps access decisions clear.
+`,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data would you encrypt?
+
+## Short answer
+Encrypt everything at rest, and prioritise the data that is sensitive or hard to replace.
+
+## Key points
+- Documents in S3, tenant data in DynamoDB, queues and backups.
+- Logs (they can contain sensitive text), secrets, model artifacts and evaluation datasets.
+- Embeddings and the vector index can reveal source text, so treat them as sensitive.
+- TLS in transit.
+
+## CWD context
+Encryption complements access control; it does not replace it.
+`,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# AWS-managed key vs customer-managed key?
+
+## Short answer
+Customer-managed keys give you control and audit; AWS-managed keys are convenient but limited.
+
+## Key points
+- AWS-owned: invisible and free. AWS-managed: created per service, automatic rotation, fixed policy.
+- Customer-managed: your key policy, rotation setting, grants, cross-account use, disable and deletion, with per-key and per-request cost.
+
+## CWD context
+Use customer-managed keys for sensitive data.
+`,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt S3?
+
+## Short answer
+Encrypt S3 with SSE-KMS using a customer-managed key as the bucket default.
+
+## Key points
+- Bucket Keys reduce KMS cost.
+- Bucket policy denies unencrypted or wrongly encrypted uploads.
+- Key policy allows only the ingestion and reader roles.
+
+## CWD context
+Enforce it in policy so a mistake cannot bypass it.
+`,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt DynamoDB?
+
+## Short answer
+DynamoDB always encrypts at rest; you choose who owns the key.
+
+## Key points
+- AWS-owned (default), AWS-managed or customer-managed.
+- Customer-managed gives audit and control; backups and exports follow.
+
+## CWD context
+Choose customer-managed for tables holding tenant or personal data.
+`,code:``},{id:`166-how-would-you-encrypt-application-secrets`,category:`KMS & Secrets Manager`,title:`How would you encrypt application secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt application secrets?
+
+## Short answer
+Encrypt application secrets with Secrets Manager backed by KMS, and use envelope encryption for fields.
+
+## Key points
+- A customer-managed key per environment.
+- Envelope encryption: generate a data key, encrypt the data, store the encrypted data key.
+- Access controlled by IAM and key policy.
+
+## CWD context
+Separate keys per environment prevent cross-environment access.
+`,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Secrets Manager?
+
+## Short answer
+Secrets Manager is the central store with rotation, versioning and audit for credentials.
+
+## Key points
+- Fine-grained IAM, KMS encryption, cross-region replication.
+- Managed rotation for supported databases and custom rotation through Lambda.
+- Native integration with ECS and Lambda; CloudTrail audit.
+
+## CWD context
+Use it for enterprise-system credentials that need rotation.
+`,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Secrets Manager vs Parameter Store?
+
+## Short answer
+Secrets Manager adds rotation and replication at higher cost; Parameter Store is cheaper and simpler.
+
+## Key points
+- Secrets Manager: built-in rotation, replication, per-secret charge.
+- Parameter Store: free standard tier, SecureString, hierarchy; no built-in rotation.
+
+## CWD context
+Secrets Manager for rotating credentials; Parameter Store or AppConfig for configuration.
+`,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Lambda retrieve secrets?
+
+## Short answer
+Lambda retrieves secrets at initialisation with a scoped role and caching.
+
+## Key points
+- GetSecretValue via the SDK or the Parameters and Secrets extension.
+- Refresh the cache on authentication failure to pick up rotation.
+- VPC endpoint if in a VPC; never log values.
+
+## CWD context
+The role should allow only that function's secrets.
+`,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you rotate secrets?
+
+## Short answer
+Rotate with Secrets Manager rotation and a zero-downtime strategy.
+
+## Key points
+- Rotation Lambda steps: create, set, test, finish, using AWSPENDING and AWSCURRENT labels.
+- Alternating-users strategy avoids downtime for databases.
+- KMS key rotation is separate; alarm on rotation failure and test regularly.
+
+## CWD context
+Rehearse rotation before it becomes an emergency.
+`,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent secrets from appearing in logs?
+
+## Short answer
+Prevent secrets in logs by design and by detection.
+
+## Key points
+- Never log environment variables, headers or bodies containing credentials; redaction in logging code.
+- CloudWatch Logs data protection policies to mask and audit sensitive patterns.
+- Secret scanning in CI; reference secrets rather than embedding them in task definitions.
+- Never put secrets in prompts.
+
+## CWD context
+Prompts and tool arguments are commonly logged, so treat them as a leak path.
+`,code:``}];function Lm(){return(0,M.jsx)($,{data:Im,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var Rm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the AWS network architecture for CWD.
+
+## Short answer
+CWD runs in a multi-AZ VPC with public, private and isolated tiers, and private endpoints for AWS services.
+
+## Key points
+- Public subnets hold only the load balancer (if internet-facing) and NAT gateways, one per AZ.
+- Private subnets hold ECS services, Lambda in VPC and MCP servers; isolated subnets hold data stores such as ElastiCache.
+- Gateway endpoints (S3, DynamoDB) and interface endpoints (Bedrock runtime, Secrets Manager, KMS, SQS, ECR, CloudWatch Logs, STS).
+- Security groups per tier, VPC Flow Logs, Direct Connect or VPN to on-premises sources, separate VPCs or accounts per environment.
+
+## CWD context
+API Gateway reaches ECS through a VPC Link, so the backend has no public address.
+`,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Public subnet vs private subnet?
+
+## Short answer
+A public subnet has a route to an internet gateway; a private subnet does not.
+
+## Key points
+- Public: resources can have public IPs and be reached from the internet.
+- Private: outbound traffic goes through a NAT gateway or VPC endpoints; inbound only from inside the VPC or through a load balancer.
+
+## CWD context
+Only edge components belong in public subnets.
+`,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which CWD components belong in private subnets?
+
+## Short answer
+Almost everything belongs in private subnets.
+
+## Key points
+- ECS Coordinator, Delegators, Workers and MCP servers; Lambda in VPC.
+- ElastiCache, databases and SageMaker endpoints.
+- Public: only the internet-facing edge and NAT gateways.
+
+## CWD context
+If a component does not need to be reached from the internet, it must not be reachable.
+`,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why deploy Workers in private subnets?
+
+## Short answer
+Deploy Workers in private subnets to remove inbound exposure and control outbound access.
+
+## Key points
+- No public IPs; smaller attack surface.
+- Outbound to enterprise systems through NAT with fixed IPs for allow-listing, or private links.
+- Egress filtering to limit data exfiltration.
+
+## CWD context
+Workers hold access to sensitive systems, so their network path should be tightly controlled.
+`,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a NAT Gateway?
+
+## Short answer
+A NAT gateway lets private resources make outbound connections without allowing inbound ones.
+
+## Key points
+- Lives in a public subnet with an Elastic IP; one per AZ for availability.
+- Charged per hour and per GB processed.
+
+## CWD context
+NAT cost grows with traffic, so keep AWS-service traffic on VPC endpoints.
+`,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use NAT Gateway?
+
+## Short answer
+Use NAT for outbound internet access that endpoints cannot provide.
+
+## Key points
+- Calls from Workers and MCP servers to Salesforce, ServiceNow and other SaaS APIs.
+- Fixed Elastic IPs for vendor allow-lists.
+- One NAT per AZ; optionally Network Firewall for egress control.
+
+## CWD context
+Use VPC endpoints for S3, ECR, Bedrock and similar to cut NAT cost.
+`,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would private workloads access AWS services?
+
+## Short answer
+Private workloads reach AWS services through VPC endpoints, keeping traffic on the AWS network.
+
+## Key points
+- Gateway endpoints for S3 and DynamoDB; interface endpoints (PrivateLink) for most other services.
+- Private DNS makes the normal service hostname resolve to the endpoint.
+- Endpoint policies restrict actions and resources.
+
+## CWD context
+Fall back to NAT only for services without an endpoint.
+`,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are VPC endpoints?
+
+## Short answer
+VPC endpoints provide private connectivity to AWS services and PrivateLink services without an internet gateway or NAT.
+
+## Key points
+- Types: gateway and interface (plus Gateway Load Balancer endpoints).
+- Endpoint policies control what can be reached.
+
+## CWD context
+They improve security and reduce NAT cost.
+`,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Gateway endpoint vs interface endpoint?
+
+## Short answer
+Gateway endpoints are route-table based and free; interface endpoints are ENI-based and charged.
+
+## Key points
+- Gateway: S3 and DynamoDB only; not reachable from on-premises or other VPCs.
+- Interface: private IPs in your subnets, security-group controlled, many services, reachable over Direct Connect or VPN; hourly and per-GB charges.
+
+## CWD context
+Use gateway endpoints for S3 and DynamoDB where possible.
+`,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you privately access S3?
+
+## Short answer
+Access S3 privately through a gateway endpoint plus policies that require it.
+
+## Key points
+- Route-table entry to the S3 endpoint; endpoint policy limiting buckets.
+- Bucket policy denying requests not coming through the endpoint (aws:SourceVpce).
+- Use an S3 interface endpoint for on-premises or cross-VPC access.
+
+## CWD context
+The bucket policy makes private access enforced, not optional.
+`,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you privately access Bedrock?
+
+## Short answer
+Access Bedrock privately through interface endpoints for the runtime API.
+
+## Key points
+- Endpoint for bedrock-runtime (and the control plane or agent runtime endpoints if used) in private subnets.
+- Security group allowing 443 from workloads; private DNS enabled; endpoint policy limiting models.
+- No NAT needed for Bedrock traffic.
+
+## CWD context
+Combine with IAM restrictions on approved model ARNs.
+`,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure traffic between services?
+
+## Short answer
+Secure service-to-service traffic with layered controls.
+
+## Key points
+- Security groups referencing security groups; private subnets.
+- TLS everywhere, including internal hops; IAM or JWT authentication between services.
+- Endpoint policies, NACLs for coarse denies, Flow Logs, Network Firewall for egress.
+- PrivateLink to expose MCP servers across accounts.
+
+## CWD context
+Authenticate every call; do not trust the network.
+`,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Security Group vs NACL?
+
+## Short answer
+Security groups are stateful and allow-only at the resource level; NACLs are stateless and rule-ordered at the subnet level.
+
+## Key points
+- Security group: return traffic automatic; evaluates all rules.
+- NACL: allow and deny rules in order; must permit return traffic and ephemeral ports.
+
+## CWD context
+Security groups are the main control; NACLs add coarse subnet-level blocks.
+`,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a networking failure?
+
+## Short answer
+Troubleshoot networking by tracing the path in a fixed order.
+
+## Key points
+- DNS resolution (private DNS and endpoint names), route tables, security groups on both ends, NACLs in both directions.
+- Endpoint policies, NAT gateway health and port allocation, target group health.
+- An AccessDenied error is IAM; a timeout is usually network.
+- Tools: VPC Reachability Analyzer, Flow Logs, Network Access Analyzer, NAT metrics.
+
+## CWD context
+Test from the same subnet as the failing workload.
+`,code:``}];function zm(){return(0,M.jsx)($,{data:Rm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Bm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement CWD monitoring using CloudWatch?
+
+## Short answer
+Implement monitoring with structured logs, metrics, alarms, traces and dashboards in CloudWatch and X-Ray.
+
+## Key points
+- JSON logs in per-service log groups with retention; custom metrics through Embedded Metric Format.
+- Alarms to SNS, Chatbot or on-call tools; dashboards per layer; Logs Insights queries.
+- X-Ray or OpenTelemetry tracing with Application Signals; Container Insights and Lambda Insights.
+- SLO-based alerting with composite alarms.
+
+## CWD context
+Monitor quality and cost as well as uptime.
+`,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What CloudWatch metrics would you monitor?
+
+## Short answer
+Track health, capacity, quality and cost at each layer.
+
+## Key points
+- API Gateway and ALB latency and errors; ECS CPU, memory and running tasks; Lambda errors, throttles and duration.
+- SQS oldest-message age and DLQ; DynamoDB throttling; OpenSearch OCU and latency; Step Functions failures.
+- Bedrock invocations, latency, tokens and throttles.
+- Custom: agent success rate, loop-guard hits, groundedness, cost per request.
+
+## CWD context
+Pick a few SLO metrics and keep the rest for diagnosis.
+`,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What logs would you collect?
+
+## Short answer
+Collect structured application logs plus service and security logs, without sensitive content.
+
+## Key points
+- Application logs with correlation ID, tenant, agent, tool, status, duration, model and prompt version, token counts.
+- API Gateway access logs, ALB logs, Step Functions and WAF logs, VPC Flow Logs, CloudTrail.
+- Bedrock invocation logs with care for sensitive content.
+
+## CWD context
+Log document IDs and scores, not document content.
+`,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you trace one request across AWS services?
+
+## Short answer
+Trace a request with the X-Ray trace header propagated across every hop.
+
+## Key points
+- API Gateway active tracing; ADOT or the X-Ray SDK in ECS; Lambda active tracing.
+- SQS carries the trace header as a system attribute; Step Functions integrates with X-Ray.
+- Custom spans around Bedrock, MCP and OpenSearch calls; service map in CloudWatch.
+
+## CWD context
+Test asynchronous hops; they are where traces usually break.
+`,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create correlation IDs?
+
+## Short answer
+A correlation ID is one identifier carried through every log and message for a request.
+
+## Key points
+- Generated or accepted at the edge, from the API Gateway request ID or a header.
+- Propagated in headers, SQS message attributes, Step Functions input and LangGraph state.
+- Included in every log line; returned to the client; stored on the run record.
+
+## CWD context
+Support should be able to start from a user-supplied request ID.
+`,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Lambda errors?
+
+## Short answer
+Monitor Lambda errors with metrics, metric math and log filters.
+
+## Key points
+- Errors, Throttles, Duration relative to the timeout, ConcurrentExecutions.
+- Error rate as Errors divided by Invocations; metric filters for exceptions.
+- Alarms to SNS; watch DLQ depth for async and SQS triggers.
+
+## CWD context
+Alarm on rate, not just count.
+`,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor ECS?
+
+## Short answer
+Monitor ECS with Container Insights, service metrics and task events.
+
+## Key points
+- CPU, memory, network, running versus desired task count.
+- Stopped-task reasons through EventBridge task state change events.
+- ALB target health, deployment events and logs.
+
+## CWD context
+Alert when running tasks fall below desired for more than a few minutes.
+`,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor API Gateway?
+
+## Short answer
+Monitor API Gateway with metrics, access logs and WAF metrics.
+
+## Key points
+- Count, 4XX, 5XX, Latency and IntegrationLatency; throttle counts.
+- Access logs for per-route analysis; WAF blocked and allowed requests.
+- Alarms on 5XX rate and p95 latency.
+
+## CWD context
+A gap between Latency and IntegrationLatency shows gateway overhead.
+`,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor SQS?
+
+## Short answer
+Monitor SQS for backlog, age and dead letters.
+
+## Key points
+- Visible and in-flight messages, oldest-message age, messages sent, received and deleted.
+- Alarm when the DLQ has any visible message.
+- Consumer lag drives auto scaling.
+
+## CWD context
+Oldest-message age is the best SLO signal.
+`,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Bedrock?
+
+## Short answer
+Monitor Bedrock with its CloudWatch metrics and invocation logging.
+
+## Key points
+- Invocations, latency, client and server errors, throttles, input and output tokens, per model.
+- Guardrail intervention counts; application inference profile metrics for per-tenant attribution.
+- Alarms on throttles, latency and token spikes.
+
+## CWD context
+Rising throttles mean capacity planning is due.
+`,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create CloudWatch alarms?
+
+## Short answer
+Create alarms that page on symptoms and explain causes, with noise control.
+
+## Key points
+- Static and anomaly-detection thresholds; metric math for rates; percentile statistics.
+- Composite alarms to reduce noise; correct handling of missing data.
+- Actions to SNS, Chatbot, on-call tools or auto-remediation Lambdas; defined in IaC.
+- Symptoms: latency, error rate, SLO burn. Causes: DLQ, throttling, capacity.
+
+## CWD context
+Every alarm links to a runbook and an owner.
+`,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect latency degradation?
+
+## Short answer
+Detect latency degradation with percentile alarms, anomaly detection and synthetic probes.
+
+## Key points
+- p95 and p99 on API Gateway Latency and ALB TargetResponseTime.
+- Anomaly-detection bands; Bedrock InvocationLatency; SQS age.
+- CloudWatch Synthetics canaries for end-to-end probing; release markers.
+
+## CWD context
+Averages hide the tail.
+`,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect a cost spike?
+
+## Short answer
+Detect cost spikes with budgets, anomaly detection and usage-level metrics.
+
+## Key points
+- AWS Budgets on actual and forecast; Cost Anomaly Detection.
+- Cost Explorer by service, usage type and tag; custom token-per-hour metrics and alarms.
+- Cost and usage reports with Athena; check NAT data processed and log ingestion.
+
+## CWD context
+Runaway agent loops and retry storms show up as token spikes first.
+`,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a production request using CloudWatch?
+
+## Short answer
+Troubleshoot a production request from the correlation ID outward.
+
+## Key points
+- Find the trace or service map segment that is slow or failing.
+- Query logs across log groups by correlation ID in Logs Insights.
+- Check metrics in the same window: throttles, 5XX, queue age; then recent deployments and prompt, model or config changes.
+- Check quotas, mitigate (roll back, fall back, scale), verify, then do root-cause analysis.
+
+## CWD context
+Mitigate first, investigate second.
+`,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:`# CloudWatch vs CloudTrail vs X-Ray?
+
+## Short answer
+CloudWatch shows performance, CloudTrail shows who did what, and X-Ray shows the request path.
+
+## Key points
+- CloudWatch: metrics, logs and alarms.
+- CloudTrail: API audit trail of account activity.
+- X-Ray: distributed tracing and latency breakdown.
+
+## CWD context
+Example: X-Ray finds a slow Bedrock call, CloudWatch shows throttles, CloudTrail shows who changed the quota or policy.
+`,code:``}];function Vm(){return(0,M.jsx)($,{data:Bm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Hm=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale CWD horizontally?
+
+## Short answer
+Scale horizontally by keeping compute stateless and pushing state and load into managed, scalable services.
+
+## Key points
+- ECS behind an ALB with target-tracking scaling; Lambda scales itself.
+- State in DynamoDB and ElastiCache; async work through SQS.
+- Scale data stores (DynamoDB on-demand, OpenSearch OCUs, ElastiCache cluster mode).
+- Remove the real bottleneck, usually Bedrock quota; load test.
+
+## CWD context
+Partition by tenant to keep one tenant from affecting others.
+`,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design CWD for 10,000 concurrent users?
+
+## Short answer
+Size from request rate and tokens, not user count.
+
+## Key points
+- Example: 10,000 users each sending one request every 30 seconds is roughly 330 requests per second.
+- Multiply by tokens per request for required tokens per minute; compare with Bedrock quota and provisioned throughput.
+- Size ECS tasks by requests per task; check API Gateway quotas, DynamoDB capacity, OpenSearch OCUs and Redis.
+- Plan for streaming connections; add per-tenant quotas, backpressure and load testing.
+
+## CWD context
+Present the arithmetic and name the bottleneck first.
+`,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle sudden traffic spikes?
+
+## Short answer
+Handle sudden spikes by absorbing, scaling quickly and degrading gracefully.
+
+## Key points
+- WAF and API throttling; SQS as a buffer for async work.
+- Fast target-tracking, scheduled or predictive scaling; provisioned concurrency; pre-warmed capacity.
+- Protect Bedrock with token budgets, cross-region inference and cache or smaller-model fallback.
+
+## CWD context
+Rehearse the spike in a load test.
+`,code:``},{id:`204-how-would-you-scale-lambda`,category:`Scalability & High Availability`,title:`How would you scale Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale Lambda?
+
+## Short answer
+Lambda scales by adding concurrent execution environments, within account and function limits.
+
+## Key points
+- Scaling rate per function; regional concurrency quota (raisable).
+- Reserved concurrency to protect or cap; provisioned concurrency for predictable peaks.
+- SQS maximum concurrency and batch sizes to protect downstream systems.
+
+## CWD context
+Cap Lambda so it cannot overwhelm MCP servers or Bedrock.
+`,code:``},{id:`205-how-would-you-scale-ecs`,category:`Scalability & High Availability`,title:`How would you scale ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale ECS?
+
+## Short answer
+Scale ECS with Service Auto Scaling and fast, right-sized tasks.
+
+## Key points
+- Target tracking on CPU, memory, ALB requests per target, or SQS backlog per task; scheduled scaling for known peaks.
+- Small images and warm minimum capacity to speed scale-out; check Fargate task quotas.
+- Spread across AZs; Fargate Spot for non-critical work.
+
+## CWD context
+Scale Workers on backlog, the API on request count.
+`,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale OpenSearch?
+
+## Short answer
+Scale OpenSearch by adding capacity and by lowering the cost of each query.
+
+## Key points
+- Serverless: automatic OCUs with a maximum; managed: nodes, shards and replicas.
+- Filters, lower dimensions and caching reduce per-query work.
+- Separate collections isolate workloads.
+
+## CWD context
+Monitor OCU utilisation against your limit.
+`,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale DynamoDB?
+
+## Short answer
+Scale DynamoDB with on-demand or auto-scaled provisioned capacity and good key design.
+
+## Key points
+- Adaptive capacity and even key distribution; GSI capacity.
+- Cache hot reads (DAX or Redis); avoid scans; batch operations.
+- Global tables for multi-region; TTL to limit growth.
+
+## CWD context
+Throttling usually means a design issue, not a capacity issue.
+`,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle Bedrock rate limits?
+
+## Short answer
+Handle Bedrock rate limits with capacity planning, distribution and graceful degradation.
+
+## Key points
+- Request quota increases early, backed by usage data.
+- Cross-region inference profiles and Provisioned Throughput for baseline.
+- Per-tenant token budgets, queued and rate-limited consumers, backoff with jitter.
+- Smaller-model fallback, caching, and batch inference for offline work.
+
+## CWD context
+Quotas are per account and region, so plan them like any other capacity.
+`,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you introduce SQS?
+
+## Short answer
+Introduce SQS wherever work is slow, bursty or side-effecting.
+
+## Key points
+- In front of long-running and write Workers; ingestion and re-index jobs.
+- Audit and telemetry; buffering before Bedrock-limited stages.
+- In front of Lambda to control concurrency.
+- Always with a DLQ.
+
+## CWD context
+Not for short read-only calls.
+`,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement backpressure?
+
+## Short answer
+Backpressure stops a fast producer from overwhelming a slower consumer.
+
+## Key points
+- Queue-depth-based admission control and 429 or "accepted, please wait" responses.
+- Consumer concurrency limits; per-tenant limits; rate limits toward Bedrock and MCP.
+- Priority-based load shedding.
+
+## CWD context
+A buffer without backpressure only delays the overload.
+`,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you eliminate AWS single points of failure?
+
+## Short answer
+Eliminate single points of failure with redundancy at every tier and tested failover.
+
+## Key points
+- ALB across AZs; ECS tasks in at least two AZs; one NAT gateway per AZ.
+- ElastiCache Multi-AZ with automatic failover; DynamoDB, S3 and SQS are multi-AZ by design; OpenSearch Serverless with standby replicas in production.
+- Bedrock fallback models and cross-region inference; everything in IaC.
+- Route 53 health checks for regional failover; runbooks and no single-person dependencies.
+
+## CWD context
+A failover you have never tested is not a failover.
+`,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design multi-AZ CWD?
+
+## Short answer
+Design multi-AZ by spreading every tier across at least two, preferably three, AZs with headroom.
+
+## Key points
+- Subnets in each AZ; ALB cross-zone; ECS desired count across AZs with spread placement.
+- NAT per AZ with per-AZ routes; ElastiCache replication group with Multi-AZ.
+- Capacity headroom (N+1) so losing an AZ does not overload the rest.
+- Test with AWS Fault Injection Service.
+
+## CWD context
+Cost of headroom is the price of surviving an AZ loss.
+`,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design multi-region CWD?
+
+## Short answer
+Design multi-region with a routing layer and per-region stacks built from the same IaC.
+
+## Key points
+- Route 53 or Global Accelerator with health checks and latency or failover routing.
+- DynamoDB global tables; S3 cross-region replication; ECR replication; secret replication; KMS multi-Region keys.
+- Rebuild or replicate the OpenSearch index per region; confirm Bedrock model availability in each region.
+- SQS is regional, so state design must tolerate a region switch; watch data residency.
+
+## CWD context
+Start active-passive; go active-active only if justified.
+`,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is your disaster-recovery strategy?
+
+## Short answer
+Choose the DR pattern from RTO and RPO: backup and restore, pilot light, warm standby or active-active.
+
+## Key points
+- For CWD: warm standby in a second region is a sensible target.
+- State through global tables, documents through cross-region replication, index rebuilt from S3 or kept warm.
+- IaC to recreate; Route 53 failover; AWS Backup; regular DR drills and restore tests.
+
+## CWD context
+Untested DR plans usually fail on first use.
+`,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What RTO/RPO would you design for CWD?
+
+## Short answer
+RTO is how long recovery may take; RPO is how much data loss is acceptable; set them from business impact.
+
+## Key points
+- Example targets: RTO one hour or less for user-facing service; RPO of seconds to minutes for workflow state.
+- Documents and the index: RPO minutes to an hour; the index can be rebuilt from S3.
+- Audit logs: near-zero RPO.
+- Tighter targets cost more, so justify each one.
+
+## CWD context
+Different data classes can have different targets.
+`,code:``}];function Um(){return(0,M.jsx)($,{data:Hm,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is the biggest cost driver in CWD?
+
+## Short answer
+The biggest cost driver is usually Bedrock token usage, followed by fixed-capacity services.
+
+## Key points
+- Bedrock: model choice × tokens per request × volume.
+- Then OpenSearch OCU baseline, running Fargate tasks, NAT gateway data processing, CloudWatch Logs ingestion and data transfer.
+- Confirm with Cost Explorer grouped by service and usage type.
+
+## CWD context
+Measure before optimising; do not assume.
+`,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Bedrock costs?
+
+## Short answer
+Reduce Bedrock cost by sending fewer, smaller and cheaper calls.
+
+## Key points
+- Model tiering and routing; prompt caching; response and semantic caching.
+- Batch inference for offline work; Provisioned Throughput only for steady heavy load.
+- Shorter prompts, fewer and better chunks, capped output tokens; distillation for narrow tasks.
+- Application inference profiles for cost attribution.
+
+## CWD context
+Model routing is usually the biggest single lever.
+`,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Lambda costs?
+
+## Short answer
+Reduce Lambda cost by right-sizing, speeding up and invoking less.
+
+## Key points
+- Right-size memory with power tuning; use arm64 (Graviton).
+- Reuse connections and shorten duration; filter events and batch SQS messages.
+- Drop unneeded provisioned concurrency; Compute Savings Plans; reduce log volume.
+
+## CWD context
+Memory affects CPU, so more memory can be cheaper if it shortens duration.
+`,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce ECS costs?
+
+## Short answer
+Reduce ECS cost by right-sizing and using cheaper capacity where safe.
+
+## Key points
+- Right-size CPU and memory from real metrics; Graviton (ARM) tasks.
+- Fargate Spot for interruptible Workers; Compute Savings Plans.
+- Scale-in policies and schedules for non-production; consolidate tiny services.
+
+## CWD context
+Do not put latency-critical services on Spot.
+`,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce OpenSearch costs?
+
+## Short answer
+Reduce OpenSearch cost by capping capacity and storing less.
+
+## Key points
+- OCU limits and reduced redundancy in dev and test.
+- Lower embedding dimensions, quantisation or disk-based vectors; store only needed fields.
+- Share collections sensibly; delete stale documents; cache frequent queries.
+
+## CWD context
+The OCU baseline dominates small workloads.
+`,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize S3 costs?
+
+## Short answer
+Optimise S3 with lifecycle rules, storage classes and hygiene.
+
+## Key points
+- Transition to infrequent-access or archive classes; Intelligent-Tiering for unknown patterns.
+- Expire non-current versions and incomplete multipart uploads.
+- Parquet and compression; avoid huge numbers of tiny objects.
+- Gateway endpoint to avoid NAT charges; Storage Lens for visibility.
+
+## CWD context
+Versioning without lifecycle rules quietly grows cost.
+`,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use caching to reduce cost?
+
+## Short answer
+Caching reduces cost by avoiding repeated expensive work.
+
+## Key points
+- ElastiCache for embeddings, responses and semantic cache; Bedrock prompt caching.
+- API Gateway caching for idempotent GETs; CloudFront.
+- Savings ≈ hit rate × cost avoided; guard against stale answers with TTL and versioning.
+
+## CWD context
+Report cache savings as a KPI.
+`,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use smaller Bedrock models?
+
+## Short answer
+Use smaller Bedrock models for tasks that do not need a large one.
+
+## Key points
+- Routing, classification, extraction, short summaries and guardrail checks.
+- Route by complexity with Intelligent Prompt Routing or your own classifier.
+- Fall back to a larger model on low confidence.
+
+## CWD context
+Prove the downshift with evaluation before switching.
+`,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor AWS cost per request?
+
+## Short answer
+Monitor cost per request by tagging everything and combining token and compute costs.
+
+## Key points
+- Cost allocation tags per tenant, agent and environment.
+- Application inference profiles for Bedrock cost by tenant or agent.
+- Custom metric: tokens × price per model plus a share of compute; log cost per request.
+- Cost and usage reports with Athena; budgets per tenant.
+
+## CWD context
+Unit economics should be visible on a dashboard.
+`,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you investigate a sudden AWS bill increase?
+
+## Short answer
+Investigate a bill increase from broad to narrow, then link it to a change.
+
+## Key points
+- Cost Explorer by service, usage type, account and tag; day-over-day comparison; Cost Anomaly Detection.
+- Usual suspects: Bedrock tokens (loops, retry storms, prompt growth after a release), NAT data, log ingestion, cross-AZ or cross-region transfer, OpenSearch OCUs, runaway scaling, forgotten resources.
+- Correlate with deployments and changes; mitigate with rate limits, disabling a feature or rollback; add guardrails.
+
+## CWD context
+Set budgets and anomaly alerts before the next spike.
+`,code:``}];function Gm(){return(0,M.jsx)($,{data:Wm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var Km=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy CWD on AWS?
+
+## Short answer
+Deploy CWD through infrastructure as code and a pipeline that promotes one artifact through accounts.
+
+## Key points
+- IaC provisions VPC, ECS, API Gateway, DynamoDB, SQS, Step Functions, IAM and alarms.
+- CodePipeline builds with CodeBuild, pushes to ECR and deploys to ECS through CodeDeploy; Lambda through versions and aliases.
+- Runtime configuration through AppConfig and SSM; approvals; smoke tests.
+
+## CWD context
+The same image and templates go to every environment; only configuration differs.
+`,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain your AWS CI/CD pipeline.
+
+## Short answer
+The pipeline moves a change from commit to production through automated gates.
+
+## Key points
+- Source → CodeBuild: lint, unit tests, dependency and secret scans, container build and image scan.
+- Evaluation stage: golden-dataset checks for prompts and agents; fail on regression.
+- Deploy to dev → integration and end-to-end tests → staging with canary, load and security tests → manual approval → production with blue-green or canary and alarm-based rollback.
+- Artifacts encrypted with KMS; cross-account deploy roles.
+
+## CWD context
+Evaluation is a quality gate alongside tests.
+`,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use CodePipeline?
+
+## Short answer
+CodePipeline orchestrates the release stages and connects the build and deploy services.
+
+## Key points
+- Triggers on source changes; integrates CodeBuild, CodeDeploy, CloudFormation, ECS and Lambda.
+- Manual approvals, cross-account and cross-region actions.
+- Artifact store in S3 encrypted with KMS; EventBridge notifications.
+
+## CWD context
+The pipeline definition itself is code.
+`,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use CodeBuild?
+
+## Short answer
+CodeBuild runs build, test and evaluation steps in managed containers.
+
+## Key points
+- buildspec: install, lint, unit tests, build and scan the image, push to ECR.
+- Also runs evaluation suites and IaC checks (for example cdk-nag or checkov).
+- VPC access for private resources; caching; test reports; least-privilege service role.
+
+## CWD context
+Keep build roles separate from deploy roles.
+`,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use ECR?
+
+## Short answer
+ECR is the private registry that stores and secures CWD's container images.
+
+## Key points
+- One repository per component; scanning (basic or enhanced with Inspector).
+- Immutable tags such as commit SHA; lifecycle policies to expire old images.
+- Cross-region and cross-account replication; pulls through IAM and VPC endpoints.
+
+## CWD context
+Never deploy a mutable tag such as latest.
+`,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy Lambda versions?
+
+## Short answer
+Deploy Lambda through immutable versions and aliases, with traffic shifting.
+
+## Key points
+- Publish a version per release; aliases such as dev and prod point at versions.
+- CodeDeploy canary or linear shifting with pre- and post-traffic test hooks.
+- Automatic rollback on CloudWatch alarms; event sources reference the alias.
+
+## CWD context
+Rollback is moving the alias back.
+`,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement blue-green deployment?
+
+## Short answer
+Blue-green runs old and new side by side and switches traffic once the new one is proven.
+
+## Key points
+- ECS with CodeDeploy: green task set behind a test listener, run tests, then shift traffic all at once, in a canary or linearly.
+- Keep blue for the rollback window; alarms trigger automatic rollback.
+- Keep database changes backward compatible; use AppConfig flags for prompts and models.
+
+## CWD context
+Prove the green stack before any user reaches it.
+`,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement canary deployment?
+
+## Short answer
+Canary exposes a small share of traffic to the new version and expands as evidence accumulates.
+
+## Key points
+- CodeDeploy canary configurations, ALB weighted target groups, Lambda alias weights, API Gateway canary stages.
+- AppConfig gradual rollout for prompts, model IDs and configuration, with automatic rollback.
+- Watch quality metrics as well as errors.
+
+## CWD context
+Start with internal or low-risk tenants.
+`,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you roll back a failed deployment?
+
+## Short answer
+Roll back by returning traffic or configuration to the last known good version.
+
+## Key points
+- CodeDeploy automatic rollback on alarms or failed hooks.
+- Manual: previous ECS task set or task definition, Lambda alias to the prior version, AppConfig rollback, IaC revert.
+- Expand-and-contract database changes keep old versions working.
+
+## CWD context
+Rehearse rollback so it is quick and calm.
+`,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage dev/test/prod environments?
+
+## Short answer
+Manage environments with separate accounts, parameterised IaC and controlled promotion.
+
+## Key points
+- Separate accounts under Organizations; SCPs per OU.
+- Same IaC with per-environment parameters; AppConfig and SSM per environment.
+- Separate KMS keys, secrets and network; masked data; budgets and auto-stop for non-production.
+
+## CWD context
+Promote the same artifact; never rebuild for production.
+`,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement Infrastructure as Code?
+
+## Short answer
+Infrastructure as code defines all infrastructure in reviewed, versioned templates deployed only through the pipeline.
+
+## Key points
+- Git, pull-request review, static checks (cfn-lint, cdk-nag, checkov).
+- Drift detection; modular constructs or modules; no console changes in production.
+- Terraform needs remote state with locking.
+
+## CWD context
+Manual console changes are the main source of environment drift.
+`,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:`# CloudFormation vs CDK vs Terraform?
+
+## Short answer
+CloudFormation is AWS-native; CDK generates CloudFormation from real code; Terraform is multi-cloud.
+
+## Key points
+- CloudFormation: declarative YAML or JSON, managed state, rollback on failure.
+- CDK: TypeScript, Python and others; reusable constructs; synthesises to CloudFormation.
+- Terraform: HCL, plan and apply, state file, providers for many platforms.
+
+## CWD context
+Choose CDK for AWS-only developer-led teams; Terraform for multi-cloud or existing skills.
+`,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage AWS configuration across environments?
+
+## Short answer
+Manage configuration per environment through IaC parameters, AppConfig and Parameter Store.
+
+## Key points
+- AppConfig for runtime configuration and feature flags with validators, gradual rollout and rollback, including prompt and model versions.
+- Parameter Store paths such as /cwd/{env}/...; Secrets Manager per environment.
+- Schema validation; no environment-specific code branches.
+
+## CWD context
+Runtime config changes need the same discipline as code changes.
+`,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure the CI/CD pipeline?
+
+## Short answer
+Secure the pipeline like production, because it can deploy anything.
+
+## Key points
+- Separate least-privilege roles for build and deploy; cross-account deploy roles with conditions.
+- No long-lived keys: OIDC federation for external CI; KMS-encrypted artifacts.
+- Image scanning and signing; dependency and secret scanning; branch protection and required reviews; approval for production.
+- Isolated build networks; audit through CloudTrail.
+
+## CWD context
+A compromised pipeline is a compromised production.
+`,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent production deployment of an untested AI model?
+
+## Short answer
+Prevent untested models from reaching production with technical gates.
+
+## Key points
+- The evaluation stage must pass for the exact model, prompt and configuration version.
+- Approved-model allow-list in AppConfig, validated by the pipeline.
+- IAM on the task role limits bedrock:InvokeModel to approved ARNs; SCPs restrict model access by account.
+- Manual approval, IaC-only changes, canary with automatic rollback, and an audit trail.
+
+## CWD context
+Make the safe path the only path.
+`,code:``}];function qm(){return(0,M.jsx)($,{data:Km,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Jm=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you use AWS Glue in CWD?
+
+## Short answer
+Glue provides serverless ETL and a data catalogue, so CWD can ingest and prepare enterprise data at scale without managing clusters.
+
+## Key points
+- Spark-based jobs for large batch work; integration with S3, Athena and Lake Formation.
+- Job bookmarks for incremental processing; connectors for databases and SaaS sources.
+- Prepares document chunks for RAG and datasets for SageMaker training.
+
+## CWD context
+Glue moves and shapes data; retrieval and reasoning happen elsewhere.
+`,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data sources would CWD ingest using Glue?
+
+## Short answer
+CWD ingests enterprise knowledge and operational data from several systems.
+
+## Key points
+- Salesforce and ServiceNow records; Oracle and Snowflake tables.
+- SharePoint and other file content exported to S3; documents already in S3.
+- Logs, telemetry and evaluation datasets.
+
+## CWD context
+Live lookups go through MCP; ingestion is for searchable knowledge and analytics.
+`,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from Salesforce?
+
+## Short answer
+Ingest Salesforce through a Glue Salesforce connection or Amazon AppFlow into S3.
+
+## Key points
+- OAuth credentials in Secrets Manager; query objects with filters.
+- Incremental on LastModifiedDate or SystemModstamp; respect API limits.
+- Write Parquet to S3; capture deletions through IsDeleted or reconciliation.
+
+## CWD context
+Keep raw and curated layers separate.
+`,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from ServiceNow?
+
+## Short answer
+Ingest ServiceNow through the Glue connector or Amazon AppFlow using the Table API.
+
+## Key points
+- Filter on sys_updated_on for incremental loads; paginate.
+- OAuth credentials in Secrets Manager; watch API rate limits.
+- Handle deletions through the audit-delete table or reconciliation; keep assignment groups as ACL metadata.
+
+## CWD context
+Land as Parquet in S3 for reprocessing.
+`,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from S3?
+
+## Short answer
+Read S3 data in Glue through the catalog or direct paths, processing only what is new.
+
+## Key points
+- DynamicFrames or Spark DataFrames; job bookmarks to skip processed files.
+- Push-down predicates and partition pruning; IAM role for access.
+- Triggered by schedule or S3 events.
+
+## CWD context
+Keep the same layout for raw, curated and consumption zones.
+`,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue integrate data from Oracle/Snowflake?
+
+## Short answer
+Read Oracle through JDBC and Snowflake through the native connector, using private connections.
+
+## Key points
+- Glue connection in a private subnet with security groups; credentials in Secrets Manager.
+- Partitioned reads for parallelism; incremental by watermark.
+- DMS for change data capture from Oracle where lower latency is needed.
+
+## CWD context
+Avoid heavy scans on production databases during business hours.
+`,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Glue Data Catalog?
+
+## Short answer
+The Glue Data Catalog is a central, Hive-compatible metadata store for datasets.
+
+## Key points
+- Databases, tables, schemas, partitions and locations.
+- Shared by Glue, Athena, EMR, Redshift Spectrum and Lake Formation.
+- Schema versioning.
+
+## CWD context
+It makes S3 data discoverable and governable.
+`,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What metadata would you maintain in Glue Data Catalog?
+
+## Short answer
+Maintain technical, business and governance metadata in the catalogue.
+
+## Key points
+- Schema, format, location, partitions, owner, source system.
+- Classification and sensitivity tags (Lake Formation tags), retention, freshness.
+- Table properties such as ingestion run ID and data-quality status.
+
+## CWD context
+Metadata is what lets you trace a citation back to its source.
+`,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue Crawler vs Glue ETL job?
+
+## Short answer
+A crawler discovers schemas and updates the catalogue; an ETL job transforms and moves data.
+
+## Key points
+- Crawler: samples data, infers schema and partitions; metadata only.
+- ETL job: produces new datasets.
+- Crawlers can be slow and drift-prone on huge paths; define known tables in IaC and use partition projection.
+
+## CWD context
+Do not put crawlers on the critical path of ingestion.
+`,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does a Glue Crawler discover schemas?
+
+## Short answer
+A crawler connects to the data store, samples files with classifiers and writes tables to the catalogue.
+
+## Key points
+- Built-in classifiers for CSV, JSON, Parquet and others.
+- Detects partitions from folder structure.
+- Schema change policy decides whether to update, log or ignore changes.
+
+## CWD context
+Sampling means the inferred schema can be wrong for irregular data.
+`,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle schema changes?
+
+## Short answer
+Handle schema changes by landing raw data untouched and evolving curated schemas deliberately.
+
+## Key points
+- Crawler schema-change policy; Iceberg, Hudi or Delta tables for additive column evolution.
+- ResolveChoice for ambiguous types; Schema Registry for streaming.
+- Alerts and review for breaking changes.
+
+## CWD context
+Additive changes flow through; breaking changes need a human decision.
+`,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement incremental data ingestion?
+
+## Short answer
+Implement incremental ingestion with bookmarks, watermarks or change data capture.
+
+## Key points
+- Glue job bookmarks for S3 files and JDBC keys; a watermark table in DynamoDB.
+- DMS CDC and AppFlow incremental transfer; upserts into Iceberg or Hudi.
+- Idempotent writes so reruns are safe.
+
+## CWD context
+Update the watermark only after a successful run.
+`,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Full load vs incremental load?
+
+## Short answer
+A full load re-reads everything; an incremental load reads only changes.
+
+## Key points
+- Full: simple, handles deletes easily, slow and costly.
+- Incremental: cheap and fast but needs a reliable change signal and delete handling.
+- Common pattern: initial full, then incremental, with periodic reconciliation.
+
+## CWD context
+Choose per source based on volume and change signals.
+`,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you identify new or changed records?
+
+## Short answer
+Identify changes through timestamps, versions, CDC logs or hashes.
+
+## Key points
+- Modified-date columns, row versions, DMS change records.
+- S3 LastModified, ETag or version ID; content hash compared with a manifest.
+- Iceberg snapshots for incremental reads.
+
+## CWD context
+Prefer a real change signal over comparing full copies.
+`,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle deleted records?
+
+## Short answer
+Handle deletions with source signals plus a reconciliation safety net.
+
+## Key points
+- Soft-delete flags and audit tables; CDC delete operations.
+- Key comparison between source and target with an anti-join; tombstones.
+- Propagate to curated tables (Iceberg MERGE DELETE) and to the OpenSearch index.
+
+## CWD context
+Fast deletion from the index matters most for confidentiality.
+`,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle duplicate records?
+
+## Short answer
+Handle duplicates by deduplicating on a business key and making writes idempotent.
+
+## Key points
+- Window functions to keep the latest record; dropDuplicates.
+- MERGE upserts in Iceberg or Hudi; deterministic IDs.
+- Partition-level overwrite for repeatable reruns.
+
+## CWD context
+Idempotency is what makes retries safe.
+`,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you partition data in S3?
+
+## Short answer
+Partition S3 data by low-cardinality columns that queries filter on, and keep files a sensible size.
+
+## Key points
+- Hive-style prefixes such as source_system and date; avoid over-partitioning.
+- Target roughly 128 MB to 1 GB files; partition projection for many partitions.
+- Separate raw and curated zones; partition indexes in the catalogue.
+
+## CWD context
+Match partitioning to how data is read.
+`,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Parquet instead of CSV?
+
+## Short answer
+Parquet is columnar, compressed and typed, so it reads less data than CSV.
+
+## Key points
+- Column and predicate pruning make Athena and Glue faster and cheaper.
+- Schema is embedded and supports evolution.
+- CSV is row-based, untyped and larger; use it only for exchange.
+
+## CWD context
+Consider Iceberg on Parquet for table features.
+`,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize Glue ETL performance?
+
+## Short answer
+Optimise Glue by reducing data read, shuffles and small files, and by sizing workers well.
+
+## Key points
+- Worker type (G.1X, G.2X and larger) and auto scaling.
+- Push-down predicates, partition pruning, file grouping, compacted output.
+- Avoid unnecessary shuffles and UDFs; broadcast small joins; use Parquet and bookmarks.
+- Check the Spark UI and job metrics.
+
+## CWD context
+Measure first; most gains come from a few stages.
+`,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle very large datasets?
+
+## Short answer
+Handle very large datasets with distributed processing, incremental loads and good partitioning.
+
+## Key points
+- Scale workers with auto scaling; process by partition or time window.
+- Columnar formats; skew handling; table compaction in Iceberg.
+- Consider EMR when you need deeper Spark control.
+
+## CWD context
+Avoid full reloads of large tables.
+`,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain S3 → Glue → OpenSearch architecture.
+
+## Short answer
+The flow is S3 raw documents → Glue processing → embeddings → OpenSearch, orchestrated by Step Functions.
+
+## Key points
+- Glue parses and cleans documents (Textract for scans), chunks them and adds metadata and ACLs.
+- Embeddings are generated with Bedrock in throttled batches.
+- Chunks are bulk-written to OpenSearch Serverless; a manifest in DynamoDB records status.
+- Curated chunks are also saved back to S3.
+
+## CWD context
+Every step is idempotent so reruns are safe.
+`,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue prepare enterprise documents for RAG?
+
+## Short answer
+Glue prepares documents by extracting, cleaning and structuring them for retrieval.
+
+## Key points
+- Text extraction, normalisation, language detection, deduplication.
+- PII detection and redaction; chunking; metadata enrichment; ACL attachment.
+- Quality checks; output as JSON or Parquet chunks.
+
+## CWD context
+Preparation quality largely determines retrieval quality.
+`,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would document preprocessing happen?
+
+## Short answer
+Preprocess in Glue for bulk corpora and in Lambda for small, per-document events.
+
+## Key points
+- Glue: large batches and heavy transformations.
+- Lambda: near-real-time single-document processing.
+- Share code as a library so both paths behave the same.
+
+## CWD context
+Divergent code paths produce inconsistent chunks.
+`,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would chunking happen?
+
+## Short answer
+Chunk in the curated processing job, not at query time.
+
+## Key points
+- Recursive, structure-aware or semantic chunking with versioned parameters (size, overlap).
+- Deterministic chunk IDs; store the chunking strategy version in metadata.
+- Changing the strategy triggers a controlled re-chunk.
+
+## CWD context
+Chunk size and overlap should be tuned with retrieval evaluation.
+`,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would metadata extraction happen?
+
+## Short answer
+Extract metadata in the same job that prepares the chunks.
+
+## Key points
+- Source system, document ID, title, author, dates, type, department, language.
+- Sensitivity, ACL principals, path or URL, version, ingest run ID, content hash.
+- From source APIs, document properties and classification.
+
+## CWD context
+Good metadata powers both filtering and citations.
+`,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you maintain document lineage?
+
+## Short answer
+Maintain lineage with catalogue metadata, chunk-level fields and run identifiers.
+
+## Key points
+- Source ID, ingest run ID and hash on every chunk; Glue job run IDs.
+- Catalogue table properties; Lake Formation or DataZone lineage where available.
+- A manifest table linking documents to chunks.
+
+## CWD context
+A citation should trace chunk → document → source system.
+`,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you identify the source system for each document?
+
+## Short answer
+Set the source system at ingestion and validate it at write time.
+
+## Key points
+- Derived from the connector or S3 prefix (for example raw/{source}/).
+- Recorded in catalogue tags and the manifest.
+- Used for filtering, governance and citations.
+
+## CWD context
+Reject records with no source identity.
+`,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you attach ACL metadata to documents?
+
+## Short answer
+Capture source permissions and store them as normalised principals on every chunk.
+
+## Key points
+- Read permissions from SharePoint, Salesforce sharing and ServiceNow roles; map to identity-provider user and group IDs.
+- Store as allowed principals on each chunk; refresh on a schedule and on events, since permissions change independently of content.
+- Fail closed: no valid ACL means no indexing.
+
+## CWD context
+Query-time filtering then trusts this metadata.
+`,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent unauthorized documents from entering the RAG index?
+
+## Short answer
+Prevent unauthorised documents from entering the index with allow-lists, classification and fail-closed checks.
+
+## Key points
+- Approved source and path allow-list; approval workflow for new sources.
+- Classification and PII scans (Macie or Comprehend) with quarantine.
+- Reject chunks with missing or invalid ACL metadata; separate indexes for restricted data.
+- Data-quality rules; least-privilege write access; query-time ACL filtering as a second layer.
+
+## CWD context
+Two layers: control what goes in, and filter what comes out.
+`,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document updates?
+
+## Short answer
+Handle updates with change detection and upserts that replace old chunks.
+
+## Key points
+- Detect by hash, ETag or version ID; deterministic chunk IDs.
+- Re-embed only changed chunks; delete obsolete ones.
+- Separate path for ACL-only changes; avoid partial states by writing new before removing old.
+
+## CWD context
+Store version and ingest time on each chunk.
+`,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion?
+
+## Short answer
+Handle deletions with delete signals and reconciliation.
+
+## Key points
+- S3 events, source tombstones and a periodic reconciliation job.
+- Delete chunks by document ID in OpenSearch; update manifests; purge caches.
+- Verify and record for compliance.
+
+## CWD context
+Erasure requests must reach the index and any caches.
+`,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue trigger downstream processing?
+
+## Short answer
+Trigger downstream steps from Glue job state-change events.
+
+## Key points
+- EventBridge events for succeeded and failed job runs → Step Functions, Lambda or SNS.
+- Step Functions can start and wait for a Glue job directly; Glue triggers and workflows for simple chains.
+
+## CWD context
+Completion starts indexing, evaluation or notification.
+`,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue vs Lambda for data transformation?
+
+## Short answer
+Use Glue for large batch transformation and Lambda for small, event-driven work.
+
+## Key points
+- Glue: distributed Spark for GBs to TBs; slower start; pay per DPU time.
+- Lambda: up to 15 minutes and limited memory; fast start; per event.
+- Hybrid designs are common.
+
+## CWD context
+Per-document events suit Lambda; bulk re-indexing suits Glue.
+`,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue vs EMR?
+
+## Short answer
+Glue is serverless ETL; EMR gives deeper control over the big-data stack.
+
+## Key points
+- Glue: less operations, catalogue integration, limited tuning.
+- EMR: custom Spark and library versions, persistent clusters, other frameworks such as Flink.
+
+## CWD context
+Choose Glue unless you need EMR-level control.
+`,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Glue jobs?
+
+## Short answer
+Monitor Glue with CloudWatch, the Spark UI and event-based alerts.
+
+## Key points
+- Job status, duration, worker and memory metrics; continuous logs; job run insights.
+- Data-quality results; EventBridge failure events to SNS.
+- Alarms on duration and missing runs; cost by tags.
+
+## CWD context
+Alert when a scheduled job does not run, not only when it fails.
+`,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a failed Glue job?
+
+## Short answer
+Troubleshoot a failed job from the logs, then the Spark UI, then the likely causes.
+
+## Key points
+- Permissions or KMS access; network and connection settings (VPC, security groups, endpoints).
+- Out-of-memory from skew or large partitions; schema mismatches and bad records.
+- Source API limits; bookmark issues; small-file explosions; timeouts.
+
+## CWD context
+Fix the cause, then rerun idempotently.
+`,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize Glue cost?
+
+## Short answer
+Reduce Glue cost with right-sizing, incremental work and cheaper execution options.
+
+## Key points
+- Auto scaling and right-sized workers; Flex execution class for non-urgent jobs.
+- Bookmarks and incremental loads; efficient formats; compact small files.
+- Fewer or no crawlers; Lambda or Athena for small tasks; tags and budgets.
+
+## CWD context
+Idle workers and full reloads are the usual waste.
+`,code:``}];function Ym(){return(0,M.jsx)($,{data:Jm,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Xm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you use SageMaker in CWD?
+
+## Short answer
+SageMaker provides the build, train, deploy and monitor lifecycle for custom ML models that Bedrock does not cover.
+
+## Key points
+- Classifiers, rerankers, anomaly detection, forecasting and fine-tuned or open-source models.
+- Managed training, pipelines, registry, endpoints and monitoring.
+- VPC, KMS and IAM controls.
+
+## CWD context
+Workers call SageMaker endpoints for scoring while Bedrock handles language tasks.
+`,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What role does SageMaker play alongside Bedrock?
+
+## Short answer
+Bedrock and SageMaker are complementary: Bedrock serves foundation models, SageMaker serves your own models.
+
+## Key points
+- Bedrock: general language and generative tasks through an API, no training.
+- SageMaker: custom-trained models with full lifecycle control.
+
+## CWD context
+A single workflow may call both, for example a classifier then an LLM.
+`,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# SageMaker vs Bedrock?
+
+## Short answer
+Bedrock is a managed foundation-model API; SageMaker is a platform to build and host any ML model.
+
+## Key points
+- Bedrock: per-token pricing, no infrastructure, fastest for general language tasks.
+- SageMaker: your data and code, pay for instances, more control and more responsibility.
+
+## CWD context
+Choose by the task, not by preference.
+`,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker instead of Bedrock?
+
+## Short answer
+Use SageMaker when you need a custom, cheap, fast or self-controlled model.
+
+## Key points
+- Custom-trained or fine-tuned models; open-source models not offered on Bedrock.
+- Strict latency or cost for a narrow task; deterministic outputs.
+- Batch scoring at scale; control of the container and hardware.
+- Bedrock Custom Model Import is a middle path for some models.
+
+## CWD context
+A small classifier is often better than an LLM for routing.
+`,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What models would you deploy using SageMaker?
+
+## Short answer
+Deploy narrow, task-specific models on SageMaker.
+
+## Key points
+- Intent or routing classifier; document and sensitivity classifier.
+- Reranker, domain-tuned embeddings, anomaly detection on telemetry.
+- Forecasting, propensity scoring, ticket triage, small fine-tuned language models.
+
+## CWD context
+Add each only when evaluation shows a clear win over a prompt.
+`,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Would you use SageMaker for foundation models or traditional ML?
+
+## Short answer
+SageMaker is mainly for traditional and task-specific ML plus small fine-tuned models; foundation models mostly come from Bedrock.
+
+## Key points
+- JumpStart can host open foundation models where control or steady high-volume cost justifies it.
+
+## CWD context
+Default to Bedrock for foundation models.
+`,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would SageMaker support the CWD ML pipeline?
+
+## Short answer
+SageMaker supports the ML pipeline from prepared data to a monitored endpoint.
+
+## Key points
+- Glue prepares data in S3; Processing and Training jobs build the model.
+- Evaluation, Model Registry, endpoint deployment, Model Monitor and retraining triggers.
+- SageMaker Pipelines orchestrates the steps.
+
+## CWD context
+The same governance applies to models as to prompts.
+`,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy a custom model to SageMaker?
+
+## Short answer
+Deploy a custom model by packaging the artifact and container, then creating a model, endpoint configuration and endpoint.
+
+## Key points
+- Model artifact in S3 and an inference container (prebuilt or custom in ECR).
+- Configure instance type, count and variants; deploy from the Model Registry through a pipeline.
+- VPC configuration, KMS, autoscaling and testing.
+
+## CWD context
+Deploy a specific registered version, never "latest".
+`,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Workers consume a SageMaker endpoint?
+
+## Short answer
+Workers invoke the endpoint through the SageMaker runtime over a private endpoint with their task role.
+
+## Key points
+- sagemaker:InvokeEndpoint scoped to that endpoint's ARN; interface VPC endpoint for the runtime.
+- Typed payload, timeout, backoff retries and a circuit breaker; validate the response.
+- Optionally wrap it in an MCP tool.
+
+## CWD context
+Pass the correlation ID so calls appear in traces.
+`,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:`# API Gateway → Worker → SageMaker architecture?
+
+## Short answer
+The Worker sits between CWD and the endpoint: API Gateway → ALB → Coordinator → Delegator → Worker → SageMaker.
+
+## Key points
+- The endpoint is private and never exposed to clients or API Gateway directly.
+- The Worker adds validation, identity context, retries and logging.
+- For slow or large jobs: Worker → SQS → asynchronous endpoint, with results in S3.
+
+## CWD context
+The Worker is the policy enforcement point.
+`,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure SageMaker endpoints?
+
+## Short answer
+Secure endpoints with network isolation, least-privilege identity and encryption.
+
+## Key points
+- VPC-only deployment, interface endpoint with policy, no public access.
+- IAM limited to InvokeEndpoint on specific endpoints; KMS for volumes, artifacts and outputs.
+- Private ECR images; input validation; CloudTrail; no sensitive payloads in logs.
+
+## CWD context
+Only Worker roles may invoke.
+`,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor SageMaker endpoints?
+
+## Short answer
+Monitor endpoints with CloudWatch metrics, logs and Model Monitor.
+
+## Key points
+- Invocations, model and overhead latency, 4XX and 5XX errors, CPU, memory and GPU.
+- Alarms on p95 latency, errors and saturation; backlog metrics for asynchronous endpoints.
+- Model Monitor for data and model quality.
+
+## CWD context
+Track quality as well as availability.
+`,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle SageMaker endpoint failures?
+
+## Short answer
+Handle endpoint failures with redundancy, retries, circuit breakers and fallbacks.
+
+## Key points
+- At least two instances across AZs with automatic replacement.
+- Backoff retries on 5xx and throttling; circuit breaker.
+- Fallback to the previous version, a simpler model, a rule or a cached result; queue for asynchronous retries.
+- Deployment guardrails with automatic rollback.
+
+## CWD context
+Log every fallback so silent quality loss is visible.
+`,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you train a model using SageMaker?
+
+## Short answer
+Train a model with a training job that reads data from S3 and writes an artifact to S3.
+
+## Key points
+- Choose a container or algorithm, script, instance type and count, hyperparameters.
+- Input channels for training and validation data; IAM role, VPC and KMS.
+- Optional spot instances; metrics logged; register the resulting model.
+
+## CWD context
+Keep the job definition in code so it can be repeated.
+`,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data would come from S3?
+
+## Short answer
+Training data comes from curated, versioned S3 datasets.
+
+## Key points
+- Cleaned and labelled data in Parquet or CSV under immutable, versioned prefixes; feature tables.
+- Training, validation and test splits; access through the job's role; encryption with KMS.
+- Use fast-file or pipe modes for very large data.
+
+## CWD context
+Record the dataset version with each model.
+`,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue prepare training data for SageMaker?
+
+## Short answer
+Glue prepares training data by cleaning, joining, engineering features and splitting.
+
+## Key points
+- Deduplicate and join sources; create features; split train, validation and test without leakage.
+- Write versioned Parquet to S3; catalogue tables; data-quality rules; anonymise PII.
+- EventBridge starts the training pipeline when data is ready.
+
+## CWD context
+Data leakage between splits is the most common silent error.
+`,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:`# Explain S3 → Glue → SageMaker Training.
+
+## Short answer
+The flow is raw S3 → Glue curation → versioned curated dataset → SageMaker training → model artifact → evaluation → registry.
+
+## Key points
+- Glue outputs a versioned dataset; the training job reads it as a channel.
+- The artifact lands in S3 and is evaluated before registration.
+- SageMaker Pipelines or Step Functions orchestrates.
+
+## CWD context
+Each stage's output is immutable and traceable.
+`,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform distributed training?
+
+## Short answer
+Distribute training across instances when data or models are too large for one.
+
+## Key points
+- Data parallelism (SageMaker distributed data parallel, PyTorch DDP, Horovod).
+- Model or sharded parallelism (FSDP, DeepSpeed) for large models; HyperPod for very large training.
+- Managed spot with checkpoints; tune batch size and network.
+
+## CWD context
+Most CWD models are small; scale out only when needed.
+`,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you select SageMaker instance types?
+
+## Short answer
+Choose instance types from the workload, and benchmark before committing.
+
+## Key points
+- CPU families for tabular and classic ML; GPU families for deep learning; memory-optimised for large feature sets.
+- Spot training with checkpointing to cut cost; profile utilisation.
+- Start small and scale.
+
+## CWD context
+Idle GPUs are the expensive mistake.
+`,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage training datasets?
+
+## Short answer
+Manage datasets as versioned, catalogued and access-controlled assets.
+
+## Key points
+- Immutable S3 snapshots with a recorded dataset version; catalogue tables.
+- SageMaker Feature Store for consistent online and offline features.
+- Lineage tracking, quality checks, retention and data cards.
+
+## CWD context
+You must be able to say exactly which data trained which model.
+`,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you track experiments?
+
+## Short answer
+Track experiments with SageMaker Experiments or managed MLflow.
+
+## Key points
+- Log parameters, metrics, artifacts, dataset versions and code commit.
+- Compare runs; tag; autologging from training jobs.
+
+## CWD context
+Every registered model links back to its run.
+`,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you version models?
+
+## Short answer
+Version models in the SageMaker Model Registry.
+
+## Key points
+- Model package groups with versions, metrics, container image and approval status.
+- Lineage and cross-account sharing.
+- Endpoints reference a specific version.
+
+## CWD context
+Never deploy an unregistered model.
+`,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reproduce a previous training run?
+
+## Short answer
+Reproduce a run by pinning everything that influenced it.
+
+## Key points
+- Code commit and container image digest; dataset version; hyperparameters and seeds; library versions.
+- Rerun from the recorded configuration through the pipeline.
+- Verify metrics within a tolerance and check lineage records.
+
+## CWD context
+Reproducibility is required for audits.
+`,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain a SageMaker MLOps pipeline.
+
+## Short answer
+A SageMaker MLOps pipeline is an automated DAG from data processing to a registered, deployable model.
+
+## Key points
+- Processing → training → evaluation → condition on metrics → register as pending approval → deploy after approval → monitor.
+- Triggered by schedule, EventBridge or CodePipeline; parameterised with caching.
+
+## CWD context
+The pipeline definition lives in Git.
+`,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you automate model training?
+
+## Short answer
+Automate training with events and schedules that start the pipeline.
+
+## Key points
+- EventBridge rules for new data, schedules or drift alarms.
+- Step Functions or CodePipeline for orchestration; notifications and retries.
+- Parameterise the dataset version.
+
+## CWD context
+Automated training still goes through the approval gate.
+`,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model validation?
+
+## Short answer
+Validate data before training and the model before registration.
+
+## Key points
+- Data: schema, ranges and data-quality rules.
+- Model: metric sanity checks, holdout inference test, container smoke test, latency test.
+- Bias and explainability checks with Clarify.
+
+## CWD context
+Fail early on bad data.
+`,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model evaluation?
+
+## Short answer
+Evaluate the candidate against the current champion on a held-out test set.
+
+## Key points
+- A Processing step computes metrics, including per-slice results.
+- A Condition step enforces thresholds; the report is stored in S3.
+- Clarify for bias and explainability; business-metric checks.
+
+## CWD context
+Do not promote a model that is better overall but worse on a critical slice.
+`,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model approval?
+
+## Short answer
+Model approval is a status on the model package, set by people or automated checks.
+
+## Key points
+- PendingManualApproval → Approved or Rejected.
+- An EventBridge event on approval triggers deployment.
+- IAM controls who can approve; CloudTrail records it.
+
+## CWD context
+Approval and deployment are separate steps by design.
+`,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is SageMaker Model Registry?
+
+## Short answer
+The SageMaker Model Registry catalogues model versions and their approval state.
+
+## Key points
+- Model package groups with versions, metadata, metrics and lineage.
+- The promotion boundary between training and deployment.
+- Supports cross-account deployment.
+
+## CWD context
+The registry is the model inventory for governance.
+`,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you promote a model from dev → test → production?
+
+## Short answer
+Promote by deploying the same registered version through each stage with tests and approvals.
+
+## Key points
+- Separate accounts; registry shared or artifacts copied.
+- CI/CD (CodePipeline or SageMaker Projects) deploys the version to each stage.
+- Endpoint configuration per environment; approval between stages.
+
+## CWD context
+Promote by version, never by retraining or copying by hand.
+`,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model rollback?
+
+## Short answer
+Roll back by returning the endpoint to the previous configuration or version.
+
+## Key points
+- Deployment guardrails can roll back automatically on CloudWatch alarms.
+- Manual: update the endpoint to the previous endpoint configuration.
+- Old versions stay in the registry; verify metrics afterwards.
+
+## CWD context
+Keep the previous configuration available until the new one is proven.
+`,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect model drift?
+
+## Short answer
+Detect model quality drift by comparing predictions with ground truth.
+
+## Key points
+- Model Monitor model-quality jobs compare predictions with labels against baseline metrics.
+- Scheduled runs with alarms; proxy metrics such as prediction distribution when labels are delayed.
+
+## CWD context
+Build a label feedback loop from Worker outcomes.
+`,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect data drift?
+
+## Short answer
+Detect data drift by comparing inference inputs with training baselines.
+
+## Key points
+- Enable data capture to S3; baseline statistics and constraints from training data.
+- Scheduled Model Monitor jobs report violations; CloudWatch alarms.
+- Clarify tracks feature attribution drift.
+
+## CWD context
+Data drift is a warning; quality drift is the proof.
+`,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor model quality?
+
+## Short answer
+Monitor model quality with technical and business metrics over time.
+
+## Key points
+- Accuracy-type metrics per slice, latency and errors.
+- Label pipeline, dashboards, thresholds and periodic comparison with the champion.
+- Feedback from Worker outcomes.
+
+## CWD context
+Tie model metrics to the business outcome they support.
+`,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform continuous training?
+
+## Short answer
+Continuous training retrains and redeploys automatically, safely.
+
+## Key points
+- Triggers: drift alarms, new labelled data, schedule.
+- Pipeline retrains, evaluates against the current model and registers only if better.
+- Approval, then canary deployment; guard against feedback loops and bad data; control cost.
+
+## CWD context
+Automation must not bypass the approval gate for production.
+`,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate SageMaker with CI/CD?
+
+## Short answer
+Integrate SageMaker with CI/CD through SageMaker Projects and standard pipelines.
+
+## Key points
+- Code changes trigger pipeline runs; registry approval triggers deployment.
+- Infrastructure as code for endpoints; tests and approvals; cross-account deployment.
+- Same CodePipeline patterns as the rest of CWD.
+
+## CWD context
+One delivery approach for services and models keeps operations consistent.
+`,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Bedrock for LLM inference but SageMaker for another ML model?
+
+## Short answer
+Use Bedrock for general language work and SageMaker for custom models with different lifecycles and economics.
+
+## Key points
+- Bedrock: prompts, evaluation, per-token cost, no training.
+- SageMaker: data, training, registry, endpoints, instance cost.
+- A narrow prediction task with labelled data is usually cheaper and more predictable on SageMaker.
+
+## CWD context
+Two lifecycles, two governance paths, one Worker interface.
+`,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you decide whether a model belongs in Bedrock or SageMaker?
+
+## Short answer
+Decide by task type, data, cost and control needs, and confirm with a comparison.
+
+## Key points
+- General language or generative task an existing model handles well → Bedrock.
+- Narrow prediction with labelled data, strict latency or cost, model ownership, or a model not on Bedrock → SageMaker.
+- Compare cost at expected volume and evaluate both on the golden dataset.
+
+## CWD context
+Revisit the decision when volume or model options change.
+`,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would a Worker call a SageMaker endpoint?
+
+## Short answer
+A Worker calls the endpoint through a private runtime endpoint, or through an MCP tool that wraps it.
+
+## Key points
+- Task role with InvokeEndpoint on the specific endpoint; interface VPC endpoint.
+- Typed schema, backoff retries, circuit breaker and correlation ID via custom attributes.
+- Validate the response before using it.
+
+## CWD context
+An MCP wrapper gives a uniform, governed interface across tools.
+`,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle SageMaker inference latency?
+
+## Short answer
+Handle inference latency by measuring where it goes and fixing the biggest part.
+
+## Key points
+- Separate model latency from overhead latency; right-size the instance.
+- Model optimisation (compilation, quantisation), batching, smaller payloads.
+- Keep endpoints warm; co-locate in the same region; cache predictions; use asynchronous inference for slow work.
+
+## CWD context
+Set timeouts and fallbacks based on a latency budget.
+`,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale SageMaker endpoints?
+
+## Short answer
+Scale endpoints with autoscaling on invocations per instance, with headroom.
+
+## Key points
+- Target-tracking on invocations per instance with a value from load tests; minimum of two instances.
+- Scheduled scaling for known peaks; multi-model endpoints or inference components for many models.
+- Asynchronous endpoints scale on backlog and can scale to zero.
+
+## CWD context
+Load test to find real per-instance capacity.
+`,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Real-time vs asynchronous SageMaker inference?
+
+## Short answer
+Real-time endpoints serve low-latency requests; asynchronous endpoints queue large or slow requests.
+
+## Key points
+- Real-time: always-on, small payloads, short timeout.
+- Asynchronous: payloads up to about 1 GB, processing up to an hour, results in S3, scale to zero.
+- Batch transform for offline datasets.
+
+## CWD context
+Choose by latency need and payload size.
+`,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker Serverless Inference?
+
+## Short answer
+Serverless Inference suits intermittent traffic that can tolerate cold starts.
+
+## Key points
+- Pay per request; no instance management.
+- Memory and concurrency limits; typically no GPU.
+- Poor fit for steady, latency-critical traffic.
+
+## CWD context
+Good for small models used occasionally.
+`,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker Asynchronous Inference?
+
+## Short answer
+Asynchronous inference suits large payloads, long processing and bursty traffic.
+
+## Key points
+- Workers submit an input in S3 and receive results by notification or polling.
+- Can scale to zero when idle.
+- Good for document processing and heavy scoring.
+
+## CWD context
+Not suitable when the user waits for an immediate answer.
+`,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement autoscaling?
+
+## Short answer
+Implement autoscaling with a scalable target, a tracking policy and sensible limits.
+
+## Key points
+- Minimum and maximum instances; target value from load testing; cooldowns.
+- Backlog-based metrics for asynchronous endpoints; scheduled scaling for known peaks.
+- Alarms; instance quota checks.
+
+## CWD context
+Keep some headroom; scale-out is not instant.
+`,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle endpoint throttling?
+
+## Short answer
+Handle endpoint throttling with retries, queuing, capacity and fallback.
+
+## Key points
+- Backoff with jitter and a circuit breaker.
+- Autoscale headroom or more instances; per-tenant rate limits.
+- Queue work through SQS to an asynchronous endpoint; fall back to another model.
+
+## CWD context
+Throttling under load means capacity planning is due.
+`,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model fallback?
+
+## Short answer
+Implement model fallback as an ordered chain, monitored and evaluated.
+
+## Key points
+- Primary model → previous stable version or smaller model → rule, default or cached result → human escalation.
+- A circuit breaker switches paths; multi-variant or separate endpoints.
+- Evaluate the fallback quality and log every use.
+
+## CWD context
+Silent quality drops are worse than visible failures.
+`,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform A/B testing between models?
+
+## Short answer
+A/B test with production variants that split traffic by weight.
+
+## Key points
+- Variants under one endpoint, for example 90/10; optionally target a variant explicitly.
+- Compare invocation metrics and model quality per variant; use statistics.
+- Adjust weights with UpdateEndpointWeightsAndCapacities and promote the winner.
+
+## CWD context
+Define success metrics before starting.
+`,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform canary deployment?
+
+## Short answer
+Canary with deployment guardrails or shadow testing.
+
+## Key points
+- Blue-green deployment with canary or linear traffic shifting and automatic rollback on alarms.
+- Shadow variants receive copies of traffic without affecting users.
+- Watch latency, errors and quality.
+
+## CWD context
+Shadow testing is safest for high-risk models.
+`,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor inference cost?
+
+## Short answer
+Monitor inference cost by usage type, utilisation and cost per prediction.
+
+## Key points
+- Cost Explorer by SageMaker usage type and tags; endpoint hours usually dominate.
+- Idle endpoints show as low invocations or utilisation; cost per prediction = endpoint cost ÷ invocations.
+- Savings Plans, budgets and anomaly alerts.
+
+## CWD context
+Delete or scale down unused endpoints quickly.
+`,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize inference latency?
+
+## Short answer
+Optimise inference latency by optimising the model, the hardware and the path.
+
+## Key points
+- Quantisation, compilation, distillation; GPU or purpose-built inference hardware where it pays off.
+- Batching, warm containers, small payloads, fast feature lookup or caching.
+- Same-region private endpoints and keep-alive connections; asynchronous handling for slow parts.
+
+## CWD context
+Measure model latency versus overhead before optimising.
+`,code:``}];function Zm(){return(0,M.jsx)($,{data:Xm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var Qm=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete Azure architecture for CWD.
 
 ## Short answer
 CWD on Azure is a layered, private, identity-based architecture: edge and API, orchestration, agents and tools, AI and data services, state and messaging, and a platform layer for security, observability and DevOps.
