@@ -6,7 +6,7 @@ var e=Object.create,t=Object.defineProperty,n=Object.getOwnPropertyDescriptor,r=
 `+c[r].replace(` at new `,` at `);return e.displayName&&u.includes(`<anonymous>`)&&(u=u.replace(`<anonymous>`,e.displayName)),u}while(1<=r&&0<=i);break}}}finally{we=!1,Error.prepareStackTrace=n}return(n=e?e.displayName||e.name:``)?Ce(n):``}function Ee(e,t){switch(e.tag){case 26:case 27:case 5:return Ce(e.type);case 16:return Ce(`Lazy`);case 13:return e.child!==t&&t!==null?Ce(`Suspense Fallback`):Ce(`Suspense`);case 19:return Ce(`SuspenseList`);case 0:case 15:return Te(e.type,!1);case 11:return Te(e.type.render,!1);case 1:return Te(e.type,!0);case 31:return Ce(`Activity`);default:return``}}function De(e){try{var t=``,n=null;do t+=Ee(e,n),n=e,e=e.return;while(e);return t}catch(e){return`
 Error generating stack: `+e.message+`
 `+e.stack}}var Oe=Object.prototype.hasOwnProperty,ke=t.unstable_scheduleCallback,Ae=t.unstable_cancelCallback,je=t.unstable_shouldYield,Me=t.unstable_requestPaint,Ne=t.unstable_now,Pe=t.unstable_getCurrentPriorityLevel,Fe=t.unstable_ImmediatePriority,Ie=t.unstable_UserBlockingPriority,Le=t.unstable_NormalPriority,Re=t.unstable_LowPriority,ze=t.unstable_IdlePriority,Be=t.log,Ve=t.unstable_setDisableYieldValue,He=null,Ue=null;function We(e){if(typeof Be==`function`&&Ve(e),Ue&&typeof Ue.setStrictMode==`function`)try{Ue.setStrictMode(He,e)}catch{}}var Ge=Math.clz32?Math.clz32:Je,Ke=Math.log,qe=Math.LN2;function Je(e){return e>>>=0,e===0?32:31-(Ke(e)/qe|0)|0}var Ye=256,Xe=262144,Ze=4194304;function Qe(e){var t=e&42;if(t!==0)return t;switch(e&-e){case 1:return 1;case 2:return 2;case 4:return 4;case 8:return 8;case 16:return 16;case 32:return 32;case 64:return 64;case 128:return 128;case 256:case 512:case 1024:case 2048:case 4096:case 8192:case 16384:case 32768:case 65536:case 131072:return e&261888;case 262144:case 524288:case 1048576:case 2097152:return e&3932160;case 4194304:case 8388608:case 16777216:case 33554432:return e&62914560;case 67108864:return 67108864;case 134217728:return 134217728;case 268435456:return 268435456;case 536870912:return 536870912;case 1073741824:return 0;default:return e}}function $e(e,t,n){var r=e.pendingLanes;if(r===0)return 0;var i=0,a=e.suspendedLanes,o=e.pingedLanes;e=e.warmLanes;var s=r&134217727;return s===0?(s=r&~a,s===0?o===0?n||(n=r&~e,n!==0&&(i=Qe(n))):i=Qe(o):i=Qe(s)):(r=s&~a,r===0?(o&=s,o===0?n||(n=s&~e,n!==0&&(i=Qe(n))):i=Qe(o)):i=Qe(r)),i===0?0:t!==0&&t!==i&&(t&a)===0&&(a=i&-i,n=t&-t,a>=n||a===32&&n&4194048)?t:i}function et(e,t){return(e.pendingLanes&~(e.suspendedLanes&~e.pingedLanes)&t)===0}function tt(e,t){switch(e){case 1:case 2:case 4:case 8:case 64:return t+250;case 16:case 32:case 128:case 256:case 512:case 1024:case 2048:case 4096:case 8192:case 16384:case 32768:case 65536:case 131072:case 262144:case 524288:case 1048576:case 2097152:return t+5e3;case 4194304:case 8388608:case 16777216:case 33554432:return-1;case 67108864:case 134217728:case 268435456:case 536870912:case 1073741824:return-1;default:return-1}}function nt(){var e=Ze;return Ze<<=1,!(Ze&62914560)&&(Ze=4194304),e}function rt(e){for(var t=[],n=0;31>n;n++)t.push(e);return t}function it(e,t){e.pendingLanes|=t,t!==268435456&&(e.suspendedLanes=0,e.pingedLanes=0,e.warmLanes=0)}function at(e,t,n,r,i,a){var o=e.pendingLanes;e.pendingLanes=n,e.suspendedLanes=0,e.pingedLanes=0,e.warmLanes=0,e.expiredLanes&=n,e.entangledLanes&=n,e.errorRecoveryDisabledLanes&=n,e.shellSuspendCounter=0;var s=e.entanglements,c=e.expirationTimes,l=e.hiddenUpdates;for(n=o&~n;0<n;){var u=31-Ge(n),d=1<<u;s[u]=0,c[u]=-1;var f=l[u];if(f!==null)for(l[u]=null,u=0;u<f.length;u++){var p=f[u];p!==null&&(p.lane&=-536870913)}n&=~d}r!==0&&ot(e,r,0),a!==0&&i===0&&e.tag!==0&&(e.suspendedLanes|=a&~(o&~t))}function ot(e,t,n){e.pendingLanes|=t,e.suspendedLanes&=~t;var r=31-Ge(t);e.entangledLanes|=t,e.entanglements[r]=e.entanglements[r]|1073741824|n&261930}function st(e,t){var n=e.entangledLanes|=t;for(e=e.entanglements;n;){var r=31-Ge(n),i=1<<r;i&t|e[r]&t&&(e[r]|=t),n&=~i}}function ct(e,t){var n=t&-t;return n=n&42?1:lt(n),(n&(e.suspendedLanes|t))===0?n:0}function lt(e){switch(e){case 2:e=1;break;case 8:e=4;break;case 32:e=16;break;case 256:case 512:case 1024:case 2048:case 4096:case 8192:case 16384:case 32768:case 65536:case 131072:case 262144:case 524288:case 1048576:case 2097152:case 4194304:case 8388608:case 16777216:case 33554432:e=128;break;case 268435456:e=134217728;break;default:e=0}return e}function ut(e){return e&=-e,2<e?8<e?e&134217727?32:268435456:8:2}function dt(){var e=k.p;return e===0?(e=window.event,e===void 0?32:mp(e.type)):e}function ft(e,t){var n=k.p;try{return k.p=e,t()}finally{k.p=n}}var pt=Math.random().toString(36).slice(2),mt=`__reactFiber$`+pt,ht=`__reactProps$`+pt,gt=`__reactContainer$`+pt,_t=`__reactEvents$`+pt,vt=`__reactListeners$`+pt,yt=`__reactHandles$`+pt,bt=`__reactResources$`+pt,xt=`__reactMarker$`+pt;function St(e){delete e[mt],delete e[ht],delete e[_t],delete e[vt],delete e[yt]}function Ct(e){var t=e[mt];if(t)return t;for(var n=e.parentNode;n;){if(t=n[gt]||n[mt]){if(n=t.alternate,t.child!==null||n!==null&&n.child!==null)for(e=ff(e);e!==null;){if(n=e[mt])return n;e=ff(e)}return t}e=n,n=e.parentNode}return null}function wt(e){if(e=e[mt]||e[gt]){var t=e.tag;if(t===5||t===6||t===13||t===31||t===26||t===27||t===3)return e}return null}function Tt(e){var t=e.tag;if(t===5||t===26||t===27||t===6)return e.stateNode;throw Error(i(33))}function Et(e){var t=e[bt];return t||=e[bt]={hoistableStyles:new Map,hoistableScripts:new Map},t}function Dt(e){e[xt]=!0}var Ot=new Set,kt={};function At(e,t){jt(e,t),jt(e+`Capture`,t)}function jt(e,t){for(kt[e]=t,e=0;e<t.length;e++)Ot.add(t[e])}var Mt=RegExp(`^[:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD][:A-Z_a-z\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD\\-.0-9\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$`),Nt={},Pt={};function Ft(e){return Oe.call(Pt,e)?!0:Oe.call(Nt,e)?!1:Mt.test(e)?Pt[e]=!0:(Nt[e]=!0,!1)}function It(e,t,n){if(Ft(t)){if(n===null)e.removeAttribute(t);else{switch(typeof n){case`undefined`:case`function`:case`symbol`:e.removeAttribute(t);return;case`boolean`:var r=t.toLowerCase().slice(0,5);if(r!==`data-`&&r!==`aria-`){e.removeAttribute(t);return}}e.setAttribute(t,``+n)}}}function Lt(e,t,n){if(n===null)e.removeAttribute(t);else{switch(typeof n){case`undefined`:case`function`:case`symbol`:case`boolean`:e.removeAttribute(t);return}e.setAttribute(t,``+n)}}function Rt(e,t,n,r){if(r===null)e.removeAttribute(n);else{switch(typeof r){case`undefined`:case`function`:case`symbol`:case`boolean`:e.removeAttribute(n);return}e.setAttributeNS(t,n,``+r)}}function zt(e){switch(typeof e){case`bigint`:case`boolean`:case`number`:case`string`:case`undefined`:return e;case`object`:return e;default:return``}}function Bt(e){var t=e.type;return(e=e.nodeName)&&e.toLowerCase()===`input`&&(t===`checkbox`||t===`radio`)}function Vt(e,t,n){var r=Object.getOwnPropertyDescriptor(e.constructor.prototype,t);if(!e.hasOwnProperty(t)&&r!==void 0&&typeof r.get==`function`&&typeof r.set==`function`){var i=r.get,a=r.set;return Object.defineProperty(e,t,{configurable:!0,get:function(){return i.call(this)},set:function(e){n=``+e,a.call(this,e)}}),Object.defineProperty(e,t,{enumerable:r.enumerable}),{getValue:function(){return n},setValue:function(e){n=``+e},stopTracking:function(){e._valueTracker=null,delete e[t]}}}}function Ht(e){if(!e._valueTracker){var t=Bt(e)?`checked`:`value`;e._valueTracker=Vt(e,t,``+e[t])}}function Ut(e){if(!e)return!1;var t=e._valueTracker;if(!t)return!0;var n=t.getValue(),r=``;return e&&(r=Bt(e)?e.checked?`true`:`false`:e.value),e=r,e!==n&&(t.setValue(e),!0)}function Wt(e){if(e||=typeof document<`u`?document:void 0,e===void 0)return null;try{return e.activeElement||e.body}catch{return e.body}}var j=/[\n"\\]/g;function Gt(e){return e.replace(j,function(e){return`\\`+e.charCodeAt(0).toString(16)+` `})}function Kt(e,t,n,r,i,a,o,s){e.name=``,o!=null&&typeof o!=`function`&&typeof o!=`symbol`&&typeof o!=`boolean`?e.type=o:e.removeAttribute(`type`),t==null?o!==`submit`&&o!==`reset`||e.removeAttribute(`value`):o===`number`?(t===0&&e.value===``||e.value!=t)&&(e.value=``+zt(t)):e.value!==``+zt(t)&&(e.value=``+zt(t)),t==null?n==null?r!=null&&e.removeAttribute(`value`):Jt(e,o,zt(n)):Jt(e,o,zt(t)),i==null&&a!=null&&(e.defaultChecked=!!a),i!=null&&(e.checked=i&&typeof i!=`function`&&typeof i!=`symbol`),s!=null&&typeof s!=`function`&&typeof s!=`symbol`&&typeof s!=`boolean`?e.name=``+zt(s):e.removeAttribute(`name`)}function qt(e,t,n,r,i,a,o,s){if(a!=null&&typeof a!=`function`&&typeof a!=`symbol`&&typeof a!=`boolean`&&(e.type=a),t!=null||n!=null){if(!(a!==`submit`&&a!==`reset`||t!=null)){Ht(e);return}n=n==null?``:``+zt(n),t=t==null?n:``+zt(t),s||t===e.value||(e.value=t),e.defaultValue=t}r??=i,r=typeof r!=`function`&&typeof r!=`symbol`&&!!r,e.checked=s?e.checked:!!r,e.defaultChecked=!!r,o!=null&&typeof o!=`function`&&typeof o!=`symbol`&&typeof o!=`boolean`&&(e.name=o),Ht(e)}function Jt(e,t,n){t===`number`&&Wt(e.ownerDocument)===e||e.defaultValue===``+n||(e.defaultValue=``+n)}function Yt(e,t,n,r){if(e=e.options,t){t={};for(var i=0;i<n.length;i++)t[`$`+n[i]]=!0;for(n=0;n<e.length;n++)i=t.hasOwnProperty(`$`+e[n].value),e[n].selected!==i&&(e[n].selected=i),i&&r&&(e[n].defaultSelected=!0)}else{for(n=``+zt(n),t=null,i=0;i<e.length;i++){if(e[i].value===n){e[i].selected=!0,r&&(e[i].defaultSelected=!0);return}t!==null||e[i].disabled||(t=e[i])}t!==null&&(t.selected=!0)}}function Xt(e,t,n){if(t!=null&&(t=``+zt(t),t!==e.value&&(e.value=t),n==null)){e.defaultValue!==t&&(e.defaultValue=t);return}e.defaultValue=n==null?``:``+zt(n)}function Zt(e,t,n,r){if(t==null){if(r!=null){if(n!=null)throw Error(i(92));if(se(r)){if(1<r.length)throw Error(i(93));r=r[0]}n=r}n??=``,t=n}n=zt(t),e.defaultValue=n,r=e.textContent,r===n&&r!==``&&r!==null&&(e.value=r),Ht(e)}function Qt(e,t){if(t){var n=e.firstChild;if(n&&n===e.lastChild&&n.nodeType===3){n.nodeValue=t;return}}e.textContent=t}var $t=new Set(`animationIterationCount aspectRatio borderImageOutset borderImageSlice borderImageWidth boxFlex boxFlexGroup boxOrdinalGroup columnCount columns flex flexGrow flexPositive flexShrink flexNegative flexOrder gridArea gridRow gridRowEnd gridRowSpan gridRowStart gridColumn gridColumnEnd gridColumnSpan gridColumnStart fontWeight lineClamp lineHeight opacity order orphans scale tabSize widows zIndex zoom fillOpacity floodOpacity stopOpacity strokeDasharray strokeDashoffset strokeMiterlimit strokeOpacity strokeWidth MozAnimationIterationCount MozBoxFlex MozBoxFlexGroup MozLineClamp msAnimationIterationCount msFlex msZoom msFlexGrow msFlexNegative msFlexOrder msFlexPositive msFlexShrink msGridColumn msGridColumnSpan msGridRow msGridRowSpan WebkitAnimationIterationCount WebkitBoxFlex WebKitBoxFlexGroup WebkitBoxOrdinalGroup WebkitColumnCount WebkitColumns WebkitFlex WebkitFlexGrow WebkitFlexPositive WebkitFlexShrink WebkitLineClamp`.split(` `));function en(e,t,n){var r=t.indexOf(`--`)===0;n==null||typeof n==`boolean`||n===``?r?e.setProperty(t,``):t===`float`?e.cssFloat=``:e[t]=``:r?e.setProperty(t,n):typeof n!=`number`||n===0||$t.has(t)?t===`float`?e.cssFloat=n:e[t]=(``+n).trim():e[t]=n+`px`}function tn(e,t,n){if(t!=null&&typeof t!=`object`)throw Error(i(62));if(e=e.style,n!=null){for(var r in n)!n.hasOwnProperty(r)||t!=null&&t.hasOwnProperty(r)||(r.indexOf(`--`)===0?e.setProperty(r,``):r===`float`?e.cssFloat=``:e[r]=``);for(var a in t)r=t[a],t.hasOwnProperty(a)&&n[a]!==r&&en(e,a,r)}else for(var o in t)t.hasOwnProperty(o)&&en(e,o,t[o])}function nn(e){if(e.indexOf(`-`)===-1)return!1;switch(e){case`annotation-xml`:case`color-profile`:case`font-face`:case`font-face-src`:case`font-face-uri`:case`font-face-format`:case`font-face-name`:case`missing-glyph`:return!1;default:return!0}}var rn=new Map([[`acceptCharset`,`accept-charset`],[`htmlFor`,`for`],[`httpEquiv`,`http-equiv`],[`crossOrigin`,`crossorigin`],[`accentHeight`,`accent-height`],[`alignmentBaseline`,`alignment-baseline`],[`arabicForm`,`arabic-form`],[`baselineShift`,`baseline-shift`],[`capHeight`,`cap-height`],[`clipPath`,`clip-path`],[`clipRule`,`clip-rule`],[`colorInterpolation`,`color-interpolation`],[`colorInterpolationFilters`,`color-interpolation-filters`],[`colorProfile`,`color-profile`],[`colorRendering`,`color-rendering`],[`dominantBaseline`,`dominant-baseline`],[`enableBackground`,`enable-background`],[`fillOpacity`,`fill-opacity`],[`fillRule`,`fill-rule`],[`floodColor`,`flood-color`],[`floodOpacity`,`flood-opacity`],[`fontFamily`,`font-family`],[`fontSize`,`font-size`],[`fontSizeAdjust`,`font-size-adjust`],[`fontStretch`,`font-stretch`],[`fontStyle`,`font-style`],[`fontVariant`,`font-variant`],[`fontWeight`,`font-weight`],[`glyphName`,`glyph-name`],[`glyphOrientationHorizontal`,`glyph-orientation-horizontal`],[`glyphOrientationVertical`,`glyph-orientation-vertical`],[`horizAdvX`,`horiz-adv-x`],[`horizOriginX`,`horiz-origin-x`],[`imageRendering`,`image-rendering`],[`letterSpacing`,`letter-spacing`],[`lightingColor`,`lighting-color`],[`markerEnd`,`marker-end`],[`markerMid`,`marker-mid`],[`markerStart`,`marker-start`],[`overlinePosition`,`overline-position`],[`overlineThickness`,`overline-thickness`],[`paintOrder`,`paint-order`],[`panose-1`,`panose-1`],[`pointerEvents`,`pointer-events`],[`renderingIntent`,`rendering-intent`],[`shapeRendering`,`shape-rendering`],[`stopColor`,`stop-color`],[`stopOpacity`,`stop-opacity`],[`strikethroughPosition`,`strikethrough-position`],[`strikethroughThickness`,`strikethrough-thickness`],[`strokeDasharray`,`stroke-dasharray`],[`strokeDashoffset`,`stroke-dashoffset`],[`strokeLinecap`,`stroke-linecap`],[`strokeLinejoin`,`stroke-linejoin`],[`strokeMiterlimit`,`stroke-miterlimit`],[`strokeOpacity`,`stroke-opacity`],[`strokeWidth`,`stroke-width`],[`textAnchor`,`text-anchor`],[`textDecoration`,`text-decoration`],[`textRendering`,`text-rendering`],[`transformOrigin`,`transform-origin`],[`underlinePosition`,`underline-position`],[`underlineThickness`,`underline-thickness`],[`unicodeBidi`,`unicode-bidi`],[`unicodeRange`,`unicode-range`],[`unitsPerEm`,`units-per-em`],[`vAlphabetic`,`v-alphabetic`],[`vHanging`,`v-hanging`],[`vIdeographic`,`v-ideographic`],[`vMathematical`,`v-mathematical`],[`vectorEffect`,`vector-effect`],[`vertAdvY`,`vert-adv-y`],[`vertOriginX`,`vert-origin-x`],[`vertOriginY`,`vert-origin-y`],[`wordSpacing`,`word-spacing`],[`writingMode`,`writing-mode`],[`xmlnsXlink`,`xmlns:xlink`],[`xHeight`,`x-height`]]),an=/^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*:/i;function on(e){return an.test(``+e)?`javascript:throw new Error('React has blocked a javascript: URL as a security precaution.')`:e}function sn(){}var cn=null;function ln(e){return e=e.target||e.srcElement||window,e.correspondingUseElement&&(e=e.correspondingUseElement),e.nodeType===3?e.parentNode:e}var un=null,dn=null;function fn(e){var t=wt(e);if(t&&(e=t.stateNode)){var n=e[ht]||null;a:switch(e=t.stateNode,t.type){case`input`:if(Kt(e,n.value,n.defaultValue,n.defaultValue,n.checked,n.defaultChecked,n.type,n.name),t=n.name,n.type===`radio`&&t!=null){for(n=e;n.parentNode;)n=n.parentNode;for(n=n.querySelectorAll(`input[name="`+Gt(``+t)+`"][type="radio"]`),t=0;t<n.length;t++){var r=n[t];if(r!==e&&r.form===e.form){var a=r[ht]||null;if(!a)throw Error(i(90));Kt(r,a.value,a.defaultValue,a.defaultValue,a.checked,a.defaultChecked,a.type,a.name)}}for(t=0;t<n.length;t++)r=n[t],r.form===e.form&&Ut(r)}break a;case`textarea`:Xt(e,n.value,n.defaultValue);break a;case`select`:t=n.value,t!=null&&Yt(e,!!n.multiple,t,!1)}}}var pn=!1;function mn(e,t,n){if(pn)return e(t,n);pn=!0;try{return e(t)}finally{if(pn=!1,(un!==null||dn!==null)&&(xu(),un&&(t=un,e=dn,dn=un=null,fn(t),e)))for(t=0;t<e.length;t++)fn(e[t])}}function hn(e,t){var n=e.stateNode;if(n===null)return null;var r=n[ht]||null;if(r===null)return null;n=r[t];a:switch(t){case`onClick`:case`onClickCapture`:case`onDoubleClick`:case`onDoubleClickCapture`:case`onMouseDown`:case`onMouseDownCapture`:case`onMouseMove`:case`onMouseMoveCapture`:case`onMouseUp`:case`onMouseUpCapture`:case`onMouseEnter`:(r=!r.disabled)||(e=e.type,r=e!==`button`&&e!==`input`&&e!==`select`&&e!==`textarea`),e=!r;break a;default:e=!1}if(e)return null;if(n&&typeof n!=`function`)throw Error(i(231,t,typeof n));return n}var gn=!(typeof window>`u`||window.document===void 0||window.document.createElement===void 0),_n=!1;if(gn)try{var vn={};Object.defineProperty(vn,"passive",{get:function(){_n=!0}}),window.addEventListener(`test`,vn,vn),window.removeEventListener(`test`,vn,vn)}catch{_n=!1}var yn=null,bn=null,xn=null;function Sn(){if(xn)return xn;var e,t=bn,n=t.length,r,i=`value`in yn?yn.value:yn.textContent,a=i.length;for(e=0;e<n&&t[e]===i[e];e++);var o=n-e;for(r=1;r<=o&&t[n-r]===i[a-r];r++);return xn=i.slice(e,1<r?1-r:void 0)}function Cn(e){var t=e.keyCode;return`charCode`in e?(e=e.charCode,e===0&&t===13&&(e=13)):e=t,e===10&&(e=13),32<=e||e===13?e:0}function wn(){return!0}function Tn(){return!1}function En(e){function t(t,n,r,i,a){for(var o in this._reactName=t,this._targetInst=r,this.type=n,this.nativeEvent=i,this.target=a,this.currentTarget=null,e)e.hasOwnProperty(o)&&(t=e[o],this[o]=t?t(i):i[o]);return this.isDefaultPrevented=(i.defaultPrevented==null?!1===i.returnValue:i.defaultPrevented)?wn:Tn,this.isPropagationStopped=Tn,this}return m(t.prototype,{preventDefault:function(){this.defaultPrevented=!0;var e=this.nativeEvent;e&&(e.preventDefault?e.preventDefault():typeof e.returnValue!=`unknown`&&(e.returnValue=!1),this.isDefaultPrevented=wn)},stopPropagation:function(){var e=this.nativeEvent;e&&(e.stopPropagation?e.stopPropagation():typeof e.cancelBubble!=`unknown`&&(e.cancelBubble=!0),this.isPropagationStopped=wn)},persist:function(){},isPersistent:wn}),t}var Dn={eventPhase:0,bubbles:0,cancelable:0,timeStamp:function(e){return e.timeStamp||Date.now()},defaultPrevented:0,isTrusted:0},On=En(Dn),kn=m({},Dn,{view:0,detail:0}),An=En(kn),jn,Mn,Nn,Pn=m({},kn,{screenX:0,screenY:0,clientX:0,clientY:0,pageX:0,pageY:0,ctrlKey:0,shiftKey:0,altKey:0,metaKey:0,getModifierState:Wn,button:0,buttons:0,relatedTarget:function(e){return e.relatedTarget===void 0?e.fromElement===e.srcElement?e.toElement:e.fromElement:e.relatedTarget},movementX:function(e){return`movementX`in e?e.movementX:(e!==Nn&&(Nn&&e.type===`mousemove`?(jn=e.screenX-Nn.screenX,Mn=e.screenY-Nn.screenY):Mn=jn=0,Nn=e),jn)},movementY:function(e){return`movementY`in e?e.movementY:Mn}}),Fn=En(Pn),In=En(m({},Pn,{dataTransfer:0})),Ln=En(m({},kn,{relatedTarget:0})),Rn=En(m({},Dn,{animationName:0,elapsedTime:0,pseudoElement:0})),zn=En(m({},Dn,{clipboardData:function(e){return`clipboardData`in e?e.clipboardData:window.clipboardData}})),Bn=En(m({},Dn,{data:0})),Vn={Esc:`Escape`,Spacebar:` `,Left:`ArrowLeft`,Up:`ArrowUp`,Right:`ArrowRight`,Down:`ArrowDown`,Del:`Delete`,Win:`OS`,Menu:`ContextMenu`,Apps:`ContextMenu`,Scroll:`ScrollLock`,MozPrintableKey:`Unidentified`},Hn={8:`Backspace`,9:`Tab`,12:`Clear`,13:`Enter`,16:`Shift`,17:`Control`,18:`Alt`,19:`Pause`,20:`CapsLock`,27:`Escape`,32:` `,33:`PageUp`,34:`PageDown`,35:`End`,36:`Home`,37:`ArrowLeft`,38:`ArrowUp`,39:`ArrowRight`,40:`ArrowDown`,45:`Insert`,46:`Delete`,112:`F1`,113:`F2`,114:`F3`,115:`F4`,116:`F5`,117:`F6`,118:`F7`,119:`F8`,120:`F9`,121:`F10`,122:`F11`,123:`F12`,144:`NumLock`,145:`ScrollLock`,224:`Meta`},Un={Alt:`altKey`,Control:`ctrlKey`,Meta:`metaKey`,Shift:`shiftKey`};function M(e){var t=this.nativeEvent;return t.getModifierState?t.getModifierState(e):(e=Un[e])?!!t[e]:!1}function Wn(){return M}var Gn=En(m({},kn,{key:function(e){if(e.key){var t=Vn[e.key]||e.key;if(t!==`Unidentified`)return t}return e.type===`keypress`?(e=Cn(e),e===13?`Enter`:String.fromCharCode(e)):e.type===`keydown`||e.type===`keyup`?Hn[e.keyCode]||`Unidentified`:``},code:0,location:0,ctrlKey:0,shiftKey:0,altKey:0,metaKey:0,repeat:0,locale:0,getModifierState:Wn,charCode:function(e){return e.type===`keypress`?Cn(e):0},keyCode:function(e){return e.type===`keydown`||e.type===`keyup`?e.keyCode:0},which:function(e){return e.type===`keypress`?Cn(e):e.type===`keydown`||e.type===`keyup`?e.keyCode:0}})),Kn=En(m({},Pn,{pointerId:0,width:0,height:0,pressure:0,tangentialPressure:0,tiltX:0,tiltY:0,twist:0,pointerType:0,isPrimary:0})),qn=En(m({},kn,{touches:0,targetTouches:0,changedTouches:0,altKey:0,metaKey:0,ctrlKey:0,shiftKey:0,getModifierState:Wn})),Jn=En(m({},Dn,{propertyName:0,elapsedTime:0,pseudoElement:0})),Yn=En(m({},Pn,{deltaX:function(e){return`deltaX`in e?e.deltaX:`wheelDeltaX`in e?-e.wheelDeltaX:0},deltaY:function(e){return`deltaY`in e?e.deltaY:`wheelDeltaY`in e?-e.wheelDeltaY:`wheelDelta`in e?-e.wheelDelta:0},deltaZ:0,deltaMode:0})),Xn=En(m({},Dn,{newState:0,oldState:0})),Zn=[9,13,27,32],Qn=gn&&`CompositionEvent`in window,$n=null;gn&&`documentMode`in document&&($n=document.documentMode);var er=gn&&`TextEvent`in window&&!$n,tr=gn&&(!Qn||$n&&8<$n&&11>=$n),nr=` `,rr=!1;function ir(e,t){switch(e){case`keyup`:return Zn.indexOf(t.keyCode)!==-1;case`keydown`:return t.keyCode!==229;case`keypress`:case`mousedown`:case`focusout`:return!0;default:return!1}}function ar(e){return e=e.detail,typeof e==`object`&&`data`in e?e.data:null}var N=!1;function or(e,t){switch(e){case`compositionend`:return ar(t);case`keypress`:return t.which===32?(rr=!0,nr):null;case`textInput`:return e=t.data,e===nr&&rr?null:e;default:return null}}function sr(e,t){if(N)return e===`compositionend`||!Qn&&ir(e,t)?(e=Sn(),xn=bn=yn=null,N=!1,e):null;switch(e){case`paste`:return null;case`keypress`:if(!(t.ctrlKey||t.altKey||t.metaKey)||t.ctrlKey&&t.altKey){if(t.char&&1<t.char.length)return t.char;if(t.which)return String.fromCharCode(t.which)}return null;case`compositionend`:return tr&&t.locale!==`ko`?null:t.data;default:return null}}var P={color:!0,date:!0,datetime:!0,"datetime-local":!0,email:!0,month:!0,number:!0,password:!0,range:!0,search:!0,tel:!0,text:!0,time:!0,url:!0,week:!0};function F(e){var t=e&&e.nodeName&&e.nodeName.toLowerCase();return t===`input`?!!P[e.type]:t===`textarea`}function cr(e,t,n,r){un?dn?dn.push(r):dn=[r]:un=r,t=Dd(t,`onChange`),0<t.length&&(n=new On(`onChange`,`change`,null,n,r),e.push({event:n,listeners:t}))}var lr=null,ur=null;function dr(e){bd(e,0)}function fr(e){if(Ut(Tt(e)))return e}function pr(e,t){if(e===`change`)return t}var mr=!1;if(gn){var hr;if(gn){var gr=`oninput`in document;if(!gr){var _r=document.createElement(`div`);_r.setAttribute(`oninput`,`return;`),gr=typeof _r.oninput==`function`}hr=gr}else hr=!1;mr=hr&&(!document.documentMode||9<document.documentMode)}function vr(){lr&&(lr.detachEvent(`onpropertychange`,yr),ur=lr=null)}function yr(e){if(e.propertyName===`value`&&fr(ur)){var t=[];cr(t,ur,e,ln(e)),mn(dr,t)}}function br(e,t,n){e===`focusin`?(vr(),lr=t,ur=n,lr.attachEvent(`onpropertychange`,yr)):e===`focusout`&&vr()}function xr(e){if(e===`selectionchange`||e===`keyup`||e===`keydown`)return fr(ur)}function Sr(e,t){if(e===`click`)return fr(t)}function Cr(e,t){if(e===`input`||e===`change`)return fr(t)}function wr(e,t){return e===t&&(e!==0||1/e==1/t)||e!==e&&t!==t}var Tr=typeof Object.is==`function`?Object.is:wr;function Er(e,t){if(Tr(e,t))return!0;if(typeof e!=`object`||!e||typeof t!=`object`||!t)return!1;var n=Object.keys(e),r=Object.keys(t);if(n.length!==r.length)return!1;for(r=0;r<n.length;r++){var i=n[r];if(!Oe.call(t,i)||!Tr(e[i],t[i]))return!1}return!0}function Dr(e){for(;e&&e.firstChild;)e=e.firstChild;return e}function Or(e,t){var n=Dr(e);e=0;for(var r;n;){if(n.nodeType===3){if(r=e+n.textContent.length,e<=t&&r>=t)return{node:n,offset:t-e};e=r}a:{for(;n;){if(n.nextSibling){n=n.nextSibling;break a}n=n.parentNode}n=void 0}n=Dr(n)}}function kr(e,t){return e&&t?e===t?!0:e&&e.nodeType===3?!1:t&&t.nodeType===3?kr(e,t.parentNode):`contains`in e?e.contains(t):e.compareDocumentPosition?!!(e.compareDocumentPosition(t)&16):!1:!1}function Ar(e){e=e!=null&&e.ownerDocument!=null&&e.ownerDocument.defaultView!=null?e.ownerDocument.defaultView:window;for(var t=Wt(e.document);t instanceof e.HTMLIFrameElement;){try{var n=typeof t.contentWindow.location.href==`string`}catch{n=!1}if(n)e=t.contentWindow;else break;t=Wt(e.document)}return t}function jr(e){var t=e&&e.nodeName&&e.nodeName.toLowerCase();return t&&(t===`input`&&(e.type===`text`||e.type===`search`||e.type===`tel`||e.type===`url`||e.type===`password`)||t===`textarea`||e.contentEditable===`true`)}var Mr=gn&&`documentMode`in document&&11>=document.documentMode,Nr=null,Pr=null,Fr=null,Ir=!1;function Lr(e,t,n){var r=n.window===n?n.document:n.nodeType===9?n:n.ownerDocument;Ir||Nr==null||Nr!==Wt(r)||(r=Nr,`selectionStart`in r&&jr(r)?r={start:r.selectionStart,end:r.selectionEnd}:(r=(r.ownerDocument&&r.ownerDocument.defaultView||window).getSelection(),r={anchorNode:r.anchorNode,anchorOffset:r.anchorOffset,focusNode:r.focusNode,focusOffset:r.focusOffset}),Fr&&Er(Fr,r)||(Fr=r,r=Dd(Pr,`onSelect`),0<r.length&&(t=new On(`onSelect`,`select`,null,t,n),e.push({event:t,listeners:r}),t.target=Nr)))}function Rr(e,t){var n={};return n[e.toLowerCase()]=t.toLowerCase(),n[`Webkit`+e]=`webkit`+t,n[`Moz`+e]=`moz`+t,n}var zr={animationend:Rr(`Animation`,`AnimationEnd`),animationiteration:Rr(`Animation`,`AnimationIteration`),animationstart:Rr(`Animation`,`AnimationStart`),transitionrun:Rr(`Transition`,`TransitionRun`),transitionstart:Rr(`Transition`,`TransitionStart`),transitioncancel:Rr(`Transition`,`TransitionCancel`),transitionend:Rr(`Transition`,`TransitionEnd`)},Br={},Vr={};gn&&(Vr=document.createElement(`div`).style,`AnimationEvent`in window||(delete zr.animationend.animation,delete zr.animationiteration.animation,delete zr.animationstart.animation),`TransitionEvent`in window||delete zr.transitionend.transition);function Hr(e){if(Br[e])return Br[e];if(!zr[e])return e;var t=zr[e],n;for(n in t)if(t.hasOwnProperty(n)&&n in Vr)return Br[e]=t[n];return e}var Ur=Hr(`animationend`),Wr=Hr(`animationiteration`),Gr=Hr(`animationstart`),Kr=Hr(`transitionrun`),qr=Hr(`transitionstart`),Jr=Hr(`transitioncancel`),Yr=Hr(`transitionend`),Xr=new Map,Zr=`abort auxClick beforeToggle cancel canPlay canPlayThrough click close contextMenu copy cut drag dragEnd dragEnter dragExit dragLeave dragOver dragStart drop durationChange emptied encrypted ended error gotPointerCapture input invalid keyDown keyPress keyUp load loadedData loadedMetadata loadStart lostPointerCapture mouseDown mouseMove mouseOut mouseOver mouseUp paste pause play playing pointerCancel pointerDown pointerMove pointerOut pointerOver pointerUp progress rateChange reset resize seeked seeking stalled submit suspend timeUpdate touchCancel touchEnd touchStart volumeChange scroll toggle touchMove waiting wheel`.split(` `);Zr.push(`scrollEnd`);function Qr(e,t){Xr.set(e,t),At(t,[e])}var $r=typeof reportError==`function`?reportError:function(e){if(typeof window==`object`&&typeof window.ErrorEvent==`function`){var t=new window.ErrorEvent(`error`,{bubbles:!0,cancelable:!0,message:typeof e==`object`&&e&&typeof e.message==`string`?String(e.message):String(e),error:e});if(!window.dispatchEvent(t))return}else if(typeof process==`object`&&typeof process.emit==`function`){process.emit(`uncaughtException`,e);return}console.error(e)},ei=[],ti=0,ni=0;function ri(){for(var e=ti,t=ni=ti=0;t<e;){var n=ei[t];ei[t++]=null;var r=ei[t];ei[t++]=null;var i=ei[t];ei[t++]=null;var a=ei[t];if(ei[t++]=null,r!==null&&i!==null){var o=r.pending;o===null?i.next=i:(i.next=o.next,o.next=i),r.pending=i}a!==0&&si(n,i,a)}}function ii(e,t,n,r){ei[ti++]=e,ei[ti++]=t,ei[ti++]=n,ei[ti++]=r,ni|=r,e.lanes|=r,e=e.alternate,e!==null&&(e.lanes|=r)}function ai(e,t,n,r){return ii(e,t,n,r),ci(e)}function oi(e,t){return ii(e,null,null,t),ci(e)}function si(e,t,n){e.lanes|=n;var r=e.alternate;r!==null&&(r.lanes|=n);for(var i=!1,a=e.return;a!==null;)a.childLanes|=n,r=a.alternate,r!==null&&(r.childLanes|=n),a.tag===22&&(e=a.stateNode,e===null||e._visibility&1||(i=!0)),e=a,a=a.return;return e.tag===3?(a=e.stateNode,i&&t!==null&&(i=31-Ge(n),e=a.hiddenUpdates,r=e[i],r===null?e[i]=[t]:r.push(t),t.lane=n|536870912),a):null}function ci(e){if(50<fu)throw fu=0,pu=null,Error(i(185));for(var t=e.return;t!==null;)e=t,t=e.return;return e.tag===3?e.stateNode:null}var li={};function ui(e,t,n,r){this.tag=e,this.key=n,this.sibling=this.child=this.return=this.stateNode=this.type=this.elementType=null,this.index=0,this.refCleanup=this.ref=null,this.pendingProps=t,this.dependencies=this.memoizedState=this.updateQueue=this.memoizedProps=null,this.mode=r,this.subtreeFlags=this.flags=0,this.deletions=null,this.childLanes=this.lanes=0,this.alternate=null}function di(e,t,n,r){return new ui(e,t,n,r)}function fi(e){return e=e.prototype,!(!e||!e.isReactComponent)}function pi(e,t){var n=e.alternate;return n===null?(n=di(e.tag,t,e.key,e.mode),n.elementType=e.elementType,n.type=e.type,n.stateNode=e.stateNode,n.alternate=e,e.alternate=n):(n.pendingProps=t,n.type=e.type,n.flags=0,n.subtreeFlags=0,n.deletions=null),n.flags=e.flags&65011712,n.childLanes=e.childLanes,n.lanes=e.lanes,n.child=e.child,n.memoizedProps=e.memoizedProps,n.memoizedState=e.memoizedState,n.updateQueue=e.updateQueue,t=e.dependencies,n.dependencies=t===null?null:{lanes:t.lanes,firstContext:t.firstContext},n.sibling=e.sibling,n.index=e.index,n.ref=e.ref,n.refCleanup=e.refCleanup,n}function mi(e,t){e.flags&=65011714;var n=e.alternate;return n===null?(e.childLanes=0,e.lanes=t,e.child=null,e.subtreeFlags=0,e.memoizedProps=null,e.memoizedState=null,e.updateQueue=null,e.dependencies=null,e.stateNode=null):(e.childLanes=n.childLanes,e.lanes=n.lanes,e.child=n.child,e.subtreeFlags=0,e.deletions=null,e.memoizedProps=n.memoizedProps,e.memoizedState=n.memoizedState,e.updateQueue=n.updateQueue,e.type=n.type,t=n.dependencies,e.dependencies=t===null?null:{lanes:t.lanes,firstContext:t.firstContext}),e}function hi(e,t,n,r,a,o){var s=0;if(r=e,typeof e==`function`)fi(e)&&(s=1);else if(typeof e==`string`)s=Uf(e,n,pe.current)?26:e===`html`||e===`head`||e===`body`?27:5;else a:switch(e){case ne:return e=di(31,n,t,a),e.elementType=ne,e.lanes=o,e;case y:return gi(n.children,a,o,t);case b:s=8,a|=24;break;case x:return e=di(12,n,t,a|2),e.elementType=x,e.lanes=o,e;case w:return e=di(13,n,t,a),e.elementType=w,e.lanes=o,e;case T:return e=di(19,n,t,a),e.elementType=T,e.lanes=o,e;default:if(typeof e==`object`&&e)switch(e.$$typeof){case S:s=10;break a;case ee:s=9;break a;case C:s=11;break a;case te:s=14;break a;case E:s=16,r=null;break a}s=29,n=Error(i(130,e===null?`null`:typeof e,``)),r=null}return t=di(s,n,t,a),t.elementType=e,t.type=r,t.lanes=o,t}function gi(e,t,n,r){return e=di(7,e,r,t),e.lanes=n,e}function _i(e,t,n){return e=di(6,e,null,t),e.lanes=n,e}function vi(e){var t=di(18,null,null,0);return t.stateNode=e,t}function yi(e,t,n){return t=di(4,e.children===null?[]:e.children,e.key,t),t.lanes=n,t.stateNode={containerInfo:e.containerInfo,pendingChildren:null,implementation:e.implementation},t}var bi=new WeakMap;function xi(e,t){if(typeof e==`object`&&e){var n=bi.get(e);return n===void 0?(t={value:e,source:t,stack:De(t)},bi.set(e,t),t):n}return{value:e,source:t,stack:De(t)}}var Si=[],Ci=0,wi=null,Ti=0,Ei=[],Di=0,Oi=null,ki=1,Ai=``;function ji(e,t){Si[Ci++]=Ti,Si[Ci++]=wi,wi=e,Ti=t}function Mi(e,t,n){Ei[Di++]=ki,Ei[Di++]=Ai,Ei[Di++]=Oi,Oi=e;var r=ki;e=Ai;var i=32-Ge(r)-1;r&=~(1<<i),n+=1;var a=32-Ge(t)+i;if(30<a){var o=i-i%5;a=(r&(1<<o)-1).toString(32),r>>=o,i-=o,ki=1<<32-Ge(t)+i|n<<i|r,Ai=a+e}else ki=1<<a|n<<i|r,Ai=e}function Ni(e){e.return!==null&&(ji(e,1),Mi(e,1,0))}function Pi(e){for(;e===wi;)wi=Si[--Ci],Si[Ci]=null,Ti=Si[--Ci],Si[Ci]=null;for(;e===Oi;)Oi=Ei[--Di],Ei[Di]=null,Ai=Ei[--Di],Ei[Di]=null,ki=Ei[--Di],Ei[Di]=null}function Fi(e,t){Ei[Di++]=ki,Ei[Di++]=Ai,Ei[Di++]=Oi,ki=t.id,Ai=t.overflow,Oi=e}var I=null,L=null,R=!1,Ii=null,Li=!1,Ri=Error(i(519));function zi(e){throw Hi(xi(Error(i(418,1<arguments.length&&arguments[1]!==void 0&&arguments[1]?`text`:`HTML`,``)),e)),Ri}function Bi(e){var t=e.stateNode,n=e.type,r=e.memoizedProps;switch(t[mt]=e,t[ht]=r,n){case`dialog`:Z(`cancel`,t),Z(`close`,t);break;case`iframe`:case`object`:case`embed`:Z(`load`,t);break;case`video`:case`audio`:for(n=0;n<vd.length;n++)Z(vd[n],t);break;case`source`:Z(`error`,t);break;case`img`:case`image`:case`link`:Z(`error`,t),Z(`load`,t);break;case`details`:Z(`toggle`,t);break;case`input`:Z(`invalid`,t),qt(t,r.value,r.defaultValue,r.checked,r.defaultChecked,r.type,r.name,!0);break;case`select`:Z(`invalid`,t);break;case`textarea`:Z(`invalid`,t),Zt(t,r.value,r.defaultValue,r.children)}n=r.children,typeof n!=`string`&&typeof n!=`number`&&typeof n!=`bigint`||t.textContent===``+n||!0===r.suppressHydrationWarning||Nd(t.textContent,n)?(r.popover!=null&&(Z(`beforetoggle`,t),Z(`toggle`,t)),r.onScroll!=null&&Z(`scroll`,t),r.onScrollEnd!=null&&Z(`scrollend`,t),r.onClick!=null&&(t.onclick=sn),t=!0):t=!1,t||zi(e,!0)}function z(e){for(I=e.return;I;)switch(I.tag){case 5:case 31:case 13:Li=!1;return;case 27:case 3:Li=!0;return;default:I=I.return}}function B(e){if(e!==I)return!1;if(!R)return z(e),R=!0,!1;var t=e.tag,n;if((n=t!==3&&t!==27)&&((n=t===5)&&(n=e.type,n=n===`form`||n===`button`||Wd(e.type,e.memoizedProps)),n=!n),n&&L&&zi(e),z(e),t===13){if(e=e.memoizedState,e=e===null?null:e.dehydrated,!e)throw Error(i(317));L=df(e)}else if(t===31){if(e=e.memoizedState,e=e===null?null:e.dehydrated,!e)throw Error(i(317));L=df(e)}else t===27?(t=L,Qd(e.type)?(e=uf,uf=null,L=e):L=t):L=I?lf(e.stateNode.nextSibling):null;return!0}function V(){L=I=null,R=!1}function Vi(){var e=Ii;return e!==null&&(Ql===null?Ql=e:Ql.push.apply(Ql,e),Ii=null),e}function Hi(e){Ii===null?Ii=[e]:Ii.push(e)}var Ui=de(null),Wi=null,H=null;function Gi(e,t,n){A(Ui,t._currentValue),t._currentValue=n}function Ki(e){e._currentValue=Ui.current,fe(Ui)}function qi(e,t,n){for(;e!==null;){var r=e.alternate;if((e.childLanes&t)===t?r!==null&&(r.childLanes&t)!==t&&(r.childLanes|=t):(e.childLanes|=t,r!==null&&(r.childLanes|=t)),e===n)break;e=e.return}}function Ji(e,t,n,r){var a=e.child;for(a!==null&&(a.return=e);a!==null;){var o=a.dependencies;if(o!==null){var s=a.child;o=o.firstContext;a:for(;o!==null;){var c=o;o=a;for(var l=0;l<t.length;l++)if(c.context===t[l]){o.lanes|=n,c=o.alternate,c!==null&&(c.lanes|=n),qi(o.return,n,e),r||(s=null);break a}o=c.next}}else if(a.tag===18){if(s=a.return,s===null)throw Error(i(341));s.lanes|=n,o=s.alternate,o!==null&&(o.lanes|=n),qi(s,n,e),s=null}else s=a.child;if(s!==null)s.return=a;else for(s=a;s!==null;){if(s===e){s=null;break}if(a=s.sibling,a!==null){a.return=s.return,s=a;break}s=s.return}a=s}}function Yi(e,t,n,r){e=null;for(var a=t,o=!1;a!==null;){if(!o){if(a.flags&524288)o=!0;else if(a.flags&262144)break}if(a.tag===10){var s=a.alternate;if(s===null)throw Error(i(387));if(s=s.memoizedProps,s!==null){var c=a.type;Tr(a.pendingProps.value,s.value)||(e===null?e=[c]:e.push(c))}}else if(a===ge.current){if(s=a.alternate,s===null)throw Error(i(387));s.memoizedState.memoizedState!==a.memoizedState.memoizedState&&(e===null?e=[Qf]:e.push(Qf))}a=a.return}e!==null&&Ji(t,e,n,r),t.flags|=262144}function Xi(e){for(e=e.firstContext;e!==null;){if(!Tr(e.context._currentValue,e.memoizedValue))return!0;e=e.next}return!1}function Zi(e){Wi=e,H=null,e=e.dependencies,e!==null&&(e.firstContext=null)}function Qi(e){return ea(Wi,e)}function $i(e,t){return Wi===null&&Zi(e),ea(e,t)}function ea(e,t){var n=t._currentValue;if(t={context:t,memoizedValue:n,next:null},H===null){if(e===null)throw Error(i(308));H=t,e.dependencies={lanes:0,firstContext:t},e.flags|=524288}else H=H.next=t;return n}var ta=typeof AbortController<`u`?AbortController:function(){var e=[],t=this.signal={aborted:!1,addEventListener:function(t,n){e.push(n)}};this.abort=function(){t.aborted=!0,e.forEach(function(e){return e()})}},na=t.unstable_scheduleCallback,ra=t.unstable_NormalPriority,ia={$$typeof:S,Consumer:null,Provider:null,_currentValue:null,_currentValue2:null,_threadCount:0};function aa(){return{controller:new ta,data:new Map,refCount:0}}function oa(e){e.refCount--,e.refCount===0&&na(ra,function(){e.controller.abort()})}var sa=null,ca=0,la=0,ua=null;function da(e,t){if(sa===null){var n=sa=[];ca=0,la=fd(),ua={status:`pending`,value:void 0,then:function(e){n.push(e)}}}return ca++,t.then(fa,fa),t}function fa(){if(--ca===0&&sa!==null){ua!==null&&(ua.status=`fulfilled`);var e=sa;sa=null,la=0,ua=null;for(var t=0;t<e.length;t++)(0,e[t])()}}function pa(e,t){var n=[],r={status:`pending`,value:null,reason:null,then:function(e){n.push(e)}};return e.then(function(){r.status=`fulfilled`,r.value=t;for(var e=0;e<n.length;e++)(0,n[e])(t)},function(e){for(r.status=`rejected`,r.reason=e,e=0;e<n.length;e++)(0,n[e])(void 0)}),r}var ma=O.S;O.S=function(e,t){tu=Ne(),typeof t==`object`&&t&&typeof t.then==`function`&&da(e,t),ma!==null&&ma(e,t)};var ha=de(null);function ga(){var e=ha.current;return e===null?K.pooledCache:e}function _a(e,t){t===null?A(ha,ha.current):A(ha,t.pool)}function va(){var e=ga();return e===null?null:{parent:ia._currentValue,pool:e}}var ya=Error(i(460)),ba=Error(i(474)),xa=Error(i(542)),Sa={then:function(){}};function Ca(e){return e=e.status,e===`fulfilled`||e===`rejected`}function wa(e,t,n){switch(n=e[n],n===void 0?e.push(t):n!==t&&(t.then(sn,sn),t=n),t.status){case`fulfilled`:return t.value;case`rejected`:throw e=t.reason,Oa(e),e;default:if(typeof t.status==`string`)t.then(sn,sn);else{if(e=K,e!==null&&100<e.shellSuspendCounter)throw Error(i(482));e=t,e.status=`pending`,e.then(function(e){if(t.status===`pending`){var n=t;n.status=`fulfilled`,n.value=e}},function(e){if(t.status===`pending`){var n=t;n.status=`rejected`,n.reason=e}})}switch(t.status){case`fulfilled`:return t.value;case`rejected`:throw e=t.reason,Oa(e),e}throw Ea=t,ya}}function Ta(e){try{var t=e._init;return t(e._payload)}catch(e){throw typeof e==`object`&&e&&typeof e.then==`function`?(Ea=e,ya):e}}var Ea=null;function Da(){if(Ea===null)throw Error(i(459));var e=Ea;return Ea=null,e}function Oa(e){if(e===ya||e===xa)throw Error(i(483))}var ka=null,Aa=0;function ja(e){var t=Aa;return Aa+=1,ka===null&&(ka=[]),wa(ka,e,t)}function Ma(e,t){t=t.props.ref,e.ref=t===void 0?null:t}function Na(e,t){throw t.$$typeof===g?Error(i(525)):(e=Object.prototype.toString.call(t),Error(i(31,e===`[object Object]`?`object with keys {`+Object.keys(t).join(`, `)+`}`:e)))}function Pa(e){function t(t,n){if(e){var r=t.deletions;r===null?(t.deletions=[n],t.flags|=16):r.push(n)}}function n(n,r){if(!e)return null;for(;r!==null;)t(n,r),r=r.sibling;return null}function r(e){for(var t=new Map;e!==null;)e.key===null?t.set(e.index,e):t.set(e.key,e),e=e.sibling;return t}function a(e,t){return e=pi(e,t),e.index=0,e.sibling=null,e}function o(t,n,r){return t.index=r,e?(r=t.alternate,r===null?(t.flags|=67108866,n):(r=r.index,r<n?(t.flags|=67108866,n):r)):(t.flags|=1048576,n)}function s(t){return e&&t.alternate===null&&(t.flags|=67108866),t}function c(e,t,n,r){return t===null||t.tag!==6?(t=_i(n,e.mode,r),t.return=e,t):(t=a(t,n),t.return=e,t)}function l(e,t,n,r){var i=n.type;return i===y?d(e,t,n.props.children,r,n.key):t!==null&&(t.elementType===i||typeof i==`object`&&i&&i.$$typeof===E&&Ta(i)===t.type)?(t=a(t,n.props),Ma(t,n),t.return=e,t):(t=hi(n.type,n.key,n.props,null,e.mode,r),Ma(t,n),t.return=e,t)}function u(e,t,n,r){return t===null||t.tag!==4||t.stateNode.containerInfo!==n.containerInfo||t.stateNode.implementation!==n.implementation?(t=yi(n,e.mode,r),t.return=e,t):(t=a(t,n.children||[]),t.return=e,t)}function d(e,t,n,r,i){return t===null||t.tag!==7?(t=gi(n,e.mode,r,i),t.return=e,t):(t=a(t,n),t.return=e,t)}function f(e,t,n){if(typeof t==`string`&&t!==``||typeof t==`number`||typeof t==`bigint`)return t=_i(``+t,e.mode,n),t.return=e,t;if(typeof t==`object`&&t){switch(t.$$typeof){case _:return n=hi(t.type,t.key,t.props,null,e.mode,n),Ma(n,t),n.return=e,n;case v:return t=yi(t,e.mode,n),t.return=e,t;case E:return t=Ta(t),f(e,t,n)}if(se(t)||ie(t))return t=gi(t,e.mode,n,null),t.return=e,t;if(typeof t.then==`function`)return f(e,ja(t),n);if(t.$$typeof===S)return f(e,$i(e,t),n);Na(e,t)}return null}function p(e,t,n,r){var i=t===null?null:t.key;if(typeof n==`string`&&n!==``||typeof n==`number`||typeof n==`bigint`)return i===null?c(e,t,``+n,r):null;if(typeof n==`object`&&n){switch(n.$$typeof){case _:return n.key===i?l(e,t,n,r):null;case v:return n.key===i?u(e,t,n,r):null;case E:return n=Ta(n),p(e,t,n,r)}if(se(n)||ie(n))return i===null?d(e,t,n,r,null):null;if(typeof n.then==`function`)return p(e,t,ja(n),r);if(n.$$typeof===S)return p(e,t,$i(e,n),r);Na(e,n)}return null}function m(e,t,n,r,i){if(typeof r==`string`&&r!==``||typeof r==`number`||typeof r==`bigint`)return e=e.get(n)||null,c(t,e,``+r,i);if(typeof r==`object`&&r){switch(r.$$typeof){case _:return e=e.get(r.key===null?n:r.key)||null,l(t,e,r,i);case v:return e=e.get(r.key===null?n:r.key)||null,u(t,e,r,i);case E:return r=Ta(r),m(e,t,n,r,i)}if(se(r)||ie(r))return e=e.get(n)||null,d(t,e,r,i,null);if(typeof r.then==`function`)return m(e,t,n,ja(r),i);if(r.$$typeof===S)return m(e,t,n,$i(t,r),i);Na(t,r)}return null}function h(i,a,s,c){for(var l=null,u=null,d=a,h=a=0,g=null;d!==null&&h<s.length;h++){d.index>h?(g=d,d=null):g=d.sibling;var _=p(i,d,s[h],c);if(_===null){d===null&&(d=g);break}e&&d&&_.alternate===null&&t(i,d),a=o(_,a,h),u===null?l=_:u.sibling=_,u=_,d=g}if(h===s.length)return n(i,d),R&&ji(i,h),l;if(d===null){for(;h<s.length;h++)d=f(i,s[h],c),d!==null&&(a=o(d,a,h),u===null?l=d:u.sibling=d,u=d);return R&&ji(i,h),l}for(d=r(d);h<s.length;h++)g=m(d,i,h,s[h],c),g!==null&&(e&&g.alternate!==null&&d.delete(g.key===null?h:g.key),a=o(g,a,h),u===null?l=g:u.sibling=g,u=g);return e&&d.forEach(function(e){return t(i,e)}),R&&ji(i,h),l}function g(a,s,c,l){if(c==null)throw Error(i(151));for(var u=null,d=null,h=s,g=s=0,_=null,v=c.next();h!==null&&!v.done;g++,v=c.next()){h.index>g?(_=h,h=null):_=h.sibling;var y=p(a,h,v.value,l);if(y===null){h===null&&(h=_);break}e&&h&&y.alternate===null&&t(a,h),s=o(y,s,g),d===null?u=y:d.sibling=y,d=y,h=_}if(v.done)return n(a,h),R&&ji(a,g),u;if(h===null){for(;!v.done;g++,v=c.next())v=f(a,v.value,l),v!==null&&(s=o(v,s,g),d===null?u=v:d.sibling=v,d=v);return R&&ji(a,g),u}for(h=r(h);!v.done;g++,v=c.next())v=m(h,a,g,v.value,l),v!==null&&(e&&v.alternate!==null&&h.delete(v.key===null?g:v.key),s=o(v,s,g),d===null?u=v:d.sibling=v,d=v);return e&&h.forEach(function(e){return t(a,e)}),R&&ji(a,g),u}function b(e,r,o,c){if(typeof o==`object`&&o&&o.type===y&&o.key===null&&(o=o.props.children),typeof o==`object`&&o){switch(o.$$typeof){case _:a:{for(var l=o.key;r!==null;){if(r.key===l){if(l=o.type,l===y){if(r.tag===7){n(e,r.sibling),c=a(r,o.props.children),c.return=e,e=c;break a}}else if(r.elementType===l||typeof l==`object`&&l&&l.$$typeof===E&&Ta(l)===r.type){n(e,r.sibling),c=a(r,o.props),Ma(c,o),c.return=e,e=c;break a}n(e,r);break}t(e,r),r=r.sibling}o.type===y?(c=gi(o.props.children,e.mode,c,o.key),c.return=e,e=c):(c=hi(o.type,o.key,o.props,null,e.mode,c),Ma(c,o),c.return=e,e=c)}return s(e);case v:a:{for(l=o.key;r!==null;){if(r.key===l){if(r.tag===4&&r.stateNode.containerInfo===o.containerInfo&&r.stateNode.implementation===o.implementation){n(e,r.sibling),c=a(r,o.children||[]),c.return=e,e=c;break a}n(e,r);break}t(e,r),r=r.sibling}c=yi(o,e.mode,c),c.return=e,e=c}return s(e);case E:return o=Ta(o),b(e,r,o,c)}if(se(o))return h(e,r,o,c);if(ie(o)){if(l=ie(o),typeof l!=`function`)throw Error(i(150));return o=l.call(o),g(e,r,o,c)}if(typeof o.then==`function`)return b(e,r,ja(o),c);if(o.$$typeof===S)return b(e,r,$i(e,o),c);Na(e,o)}return typeof o==`string`&&o!==``||typeof o==`number`||typeof o==`bigint`?(o=``+o,r!==null&&r.tag===6?(n(e,r.sibling),c=a(r,o),c.return=e,e=c):(n(e,r),c=_i(o,e.mode,c),c.return=e,e=c),s(e)):n(e,r)}return function(e,t,n,r){try{Aa=0;var i=b(e,t,n,r);return ka=null,i}catch(t){if(t===ya||t===xa)throw t;var a=di(29,t,null,e.mode);return a.lanes=r,a.return=e,a}}}var Fa=Pa(!0),Ia=Pa(!1),La=!1;function Ra(e){e.updateQueue={baseState:e.memoizedState,firstBaseUpdate:null,lastBaseUpdate:null,shared:{pending:null,lanes:0,hiddenCallbacks:null},callbacks:null}}function za(e,t){e=e.updateQueue,t.updateQueue===e&&(t.updateQueue={baseState:e.baseState,firstBaseUpdate:e.firstBaseUpdate,lastBaseUpdate:e.lastBaseUpdate,shared:e.shared,callbacks:null})}function Ba(e){return{lane:e,tag:0,payload:null,callback:null,next:null}}function Va(e,t,n){var r=e.updateQueue;if(r===null)return null;if(r=r.shared,G&2){var i=r.pending;return i===null?t.next=t:(t.next=i.next,i.next=t),r.pending=t,t=ci(e),si(e,null,n),t}return ii(e,r,t,n),ci(e)}function Ha(e,t,n){if(t=t.updateQueue,t!==null&&(t=t.shared,n&4194048)){var r=t.lanes;r&=e.pendingLanes,n|=r,t.lanes=n,st(e,n)}}function Ua(e,t){var n=e.updateQueue,r=e.alternate;if(r!==null&&(r=r.updateQueue,n===r)){var i=null,a=null;if(n=n.firstBaseUpdate,n!==null){do{var o={lane:n.lane,tag:n.tag,payload:n.payload,callback:null,next:null};a===null?i=a=o:a=a.next=o,n=n.next}while(n!==null);a===null?i=a=t:a=a.next=t}else i=a=t;n={baseState:r.baseState,firstBaseUpdate:i,lastBaseUpdate:a,shared:r.shared,callbacks:r.callbacks},e.updateQueue=n;return}e=n.lastBaseUpdate,e===null?n.firstBaseUpdate=t:e.next=t,n.lastBaseUpdate=t}var Wa=!1;function Ga(){if(Wa){var e=ua;if(e!==null)throw e}}function Ka(e,t,n,r){Wa=!1;var i=e.updateQueue;La=!1;var a=i.firstBaseUpdate,o=i.lastBaseUpdate,s=i.shared.pending;if(s!==null){i.shared.pending=null;var c=s,l=c.next;c.next=null,o===null?a=l:o.next=l,o=c;var u=e.alternate;u!==null&&(u=u.updateQueue,s=u.lastBaseUpdate,s!==o&&(s===null?u.firstBaseUpdate=l:s.next=l,u.lastBaseUpdate=c))}if(a!==null){var d=i.baseState;o=0,u=l=c=null,s=a;do{var f=s.lane&-536870913,p=f!==s.lane;if(p?(J&f)===f:(r&f)===f){f!==0&&f===la&&(Wa=!0),u!==null&&(u=u.next={lane:0,tag:s.tag,payload:s.payload,callback:null,next:null});a:{var h=e,g=s;f=t;var _=n;switch(g.tag){case 1:if(h=g.payload,typeof h==`function`){d=h.call(_,d,f);break a}d=h;break a;case 3:h.flags=h.flags&-65537|128;case 0:if(h=g.payload,f=typeof h==`function`?h.call(_,d,f):h,f==null)break a;d=m({},d,f);break a;case 2:La=!0}}f=s.callback,f!==null&&(e.flags|=64,p&&(e.flags|=8192),p=i.callbacks,p===null?i.callbacks=[f]:p.push(f))}else p={lane:f,tag:s.tag,payload:s.payload,callback:s.callback,next:null},u===null?(l=u=p,c=d):u=u.next=p,o|=f;if(s=s.next,s===null){if(s=i.shared.pending,s===null)break;p=s,s=p.next,p.next=null,i.lastBaseUpdate=p,i.shared.pending=null}}while(1);u===null&&(c=d),i.baseState=c,i.firstBaseUpdate=l,i.lastBaseUpdate=u,a===null&&(i.shared.lanes=0),Kl|=o,e.lanes=o,e.memoizedState=d}}function qa(e,t){if(typeof e!=`function`)throw Error(i(191,e));e.call(t)}function Ja(e,t){var n=e.callbacks;if(n!==null)for(e.callbacks=null,e=0;e<n.length;e++)qa(n[e],t)}var Ya=de(null),Xa=de(0);function Za(e,t){e=Wl,A(Xa,e),A(Ya,t),Wl=e|t.baseLanes}function Qa(){A(Xa,Wl),A(Ya,Ya.current)}function $a(){Wl=Xa.current,fe(Ya),fe(Xa)}var eo=de(null),to=null;function no(e){var t=e.alternate;A(so,so.current&1),A(eo,e),to===null&&(t===null||Ya.current!==null||t.memoizedState!==null)&&(to=e)}function ro(e){A(so,so.current),A(eo,e),to===null&&(to=e)}function io(e){e.tag===22?(A(so,so.current),A(eo,e),to===null&&(to=e)):ao(e)}function ao(){A(so,so.current),A(eo,eo.current)}function oo(e){fe(eo),to===e&&(to=null),fe(so)}var so=de(0);function co(e){for(var t=e;t!==null;){if(t.tag===13){var n=t.memoizedState;if(n!==null&&(n=n.dehydrated,n===null||of(n)||sf(n)))return t}else if(t.tag===19&&(t.memoizedProps.revealOrder===`forwards`||t.memoizedProps.revealOrder===`backwards`||t.memoizedProps.revealOrder===`unstable_legacy-backwards`||t.memoizedProps.revealOrder===`together`)){if(t.flags&128)return t}else if(t.child!==null){t.child.return=t,t=t.child;continue}if(t===e)break;for(;t.sibling===null;){if(t.return===null||t.return===e)return null;t=t.return}t.sibling.return=t.return,t=t.sibling}return null}var lo=0,U=null,W=null,uo=null,fo=!1,po=!1,mo=!1,ho=0,go=0,_o=null,vo=0;function yo(){throw Error(i(321))}function bo(e,t){if(t===null)return!1;for(var n=0;n<t.length&&n<e.length;n++)if(!Tr(e[n],t[n]))return!1;return!0}function xo(e,t,n,r,i,a){return lo=a,U=t,t.memoizedState=null,t.updateQueue=null,t.lanes=0,O.H=e===null||e.memoizedState===null?Rs:zs,mo=!1,a=n(r,i),mo=!1,po&&(a=Co(t,n,r,i)),So(e),a}function So(e){O.H=Ls;var t=W!==null&&W.next!==null;if(lo=0,uo=W=U=null,fo=!1,go=0,_o=null,t)throw Error(i(300));e===null||nc||(e=e.dependencies,e!==null&&Xi(e)&&(nc=!0))}function Co(e,t,n,r){U=e;var a=0;do{if(po&&(_o=null),go=0,po=!1,25<=a)throw Error(i(301));if(a+=1,uo=W=null,e.updateQueue!=null){var o=e.updateQueue;o.lastEffect=null,o.events=null,o.stores=null,o.memoCache!=null&&(o.memoCache.index=0)}O.H=Bs,o=t(n,r)}while(po);return o}function wo(){var e=O.H,t=e.useState()[0];return t=typeof t.then==`function`?jo(t):t,e=e.useState()[0],(W===null?null:W.memoizedState)!==e&&(U.flags|=1024),t}function To(){var e=ho!==0;return ho=0,e}function Eo(e,t,n){t.updateQueue=e.updateQueue,t.flags&=-2053,e.lanes&=~n}function Do(e){if(fo){for(e=e.memoizedState;e!==null;){var t=e.queue;t!==null&&(t.pending=null),e=e.next}fo=!1}lo=0,uo=W=U=null,po=!1,go=ho=0,_o=null}function Oo(){var e={memoizedState:null,baseState:null,baseQueue:null,queue:null,next:null};return uo===null?U.memoizedState=uo=e:uo=uo.next=e,uo}function ko(){if(W===null){var e=U.alternate;e=e===null?null:e.memoizedState}else e=W.next;var t=uo===null?U.memoizedState:uo.next;if(t!==null)uo=t,W=e;else{if(e===null)throw U.alternate===null?Error(i(467)):Error(i(310));W=e,e={memoizedState:W.memoizedState,baseState:W.baseState,baseQueue:W.baseQueue,queue:W.queue,next:null},uo===null?U.memoizedState=uo=e:uo=uo.next=e}return uo}function Ao(){return{lastEffect:null,events:null,stores:null,memoCache:null}}function jo(e){var t=go;return go+=1,_o===null&&(_o=[]),e=wa(_o,e,t),t=U,(uo===null?t.memoizedState:uo.next)===null&&(t=t.alternate,O.H=t===null||t.memoizedState===null?Rs:zs),e}function Mo(e){if(typeof e==`object`&&e){if(typeof e.then==`function`)return jo(e);if(e.$$typeof===S)return Qi(e)}throw Error(i(438,String(e)))}function No(e){var t=null,n=U.updateQueue;if(n!==null&&(t=n.memoCache),t==null){var r=U.alternate;r!==null&&(r=r.updateQueue,r!==null&&(r=r.memoCache,r!=null&&(t={data:r.data.map(function(e){return e.slice()}),index:0})))}if(t??={data:[],index:0},n===null&&(n=Ao(),U.updateQueue=n),n.memoCache=t,n=t.data[t.index],n===void 0)for(n=t.data[t.index]=Array(e),r=0;r<e;r++)n[r]=D;return t.index++,n}function Po(e,t){return typeof t==`function`?t(e):t}function Fo(e){return Io(ko(),W,e)}function Io(e,t,n){var r=e.queue;if(r===null)throw Error(i(311));r.lastRenderedReducer=n;var a=e.baseQueue,o=r.pending;if(o!==null){if(a!==null){var s=a.next;a.next=o.next,o.next=s}t.baseQueue=a=o,r.pending=null}if(o=e.baseState,a===null)e.memoizedState=o;else{t=a.next;var c=s=null,l=null,u=t,d=!1;do{var f=u.lane&-536870913;if(f===u.lane?(lo&f)===f:(J&f)===f){var p=u.revertLane;if(p===0)l!==null&&(l=l.next={lane:0,revertLane:0,gesture:null,action:u.action,hasEagerState:u.hasEagerState,eagerState:u.eagerState,next:null}),f===la&&(d=!0);else if((lo&p)===p){u=u.next,p===la&&(d=!0);continue}else f={lane:0,revertLane:u.revertLane,gesture:null,action:u.action,hasEagerState:u.hasEagerState,eagerState:u.eagerState,next:null},l===null?(c=l=f,s=o):l=l.next=f,U.lanes|=p,Kl|=p;f=u.action,mo&&n(o,f),o=u.hasEagerState?u.eagerState:n(o,f)}else p={lane:f,revertLane:u.revertLane,gesture:u.gesture,action:u.action,hasEagerState:u.hasEagerState,eagerState:u.eagerState,next:null},l===null?(c=l=p,s=o):l=l.next=p,U.lanes|=f,Kl|=f;u=u.next}while(u!==null&&u!==t);if(l===null?s=o:l.next=c,!Tr(o,e.memoizedState)&&(nc=!0,d&&(n=ua,n!==null)))throw n;e.memoizedState=o,e.baseState=s,e.baseQueue=l,r.lastRenderedState=o}return a===null&&(r.lanes=0),[e.memoizedState,r.dispatch]}function Lo(e){var t=ko(),n=t.queue;if(n===null)throw Error(i(311));n.lastRenderedReducer=e;var r=n.dispatch,a=n.pending,o=t.memoizedState;if(a!==null){n.pending=null;var s=a=a.next;do o=e(o,s.action),s=s.next;while(s!==a);Tr(o,t.memoizedState)||(nc=!0),t.memoizedState=o,t.baseQueue===null&&(t.baseState=o),n.lastRenderedState=o}return[o,r]}function Ro(e,t,n){var r=U,a=ko(),o=R;if(o){if(n===void 0)throw Error(i(407));n=n()}else n=t();var s=!Tr((W||a).memoizedState,n);if(s&&(a.memoizedState=n,nc=!0),a=a.queue,ls(Vo.bind(null,r,a,e),[e]),a.getSnapshot!==t||s||uo!==null&&uo.memoizedState.tag&1){if(r.flags|=2048,is(9,{destroy:void 0},Bo.bind(null,r,a,n,t),null),K===null)throw Error(i(349));o||lo&127||zo(r,t,n)}return n}function zo(e,t,n){e.flags|=16384,e={getSnapshot:t,value:n},t=U.updateQueue,t===null?(t=Ao(),U.updateQueue=t,t.stores=[e]):(n=t.stores,n===null?t.stores=[e]:n.push(e))}function Bo(e,t,n,r){t.value=n,t.getSnapshot=r,Ho(t)&&Uo(e)}function Vo(e,t,n){return n(function(){Ho(t)&&Uo(e)})}function Ho(e){var t=e.getSnapshot;e=e.value;try{var n=t();return!Tr(e,n)}catch{return!0}}function Uo(e){var t=oi(e,2);t!==null&&gu(t,e,2)}function Wo(e){var t=Oo();if(typeof e==`function`){var n=e;if(e=n(),mo){We(!0);try{n()}finally{We(!1)}}}return t.memoizedState=t.baseState=e,t.queue={pending:null,lanes:0,dispatch:null,lastRenderedReducer:Po,lastRenderedState:e},t}function Go(e,t,n,r){return e.baseState=n,Io(e,W,typeof r==`function`?r:Po)}function Ko(e,t,n,r,a){if(Ps(e))throw Error(i(485));if(e=t.action,e!==null){var o={payload:a,action:e,next:null,isTransition:!0,status:`pending`,value:null,reason:null,listeners:[],then:function(e){o.listeners.push(e)}};O.T===null?o.isTransition=!1:n(!0),r(o),n=t.pending,n===null?(o.next=t.pending=o,qo(t,o)):(o.next=n.next,t.pending=n.next=o)}}function qo(e,t){var n=t.action,r=t.payload,i=e.state;if(t.isTransition){var a=O.T,o={};O.T=o;try{var s=n(i,r),c=O.S;c!==null&&c(o,s),Jo(e,t,s)}catch(n){Xo(e,t,n)}finally{a!==null&&o.types!==null&&(a.types=o.types),O.T=a}}else try{a=n(i,r),Jo(e,t,a)}catch(n){Xo(e,t,n)}}function Jo(e,t,n){typeof n==`object`&&n&&typeof n.then==`function`?n.then(function(n){Yo(e,t,n)},function(n){return Xo(e,t,n)}):Yo(e,t,n)}function Yo(e,t,n){t.status=`fulfilled`,t.value=n,Zo(t),e.state=n,t=e.pending,t!==null&&(n=t.next,n===t?e.pending=null:(n=n.next,t.next=n,qo(e,n)))}function Xo(e,t,n){var r=e.pending;if(e.pending=null,r!==null){r=r.next;do t.status=`rejected`,t.reason=n,Zo(t),t=t.next;while(t!==r)}e.action=null}function Zo(e){e=e.listeners;for(var t=0;t<e.length;t++)(0,e[t])()}function Qo(e,t){return t}function $o(e,t){if(R){var n=K.formState;if(n!==null){a:{var r=U;if(R){if(L){b:{for(var i=L,a=Li;i.nodeType!==8;){if(!a){i=null;break b}if(i=lf(i.nextSibling),i===null){i=null;break b}}a=i.data,i=a===`F!`||a===`F`?i:null}if(i){L=lf(i.nextSibling),r=i.data===`F!`;break a}}zi(r)}r=!1}r&&(t=n[0])}}return n=Oo(),n.memoizedState=n.baseState=t,r={pending:null,lanes:0,dispatch:null,lastRenderedReducer:Qo,lastRenderedState:t},n.queue=r,n=js.bind(null,U,r),r.dispatch=n,r=Wo(!1),a=Ns.bind(null,U,!1,r.queue),r=Oo(),i={state:t,dispatch:null,action:e,pending:null},r.queue=i,n=Ko.bind(null,U,i,a,n),i.dispatch=n,r.memoizedState=e,[t,n,!1]}function es(e){return ts(ko(),W,e)}function ts(e,t,n){if(t=Io(e,t,Qo)[0],e=Fo(Po)[0],typeof t==`object`&&t&&typeof t.then==`function`)try{var r=jo(t)}catch(e){throw e===ya?xa:e}else r=t;t=ko();var i=t.queue,a=i.dispatch;return n!==t.memoizedState&&(U.flags|=2048,is(9,{destroy:void 0},ns.bind(null,i,n),null)),[r,a,e]}function ns(e,t){e.action=t}function rs(e){var t=ko(),n=W;if(n!==null)return ts(t,n,e);ko(),t=t.memoizedState,n=ko();var r=n.queue.dispatch;return n.memoizedState=e,[t,r,!1]}function is(e,t,n,r){return e={tag:e,create:n,deps:r,inst:t,next:null},t=U.updateQueue,t===null&&(t=Ao(),U.updateQueue=t),n=t.lastEffect,n===null?t.lastEffect=e.next=e:(r=n.next,n.next=e,e.next=r,t.lastEffect=e),e}function as(){return ko().memoizedState}function os(e,t,n,r){var i=Oo();U.flags|=e,i.memoizedState=is(1|t,{destroy:void 0},n,r===void 0?null:r)}function ss(e,t,n,r){var i=ko();r=r===void 0?null:r;var a=i.memoizedState.inst;W!==null&&r!==null&&bo(r,W.memoizedState.deps)?i.memoizedState=is(t,a,n,r):(U.flags|=e,i.memoizedState=is(1|t,a,n,r))}function cs(e,t){os(8390656,8,e,t)}function ls(e,t){ss(2048,8,e,t)}function us(e){U.flags|=4;var t=U.updateQueue;if(t===null)t=Ao(),U.updateQueue=t,t.events=[e];else{var n=t.events;n===null?t.events=[e]:n.push(e)}}function ds(e){var t=ko().memoizedState;return us({ref:t,nextImpl:e}),function(){if(G&2)throw Error(i(440));return t.impl.apply(void 0,arguments)}}function fs(e,t){return ss(4,2,e,t)}function ps(e,t){return ss(4,4,e,t)}function ms(e,t){if(typeof t==`function`){e=e();var n=t(e);return function(){typeof n==`function`?n():t(null)}}if(t!=null)return e=e(),t.current=e,function(){t.current=null}}function hs(e,t,n){n=n==null?null:n.concat([e]),ss(4,4,ms.bind(null,t,e),n)}function gs(){}function _s(e,t){var n=ko();t=t===void 0?null:t;var r=n.memoizedState;return t!==null&&bo(t,r[1])?r[0]:(n.memoizedState=[e,t],e)}function vs(e,t){var n=ko();t=t===void 0?null:t;var r=n.memoizedState;if(t!==null&&bo(t,r[1]))return r[0];if(r=e(),mo){We(!0);try{e()}finally{We(!1)}}return n.memoizedState=[r,t],r}function ys(e,t,n){return n===void 0||lo&1073741824&&!(J&261930)?e.memoizedState=t:(e.memoizedState=n,e=hu(),U.lanes|=e,Kl|=e,n)}function bs(e,t,n,r){return Tr(n,t)?n:Ya.current===null?!(lo&42)||lo&1073741824&&!(J&261930)?(nc=!0,e.memoizedState=n):(e=hu(),U.lanes|=e,Kl|=e,t):(e=ys(e,n,r),Tr(e,t)||(nc=!0),e)}function xs(e,t,n,r,i){var a=k.p;k.p=a!==0&&8>a?a:8;var o=O.T,s={};O.T=s,Ns(e,!1,t,n);try{var c=i(),l=O.S;l!==null&&l(s,c),typeof c==`object`&&c&&typeof c.then==`function`?Ms(e,t,pa(c,r),mu(e)):Ms(e,t,r,mu(e))}catch(n){Ms(e,t,{then:function(){},status:`rejected`,reason:n},mu())}finally{k.p=a,o!==null&&s.types!==null&&(o.types=s.types),O.T=o}}function Ss(){}function Cs(e,t,n,r){if(e.tag!==5)throw Error(i(476));var a=ws(e).queue;xs(e,a,t,ce,n===null?Ss:function(){return Ts(e),n(r)})}function ws(e){var t=e.memoizedState;if(t!==null)return t;t={memoizedState:ce,baseState:ce,baseQueue:null,queue:{pending:null,lanes:0,dispatch:null,lastRenderedReducer:Po,lastRenderedState:ce},next:null};var n={};return t.next={memoizedState:n,baseState:n,baseQueue:null,queue:{pending:null,lanes:0,dispatch:null,lastRenderedReducer:Po,lastRenderedState:n},next:null},e.memoizedState=t,e=e.alternate,e!==null&&(e.memoizedState=t),t}function Ts(e){var t=ws(e);t.next===null&&(t=e.alternate.memoizedState),Ms(e,t.next.queue,{},mu())}function Es(){return Qi(Qf)}function Ds(){return ko().memoizedState}function Os(){return ko().memoizedState}function ks(e){for(var t=e.return;t!==null;){switch(t.tag){case 24:case 3:var n=mu();e=Ba(n);var r=Va(t,e,n);r!==null&&(gu(r,t,n),Ha(r,t,n)),t={cache:aa()},e.payload=t;return}t=t.return}}function As(e,t,n){var r=mu();n={lane:r,revertLane:0,gesture:null,action:n,hasEagerState:!1,eagerState:null,next:null},Ps(e)?Fs(t,n):(n=ai(e,t,n,r),n!==null&&(gu(n,e,r),Is(n,t,r)))}function js(e,t,n){Ms(e,t,n,mu())}function Ms(e,t,n,r){var i={lane:r,revertLane:0,gesture:null,action:n,hasEagerState:!1,eagerState:null,next:null};if(Ps(e))Fs(t,i);else{var a=e.alternate;if(e.lanes===0&&(a===null||a.lanes===0)&&(a=t.lastRenderedReducer,a!==null))try{var o=t.lastRenderedState,s=a(o,n);if(i.hasEagerState=!0,i.eagerState=s,Tr(s,o))return ii(e,t,i,0),K===null&&ri(),!1}catch{}if(n=ai(e,t,i,r),n!==null)return gu(n,e,r),Is(n,t,r),!0}return!1}function Ns(e,t,n,r){if(r={lane:2,revertLane:fd(),gesture:null,action:r,hasEagerState:!1,eagerState:null,next:null},Ps(e)){if(t)throw Error(i(479))}else t=ai(e,n,r,2),t!==null&&gu(t,e,2)}function Ps(e){var t=e.alternate;return e===U||t!==null&&t===U}function Fs(e,t){po=fo=!0;var n=e.pending;n===null?t.next=t:(t.next=n.next,n.next=t),e.pending=t}function Is(e,t,n){if(n&4194048){var r=t.lanes;r&=e.pendingLanes,n|=r,t.lanes=n,st(e,n)}}var Ls={readContext:Qi,use:Mo,useCallback:yo,useContext:yo,useEffect:yo,useImperativeHandle:yo,useLayoutEffect:yo,useInsertionEffect:yo,useMemo:yo,useReducer:yo,useRef:yo,useState:yo,useDebugValue:yo,useDeferredValue:yo,useTransition:yo,useSyncExternalStore:yo,useId:yo,useHostTransitionStatus:yo,useFormState:yo,useActionState:yo,useOptimistic:yo,useMemoCache:yo,useCacheRefresh:yo};Ls.useEffectEvent=yo;var Rs={readContext:Qi,use:Mo,useCallback:function(e,t){return Oo().memoizedState=[e,t===void 0?null:t],e},useContext:Qi,useEffect:cs,useImperativeHandle:function(e,t,n){n=n==null?null:n.concat([e]),os(4194308,4,ms.bind(null,t,e),n)},useLayoutEffect:function(e,t){return os(4194308,4,e,t)},useInsertionEffect:function(e,t){os(4,2,e,t)},useMemo:function(e,t){var n=Oo();t=t===void 0?null:t;var r=e();if(mo){We(!0);try{e()}finally{We(!1)}}return n.memoizedState=[r,t],r},useReducer:function(e,t,n){var r=Oo();if(n!==void 0){var i=n(t);if(mo){We(!0);try{n(t)}finally{We(!1)}}}else i=t;return r.memoizedState=r.baseState=i,e={pending:null,lanes:0,dispatch:null,lastRenderedReducer:e,lastRenderedState:i},r.queue=e,e=e.dispatch=As.bind(null,U,e),[r.memoizedState,e]},useRef:function(e){var t=Oo();return e={current:e},t.memoizedState=e},useState:function(e){e=Wo(e);var t=e.queue,n=js.bind(null,U,t);return t.dispatch=n,[e.memoizedState,n]},useDebugValue:gs,useDeferredValue:function(e,t){return ys(Oo(),e,t)},useTransition:function(){var e=Wo(!1);return e=xs.bind(null,U,e.queue,!0,!1),Oo().memoizedState=e,[!1,e]},useSyncExternalStore:function(e,t,n){var r=U,a=Oo();if(R){if(n===void 0)throw Error(i(407));n=n()}else{if(n=t(),K===null)throw Error(i(349));J&127||zo(r,t,n)}a.memoizedState=n;var o={value:n,getSnapshot:t};return a.queue=o,cs(Vo.bind(null,r,o,e),[e]),r.flags|=2048,is(9,{destroy:void 0},Bo.bind(null,r,o,n,t),null),n},useId:function(){var e=Oo(),t=K.identifierPrefix;if(R){var n=Ai,r=ki;n=(r&~(1<<32-Ge(r)-1)).toString(32)+n,t=`_`+t+`R_`+n,n=ho++,0<n&&(t+=`H`+n.toString(32)),t+=`_`}else n=vo++,t=`_`+t+`r_`+n.toString(32)+`_`;return e.memoizedState=t},useHostTransitionStatus:Es,useFormState:$o,useActionState:$o,useOptimistic:function(e){var t=Oo();t.memoizedState=t.baseState=e;var n={pending:null,lanes:0,dispatch:null,lastRenderedReducer:null,lastRenderedState:null};return t.queue=n,t=Ns.bind(null,U,!0,n),n.dispatch=t,[e,t]},useMemoCache:No,useCacheRefresh:function(){return Oo().memoizedState=ks.bind(null,U)},useEffectEvent:function(e){var t=Oo(),n={impl:e};return t.memoizedState=n,function(){if(G&2)throw Error(i(440));return n.impl.apply(void 0,arguments)}}},zs={readContext:Qi,use:Mo,useCallback:_s,useContext:Qi,useEffect:ls,useImperativeHandle:hs,useInsertionEffect:fs,useLayoutEffect:ps,useMemo:vs,useReducer:Fo,useRef:as,useState:function(){return Fo(Po)},useDebugValue:gs,useDeferredValue:function(e,t){return bs(ko(),W.memoizedState,e,t)},useTransition:function(){var e=Fo(Po)[0],t=ko().memoizedState;return[typeof e==`boolean`?e:jo(e),t]},useSyncExternalStore:Ro,useId:Ds,useHostTransitionStatus:Es,useFormState:es,useActionState:es,useOptimistic:function(e,t){return Go(ko(),W,e,t)},useMemoCache:No,useCacheRefresh:Os};zs.useEffectEvent=ds;var Bs={readContext:Qi,use:Mo,useCallback:_s,useContext:Qi,useEffect:ls,useImperativeHandle:hs,useInsertionEffect:fs,useLayoutEffect:ps,useMemo:vs,useReducer:Lo,useRef:as,useState:function(){return Lo(Po)},useDebugValue:gs,useDeferredValue:function(e,t){var n=ko();return W===null?ys(n,e,t):bs(n,W.memoizedState,e,t)},useTransition:function(){var e=Lo(Po)[0],t=ko().memoizedState;return[typeof e==`boolean`?e:jo(e),t]},useSyncExternalStore:Ro,useId:Ds,useHostTransitionStatus:Es,useFormState:rs,useActionState:rs,useOptimistic:function(e,t){var n=ko();return W===null?(n.baseState=e,[e,n.queue.dispatch]):Go(n,W,e,t)},useMemoCache:No,useCacheRefresh:Os};Bs.useEffectEvent=ds;function Vs(e,t,n,r){t=e.memoizedState,n=n(r,t),n=n==null?t:m({},t,n),e.memoizedState=n,e.lanes===0&&(e.updateQueue.baseState=n)}var Hs={enqueueSetState:function(e,t,n){e=e._reactInternals;var r=mu(),i=Ba(r);i.payload=t,n!=null&&(i.callback=n),t=Va(e,i,r),t!==null&&(gu(t,e,r),Ha(t,e,r))},enqueueReplaceState:function(e,t,n){e=e._reactInternals;var r=mu(),i=Ba(r);i.tag=1,i.payload=t,n!=null&&(i.callback=n),t=Va(e,i,r),t!==null&&(gu(t,e,r),Ha(t,e,r))},enqueueForceUpdate:function(e,t){e=e._reactInternals;var n=mu(),r=Ba(n);r.tag=2,t!=null&&(r.callback=t),t=Va(e,r,n),t!==null&&(gu(t,e,n),Ha(t,e,n))}};function Us(e,t,n,r,i,a,o){return e=e.stateNode,typeof e.shouldComponentUpdate==`function`?e.shouldComponentUpdate(r,a,o):t.prototype&&t.prototype.isPureReactComponent?!Er(n,r)||!Er(i,a):!0}function Ws(e,t,n,r){e=t.state,typeof t.componentWillReceiveProps==`function`&&t.componentWillReceiveProps(n,r),typeof t.UNSAFE_componentWillReceiveProps==`function`&&t.UNSAFE_componentWillReceiveProps(n,r),t.state!==e&&Hs.enqueueReplaceState(t,t.state,null)}function Gs(e,t){var n=t;if(`ref`in t)for(var r in n={},t)r!==`ref`&&(n[r]=t[r]);if(e=e.defaultProps)for(var i in n===t&&(n=m({},n)),e)n[i]===void 0&&(n[i]=e[i]);return n}function Ks(e){$r(e)}function qs(e){console.error(e)}function Js(e){$r(e)}function Ys(e,t){try{var n=e.onUncaughtError;n(t.value,{componentStack:t.stack})}catch(e){setTimeout(function(){throw e})}}function Xs(e,t,n){try{var r=e.onCaughtError;r(n.value,{componentStack:n.stack,errorBoundary:t.tag===1?t.stateNode:null})}catch(e){setTimeout(function(){throw e})}}function Zs(e,t,n){return n=Ba(n),n.tag=3,n.payload={element:null},n.callback=function(){Ys(e,t)},n}function Qs(e){return e=Ba(e),e.tag=3,e}function $s(e,t,n,r){var i=n.type.getDerivedStateFromError;if(typeof i==`function`){var a=r.value;e.payload=function(){return i(a)},e.callback=function(){Xs(t,n,r)}}var o=n.stateNode;o!==null&&typeof o.componentDidCatch==`function`&&(e.callback=function(){Xs(t,n,r),typeof i!=`function`&&(iu===null?iu=new Set([this]):iu.add(this));var e=r.stack;this.componentDidCatch(r.value,{componentStack:e===null?``:e})})}function ec(e,t,n,r,a){if(n.flags|=32768,typeof r==`object`&&r&&typeof r.then==`function`){if(t=n.alternate,t!==null&&Yi(t,n,a,!0),n=eo.current,n!==null){switch(n.tag){case 31:case 13:return to===null?Ou():n.alternate===null&&Gl===0&&(Gl=3),n.flags&=-257,n.flags|=65536,n.lanes=a,r===Sa?n.flags|=16384:(t=n.updateQueue,t===null?n.updateQueue=new Set([r]):t.add(r),Ku(e,r,a)),!1;case 22:return n.flags|=65536,r===Sa?n.flags|=16384:(t=n.updateQueue,t===null?(t={transitions:null,markerInstances:null,retryQueue:new Set([r])},n.updateQueue=t):(n=t.retryQueue,n===null?t.retryQueue=new Set([r]):n.add(r)),Ku(e,r,a)),!1}throw Error(i(435,n.tag))}return Ku(e,r,a),Ou(),!1}if(R)return t=eo.current,t===null?(r!==Ri&&(t=Error(i(423),{cause:r}),Hi(xi(t,n))),e=e.current.alternate,e.flags|=65536,a&=-a,e.lanes|=a,r=xi(r,n),a=Zs(e.stateNode,r,a),Ua(e,a),Gl!==4&&(Gl=2)):(!(t.flags&65536)&&(t.flags|=256),t.flags|=65536,t.lanes=a,r!==Ri&&(e=Error(i(422),{cause:r}),Hi(xi(e,n)))),!1;var o=Error(i(520),{cause:r});if(o=xi(o,n),Zl===null?Zl=[o]:Zl.push(o),Gl!==4&&(Gl=2),t===null)return!0;r=xi(r,n),n=t;do{switch(n.tag){case 3:return n.flags|=65536,e=a&-a,n.lanes|=e,e=Zs(n.stateNode,r,e),Ua(n,e),!1;case 1:if(t=n.type,o=n.stateNode,!(n.flags&128)&&(typeof t.getDerivedStateFromError==`function`||o!==null&&typeof o.componentDidCatch==`function`&&(iu===null||!iu.has(o))))return n.flags|=65536,a&=-a,n.lanes|=a,a=Qs(a),$s(a,e,n,r),Ua(n,a),!1}n=n.return}while(n!==null);return!1}var tc=Error(i(461)),nc=!1;function rc(e,t,n,r){t.child=e===null?Ia(t,null,n,r):Fa(t,e.child,n,r)}function ic(e,t,n,r,i){n=n.render;var a=t.ref;if(`ref`in r){var o={};for(var s in r)s!==`ref`&&(o[s]=r[s])}else o=r;return Zi(t),r=xo(e,t,n,o,a,i),s=To(),e!==null&&!nc?(Eo(e,t,i),Oc(e,t,i)):(R&&s&&Ni(t),t.flags|=1,rc(e,t,r,i),t.child)}function ac(e,t,n,r,i){if(e===null){var a=n.type;return typeof a==`function`&&!fi(a)&&a.defaultProps===void 0&&n.compare===null?(t.tag=15,t.type=a,oc(e,t,a,r,i)):(e=hi(n.type,null,r,t,t.mode,i),e.ref=t.ref,e.return=t,t.child=e)}if(a=e.child,!kc(e,i)){var o=a.memoizedProps;if(n=n.compare,n=n===null?Er:n,n(o,r)&&e.ref===t.ref)return Oc(e,t,i)}return t.flags|=1,e=pi(a,r),e.ref=t.ref,e.return=t,t.child=e}function oc(e,t,n,r,i){if(e!==null){var a=e.memoizedProps;if(Er(a,r)&&e.ref===t.ref){if(nc=!1,t.pendingProps=r=a,kc(e,i))e.flags&131072&&(nc=!0);else return t.lanes=e.lanes,Oc(e,t,i)}}return mc(e,t,n,r,i)}function sc(e,t,n,r){var i=r.children,a=e===null?null:e.memoizedState;if(e===null&&t.stateNode===null&&(t.stateNode={_visibility:1,_pendingMarkers:null,_retryCache:null,_transitions:null}),r.mode===`hidden`){if(t.flags&128){if(a=a===null?n:a.baseLanes|n,e!==null){for(r=t.child=e.child,i=0;r!==null;)i=i|r.lanes|r.childLanes,r=r.sibling;r=i&~a}else r=0,t.child=null;return lc(e,t,a,n,r)}if(n&536870912)t.memoizedState={baseLanes:0,cachePool:null},e!==null&&_a(t,a===null?null:a.cachePool),a===null?Qa():Za(t,a),io(t);else return r=t.lanes=536870912,lc(e,t,a===null?n:a.baseLanes|n,n,r)}else a===null?(e!==null&&_a(t,null),Qa(),ao(t)):(_a(t,a.cachePool),Za(t,a),ao(t),t.memoizedState=null);return rc(e,t,i,n),t.child}function cc(e,t){return e!==null&&e.tag===22||t.stateNode!==null||(t.stateNode={_visibility:1,_pendingMarkers:null,_retryCache:null,_transitions:null}),t.sibling}function lc(e,t,n,r,i){var a=ga();return a=a===null?null:{parent:ia._currentValue,pool:a},t.memoizedState={baseLanes:n,cachePool:a},e!==null&&_a(t,null),Qa(),io(t),e!==null&&Yi(e,t,r,!0),t.childLanes=i,null}function uc(e,t){return t=Cc({mode:t.mode,children:t.children},e.mode),t.ref=e.ref,e.child=t,t.return=e,t}function dc(e,t,n){return Fa(t,e.child,null,n),e=uc(t,t.pendingProps),e.flags|=2,oo(t),t.memoizedState=null,e}function fc(e,t,n){var r=t.pendingProps,a=!!(t.flags&128);if(t.flags&=-129,e===null){if(R){if(r.mode===`hidden`)return e=uc(t,r),t.lanes=536870912,cc(null,e);if(ro(t),(e=L)?(e=af(e,Li),e=e!==null&&e.data===`&`?e:null,e!==null&&(t.memoizedState={dehydrated:e,treeContext:Oi===null?null:{id:ki,overflow:Ai},retryLane:536870912,hydrationErrors:null},n=vi(e),n.return=t,t.child=n,I=t,L=null)):e=null,e===null)throw zi(t);return t.lanes=536870912,null}return uc(t,r)}var o=e.memoizedState;if(o!==null){var s=o.dehydrated;if(ro(t),a){if(t.flags&256)t.flags&=-257,t=dc(e,t,n);else if(t.memoizedState!==null)t.child=e.child,t.flags|=128,t=null;else throw Error(i(558))}else if(nc||Yi(e,t,n,!1),a=(n&e.childLanes)!==0,nc||a){if(r=K,r!==null&&(s=ct(r,n),s!==0&&s!==o.retryLane))throw o.retryLane=s,oi(e,s),gu(r,e,s),tc;Ou(),t=dc(e,t,n)}else e=o.treeContext,L=lf(s.nextSibling),I=t,R=!0,Ii=null,Li=!1,e!==null&&Fi(t,e),t=uc(t,r),t.flags|=4096;return t}return e=pi(e.child,{mode:r.mode,children:r.children}),e.ref=t.ref,t.child=e,e.return=t,e}function pc(e,t){var n=t.ref;if(n===null)e!==null&&e.ref!==null&&(t.flags|=4194816);else{if(typeof n!=`function`&&typeof n!=`object`)throw Error(i(284));(e===null||e.ref!==n)&&(t.flags|=4194816)}}function mc(e,t,n,r,i){return Zi(t),n=xo(e,t,n,r,void 0,i),r=To(),e!==null&&!nc?(Eo(e,t,i),Oc(e,t,i)):(R&&r&&Ni(t),t.flags|=1,rc(e,t,n,i),t.child)}function hc(e,t,n,r,i,a){return Zi(t),t.updateQueue=null,n=Co(t,r,n,i),So(e),r=To(),e!==null&&!nc?(Eo(e,t,a),Oc(e,t,a)):(R&&r&&Ni(t),t.flags|=1,rc(e,t,n,a),t.child)}function gc(e,t,n,r,i){if(Zi(t),t.stateNode===null){var a=li,o=n.contextType;typeof o==`object`&&o&&(a=Qi(o)),a=new n(r,a),t.memoizedState=a.state!==null&&a.state!==void 0?a.state:null,a.updater=Hs,t.stateNode=a,a._reactInternals=t,a=t.stateNode,a.props=r,a.state=t.memoizedState,a.refs={},Ra(t),o=n.contextType,a.context=typeof o==`object`&&o?Qi(o):li,a.state=t.memoizedState,o=n.getDerivedStateFromProps,typeof o==`function`&&(Vs(t,n,o,r),a.state=t.memoizedState),typeof n.getDerivedStateFromProps==`function`||typeof a.getSnapshotBeforeUpdate==`function`||typeof a.UNSAFE_componentWillMount!=`function`&&typeof a.componentWillMount!=`function`||(o=a.state,typeof a.componentWillMount==`function`&&a.componentWillMount(),typeof a.UNSAFE_componentWillMount==`function`&&a.UNSAFE_componentWillMount(),o!==a.state&&Hs.enqueueReplaceState(a,a.state,null),Ka(t,r,a,i),Ga(),a.state=t.memoizedState),typeof a.componentDidMount==`function`&&(t.flags|=4194308),r=!0}else if(e===null){a=t.stateNode;var s=t.memoizedProps,c=Gs(n,s);a.props=c;var l=a.context,u=n.contextType;o=li,typeof u==`object`&&u&&(o=Qi(u));var d=n.getDerivedStateFromProps;u=typeof d==`function`||typeof a.getSnapshotBeforeUpdate==`function`,s=t.pendingProps!==s,u||typeof a.UNSAFE_componentWillReceiveProps!=`function`&&typeof a.componentWillReceiveProps!=`function`||(s||l!==o)&&Ws(t,a,r,o),La=!1;var f=t.memoizedState;a.state=f,Ka(t,r,a,i),Ga(),l=t.memoizedState,s||f!==l||La?(typeof d==`function`&&(Vs(t,n,d,r),l=t.memoizedState),(c=La||Us(t,n,c,r,f,l,o))?(u||typeof a.UNSAFE_componentWillMount!=`function`&&typeof a.componentWillMount!=`function`||(typeof a.componentWillMount==`function`&&a.componentWillMount(),typeof a.UNSAFE_componentWillMount==`function`&&a.UNSAFE_componentWillMount()),typeof a.componentDidMount==`function`&&(t.flags|=4194308)):(typeof a.componentDidMount==`function`&&(t.flags|=4194308),t.memoizedProps=r,t.memoizedState=l),a.props=r,a.state=l,a.context=o,r=c):(typeof a.componentDidMount==`function`&&(t.flags|=4194308),r=!1)}else{a=t.stateNode,za(e,t),o=t.memoizedProps,u=Gs(n,o),a.props=u,d=t.pendingProps,f=a.context,l=n.contextType,c=li,typeof l==`object`&&l&&(c=Qi(l)),s=n.getDerivedStateFromProps,(l=typeof s==`function`||typeof a.getSnapshotBeforeUpdate==`function`)||typeof a.UNSAFE_componentWillReceiveProps!=`function`&&typeof a.componentWillReceiveProps!=`function`||(o!==d||f!==c)&&Ws(t,a,r,c),La=!1,f=t.memoizedState,a.state=f,Ka(t,r,a,i),Ga();var p=t.memoizedState;o!==d||f!==p||La||e!==null&&e.dependencies!==null&&Xi(e.dependencies)?(typeof s==`function`&&(Vs(t,n,s,r),p=t.memoizedState),(u=La||Us(t,n,u,r,f,p,c)||e!==null&&e.dependencies!==null&&Xi(e.dependencies))?(l||typeof a.UNSAFE_componentWillUpdate!=`function`&&typeof a.componentWillUpdate!=`function`||(typeof a.componentWillUpdate==`function`&&a.componentWillUpdate(r,p,c),typeof a.UNSAFE_componentWillUpdate==`function`&&a.UNSAFE_componentWillUpdate(r,p,c)),typeof a.componentDidUpdate==`function`&&(t.flags|=4),typeof a.getSnapshotBeforeUpdate==`function`&&(t.flags|=1024)):(typeof a.componentDidUpdate!=`function`||o===e.memoizedProps&&f===e.memoizedState||(t.flags|=4),typeof a.getSnapshotBeforeUpdate!=`function`||o===e.memoizedProps&&f===e.memoizedState||(t.flags|=1024),t.memoizedProps=r,t.memoizedState=p),a.props=r,a.state=p,a.context=c,r=u):(typeof a.componentDidUpdate!=`function`||o===e.memoizedProps&&f===e.memoizedState||(t.flags|=4),typeof a.getSnapshotBeforeUpdate!=`function`||o===e.memoizedProps&&f===e.memoizedState||(t.flags|=1024),r=!1)}return a=r,pc(e,t),r=!!(t.flags&128),a||r?(a=t.stateNode,n=r&&typeof n.getDerivedStateFromError!=`function`?null:a.render(),t.flags|=1,e!==null&&r?(t.child=Fa(t,e.child,null,i),t.child=Fa(t,null,n,i)):rc(e,t,n,i),t.memoizedState=a.state,e=t.child):e=Oc(e,t,i),e}function _c(e,t,n,r){return V(),t.flags|=256,rc(e,t,n,r),t.child}var vc={dehydrated:null,treeContext:null,retryLane:0,hydrationErrors:null};function yc(e){return{baseLanes:e,cachePool:va()}}function bc(e,t,n){return e=e===null?0:e.childLanes&~n,t&&(e|=Yl),e}function xc(e,t,n){var r=t.pendingProps,a=!1,o=!!(t.flags&128),s;if((s=o)||(s=e!==null&&e.memoizedState===null?!1:!!(so.current&2)),s&&(a=!0,t.flags&=-129),s=!!(t.flags&32),t.flags&=-33,e===null){if(R){if(a?no(t):ao(t),(e=L)?(e=af(e,Li),e=e!==null&&e.data!==`&`?e:null,e!==null&&(t.memoizedState={dehydrated:e,treeContext:Oi===null?null:{id:ki,overflow:Ai},retryLane:536870912,hydrationErrors:null},n=vi(e),n.return=t,t.child=n,I=t,L=null)):e=null,e===null)throw zi(t);return sf(e)?t.lanes=32:t.lanes=536870912,null}var c=r.children;return r=r.fallback,a?(ao(t),a=t.mode,c=Cc({mode:`hidden`,children:c},a),r=gi(r,a,n,null),c.return=t,r.return=t,c.sibling=r,t.child=c,r=t.child,r.memoizedState=yc(n),r.childLanes=bc(e,s,n),t.memoizedState=vc,cc(null,r)):(no(t),Sc(t,c))}var l=e.memoizedState;if(l!==null&&(c=l.dehydrated,c!==null)){if(o)t.flags&256?(no(t),t.flags&=-257,t=wc(e,t,n)):t.memoizedState===null?(ao(t),c=r.fallback,a=t.mode,r=Cc({mode:`visible`,children:r.children},a),c=gi(c,a,n,null),c.flags|=2,r.return=t,c.return=t,r.sibling=c,t.child=r,Fa(t,e.child,null,n),r=t.child,r.memoizedState=yc(n),r.childLanes=bc(e,s,n),t.memoizedState=vc,t=cc(null,r)):(ao(t),t.child=e.child,t.flags|=128,t=null);else if(no(t),sf(c)){if(s=c.nextSibling&&c.nextSibling.dataset,s)var u=s.dgst;s=u,r=Error(i(419)),r.stack=``,r.digest=s,Hi({value:r,source:null,stack:null}),t=wc(e,t,n)}else if(nc||Yi(e,t,n,!1),s=(n&e.childLanes)!==0,nc||s){if(s=K,s!==null&&(r=ct(s,n),r!==0&&r!==l.retryLane))throw l.retryLane=r,oi(e,r),gu(s,e,r),tc;of(c)||Ou(),t=wc(e,t,n)}else of(c)?(t.flags|=192,t.child=e.child,t=null):(e=l.treeContext,L=lf(c.nextSibling),I=t,R=!0,Ii=null,Li=!1,e!==null&&Fi(t,e),t=Sc(t,r.children),t.flags|=4096);return t}return a?(ao(t),c=r.fallback,a=t.mode,l=e.child,u=l.sibling,r=pi(l,{mode:`hidden`,children:r.children}),r.subtreeFlags=l.subtreeFlags&65011712,u===null?(c=gi(c,a,n,null),c.flags|=2):c=pi(u,c),c.return=t,r.return=t,r.sibling=c,t.child=r,cc(null,r),r=t.child,c=e.child.memoizedState,c===null?c=yc(n):(a=c.cachePool,a===null?a=va():(l=ia._currentValue,a=a.parent===l?a:{parent:l,pool:l}),c={baseLanes:c.baseLanes|n,cachePool:a}),r.memoizedState=c,r.childLanes=bc(e,s,n),t.memoizedState=vc,cc(e.child,r)):(no(t),n=e.child,e=n.sibling,n=pi(n,{mode:`visible`,children:r.children}),n.return=t,n.sibling=null,e!==null&&(s=t.deletions,s===null?(t.deletions=[e],t.flags|=16):s.push(e)),t.child=n,t.memoizedState=null,n)}function Sc(e,t){return t=Cc({mode:`visible`,children:t},e.mode),t.return=e,e.child=t}function Cc(e,t){return e=di(22,e,null,t),e.lanes=0,e}function wc(e,t,n){return Fa(t,e.child,null,n),e=Sc(t,t.pendingProps.children),e.flags|=2,t.memoizedState=null,e}function Tc(e,t,n){e.lanes|=t;var r=e.alternate;r!==null&&(r.lanes|=t),qi(e.return,t,n)}function Ec(e,t,n,r,i,a){var o=e.memoizedState;o===null?e.memoizedState={isBackwards:t,rendering:null,renderingStartTime:0,last:r,tail:n,tailMode:i,treeForkCount:a}:(o.isBackwards=t,o.rendering=null,o.renderingStartTime=0,o.last=r,o.tail=n,o.tailMode=i,o.treeForkCount=a)}function Dc(e,t,n){var r=t.pendingProps,i=r.revealOrder,a=r.tail;r=r.children;var o=so.current,s=!!(o&2);if(s?(o=o&1|2,t.flags|=128):o&=1,A(so,o),rc(e,t,r,n),r=R?Ti:0,!s&&e!==null&&e.flags&128)a:for(e=t.child;e!==null;){if(e.tag===13)e.memoizedState!==null&&Tc(e,n,t);else if(e.tag===19)Tc(e,n,t);else if(e.child!==null){e.child.return=e,e=e.child;continue}if(e===t)break a;for(;e.sibling===null;){if(e.return===null||e.return===t)break a;e=e.return}e.sibling.return=e.return,e=e.sibling}switch(i){case`forwards`:for(n=t.child,i=null;n!==null;)e=n.alternate,e!==null&&co(e)===null&&(i=n),n=n.sibling;n=i,n===null?(i=t.child,t.child=null):(i=n.sibling,n.sibling=null),Ec(t,!1,i,n,a,r);break;case`backwards`:case`unstable_legacy-backwards`:for(n=null,i=t.child,t.child=null;i!==null;){if(e=i.alternate,e!==null&&co(e)===null){t.child=i;break}e=i.sibling,i.sibling=n,n=i,i=e}Ec(t,!0,n,null,a,r);break;case`together`:Ec(t,!1,null,null,void 0,r);break;default:t.memoizedState=null}return t.child}function Oc(e,t,n){if(e!==null&&(t.dependencies=e.dependencies),Kl|=t.lanes,(n&t.childLanes)===0){if(e!==null){if(Yi(e,t,n,!1),(n&t.childLanes)===0)return null}else return null}if(e!==null&&t.child!==e.child)throw Error(i(153));if(t.child!==null){for(e=t.child,n=pi(e,e.pendingProps),t.child=n,n.return=t;e.sibling!==null;)e=e.sibling,n=n.sibling=pi(e,e.pendingProps),n.return=t;n.sibling=null}return t.child}function kc(e,t){return(e.lanes&t)!==0||(e=e.dependencies,!!(e!==null&&Xi(e)))}function Ac(e,t,n){switch(t.tag){case 3:_e(t,t.stateNode.containerInfo),Gi(t,ia,e.memoizedState.cache),V();break;case 27:case 5:ye(t);break;case 4:_e(t,t.stateNode.containerInfo);break;case 10:Gi(t,t.type,t.memoizedProps.value);break;case 31:if(t.memoizedState!==null)return t.flags|=128,ro(t),null;break;case 13:var r=t.memoizedState;if(r!==null)return r.dehydrated===null?(n&t.child.childLanes)===0?(no(t),e=Oc(e,t,n),e===null?null:e.sibling):xc(e,t,n):(no(t),t.flags|=128,null);no(t);break;case 19:var i=!!(e.flags&128);if(r=(n&t.childLanes)!==0,r||=(Yi(e,t,n,!1),(n&t.childLanes)!==0),i){if(r)return Dc(e,t,n);t.flags|=128}if(i=t.memoizedState,i!==null&&(i.rendering=null,i.tail=null,i.lastEffect=null),A(so,so.current),r)break;return null;case 22:return t.lanes=0,sc(e,t,n,t.pendingProps);case 24:Gi(t,ia,e.memoizedState.cache)}return Oc(e,t,n)}function jc(e,t,n){if(e!==null){if(e.memoizedProps!==t.pendingProps)nc=!0;else{if(!kc(e,n)&&!(t.flags&128))return nc=!1,Ac(e,t,n);nc=!!(e.flags&131072)}}else nc=!1,R&&t.flags&1048576&&Mi(t,Ti,t.index);switch(t.lanes=0,t.tag){case 16:a:{var r=t.pendingProps;if(e=Ta(t.elementType),t.type=e,typeof e==`function`)fi(e)?(r=Gs(e,r),t.tag=1,t=gc(null,t,e,r,n)):(t.tag=0,t=mc(null,t,e,r,n));else{if(e!=null){var a=e.$$typeof;if(a===C){t.tag=11,t=ic(null,t,e,r,n);break a}if(a===te){t.tag=14,t=ac(null,t,e,r,n);break a}}throw t=oe(e)||e,Error(i(306,t,``))}}return t;case 0:return mc(e,t,t.type,t.pendingProps,n);case 1:return r=t.type,a=Gs(r,t.pendingProps),gc(e,t,r,a,n);case 3:a:{if(_e(t,t.stateNode.containerInfo),e===null)throw Error(i(387));r=t.pendingProps;var o=t.memoizedState;a=o.element,za(e,t),Ka(t,r,null,n);var s=t.memoizedState;if(r=s.cache,Gi(t,ia,r),r!==o.cache&&Ji(t,[ia],n,!0),Ga(),r=s.element,o.isDehydrated){if(o={element:r,isDehydrated:!1,cache:s.cache},t.updateQueue.baseState=o,t.memoizedState=o,t.flags&256){t=_c(e,t,r,n);break a}if(r!==a){a=xi(Error(i(424)),t),Hi(a),t=_c(e,t,r,n);break a}switch(e=t.stateNode.containerInfo,e.nodeType){case 9:e=e.body;break;default:e=e.nodeName===`HTML`?e.ownerDocument.body:e}for(L=lf(e.firstChild),I=t,R=!0,Ii=null,Li=!0,n=Ia(t,null,r,n),t.child=n;n;)n.flags=n.flags&-3|4096,n=n.sibling}else{if(V(),r===a){t=Oc(e,t,n);break a}rc(e,t,r,n)}t=t.child}return t;case 26:return pc(e,t),e===null?(n=kf(t.type,null,t.pendingProps,null))?t.memoizedState=n:R||(n=t.type,e=t.pendingProps,r=Vd(he.current).createElement(n),r[mt]=t,r[ht]=e,Fd(r,n,e),Dt(r),t.stateNode=r):t.memoizedState=kf(t.type,e.memoizedProps,t.pendingProps,e.memoizedState),null;case 27:return ye(t),e===null&&R&&(r=t.stateNode=pf(t.type,t.pendingProps,he.current),I=t,Li=!0,a=L,Qd(t.type)?(uf=a,L=lf(r.firstChild)):L=a),rc(e,t,t.pendingProps.children,n),pc(e,t),e===null&&(t.flags|=4194304),t.child;case 5:return e===null&&R&&((a=r=L)&&(r=nf(r,t.type,t.pendingProps,Li),r===null?a=!1:(t.stateNode=r,I=t,L=lf(r.firstChild),Li=!1,a=!0)),a||zi(t)),ye(t),a=t.type,o=t.pendingProps,s=e===null?null:e.memoizedProps,r=o.children,Wd(a,o)?r=null:s!==null&&Wd(a,s)&&(t.flags|=32),t.memoizedState!==null&&(a=xo(e,t,wo,null,null,n),Qf._currentValue=a),pc(e,t),rc(e,t,r,n),t.child;case 6:return e===null&&R&&((e=n=L)&&(n=rf(n,t.pendingProps,Li),n===null?e=!1:(t.stateNode=n,I=t,L=null,e=!0)),e||zi(t)),null;case 13:return xc(e,t,n);case 4:return _e(t,t.stateNode.containerInfo),r=t.pendingProps,e===null?t.child=Fa(t,null,r,n):rc(e,t,r,n),t.child;case 11:return ic(e,t,t.type,t.pendingProps,n);case 7:return rc(e,t,t.pendingProps,n),t.child;case 8:return rc(e,t,t.pendingProps.children,n),t.child;case 12:return rc(e,t,t.pendingProps.children,n),t.child;case 10:return r=t.pendingProps,Gi(t,t.type,r.value),rc(e,t,r.children,n),t.child;case 9:return a=t.type._context,r=t.pendingProps.children,Zi(t),a=Qi(a),r=r(a),t.flags|=1,rc(e,t,r,n),t.child;case 14:return ac(e,t,t.type,t.pendingProps,n);case 15:return oc(e,t,t.type,t.pendingProps,n);case 19:return Dc(e,t,n);case 31:return fc(e,t,n);case 22:return sc(e,t,n,t.pendingProps);case 24:return Zi(t),r=Qi(ia),e===null?(a=ga(),a===null&&(a=K,o=aa(),a.pooledCache=o,o.refCount++,o!==null&&(a.pooledCacheLanes|=n),a=o),t.memoizedState={parent:r,cache:a},Ra(t),Gi(t,ia,a)):((e.lanes&n)!==0&&(za(e,t),Ka(t,null,null,n),Ga()),a=e.memoizedState,o=t.memoizedState,a.parent===r?(r=o.cache,Gi(t,ia,r),r!==a.cache&&Ji(t,[ia],n,!0)):(a={parent:r,cache:r},t.memoizedState=a,t.lanes===0&&(t.memoizedState=t.updateQueue.baseState=a),Gi(t,ia,r))),rc(e,t,t.pendingProps.children,n),t.child;case 29:throw t.pendingProps}throw Error(i(156,t.tag))}function Mc(e){e.flags|=4}function Nc(e,t,n,r,i){if((t=!!(e.mode&32))&&(t=!1),t){if(e.flags|=16777216,(i&335544128)===i){if(e.stateNode.complete)e.flags|=8192;else if(Tu())e.flags|=8192;else throw Ea=Sa,ba}}else e.flags&=-16777217}function Pc(e,t){if(t.type!==`stylesheet`||t.state.loading&4)e.flags&=-16777217;else if(e.flags|=16777216,!Wf(t)){if(Tu())e.flags|=8192;else throw Ea=Sa,ba}}function Fc(e,t){t!==null&&(e.flags|=4),e.flags&16384&&(t=e.tag===22?536870912:nt(),e.lanes|=t,Xl|=t)}function Ic(e,t){if(!R)switch(e.tailMode){case`hidden`:t=e.tail;for(var n=null;t!==null;)t.alternate!==null&&(n=t),t=t.sibling;n===null?e.tail=null:n.sibling=null;break;case`collapsed`:n=e.tail;for(var r=null;n!==null;)n.alternate!==null&&(r=n),n=n.sibling;r===null?t||e.tail===null?e.tail=null:e.tail.sibling=null:r.sibling=null}}function Lc(e){var t=e.alternate!==null&&e.alternate.child===e.child,n=0,r=0;if(t)for(var i=e.child;i!==null;)n|=i.lanes|i.childLanes,r|=i.subtreeFlags&65011712,r|=i.flags&65011712,i.return=e,i=i.sibling;else for(i=e.child;i!==null;)n|=i.lanes|i.childLanes,r|=i.subtreeFlags,r|=i.flags,i.return=e,i=i.sibling;return e.subtreeFlags|=r,e.childLanes=n,t}function Rc(e,t,n){var r=t.pendingProps;switch(Pi(t),t.tag){case 16:case 15:case 0:case 11:case 7:case 8:case 12:case 9:case 14:return Lc(t),null;case 1:return Lc(t),null;case 3:return n=t.stateNode,r=null,e!==null&&(r=e.memoizedState.cache),t.memoizedState.cache!==r&&(t.flags|=2048),Ki(ia),ve(),n.pendingContext&&(n.context=n.pendingContext,n.pendingContext=null),(e===null||e.child===null)&&(B(t)?Mc(t):e===null||e.memoizedState.isDehydrated&&!(t.flags&256)||(t.flags|=1024,Vi())),Lc(t),null;case 26:var a=t.type,o=t.memoizedState;return e===null?(Mc(t),o===null?(Lc(t),Nc(t,a,null,r,n)):(Lc(t),Pc(t,o))):o?o===e.memoizedState?(Lc(t),t.flags&=-16777217):(Mc(t),Lc(t),Pc(t,o)):(e=e.memoizedProps,e!==r&&Mc(t),Lc(t),Nc(t,a,e,r,n)),null;case 27:if(be(t),n=he.current,a=t.type,e!==null&&t.stateNode!=null)e.memoizedProps!==r&&Mc(t);else{if(!r){if(t.stateNode===null)throw Error(i(166));return Lc(t),null}e=pe.current,B(t)?Bi(t,e):(e=pf(a,r,n),t.stateNode=e,Mc(t))}return Lc(t),null;case 5:if(be(t),a=t.type,e!==null&&t.stateNode!=null)e.memoizedProps!==r&&Mc(t);else{if(!r){if(t.stateNode===null)throw Error(i(166));return Lc(t),null}if(o=pe.current,B(t))Bi(t,o);else{var s=Vd(he.current);switch(o){case 1:o=s.createElementNS(`http://www.w3.org/2000/svg`,a);break;case 2:o=s.createElementNS(`http://www.w3.org/1998/Math/MathML`,a);break;default:switch(a){case`svg`:o=s.createElementNS(`http://www.w3.org/2000/svg`,a);break;case`math`:o=s.createElementNS(`http://www.w3.org/1998/Math/MathML`,a);break;case`script`:o=s.createElement(`div`),o.innerHTML=`<script><\/script>`,o=o.removeChild(o.firstChild);break;case`select`:o=typeof r.is==`string`?s.createElement(`select`,{is:r.is}):s.createElement(`select`),r.multiple?o.multiple=!0:r.size&&(o.size=r.size);break;default:o=typeof r.is==`string`?s.createElement(a,{is:r.is}):s.createElement(a)}}o[mt]=t,o[ht]=r;a:for(s=t.child;s!==null;){if(s.tag===5||s.tag===6)o.appendChild(s.stateNode);else if(s.tag!==4&&s.tag!==27&&s.child!==null){s.child.return=s,s=s.child;continue}if(s===t)break a;for(;s.sibling===null;){if(s.return===null||s.return===t)break a;s=s.return}s.sibling.return=s.return,s=s.sibling}t.stateNode=o;a:switch(Fd(o,a,r),a){case`button`:case`input`:case`select`:case`textarea`:r=!!r.autoFocus;break a;case`img`:r=!0;break a;default:r=!1}r&&Mc(t)}}return Lc(t),Nc(t,t.type,e===null?null:e.memoizedProps,t.pendingProps,n),null;case 6:if(e&&t.stateNode!=null)e.memoizedProps!==r&&Mc(t);else{if(typeof r!=`string`&&t.stateNode===null)throw Error(i(166));if(e=he.current,B(t)){if(e=t.stateNode,n=t.memoizedProps,r=null,a=I,a!==null)switch(a.tag){case 27:case 5:r=a.memoizedProps}e[mt]=t,e=!!(e.nodeValue===n||r!==null&&!0===r.suppressHydrationWarning||Nd(e.nodeValue,n)),e||zi(t,!0)}else e=Vd(e).createTextNode(r),e[mt]=t,t.stateNode=e}return Lc(t),null;case 31:if(n=t.memoizedState,e===null||e.memoizedState!==null){if(r=B(t),n!==null){if(e===null){if(!r)throw Error(i(318));if(e=t.memoizedState,e=e===null?null:e.dehydrated,!e)throw Error(i(557));e[mt]=t}else V(),!(t.flags&128)&&(t.memoizedState=null),t.flags|=4;Lc(t),e=!1}else n=Vi(),e!==null&&e.memoizedState!==null&&(e.memoizedState.hydrationErrors=n),e=!0;if(!e)return t.flags&256?(oo(t),t):(oo(t),null);if(t.flags&128)throw Error(i(558))}return Lc(t),null;case 13:if(r=t.memoizedState,e===null||e.memoizedState!==null&&e.memoizedState.dehydrated!==null){if(a=B(t),r!==null&&r.dehydrated!==null){if(e===null){if(!a)throw Error(i(318));if(a=t.memoizedState,a=a===null?null:a.dehydrated,!a)throw Error(i(317));a[mt]=t}else V(),!(t.flags&128)&&(t.memoizedState=null),t.flags|=4;Lc(t),a=!1}else a=Vi(),e!==null&&e.memoizedState!==null&&(e.memoizedState.hydrationErrors=a),a=!0;if(!a)return t.flags&256?(oo(t),t):(oo(t),null)}return oo(t),t.flags&128?(t.lanes=n,t):(n=r!==null,e=e!==null&&e.memoizedState!==null,n&&(r=t.child,a=null,r.alternate!==null&&r.alternate.memoizedState!==null&&r.alternate.memoizedState.cachePool!==null&&(a=r.alternate.memoizedState.cachePool.pool),o=null,r.memoizedState!==null&&r.memoizedState.cachePool!==null&&(o=r.memoizedState.cachePool.pool),o!==a&&(r.flags|=2048)),n!==e&&n&&(t.child.flags|=8192),Fc(t,t.updateQueue),Lc(t),null);case 4:return ve(),e===null&&Cd(t.stateNode.containerInfo),Lc(t),null;case 10:return Ki(t.type),Lc(t),null;case 19:if(fe(so),r=t.memoizedState,r===null)return Lc(t),null;if(a=!!(t.flags&128),o=r.rendering,o===null){if(a)Ic(r,!1);else{if(Gl!==0||e!==null&&e.flags&128)for(e=t.child;e!==null;){if(o=co(e),o!==null){for(t.flags|=128,Ic(r,!1),e=o.updateQueue,t.updateQueue=e,Fc(t,e),t.subtreeFlags=0,e=n,n=t.child;n!==null;)mi(n,e),n=n.sibling;return A(so,so.current&1|2),R&&ji(t,r.treeForkCount),t.child}e=e.sibling}r.tail!==null&&Ne()>nu&&(t.flags|=128,a=!0,Ic(r,!1),t.lanes=4194304)}}else{if(!a){if(e=co(o),e!==null){if(t.flags|=128,a=!0,e=e.updateQueue,t.updateQueue=e,Fc(t,e),Ic(r,!0),r.tail===null&&r.tailMode===`hidden`&&!o.alternate&&!R)return Lc(t),null}else 2*Ne()-r.renderingStartTime>nu&&n!==536870912&&(t.flags|=128,a=!0,Ic(r,!1),t.lanes=4194304)}r.isBackwards?(o.sibling=t.child,t.child=o):(e=r.last,e===null?t.child=o:e.sibling=o,r.last=o)}return r.tail===null?(Lc(t),null):(e=r.tail,r.rendering=e,r.tail=e.sibling,r.renderingStartTime=Ne(),e.sibling=null,n=so.current,A(so,a?n&1|2:n&1),R&&ji(t,r.treeForkCount),e);case 22:case 23:return oo(t),$a(),r=t.memoizedState!==null,e===null?r&&(t.flags|=8192):e.memoizedState!==null!==r&&(t.flags|=8192),r?n&536870912&&!(t.flags&128)&&(Lc(t),t.subtreeFlags&6&&(t.flags|=8192)):Lc(t),n=t.updateQueue,n!==null&&Fc(t,n.retryQueue),n=null,e!==null&&e.memoizedState!==null&&e.memoizedState.cachePool!==null&&(n=e.memoizedState.cachePool.pool),r=null,t.memoizedState!==null&&t.memoizedState.cachePool!==null&&(r=t.memoizedState.cachePool.pool),r!==n&&(t.flags|=2048),e!==null&&fe(ha),null;case 24:return n=null,e!==null&&(n=e.memoizedState.cache),t.memoizedState.cache!==n&&(t.flags|=2048),Ki(ia),Lc(t),null;case 25:return null;case 30:return null}throw Error(i(156,t.tag))}function zc(e,t){switch(Pi(t),t.tag){case 1:return e=t.flags,e&65536?(t.flags=e&-65537|128,t):null;case 3:return Ki(ia),ve(),e=t.flags,e&65536&&!(e&128)?(t.flags=e&-65537|128,t):null;case 26:case 27:case 5:return be(t),null;case 31:if(t.memoizedState!==null){if(oo(t),t.alternate===null)throw Error(i(340));V()}return e=t.flags,e&65536?(t.flags=e&-65537|128,t):null;case 13:if(oo(t),e=t.memoizedState,e!==null&&e.dehydrated!==null){if(t.alternate===null)throw Error(i(340));V()}return e=t.flags,e&65536?(t.flags=e&-65537|128,t):null;case 19:return fe(so),null;case 4:return ve(),null;case 10:return Ki(t.type),null;case 22:case 23:return oo(t),$a(),e!==null&&fe(ha),e=t.flags,e&65536?(t.flags=e&-65537|128,t):null;case 24:return Ki(ia),null;case 25:return null;default:return null}}function Bc(e,t){switch(Pi(t),t.tag){case 3:Ki(ia),ve();break;case 26:case 27:case 5:be(t);break;case 4:ve();break;case 31:t.memoizedState!==null&&oo(t);break;case 13:oo(t);break;case 19:fe(so);break;case 10:Ki(t.type);break;case 22:case 23:oo(t),$a(),e!==null&&fe(ha);break;case 24:Ki(ia)}}function Vc(e,t){try{var n=t.updateQueue,r=n===null?null:n.lastEffect;if(r!==null){var i=r.next;n=i;do{if((n.tag&e)===e){r=void 0;var a=n.create,o=n.inst;r=a(),o.destroy=r}n=n.next}while(n!==i)}}catch(e){X(t,t.return,e)}}function Hc(e,t,n){try{var r=t.updateQueue,i=r===null?null:r.lastEffect;if(i!==null){var a=i.next;r=a;do{if((r.tag&e)===e){var o=r.inst,s=o.destroy;if(s!==void 0){o.destroy=void 0,i=t;var c=n,l=s;try{l()}catch(e){X(i,c,e)}}}r=r.next}while(r!==a)}}catch(e){X(t,t.return,e)}}function Uc(e){var t=e.updateQueue;if(t!==null){var n=e.stateNode;try{Ja(t,n)}catch(t){X(e,e.return,t)}}}function Wc(e,t,n){n.props=Gs(e.type,e.memoizedProps),n.state=e.memoizedState;try{n.componentWillUnmount()}catch(n){X(e,t,n)}}function Gc(e,t){try{var n=e.ref;if(n!==null){switch(e.tag){case 26:case 27:case 5:var r=e.stateNode;break;case 30:r=e.stateNode;break;default:r=e.stateNode}typeof n==`function`?e.refCleanup=n(r):n.current=r}}catch(n){X(e,t,n)}}function Kc(e,t){var n=e.ref,r=e.refCleanup;if(n!==null){if(typeof r==`function`)try{r()}catch(n){X(e,t,n)}finally{e.refCleanup=null,e=e.alternate,e!=null&&(e.refCleanup=null)}else if(typeof n==`function`)try{n(null)}catch(n){X(e,t,n)}else n.current=null}}function qc(e){var t=e.type,n=e.memoizedProps,r=e.stateNode;try{a:switch(t){case`button`:case`input`:case`select`:case`textarea`:n.autoFocus&&r.focus();break a;case`img`:n.src?r.src=n.src:n.srcSet&&(r.srcset=n.srcSet)}}catch(t){X(e,e.return,t)}}function Jc(e,t,n){try{var r=e.stateNode;Id(r,e.type,n,t),r[ht]=t}catch(t){X(e,e.return,t)}}function Yc(e){return e.tag===5||e.tag===3||e.tag===26||e.tag===27&&Qd(e.type)||e.tag===4}function Xc(e){a:for(;;){for(;e.sibling===null;){if(e.return===null||Yc(e.return))return null;e=e.return}for(e.sibling.return=e.return,e=e.sibling;e.tag!==5&&e.tag!==6&&e.tag!==18;){if(e.tag===27&&Qd(e.type)||e.flags&2||e.child===null||e.tag===4)continue a;e.child.return=e,e=e.child}if(!(e.flags&2))return e.stateNode}}function Zc(e,t,n){var r=e.tag;if(r===5||r===6)e=e.stateNode,t?(n.nodeType===9?n.body:n.nodeName===`HTML`?n.ownerDocument.body:n).insertBefore(e,t):(t=n.nodeType===9?n.body:n.nodeName===`HTML`?n.ownerDocument.body:n,t.appendChild(e),n=n._reactRootContainer,n!=null||t.onclick!==null||(t.onclick=sn));else if(r!==4&&(r===27&&Qd(e.type)&&(n=e.stateNode,t=null),e=e.child,e!==null))for(Zc(e,t,n),e=e.sibling;e!==null;)Zc(e,t,n),e=e.sibling}function Qc(e,t,n){var r=e.tag;if(r===5||r===6)e=e.stateNode,t?n.insertBefore(e,t):n.appendChild(e);else if(r!==4&&(r===27&&Qd(e.type)&&(n=e.stateNode),e=e.child,e!==null))for(Qc(e,t,n),e=e.sibling;e!==null;)Qc(e,t,n),e=e.sibling}function $c(e){var t=e.stateNode,n=e.memoizedProps;try{for(var r=e.type,i=t.attributes;i.length;)t.removeAttributeNode(i[0]);Fd(t,r,n),t[mt]=e,t[ht]=n}catch(t){X(e,e.return,t)}}var el=!1,tl=!1,nl=!1,rl=typeof WeakSet==`function`?WeakSet:Set,il=null;function al(e,t){if(e=e.containerInfo,zd=sp,e=Ar(e),jr(e)){if(`selectionStart`in e)var n={start:e.selectionStart,end:e.selectionEnd};else a:{n=(n=e.ownerDocument)&&n.defaultView||window;var r=n.getSelection&&n.getSelection();if(r&&r.rangeCount!==0){n=r.anchorNode;var a=r.anchorOffset,o=r.focusNode;r=r.focusOffset;try{n.nodeType,o.nodeType}catch{n=null;break a}var s=0,c=-1,l=-1,u=0,d=0,f=e,p=null;b:for(;;){for(var m;f!==n||a!==0&&f.nodeType!==3||(c=s+a),f!==o||r!==0&&f.nodeType!==3||(l=s+r),f.nodeType===3&&(s+=f.nodeValue.length),(m=f.firstChild)!==null;)p=f,f=m;for(;;){if(f===e)break b;if(p===n&&++u===a&&(c=s),p===o&&++d===r&&(l=s),(m=f.nextSibling)!==null)break;f=p,p=f.parentNode}f=m}n=c===-1||l===-1?null:{start:c,end:l}}else n=null}n||={start:0,end:0}}else n=null;for(Bd={focusedElem:e,selectionRange:n},sp=!1,il=t;il!==null;)if(t=il,e=t.child,t.subtreeFlags&1028&&e!==null)e.return=t,il=e;else for(;il!==null;){switch(t=il,o=t.alternate,e=t.flags,t.tag){case 0:if(e&4&&(e=t.updateQueue,e=e===null?null:e.events,e!==null))for(n=0;n<e.length;n++)a=e[n],a.ref.impl=a.nextImpl;break;case 11:case 15:break;case 1:if(e&1024&&o!==null){e=void 0,n=t,a=o.memoizedProps,o=o.memoizedState,r=n.stateNode;try{var h=Gs(n.type,a);e=r.getSnapshotBeforeUpdate(h,o),r.__reactInternalSnapshotBeforeUpdate=e}catch(e){X(n,n.return,e)}}break;case 3:if(e&1024){if(e=t.stateNode.containerInfo,n=e.nodeType,n===9)tf(e);else if(n===1)switch(e.nodeName){case`HEAD`:case`HTML`:case`BODY`:tf(e);break;default:e.textContent=``}}break;case 5:case 26:case 27:case 6:case 4:case 17:break;default:if(e&1024)throw Error(i(163))}if(e=t.sibling,e!==null){e.return=t.return,il=e;break}il=t.return}}function ol(e,t,n){var r=n.flags;switch(n.tag){case 0:case 11:case 15:xl(e,n),r&4&&Vc(5,n);break;case 1:if(xl(e,n),r&4){if(e=n.stateNode,t===null)try{e.componentDidMount()}catch(e){X(n,n.return,e)}else{var i=Gs(n.type,t.memoizedProps);t=t.memoizedState;try{e.componentDidUpdate(i,t,e.__reactInternalSnapshotBeforeUpdate)}catch(e){X(n,n.return,e)}}}r&64&&Uc(n),r&512&&Gc(n,n.return);break;case 3:if(xl(e,n),r&64&&(e=n.updateQueue,e!==null)){if(t=null,n.child!==null)switch(n.child.tag){case 27:case 5:t=n.child.stateNode;break;case 1:t=n.child.stateNode}try{Ja(e,t)}catch(e){X(n,n.return,e)}}break;case 27:t===null&&r&4&&$c(n);case 26:case 5:xl(e,n),t===null&&r&4&&qc(n),r&512&&Gc(n,n.return);break;case 12:xl(e,n);break;case 31:xl(e,n),r&4&&fl(e,n);break;case 13:xl(e,n),r&4&&pl(e,n),r&64&&(e=n.memoizedState,e!==null&&(e=e.dehydrated,e!==null&&(n=Yu.bind(null,n),cf(e,n))));break;case 22:if(r=n.memoizedState!==null||el,!r){t=t!==null&&t.memoizedState!==null||tl,i=el;var a=tl;el=r,(tl=t)&&!a?Cl(e,n,!!(n.subtreeFlags&8772)):xl(e,n),el=i,tl=a}break;case 30:break;default:xl(e,n)}}function sl(e){var t=e.alternate;t!==null&&(e.alternate=null,sl(t)),e.child=null,e.deletions=null,e.sibling=null,e.tag===5&&(t=e.stateNode,t!==null&&St(t)),e.stateNode=null,e.return=null,e.dependencies=null,e.memoizedProps=null,e.memoizedState=null,e.pendingProps=null,e.stateNode=null,e.updateQueue=null}var cl=null,ll=!1;function ul(e,t,n){for(n=n.child;n!==null;)dl(e,t,n),n=n.sibling}function dl(e,t,n){if(Ue&&typeof Ue.onCommitFiberUnmount==`function`)try{Ue.onCommitFiberUnmount(He,n)}catch{}switch(n.tag){case 26:tl||Kc(n,t),ul(e,t,n),n.memoizedState?n.memoizedState.count--:n.stateNode&&(n=n.stateNode,n.parentNode.removeChild(n));break;case 27:tl||Kc(n,t);var r=cl,i=ll;Qd(n.type)&&(cl=n.stateNode,ll=!1),ul(e,t,n),mf(n.stateNode),cl=r,ll=i;break;case 5:tl||Kc(n,t);case 6:if(r=cl,i=ll,cl=null,ul(e,t,n),cl=r,ll=i,cl!==null){if(ll)try{(cl.nodeType===9?cl.body:cl.nodeName===`HTML`?cl.ownerDocument.body:cl).removeChild(n.stateNode)}catch(e){X(n,t,e)}else try{cl.removeChild(n.stateNode)}catch(e){X(n,t,e)}}break;case 18:cl!==null&&(ll?(e=cl,$d(e.nodeType===9?e.body:e.nodeName===`HTML`?e.ownerDocument.body:e,n.stateNode),Np(e)):$d(cl,n.stateNode));break;case 4:r=cl,i=ll,cl=n.stateNode.containerInfo,ll=!0,ul(e,t,n),cl=r,ll=i;break;case 0:case 11:case 14:case 15:Hc(2,n,t),tl||Hc(4,n,t),ul(e,t,n);break;case 1:tl||(Kc(n,t),r=n.stateNode,typeof r.componentWillUnmount==`function`&&Wc(n,t,r)),ul(e,t,n);break;case 21:ul(e,t,n);break;case 22:tl=(r=tl)||n.memoizedState!==null,ul(e,t,n),tl=r;break;default:ul(e,t,n)}}function fl(e,t){if(t.memoizedState===null&&(e=t.alternate,e!==null&&(e=e.memoizedState,e!==null))){e=e.dehydrated;try{Np(e)}catch(e){X(t,t.return,e)}}}function pl(e,t){if(t.memoizedState===null&&(e=t.alternate,e!==null&&(e=e.memoizedState,e!==null&&(e=e.dehydrated,e!==null))))try{Np(e)}catch(e){X(t,t.return,e)}}function ml(e){switch(e.tag){case 31:case 13:case 19:var t=e.stateNode;return t===null&&(t=e.stateNode=new rl),t;case 22:return e=e.stateNode,t=e._retryCache,t===null&&(t=e._retryCache=new rl),t;default:throw Error(i(435,e.tag))}}function hl(e,t){var n=ml(e);t.forEach(function(t){if(!n.has(t)){n.add(t);var r=Xu.bind(null,e,t);t.then(r,r)}})}function gl(e,t){var n=t.deletions;if(n!==null)for(var r=0;r<n.length;r++){var a=n[r],o=e,s=t,c=s;a:for(;c!==null;){switch(c.tag){case 27:if(Qd(c.type)){cl=c.stateNode,ll=!1;break a}break;case 5:cl=c.stateNode,ll=!1;break a;case 3:case 4:cl=c.stateNode.containerInfo,ll=!0;break a}c=c.return}if(cl===null)throw Error(i(160));dl(o,s,a),cl=null,ll=!1,o=a.alternate,o!==null&&(o.return=null),a.return=null}if(t.subtreeFlags&13886)for(t=t.child;t!==null;)vl(t,e),t=t.sibling}var _l=null;function vl(e,t){var n=e.alternate,r=e.flags;switch(e.tag){case 0:case 11:case 14:case 15:gl(t,e),yl(e),r&4&&(Hc(3,e,e.return),Vc(3,e),Hc(5,e,e.return));break;case 1:gl(t,e),yl(e),r&512&&(tl||n===null||Kc(n,n.return)),r&64&&el&&(e=e.updateQueue,e!==null&&(r=e.callbacks,r!==null&&(n=e.shared.hiddenCallbacks,e.shared.hiddenCallbacks=n===null?r:n.concat(r))));break;case 26:var a=_l;if(gl(t,e),yl(e),r&512&&(tl||n===null||Kc(n,n.return)),r&4){var o=n===null?null:n.memoizedState;if(r=e.memoizedState,n===null){if(r===null){if(e.stateNode===null){a:{r=e.type,n=e.memoizedProps,a=a.ownerDocument||a;b:switch(r){case`title`:o=a.getElementsByTagName(`title`)[0],(!o||o[xt]||o[mt]||o.namespaceURI===`http://www.w3.org/2000/svg`||o.hasAttribute(`itemprop`))&&(o=a.createElement(r),a.head.insertBefore(o,a.querySelector(`head > title`))),Fd(o,r,n),o[mt]=e,Dt(o),r=o;break a;case`link`:var s=Vf(`link`,`href`,a).get(r+(n.href||``));if(s){for(var c=0;c<s.length;c++)if(o=s[c],o.getAttribute(`href`)===(n.href==null||n.href===``?null:n.href)&&o.getAttribute(`rel`)===(n.rel==null?null:n.rel)&&o.getAttribute(`title`)===(n.title==null?null:n.title)&&o.getAttribute(`crossorigin`)===(n.crossOrigin==null?null:n.crossOrigin)){s.splice(c,1);break b}}o=a.createElement(r),Fd(o,r,n),a.head.appendChild(o);break;case`meta`:if(s=Vf(`meta`,`content`,a).get(r+(n.content||``))){for(c=0;c<s.length;c++)if(o=s[c],o.getAttribute(`content`)===(n.content==null?null:``+n.content)&&o.getAttribute(`name`)===(n.name==null?null:n.name)&&o.getAttribute(`property`)===(n.property==null?null:n.property)&&o.getAttribute(`http-equiv`)===(n.httpEquiv==null?null:n.httpEquiv)&&o.getAttribute(`charset`)===(n.charSet==null?null:n.charSet)){s.splice(c,1);break b}}o=a.createElement(r),Fd(o,r,n),a.head.appendChild(o);break;default:throw Error(i(468,r))}o[mt]=e,Dt(o),r=o}e.stateNode=r}else Hf(a,e.type,e.stateNode)}else e.stateNode=If(a,r,e.memoizedProps)}else o===r?r===null&&e.stateNode!==null&&Jc(e,e.memoizedProps,n.memoizedProps):(o===null?n.stateNode!==null&&(n=n.stateNode,n.parentNode.removeChild(n)):o.count--,r===null?Hf(a,e.type,e.stateNode):If(a,r,e.memoizedProps))}break;case 27:gl(t,e),yl(e),r&512&&(tl||n===null||Kc(n,n.return)),n!==null&&r&4&&Jc(e,e.memoizedProps,n.memoizedProps);break;case 5:if(gl(t,e),yl(e),r&512&&(tl||n===null||Kc(n,n.return)),e.flags&32){a=e.stateNode;try{Qt(a,``)}catch(t){X(e,e.return,t)}}r&4&&e.stateNode!=null&&(a=e.memoizedProps,Jc(e,a,n===null?a:n.memoizedProps)),r&1024&&(nl=!0);break;case 6:if(gl(t,e),yl(e),r&4){if(e.stateNode===null)throw Error(i(162));r=e.memoizedProps,n=e.stateNode;try{n.nodeValue=r}catch(t){X(e,e.return,t)}}break;case 3:if(Bf=null,a=_l,_l=_f(t.containerInfo),gl(t,e),_l=a,yl(e),r&4&&n!==null&&n.memoizedState.isDehydrated)try{Np(t.containerInfo)}catch(t){X(e,e.return,t)}nl&&(nl=!1,bl(e));break;case 4:r=_l,_l=_f(e.stateNode.containerInfo),gl(t,e),yl(e),_l=r;break;case 12:gl(t,e),yl(e);break;case 31:gl(t,e),yl(e),r&4&&(r=e.updateQueue,r!==null&&(e.updateQueue=null,hl(e,r)));break;case 13:gl(t,e),yl(e),e.child.flags&8192&&e.memoizedState!==null!=(n!==null&&n.memoizedState!==null)&&(eu=Ne()),r&4&&(r=e.updateQueue,r!==null&&(e.updateQueue=null,hl(e,r)));break;case 22:a=e.memoizedState!==null;var l=n!==null&&n.memoizedState!==null,u=el,d=tl;if(el=u||a,tl=d||l,gl(t,e),tl=d,el=u,yl(e),r&8192)a:for(t=e.stateNode,t._visibility=a?t._visibility&-2:t._visibility|1,a&&(n===null||l||el||tl||Sl(e)),n=null,t=e;;){if(t.tag===5||t.tag===26){if(n===null){l=n=t;try{if(o=l.stateNode,a)s=o.style,typeof s.setProperty==`function`?s.setProperty(`display`,`none`,`important`):s.display=`none`;else{c=l.stateNode;var f=l.memoizedProps.style,p=f!=null&&f.hasOwnProperty(`display`)?f.display:null;c.style.display=p==null||typeof p==`boolean`?``:(``+p).trim()}}catch(e){X(l,l.return,e)}}}else if(t.tag===6){if(n===null){l=t;try{l.stateNode.nodeValue=a?``:l.memoizedProps}catch(e){X(l,l.return,e)}}}else if(t.tag===18){if(n===null){l=t;try{var m=l.stateNode;a?ef(m,!0):ef(l.stateNode,!1)}catch(e){X(l,l.return,e)}}}else if((t.tag!==22&&t.tag!==23||t.memoizedState===null||t===e)&&t.child!==null){t.child.return=t,t=t.child;continue}if(t===e)break a;for(;t.sibling===null;){if(t.return===null||t.return===e)break a;n===t&&(n=null),t=t.return}n===t&&(n=null),t.sibling.return=t.return,t=t.sibling}r&4&&(r=e.updateQueue,r!==null&&(n=r.retryQueue,n!==null&&(r.retryQueue=null,hl(e,n))));break;case 19:gl(t,e),yl(e),r&4&&(r=e.updateQueue,r!==null&&(e.updateQueue=null,hl(e,r)));break;case 30:break;case 21:break;default:gl(t,e),yl(e)}}function yl(e){var t=e.flags;if(t&2){try{for(var n,r=e.return;r!==null;){if(Yc(r)){n=r;break}r=r.return}if(n==null)throw Error(i(160));switch(n.tag){case 27:var a=n.stateNode;Qc(e,Xc(e),a);break;case 5:var o=n.stateNode;n.flags&32&&(Qt(o,``),n.flags&=-33),Qc(e,Xc(e),o);break;case 3:case 4:var s=n.stateNode.containerInfo;Zc(e,Xc(e),s);break;default:throw Error(i(161))}}catch(t){X(e,e.return,t)}e.flags&=-3}t&4096&&(e.flags&=-4097)}function bl(e){if(e.subtreeFlags&1024)for(e=e.child;e!==null;){var t=e;bl(t),t.tag===5&&t.flags&1024&&t.stateNode.reset(),e=e.sibling}}function xl(e,t){if(t.subtreeFlags&8772)for(t=t.child;t!==null;)ol(e,t.alternate,t),t=t.sibling}function Sl(e){for(e=e.child;e!==null;){var t=e;switch(t.tag){case 0:case 11:case 14:case 15:Hc(4,t,t.return),Sl(t);break;case 1:Kc(t,t.return);var n=t.stateNode;typeof n.componentWillUnmount==`function`&&Wc(t,t.return,n),Sl(t);break;case 27:mf(t.stateNode);case 26:case 5:Kc(t,t.return),Sl(t);break;case 22:t.memoizedState===null&&Sl(t);break;case 30:Sl(t);break;default:Sl(t)}e=e.sibling}}function Cl(e,t,n){for(n&&=!!(t.subtreeFlags&8772),t=t.child;t!==null;){var r=t.alternate,i=e,a=t,o=a.flags;switch(a.tag){case 0:case 11:case 15:Cl(i,a,n),Vc(4,a);break;case 1:if(Cl(i,a,n),r=a,i=r.stateNode,typeof i.componentDidMount==`function`)try{i.componentDidMount()}catch(e){X(r,r.return,e)}if(r=a,i=r.updateQueue,i!==null){var s=r.stateNode;try{var c=i.shared.hiddenCallbacks;if(c!==null)for(i.shared.hiddenCallbacks=null,i=0;i<c.length;i++)qa(c[i],s)}catch(e){X(r,r.return,e)}}n&&o&64&&Uc(a),Gc(a,a.return);break;case 27:$c(a);case 26:case 5:Cl(i,a,n),n&&r===null&&o&4&&qc(a),Gc(a,a.return);break;case 12:Cl(i,a,n);break;case 31:Cl(i,a,n),n&&o&4&&fl(i,a);break;case 13:Cl(i,a,n),n&&o&4&&pl(i,a);break;case 22:a.memoizedState===null&&Cl(i,a,n),Gc(a,a.return);break;case 30:break;default:Cl(i,a,n)}t=t.sibling}}function wl(e,t){var n=null;e!==null&&e.memoizedState!==null&&e.memoizedState.cachePool!==null&&(n=e.memoizedState.cachePool.pool),e=null,t.memoizedState!==null&&t.memoizedState.cachePool!==null&&(e=t.memoizedState.cachePool.pool),e!==n&&(e!=null&&e.refCount++,n!=null&&oa(n))}function Tl(e,t){e=null,t.alternate!==null&&(e=t.alternate.memoizedState.cache),t=t.memoizedState.cache,t!==e&&(t.refCount++,e!=null&&oa(e))}function El(e,t,n,r){if(t.subtreeFlags&10256)for(t=t.child;t!==null;)Dl(e,t,n,r),t=t.sibling}function Dl(e,t,n,r){var i=t.flags;switch(t.tag){case 0:case 11:case 15:El(e,t,n,r),i&2048&&Vc(9,t);break;case 1:El(e,t,n,r);break;case 3:El(e,t,n,r),i&2048&&(e=null,t.alternate!==null&&(e=t.alternate.memoizedState.cache),t=t.memoizedState.cache,t!==e&&(t.refCount++,e!=null&&oa(e)));break;case 12:if(i&2048){El(e,t,n,r),e=t.stateNode;try{var a=t.memoizedProps,o=a.id,s=a.onPostCommit;typeof s==`function`&&s(o,t.alternate===null?`mount`:`update`,e.passiveEffectDuration,-0)}catch(e){X(t,t.return,e)}}else El(e,t,n,r);break;case 31:El(e,t,n,r);break;case 13:El(e,t,n,r);break;case 23:break;case 22:a=t.stateNode,o=t.alternate,t.memoizedState===null?a._visibility&2?El(e,t,n,r):(a._visibility|=2,Ol(e,t,n,r,!!(t.subtreeFlags&10256)||!1)):a._visibility&2?El(e,t,n,r):kl(e,t),i&2048&&wl(o,t);break;case 24:El(e,t,n,r),i&2048&&Tl(t.alternate,t);break;default:El(e,t,n,r)}}function Ol(e,t,n,r,i){for(i&&=!!(t.subtreeFlags&10256)||!1,t=t.child;t!==null;){var a=e,o=t,s=n,c=r,l=o.flags;switch(o.tag){case 0:case 11:case 15:Ol(a,o,s,c,i),Vc(8,o);break;case 23:break;case 22:var u=o.stateNode;o.memoizedState===null?(u._visibility|=2,Ol(a,o,s,c,i)):u._visibility&2?Ol(a,o,s,c,i):kl(a,o),i&&l&2048&&wl(o.alternate,o);break;case 24:Ol(a,o,s,c,i),i&&l&2048&&Tl(o.alternate,o);break;default:Ol(a,o,s,c,i)}t=t.sibling}}function kl(e,t){if(t.subtreeFlags&10256)for(t=t.child;t!==null;){var n=e,r=t,i=r.flags;switch(r.tag){case 22:kl(n,r),i&2048&&wl(r.alternate,r);break;case 24:kl(n,r),i&2048&&Tl(r.alternate,r);break;default:kl(n,r)}t=t.sibling}}var Al=8192;function jl(e,t,n){if(e.subtreeFlags&Al)for(e=e.child;e!==null;)Ml(e,t,n),e=e.sibling}function Ml(e,t,n){switch(e.tag){case 26:jl(e,t,n),e.flags&Al&&e.memoizedState!==null&&Gf(n,_l,e.memoizedState,e.memoizedProps);break;case 5:jl(e,t,n);break;case 3:case 4:var r=_l;_l=_f(e.stateNode.containerInfo),jl(e,t,n),_l=r;break;case 22:e.memoizedState===null&&(r=e.alternate,r!==null&&r.memoizedState!==null?(r=Al,Al=16777216,jl(e,t,n),Al=r):jl(e,t,n));break;default:jl(e,t,n)}}function Nl(e){var t=e.alternate;if(t!==null&&(e=t.child,e!==null)){t.child=null;do t=e.sibling,e.sibling=null,e=t;while(e!==null)}}function Pl(e){var t=e.deletions;if(e.flags&16){if(t!==null)for(var n=0;n<t.length;n++){var r=t[n];il=r,Ll(r,e)}Nl(e)}if(e.subtreeFlags&10256)for(e=e.child;e!==null;)Fl(e),e=e.sibling}function Fl(e){switch(e.tag){case 0:case 11:case 15:Pl(e),e.flags&2048&&Hc(9,e,e.return);break;case 3:Pl(e);break;case 12:Pl(e);break;case 22:var t=e.stateNode;e.memoizedState!==null&&t._visibility&2&&(e.return===null||e.return.tag!==13)?(t._visibility&=-3,Il(e)):Pl(e);break;default:Pl(e)}}function Il(e){var t=e.deletions;if(e.flags&16){if(t!==null)for(var n=0;n<t.length;n++){var r=t[n];il=r,Ll(r,e)}Nl(e)}for(e=e.child;e!==null;){switch(t=e,t.tag){case 0:case 11:case 15:Hc(8,t,t.return),Il(t);break;case 22:n=t.stateNode,n._visibility&2&&(n._visibility&=-3,Il(t));break;default:Il(t)}e=e.sibling}}function Ll(e,t){for(;il!==null;){var n=il;switch(n.tag){case 0:case 11:case 15:Hc(8,n,t);break;case 23:case 22:if(n.memoizedState!==null&&n.memoizedState.cachePool!==null){var r=n.memoizedState.cachePool.pool;r!=null&&r.refCount++}break;case 24:oa(n.memoizedState.cache)}if(r=n.child,r!==null)r.return=n,il=r;else a:for(n=e;il!==null;){r=il;var i=r.sibling,a=r.return;if(sl(r),r===n){il=null;break a}if(i!==null){i.return=a,il=i;break a}il=a}}}var Rl={getCacheForType:function(e){var t=Qi(ia),n=t.data.get(e);return n===void 0&&(n=e(),t.data.set(e,n)),n},cacheSignal:function(){return Qi(ia).controller.signal}},zl=typeof WeakMap==`function`?WeakMap:Map,G=0,K=null,q=null,J=0,Y=0,Bl=null,Vl=!1,Hl=!1,Ul=!1,Wl=0,Gl=0,Kl=0,ql=0,Jl=0,Yl=0,Xl=0,Zl=null,Ql=null,$l=!1,eu=0,tu=0,nu=1/0,ru=null,iu=null,au=0,ou=null,su=null,cu=0,lu=0,uu=null,du=null,fu=0,pu=null;function mu(){return G&2&&J!==0?J&-J:O.T===null?dt():fd()}function hu(){if(Yl===0){if(!(J&536870912)||R){var e=Xe;Xe<<=1,!(Xe&3932160)&&(Xe=262144),Yl=e}else Yl=536870912}return e=eo.current,e!==null&&(e.flags|=32),Yl}function gu(e,t,n){(e===K&&(Y===2||Y===9)||e.cancelPendingCommit!==null)&&(Cu(e,0),bu(e,J,Yl,!1)),it(e,n),(!(G&2)||e!==K)&&(e===K&&(!(G&2)&&(ql|=n),Gl===4&&bu(e,J,Yl,!1)),id(e))}function _u(e,t,n){if(G&6)throw Error(i(327));var r=!n&&!(t&127)&&(t&e.expiredLanes)===0||et(e,t),a=r?ju(e,t):ku(e,t,!0),o=r;do{if(a===0){Hl&&!r&&bu(e,t,0,!1);break}if(n=e.current.alternate,o&&!yu(n)){a=ku(e,t,!1),o=!1;continue}if(a===2){if(o=t,e.errorRecoveryDisabledLanes&o)var s=0;else s=e.pendingLanes&-536870913,s=s===0?s&536870912?536870912:0:s;if(s!==0){t=s;a:{var c=e;a=Zl;var l=c.current.memoizedState.isDehydrated;if(l&&(Cu(c,s).flags|=256),s=ku(c,s,!1),s!==2){if(Ul&&!l){c.errorRecoveryDisabledLanes|=o,ql|=o,a=4;break a}o=Ql,Ql=a,o!==null&&(Ql===null?Ql=o:Ql.push.apply(Ql,o))}a=s}if(o=!1,a!==2)continue}}if(a===1){Cu(e,0),bu(e,t,0,!0);break}a:{switch(r=e,o=a,o){case 0:case 1:throw Error(i(345));case 4:if((t&4194048)!==t)break;case 6:bu(r,t,Yl,!Vl);break a;case 2:Ql=null;break;case 3:case 5:break;default:throw Error(i(329))}if((t&62914560)===t&&(a=eu+300-Ne(),10<a)){if(bu(r,t,Yl,!Vl),$e(r,0,!0)!==0)break a;cu=t,r.timeoutHandle=qd(vu.bind(null,r,n,Ql,ru,$l,t,Yl,ql,Xl,Vl,o,`Throttled`,-0,0),a);break a}vu(r,n,Ql,ru,$l,t,Yl,ql,Xl,Vl,o,null,-0,0)}break}while(1);id(e)}function vu(e,t,n,r,i,a,o,s,c,l,u,d,f,p){if(e.timeoutHandle=-1,d=t.subtreeFlags,d&8192||(d&16785408)==16785408){d={stylesheets:null,count:0,imgCount:0,imgBytes:0,suspenseyImages:[],waitingForImages:!0,waitingForViewTransition:!1,unsuspend:sn},Ml(t,a,d);var m=(a&62914560)===a?eu-Ne():(a&4194048)===a?tu-Ne():0;if(m=qf(d,m),m!==null){cu=a,e.cancelPendingCommit=m(Ru.bind(null,e,t,a,n,r,i,o,s,c,u,d,null,f,p)),bu(e,a,o,!l);return}}Ru(e,t,a,n,r,i,o,s,c)}function yu(e){for(var t=e;;){var n=t.tag;if((n===0||n===11||n===15)&&t.flags&16384&&(n=t.updateQueue,n!==null&&(n=n.stores,n!==null)))for(var r=0;r<n.length;r++){var i=n[r],a=i.getSnapshot;i=i.value;try{if(!Tr(a(),i))return!1}catch{return!1}}if(n=t.child,t.subtreeFlags&16384&&n!==null)n.return=t,t=n;else{if(t===e)break;for(;t.sibling===null;){if(t.return===null||t.return===e)return!0;t=t.return}t.sibling.return=t.return,t=t.sibling}}return!0}function bu(e,t,n,r){t&=~Jl,t&=~ql,e.suspendedLanes|=t,e.pingedLanes&=~t,r&&(e.warmLanes|=t),r=e.expirationTimes;for(var i=t;0<i;){var a=31-Ge(i),o=1<<a;r[a]=-1,i&=~o}n!==0&&ot(e,n,t)}function xu(){return G&6?!0:(ad(0,!1),!1)}function Su(){if(q!==null){if(Y===0)var e=q.return;else e=q,H=Wi=null,Do(e),ka=null,Aa=0,e=q;for(;e!==null;)Bc(e.alternate,e),e=e.return;q=null}}function Cu(e,t){var n=e.timeoutHandle;n!==-1&&(e.timeoutHandle=-1,Jd(n)),n=e.cancelPendingCommit,n!==null&&(e.cancelPendingCommit=null,n()),cu=0,Su(),K=e,q=n=pi(e.current,null),J=t,Y=0,Bl=null,Vl=!1,Hl=et(e,t),Ul=!1,Xl=Yl=Jl=ql=Kl=Gl=0,Ql=Zl=null,$l=!1,t&8&&(t|=t&32);var r=e.entangledLanes;if(r!==0)for(e=e.entanglements,r&=t;0<r;){var i=31-Ge(r),a=1<<i;t|=e[i],r&=~a}return Wl=t,ri(),n}function wu(e,t){U=null,O.H=Ls,t===ya||t===xa?(t=Da(),Y=3):t===ba?(t=Da(),Y=4):Y=t===tc?8:typeof t==`object`&&t&&typeof t.then==`function`?6:1,Bl=t,q===null&&(Gl=1,Ys(e,xi(t,e.current)))}function Tu(){var e=eo.current;return e===null?!0:(J&4194048)===J?to===null:(J&62914560)===J||J&536870912?e===to:!1}function Eu(){var e=O.H;return O.H=Ls,e===null?Ls:e}function Du(){var e=O.A;return O.A=Rl,e}function Ou(){Gl=4,Vl||(J&4194048)!==J&&eo.current!==null||(Hl=!0),!(Kl&134217727)&&!(ql&134217727)||K===null||bu(K,J,Yl,!1)}function ku(e,t,n){var r=G;G|=2;var i=Eu(),a=Du();(K!==e||J!==t)&&(ru=null,Cu(e,t)),t=!1;var o=Gl;a:do try{if(Y!==0&&q!==null){var s=q,c=Bl;switch(Y){case 8:Su(),o=6;break a;case 3:case 2:case 9:case 6:eo.current===null&&(t=!0);var l=Y;if(Y=0,Bl=null,Fu(e,s,c,l),n&&Hl){o=0;break a}break;default:l=Y,Y=0,Bl=null,Fu(e,s,c,l)}}Au(),o=Gl;break}catch(t){wu(e,t)}while(1);return t&&e.shellSuspendCounter++,H=Wi=null,G=r,O.H=i,O.A=a,q===null&&(K=null,J=0,ri()),o}function Au(){for(;q!==null;)Nu(q)}function ju(e,t){var n=G;G|=2;var r=Eu(),a=Du();K!==e||J!==t?(ru=null,nu=Ne()+500,Cu(e,t)):Hl=et(e,t);a:do try{if(Y!==0&&q!==null){t=q;var o=Bl;b:switch(Y){case 1:Y=0,Bl=null,Fu(e,t,o,1);break;case 2:case 9:if(Ca(o)){Y=0,Bl=null,Pu(t);break}t=function(){Y!==2&&Y!==9||K!==e||(Y=7),id(e)},o.then(t,t);break a;case 3:Y=7;break a;case 4:Y=5;break a;case 7:Ca(o)?(Y=0,Bl=null,Pu(t)):(Y=0,Bl=null,Fu(e,t,o,7));break;case 5:var s=null;switch(q.tag){case 26:s=q.memoizedState;case 5:case 27:var c=q;if(s?Wf(s):c.stateNode.complete){Y=0,Bl=null;var l=c.sibling;if(l!==null)q=l;else{var u=c.return;u===null?q=null:(q=u,Iu(u))}break b}}Y=0,Bl=null,Fu(e,t,o,5);break;case 6:Y=0,Bl=null,Fu(e,t,o,6);break;case 8:Su(),Gl=6;break a;default:throw Error(i(462))}}Mu();break}catch(t){wu(e,t)}while(1);return H=Wi=null,O.H=r,O.A=a,G=n,q===null?(K=null,J=0,ri(),Gl):0}function Mu(){for(;q!==null&&!je();)Nu(q)}function Nu(e){var t=jc(e.alternate,e,Wl);e.memoizedProps=e.pendingProps,t===null?Iu(e):q=t}function Pu(e){var t=e,n=t.alternate;switch(t.tag){case 15:case 0:t=hc(n,t,t.pendingProps,t.type,void 0,J);break;case 11:t=hc(n,t,t.pendingProps,t.type.render,t.ref,J);break;case 5:Do(t);default:Bc(n,t),t=q=mi(t,Wl),t=jc(n,t,Wl)}e.memoizedProps=e.pendingProps,t===null?Iu(e):q=t}function Fu(e,t,n,r){H=Wi=null,Do(t),ka=null,Aa=0;var i=t.return;try{if(ec(e,i,t,n,J)){Gl=1,Ys(e,xi(n,e.current)),q=null;return}}catch(t){if(i!==null)throw q=i,t;Gl=1,Ys(e,xi(n,e.current)),q=null;return}t.flags&32768?(R||r===1?e=!0:Hl||J&536870912?e=!1:(Vl=e=!0,(r===2||r===9||r===3||r===6)&&(r=eo.current,r!==null&&r.tag===13&&(r.flags|=16384))),Lu(t,e)):Iu(t)}function Iu(e){var t=e;do{if(t.flags&32768){Lu(t,Vl);return}e=t.return;var n=Rc(t.alternate,t,Wl);if(n!==null){q=n;return}if(t=t.sibling,t!==null){q=t;return}q=t=e}while(t!==null);Gl===0&&(Gl=5)}function Lu(e,t){do{var n=zc(e.alternate,e);if(n!==null){n.flags&=32767,q=n;return}if(n=e.return,n!==null&&(n.flags|=32768,n.subtreeFlags=0,n.deletions=null),!t&&(e=e.sibling,e!==null)){q=e;return}q=e=n}while(e!==null);Gl=6,q=null}function Ru(e,t,n,r,a,o,s,c,l){e.cancelPendingCommit=null;do Uu();while(au!==0);if(G&6)throw Error(i(327));if(t!==null){if(t===e.current)throw Error(i(177));if(o=t.lanes|t.childLanes,o|=ni,at(e,n,o,s,c,l),e===K&&(q=K=null,J=0),su=t,ou=e,cu=n,lu=o,uu=a,du=r,t.subtreeFlags&10256||t.flags&10256?(e.callbackNode=null,e.callbackPriority=0,Zu(Le,function(){return Wu(),null})):(e.callbackNode=null,e.callbackPriority=0),r=!!(t.flags&13878),t.subtreeFlags&13878||r){r=O.T,O.T=null,a=k.p,k.p=2,s=G,G|=4;try{al(e,t,n)}finally{G=s,k.p=a,O.T=r}}au=1,zu(),Bu(),Vu()}}function zu(){if(au===1){au=0;var e=ou,t=su,n=!!(t.flags&13878);if(t.subtreeFlags&13878||n){n=O.T,O.T=null;var r=k.p;k.p=2;var i=G;G|=4;try{vl(t,e);var a=Bd,o=Ar(e.containerInfo),s=a.focusedElem,c=a.selectionRange;if(o!==s&&s&&s.ownerDocument&&kr(s.ownerDocument.documentElement,s)){if(c!==null&&jr(s)){var l=c.start,u=c.end;if(u===void 0&&(u=l),`selectionStart`in s)s.selectionStart=l,s.selectionEnd=Math.min(u,s.value.length);else{var d=s.ownerDocument||document,f=d&&d.defaultView||window;if(f.getSelection){var p=f.getSelection(),m=s.textContent.length,h=Math.min(c.start,m),g=c.end===void 0?h:Math.min(c.end,m);!p.extend&&h>g&&(o=g,g=h,h=o);var _=Or(s,h),v=Or(s,g);if(_&&v&&(p.rangeCount!==1||p.anchorNode!==_.node||p.anchorOffset!==_.offset||p.focusNode!==v.node||p.focusOffset!==v.offset)){var y=d.createRange();y.setStart(_.node,_.offset),p.removeAllRanges(),h>g?(p.addRange(y),p.extend(v.node,v.offset)):(y.setEnd(v.node,v.offset),p.addRange(y))}}}}for(d=[],p=s;p=p.parentNode;)p.nodeType===1&&d.push({element:p,left:p.scrollLeft,top:p.scrollTop});for(typeof s.focus==`function`&&s.focus(),s=0;s<d.length;s++){var b=d[s];b.element.scrollLeft=b.left,b.element.scrollTop=b.top}}sp=!!zd,Bd=zd=null}finally{G=i,k.p=r,O.T=n}}e.current=t,au=2}}function Bu(){if(au===2){au=0;var e=ou,t=su,n=!!(t.flags&8772);if(t.subtreeFlags&8772||n){n=O.T,O.T=null;var r=k.p;k.p=2;var i=G;G|=4;try{ol(e,t.alternate,t)}finally{G=i,k.p=r,O.T=n}}au=3}}function Vu(){if(au===4||au===3){au=0,Me();var e=ou,t=su,n=cu,r=du;t.subtreeFlags&10256||t.flags&10256?au=5:(au=0,su=ou=null,Hu(e,e.pendingLanes));var i=e.pendingLanes;if(i===0&&(iu=null),ut(n),t=t.stateNode,Ue&&typeof Ue.onCommitFiberRoot==`function`)try{Ue.onCommitFiberRoot(He,t,void 0,(t.current.flags&128)==128)}catch{}if(r!==null){t=O.T,i=k.p,k.p=2,O.T=null;try{for(var a=e.onRecoverableError,o=0;o<r.length;o++){var s=r[o];a(s.value,{componentStack:s.stack})}}finally{O.T=t,k.p=i}}cu&3&&Uu(),id(e),i=e.pendingLanes,n&261930&&i&42?e===pu?fu++:(fu=0,pu=e):fu=0,ad(0,!1)}}function Hu(e,t){(e.pooledCacheLanes&=t)===0&&(t=e.pooledCache,t!=null&&(e.pooledCache=null,oa(t)))}function Uu(){return zu(),Bu(),Vu(),Wu()}function Wu(){if(au!==5)return!1;var e=ou,t=lu;lu=0;var n=ut(cu),r=O.T,a=k.p;try{k.p=32>n?32:n,O.T=null,n=uu,uu=null;var o=ou,s=cu;if(au=0,su=ou=null,cu=0,G&6)throw Error(i(331));var c=G;if(G|=4,Fl(o.current),Dl(o,o.current,s,n),G=c,ad(0,!1),Ue&&typeof Ue.onPostCommitFiberRoot==`function`)try{Ue.onPostCommitFiberRoot(He,o)}catch{}return!0}finally{k.p=a,O.T=r,Hu(e,t)}}function Gu(e,t,n){t=xi(n,t),t=Zs(e.stateNode,t,2),e=Va(e,t,2),e!==null&&(it(e,2),id(e))}function X(e,t,n){if(e.tag===3)Gu(e,e,n);else for(;t!==null;){if(t.tag===3){Gu(t,e,n);break}if(t.tag===1){var r=t.stateNode;if(typeof t.type.getDerivedStateFromError==`function`||typeof r.componentDidCatch==`function`&&(iu===null||!iu.has(r))){e=xi(n,e),n=Qs(2),r=Va(t,n,2),r!==null&&($s(n,r,t,e),it(r,2),id(r));break}}t=t.return}}function Ku(e,t,n){var r=e.pingCache;if(r===null){r=e.pingCache=new zl;var i=new Set;r.set(t,i)}else i=r.get(t),i===void 0&&(i=new Set,r.set(t,i));i.has(n)||(Ul=!0,i.add(n),e=qu.bind(null,e,t,n),t.then(e,e))}function qu(e,t,n){var r=e.pingCache;r!==null&&r.delete(t),e.pingedLanes|=e.suspendedLanes&n,e.warmLanes&=~n,K===e&&(J&n)===n&&(Gl===4||Gl===3&&(J&62914560)===J&&300>Ne()-eu?!(G&2)&&Cu(e,0):Jl|=n,Xl===J&&(Xl=0)),id(e)}function Ju(e,t){t===0&&(t=nt()),e=oi(e,t),e!==null&&(it(e,t),id(e))}function Yu(e){var t=e.memoizedState,n=0;t!==null&&(n=t.retryLane),Ju(e,n)}function Xu(e,t){var n=0;switch(e.tag){case 31:case 13:var r=e.stateNode,a=e.memoizedState;a!==null&&(n=a.retryLane);break;case 19:r=e.stateNode;break;case 22:r=e.stateNode._retryCache;break;default:throw Error(i(314))}r!==null&&r.delete(t),Ju(e,n)}function Zu(e,t){return ke(e,t)}var Qu=null,$u=null,ed=!1,td=!1,nd=!1,rd=0;function id(e){e!==$u&&e.next===null&&($u===null?Qu=$u=e:$u=$u.next=e),td=!0,ed||(ed=!0,dd())}function ad(e,t){if(!nd&&td){nd=!0;do for(var n=!1,r=Qu;r!==null;){if(!t){if(e!==0){var i=r.pendingLanes;if(i===0)var a=0;else{var o=r.suspendedLanes,s=r.pingedLanes;a=(1<<31-Ge(42|e)+1)-1,a&=i&~(o&~s),a=a&201326741?a&201326741|1:a?a|2:0}a!==0&&(n=!0,ud(r,a))}else a=J,a=$e(r,r===K?a:0,r.cancelPendingCommit!==null||r.timeoutHandle!==-1),!(a&3)||et(r,a)||(n=!0,ud(r,a))}r=r.next}while(n);nd=!1}}function od(){sd()}function sd(){td=ed=!1;var e=0;rd!==0&&Kd()&&(e=rd);for(var t=Ne(),n=null,r=Qu;r!==null;){var i=r.next,a=cd(r,t);a===0?(r.next=null,n===null?Qu=i:n.next=i,i===null&&($u=n)):(n=r,(e!==0||a&3)&&(td=!0)),r=i}au!==0&&au!==5||ad(e,!1),rd!==0&&(rd=0)}function cd(e,t){for(var n=e.suspendedLanes,r=e.pingedLanes,i=e.expirationTimes,a=e.pendingLanes&-62914561;0<a;){var o=31-Ge(a),s=1<<o,c=i[o];c===-1?((s&n)===0||(s&r)!==0)&&(i[o]=tt(s,t)):c<=t&&(e.expiredLanes|=s),a&=~s}if(t=K,n=J,n=$e(e,e===t?n:0,e.cancelPendingCommit!==null||e.timeoutHandle!==-1),r=e.callbackNode,n===0||e===t&&(Y===2||Y===9)||e.cancelPendingCommit!==null)return r!==null&&r!==null&&Ae(r),e.callbackNode=null,e.callbackPriority=0;if(!(n&3)||et(e,n)){if(t=n&-n,t===e.callbackPriority)return t;switch(r!==null&&Ae(r),ut(n)){case 2:case 8:n=Ie;break;case 32:n=Le;break;case 268435456:n=ze;break;default:n=Le}return r=ld.bind(null,e),n=ke(n,r),e.callbackPriority=t,e.callbackNode=n,t}return r!==null&&r!==null&&Ae(r),e.callbackPriority=2,e.callbackNode=null,2}function ld(e,t){if(au!==0&&au!==5)return e.callbackNode=null,e.callbackPriority=0,null;var n=e.callbackNode;if(Uu()&&e.callbackNode!==n)return null;var r=J;return r=$e(e,e===K?r:0,e.cancelPendingCommit!==null||e.timeoutHandle!==-1),r===0?null:(_u(e,r,t),cd(e,Ne()),e.callbackNode!=null&&e.callbackNode===n?ld.bind(null,e):null)}function ud(e,t){if(Uu())return null;_u(e,t,!0)}function dd(){Xd(function(){G&6?ke(Fe,od):sd()})}function fd(){if(rd===0){var e=la;e===0&&(e=Ye,Ye<<=1,!(Ye&261888)&&(Ye=256)),rd=e}return rd}function pd(e){return e==null||typeof e==`symbol`||typeof e==`boolean`?null:typeof e==`function`?e:on(``+e)}function md(e,t){var n=t.ownerDocument.createElement(`input`);return n.name=t.name,n.value=t.value,e.id&&n.setAttribute(`form`,e.id),t.parentNode.insertBefore(n,t),e=new FormData(e),n.parentNode.removeChild(n),e}function hd(e,t,n,r,i){if(t===`submit`&&n&&n.stateNode===i){var a=pd((i[ht]||null).action),o=r.submitter;o&&(t=(t=o[ht]||null)?pd(t.formAction):o.getAttribute(`formAction`),t!==null&&(a=t,o=null));var s=new On(`action`,`action`,null,r,i);e.push({event:s,listeners:[{instance:null,listener:function(){if(r.defaultPrevented){if(rd!==0){var e=o?md(i,o):new FormData(i);Cs(n,{pending:!0,data:e,method:i.method,action:a},null,e)}}else typeof a==`function`&&(s.preventDefault(),e=o?md(i,o):new FormData(i),Cs(n,{pending:!0,data:e,method:i.method,action:a},a,e))},currentTarget:i}]})}}for(var gd=0;gd<Zr.length;gd++){var _d=Zr[gd];Qr(_d.toLowerCase(),`on`+(_d[0].toUpperCase()+_d.slice(1)))}Qr(Ur,`onAnimationEnd`),Qr(Wr,`onAnimationIteration`),Qr(Gr,`onAnimationStart`),Qr(`dblclick`,`onDoubleClick`),Qr(`focusin`,`onFocus`),Qr(`focusout`,`onBlur`),Qr(Kr,`onTransitionRun`),Qr(qr,`onTransitionStart`),Qr(Jr,`onTransitionCancel`),Qr(Yr,`onTransitionEnd`),jt(`onMouseEnter`,[`mouseout`,`mouseover`]),jt(`onMouseLeave`,[`mouseout`,`mouseover`]),jt(`onPointerEnter`,[`pointerout`,`pointerover`]),jt(`onPointerLeave`,[`pointerout`,`pointerover`]),At(`onChange`,`change click focusin focusout input keydown keyup selectionchange`.split(` `)),At(`onSelect`,`focusout contextmenu dragend focusin keydown keyup mousedown mouseup selectionchange`.split(` `)),At(`onBeforeInput`,[`compositionend`,`keypress`,`textInput`,`paste`]),At(`onCompositionEnd`,`compositionend focusout keydown keypress keyup mousedown`.split(` `)),At(`onCompositionStart`,`compositionstart focusout keydown keypress keyup mousedown`.split(` `)),At(`onCompositionUpdate`,`compositionupdate focusout keydown keypress keyup mousedown`.split(` `));var vd=`abort canplay canplaythrough durationchange emptied encrypted ended error loadeddata loadedmetadata loadstart pause play playing progress ratechange resize seeked seeking stalled suspend timeupdate volumechange waiting`.split(` `),yd=new Set(`beforetoggle cancel close invalid load scroll scrollend toggle`.split(` `).concat(vd));function bd(e,t){t=!!(t&4);for(var n=0;n<e.length;n++){var r=e[n],i=r.event;r=r.listeners;a:{var a=void 0;if(t)for(var o=r.length-1;0<=o;o--){var s=r[o],c=s.instance,l=s.currentTarget;if(s=s.listener,c!==a&&i.isPropagationStopped())break a;a=s,i.currentTarget=l;try{a(i)}catch(e){$r(e)}i.currentTarget=null,a=c}else for(o=0;o<r.length;o++){if(s=r[o],c=s.instance,l=s.currentTarget,s=s.listener,c!==a&&i.isPropagationStopped())break a;a=s,i.currentTarget=l;try{a(i)}catch(e){$r(e)}i.currentTarget=null,a=c}}}}function Z(e,t){var n=t[_t];n===void 0&&(n=t[_t]=new Set);var r=e+`__bubble`;n.has(r)||(wd(t,e,2,!1),n.add(r))}function xd(e,t,n){var r=0;t&&(r|=4),wd(n,e,r,t)}var Sd=`_reactListening`+Math.random().toString(36).slice(2);function Cd(e){if(!e[Sd]){e[Sd]=!0,Ot.forEach(function(t){t!==`selectionchange`&&(yd.has(t)||xd(t,!1,e),xd(t,!0,e))});var t=e.nodeType===9?e:e.ownerDocument;t===null||t[Sd]||(t[Sd]=!0,xd(`selectionchange`,!1,t))}}function wd(e,t,n,r){switch(mp(t)){case 2:var i=cp;break;case 8:i=lp;break;default:i=up}n=i.bind(null,t,n,e),i=void 0,!_n||t!==`touchstart`&&t!==`touchmove`&&t!==`wheel`||(i=!0),r?i===void 0?e.addEventListener(t,n,!0):e.addEventListener(t,n,{capture:!0,passive:i}):i===void 0?e.addEventListener(t,n,!1):e.addEventListener(t,n,{passive:i})}function Td(e,t,n,r,i){var a=r;if(!(t&1)&&!(t&2)&&r!==null)a:for(;;){if(r===null)return;var s=r.tag;if(s===3||s===4){var c=r.stateNode.containerInfo;if(c===i)break;if(s===4)for(s=r.return;s!==null;){var l=s.tag;if((l===3||l===4)&&s.stateNode.containerInfo===i)return;s=s.return}for(;c!==null;){if(s=Ct(c),s===null)return;if(l=s.tag,l===5||l===6||l===26||l===27){r=a=s;continue a}c=c.parentNode}}r=r.return}mn(function(){var r=a,i=ln(n),s=[];a:{var c=Xr.get(e);if(c!==void 0){var l=On,u=e;switch(e){case`keypress`:if(Cn(n)===0)break a;case`keydown`:case`keyup`:l=Gn;break;case`focusin`:u=`focus`,l=Ln;break;case`focusout`:u=`blur`,l=Ln;break;case`beforeblur`:case`afterblur`:l=Ln;break;case`click`:if(n.button===2)break a;case`auxclick`:case`dblclick`:case`mousedown`:case`mousemove`:case`mouseup`:case`mouseout`:case`mouseover`:case`contextmenu`:l=Fn;break;case`drag`:case`dragend`:case`dragenter`:case`dragexit`:case`dragleave`:case`dragover`:case`dragstart`:case`drop`:l=In;break;case`touchcancel`:case`touchend`:case`touchmove`:case`touchstart`:l=qn;break;case Ur:case Wr:case Gr:l=Rn;break;case Yr:l=Jn;break;case`scroll`:case`scrollend`:l=An;break;case`wheel`:l=Yn;break;case`copy`:case`cut`:case`paste`:l=zn;break;case`gotpointercapture`:case`lostpointercapture`:case`pointercancel`:case`pointerdown`:case`pointermove`:case`pointerout`:case`pointerover`:case`pointerup`:l=Kn;break;case`toggle`:case`beforetoggle`:l=Xn}var d=!!(t&4),f=!d&&(e===`scroll`||e===`scrollend`),p=d?c===null?null:c+`Capture`:c;d=[];for(var m=r,h;m!==null;){var g=m;if(h=g.stateNode,g=g.tag,g!==5&&g!==26&&g!==27||h===null||p===null||(g=hn(m,p),g!=null&&d.push(Ed(m,g,h))),f)break;m=m.return}0<d.length&&(c=new l(c,u,null,n,i),s.push({event:c,listeners:d}))}}if(!(t&7)){a:{if(c=e===`mouseover`||e===`pointerover`,l=e===`mouseout`||e===`pointerout`,c&&n!==cn&&(u=n.relatedTarget||n.fromElement)&&(Ct(u)||u[gt]))break a;if((l||c)&&(c=i.window===i?i:(c=i.ownerDocument)?c.defaultView||c.parentWindow:window,l?(u=n.relatedTarget||n.toElement,l=r,u=u?Ct(u):null,u!==null&&(f=o(u),d=u.tag,u!==f||d!==5&&d!==27&&d!==6)&&(u=null)):(l=null,u=r),l!==u)){if(d=Fn,g=`onMouseLeave`,p=`onMouseEnter`,m=`mouse`,(e===`pointerout`||e===`pointerover`)&&(d=Kn,g=`onPointerLeave`,p=`onPointerEnter`,m=`pointer`),f=l==null?c:Tt(l),h=u==null?c:Tt(u),c=new d(g,m+`leave`,l,n,i),c.target=f,c.relatedTarget=h,g=null,Ct(i)===r&&(d=new d(p,m+`enter`,u,n,i),d.target=h,d.relatedTarget=f,g=d),f=g,l&&u)b:{for(d=Od,p=l,m=u,h=0,g=p;g;g=d(g))h++;g=0;for(var _=m;_;_=d(_))g++;for(;0<h-g;)p=d(p),h--;for(;0<g-h;)m=d(m),g--;for(;h--;){if(p===m||m!==null&&p===m.alternate){d=p;break b}p=d(p),m=d(m)}d=null}else d=null;l!==null&&kd(s,c,l,d,!1),u!==null&&f!==null&&kd(s,f,u,d,!0)}}a:{if(c=r?Tt(r):window,l=c.nodeName&&c.nodeName.toLowerCase(),l===`select`||l===`input`&&c.type===`file`)var v=pr;else if(F(c)){if(mr)v=Cr;else{v=xr;var y=br}}else l=c.nodeName,!l||l.toLowerCase()!==`input`||c.type!==`checkbox`&&c.type!==`radio`?r&&nn(r.elementType)&&(v=pr):v=Sr;if(v&&=v(e,r)){cr(s,v,n,i);break a}y&&y(e,c,r),e===`focusout`&&r&&c.type===`number`&&r.memoizedProps.value!=null&&Jt(c,`number`,c.value)}switch(y=r?Tt(r):window,e){case`focusin`:(F(y)||y.contentEditable===`true`)&&(Nr=y,Pr=r,Fr=null);break;case`focusout`:Fr=Pr=Nr=null;break;case`mousedown`:Ir=!0;break;case`contextmenu`:case`mouseup`:case`dragend`:Ir=!1,Lr(s,n,i);break;case`selectionchange`:if(Mr)break;case`keydown`:case`keyup`:Lr(s,n,i)}var b;if(Qn)b:{switch(e){case`compositionstart`:var x=`onCompositionStart`;break b;case`compositionend`:x=`onCompositionEnd`;break b;case`compositionupdate`:x=`onCompositionUpdate`;break b}x=void 0}else N?ir(e,n)&&(x=`onCompositionEnd`):e===`keydown`&&n.keyCode===229&&(x=`onCompositionStart`);x&&(tr&&n.locale!==`ko`&&(N||x!==`onCompositionStart`?x===`onCompositionEnd`&&N&&(b=Sn()):(yn=i,bn=`value`in yn?yn.value:yn.textContent,N=!0)),y=Dd(r,x),0<y.length&&(x=new Bn(x,e,null,n,i),s.push({event:x,listeners:y}),b?x.data=b:(b=ar(n),b!==null&&(x.data=b)))),(b=er?or(e,n):sr(e,n))&&(x=Dd(r,`onBeforeInput`),0<x.length&&(y=new Bn(`onBeforeInput`,`beforeinput`,null,n,i),s.push({event:y,listeners:x}),y.data=b)),hd(s,e,r,n,i)}bd(s,t)})}function Ed(e,t,n){return{instance:e,listener:t,currentTarget:n}}function Dd(e,t){for(var n=t+`Capture`,r=[];e!==null;){var i=e,a=i.stateNode;if(i=i.tag,i!==5&&i!==26&&i!==27||a===null||(i=hn(e,n),i!=null&&r.unshift(Ed(e,i,a)),i=hn(e,t),i!=null&&r.push(Ed(e,i,a))),e.tag===3)return r;e=e.return}return[]}function Od(e){if(e===null)return null;do e=e.return;while(e&&e.tag!==5&&e.tag!==27);return e||null}function kd(e,t,n,r,i){for(var a=t._reactName,o=[];n!==null&&n!==r;){var s=n,c=s.alternate,l=s.stateNode;if(s=s.tag,c!==null&&c===r)break;s!==5&&s!==26&&s!==27||l===null||(c=l,i?(l=hn(n,a),l!=null&&o.unshift(Ed(n,l,c))):i||(l=hn(n,a),l!=null&&o.push(Ed(n,l,c)))),n=n.return}o.length!==0&&e.push({event:t,listeners:o})}var Ad=/\r\n?/g,jd=/\u0000|\uFFFD/g;function Md(e){return(typeof e==`string`?e:``+e).replace(Ad,`
-`).replace(jd,``)}function Nd(e,t){return t=Md(t),Md(e)===t}function Q(e,t,n,r,a,o){switch(n){case`children`:typeof r==`string`?t===`body`||t===`textarea`&&r===``||Qt(e,r):(typeof r==`number`||typeof r==`bigint`)&&t!==`body`&&Qt(e,``+r);break;case`className`:Lt(e,`class`,r);break;case`tabIndex`:Lt(e,`tabindex`,r);break;case`dir`:case`role`:case`viewBox`:case`width`:case`height`:Lt(e,n,r);break;case`style`:tn(e,r,o);break;case`data`:if(t!==`object`){Lt(e,`data`,r);break}case`src`:case`href`:if(r===``&&(t!==`a`||n!==`href`)){e.removeAttribute(n);break}if(r==null||typeof r==`function`||typeof r==`symbol`||typeof r==`boolean`){e.removeAttribute(n);break}r=on(``+r),e.setAttribute(n,r);break;case`action`:case`formAction`:if(typeof r==`function`){e.setAttribute(n,`javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')`);break}if(typeof o==`function`&&(n===`formAction`?(t!==`input`&&Q(e,t,`name`,a.name,a,null),Q(e,t,`formEncType`,a.formEncType,a,null),Q(e,t,`formMethod`,a.formMethod,a,null),Q(e,t,`formTarget`,a.formTarget,a,null)):(Q(e,t,`encType`,a.encType,a,null),Q(e,t,`method`,a.method,a,null),Q(e,t,`target`,a.target,a,null))),r==null||typeof r==`symbol`||typeof r==`boolean`){e.removeAttribute(n);break}r=on(``+r),e.setAttribute(n,r);break;case`onClick`:r!=null&&(e.onclick=sn);break;case`onScroll`:r!=null&&Z(`scroll`,e);break;case`onScrollEnd`:r!=null&&Z(`scrollend`,e);break;case`dangerouslySetInnerHTML`:if(r!=null){if(typeof r!=`object`||!(`__html`in r))throw Error(i(61));if(n=r.__html,n!=null){if(a.children!=null)throw Error(i(60));e.innerHTML=n}}break;case`multiple`:e.multiple=r&&typeof r!=`function`&&typeof r!=`symbol`;break;case`muted`:e.muted=r&&typeof r!=`function`&&typeof r!=`symbol`;break;case`suppressContentEditableWarning`:case`suppressHydrationWarning`:case`defaultValue`:case`defaultChecked`:case`innerHTML`:case`ref`:break;case`autoFocus`:break;case`xlinkHref`:if(r==null||typeof r==`function`||typeof r==`boolean`||typeof r==`symbol`){e.removeAttribute(`xlink:href`);break}n=on(``+r),e.setAttributeNS(`http://www.w3.org/1999/xlink`,`xlink:href`,n);break;case`contentEditable`:case`spellCheck`:case`draggable`:case`value`:case`autoReverse`:case`externalResourcesRequired`:case`focusable`:case`preserveAlpha`:r!=null&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,``+r):e.removeAttribute(n);break;case`inert`:case`allowFullScreen`:case`async`:case`autoPlay`:case`controls`:case`default`:case`defer`:case`disabled`:case`disablePictureInPicture`:case`disableRemotePlayback`:case`formNoValidate`:case`hidden`:case`loop`:case`noModule`:case`noValidate`:case`open`:case`playsInline`:case`readOnly`:case`required`:case`reversed`:case`scoped`:case`seamless`:case`itemScope`:r&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,``):e.removeAttribute(n);break;case`capture`:case`download`:!0===r?e.setAttribute(n,``):!1!==r&&r!=null&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,r):e.removeAttribute(n);break;case`cols`:case`rows`:case`size`:case`span`:r!=null&&typeof r!=`function`&&typeof r!=`symbol`&&!isNaN(r)&&1<=r?e.setAttribute(n,r):e.removeAttribute(n);break;case`rowSpan`:case`start`:r==null||typeof r==`function`||typeof r==`symbol`||isNaN(r)?e.removeAttribute(n):e.setAttribute(n,r);break;case`popover`:Z(`beforetoggle`,e),Z(`toggle`,e),It(e,`popover`,r);break;case`xlinkActuate`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:actuate`,r);break;case`xlinkArcrole`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:arcrole`,r);break;case`xlinkRole`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:role`,r);break;case`xlinkShow`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:show`,r);break;case`xlinkTitle`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:title`,r);break;case`xlinkType`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:type`,r);break;case`xmlBase`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:base`,r);break;case`xmlLang`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:lang`,r);break;case`xmlSpace`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:space`,r);break;case`is`:It(e,`is`,r);break;case`innerText`:case`textContent`:break;default:(!(2<n.length)||n[0]!==`o`&&n[0]!==`O`||n[1]!==`n`&&n[1]!==`N`)&&(n=rn.get(n)||n,It(e,n,r))}}function Pd(e,t,n,r,a,o){switch(n){case`style`:tn(e,r,o);break;case`dangerouslySetInnerHTML`:if(r!=null){if(typeof r!=`object`||!(`__html`in r))throw Error(i(61));if(n=r.__html,n!=null){if(a.children!=null)throw Error(i(60));e.innerHTML=n}}break;case`children`:typeof r==`string`?Qt(e,r):(typeof r==`number`||typeof r==`bigint`)&&Qt(e,``+r);break;case`onScroll`:r!=null&&Z(`scroll`,e);break;case`onScrollEnd`:r!=null&&Z(`scrollend`,e);break;case`onClick`:r!=null&&(e.onclick=sn);break;case`suppressContentEditableWarning`:case`suppressHydrationWarning`:case`innerHTML`:case`ref`:break;case`innerText`:case`textContent`:break;default:if(!kt.hasOwnProperty(n))a:{if(n[0]===`o`&&n[1]===`n`&&(a=n.endsWith(`Capture`),t=n.slice(2,a?n.length-7:void 0),o=e[ht]||null,o=o==null?null:o[n],typeof o==`function`&&e.removeEventListener(t,o,a),typeof r==`function`)){typeof o!=`function`&&o!==null&&(n in e?e[n]=null:e.hasAttribute(n)&&e.removeAttribute(n)),e.addEventListener(t,r,a);break a}n in e?e[n]=r:!0===r?e.setAttribute(n,``):It(e,n,r)}}}function Fd(e,t,n){switch(t){case`div`:case`span`:case`svg`:case`path`:case`a`:case`g`:case`p`:case`li`:break;case`img`:Z(`error`,e),Z(`load`,e);var r=!1,a=!1,o;for(o in n)if(n.hasOwnProperty(o)){var s=n[o];if(s!=null)switch(o){case`src`:r=!0;break;case`srcSet`:a=!0;break;case`children`:case`dangerouslySetInnerHTML`:throw Error(i(137,t));default:Q(e,t,o,s,n,null)}}a&&Q(e,t,`srcSet`,n.srcSet,n,null),r&&Q(e,t,`src`,n.src,n,null);return;case`input`:Z(`invalid`,e);var c=o=s=a=null,l=null,u=null;for(r in n)if(n.hasOwnProperty(r)){var d=n[r];if(d!=null)switch(r){case`name`:a=d;break;case`type`:s=d;break;case`checked`:l=d;break;case`defaultChecked`:u=d;break;case`value`:o=d;break;case`defaultValue`:c=d;break;case`children`:case`dangerouslySetInnerHTML`:if(d!=null)throw Error(i(137,t));break;default:Q(e,t,r,d,n,null)}}qt(e,o,c,l,u,s,a,!1);return;case`select`:for(a in Z(`invalid`,e),r=s=o=null,n)if(n.hasOwnProperty(a)&&(c=n[a],c!=null))switch(a){case`value`:o=c;break;case`defaultValue`:s=c;break;case`multiple`:r=c;default:Q(e,t,a,c,n,null)}t=o,n=s,e.multiple=!!r,t==null?n!=null&&Yt(e,!!r,n,!0):Yt(e,!!r,t,!1);return;case`textarea`:for(s in Z(`invalid`,e),o=a=r=null,n)if(n.hasOwnProperty(s)&&(c=n[s],c!=null))switch(s){case`value`:r=c;break;case`defaultValue`:a=c;break;case`children`:o=c;break;case`dangerouslySetInnerHTML`:if(c!=null)throw Error(i(91));break;default:Q(e,t,s,c,n,null)}Zt(e,r,a,o);return;case`option`:for(l in n)if(n.hasOwnProperty(l)&&(r=n[l],r!=null))switch(l){case`selected`:e.selected=r&&typeof r!=`function`&&typeof r!=`symbol`;break;default:Q(e,t,l,r,n,null)}return;case`dialog`:Z(`beforetoggle`,e),Z(`toggle`,e),Z(`cancel`,e),Z(`close`,e);break;case`iframe`:case`object`:Z(`load`,e);break;case`video`:case`audio`:for(r=0;r<vd.length;r++)Z(vd[r],e);break;case`image`:Z(`error`,e),Z(`load`,e);break;case`details`:Z(`toggle`,e);break;case`embed`:case`source`:case`link`:Z(`error`,e),Z(`load`,e);case`area`:case`base`:case`br`:case`col`:case`hr`:case`keygen`:case`meta`:case`param`:case`track`:case`wbr`:case`menuitem`:for(u in n)if(n.hasOwnProperty(u)&&(r=n[u],r!=null))switch(u){case`children`:case`dangerouslySetInnerHTML`:throw Error(i(137,t));default:Q(e,t,u,r,n,null)}return;default:if(nn(t)){for(d in n)n.hasOwnProperty(d)&&(r=n[d],r!==void 0&&Pd(e,t,d,r,n,void 0));return}}for(c in n)n.hasOwnProperty(c)&&(r=n[c],r!=null&&Q(e,t,c,r,n,null))}function Id(e,t,n,r){switch(t){case`div`:case`span`:case`svg`:case`path`:case`a`:case`g`:case`p`:case`li`:break;case`input`:var a=null,o=null,s=null,c=null,l=null,u=null,d=null;for(m in n){var f=n[m];if(n.hasOwnProperty(m)&&f!=null)switch(m){case`checked`:break;case`value`:break;case`defaultValue`:l=f;default:r.hasOwnProperty(m)||Q(e,t,m,null,r,f)}}for(var p in r){var m=r[p];if(f=n[p],r.hasOwnProperty(p)&&(m!=null||f!=null))switch(p){case`type`:o=m;break;case`name`:a=m;break;case`checked`:u=m;break;case`defaultChecked`:d=m;break;case`value`:s=m;break;case`defaultValue`:c=m;break;case`children`:case`dangerouslySetInnerHTML`:if(m!=null)throw Error(i(137,t));break;default:m!==f&&Q(e,t,p,m,r,f)}}Kt(e,s,c,l,u,d,o,a);return;case`select`:for(o in m=s=c=p=null,n)if(l=n[o],n.hasOwnProperty(o)&&l!=null)switch(o){case`value`:break;case`multiple`:m=l;default:r.hasOwnProperty(o)||Q(e,t,o,null,r,l)}for(a in r)if(o=r[a],l=n[a],r.hasOwnProperty(a)&&(o!=null||l!=null))switch(a){case`value`:p=o;break;case`defaultValue`:c=o;break;case`multiple`:s=o;default:o!==l&&Q(e,t,a,o,r,l)}t=c,n=s,r=m,p==null?!!r!=!!n&&(t==null?Yt(e,!!n,n?[]:``,!1):Yt(e,!!n,t,!0)):Yt(e,!!n,p,!1);return;case`textarea`:for(c in m=p=null,n)if(a=n[c],n.hasOwnProperty(c)&&a!=null&&!r.hasOwnProperty(c))switch(c){case`value`:break;case`children`:break;default:Q(e,t,c,null,r,a)}for(s in r)if(a=r[s],o=n[s],r.hasOwnProperty(s)&&(a!=null||o!=null))switch(s){case`value`:p=a;break;case`defaultValue`:m=a;break;case`children`:break;case`dangerouslySetInnerHTML`:if(a!=null)throw Error(i(91));break;default:a!==o&&Q(e,t,s,a,r,o)}Xt(e,p,m);return;case`option`:for(var h in n)if(p=n[h],n.hasOwnProperty(h)&&p!=null&&!r.hasOwnProperty(h))switch(h){case`selected`:e.selected=!1;break;default:Q(e,t,h,null,r,p)}for(l in r)if(p=r[l],m=n[l],r.hasOwnProperty(l)&&p!==m&&(p!=null||m!=null))switch(l){case`selected`:e.selected=p&&typeof p!=`function`&&typeof p!=`symbol`;break;default:Q(e,t,l,p,r,m)}return;case`img`:case`link`:case`area`:case`base`:case`br`:case`col`:case`embed`:case`hr`:case`keygen`:case`meta`:case`param`:case`source`:case`track`:case`wbr`:case`menuitem`:for(var g in n)p=n[g],n.hasOwnProperty(g)&&p!=null&&!r.hasOwnProperty(g)&&Q(e,t,g,null,r,p);for(u in r)if(p=r[u],m=n[u],r.hasOwnProperty(u)&&p!==m&&(p!=null||m!=null))switch(u){case`children`:case`dangerouslySetInnerHTML`:if(p!=null)throw Error(i(137,t));break;default:Q(e,t,u,p,r,m)}return;default:if(nn(t)){for(var _ in n)p=n[_],n.hasOwnProperty(_)&&p!==void 0&&!r.hasOwnProperty(_)&&Pd(e,t,_,void 0,r,p);for(d in r)p=r[d],m=n[d],!r.hasOwnProperty(d)||p===m||p===void 0&&m===void 0||Pd(e,t,d,p,r,m);return}}for(var v in n)p=n[v],n.hasOwnProperty(v)&&p!=null&&!r.hasOwnProperty(v)&&Q(e,t,v,null,r,p);for(f in r)p=r[f],m=n[f],!r.hasOwnProperty(f)||p===m||p==null&&m==null||Q(e,t,f,p,r,m)}function Ld(e){switch(e){case`css`:case`script`:case`font`:case`img`:case`image`:case`input`:case`link`:return!0;default:return!1}}function Rd(){if(typeof performance.getEntriesByType==`function`){for(var e=0,t=0,n=performance.getEntriesByType(`resource`),r=0;r<n.length;r++){var i=n[r],a=i.transferSize,o=i.initiatorType,s=i.duration;if(a&&s&&Ld(o)){for(o=0,s=i.responseEnd,r+=1;r<n.length;r++){var c=n[r],l=c.startTime;if(l>s)break;var u=c.transferSize,d=c.initiatorType;u&&Ld(d)&&(c=c.responseEnd,o+=u*(c<s?1:(s-l)/(c-l)))}if(--r,t+=8*(a+o)/(i.duration/1e3),e++,10<e)break}}if(0<e)return t/e/1e6}return navigator.connection&&(e=navigator.connection.downlink,typeof e==`number`)?e:5}var zd=null,Bd=null;function Vd(e){return e.nodeType===9?e:e.ownerDocument}function Hd(e){switch(e){case`http://www.w3.org/2000/svg`:return 1;case`http://www.w3.org/1998/Math/MathML`:return 2;default:return 0}}function Ud(e,t){if(e===0)switch(t){case`svg`:return 1;case`math`:return 2;default:return 0}return e===1&&t===`foreignObject`?0:e}function Wd(e,t){return e===`textarea`||e===`noscript`||typeof t.children==`string`||typeof t.children==`number`||typeof t.children==`bigint`||typeof t.dangerouslySetInnerHTML==`object`&&t.dangerouslySetInnerHTML!==null&&t.dangerouslySetInnerHTML.__html!=null}var Gd=null;function Kd(){var e=window.event;return e&&e.type===`popstate`?e!==Gd&&(Gd=e,!0):(Gd=null,!1)}var qd=typeof setTimeout==`function`?setTimeout:void 0,Jd=typeof clearTimeout==`function`?clearTimeout:void 0,Yd=typeof Promise==`function`?Promise:void 0,Xd=typeof queueMicrotask==`function`?queueMicrotask:Yd===void 0?qd:function(e){return Yd.resolve(null).then(e).catch(Zd)};function Zd(e){setTimeout(function(){throw e})}function Qd(e){return e===`head`}function $d(e,t){var n=t,r=0;do{var i=n.nextSibling;if(e.removeChild(n),i&&i.nodeType===8){if(n=i.data,n===`/$`||n===`/&`){if(r===0){e.removeChild(i),Np(t);return}r--}else if(n===`$`||n===`$?`||n===`$~`||n===`$!`||n===`&`)r++;else if(n===`html`)mf(e.ownerDocument.documentElement);else if(n===`head`){n=e.ownerDocument.head,mf(n);for(var a=n.firstChild;a;){var o=a.nextSibling,s=a.nodeName;a[xt]||s===`SCRIPT`||s===`STYLE`||s===`LINK`&&a.rel.toLowerCase()===`stylesheet`||n.removeChild(a),a=o}}else n===`body`&&mf(e.ownerDocument.body)}n=i}while(n);Np(t)}function ef(e,t){var n=e;e=0;do{var r=n.nextSibling;if(n.nodeType===1?t?(n._stashedDisplay=n.style.display,n.style.display=`none`):(n.style.display=n._stashedDisplay||``,n.getAttribute(`style`)===``&&n.removeAttribute(`style`)):n.nodeType===3&&(t?(n._stashedText=n.nodeValue,n.nodeValue=``):n.nodeValue=n._stashedText||``),r&&r.nodeType===8){if(n=r.data,n===`/$`){if(e===0)break;e--}else n!==`$`&&n!==`$?`&&n!==`$~`&&n!==`$!`||e++}n=r}while(n)}function tf(e){var t=e.firstChild;for(t&&t.nodeType===10&&(t=t.nextSibling);t;){var n=t;switch(t=t.nextSibling,n.nodeName){case`HTML`:case`HEAD`:case`BODY`:tf(n),St(n);continue;case`SCRIPT`:case`STYLE`:continue;case`LINK`:if(n.rel.toLowerCase()===`stylesheet`)continue}e.removeChild(n)}}function nf(e,t,n,r){for(;e.nodeType===1;){var i=n;if(e.nodeName.toLowerCase()!==t.toLowerCase()){if(!r&&(e.nodeName!==`INPUT`||e.type!==`hidden`))break}else if(!r){if(t===`input`&&e.type===`hidden`){var a=i.name==null?null:``+i.name;if(i.type===`hidden`&&e.getAttribute(`name`)===a)return e}else return e}else if(!e[xt])switch(t){case`meta`:if(!e.hasAttribute(`itemprop`))break;return e;case`link`:if(a=e.getAttribute(`rel`),a===`stylesheet`&&e.hasAttribute(`data-precedence`)||a!==i.rel||e.getAttribute(`href`)!==(i.href==null||i.href===``?null:i.href)||e.getAttribute(`crossorigin`)!==(i.crossOrigin==null?null:i.crossOrigin)||e.getAttribute(`title`)!==(i.title==null?null:i.title))break;return e;case`style`:if(e.hasAttribute(`data-precedence`))break;return e;case`script`:if(a=e.getAttribute(`src`),(a!==(i.src==null?null:i.src)||e.getAttribute(`type`)!==(i.type==null?null:i.type)||e.getAttribute(`crossorigin`)!==(i.crossOrigin==null?null:i.crossOrigin))&&a&&e.hasAttribute(`async`)&&!e.hasAttribute(`itemprop`))break;return e;default:return e}if(e=lf(e.nextSibling),e===null)break}return null}function rf(e,t,n){if(t===``)return null;for(;e.nodeType!==3;)if((e.nodeType!==1||e.nodeName!==`INPUT`||e.type!==`hidden`)&&!n||(e=lf(e.nextSibling),e===null))return null;return e}function af(e,t){for(;e.nodeType!==8;)if((e.nodeType!==1||e.nodeName!==`INPUT`||e.type!==`hidden`)&&!t||(e=lf(e.nextSibling),e===null))return null;return e}function of(e){return e.data===`$?`||e.data===`$~`}function sf(e){return e.data===`$!`||e.data===`$?`&&e.ownerDocument.readyState!==`loading`}function cf(e,t){var n=e.ownerDocument;if(e.data===`$~`)e._reactRetry=t;else if(e.data!==`$?`||n.readyState!==`loading`)t();else{var r=function(){t(),n.removeEventListener(`DOMContentLoaded`,r)};n.addEventListener(`DOMContentLoaded`,r),e._reactRetry=r}}function lf(e){for(;e!=null;e=e.nextSibling){var t=e.nodeType;if(t===1||t===3)break;if(t===8){if(t=e.data,t===`$`||t===`$!`||t===`$?`||t===`$~`||t===`&`||t===`F!`||t===`F`)break;if(t===`/$`||t===`/&`)return null}}return e}var uf=null;function df(e){e=e.nextSibling;for(var t=0;e;){if(e.nodeType===8){var n=e.data;if(n===`/$`||n===`/&`){if(t===0)return lf(e.nextSibling);t--}else n!==`$`&&n!==`$!`&&n!==`$?`&&n!==`$~`&&n!==`&`||t++}e=e.nextSibling}return null}function ff(e){e=e.previousSibling;for(var t=0;e;){if(e.nodeType===8){var n=e.data;if(n===`$`||n===`$!`||n===`$?`||n===`$~`||n===`&`){if(t===0)return e;t--}else n!==`/$`&&n!==`/&`||t++}e=e.previousSibling}return null}function pf(e,t,n){switch(t=Vd(n),e){case`html`:if(e=t.documentElement,!e)throw Error(i(452));return e;case`head`:if(e=t.head,!e)throw Error(i(453));return e;case`body`:if(e=t.body,!e)throw Error(i(454));return e;default:throw Error(i(451))}}function mf(e){for(var t=e.attributes;t.length;)e.removeAttributeNode(t[0]);St(e)}var hf=new Map,gf=new Set;function _f(e){return typeof e.getRootNode==`function`?e.getRootNode():e.nodeType===9?e:e.ownerDocument}var vf=k.d;k.d={f:yf,r:bf,D:Cf,C:wf,L:Tf,m:Ef,X:Df,S:$,M:Of};function yf(){var e=vf.f(),t=xu();return e||t}function bf(e){var t=wt(e);t!==null&&t.tag===5&&t.type===`form`?Ts(t):vf.r(e)}var xf=typeof document>`u`?null:document;function Sf(e,t,n){var r=xf;if(r&&typeof t==`string`&&t){var i=Gt(t);i=`link[rel="`+e+`"][href="`+i+`"]`,typeof n==`string`&&(i+=`[crossorigin="`+n+`"]`),gf.has(i)||(gf.add(i),e={rel:e,crossOrigin:n,href:t},r.querySelector(i)===null&&(t=r.createElement(`link`),Fd(t,`link`,e),Dt(t),r.head.appendChild(t)))}}function Cf(e){vf.D(e),Sf(`dns-prefetch`,e,null)}function wf(e,t){vf.C(e,t),Sf(`preconnect`,e,t)}function Tf(e,t,n){vf.L(e,t,n);var r=xf;if(r&&e&&t){var i=`link[rel="preload"][as="`+Gt(t)+`"]`;t===`image`&&n&&n.imageSrcSet?(i+=`[imagesrcset="`+Gt(n.imageSrcSet)+`"]`,typeof n.imageSizes==`string`&&(i+=`[imagesizes="`+Gt(n.imageSizes)+`"]`)):i+=`[href="`+Gt(e)+`"]`;var a=i;switch(t){case`style`:a=Af(e);break;case`script`:a=Pf(e)}hf.has(a)||(e=m({rel:`preload`,href:t===`image`&&n&&n.imageSrcSet?void 0:e,as:t},n),hf.set(a,e),r.querySelector(i)!==null||t===`style`&&r.querySelector(jf(a))||t===`script`&&r.querySelector(Ff(a))||(t=r.createElement(`link`),Fd(t,`link`,e),Dt(t),r.head.appendChild(t)))}}function Ef(e,t){vf.m(e,t);var n=xf;if(n&&e){var r=t&&typeof t.as==`string`?t.as:`script`,i=`link[rel="modulepreload"][as="`+Gt(r)+`"][href="`+Gt(e)+`"]`,a=i;switch(r){case`audioworklet`:case`paintworklet`:case`serviceworker`:case`sharedworker`:case`worker`:case`script`:a=Pf(e)}if(!hf.has(a)&&(e=m({rel:`modulepreload`,href:e},t),hf.set(a,e),n.querySelector(i)===null)){switch(r){case`audioworklet`:case`paintworklet`:case`serviceworker`:case`sharedworker`:case`worker`:case`script`:if(n.querySelector(Ff(a)))return}r=n.createElement(`link`),Fd(r,`link`,e),Dt(r),n.head.appendChild(r)}}}function $(e,t,n){vf.S(e,t,n);var r=xf;if(r&&e){var i=Et(r).hoistableStyles,a=Af(e);t||=`default`;var o=i.get(a);if(!o){var s={loading:0,preload:null};if(o=r.querySelector(jf(a)))s.loading=5;else{e=m({rel:`stylesheet`,href:e,"data-precedence":t},n),(n=hf.get(a))&&Rf(e,n);var c=o=r.createElement(`link`);Dt(c),Fd(c,`link`,e),c._p=new Promise(function(e,t){c.onload=e,c.onerror=t}),c.addEventListener(`load`,function(){s.loading|=1}),c.addEventListener(`error`,function(){s.loading|=2}),s.loading|=4,Lf(o,t,r)}o={type:`stylesheet`,instance:o,count:1,state:s},i.set(a,o)}}}function Df(e,t){vf.X(e,t);var n=xf;if(n&&e){var r=Et(n).hoistableScripts,i=Pf(e),a=r.get(i);a||(a=n.querySelector(Ff(i)),a||(e=m({src:e,async:!0},t),(t=hf.get(i))&&zf(e,t),a=n.createElement(`script`),Dt(a),Fd(a,`link`,e),n.head.appendChild(a)),a={type:`script`,instance:a,count:1,state:null},r.set(i,a))}}function Of(e,t){vf.M(e,t);var n=xf;if(n&&e){var r=Et(n).hoistableScripts,i=Pf(e),a=r.get(i);a||(a=n.querySelector(Ff(i)),a||(e=m({src:e,async:!0,type:`module`},t),(t=hf.get(i))&&zf(e,t),a=n.createElement(`script`),Dt(a),Fd(a,`link`,e),n.head.appendChild(a)),a={type:`script`,instance:a,count:1,state:null},r.set(i,a))}}function kf(e,t,n,r){var a=(a=he.current)?_f(a):null;if(!a)throw Error(i(446));switch(e){case`meta`:case`title`:return null;case`style`:return typeof n.precedence==`string`&&typeof n.href==`string`?(t=Af(n.href),n=Et(a).hoistableStyles,r=n.get(t),r||(r={type:`style`,instance:null,count:0,state:null},n.set(t,r)),r):{type:`void`,instance:null,count:0,state:null};case`link`:if(n.rel===`stylesheet`&&typeof n.href==`string`&&typeof n.precedence==`string`){e=Af(n.href);var o=Et(a).hoistableStyles,s=o.get(e);if(s||(a=a.ownerDocument||a,s={type:`stylesheet`,instance:null,count:0,state:{loading:0,preload:null}},o.set(e,s),(o=a.querySelector(jf(e)))&&!o._p&&(s.instance=o,s.state.loading=5),hf.has(e)||(n={rel:`preload`,as:`style`,href:n.href,crossOrigin:n.crossOrigin,integrity:n.integrity,media:n.media,hrefLang:n.hrefLang,referrerPolicy:n.referrerPolicy},hf.set(e,n),o||Nf(a,e,n,s.state))),t&&r===null)throw Error(i(528,``));return s}if(t&&r!==null)throw Error(i(529,``));return null;case`script`:return t=n.async,n=n.src,typeof n==`string`&&t&&typeof t!=`function`&&typeof t!=`symbol`?(t=Pf(n),n=Et(a).hoistableScripts,r=n.get(t),r||(r={type:`script`,instance:null,count:0,state:null},n.set(t,r)),r):{type:`void`,instance:null,count:0,state:null};default:throw Error(i(444,e))}}function Af(e){return`href="`+Gt(e)+`"`}function jf(e){return`link[rel="stylesheet"][`+e+`]`}function Mf(e){return m({},e,{"data-precedence":e.precedence,precedence:null})}function Nf(e,t,n,r){e.querySelector(`link[rel="preload"][as="style"][`+t+`]`)?r.loading=1:(t=e.createElement(`link`),r.preload=t,t.addEventListener(`load`,function(){return r.loading|=1}),t.addEventListener(`error`,function(){return r.loading|=2}),Fd(t,`link`,n),Dt(t),e.head.appendChild(t))}function Pf(e){return`[src="`+Gt(e)+`"]`}function Ff(e){return`script[async]`+e}function If(e,t,n){if(t.count++,t.instance===null)switch(t.type){case`style`:var r=e.querySelector(`style[data-href~="`+Gt(n.href)+`"]`);if(r)return t.instance=r,Dt(r),r;var a=m({},n,{"data-href":n.href,"data-precedence":n.precedence,href:null,precedence:null});return r=(e.ownerDocument||e).createElement(`style`),Dt(r),Fd(r,`style`,a),Lf(r,n.precedence,e),t.instance=r;case`stylesheet`:a=Af(n.href);var o=e.querySelector(jf(a));if(o)return t.state.loading|=4,t.instance=o,Dt(o),o;r=Mf(n),(a=hf.get(a))&&Rf(r,a),o=(e.ownerDocument||e).createElement(`link`),Dt(o);var s=o;return s._p=new Promise(function(e,t){s.onload=e,s.onerror=t}),Fd(o,`link`,r),t.state.loading|=4,Lf(o,n.precedence,e),t.instance=o;case`script`:return o=Pf(n.src),(a=e.querySelector(Ff(o)))?(t.instance=a,Dt(a),a):(r=n,(a=hf.get(o))&&(r=m({},n),zf(r,a)),e=e.ownerDocument||e,a=e.createElement(`script`),Dt(a),Fd(a,`link`,r),e.head.appendChild(a),t.instance=a);case`void`:return null;default:throw Error(i(443,t.type))}else t.type===`stylesheet`&&!(t.state.loading&4)&&(r=t.instance,t.state.loading|=4,Lf(r,n.precedence,e));return t.instance}function Lf(e,t,n){for(var r=n.querySelectorAll(`link[rel="stylesheet"][data-precedence],style[data-precedence]`),i=r.length?r[r.length-1]:null,a=i,o=0;o<r.length;o++){var s=r[o];if(s.dataset.precedence===t)a=s;else if(a!==i)break}a?a.parentNode.insertBefore(e,a.nextSibling):(t=n.nodeType===9?n.head:n,t.insertBefore(e,t.firstChild))}function Rf(e,t){e.crossOrigin??=t.crossOrigin,e.referrerPolicy??=t.referrerPolicy,e.title??=t.title}function zf(e,t){e.crossOrigin??=t.crossOrigin,e.referrerPolicy??=t.referrerPolicy,e.integrity??=t.integrity}var Bf=null;function Vf(e,t,n){if(Bf===null){var r=new Map,i=Bf=new Map;i.set(n,r)}else i=Bf,r=i.get(n),r||(r=new Map,i.set(n,r));if(r.has(e))return r;for(r.set(e,null),n=n.getElementsByTagName(e),i=0;i<n.length;i++){var a=n[i];if(!(a[xt]||a[mt]||e===`link`&&a.getAttribute(`rel`)===`stylesheet`)&&a.namespaceURI!==`http://www.w3.org/2000/svg`){var o=a.getAttribute(t)||``;o=e+o;var s=r.get(o);s?s.push(a):r.set(o,[a])}}return r}function Hf(e,t,n){e=e.ownerDocument||e,e.head.insertBefore(n,t===`title`?e.querySelector(`head > title`):null)}function Uf(e,t,n){if(n===1||t.itemProp!=null)return!1;switch(e){case`meta`:case`title`:return!0;case`style`:if(typeof t.precedence!=`string`||typeof t.href!=`string`||t.href===``)break;return!0;case`link`:if(typeof t.rel!=`string`||typeof t.href!=`string`||t.href===``||t.onLoad||t.onError)break;switch(t.rel){case`stylesheet`:return e=t.disabled,typeof t.precedence==`string`&&e==null;default:return!0}case`script`:if(t.async&&typeof t.async!=`function`&&typeof t.async!=`symbol`&&!t.onLoad&&!t.onError&&t.src&&typeof t.src==`string`)return!0}return!1}function Wf(e){return!(e.type===`stylesheet`&&!(e.state.loading&3))}function Gf(e,t,n,r){if(n.type===`stylesheet`&&(typeof r.media!=`string`||!1!==matchMedia(r.media).matches)&&!(n.state.loading&4)){if(n.instance===null){var i=Af(r.href),a=t.querySelector(jf(i));if(a){t=a._p,typeof t==`object`&&t&&typeof t.then==`function`&&(e.count++,e=Jf.bind(e),t.then(e,e)),n.state.loading|=4,n.instance=a,Dt(a);return}a=t.ownerDocument||t,r=Mf(r),(i=hf.get(i))&&Rf(r,i),a=a.createElement(`link`),Dt(a);var o=a;o._p=new Promise(function(e,t){o.onload=e,o.onerror=t}),Fd(a,`link`,r),n.instance=a}e.stylesheets===null&&(e.stylesheets=new Map),e.stylesheets.set(n,t),(t=n.state.preload)&&!(n.state.loading&3)&&(e.count++,n=Jf.bind(e),t.addEventListener(`load`,n),t.addEventListener(`error`,n))}}var Kf=0;function qf(e,t){return e.stylesheets&&e.count===0&&Xf(e,e.stylesheets),0<e.count||0<e.imgCount?function(n){var r=setTimeout(function(){if(e.stylesheets&&Xf(e,e.stylesheets),e.unsuspend){var t=e.unsuspend;e.unsuspend=null,t()}},6e4+t);0<e.imgBytes&&Kf===0&&(Kf=62500*Rd());var i=setTimeout(function(){if(e.waitingForImages=!1,e.count===0&&(e.stylesheets&&Xf(e,e.stylesheets),e.unsuspend)){var t=e.unsuspend;e.unsuspend=null,t()}},(e.imgBytes>Kf?50:800)+t);return e.unsuspend=n,function(){e.unsuspend=null,clearTimeout(r),clearTimeout(i)}}:null}function Jf(){if(this.count--,this.count===0&&(this.imgCount===0||!this.waitingForImages)){if(this.stylesheets)Xf(this,this.stylesheets);else if(this.unsuspend){var e=this.unsuspend;this.unsuspend=null,e()}}}var Yf=null;function Xf(e,t){e.stylesheets=null,e.unsuspend!==null&&(e.count++,Yf=new Map,t.forEach(Zf,e),Yf=null,Jf.call(e))}function Zf(e,t){if(!(t.state.loading&4)){var n=Yf.get(e);if(n)var r=n.get(null);else{n=new Map,Yf.set(e,n);for(var i=e.querySelectorAll(`link[data-precedence],style[data-precedence]`),a=0;a<i.length;a++){var o=i[a];(o.nodeName===`LINK`||o.getAttribute(`media`)!==`not all`)&&(n.set(o.dataset.precedence,o),r=o)}r&&n.set(null,r)}i=t.instance,o=i.getAttribute(`data-precedence`),a=n.get(o)||r,a===r&&n.set(null,i),n.set(o,i),this.count++,r=Jf.bind(this),i.addEventListener(`load`,r),i.addEventListener(`error`,r),a?a.parentNode.insertBefore(i,a.nextSibling):(e=e.nodeType===9?e.head:e,e.insertBefore(i,e.firstChild)),t.state.loading|=4}}var Qf={$$typeof:S,Provider:null,Consumer:null,_currentValue:ce,_currentValue2:ce,_threadCount:0};function $f(e,t,n,r,i,a,o,s,c){this.tag=1,this.containerInfo=e,this.pingCache=this.current=this.pendingChildren=null,this.timeoutHandle=-1,this.callbackNode=this.next=this.pendingContext=this.context=this.cancelPendingCommit=null,this.callbackPriority=0,this.expirationTimes=rt(-1),this.entangledLanes=this.shellSuspendCounter=this.errorRecoveryDisabledLanes=this.expiredLanes=this.warmLanes=this.pingedLanes=this.suspendedLanes=this.pendingLanes=0,this.entanglements=rt(0),this.hiddenUpdates=rt(null),this.identifierPrefix=r,this.onUncaughtError=i,this.onCaughtError=a,this.onRecoverableError=o,this.pooledCache=null,this.pooledCacheLanes=0,this.formState=c,this.incompleteTransitions=new Map}function ep(e,t,n,r,i,a,o,s,c,l,u,d){return e=new $f(e,t,n,o,c,l,u,d,s),t=1,!0===a&&(t|=24),a=di(3,null,null,t),e.current=a,a.stateNode=e,t=aa(),t.refCount++,e.pooledCache=t,t.refCount++,a.memoizedState={element:r,isDehydrated:n,cache:t},Ra(a),e}function tp(e){return e?(e=li,e):li}function np(e,t,n,r,i,a){i=tp(i),r.context===null?r.context=i:r.pendingContext=i,r=Ba(t),r.payload={element:n},a=a===void 0?null:a,a!==null&&(r.callback=a),n=Va(e,r,t),n!==null&&(gu(n,e,t),Ha(n,e,t))}function rp(e,t){if(e=e.memoizedState,e!==null&&e.dehydrated!==null){var n=e.retryLane;e.retryLane=n!==0&&n<t?n:t}}function ip(e,t){rp(e,t),(e=e.alternate)&&rp(e,t)}function ap(e){if(e.tag===13||e.tag===31){var t=oi(e,67108864);t!==null&&gu(t,e,67108864),ip(e,67108864)}}function op(e){if(e.tag===13||e.tag===31){var t=mu();t=lt(t);var n=oi(e,t);n!==null&&gu(n,e,t),ip(e,t)}}var sp=!0;function cp(e,t,n,r){var i=O.T;O.T=null;var a=k.p;try{k.p=2,up(e,t,n,r)}finally{k.p=a,O.T=i}}function lp(e,t,n,r){var i=O.T;O.T=null;var a=k.p;try{k.p=8,up(e,t,n,r)}finally{k.p=a,O.T=i}}function up(e,t,n,r){if(sp){var i=dp(r);if(i===null)Td(e,t,r,fp,n),Cp(e,r);else if(Tp(i,e,t,n,r))r.stopPropagation();else if(Cp(e,r),t&4&&-1<Sp.indexOf(e)){for(;i!==null;){var a=wt(i);if(a!==null)switch(a.tag){case 3:if(a=a.stateNode,a.current.memoizedState.isDehydrated){var o=Qe(a.pendingLanes);if(o!==0){var s=a;for(s.pendingLanes|=2,s.entangledLanes|=2;o;){var c=1<<31-Ge(o);s.entanglements[1]|=c,o&=~c}id(a),!(G&6)&&(nu=Ne()+500,ad(0,!1))}}break;case 31:case 13:s=oi(a,2),s!==null&&gu(s,a,2),xu(),ip(a,2)}if(a=dp(r),a===null&&Td(e,t,r,fp,n),a===i)break;i=a}i!==null&&r.stopPropagation()}else Td(e,t,r,null,n)}}function dp(e){return e=ln(e),pp(e)}var fp=null;function pp(e){if(fp=null,e=Ct(e),e!==null){var t=o(e);if(t===null)e=null;else{var n=t.tag;if(n===13){if(e=s(t),e!==null)return e;e=null}else if(n===31){if(e=c(t),e!==null)return e;e=null}else if(n===3){if(t.stateNode.current.memoizedState.isDehydrated)return t.tag===3?t.stateNode.containerInfo:null;e=null}else t!==e&&(e=null)}}return fp=e,null}function mp(e){switch(e){case`beforetoggle`:case`cancel`:case`click`:case`close`:case`contextmenu`:case`copy`:case`cut`:case`auxclick`:case`dblclick`:case`dragend`:case`dragstart`:case`drop`:case`focusin`:case`focusout`:case`input`:case`invalid`:case`keydown`:case`keypress`:case`keyup`:case`mousedown`:case`mouseup`:case`paste`:case`pause`:case`play`:case`pointercancel`:case`pointerdown`:case`pointerup`:case`ratechange`:case`reset`:case`resize`:case`seeked`:case`submit`:case`toggle`:case`touchcancel`:case`touchend`:case`touchstart`:case`volumechange`:case`change`:case`selectionchange`:case`textInput`:case`compositionstart`:case`compositionend`:case`compositionupdate`:case`beforeblur`:case`afterblur`:case`beforeinput`:case`blur`:case`fullscreenchange`:case`focus`:case`hashchange`:case`popstate`:case`select`:case`selectstart`:return 2;case`drag`:case`dragenter`:case`dragexit`:case`dragleave`:case`dragover`:case`mousemove`:case`mouseout`:case`mouseover`:case`pointermove`:case`pointerout`:case`pointerover`:case`scroll`:case`touchmove`:case`wheel`:case`mouseenter`:case`mouseleave`:case`pointerenter`:case`pointerleave`:return 8;case`message`:switch(Pe()){case Fe:return 2;case Ie:return 8;case Le:case Re:return 32;case ze:return 268435456;default:return 32}default:return 32}}var hp=!1,gp=null,_p=null,vp=null,yp=new Map,bp=new Map,xp=[],Sp=`mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset`.split(` `);function Cp(e,t){switch(e){case`focusin`:case`focusout`:gp=null;break;case`dragenter`:case`dragleave`:_p=null;break;case`mouseover`:case`mouseout`:vp=null;break;case`pointerover`:case`pointerout`:yp.delete(t.pointerId);break;case`gotpointercapture`:case`lostpointercapture`:bp.delete(t.pointerId)}}function wp(e,t,n,r,i,a){return e===null||e.nativeEvent!==a?(e={blockedOn:t,domEventName:n,eventSystemFlags:r,nativeEvent:a,targetContainers:[i]},t!==null&&(t=wt(t),t!==null&&ap(t)),e):(e.eventSystemFlags|=r,t=e.targetContainers,i!==null&&t.indexOf(i)===-1&&t.push(i),e)}function Tp(e,t,n,r,i){switch(t){case`focusin`:return gp=wp(gp,e,t,n,r,i),!0;case`dragenter`:return _p=wp(_p,e,t,n,r,i),!0;case`mouseover`:return vp=wp(vp,e,t,n,r,i),!0;case`pointerover`:var a=i.pointerId;return yp.set(a,wp(yp.get(a)||null,e,t,n,r,i)),!0;case`gotpointercapture`:return a=i.pointerId,bp.set(a,wp(bp.get(a)||null,e,t,n,r,i)),!0}return!1}function Ep(e){var t=Ct(e.target);if(t!==null){var n=o(t);if(n!==null){if(t=n.tag,t===13){if(t=s(n),t!==null){e.blockedOn=t,ft(e.priority,function(){op(n)});return}}else if(t===31){if(t=c(n),t!==null){e.blockedOn=t,ft(e.priority,function(){op(n)});return}}else if(t===3&&n.stateNode.current.memoizedState.isDehydrated){e.blockedOn=n.tag===3?n.stateNode.containerInfo:null;return}}}e.blockedOn=null}function Dp(e){if(e.blockedOn!==null)return!1;for(var t=e.targetContainers;0<t.length;){var n=dp(e.nativeEvent);if(n===null){n=e.nativeEvent;var r=new n.constructor(n.type,n);cn=r,n.target.dispatchEvent(r),cn=null}else return t=wt(n),t!==null&&ap(t),e.blockedOn=n,!1;t.shift()}return!0}function Op(e,t,n){Dp(e)&&n.delete(t)}function kp(){hp=!1,gp!==null&&Dp(gp)&&(gp=null),_p!==null&&Dp(_p)&&(_p=null),vp!==null&&Dp(vp)&&(vp=null),yp.forEach(Op),bp.forEach(Op)}function Ap(e,n){e.blockedOn===n&&(e.blockedOn=null,hp||(hp=!0,t.unstable_scheduleCallback(t.unstable_NormalPriority,kp)))}var jp=null;function Mp(e){jp!==e&&(jp=e,t.unstable_scheduleCallback(t.unstable_NormalPriority,function(){jp===e&&(jp=null);for(var t=0;t<e.length;t+=3){var n=e[t],r=e[t+1],i=e[t+2];if(typeof r!=`function`){if(pp(r||n)===null)continue;break}var a=wt(n);a!==null&&(e.splice(t,3),t-=3,Cs(a,{pending:!0,data:i,method:n.method,action:r},r,i))}}))}function Np(e){function t(t){return Ap(t,e)}gp!==null&&Ap(gp,e),_p!==null&&Ap(_p,e),vp!==null&&Ap(vp,e),yp.forEach(t),bp.forEach(t);for(var n=0;n<xp.length;n++){var r=xp[n];r.blockedOn===e&&(r.blockedOn=null)}for(;0<xp.length&&(n=xp[0],n.blockedOn===null);)Ep(n),n.blockedOn===null&&xp.shift();if(n=(e.ownerDocument||e).$$reactFormReplay,n!=null)for(r=0;r<n.length;r+=3){var i=n[r],a=n[r+1],o=i[ht]||null;if(typeof a==`function`)o||Mp(n);else if(o){var s=null;if(a&&a.hasAttribute(`formAction`)){if(i=a,o=a[ht]||null)s=o.formAction;else if(pp(i)!==null)continue}else s=o.action;typeof s==`function`?n[r+1]=s:(n.splice(r,3),r-=3),Mp(n)}}}function Pp(){function e(e){e.canIntercept&&e.info===`react-transition`&&e.intercept({handler:function(){return new Promise(function(e){return i=e})},focusReset:`manual`,scroll:`manual`})}function t(){i!==null&&(i(),i=null),r||setTimeout(n,20)}function n(){if(!r&&!navigation.transition){var e=navigation.currentEntry;e&&e.url!=null&&navigation.navigate(e.url,{state:e.getState(),info:`react-transition`,history:`replace`})}}if(typeof navigation==`object`){var r=!1,i=null;return navigation.addEventListener(`navigate`,e),navigation.addEventListener(`navigatesuccess`,t),navigation.addEventListener(`navigateerror`,t),setTimeout(n,100),function(){r=!0,navigation.removeEventListener(`navigate`,e),navigation.removeEventListener(`navigatesuccess`,t),navigation.removeEventListener(`navigateerror`,t),i!==null&&(i(),i=null)}}}function Fp(e){this._internalRoot=e}Ip.prototype.render=Fp.prototype.render=function(e){var t=this._internalRoot;if(t===null)throw Error(i(409));var n=t.current;np(n,mu(),e,t,null,null)},Ip.prototype.unmount=Fp.prototype.unmount=function(){var e=this._internalRoot;if(e!==null){this._internalRoot=null;var t=e.containerInfo;np(e.current,2,null,e,null,null),xu(),t[gt]=null}};function Ip(e){this._internalRoot=e}Ip.prototype.unstable_scheduleHydration=function(e){if(e){var t=dt();e={blockedOn:null,target:e,priority:t};for(var n=0;n<xp.length&&t!==0&&t<xp[n].priority;n++);xp.splice(n,0,e),n===0&&Ep(e)}};var Lp=n.version;if(Lp!==`19.2.8`)throw Error(i(527,Lp,`19.2.8`));k.findDOMNode=function(e){var t=e._reactInternals;if(t===void 0)throw typeof e.render==`function`?Error(i(188)):(e=Object.keys(e).join(`,`),Error(i(268,e)));return e=u(t),e=e===null?null:f(e),e=e===null?null:e.stateNode,e};var Rp={bundleType:0,version:`19.2.8`,rendererPackageName:`react-dom`,currentDispatcherRef:O,reconcilerVersion:`19.2.8`};if(typeof __REACT_DEVTOOLS_GLOBAL_HOOK__<`u`){var zp=__REACT_DEVTOOLS_GLOBAL_HOOK__;if(!zp.isDisabled&&zp.supportsFiber)try{He=zp.inject(Rp),Ue=zp}catch{}}e.createRoot=function(e,t){if(!a(e))throw Error(i(299));var n=!1,r=``,o=Ks,s=qs,c=Js;return t!=null&&(!0===t.unstable_strictMode&&(n=!0),t.identifierPrefix!==void 0&&(r=t.identifierPrefix),t.onUncaughtError!==void 0&&(o=t.onUncaughtError),t.onCaughtError!==void 0&&(s=t.onCaughtError),t.onRecoverableError!==void 0&&(c=t.onRecoverableError)),t=ep(e,1,!1,null,null,n,r,null,o,s,c,Pp),e[gt]=t.current,Cd(e),new Fp(t)}})),_=o(((e,t)=>{function n(){if(!(typeof __REACT_DEVTOOLS_GLOBAL_HOOK__>`u`||typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE!=`function`))try{__REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n)}catch(e){console.error(e)}}n(),t.exports=g()})),v=l(d(),1),y=_(),b=`modulepreload`,x=function(e){return`/GenAI-Architect-Playbook/`+e},ee={},S=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}function s(e){return import.meta.resolve?import.meta.resolve(e):new URL(e,import.meta.url).href}r=o(t.map(t=>{if(t=x(t,n),t=s(t),t in ee)return;ee[t]=!0;let r=t.endsWith(`.css`);for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}let i=document.createElement(`link`);if(i.rel=r?`stylesheet`:b,r||(i.as=`script`),i.crossOrigin=``,i.href=t,a&&i.setAttribute(`nonce`,a),document.head.appendChild(i),r)return new Promise((e,n)=>{i.addEventListener(`load`,e),i.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})},C=/^(?:[a-z][a-z0-9+.-]*:|[\\/]{2})/i,w=/^[\\/]{2}/;function T(e,t){return t+e.replace(/\\/g,`/`)}var te=`popstate`;function E(e){return typeof e==`object`&&!!e&&`pathname`in e&&`search`in e&&`hash`in e&&`state`in e&&`key`in e}function ne(e={}){function t(e,t){let n=t.state?.masked,{pathname:r,search:i,hash:a}=n||e.location;return oe(``,{pathname:r,search:i,hash:a},t.state&&t.state.usr||null,t.state&&t.state.key||`default`,n?{pathname:e.location.pathname,search:e.location.search,hash:e.location.hash}:void 0)}function n(e,t){return typeof t==`string`?t:se(t)}return k(t,n,null,e)}function D(e,t){if(e===!1||e==null)throw Error(t)}function re(e,t){if(!e){typeof console<`u`&&console.warn(t);try{throw Error(t)}catch{}}}function ie(){return Math.random().toString(36).substring(2,10)}function ae(e,t){return{usr:e.state,key:e.key,idx:t,masked:e.mask?{pathname:e.pathname,search:e.search,hash:e.hash}:void 0}}function oe(e,t,n=null,r,i){return{pathname:typeof e==`string`?e:e.pathname,search:``,hash:``,...typeof t==`string`?O(t):t,state:n,key:t&&t.key||r||ie(),mask:i}}function se({pathname:e=`/`,search:t=``,hash:n=``}){return t&&t!==`?`&&(e+=t.charAt(0)===`?`?t:`?`+t),n&&n!==`#`&&(e+=n.charAt(0)===`#`?n:`#`+n),e}function O(e){let t={};if(e){let n=e.indexOf(`#`);n>=0&&(t.hash=e.substring(n),e=e.substring(0,n));let r=e.indexOf(`?`);r>=0&&(t.search=e.substring(r),e=e.substring(0,r)),e&&(t.pathname=e)}return t}function k(e,t,n,r={}){let{window:i=document.defaultView,v5Compat:a=!1}=r,o=i.history,s=`POP`,c=null,l=u();l??(l=0,o.replaceState({...o.state,idx:l},``));function u(){return(o.state||{idx:null}).idx}function d(){s=`POP`;let e=u(),t=e==null?null:e-l;l=e,c&&c({action:s,location:h.location,delta:t})}function f(e,t){s=`PUSH`;let r=E(e)?e:oe(h.location,e,t);n&&n(r,e),l=u()+1;let d=ae(r,l),f=h.createHref(r.mask||r);try{o.pushState(d,``,f)}catch(e){if(e instanceof DOMException&&e.name===`DataCloneError`)throw e;i.location.assign(f)}a&&c&&c({action:s,location:h.location,delta:1})}function p(e,t){s=`REPLACE`;let r=E(e)?e:oe(h.location,e,t);n&&n(r,e),l=u();let i=ae(r,l),d=h.createHref(r.mask||r);o.replaceState(i,``,d),a&&c&&c({action:s,location:h.location,delta:0})}function m(e){return ce(i,e)}let h={get action(){return s},get location(){return e(i,o)},listen(e){if(c)throw Error(`A history only accepts one active listener`);return i.addEventListener(te,d),c=e,()=>{i.removeEventListener(te,d),c=null}},createHref(e){return t(i,e)},createURL:m,encodeLocation(e){let t=m(e);return{pathname:t.pathname,search:t.search,hash:t.hash}},push:f,replace:p,go(e){return o.go(e)}};return h}function ce(e,t,n=!1){let r=`http://localhost`;e&&(r=e.location.origin===`null`?e.location.href:e.location.origin),D(r,`No window.location.(origin|href) available to create URL`);let i=typeof t==`string`?t:se(t);return i=i.replace(/ $/,`%20`),!n&&w.test(i)&&(i=r+i),new URL(i,r)}function le(e,t,n=`/`){return ue(e,t,n,!1)}function ue(e,t,n,r,i){let a=Oe((typeof t==`string`?O(t):t).pathname||`/`,n);if(a==null)return null;let o=i??de(e),s=null,c=De(a);for(let e=0;s==null&&e<o.length;++e)s=Ce(o[e],c,r);return s}function de(e){let t=fe(e);return pe(t),t}function fe(e,t=[],n=[],r=``,i=!1){let a=(e,a,o=i,s)=>{let c={relativePath:s===void 0?e.path||``:s,caseSensitive:e.caseSensitive===!0,childrenIndex:a,route:e};if(c.relativePath.startsWith(`/`)){if(!c.relativePath.startsWith(r)&&o)return;D(c.relativePath.startsWith(r),`Absolute route path "${c.relativePath}" nested under path "${r}" is not valid. An absolute child route path must start with the combined path of all its parent routes.`),c.relativePath=c.relativePath.slice(r.length)}let l=Ie([r,c.relativePath]),u=n.concat(c);e.children&&e.children.length>0&&(D(e.index!==!0,`Index routes must not have child routes. Please remove all child routes from route path "${l}".`),fe(e.children,t,u,l,o)),!(e.path==null&&!e.index)&&t.push({path:l,score:xe(l,e.index),routesMeta:u.map((e,t)=>{let[n,r]=Ee(e.relativePath,e.caseSensitive,t===u.length-1);return{...e,matcher:n,compiledParams:r}})})};return e.forEach((e,t)=>{if(e.path===``||!e.path?.includes(`?`))a(e,t);else for(let n of A(e.path))a(e,t,!0,n)}),t}function A(e){let t=e.split(`/`);if(t.length===0)return[];let[n,...r]=t,i=n.endsWith(`?`),a=n.replace(/\?$/,``);if(r.length===0)return i?[a,``]:[a];let o=A(r.join(`/`)),s=[];return s.push(...o.map(e=>e===``?a:[a,e].join(`/`))),i&&s.push(...o),s.map(t=>e.startsWith(`/`)&&t===``?`/`:t)}function pe(e){e.sort((e,t)=>e.score===t.score?Se(e.routesMeta.map(e=>e.childrenIndex),t.routesMeta.map(e=>e.childrenIndex)):t.score-e.score)}var me=/^:[\w-]+$/,he=3,ge=2,_e=1,ve=10,ye=-2,be=e=>e===`*`;function xe(e,t){let n=e.split(`/`),r=n.length;return n.some(be)&&(r+=ye),t&&(r+=ge),n.filter(e=>!be(e)).reduce((e,t)=>e+(me.test(t)?he:t===``?_e:ve),r)}function Se(e,t){return e.length===t.length&&e.slice(0,-1).every((e,n)=>e===t[n])?e[e.length-1]-t[t.length-1]:0}function Ce(e,t,n=!1){let{routesMeta:r}=e,i={},a=`/`,o=[];for(let e=0;e<r.length;++e){let s=r[e],c=e===r.length-1,l=a===`/`?t:t.slice(a.length)||`/`,u={path:s.relativePath,caseSensitive:s.caseSensitive,end:c},d=s.matcher&&s.compiledParams?Te(u,l,s.matcher,s.compiledParams):we(u,l),f=s.route;if(!d&&c&&n&&!r[r.length-1].route.index&&(d=we({path:s.relativePath,caseSensitive:s.caseSensitive,end:!1},l)),!d)return null;Object.assign(i,d.params),o.push({params:i,pathname:Ie([a,d.pathname]),pathnameBase:Re(Ie([a,d.pathnameBase])),route:f}),d.pathnameBase!==`/`&&(a=Ie([a,d.pathnameBase]))}return o}function we(e,t){typeof e==`string`&&(e={path:e,caseSensitive:!1,end:!0});let[n,r]=Ee(e.path,e.caseSensitive,e.end);return Te(e,t,n,r)}function Te(e,t,n,r){let i=t.match(n);if(!i)return null;let a=i[0],o=Le(a,1),s=i.slice(1);return{params:r.reduce((e,{paramName:t,isOptional:n},r)=>{if(t===`*`){let e=s[r]||``;o=Le(a.slice(0,a.length-e.length),1)}let i=s[r];return e[t]=n&&!i?void 0:(i||``).replace(/%2F/g,`/`),e},{}),pathname:a,pathnameBase:o,pattern:e}}function Ee(e,t=!1,n=!0){re(e===`*`||!e.endsWith(`*`)||e.endsWith(`/*`),`Route path "${e}" will be treated as if it were "${e.replace(/\*$/,`/*`)}" because the \`*\` character must always follow a \`/\` in the pattern. To get rid of this warning, please change the route path to "${e.replace(/\*$/,`/*`)}".`);let r=[],i=`^`+e.replace(/\/*\*?$/,``).replace(/^\/*/,`/`).replace(/[\\.*+^${}|()[\]]/g,`\\$&`).replace(/\/:([\w-]+)(\?)?/g,(e,t,n,i,a)=>{if(r.push({paramName:t,isOptional:n!=null}),n){let t=a.charAt(i+e.length);return t&&t!==`/`?`/([^\\/]*)`:`(?:/([^\\/]*))?`}return`/([^\\/]+)`}).replace(/\/([\w-]+)\?(\/|$)/g,`(/$1)?$2`);return e.endsWith(`*`)?(r.push({paramName:`*`}),i+=e===`*`||e===`/*`?`(.*)$`:`(?:\\/(.+)|\\/*)$`):n?i+=`\\/*$`:e!==``&&e!==`/`&&(i+=`(?:(?=\\/|$))`),[new RegExp(i,t?void 0:`i`),r]}function De(e){try{return e.split(`/`).map(e=>decodeURIComponent(e).replace(/\//g,`%2F`)).join(`/`)}catch(t){return re(!1,`The URL path "${e}" could not be decoded because it is a malformed URL segment. This is probably due to a bad percent encoding (${t}).`),e}}function Oe(e,t){if(t===`/`)return e;if(!e.toLowerCase().startsWith(t.toLowerCase()))return null;let n=t.endsWith(`/`)?t.length-1:t.length,r=e.charAt(n);return r&&r!==`/`?null:e.slice(n)||`/`}function ke(e,t=`/`){let{pathname:n,search:r=``,hash:i=``}=typeof e==`string`?O(e):e,a;return n?(n=Fe(n),a=n.startsWith(`/`)||n.startsWith(`\\`)?Ae(n.substring(1),`/`):Ae(n,t)):a=t,{pathname:a,search:ze(r),hash:Be(i)}}function Ae(e,t){let n=Le(t).split(`/`);return e.split(`/`).forEach(e=>{e===`..`?n.length>1&&n.pop():e!==`.`&&n.push(e)}),n.length>1?n.join(`/`):`/`}function je(e,t,n,r){return`Cannot include a '${e}' character in a manually specified \`to.${t}\` field [${JSON.stringify(r)}].  Please separate it out to the \`to.${n}\` field. Alternatively you may provide the full path as a string in <Link to="..."> and the router will parse it for you.`}function Me(e){return e.filter((e,t)=>t===0||e.route.path&&e.route.path.length>0)}function Ne(e){let t=Me(e);return t.map((e,n)=>n===t.length-1?e.pathname:e.pathnameBase)}function Pe(e,t,n,r=!1){let i;typeof e==`string`?i=O(e):(i={...e},D(!i.pathname||!i.pathname.includes(`?`),je(`?`,`pathname`,`search`,i)),D(!i.pathname||!i.pathname.includes(`#`),je(`#`,`pathname`,`hash`,i)),D(!i.search||!i.search.includes(`#`),je(`#`,`search`,`hash`,i)));let a=e===``||i.pathname===``,o=a?`/`:i.pathname,s;if(o==null)s=n;else{let e=t.length-1;if(!r&&o.startsWith(`..`)){let t=o.split(`/`);for(;t[0]===`..`;)t.shift(),--e;i.pathname=t.join(`/`)}s=e>=0?t[e]:`/`}let c=ke(i,s),l=o&&o!==`/`&&o.endsWith(`/`),u=(a||o===`.`)&&n.endsWith(`/`);return!c.pathname.endsWith(`/`)&&(l||u)&&(c.pathname+=`/`),c}var Fe=e=>e.replace(/[\\/]{2,}/g,`/`),Ie=e=>Fe(e.join(`/`));function Le(e,t=0){let n=e.length;for(;n>t&&e.charCodeAt(n-1)===47;)n--;return n===e.length?e:e.slice(0,n)}var Re=e=>Le(e).replace(/^\/*/,`/`),ze=e=>!e||e===`?`?``:e.startsWith(`?`)?e:`?`+e,Be=e=>!e||e===`#`?``:e.startsWith(`#`)?e:`#`+e,Ve=class{constructor(e,t,n,r=!1){this.status=e,this.statusText=t||``,this.internal=r,n instanceof Error?(this.data=n.toString(),this.error=n):this.data=n}};function He(e){return e!=null&&typeof e.status==`number`&&typeof e.statusText==`string`&&typeof e.internal==`boolean`&&`data`in e}function Ue(e){return Ie(e.map(e=>e.route.path).filter(Boolean))||`/`}var We=typeof window<`u`&&window.document!==void 0&&window.document.createElement!==void 0;function Ge(e,t){let n=e;if(typeof n!=`string`||!C.test(n))return{absoluteURL:void 0,isExternal:!1,to:n};let r=n,i=!1;if(We)try{let e=new URL(window.location.href),r=w.test(n)?new URL(T(n,e.protocol)):new URL(n),a=Oe(r.pathname,t);r.origin===e.origin&&a!=null?n=a+r.search+r.hash:i=!0}catch{re(!1,`<Link to="${n}"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.`)}return{absoluteURL:r,isExternal:i,to:n}}Object.getOwnPropertyNames(Object.prototype).sort().join(`\0`);var Ke=new URL(`http://localhost`);function qe(e){if(e.createURL)return e.createURL(`/`);try{return new URL(e.createHref(`/`),Ke)}catch{return Ke}}function Je(e,t){return e.origin===t.origin&&(e.origin!==`null`||e.protocol===t.protocol&&e.host===t.host)}function Ye(e,t){if(e.startsWith(`//`))return!0;let n=t.protocol.toLowerCase();return e.toLowerCase().startsWith(n)?t.host===``||e.slice(n.length).startsWith(`//`):!1}function Xe(e,t,n,r){let i=null;try{i=e==null?null:new URL(e,n)}catch{}let a=new URL(t,n),o=i!=null&&!Je(i,n),s=!Je(a,n);if(r===`reject`){if(o||s)throw Error(`External navigation is not allowed`)}else if(s&&(i==null||!Ye(e,i)||!Je(i,a)))throw Error(`External navigation is not allowed`)}var Ze=[`POST`,`PUT`,`PATCH`,`DELETE`];new Set(Ze);var Qe=[`GET`,...Ze];new Set(Qe);var $e=[`about:`,`blob:`,`chrome:`,`chrome-untrusted:`,`content:`,`data:`,`devtools:`,`file:`,`filesystem:`,`javascript:`];function et(e){try{return $e.includes(new URL(e).protocol)}catch{return!1}}var tt=v.createContext(null);tt.displayName=`DataRouter`;var nt=v.createContext(null);nt.displayName=`DataRouterState`;var rt=v.createContext(!1);function it(){return v.useContext(rt)}var at=v.createContext({isTransitioning:!1});at.displayName=`ViewTransition`;var ot=v.createContext(new Map);ot.displayName=`Fetchers`;var st=v.createContext(null);st.displayName=`Await`;var ct=v.createContext(null);ct.displayName=`Navigation`;var lt=v.createContext(null);lt.displayName=`Location`;var ut=v.createContext({outlet:null,matches:[],isDataRoute:!1});ut.displayName=`Route`;var dt=v.createContext(null);dt.displayName=`RouteError`;var ft=`REACT_ROUTER_ERROR`,pt=`REDIRECT`,mt=`ROUTE_ERROR_RESPONSE`;function ht(e){if(e.startsWith(`${ft}:${pt}:{`))try{let t=JSON.parse(e.slice(28));if(typeof t==`object`&&t&&typeof t.status==`number`&&typeof t.statusText==`string`&&typeof t.location==`string`&&typeof t.reloadDocument==`boolean`&&typeof t.replace==`boolean`)return t}catch{}}function gt(e){if(e.startsWith(`${ft}:${mt}:{`))try{let t=JSON.parse(e.slice(40));if(typeof t==`object`&&t&&typeof t.status==`number`&&typeof t.statusText==`string`)return new Ve(t.status,t.statusText,t.data)}catch{}}function _t(e,{relative:t}={}){D(vt(),`useHref() may be used only in the context of a <Router> component.`);let{basename:n,navigator:r}=v.useContext(ct),{hash:i,pathname:a,search:o}=wt(e,{relative:t}),s=a;return n!==`/`&&(s=a===`/`?n:Ie([n,a])),r.createHref({pathname:s,search:o,hash:i})}function vt(){return v.useContext(lt)!=null}function yt(){return D(vt(),`useLocation() may be used only in the context of a <Router> component.`),v.useContext(lt).location}var bt=`You should call navigate() in a React.useEffect(), not when your component is first rendered.`;function xt(e){v.useContext(ct).static||v.useLayoutEffect(e)}function St(){let{isDataRoute:e}=v.useContext(ut);return e?Vt():Ct()}function Ct(){D(vt(),`useNavigate() may be used only in the context of a <Router> component.`);let e=v.useContext(tt),{basename:t,navigator:n}=v.useContext(ct),{matches:r}=v.useContext(ut),{pathname:i}=yt(),a=JSON.stringify(Ne(r)),o=v.useRef(!1);return xt(()=>{o.current=!0}),v.useCallback((r,s={})=>{if(re(o.current,bt),!o.current)return;if(typeof r==`number`){n.go(r);return}let c=Pe(r,JSON.parse(a),i,s.relative===`path`);e==null&&t!==`/`&&(c.pathname=c.pathname===`/`?t:Ie([t,c.pathname])),Xe(typeof r==`string`?r:se(r),n.createHref(c),qe(n),`reject`),(s.replace?n.replace:n.push)(c,s.state,s)},[t,n,a,i,e])}v.createContext(null);function wt(e,{relative:t}={}){let{matches:n}=v.useContext(ut),{pathname:r}=yt(),i=JSON.stringify(Ne(n));return v.useMemo(()=>Pe(e,JSON.parse(i),r,t===`path`),[e,i,r,t])}function Tt(e,t){return Et(e,t)}function Et(e,t,n){D(vt(),`useRoutes() may be used only in the context of a <Router> component.`);let{navigator:r}=v.useContext(ct),{matches:i}=v.useContext(ut),a=i[i.length-1],o=a?a.params:{},s=a?a.pathname:`/`,c=a?a.pathnameBase:`/`,l=a&&a.route;{let e=l&&l.path||``;Ut(s,!l||e.endsWith(`*`)||e.endsWith(`*?`),`You rendered descendant <Routes> (or called \`useRoutes()\`) at "${s}" (under <Route path="${e}">) but the parent route path has no trailing "*". This means if you navigate deeper, the parent won't match anymore and therefore the child routes will never render.
+`).replace(jd,``)}function Nd(e,t){return t=Md(t),Md(e)===t}function Q(e,t,n,r,a,o){switch(n){case`children`:typeof r==`string`?t===`body`||t===`textarea`&&r===``||Qt(e,r):(typeof r==`number`||typeof r==`bigint`)&&t!==`body`&&Qt(e,``+r);break;case`className`:Lt(e,`class`,r);break;case`tabIndex`:Lt(e,`tabindex`,r);break;case`dir`:case`role`:case`viewBox`:case`width`:case`height`:Lt(e,n,r);break;case`style`:tn(e,r,o);break;case`data`:if(t!==`object`){Lt(e,`data`,r);break}case`src`:case`href`:if(r===``&&(t!==`a`||n!==`href`)){e.removeAttribute(n);break}if(r==null||typeof r==`function`||typeof r==`symbol`||typeof r==`boolean`){e.removeAttribute(n);break}r=on(``+r),e.setAttribute(n,r);break;case`action`:case`formAction`:if(typeof r==`function`){e.setAttribute(n,`javascript:throw new Error('A React form was unexpectedly submitted. If you called form.submit() manually, consider using form.requestSubmit() instead. If you\\'re trying to use event.stopPropagation() in a submit event handler, consider also calling event.preventDefault().')`);break}if(typeof o==`function`&&(n===`formAction`?(t!==`input`&&Q(e,t,`name`,a.name,a,null),Q(e,t,`formEncType`,a.formEncType,a,null),Q(e,t,`formMethod`,a.formMethod,a,null),Q(e,t,`formTarget`,a.formTarget,a,null)):(Q(e,t,`encType`,a.encType,a,null),Q(e,t,`method`,a.method,a,null),Q(e,t,`target`,a.target,a,null))),r==null||typeof r==`symbol`||typeof r==`boolean`){e.removeAttribute(n);break}r=on(``+r),e.setAttribute(n,r);break;case`onClick`:r!=null&&(e.onclick=sn);break;case`onScroll`:r!=null&&Z(`scroll`,e);break;case`onScrollEnd`:r!=null&&Z(`scrollend`,e);break;case`dangerouslySetInnerHTML`:if(r!=null){if(typeof r!=`object`||!(`__html`in r))throw Error(i(61));if(n=r.__html,n!=null){if(a.children!=null)throw Error(i(60));e.innerHTML=n}}break;case`multiple`:e.multiple=r&&typeof r!=`function`&&typeof r!=`symbol`;break;case`muted`:e.muted=r&&typeof r!=`function`&&typeof r!=`symbol`;break;case`suppressContentEditableWarning`:case`suppressHydrationWarning`:case`defaultValue`:case`defaultChecked`:case`innerHTML`:case`ref`:break;case`autoFocus`:break;case`xlinkHref`:if(r==null||typeof r==`function`||typeof r==`boolean`||typeof r==`symbol`){e.removeAttribute(`xlink:href`);break}n=on(``+r),e.setAttributeNS(`http://www.w3.org/1999/xlink`,`xlink:href`,n);break;case`contentEditable`:case`spellCheck`:case`draggable`:case`value`:case`autoReverse`:case`externalResourcesRequired`:case`focusable`:case`preserveAlpha`:r!=null&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,``+r):e.removeAttribute(n);break;case`inert`:case`allowFullScreen`:case`async`:case`autoPlay`:case`controls`:case`default`:case`defer`:case`disabled`:case`disablePictureInPicture`:case`disableRemotePlayback`:case`formNoValidate`:case`hidden`:case`loop`:case`noModule`:case`noValidate`:case`open`:case`playsInline`:case`readOnly`:case`required`:case`reversed`:case`scoped`:case`seamless`:case`itemScope`:r&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,``):e.removeAttribute(n);break;case`capture`:case`download`:!0===r?e.setAttribute(n,``):!1!==r&&r!=null&&typeof r!=`function`&&typeof r!=`symbol`?e.setAttribute(n,r):e.removeAttribute(n);break;case`cols`:case`rows`:case`size`:case`span`:r!=null&&typeof r!=`function`&&typeof r!=`symbol`&&!isNaN(r)&&1<=r?e.setAttribute(n,r):e.removeAttribute(n);break;case`rowSpan`:case`start`:r==null||typeof r==`function`||typeof r==`symbol`||isNaN(r)?e.removeAttribute(n):e.setAttribute(n,r);break;case`popover`:Z(`beforetoggle`,e),Z(`toggle`,e),It(e,`popover`,r);break;case`xlinkActuate`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:actuate`,r);break;case`xlinkArcrole`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:arcrole`,r);break;case`xlinkRole`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:role`,r);break;case`xlinkShow`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:show`,r);break;case`xlinkTitle`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:title`,r);break;case`xlinkType`:Rt(e,`http://www.w3.org/1999/xlink`,`xlink:type`,r);break;case`xmlBase`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:base`,r);break;case`xmlLang`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:lang`,r);break;case`xmlSpace`:Rt(e,`http://www.w3.org/XML/1998/namespace`,`xml:space`,r);break;case`is`:It(e,`is`,r);break;case`innerText`:case`textContent`:break;default:(!(2<n.length)||n[0]!==`o`&&n[0]!==`O`||n[1]!==`n`&&n[1]!==`N`)&&(n=rn.get(n)||n,It(e,n,r))}}function Pd(e,t,n,r,a,o){switch(n){case`style`:tn(e,r,o);break;case`dangerouslySetInnerHTML`:if(r!=null){if(typeof r!=`object`||!(`__html`in r))throw Error(i(61));if(n=r.__html,n!=null){if(a.children!=null)throw Error(i(60));e.innerHTML=n}}break;case`children`:typeof r==`string`?Qt(e,r):(typeof r==`number`||typeof r==`bigint`)&&Qt(e,``+r);break;case`onScroll`:r!=null&&Z(`scroll`,e);break;case`onScrollEnd`:r!=null&&Z(`scrollend`,e);break;case`onClick`:r!=null&&(e.onclick=sn);break;case`suppressContentEditableWarning`:case`suppressHydrationWarning`:case`innerHTML`:case`ref`:break;case`innerText`:case`textContent`:break;default:if(!kt.hasOwnProperty(n))a:{if(n[0]===`o`&&n[1]===`n`&&(a=n.endsWith(`Capture`),t=n.slice(2,a?n.length-7:void 0),o=e[ht]||null,o=o==null?null:o[n],typeof o==`function`&&e.removeEventListener(t,o,a),typeof r==`function`)){typeof o!=`function`&&o!==null&&(n in e?e[n]=null:e.hasAttribute(n)&&e.removeAttribute(n)),e.addEventListener(t,r,a);break a}n in e?e[n]=r:!0===r?e.setAttribute(n,``):It(e,n,r)}}}function Fd(e,t,n){switch(t){case`div`:case`span`:case`svg`:case`path`:case`a`:case`g`:case`p`:case`li`:break;case`img`:Z(`error`,e),Z(`load`,e);var r=!1,a=!1,o;for(o in n)if(n.hasOwnProperty(o)){var s=n[o];if(s!=null)switch(o){case`src`:r=!0;break;case`srcSet`:a=!0;break;case`children`:case`dangerouslySetInnerHTML`:throw Error(i(137,t));default:Q(e,t,o,s,n,null)}}a&&Q(e,t,`srcSet`,n.srcSet,n,null),r&&Q(e,t,`src`,n.src,n,null);return;case`input`:Z(`invalid`,e);var c=o=s=a=null,l=null,u=null;for(r in n)if(n.hasOwnProperty(r)){var d=n[r];if(d!=null)switch(r){case`name`:a=d;break;case`type`:s=d;break;case`checked`:l=d;break;case`defaultChecked`:u=d;break;case`value`:o=d;break;case`defaultValue`:c=d;break;case`children`:case`dangerouslySetInnerHTML`:if(d!=null)throw Error(i(137,t));break;default:Q(e,t,r,d,n,null)}}qt(e,o,c,l,u,s,a,!1);return;case`select`:for(a in Z(`invalid`,e),r=s=o=null,n)if(n.hasOwnProperty(a)&&(c=n[a],c!=null))switch(a){case`value`:o=c;break;case`defaultValue`:s=c;break;case`multiple`:r=c;default:Q(e,t,a,c,n,null)}t=o,n=s,e.multiple=!!r,t==null?n!=null&&Yt(e,!!r,n,!0):Yt(e,!!r,t,!1);return;case`textarea`:for(s in Z(`invalid`,e),o=a=r=null,n)if(n.hasOwnProperty(s)&&(c=n[s],c!=null))switch(s){case`value`:r=c;break;case`defaultValue`:a=c;break;case`children`:o=c;break;case`dangerouslySetInnerHTML`:if(c!=null)throw Error(i(91));break;default:Q(e,t,s,c,n,null)}Zt(e,r,a,o);return;case`option`:for(l in n)if(n.hasOwnProperty(l)&&(r=n[l],r!=null))switch(l){case`selected`:e.selected=r&&typeof r!=`function`&&typeof r!=`symbol`;break;default:Q(e,t,l,r,n,null)}return;case`dialog`:Z(`beforetoggle`,e),Z(`toggle`,e),Z(`cancel`,e),Z(`close`,e);break;case`iframe`:case`object`:Z(`load`,e);break;case`video`:case`audio`:for(r=0;r<vd.length;r++)Z(vd[r],e);break;case`image`:Z(`error`,e),Z(`load`,e);break;case`details`:Z(`toggle`,e);break;case`embed`:case`source`:case`link`:Z(`error`,e),Z(`load`,e);case`area`:case`base`:case`br`:case`col`:case`hr`:case`keygen`:case`meta`:case`param`:case`track`:case`wbr`:case`menuitem`:for(u in n)if(n.hasOwnProperty(u)&&(r=n[u],r!=null))switch(u){case`children`:case`dangerouslySetInnerHTML`:throw Error(i(137,t));default:Q(e,t,u,r,n,null)}return;default:if(nn(t)){for(d in n)n.hasOwnProperty(d)&&(r=n[d],r!==void 0&&Pd(e,t,d,r,n,void 0));return}}for(c in n)n.hasOwnProperty(c)&&(r=n[c],r!=null&&Q(e,t,c,r,n,null))}function Id(e,t,n,r){switch(t){case`div`:case`span`:case`svg`:case`path`:case`a`:case`g`:case`p`:case`li`:break;case`input`:var a=null,o=null,s=null,c=null,l=null,u=null,d=null;for(m in n){var f=n[m];if(n.hasOwnProperty(m)&&f!=null)switch(m){case`checked`:break;case`value`:break;case`defaultValue`:l=f;default:r.hasOwnProperty(m)||Q(e,t,m,null,r,f)}}for(var p in r){var m=r[p];if(f=n[p],r.hasOwnProperty(p)&&(m!=null||f!=null))switch(p){case`type`:o=m;break;case`name`:a=m;break;case`checked`:u=m;break;case`defaultChecked`:d=m;break;case`value`:s=m;break;case`defaultValue`:c=m;break;case`children`:case`dangerouslySetInnerHTML`:if(m!=null)throw Error(i(137,t));break;default:m!==f&&Q(e,t,p,m,r,f)}}Kt(e,s,c,l,u,d,o,a);return;case`select`:for(o in m=s=c=p=null,n)if(l=n[o],n.hasOwnProperty(o)&&l!=null)switch(o){case`value`:break;case`multiple`:m=l;default:r.hasOwnProperty(o)||Q(e,t,o,null,r,l)}for(a in r)if(o=r[a],l=n[a],r.hasOwnProperty(a)&&(o!=null||l!=null))switch(a){case`value`:p=o;break;case`defaultValue`:c=o;break;case`multiple`:s=o;default:o!==l&&Q(e,t,a,o,r,l)}t=c,n=s,r=m,p==null?!!r!=!!n&&(t==null?Yt(e,!!n,n?[]:``,!1):Yt(e,!!n,t,!0)):Yt(e,!!n,p,!1);return;case`textarea`:for(c in m=p=null,n)if(a=n[c],n.hasOwnProperty(c)&&a!=null&&!r.hasOwnProperty(c))switch(c){case`value`:break;case`children`:break;default:Q(e,t,c,null,r,a)}for(s in r)if(a=r[s],o=n[s],r.hasOwnProperty(s)&&(a!=null||o!=null))switch(s){case`value`:p=a;break;case`defaultValue`:m=a;break;case`children`:break;case`dangerouslySetInnerHTML`:if(a!=null)throw Error(i(91));break;default:a!==o&&Q(e,t,s,a,r,o)}Xt(e,p,m);return;case`option`:for(var h in n)if(p=n[h],n.hasOwnProperty(h)&&p!=null&&!r.hasOwnProperty(h))switch(h){case`selected`:e.selected=!1;break;default:Q(e,t,h,null,r,p)}for(l in r)if(p=r[l],m=n[l],r.hasOwnProperty(l)&&p!==m&&(p!=null||m!=null))switch(l){case`selected`:e.selected=p&&typeof p!=`function`&&typeof p!=`symbol`;break;default:Q(e,t,l,p,r,m)}return;case`img`:case`link`:case`area`:case`base`:case`br`:case`col`:case`embed`:case`hr`:case`keygen`:case`meta`:case`param`:case`source`:case`track`:case`wbr`:case`menuitem`:for(var g in n)p=n[g],n.hasOwnProperty(g)&&p!=null&&!r.hasOwnProperty(g)&&Q(e,t,g,null,r,p);for(u in r)if(p=r[u],m=n[u],r.hasOwnProperty(u)&&p!==m&&(p!=null||m!=null))switch(u){case`children`:case`dangerouslySetInnerHTML`:if(p!=null)throw Error(i(137,t));break;default:Q(e,t,u,p,r,m)}return;default:if(nn(t)){for(var _ in n)p=n[_],n.hasOwnProperty(_)&&p!==void 0&&!r.hasOwnProperty(_)&&Pd(e,t,_,void 0,r,p);for(d in r)p=r[d],m=n[d],!r.hasOwnProperty(d)||p===m||p===void 0&&m===void 0||Pd(e,t,d,p,r,m);return}}for(var v in n)p=n[v],n.hasOwnProperty(v)&&p!=null&&!r.hasOwnProperty(v)&&Q(e,t,v,null,r,p);for(f in r)p=r[f],m=n[f],!r.hasOwnProperty(f)||p===m||p==null&&m==null||Q(e,t,f,p,r,m)}function Ld(e){switch(e){case`css`:case`script`:case`font`:case`img`:case`image`:case`input`:case`link`:return!0;default:return!1}}function Rd(){if(typeof performance.getEntriesByType==`function`){for(var e=0,t=0,n=performance.getEntriesByType(`resource`),r=0;r<n.length;r++){var i=n[r],a=i.transferSize,o=i.initiatorType,s=i.duration;if(a&&s&&Ld(o)){for(o=0,s=i.responseEnd,r+=1;r<n.length;r++){var c=n[r],l=c.startTime;if(l>s)break;var u=c.transferSize,d=c.initiatorType;u&&Ld(d)&&(c=c.responseEnd,o+=u*(c<s?1:(s-l)/(c-l)))}if(--r,t+=8*(a+o)/(i.duration/1e3),e++,10<e)break}}if(0<e)return t/e/1e6}return navigator.connection&&(e=navigator.connection.downlink,typeof e==`number`)?e:5}var zd=null,Bd=null;function Vd(e){return e.nodeType===9?e:e.ownerDocument}function Hd(e){switch(e){case`http://www.w3.org/2000/svg`:return 1;case`http://www.w3.org/1998/Math/MathML`:return 2;default:return 0}}function Ud(e,t){if(e===0)switch(t){case`svg`:return 1;case`math`:return 2;default:return 0}return e===1&&t===`foreignObject`?0:e}function Wd(e,t){return e===`textarea`||e===`noscript`||typeof t.children==`string`||typeof t.children==`number`||typeof t.children==`bigint`||typeof t.dangerouslySetInnerHTML==`object`&&t.dangerouslySetInnerHTML!==null&&t.dangerouslySetInnerHTML.__html!=null}var Gd=null;function Kd(){var e=window.event;return e&&e.type===`popstate`?e!==Gd&&(Gd=e,!0):(Gd=null,!1)}var qd=typeof setTimeout==`function`?setTimeout:void 0,Jd=typeof clearTimeout==`function`?clearTimeout:void 0,Yd=typeof Promise==`function`?Promise:void 0,Xd=typeof queueMicrotask==`function`?queueMicrotask:Yd===void 0?qd:function(e){return Yd.resolve(null).then(e).catch(Zd)};function Zd(e){setTimeout(function(){throw e})}function Qd(e){return e===`head`}function $d(e,t){var n=t,r=0;do{var i=n.nextSibling;if(e.removeChild(n),i&&i.nodeType===8){if(n=i.data,n===`/$`||n===`/&`){if(r===0){e.removeChild(i),Np(t);return}r--}else if(n===`$`||n===`$?`||n===`$~`||n===`$!`||n===`&`)r++;else if(n===`html`)mf(e.ownerDocument.documentElement);else if(n===`head`){n=e.ownerDocument.head,mf(n);for(var a=n.firstChild;a;){var o=a.nextSibling,s=a.nodeName;a[xt]||s===`SCRIPT`||s===`STYLE`||s===`LINK`&&a.rel.toLowerCase()===`stylesheet`||n.removeChild(a),a=o}}else n===`body`&&mf(e.ownerDocument.body)}n=i}while(n);Np(t)}function ef(e,t){var n=e;e=0;do{var r=n.nextSibling;if(n.nodeType===1?t?(n._stashedDisplay=n.style.display,n.style.display=`none`):(n.style.display=n._stashedDisplay||``,n.getAttribute(`style`)===``&&n.removeAttribute(`style`)):n.nodeType===3&&(t?(n._stashedText=n.nodeValue,n.nodeValue=``):n.nodeValue=n._stashedText||``),r&&r.nodeType===8){if(n=r.data,n===`/$`){if(e===0)break;e--}else n!==`$`&&n!==`$?`&&n!==`$~`&&n!==`$!`||e++}n=r}while(n)}function tf(e){var t=e.firstChild;for(t&&t.nodeType===10&&(t=t.nextSibling);t;){var n=t;switch(t=t.nextSibling,n.nodeName){case`HTML`:case`HEAD`:case`BODY`:tf(n),St(n);continue;case`SCRIPT`:case`STYLE`:continue;case`LINK`:if(n.rel.toLowerCase()===`stylesheet`)continue}e.removeChild(n)}}function nf(e,t,n,r){for(;e.nodeType===1;){var i=n;if(e.nodeName.toLowerCase()!==t.toLowerCase()){if(!r&&(e.nodeName!==`INPUT`||e.type!==`hidden`))break}else if(!r){if(t===`input`&&e.type===`hidden`){var a=i.name==null?null:``+i.name;if(i.type===`hidden`&&e.getAttribute(`name`)===a)return e}else return e}else if(!e[xt])switch(t){case`meta`:if(!e.hasAttribute(`itemprop`))break;return e;case`link`:if(a=e.getAttribute(`rel`),a===`stylesheet`&&e.hasAttribute(`data-precedence`)||a!==i.rel||e.getAttribute(`href`)!==(i.href==null||i.href===``?null:i.href)||e.getAttribute(`crossorigin`)!==(i.crossOrigin==null?null:i.crossOrigin)||e.getAttribute(`title`)!==(i.title==null?null:i.title))break;return e;case`style`:if(e.hasAttribute(`data-precedence`))break;return e;case`script`:if(a=e.getAttribute(`src`),(a!==(i.src==null?null:i.src)||e.getAttribute(`type`)!==(i.type==null?null:i.type)||e.getAttribute(`crossorigin`)!==(i.crossOrigin==null?null:i.crossOrigin))&&a&&e.hasAttribute(`async`)&&!e.hasAttribute(`itemprop`))break;return e;default:return e}if(e=lf(e.nextSibling),e===null)break}return null}function rf(e,t,n){if(t===``)return null;for(;e.nodeType!==3;)if((e.nodeType!==1||e.nodeName!==`INPUT`||e.type!==`hidden`)&&!n||(e=lf(e.nextSibling),e===null))return null;return e}function af(e,t){for(;e.nodeType!==8;)if((e.nodeType!==1||e.nodeName!==`INPUT`||e.type!==`hidden`)&&!t||(e=lf(e.nextSibling),e===null))return null;return e}function of(e){return e.data===`$?`||e.data===`$~`}function sf(e){return e.data===`$!`||e.data===`$?`&&e.ownerDocument.readyState!==`loading`}function cf(e,t){var n=e.ownerDocument;if(e.data===`$~`)e._reactRetry=t;else if(e.data!==`$?`||n.readyState!==`loading`)t();else{var r=function(){t(),n.removeEventListener(`DOMContentLoaded`,r)};n.addEventListener(`DOMContentLoaded`,r),e._reactRetry=r}}function lf(e){for(;e!=null;e=e.nextSibling){var t=e.nodeType;if(t===1||t===3)break;if(t===8){if(t=e.data,t===`$`||t===`$!`||t===`$?`||t===`$~`||t===`&`||t===`F!`||t===`F`)break;if(t===`/$`||t===`/&`)return null}}return e}var uf=null;function df(e){e=e.nextSibling;for(var t=0;e;){if(e.nodeType===8){var n=e.data;if(n===`/$`||n===`/&`){if(t===0)return lf(e.nextSibling);t--}else n!==`$`&&n!==`$!`&&n!==`$?`&&n!==`$~`&&n!==`&`||t++}e=e.nextSibling}return null}function ff(e){e=e.previousSibling;for(var t=0;e;){if(e.nodeType===8){var n=e.data;if(n===`$`||n===`$!`||n===`$?`||n===`$~`||n===`&`){if(t===0)return e;t--}else n!==`/$`&&n!==`/&`||t++}e=e.previousSibling}return null}function pf(e,t,n){switch(t=Vd(n),e){case`html`:if(e=t.documentElement,!e)throw Error(i(452));return e;case`head`:if(e=t.head,!e)throw Error(i(453));return e;case`body`:if(e=t.body,!e)throw Error(i(454));return e;default:throw Error(i(451))}}function mf(e){for(var t=e.attributes;t.length;)e.removeAttributeNode(t[0]);St(e)}var hf=new Map,gf=new Set;function _f(e){return typeof e.getRootNode==`function`?e.getRootNode():e.nodeType===9?e:e.ownerDocument}var vf=k.d;k.d={f:yf,r:bf,D:Cf,C:wf,L:Tf,m:Ef,X:$,S:Df,M:Of};function yf(){var e=vf.f(),t=xu();return e||t}function bf(e){var t=wt(e);t!==null&&t.tag===5&&t.type===`form`?Ts(t):vf.r(e)}var xf=typeof document>`u`?null:document;function Sf(e,t,n){var r=xf;if(r&&typeof t==`string`&&t){var i=Gt(t);i=`link[rel="`+e+`"][href="`+i+`"]`,typeof n==`string`&&(i+=`[crossorigin="`+n+`"]`),gf.has(i)||(gf.add(i),e={rel:e,crossOrigin:n,href:t},r.querySelector(i)===null&&(t=r.createElement(`link`),Fd(t,`link`,e),Dt(t),r.head.appendChild(t)))}}function Cf(e){vf.D(e),Sf(`dns-prefetch`,e,null)}function wf(e,t){vf.C(e,t),Sf(`preconnect`,e,t)}function Tf(e,t,n){vf.L(e,t,n);var r=xf;if(r&&e&&t){var i=`link[rel="preload"][as="`+Gt(t)+`"]`;t===`image`&&n&&n.imageSrcSet?(i+=`[imagesrcset="`+Gt(n.imageSrcSet)+`"]`,typeof n.imageSizes==`string`&&(i+=`[imagesizes="`+Gt(n.imageSizes)+`"]`)):i+=`[href="`+Gt(e)+`"]`;var a=i;switch(t){case`style`:a=Af(e);break;case`script`:a=Pf(e)}hf.has(a)||(e=m({rel:`preload`,href:t===`image`&&n&&n.imageSrcSet?void 0:e,as:t},n),hf.set(a,e),r.querySelector(i)!==null||t===`style`&&r.querySelector(jf(a))||t===`script`&&r.querySelector(Ff(a))||(t=r.createElement(`link`),Fd(t,`link`,e),Dt(t),r.head.appendChild(t)))}}function Ef(e,t){vf.m(e,t);var n=xf;if(n&&e){var r=t&&typeof t.as==`string`?t.as:`script`,i=`link[rel="modulepreload"][as="`+Gt(r)+`"][href="`+Gt(e)+`"]`,a=i;switch(r){case`audioworklet`:case`paintworklet`:case`serviceworker`:case`sharedworker`:case`worker`:case`script`:a=Pf(e)}if(!hf.has(a)&&(e=m({rel:`modulepreload`,href:e},t),hf.set(a,e),n.querySelector(i)===null)){switch(r){case`audioworklet`:case`paintworklet`:case`serviceworker`:case`sharedworker`:case`worker`:case`script`:if(n.querySelector(Ff(a)))return}r=n.createElement(`link`),Fd(r,`link`,e),Dt(r),n.head.appendChild(r)}}}function Df(e,t,n){vf.S(e,t,n);var r=xf;if(r&&e){var i=Et(r).hoistableStyles,a=Af(e);t||=`default`;var o=i.get(a);if(!o){var s={loading:0,preload:null};if(o=r.querySelector(jf(a)))s.loading=5;else{e=m({rel:`stylesheet`,href:e,"data-precedence":t},n),(n=hf.get(a))&&Rf(e,n);var c=o=r.createElement(`link`);Dt(c),Fd(c,`link`,e),c._p=new Promise(function(e,t){c.onload=e,c.onerror=t}),c.addEventListener(`load`,function(){s.loading|=1}),c.addEventListener(`error`,function(){s.loading|=2}),s.loading|=4,Lf(o,t,r)}o={type:`stylesheet`,instance:o,count:1,state:s},i.set(a,o)}}}function $(e,t){vf.X(e,t);var n=xf;if(n&&e){var r=Et(n).hoistableScripts,i=Pf(e),a=r.get(i);a||(a=n.querySelector(Ff(i)),a||(e=m({src:e,async:!0},t),(t=hf.get(i))&&zf(e,t),a=n.createElement(`script`),Dt(a),Fd(a,`link`,e),n.head.appendChild(a)),a={type:`script`,instance:a,count:1,state:null},r.set(i,a))}}function Of(e,t){vf.M(e,t);var n=xf;if(n&&e){var r=Et(n).hoistableScripts,i=Pf(e),a=r.get(i);a||(a=n.querySelector(Ff(i)),a||(e=m({src:e,async:!0,type:`module`},t),(t=hf.get(i))&&zf(e,t),a=n.createElement(`script`),Dt(a),Fd(a,`link`,e),n.head.appendChild(a)),a={type:`script`,instance:a,count:1,state:null},r.set(i,a))}}function kf(e,t,n,r){var a=(a=he.current)?_f(a):null;if(!a)throw Error(i(446));switch(e){case`meta`:case`title`:return null;case`style`:return typeof n.precedence==`string`&&typeof n.href==`string`?(t=Af(n.href),n=Et(a).hoistableStyles,r=n.get(t),r||(r={type:`style`,instance:null,count:0,state:null},n.set(t,r)),r):{type:`void`,instance:null,count:0,state:null};case`link`:if(n.rel===`stylesheet`&&typeof n.href==`string`&&typeof n.precedence==`string`){e=Af(n.href);var o=Et(a).hoistableStyles,s=o.get(e);if(s||(a=a.ownerDocument||a,s={type:`stylesheet`,instance:null,count:0,state:{loading:0,preload:null}},o.set(e,s),(o=a.querySelector(jf(e)))&&!o._p&&(s.instance=o,s.state.loading=5),hf.has(e)||(n={rel:`preload`,as:`style`,href:n.href,crossOrigin:n.crossOrigin,integrity:n.integrity,media:n.media,hrefLang:n.hrefLang,referrerPolicy:n.referrerPolicy},hf.set(e,n),o||Nf(a,e,n,s.state))),t&&r===null)throw Error(i(528,``));return s}if(t&&r!==null)throw Error(i(529,``));return null;case`script`:return t=n.async,n=n.src,typeof n==`string`&&t&&typeof t!=`function`&&typeof t!=`symbol`?(t=Pf(n),n=Et(a).hoistableScripts,r=n.get(t),r||(r={type:`script`,instance:null,count:0,state:null},n.set(t,r)),r):{type:`void`,instance:null,count:0,state:null};default:throw Error(i(444,e))}}function Af(e){return`href="`+Gt(e)+`"`}function jf(e){return`link[rel="stylesheet"][`+e+`]`}function Mf(e){return m({},e,{"data-precedence":e.precedence,precedence:null})}function Nf(e,t,n,r){e.querySelector(`link[rel="preload"][as="style"][`+t+`]`)?r.loading=1:(t=e.createElement(`link`),r.preload=t,t.addEventListener(`load`,function(){return r.loading|=1}),t.addEventListener(`error`,function(){return r.loading|=2}),Fd(t,`link`,n),Dt(t),e.head.appendChild(t))}function Pf(e){return`[src="`+Gt(e)+`"]`}function Ff(e){return`script[async]`+e}function If(e,t,n){if(t.count++,t.instance===null)switch(t.type){case`style`:var r=e.querySelector(`style[data-href~="`+Gt(n.href)+`"]`);if(r)return t.instance=r,Dt(r),r;var a=m({},n,{"data-href":n.href,"data-precedence":n.precedence,href:null,precedence:null});return r=(e.ownerDocument||e).createElement(`style`),Dt(r),Fd(r,`style`,a),Lf(r,n.precedence,e),t.instance=r;case`stylesheet`:a=Af(n.href);var o=e.querySelector(jf(a));if(o)return t.state.loading|=4,t.instance=o,Dt(o),o;r=Mf(n),(a=hf.get(a))&&Rf(r,a),o=(e.ownerDocument||e).createElement(`link`),Dt(o);var s=o;return s._p=new Promise(function(e,t){s.onload=e,s.onerror=t}),Fd(o,`link`,r),t.state.loading|=4,Lf(o,n.precedence,e),t.instance=o;case`script`:return o=Pf(n.src),(a=e.querySelector(Ff(o)))?(t.instance=a,Dt(a),a):(r=n,(a=hf.get(o))&&(r=m({},n),zf(r,a)),e=e.ownerDocument||e,a=e.createElement(`script`),Dt(a),Fd(a,`link`,r),e.head.appendChild(a),t.instance=a);case`void`:return null;default:throw Error(i(443,t.type))}else t.type===`stylesheet`&&!(t.state.loading&4)&&(r=t.instance,t.state.loading|=4,Lf(r,n.precedence,e));return t.instance}function Lf(e,t,n){for(var r=n.querySelectorAll(`link[rel="stylesheet"][data-precedence],style[data-precedence]`),i=r.length?r[r.length-1]:null,a=i,o=0;o<r.length;o++){var s=r[o];if(s.dataset.precedence===t)a=s;else if(a!==i)break}a?a.parentNode.insertBefore(e,a.nextSibling):(t=n.nodeType===9?n.head:n,t.insertBefore(e,t.firstChild))}function Rf(e,t){e.crossOrigin??=t.crossOrigin,e.referrerPolicy??=t.referrerPolicy,e.title??=t.title}function zf(e,t){e.crossOrigin??=t.crossOrigin,e.referrerPolicy??=t.referrerPolicy,e.integrity??=t.integrity}var Bf=null;function Vf(e,t,n){if(Bf===null){var r=new Map,i=Bf=new Map;i.set(n,r)}else i=Bf,r=i.get(n),r||(r=new Map,i.set(n,r));if(r.has(e))return r;for(r.set(e,null),n=n.getElementsByTagName(e),i=0;i<n.length;i++){var a=n[i];if(!(a[xt]||a[mt]||e===`link`&&a.getAttribute(`rel`)===`stylesheet`)&&a.namespaceURI!==`http://www.w3.org/2000/svg`){var o=a.getAttribute(t)||``;o=e+o;var s=r.get(o);s?s.push(a):r.set(o,[a])}}return r}function Hf(e,t,n){e=e.ownerDocument||e,e.head.insertBefore(n,t===`title`?e.querySelector(`head > title`):null)}function Uf(e,t,n){if(n===1||t.itemProp!=null)return!1;switch(e){case`meta`:case`title`:return!0;case`style`:if(typeof t.precedence!=`string`||typeof t.href!=`string`||t.href===``)break;return!0;case`link`:if(typeof t.rel!=`string`||typeof t.href!=`string`||t.href===``||t.onLoad||t.onError)break;switch(t.rel){case`stylesheet`:return e=t.disabled,typeof t.precedence==`string`&&e==null;default:return!0}case`script`:if(t.async&&typeof t.async!=`function`&&typeof t.async!=`symbol`&&!t.onLoad&&!t.onError&&t.src&&typeof t.src==`string`)return!0}return!1}function Wf(e){return!(e.type===`stylesheet`&&!(e.state.loading&3))}function Gf(e,t,n,r){if(n.type===`stylesheet`&&(typeof r.media!=`string`||!1!==matchMedia(r.media).matches)&&!(n.state.loading&4)){if(n.instance===null){var i=Af(r.href),a=t.querySelector(jf(i));if(a){t=a._p,typeof t==`object`&&t&&typeof t.then==`function`&&(e.count++,e=Jf.bind(e),t.then(e,e)),n.state.loading|=4,n.instance=a,Dt(a);return}a=t.ownerDocument||t,r=Mf(r),(i=hf.get(i))&&Rf(r,i),a=a.createElement(`link`),Dt(a);var o=a;o._p=new Promise(function(e,t){o.onload=e,o.onerror=t}),Fd(a,`link`,r),n.instance=a}e.stylesheets===null&&(e.stylesheets=new Map),e.stylesheets.set(n,t),(t=n.state.preload)&&!(n.state.loading&3)&&(e.count++,n=Jf.bind(e),t.addEventListener(`load`,n),t.addEventListener(`error`,n))}}var Kf=0;function qf(e,t){return e.stylesheets&&e.count===0&&Xf(e,e.stylesheets),0<e.count||0<e.imgCount?function(n){var r=setTimeout(function(){if(e.stylesheets&&Xf(e,e.stylesheets),e.unsuspend){var t=e.unsuspend;e.unsuspend=null,t()}},6e4+t);0<e.imgBytes&&Kf===0&&(Kf=62500*Rd());var i=setTimeout(function(){if(e.waitingForImages=!1,e.count===0&&(e.stylesheets&&Xf(e,e.stylesheets),e.unsuspend)){var t=e.unsuspend;e.unsuspend=null,t()}},(e.imgBytes>Kf?50:800)+t);return e.unsuspend=n,function(){e.unsuspend=null,clearTimeout(r),clearTimeout(i)}}:null}function Jf(){if(this.count--,this.count===0&&(this.imgCount===0||!this.waitingForImages)){if(this.stylesheets)Xf(this,this.stylesheets);else if(this.unsuspend){var e=this.unsuspend;this.unsuspend=null,e()}}}var Yf=null;function Xf(e,t){e.stylesheets=null,e.unsuspend!==null&&(e.count++,Yf=new Map,t.forEach(Zf,e),Yf=null,Jf.call(e))}function Zf(e,t){if(!(t.state.loading&4)){var n=Yf.get(e);if(n)var r=n.get(null);else{n=new Map,Yf.set(e,n);for(var i=e.querySelectorAll(`link[data-precedence],style[data-precedence]`),a=0;a<i.length;a++){var o=i[a];(o.nodeName===`LINK`||o.getAttribute(`media`)!==`not all`)&&(n.set(o.dataset.precedence,o),r=o)}r&&n.set(null,r)}i=t.instance,o=i.getAttribute(`data-precedence`),a=n.get(o)||r,a===r&&n.set(null,i),n.set(o,i),this.count++,r=Jf.bind(this),i.addEventListener(`load`,r),i.addEventListener(`error`,r),a?a.parentNode.insertBefore(i,a.nextSibling):(e=e.nodeType===9?e.head:e,e.insertBefore(i,e.firstChild)),t.state.loading|=4}}var Qf={$$typeof:S,Provider:null,Consumer:null,_currentValue:ce,_currentValue2:ce,_threadCount:0};function $f(e,t,n,r,i,a,o,s,c){this.tag=1,this.containerInfo=e,this.pingCache=this.current=this.pendingChildren=null,this.timeoutHandle=-1,this.callbackNode=this.next=this.pendingContext=this.context=this.cancelPendingCommit=null,this.callbackPriority=0,this.expirationTimes=rt(-1),this.entangledLanes=this.shellSuspendCounter=this.errorRecoveryDisabledLanes=this.expiredLanes=this.warmLanes=this.pingedLanes=this.suspendedLanes=this.pendingLanes=0,this.entanglements=rt(0),this.hiddenUpdates=rt(null),this.identifierPrefix=r,this.onUncaughtError=i,this.onCaughtError=a,this.onRecoverableError=o,this.pooledCache=null,this.pooledCacheLanes=0,this.formState=c,this.incompleteTransitions=new Map}function ep(e,t,n,r,i,a,o,s,c,l,u,d){return e=new $f(e,t,n,o,c,l,u,d,s),t=1,!0===a&&(t|=24),a=di(3,null,null,t),e.current=a,a.stateNode=e,t=aa(),t.refCount++,e.pooledCache=t,t.refCount++,a.memoizedState={element:r,isDehydrated:n,cache:t},Ra(a),e}function tp(e){return e?(e=li,e):li}function np(e,t,n,r,i,a){i=tp(i),r.context===null?r.context=i:r.pendingContext=i,r=Ba(t),r.payload={element:n},a=a===void 0?null:a,a!==null&&(r.callback=a),n=Va(e,r,t),n!==null&&(gu(n,e,t),Ha(n,e,t))}function rp(e,t){if(e=e.memoizedState,e!==null&&e.dehydrated!==null){var n=e.retryLane;e.retryLane=n!==0&&n<t?n:t}}function ip(e,t){rp(e,t),(e=e.alternate)&&rp(e,t)}function ap(e){if(e.tag===13||e.tag===31){var t=oi(e,67108864);t!==null&&gu(t,e,67108864),ip(e,67108864)}}function op(e){if(e.tag===13||e.tag===31){var t=mu();t=lt(t);var n=oi(e,t);n!==null&&gu(n,e,t),ip(e,t)}}var sp=!0;function cp(e,t,n,r){var i=O.T;O.T=null;var a=k.p;try{k.p=2,up(e,t,n,r)}finally{k.p=a,O.T=i}}function lp(e,t,n,r){var i=O.T;O.T=null;var a=k.p;try{k.p=8,up(e,t,n,r)}finally{k.p=a,O.T=i}}function up(e,t,n,r){if(sp){var i=dp(r);if(i===null)Td(e,t,r,fp,n),Cp(e,r);else if(Tp(i,e,t,n,r))r.stopPropagation();else if(Cp(e,r),t&4&&-1<Sp.indexOf(e)){for(;i!==null;){var a=wt(i);if(a!==null)switch(a.tag){case 3:if(a=a.stateNode,a.current.memoizedState.isDehydrated){var o=Qe(a.pendingLanes);if(o!==0){var s=a;for(s.pendingLanes|=2,s.entangledLanes|=2;o;){var c=1<<31-Ge(o);s.entanglements[1]|=c,o&=~c}id(a),!(G&6)&&(nu=Ne()+500,ad(0,!1))}}break;case 31:case 13:s=oi(a,2),s!==null&&gu(s,a,2),xu(),ip(a,2)}if(a=dp(r),a===null&&Td(e,t,r,fp,n),a===i)break;i=a}i!==null&&r.stopPropagation()}else Td(e,t,r,null,n)}}function dp(e){return e=ln(e),pp(e)}var fp=null;function pp(e){if(fp=null,e=Ct(e),e!==null){var t=o(e);if(t===null)e=null;else{var n=t.tag;if(n===13){if(e=s(t),e!==null)return e;e=null}else if(n===31){if(e=c(t),e!==null)return e;e=null}else if(n===3){if(t.stateNode.current.memoizedState.isDehydrated)return t.tag===3?t.stateNode.containerInfo:null;e=null}else t!==e&&(e=null)}}return fp=e,null}function mp(e){switch(e){case`beforetoggle`:case`cancel`:case`click`:case`close`:case`contextmenu`:case`copy`:case`cut`:case`auxclick`:case`dblclick`:case`dragend`:case`dragstart`:case`drop`:case`focusin`:case`focusout`:case`input`:case`invalid`:case`keydown`:case`keypress`:case`keyup`:case`mousedown`:case`mouseup`:case`paste`:case`pause`:case`play`:case`pointercancel`:case`pointerdown`:case`pointerup`:case`ratechange`:case`reset`:case`resize`:case`seeked`:case`submit`:case`toggle`:case`touchcancel`:case`touchend`:case`touchstart`:case`volumechange`:case`change`:case`selectionchange`:case`textInput`:case`compositionstart`:case`compositionend`:case`compositionupdate`:case`beforeblur`:case`afterblur`:case`beforeinput`:case`blur`:case`fullscreenchange`:case`focus`:case`hashchange`:case`popstate`:case`select`:case`selectstart`:return 2;case`drag`:case`dragenter`:case`dragexit`:case`dragleave`:case`dragover`:case`mousemove`:case`mouseout`:case`mouseover`:case`pointermove`:case`pointerout`:case`pointerover`:case`scroll`:case`touchmove`:case`wheel`:case`mouseenter`:case`mouseleave`:case`pointerenter`:case`pointerleave`:return 8;case`message`:switch(Pe()){case Fe:return 2;case Ie:return 8;case Le:case Re:return 32;case ze:return 268435456;default:return 32}default:return 32}}var hp=!1,gp=null,_p=null,vp=null,yp=new Map,bp=new Map,xp=[],Sp=`mousedown mouseup touchcancel touchend touchstart auxclick dblclick pointercancel pointerdown pointerup dragend dragstart drop compositionend compositionstart keydown keypress keyup input textInput copy cut paste click change contextmenu reset`.split(` `);function Cp(e,t){switch(e){case`focusin`:case`focusout`:gp=null;break;case`dragenter`:case`dragleave`:_p=null;break;case`mouseover`:case`mouseout`:vp=null;break;case`pointerover`:case`pointerout`:yp.delete(t.pointerId);break;case`gotpointercapture`:case`lostpointercapture`:bp.delete(t.pointerId)}}function wp(e,t,n,r,i,a){return e===null||e.nativeEvent!==a?(e={blockedOn:t,domEventName:n,eventSystemFlags:r,nativeEvent:a,targetContainers:[i]},t!==null&&(t=wt(t),t!==null&&ap(t)),e):(e.eventSystemFlags|=r,t=e.targetContainers,i!==null&&t.indexOf(i)===-1&&t.push(i),e)}function Tp(e,t,n,r,i){switch(t){case`focusin`:return gp=wp(gp,e,t,n,r,i),!0;case`dragenter`:return _p=wp(_p,e,t,n,r,i),!0;case`mouseover`:return vp=wp(vp,e,t,n,r,i),!0;case`pointerover`:var a=i.pointerId;return yp.set(a,wp(yp.get(a)||null,e,t,n,r,i)),!0;case`gotpointercapture`:return a=i.pointerId,bp.set(a,wp(bp.get(a)||null,e,t,n,r,i)),!0}return!1}function Ep(e){var t=Ct(e.target);if(t!==null){var n=o(t);if(n!==null){if(t=n.tag,t===13){if(t=s(n),t!==null){e.blockedOn=t,ft(e.priority,function(){op(n)});return}}else if(t===31){if(t=c(n),t!==null){e.blockedOn=t,ft(e.priority,function(){op(n)});return}}else if(t===3&&n.stateNode.current.memoizedState.isDehydrated){e.blockedOn=n.tag===3?n.stateNode.containerInfo:null;return}}}e.blockedOn=null}function Dp(e){if(e.blockedOn!==null)return!1;for(var t=e.targetContainers;0<t.length;){var n=dp(e.nativeEvent);if(n===null){n=e.nativeEvent;var r=new n.constructor(n.type,n);cn=r,n.target.dispatchEvent(r),cn=null}else return t=wt(n),t!==null&&ap(t),e.blockedOn=n,!1;t.shift()}return!0}function Op(e,t,n){Dp(e)&&n.delete(t)}function kp(){hp=!1,gp!==null&&Dp(gp)&&(gp=null),_p!==null&&Dp(_p)&&(_p=null),vp!==null&&Dp(vp)&&(vp=null),yp.forEach(Op),bp.forEach(Op)}function Ap(e,n){e.blockedOn===n&&(e.blockedOn=null,hp||(hp=!0,t.unstable_scheduleCallback(t.unstable_NormalPriority,kp)))}var jp=null;function Mp(e){jp!==e&&(jp=e,t.unstable_scheduleCallback(t.unstable_NormalPriority,function(){jp===e&&(jp=null);for(var t=0;t<e.length;t+=3){var n=e[t],r=e[t+1],i=e[t+2];if(typeof r!=`function`){if(pp(r||n)===null)continue;break}var a=wt(n);a!==null&&(e.splice(t,3),t-=3,Cs(a,{pending:!0,data:i,method:n.method,action:r},r,i))}}))}function Np(e){function t(t){return Ap(t,e)}gp!==null&&Ap(gp,e),_p!==null&&Ap(_p,e),vp!==null&&Ap(vp,e),yp.forEach(t),bp.forEach(t);for(var n=0;n<xp.length;n++){var r=xp[n];r.blockedOn===e&&(r.blockedOn=null)}for(;0<xp.length&&(n=xp[0],n.blockedOn===null);)Ep(n),n.blockedOn===null&&xp.shift();if(n=(e.ownerDocument||e).$$reactFormReplay,n!=null)for(r=0;r<n.length;r+=3){var i=n[r],a=n[r+1],o=i[ht]||null;if(typeof a==`function`)o||Mp(n);else if(o){var s=null;if(a&&a.hasAttribute(`formAction`)){if(i=a,o=a[ht]||null)s=o.formAction;else if(pp(i)!==null)continue}else s=o.action;typeof s==`function`?n[r+1]=s:(n.splice(r,3),r-=3),Mp(n)}}}function Pp(){function e(e){e.canIntercept&&e.info===`react-transition`&&e.intercept({handler:function(){return new Promise(function(e){return i=e})},focusReset:`manual`,scroll:`manual`})}function t(){i!==null&&(i(),i=null),r||setTimeout(n,20)}function n(){if(!r&&!navigation.transition){var e=navigation.currentEntry;e&&e.url!=null&&navigation.navigate(e.url,{state:e.getState(),info:`react-transition`,history:`replace`})}}if(typeof navigation==`object`){var r=!1,i=null;return navigation.addEventListener(`navigate`,e),navigation.addEventListener(`navigatesuccess`,t),navigation.addEventListener(`navigateerror`,t),setTimeout(n,100),function(){r=!0,navigation.removeEventListener(`navigate`,e),navigation.removeEventListener(`navigatesuccess`,t),navigation.removeEventListener(`navigateerror`,t),i!==null&&(i(),i=null)}}}function Fp(e){this._internalRoot=e}Ip.prototype.render=Fp.prototype.render=function(e){var t=this._internalRoot;if(t===null)throw Error(i(409));var n=t.current;np(n,mu(),e,t,null,null)},Ip.prototype.unmount=Fp.prototype.unmount=function(){var e=this._internalRoot;if(e!==null){this._internalRoot=null;var t=e.containerInfo;np(e.current,2,null,e,null,null),xu(),t[gt]=null}};function Ip(e){this._internalRoot=e}Ip.prototype.unstable_scheduleHydration=function(e){if(e){var t=dt();e={blockedOn:null,target:e,priority:t};for(var n=0;n<xp.length&&t!==0&&t<xp[n].priority;n++);xp.splice(n,0,e),n===0&&Ep(e)}};var Lp=n.version;if(Lp!==`19.2.8`)throw Error(i(527,Lp,`19.2.8`));k.findDOMNode=function(e){var t=e._reactInternals;if(t===void 0)throw typeof e.render==`function`?Error(i(188)):(e=Object.keys(e).join(`,`),Error(i(268,e)));return e=u(t),e=e===null?null:f(e),e=e===null?null:e.stateNode,e};var Rp={bundleType:0,version:`19.2.8`,rendererPackageName:`react-dom`,currentDispatcherRef:O,reconcilerVersion:`19.2.8`};if(typeof __REACT_DEVTOOLS_GLOBAL_HOOK__<`u`){var zp=__REACT_DEVTOOLS_GLOBAL_HOOK__;if(!zp.isDisabled&&zp.supportsFiber)try{He=zp.inject(Rp),Ue=zp}catch{}}e.createRoot=function(e,t){if(!a(e))throw Error(i(299));var n=!1,r=``,o=Ks,s=qs,c=Js;return t!=null&&(!0===t.unstable_strictMode&&(n=!0),t.identifierPrefix!==void 0&&(r=t.identifierPrefix),t.onUncaughtError!==void 0&&(o=t.onUncaughtError),t.onCaughtError!==void 0&&(s=t.onCaughtError),t.onRecoverableError!==void 0&&(c=t.onRecoverableError)),t=ep(e,1,!1,null,null,n,r,null,o,s,c,Pp),e[gt]=t.current,Cd(e),new Fp(t)}})),_=o(((e,t)=>{function n(){if(!(typeof __REACT_DEVTOOLS_GLOBAL_HOOK__>`u`||typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE!=`function`))try{__REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(n)}catch(e){console.error(e)}}n(),t.exports=g()})),v=l(d(),1),y=_(),b=`modulepreload`,x=function(e){return`/GenAI-Architect-Playbook/`+e},ee={},S=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}function s(e){return import.meta.resolve?import.meta.resolve(e):new URL(e,import.meta.url).href}r=o(t.map(t=>{if(t=x(t,n),t=s(t),t in ee)return;ee[t]=!0;let r=t.endsWith(`.css`);for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}let i=document.createElement(`link`);if(i.rel=r?`stylesheet`:b,r||(i.as=`script`),i.crossOrigin=``,i.href=t,a&&i.setAttribute(`nonce`,a),document.head.appendChild(i),r)return new Promise((e,n)=>{i.addEventListener(`load`,e),i.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})},C=/^(?:[a-z][a-z0-9+.-]*:|[\\/]{2})/i,w=/^[\\/]{2}/;function T(e,t){return t+e.replace(/\\/g,`/`)}var te=`popstate`;function E(e){return typeof e==`object`&&!!e&&`pathname`in e&&`search`in e&&`hash`in e&&`state`in e&&`key`in e}function ne(e={}){function t(e,t){let n=t.state?.masked,{pathname:r,search:i,hash:a}=n||e.location;return oe(``,{pathname:r,search:i,hash:a},t.state&&t.state.usr||null,t.state&&t.state.key||`default`,n?{pathname:e.location.pathname,search:e.location.search,hash:e.location.hash}:void 0)}function n(e,t){return typeof t==`string`?t:se(t)}return k(t,n,null,e)}function D(e,t){if(e===!1||e==null)throw Error(t)}function re(e,t){if(!e){typeof console<`u`&&console.warn(t);try{throw Error(t)}catch{}}}function ie(){return Math.random().toString(36).substring(2,10)}function ae(e,t){return{usr:e.state,key:e.key,idx:t,masked:e.mask?{pathname:e.pathname,search:e.search,hash:e.hash}:void 0}}function oe(e,t,n=null,r,i){return{pathname:typeof e==`string`?e:e.pathname,search:``,hash:``,...typeof t==`string`?O(t):t,state:n,key:t&&t.key||r||ie(),mask:i}}function se({pathname:e=`/`,search:t=``,hash:n=``}){return t&&t!==`?`&&(e+=t.charAt(0)===`?`?t:`?`+t),n&&n!==`#`&&(e+=n.charAt(0)===`#`?n:`#`+n),e}function O(e){let t={};if(e){let n=e.indexOf(`#`);n>=0&&(t.hash=e.substring(n),e=e.substring(0,n));let r=e.indexOf(`?`);r>=0&&(t.search=e.substring(r),e=e.substring(0,r)),e&&(t.pathname=e)}return t}function k(e,t,n,r={}){let{window:i=document.defaultView,v5Compat:a=!1}=r,o=i.history,s=`POP`,c=null,l=u();l??(l=0,o.replaceState({...o.state,idx:l},``));function u(){return(o.state||{idx:null}).idx}function d(){s=`POP`;let e=u(),t=e==null?null:e-l;l=e,c&&c({action:s,location:h.location,delta:t})}function f(e,t){s=`PUSH`;let r=E(e)?e:oe(h.location,e,t);n&&n(r,e),l=u()+1;let d=ae(r,l),f=h.createHref(r.mask||r);try{o.pushState(d,``,f)}catch(e){if(e instanceof DOMException&&e.name===`DataCloneError`)throw e;i.location.assign(f)}a&&c&&c({action:s,location:h.location,delta:1})}function p(e,t){s=`REPLACE`;let r=E(e)?e:oe(h.location,e,t);n&&n(r,e),l=u();let i=ae(r,l),d=h.createHref(r.mask||r);o.replaceState(i,``,d),a&&c&&c({action:s,location:h.location,delta:0})}function m(e){return ce(i,e)}let h={get action(){return s},get location(){return e(i,o)},listen(e){if(c)throw Error(`A history only accepts one active listener`);return i.addEventListener(te,d),c=e,()=>{i.removeEventListener(te,d),c=null}},createHref(e){return t(i,e)},createURL:m,encodeLocation(e){let t=m(e);return{pathname:t.pathname,search:t.search,hash:t.hash}},push:f,replace:p,go(e){return o.go(e)}};return h}function ce(e,t,n=!1){let r=`http://localhost`;e&&(r=e.location.origin===`null`?e.location.href:e.location.origin),D(r,`No window.location.(origin|href) available to create URL`);let i=typeof t==`string`?t:se(t);return i=i.replace(/ $/,`%20`),!n&&w.test(i)&&(i=r+i),new URL(i,r)}function le(e,t,n=`/`){return ue(e,t,n,!1)}function ue(e,t,n,r,i){let a=Oe((typeof t==`string`?O(t):t).pathname||`/`,n);if(a==null)return null;let o=i??de(e),s=null,c=De(a);for(let e=0;s==null&&e<o.length;++e)s=Ce(o[e],c,r);return s}function de(e){let t=fe(e);return pe(t),t}function fe(e,t=[],n=[],r=``,i=!1){let a=(e,a,o=i,s)=>{let c={relativePath:s===void 0?e.path||``:s,caseSensitive:e.caseSensitive===!0,childrenIndex:a,route:e};if(c.relativePath.startsWith(`/`)){if(!c.relativePath.startsWith(r)&&o)return;D(c.relativePath.startsWith(r),`Absolute route path "${c.relativePath}" nested under path "${r}" is not valid. An absolute child route path must start with the combined path of all its parent routes.`),c.relativePath=c.relativePath.slice(r.length)}let l=Ie([r,c.relativePath]),u=n.concat(c);e.children&&e.children.length>0&&(D(e.index!==!0,`Index routes must not have child routes. Please remove all child routes from route path "${l}".`),fe(e.children,t,u,l,o)),!(e.path==null&&!e.index)&&t.push({path:l,score:xe(l,e.index),routesMeta:u.map((e,t)=>{let[n,r]=Ee(e.relativePath,e.caseSensitive,t===u.length-1);return{...e,matcher:n,compiledParams:r}})})};return e.forEach((e,t)=>{if(e.path===``||!e.path?.includes(`?`))a(e,t);else for(let n of A(e.path))a(e,t,!0,n)}),t}function A(e){let t=e.split(`/`);if(t.length===0)return[];let[n,...r]=t,i=n.endsWith(`?`),a=n.replace(/\?$/,``);if(r.length===0)return i?[a,``]:[a];let o=A(r.join(`/`)),s=[];return s.push(...o.map(e=>e===``?a:[a,e].join(`/`))),i&&s.push(...o),s.map(t=>e.startsWith(`/`)&&t===``?`/`:t)}function pe(e){e.sort((e,t)=>e.score===t.score?Se(e.routesMeta.map(e=>e.childrenIndex),t.routesMeta.map(e=>e.childrenIndex)):t.score-e.score)}var me=/^:[\w-]+$/,he=3,ge=2,_e=1,ve=10,ye=-2,be=e=>e===`*`;function xe(e,t){let n=e.split(`/`),r=n.length;return n.some(be)&&(r+=ye),t&&(r+=ge),n.filter(e=>!be(e)).reduce((e,t)=>e+(me.test(t)?he:t===``?_e:ve),r)}function Se(e,t){return e.length===t.length&&e.slice(0,-1).every((e,n)=>e===t[n])?e[e.length-1]-t[t.length-1]:0}function Ce(e,t,n=!1){let{routesMeta:r}=e,i={},a=`/`,o=[];for(let e=0;e<r.length;++e){let s=r[e],c=e===r.length-1,l=a===`/`?t:t.slice(a.length)||`/`,u={path:s.relativePath,caseSensitive:s.caseSensitive,end:c},d=s.matcher&&s.compiledParams?Te(u,l,s.matcher,s.compiledParams):we(u,l),f=s.route;if(!d&&c&&n&&!r[r.length-1].route.index&&(d=we({path:s.relativePath,caseSensitive:s.caseSensitive,end:!1},l)),!d)return null;Object.assign(i,d.params),o.push({params:i,pathname:Ie([a,d.pathname]),pathnameBase:Re(Ie([a,d.pathnameBase])),route:f}),d.pathnameBase!==`/`&&(a=Ie([a,d.pathnameBase]))}return o}function we(e,t){typeof e==`string`&&(e={path:e,caseSensitive:!1,end:!0});let[n,r]=Ee(e.path,e.caseSensitive,e.end);return Te(e,t,n,r)}function Te(e,t,n,r){let i=t.match(n);if(!i)return null;let a=i[0],o=Le(a,1),s=i.slice(1);return{params:r.reduce((e,{paramName:t,isOptional:n},r)=>{if(t===`*`){let e=s[r]||``;o=Le(a.slice(0,a.length-e.length),1)}let i=s[r];return e[t]=n&&!i?void 0:(i||``).replace(/%2F/g,`/`),e},{}),pathname:a,pathnameBase:o,pattern:e}}function Ee(e,t=!1,n=!0){re(e===`*`||!e.endsWith(`*`)||e.endsWith(`/*`),`Route path "${e}" will be treated as if it were "${e.replace(/\*$/,`/*`)}" because the \`*\` character must always follow a \`/\` in the pattern. To get rid of this warning, please change the route path to "${e.replace(/\*$/,`/*`)}".`);let r=[],i=`^`+e.replace(/\/*\*?$/,``).replace(/^\/*/,`/`).replace(/[\\.*+^${}|()[\]]/g,`\\$&`).replace(/\/:([\w-]+)(\?)?/g,(e,t,n,i,a)=>{if(r.push({paramName:t,isOptional:n!=null}),n){let t=a.charAt(i+e.length);return t&&t!==`/`?`/([^\\/]*)`:`(?:/([^\\/]*))?`}return`/([^\\/]+)`}).replace(/\/([\w-]+)\?(\/|$)/g,`(/$1)?$2`);return e.endsWith(`*`)?(r.push({paramName:`*`}),i+=e===`*`||e===`/*`?`(.*)$`:`(?:\\/(.+)|\\/*)$`):n?i+=`\\/*$`:e!==``&&e!==`/`&&(i+=`(?:(?=\\/|$))`),[new RegExp(i,t?void 0:`i`),r]}function De(e){try{return e.split(`/`).map(e=>decodeURIComponent(e).replace(/\//g,`%2F`)).join(`/`)}catch(t){return re(!1,`The URL path "${e}" could not be decoded because it is a malformed URL segment. This is probably due to a bad percent encoding (${t}).`),e}}function Oe(e,t){if(t===`/`)return e;if(!e.toLowerCase().startsWith(t.toLowerCase()))return null;let n=t.endsWith(`/`)?t.length-1:t.length,r=e.charAt(n);return r&&r!==`/`?null:e.slice(n)||`/`}function ke(e,t=`/`){let{pathname:n,search:r=``,hash:i=``}=typeof e==`string`?O(e):e,a;return n?(n=Fe(n),a=n.startsWith(`/`)||n.startsWith(`\\`)?Ae(n.substring(1),`/`):Ae(n,t)):a=t,{pathname:a,search:ze(r),hash:Be(i)}}function Ae(e,t){let n=Le(t).split(`/`);return e.split(`/`).forEach(e=>{e===`..`?n.length>1&&n.pop():e!==`.`&&n.push(e)}),n.length>1?n.join(`/`):`/`}function je(e,t,n,r){return`Cannot include a '${e}' character in a manually specified \`to.${t}\` field [${JSON.stringify(r)}].  Please separate it out to the \`to.${n}\` field. Alternatively you may provide the full path as a string in <Link to="..."> and the router will parse it for you.`}function Me(e){return e.filter((e,t)=>t===0||e.route.path&&e.route.path.length>0)}function Ne(e){let t=Me(e);return t.map((e,n)=>n===t.length-1?e.pathname:e.pathnameBase)}function Pe(e,t,n,r=!1){let i;typeof e==`string`?i=O(e):(i={...e},D(!i.pathname||!i.pathname.includes(`?`),je(`?`,`pathname`,`search`,i)),D(!i.pathname||!i.pathname.includes(`#`),je(`#`,`pathname`,`hash`,i)),D(!i.search||!i.search.includes(`#`),je(`#`,`search`,`hash`,i)));let a=e===``||i.pathname===``,o=a?`/`:i.pathname,s;if(o==null)s=n;else{let e=t.length-1;if(!r&&o.startsWith(`..`)){let t=o.split(`/`);for(;t[0]===`..`;)t.shift(),--e;i.pathname=t.join(`/`)}s=e>=0?t[e]:`/`}let c=ke(i,s),l=o&&o!==`/`&&o.endsWith(`/`),u=(a||o===`.`)&&n.endsWith(`/`);return!c.pathname.endsWith(`/`)&&(l||u)&&(c.pathname+=`/`),c}var Fe=e=>e.replace(/[\\/]{2,}/g,`/`),Ie=e=>Fe(e.join(`/`));function Le(e,t=0){let n=e.length;for(;n>t&&e.charCodeAt(n-1)===47;)n--;return n===e.length?e:e.slice(0,n)}var Re=e=>Le(e).replace(/^\/*/,`/`),ze=e=>!e||e===`?`?``:e.startsWith(`?`)?e:`?`+e,Be=e=>!e||e===`#`?``:e.startsWith(`#`)?e:`#`+e,Ve=class{constructor(e,t,n,r=!1){this.status=e,this.statusText=t||``,this.internal=r,n instanceof Error?(this.data=n.toString(),this.error=n):this.data=n}};function He(e){return e!=null&&typeof e.status==`number`&&typeof e.statusText==`string`&&typeof e.internal==`boolean`&&`data`in e}function Ue(e){return Ie(e.map(e=>e.route.path).filter(Boolean))||`/`}var We=typeof window<`u`&&window.document!==void 0&&window.document.createElement!==void 0;function Ge(e,t){let n=e;if(typeof n!=`string`||!C.test(n))return{absoluteURL:void 0,isExternal:!1,to:n};let r=n,i=!1;if(We)try{let e=new URL(window.location.href),r=w.test(n)?new URL(T(n,e.protocol)):new URL(n),a=Oe(r.pathname,t);r.origin===e.origin&&a!=null?n=a+r.search+r.hash:i=!0}catch{re(!1,`<Link to="${n}"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.`)}return{absoluteURL:r,isExternal:i,to:n}}Object.getOwnPropertyNames(Object.prototype).sort().join(`\0`);var Ke=new URL(`http://localhost`);function qe(e){if(e.createURL)return e.createURL(`/`);try{return new URL(e.createHref(`/`),Ke)}catch{return Ke}}function Je(e,t){return e.origin===t.origin&&(e.origin!==`null`||e.protocol===t.protocol&&e.host===t.host)}function Ye(e,t){if(e.startsWith(`//`))return!0;let n=t.protocol.toLowerCase();return e.toLowerCase().startsWith(n)?t.host===``||e.slice(n.length).startsWith(`//`):!1}function Xe(e,t,n,r){let i=null;try{i=e==null?null:new URL(e,n)}catch{}let a=new URL(t,n),o=i!=null&&!Je(i,n),s=!Je(a,n);if(r===`reject`){if(o||s)throw Error(`External navigation is not allowed`)}else if(s&&(i==null||!Ye(e,i)||!Je(i,a)))throw Error(`External navigation is not allowed`)}var Ze=[`POST`,`PUT`,`PATCH`,`DELETE`];new Set(Ze);var Qe=[`GET`,...Ze];new Set(Qe);var $e=[`about:`,`blob:`,`chrome:`,`chrome-untrusted:`,`content:`,`data:`,`devtools:`,`file:`,`filesystem:`,`javascript:`];function et(e){try{return $e.includes(new URL(e).protocol)}catch{return!1}}var tt=v.createContext(null);tt.displayName=`DataRouter`;var nt=v.createContext(null);nt.displayName=`DataRouterState`;var rt=v.createContext(!1);function it(){return v.useContext(rt)}var at=v.createContext({isTransitioning:!1});at.displayName=`ViewTransition`;var ot=v.createContext(new Map);ot.displayName=`Fetchers`;var st=v.createContext(null);st.displayName=`Await`;var ct=v.createContext(null);ct.displayName=`Navigation`;var lt=v.createContext(null);lt.displayName=`Location`;var ut=v.createContext({outlet:null,matches:[],isDataRoute:!1});ut.displayName=`Route`;var dt=v.createContext(null);dt.displayName=`RouteError`;var ft=`REACT_ROUTER_ERROR`,pt=`REDIRECT`,mt=`ROUTE_ERROR_RESPONSE`;function ht(e){if(e.startsWith(`${ft}:${pt}:{`))try{let t=JSON.parse(e.slice(28));if(typeof t==`object`&&t&&typeof t.status==`number`&&typeof t.statusText==`string`&&typeof t.location==`string`&&typeof t.reloadDocument==`boolean`&&typeof t.replace==`boolean`)return t}catch{}}function gt(e){if(e.startsWith(`${ft}:${mt}:{`))try{let t=JSON.parse(e.slice(40));if(typeof t==`object`&&t&&typeof t.status==`number`&&typeof t.statusText==`string`)return new Ve(t.status,t.statusText,t.data)}catch{}}function _t(e,{relative:t}={}){D(vt(),`useHref() may be used only in the context of a <Router> component.`);let{basename:n,navigator:r}=v.useContext(ct),{hash:i,pathname:a,search:o}=wt(e,{relative:t}),s=a;return n!==`/`&&(s=a===`/`?n:Ie([n,a])),r.createHref({pathname:s,search:o,hash:i})}function vt(){return v.useContext(lt)!=null}function yt(){return D(vt(),`useLocation() may be used only in the context of a <Router> component.`),v.useContext(lt).location}var bt=`You should call navigate() in a React.useEffect(), not when your component is first rendered.`;function xt(e){v.useContext(ct).static||v.useLayoutEffect(e)}function St(){let{isDataRoute:e}=v.useContext(ut);return e?Vt():Ct()}function Ct(){D(vt(),`useNavigate() may be used only in the context of a <Router> component.`);let e=v.useContext(tt),{basename:t,navigator:n}=v.useContext(ct),{matches:r}=v.useContext(ut),{pathname:i}=yt(),a=JSON.stringify(Ne(r)),o=v.useRef(!1);return xt(()=>{o.current=!0}),v.useCallback((r,s={})=>{if(re(o.current,bt),!o.current)return;if(typeof r==`number`){n.go(r);return}let c=Pe(r,JSON.parse(a),i,s.relative===`path`);e==null&&t!==`/`&&(c.pathname=c.pathname===`/`?t:Ie([t,c.pathname])),Xe(typeof r==`string`?r:se(r),n.createHref(c),qe(n),`reject`),(s.replace?n.replace:n.push)(c,s.state,s)},[t,n,a,i,e])}v.createContext(null);function wt(e,{relative:t}={}){let{matches:n}=v.useContext(ut),{pathname:r}=yt(),i=JSON.stringify(Ne(n));return v.useMemo(()=>Pe(e,JSON.parse(i),r,t===`path`),[e,i,r,t])}function Tt(e,t){return Et(e,t)}function Et(e,t,n){D(vt(),`useRoutes() may be used only in the context of a <Router> component.`);let{navigator:r}=v.useContext(ct),{matches:i}=v.useContext(ut),a=i[i.length-1],o=a?a.params:{},s=a?a.pathname:`/`,c=a?a.pathnameBase:`/`,l=a&&a.route;{let e=l&&l.path||``;Ut(s,!l||e.endsWith(`*`)||e.endsWith(`*?`),`You rendered descendant <Routes> (or called \`useRoutes()\`) at "${s}" (under <Route path="${e}">) but the parent route path has no trailing "*". This means if you navigate deeper, the parent won't match anymore and therefore the child routes will never render.
 
 Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}/*`}">.`)}let u=yt(),d;if(t){let e=typeof t==`string`?O(t):t;D(c===`/`||e.pathname?.startsWith(c),`When overriding the location using \`<Routes location>\` or \`useRoutes(routes, location)\`, the location pathname must begin with the portion of the URL pathname that was matched by all parent routes. The current pathname base is "${c}" but pathname "${e.pathname}" was given in the \`location\` prop.`),d=e}else d=u;let f=d.pathname||`/`,p=f;if(c!==`/`){let e=c.replace(/^\//,``).split(`/`);p=`/`+f.replace(/^\//,``).split(`/`).slice(e.length).join(`/`)}let m=n&&n.state.matches.length?n.state.matches.map(e=>Object.assign(e,{route:n.manifest[e.route.id]||e.route})):le(e,{pathname:p});re(l||m!=null,`No routes matched location "${d.pathname}${d.search}${d.hash}" `),re(m==null||m[m.length-1].route.element!==void 0||m[m.length-1].route.Component!==void 0||m[m.length-1].route.lazy!==void 0,`Matched leaf route at location "${d.pathname}${d.search}${d.hash}" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.`);let h=Nt(m&&m.map(e=>Object.assign({},e,{params:Object.assign({},o,e.params),pathname:Ie([c,r.encodeLocation?r.encodeLocation(e.pathname.replace(/%/g,`%25`).replace(/\?/g,`%3F`).replace(/#/g,`%23`)).pathname:e.pathname]),pathnameBase:e.pathnameBase===`/`?c:Ie([c,r.encodeLocation?r.encodeLocation(e.pathnameBase.replace(/%/g,`%25`).replace(/\?/g,`%3F`).replace(/#/g,`%23`)).pathname:e.pathnameBase])})),i,n);return t&&h?v.createElement(lt.Provider,{value:{location:{pathname:`/`,search:``,hash:``,state:null,key:`default`,mask:void 0,...d},navigationType:`POP`}},h):h}function Dt(){let e=Bt(),t=He(e)?`${e.status} ${e.statusText}`:e instanceof Error?e.message:JSON.stringify(e),n=e instanceof Error?e.stack:null,r=`rgba(200,200,200, 0.5)`,i={padding:`0.5rem`,backgroundColor:r},a={padding:`2px 4px`,backgroundColor:r},o=null;return console.error(`Error handled by React Router default ErrorBoundary:`,e),o=v.createElement(v.Fragment,null,v.createElement(`p`,null,`💿 Hey developer 👋`),v.createElement(`p`,null,`You can provide a way better UX than this when your app throws errors by providing your own `,v.createElement(`code`,{style:a},`ErrorBoundary`),` or`,` `,v.createElement(`code`,{style:a},`errorElement`),` prop on your route.`)),v.createElement(v.Fragment,null,v.createElement(`h2`,null,`Unexpected Application Error!`),v.createElement(`h3`,{style:{fontStyle:`italic`}},t),n?v.createElement(`pre`,{style:i},n):null,o)}var Ot=v.createElement(Dt,null),kt=class extends v.Component{constructor(e){super(e),this.state={location:e.location,revalidation:e.revalidation,error:e.error}}static getDerivedStateFromError(e){return{error:e}}static getDerivedStateFromProps(e,t){return t.location!==e.location||t.revalidation!==`idle`&&e.revalidation===`idle`?{error:e.error,location:e.location,revalidation:e.revalidation}:{error:e.error===void 0?t.error:e.error,location:t.location,revalidation:e.revalidation||t.revalidation}}componentDidCatch(e,t){this.props.onError?this.props.onError(e,t):console.error(`React Router caught the following error during render`,e)}render(){let e=this.state.error;if(this.context&&typeof e==`object`&&e&&`digest`in e&&typeof e.digest==`string`){let t=gt(e.digest);t&&(e=t)}let t=e===void 0?this.props.children:v.createElement(ut.Provider,{value:this.props.routeContext},v.createElement(dt.Provider,{value:e,children:this.props.component}));return this.context?v.createElement(jt,{error:e},t):t}};kt.contextType=rt;var At=new WeakMap;function jt({children:e,error:t}){let{basename:n,navigator:r}=v.useContext(ct);if(typeof t==`object`&&t&&`digest`in t&&typeof t.digest==`string`){let e=ht(t.digest);if(e){let i=At.get(t);if(i)throw i;let a=Ge(e.location,n),o=a.absoluteURL||a.to;if(Xe(e.location,o,qe(r),`allow-explicit`),et(o))throw Error(`Invalid redirect location`);if(We&&!At.get(t)){if(a.isExternal||e.reloadDocument)window.location.href=o;else{let n=Promise.resolve().then(()=>window.__reactRouterDataRouter.navigate(a.to,{replace:e.replace}));throw At.set(t,n),n}}return v.createElement(`meta`,{httpEquiv:`refresh`,content:`0;url=${o}`})}}return e}function Mt({routeContext:e,match:t,children:n}){let r=v.useContext(tt);return r&&r.static&&r.staticContext&&(t.route.errorElement||t.route.ErrorBoundary)&&(r.staticContext._deepestRenderedBoundaryId=t.route.id),v.createElement(ut.Provider,{value:e},n)}function Nt(e,t=[],n){let r=n?.state;if(e==null){if(!r)return null;if(r.errors)e=r.matches;else if(t.length===0&&!r.initialized&&r.matches.length>0)e=r.matches;else return null}let i=e,a=r?.errors;if(a!=null){let e=i.findIndex(e=>e.route.id&&a?.[e.route.id]!==void 0);D(e>=0,`Could not find a matching route for errors on route IDs: ${Object.keys(a).join(`,`)}`),i=i.slice(0,Math.min(i.length,e+1))}let o=!1,s=-1;if(n&&r){o=r.renderFallback;for(let e=0;e<i.length;e++){let t=i[e];if((t.route.HydrateFallback||t.route.hydrateFallbackElement)&&(s=e),t.route.id){let{loaderData:e,errors:a}=r,c=t.route.loader&&!e.hasOwnProperty(t.route.id)&&(!a||a[t.route.id]===void 0);if(t.route.lazy||c){n.isStatic&&(o=!0),i=s>=0?i.slice(0,s+1):[i[0]];break}}}}let c=n?.onError,l=r&&c?(e,t)=>{c(e,{location:r.location,params:r.matches?.[0]?.params??{},pattern:Ue(r.matches),errorInfo:t})}:void 0;return i.reduceRight((e,n,c)=>{let u,d=!1,f=null,p=null;r&&(u=a&&n.route.id?a[n.route.id]:void 0,f=n.route.errorElement||Ot,o&&(s<0&&c===0?(Ut(`route-fallback`,!1,"No `HydrateFallback` element provided to render during initial hydration"),d=!0,p=null):s===c&&(d=!0,p=n.route.hydrateFallbackElement||null)));let m=t.concat(i.slice(0,c+1)),h=()=>{let t;return t=u?f:d?p:n.route.Component?v.createElement(n.route.Component,null):n.route.element?n.route.element:e,v.createElement(Mt,{match:n,routeContext:{outlet:e,matches:m,isDataRoute:r!=null},children:t})};return r&&(n.route.ErrorBoundary||n.route.errorElement||c===0)?v.createElement(kt,{location:r.location,revalidation:r.revalidation,component:f,error:u,children:h(),routeContext:{outlet:null,matches:m,isDataRoute:!0},onError:l}):h()},null)}function Pt(e){return`${e} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`}function Ft(e){let t=v.useContext(tt);return D(t,Pt(e)),t}function It(e){let t=v.useContext(nt);return D(t,Pt(e)),t}function Lt(e){let t=v.useContext(ut);return D(t,Pt(e)),t}function Rt(e){let t=Lt(e),n=t.matches[t.matches.length-1];return D(n.route.id,`${e} can only be used on routes that contain a unique "id"`),n.route.id}function zt(){return Rt(`useRouteId`)}function Bt(){let e=v.useContext(dt),t=It(`useRouteError`),n=Rt(`useRouteError`);return e===void 0?t.errors?.[n]:e}function Vt(){let{router:e}=Ft(`useNavigate`),t=Rt(`useNavigate`),n=v.useRef(!1);return xt(()=>{n.current=!0}),v.useCallback(async(r,i={})=>{re(n.current,bt),n.current&&(typeof r==`number`?await e.navigate(r):await e.navigate(r,{fromRouteId:t,...i}))},[e,t])}var Ht={};function Ut(e,t,n){!t&&!Ht[e]&&(Ht[e]=!0,re(!1,n))}v.memo(Wt);function Wt({routes:e,manifest:t,future:n,state:r,isStatic:i,onError:a}){return Et(e,void 0,{manifest:t,state:r,isStatic:i,onError:a,future:n})}function j(e){D(!1,`A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.`)}function Gt({basename:e=`/`,children:t=null,location:n,navigationType:r=`POP`,navigator:i,static:a=!1,useTransitions:o}){D(!vt(),`You cannot render a <Router> inside another <Router>. You should never have more than one in your app.`);let s=e.replace(/^\/*/,`/`),c=v.useMemo(()=>({basename:s,navigator:i,static:a,useTransitions:o,future:{}}),[s,i,a,o]);typeof n==`string`&&(n=O(n));let{pathname:l=`/`,search:u=``,hash:d=``,state:f=null,key:p=`default`,mask:m}=n,h=v.useMemo(()=>{let e=Oe(l,s);return e==null?null:{location:{pathname:e,search:u,hash:d,state:f,key:p,mask:m},navigationType:r}},[s,l,u,d,f,p,r,m]);return re(h!=null,`<Router basename="${s}"> is not able to match the URL "${l}${u}${d}" because it does not start with the basename, so the <Router> won't render anything.`),h==null?null:v.createElement(ct.Provider,{value:c},v.createElement(lt.Provider,{children:t,value:h}))}function Kt({children:e,location:t}){return Tt(qt(e),t)}v.Component;function qt(e,t=[]){let n=[];return v.Children.forEach(e,(e,r)=>{if(!v.isValidElement(e))return;let i=[...t,r];if(e.type===v.Fragment){n.push.apply(n,qt(e.props.children,i));return}D(e.type===j,`[${typeof e.type==`string`?e.type:e.type.name}] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>`),D(!e.props.index||!e.props.children,`An index route cannot have child routes.`);let a={id:e.props.id||i.join(`-`),caseSensitive:e.props.caseSensitive,element:e.props.element,Component:e.props.Component,index:e.props.index,path:e.props.path,middleware:e.props.middleware,loader:e.props.loader,action:e.props.action,hydrateFallbackElement:e.props.hydrateFallbackElement,HydrateFallback:e.props.HydrateFallback,errorElement:e.props.errorElement,ErrorBoundary:e.props.ErrorBoundary,hasErrorBoundary:e.props.hasErrorBoundary===!0||e.props.ErrorBoundary!=null||e.props.errorElement!=null,shouldRevalidate:e.props.shouldRevalidate,handle:e.props.handle,lazy:e.props.lazy};e.props.children&&(a.children=qt(e.props.children,i)),n.push(a)}),n}var Jt=`get`,Yt=`application/x-www-form-urlencoded`;function Xt(e){return typeof HTMLElement<`u`&&e instanceof HTMLElement}function Zt(e){return Xt(e)&&e.tagName.toLowerCase()===`button`}function Qt(e){return Xt(e)&&e.tagName.toLowerCase()===`form`}function $t(e){return Xt(e)&&e.tagName.toLowerCase()===`input`}function en(e){return!!(e.metaKey||e.altKey||e.ctrlKey||e.shiftKey)}function tn(e,t){return e.button===0&&(!t||t===`_self`)&&!en(e)}var nn=null;function rn(){if(nn===null)try{new FormData(document.createElement(`form`),0),nn=!1}catch{nn=!0}return nn}var an=new Set([`application/x-www-form-urlencoded`,`multipart/form-data`,`text/plain`]);function on(e){return e!=null&&!an.has(e)?(re(!1,`"${e}" is not a valid \`encType\` for \`<Form>\`/\`<fetcher.Form>\` and will default to "${Yt}"`),null):e}function sn(e,t){let n,r,i,a,o;if(Qt(e)){let o=e.getAttribute(`action`);r=o?Oe(o,t):null,n=e.getAttribute(`method`)||Jt,i=on(e.getAttribute(`enctype`))||Yt,a=new FormData(e)}else if(Zt(e)||$t(e)&&(e.type===`submit`||e.type===`image`)){let o=e.form;if(o==null)throw Error(`Cannot submit a <button> or <input type="submit"> without a <form>`);let s=e.getAttribute(`formaction`)||o.getAttribute(`action`);if(r=s?Oe(s,t):null,n=e.getAttribute(`formmethod`)||o.getAttribute(`method`)||Jt,i=on(e.getAttribute(`formenctype`))||on(o.getAttribute(`enctype`))||Yt,a=new FormData(o,e),!rn()){let{name:t,type:n,value:r}=e;if(n===`image`){let e=t?`${t}.`:``;a.append(`${e}x`,`0`),a.append(`${e}y`,`0`)}else t&&a.append(t,r)}}else if(Xt(e))throw Error(`Cannot submit element that is not <form>, <button>, or <input type="submit|image">`);else n=Jt,r=null,i=Yt,o=e;return a&&i===`text/plain`&&(o=a,a=void 0),{action:r,method:n.toLowerCase(),encType:i,formData:a,body:o}}Object.getOwnPropertyNames(Object.prototype).sort().join(`\0`);function cn(e,t){if(e===!1||e==null)throw Error(t)}function ln(e,t,n,r){let i=typeof e==`string`?new URL(e,typeof window>`u`?`server://singlefetch/`:window.location.origin):e;return i.pathname=n?i.pathname.endsWith(`/`)?`${i.pathname}_.${r}`:`${i.pathname}.${r}`:i.pathname===`/`?`_root.${r}`:t&&Oe(i.pathname,t)===`/`?`${Le(t)}/_root.${r}`:`${Le(i.pathname)}.${r}`,i}async function un(e,t){if(e.id in t)return t[e.id];try{let n=await S(()=>import(e.module),[]);return t[e.id]=n,n}catch(t){return console.error(`Error loading route module \`${e.module}\`, reloading page...`),console.error(t),window.__reactRouterContext&&window.__reactRouterContext.isSpaMode,window.location.reload(),new Promise(()=>{})}}function dn(e){return e!=null&&typeof e.page==`string`}function fn(e){return e==null?!1:e.href==null?e.rel===`preload`&&typeof e.imageSrcSet==`string`&&typeof e.imageSizes==`string`:typeof e.rel==`string`&&typeof e.href==`string`}async function pn(e,t,n){return vn((await Promise.all(e.map(async e=>{let r=t.routes[e.route.id];if(r){let e=await un(r,n);return e.links?e.links():[]}return[]}))).flat(1).filter(fn).filter(e=>e.rel===`stylesheet`||e.rel===`preload`).map(e=>e.rel===`stylesheet`?{...e,rel:`prefetch`,as:`style`}:{...e,rel:`prefetch`}))}function mn(e,t,n,r,i,a){let o=(e,t)=>!n[t]||e.route.id!==n[t].route.id,s=(e,t)=>n[t].pathname!==e.pathname||n[t].route.path?.endsWith(`*`)&&n[t].params[`*`]!==e.params[`*`];return a===`assets`?t.filter((e,t)=>o(e,t)||s(e,t)):a===`data`?t.filter((t,a)=>{let c=r.routes[t.route.id];if(!c||!c.hasLoader)return!1;if(o(t,a)||s(t,a))return!0;if(t.route.shouldRevalidate){let r=t.route.shouldRevalidate({currentUrl:new URL(i.pathname+i.search+i.hash,window.origin),currentParams:n[0]?.params||{},nextUrl:new URL(e,window.origin),nextParams:t.params,defaultShouldRevalidate:!0});if(typeof r==`boolean`)return r}return!0}):[]}function hn(e,t,{includeHydrateFallback:n}={}){return gn(e.map(e=>{let r=t.routes[e.route.id];if(!r)return[];let i=[r.module];return r.clientActionModule&&(i=i.concat(r.clientActionModule)),r.clientLoaderModule&&(i=i.concat(r.clientLoaderModule)),n&&r.hydrateFallbackModule&&(i=i.concat(r.hydrateFallbackModule)),r.imports&&(i=i.concat(r.imports)),i}).flat(1))}function gn(e){return[...new Set(e)]}function _n(e){let t={},n=Object.keys(e).sort();for(let r of n)t[r]=e[r];return t}function vn(e,t){let n=new Set,r=new Set(t);return e.reduce((e,i)=>{if(t&&!dn(i)&&i.as===`script`&&i.href&&r.has(i.href))return e;let a=JSON.stringify(_n(i));return n.has(a)||(n.add(a),e.push({key:a,link:i})),e},[])}function yn(){let e=v.useContext(tt);return cn(e,`You must render this element inside a <DataRouterContext.Provider> element`),e}function bn(){let e=v.useContext(nt);return cn(e,`You must render this element inside a <DataRouterStateContext.Provider> element`),e}var xn=v.createContext(void 0);xn.displayName=`FrameworkContext`;function Sn(){let e=v.useContext(xn);return cn(e,`You must render this element inside a <HydratedRouter> element`),e}function Cn(e,t){let n=v.useContext(xn),[r,i]=v.useState(!1),[a,o]=v.useState(!1),{onFocus:s,onBlur:c,onMouseEnter:l,onMouseLeave:u,onTouchStart:d}=t,f=v.useRef(null);v.useEffect(()=>{if(e===`render`&&o(!0),e===`viewport`){let e=new IntersectionObserver(e=>{e.forEach(e=>{o(e.isIntersecting)})},{threshold:.5});return f.current&&e.observe(f.current),()=>{e.disconnect()}}},[e]),v.useEffect(()=>{if(r){let e=setTimeout(()=>{o(!0)},100);return()=>{clearTimeout(e)}}},[r]);let p=()=>{i(!0)},m=()=>{i(!1),o(!1)};return n?e===`intent`?[a,f,{onFocus:wn(s,p),onBlur:wn(c,m),onMouseEnter:wn(l,p),onMouseLeave:wn(u,m),onTouchStart:wn(d,p)}]:[a,f,{}]:[!1,f,{}]}function wn(e,t){return n=>{e&&e(n),n.defaultPrevented||t(n)}}function Tn({page:e,...t}){let n=it(),{nonce:r}=Sn(),{router:i}=yn(),a=v.useMemo(()=>le(i.routes,e,i.basename),[i.routes,e,i.basename]);return a?(t.nonce==null&&r&&(t={...t,nonce:r}),n?v.createElement(Dn,{page:e,matches:a,...t}):v.createElement(On,{page:e,matches:a,...t})):null}function En(e){let{manifest:t,routeModules:n}=Sn(),[r,i]=v.useState([]);return v.useEffect(()=>{let r=!1;return pn(e,t,n).then(e=>{r||i(e)}),()=>{r=!0}},[e,t,n]),r}function Dn({page:e,matches:t,...n}){let r=yt(),{future:i}=Sn(),{basename:a}=yn(),o=v.useMemo(()=>{if(e===r.pathname+r.search+r.hash)return[];let n=ln(e,a,i.v8_trailingSlashAwareDataRequests,`rsc`),o=!1,s=[];for(let e of t)typeof e.route.shouldRevalidate==`function`?o=!0:s.push(e.route.id);return o&&s.length>0&&n.searchParams.set(`_routes`,s.join(`,`)),[n.pathname+n.search]},[a,i.v8_trailingSlashAwareDataRequests,e,r,t]);return v.createElement(v.Fragment,null,o.map(e=>v.createElement(`link`,{key:e,rel:`prefetch`,as:`fetch`,href:e,...n})))}function On({page:e,matches:t,...n}){let r=yt(),{future:i,manifest:a,routeModules:o}=Sn(),{basename:s}=yn(),{loaderData:c,matches:l}=bn(),u=v.useMemo(()=>mn(e,t,l,a,r,`data`),[e,t,l,a,r]),d=v.useMemo(()=>mn(e,t,l,a,r,`assets`),[e,t,l,a,r]),f=v.useMemo(()=>{if(e===r.pathname+r.search+r.hash)return[];let n=new Set,l=!1;if(t.forEach(e=>{let t=a.routes[e.route.id];!t||!t.hasLoader||(!u.some(t=>t.route.id===e.route.id)&&e.route.id in c&&o[e.route.id]?.shouldRevalidate||t.hasClientLoader?l=!0:n.add(e.route.id))}),n.size===0)return[];let d=ln(e,s,i.v8_trailingSlashAwareDataRequests,`data`);return l&&n.size>0&&d.searchParams.set(`_routes`,t.filter(e=>n.has(e.route.id)).map(e=>e.route.id).join(`,`)),[d.pathname+d.search]},[s,i.v8_trailingSlashAwareDataRequests,c,r,a,u,t,e,o]),p=v.useMemo(()=>hn(d,a),[d,a]),m=En(d);return v.createElement(v.Fragment,null,f.map(e=>v.createElement(`link`,{key:e,rel:`prefetch`,as:`fetch`,href:e,...n})),p.map(e=>v.createElement(`link`,{key:e,rel:`modulepreload`,href:e,...n})),m.map(({key:e,link:t})=>v.createElement(`link`,{key:e,nonce:n.nonce,...t,crossOrigin:t.crossOrigin??n.crossOrigin})))}function kn(...e){return t=>{e.forEach(e=>{typeof e==`function`?e(t):e!=null&&(e.current=t)})}}v.Component;var An=typeof window<`u`&&window.document!==void 0&&window.document.createElement!==void 0;try{An&&(window.__reactRouterVersion=`7.18.3`)}catch{}function jn({basename:e,children:t,useTransitions:n,window:r}){let i=v.useRef();i.current??=ne({window:r,v5Compat:!0});let a=i.current,[o,s]=v.useState({action:a.action,location:a.location}),c=v.useCallback(e=>{n===!1?s(e):v.startTransition(()=>s(e))},[n]);return v.useLayoutEffect(()=>a.listen(c),[a,c]),v.createElement(Gt,{basename:e,children:t,location:o.location,navigationType:o.action,navigator:a,useTransitions:n})}var Mn=v.forwardRef(function({onClick:e,discover:t=`render`,prefetch:n=`none`,relative:r,reloadDocument:i,replace:a,mask:o,state:s,target:c,to:l,preventScrollReset:u,viewTransition:d,defaultShouldRevalidate:f,...p},m){let{basename:h,navigator:g,useTransitions:_}=v.useContext(ct),y=typeof l==`string`&&C.test(l),b=Ge(l,h);l=b.to;let x=_t(l,{relative:r}),ee=yt(),S=null;if(o){let e=Pe(o,[],ee.mask?ee.mask.pathname:`/`,!0);h!==`/`&&(e.pathname=e.pathname===`/`?h:Ie([h,e.pathname])),S=g.createHref(e)}let[w,T,te]=Cn(n,p),E=Ln(l,{replace:a,mask:o,state:s,target:c,preventScrollReset:u,relative:r,viewTransition:d,defaultShouldRevalidate:f,useTransitions:_});function ne(t){e&&e(t),t.defaultPrevented||E(t)}let D=!(b.isExternal||i),re=v.createElement(`a`,{...p,...te,href:(D?S:void 0)||b.absoluteURL||x,onClick:D?ne:e,ref:kn(m,T),target:c,"data-discover":!y&&t===`render`?`true`:void 0});return w&&!y?v.createElement(v.Fragment,null,re,v.createElement(Tn,{page:x})):re});Mn.displayName=`Link`;var Nn=v.forwardRef(function({"aria-current":e=`page`,caseSensitive:t=!1,className:n=``,end:r=!1,style:i,to:a,viewTransition:o,children:s,...c},l){let u=wt(a,{relative:c.relative}),d=yt(),f=v.useContext(nt),{navigator:p,basename:m}=v.useContext(ct),h=f!=null&&Hn(u)&&o===!0,g=p.encodeLocation?p.encodeLocation(u).pathname:u.pathname,_=d.pathname,y=f&&f.navigation&&f.navigation.location?f.navigation.location.pathname:null;t||(_=_.toLowerCase(),y=y?y.toLowerCase():null,g=g.toLowerCase()),y&&m&&(y=Oe(y,m)||y);let b=g!==`/`&&g.endsWith(`/`)?g.length-1:g.length,x=_===g||!r&&_.startsWith(g)&&_.charAt(b)===`/`,ee=y!=null&&(y===g||!r&&y.startsWith(g)&&y.charAt(g.length)===`/`),S={isActive:x,isPending:ee,isTransitioning:h},C=x?e:void 0,w;w=typeof n==`function`?n(S):[n,x?`active`:null,ee?`pending`:null,h?`transitioning`:null].filter(Boolean).join(` `);let T=typeof i==`function`?i(S):i;return v.createElement(Mn,{...c,"aria-current":C,className:w,ref:l,style:T,to:a,viewTransition:o},typeof s==`function`?s(S):s)});Nn.displayName=`NavLink`;var Pn=v.forwardRef(({discover:e=`render`,fetcherKey:t,navigate:n,reloadDocument:r,replace:i,state:a,method:o=Jt,action:s,onSubmit:c,relative:l,preventScrollReset:u,viewTransition:d,defaultShouldRevalidate:f,...p},m)=>{let{useTransitions:h}=v.useContext(ct),g=Bn(),_=Vn(s,{relative:l}),y=o.toLowerCase()===`get`?`get`:`post`,b=typeof s==`string`&&C.test(s);return v.createElement(`form`,{ref:m,method:y,action:_,onSubmit:r?c:e=>{if(c&&c(e),e.defaultPrevented)return;e.preventDefault();let r=e.nativeEvent.submitter,s=r?.getAttribute(`formmethod`)||o,p=()=>g(r||e.currentTarget,{fetcherKey:t,method:s,navigate:n,replace:i,state:a,relative:l,preventScrollReset:u,viewTransition:d,defaultShouldRevalidate:f});h&&n!==!1?v.startTransition(()=>p()):p()},...p,"data-discover":!b&&e===`render`?`true`:void 0})});Pn.displayName=`Form`;function Fn(e){return`${e} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`}function In(e){let t=v.useContext(tt);return D(t,Fn(e)),t}function Ln(e,{target:t,replace:n,mask:r,state:i,preventScrollReset:a,relative:o,viewTransition:s,defaultShouldRevalidate:c,useTransitions:l}={}){let u=St(),d=yt(),f=wt(e,{relative:o});return v.useCallback(p=>{if(tn(p,t)){p.preventDefault();let t=n===void 0?se(d)===se(f):n,m=()=>u(e,{replace:t,mask:r,state:i,preventScrollReset:a,relative:o,viewTransition:s,defaultShouldRevalidate:c});l?v.startTransition(()=>m()):m()}},[d,u,f,n,r,i,t,e,a,o,s,c,l])}var Rn=0,zn=()=>`__${String(++Rn)}__`;function Bn(){let{router:e}=In(`useSubmit`),{basename:t}=v.useContext(ct),n=zt(),r=e.fetch,i=e.navigate;return v.useCallback(async(e,a={})=>{let{action:o,method:s,encType:c,formData:l,body:u}=sn(e,t);if(a.navigate===!1){let e=a.fetcherKey||zn();await r(e,n,a.action||o,{defaultShouldRevalidate:a.defaultShouldRevalidate,preventScrollReset:a.preventScrollReset,formData:l,body:u,formMethod:a.method||s,formEncType:a.encType||c,flushSync:a.flushSync})}else await i(a.action||o,{defaultShouldRevalidate:a.defaultShouldRevalidate,preventScrollReset:a.preventScrollReset,formData:l,body:u,formMethod:a.method||s,formEncType:a.encType||c,replace:a.replace,state:a.state,fromRouteId:n,flushSync:a.flushSync,viewTransition:a.viewTransition})},[r,i,t,n])}function Vn(e,{relative:t}={}){let{basename:n}=v.useContext(ct),r=v.useContext(ut);D(r,`useFormAction must be used inside a RouteContext`);let[i]=r.matches.slice(-1),a={...wt(e||`.`,{relative:t})},o=yt();if(e==null){a.search=o.search;let e=new URLSearchParams(a.search),t=e.getAll(`index`);if(t.some(e=>e===``)){e.delete(`index`),t.filter(e=>e).forEach(t=>e.append(`index`,t));let n=e.toString();a.search=n?`?${n}`:``}}return(!e||e===`.`)&&i.route.index&&(a.search=a.search?a.search.replace(/^\?/,`?index&`):`?index`),n!==`/`&&(a.pathname=a.pathname===`/`?n:Ie([n,a.pathname])),se(a)}function Hn(e,{relative:t}={}){let n=v.useContext(at);D(n!=null,"`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");let{basename:r}=In(`useViewTransitionState`),i=wt(e,{relative:t});if(!n.isTransitioning)return!1;let a=Oe(n.currentLocation.pathname,r)||n.currentLocation.pathname,o=Oe(n.nextLocation.pathname,r)||n.nextLocation.pathname;return we(i.pathname,o)!=null||we(i.pathname,a)!=null}var Un=o((e=>{var t=Symbol.for(`react.transitional.element`),n=Symbol.for(`react.fragment`);function r(e,n,r){var i=null;if(r!==void 0&&(i=``+r),n.key!==void 0&&(i=``+n.key),`key`in n)for(var a in r={},n)a!==`key`&&(r[a]=n[a]);else r=n;return n=r.ref,{$$typeof:t,type:e,key:i,ref:n===void 0?null:n,props:r}}e.Fragment=n,e.jsx=r,e.jsxs=r})),M=o(((e,t)=>{t.exports=Un()}))();function Wn(){return(0,M.jsxs)(`section`,{className:`hero`,children:[(0,M.jsxs)(`div`,{className:`hero-bg`,children:[(0,M.jsx)(`div`,{className:`glow glow1`}),(0,M.jsx)(`div`,{className:`glow glow2`}),(0,M.jsx)(`div`,{className:`grid`})]}),(0,M.jsx)(`div`,{className:`hero-content`,children:(0,M.jsx)(`div`,{className:`hero-buttons`})})]})}function Gn(){return(0,M.jsx)(M.Fragment,{children:(0,M.jsx)(Wn,{})})}function Kn(e,t){let n=t||{};return(e[e.length-1]===``?[...e,``]:e).join((n.padRight?` `:``)+`,`+(n.padLeft===!1?``:` `)).trim()}var qn=/^[$_\p{ID_Start}][$_\u{200C}\u{200D}\p{ID_Continue}]*$/u,Jn=/^[$_\p{ID_Start}][-$_\u{200C}\u{200D}\p{ID_Continue}]*$/u,Yn={};function Xn(e,t){return((t||Yn).jsx?Jn:qn).test(e)}var Zn=/[ \t\n\f\r]/g;function Qn(e){return typeof e==`object`?e.type===`text`&&$n(e.value):$n(e)}function $n(e){return e.replace(Zn,``)===``}var er=class{constructor(e,t,n){this.normal=t,this.property=e,n&&(this.space=n)}};er.prototype.normal={},er.prototype.property={},er.prototype.space=void 0;function tr(e,t){let n={},r={};for(let t of e)Object.assign(n,t.property),Object.assign(r,t.normal);return new er(n,r,t)}function nr(e){return e.toLowerCase()}var rr=class{constructor(e,t){this.attribute=t,this.property=e}};rr.prototype.attribute=``,rr.prototype.booleanish=!1,rr.prototype.boolean=!1,rr.prototype.commaOrSpaceSeparated=!1,rr.prototype.commaSeparated=!1,rr.prototype.defined=!1,rr.prototype.mustUseProperty=!1,rr.prototype.number=!1,rr.prototype.overloadedBoolean=!1,rr.prototype.property=``,rr.prototype.spaceSeparated=!1,rr.prototype.space=void 0;var ir=s({boolean:()=>N,booleanish:()=>or,commaOrSpaceSeparated:()=>lr,commaSeparated:()=>cr,number:()=>P,overloadedBoolean:()=>sr,spaceSeparated:()=>F}),ar=0,N=ur(),or=ur(),sr=ur(),P=ur(),F=ur(),cr=ur(),lr=ur();function ur(){return 2**++ar}var dr=Object.keys(ir),fr=class extends rr{constructor(e,t,n,r){let i=-1;if(super(e,t),pr(this,`space`,r),typeof n==`number`)for(;++i<dr.length;){let e=dr[i];pr(this,dr[i],(n&ir[e])===ir[e])}}};fr.prototype.defined=!0;function pr(e,t,n){n&&(e[t]=n)}function mr(e){let t={},n={};for(let[r,i]of Object.entries(e.properties)){let a=new fr(r,e.transform(e.attributes||{},r),i,e.space);e.mustUseProperty&&e.mustUseProperty.includes(r)&&(a.mustUseProperty=!0),t[r]=a,n[nr(r)]=r,n[nr(a.attribute)]=r}return new er(t,n,e.space)}var hr=mr({properties:{ariaActiveDescendant:null,ariaAtomic:or,ariaAutoComplete:null,ariaBusy:or,ariaChecked:or,ariaColCount:P,ariaColIndex:P,ariaColSpan:P,ariaControls:F,ariaCurrent:null,ariaDescribedBy:F,ariaDetails:null,ariaDisabled:or,ariaDropEffect:F,ariaErrorMessage:null,ariaExpanded:or,ariaFlowTo:F,ariaGrabbed:or,ariaHasPopup:null,ariaHidden:or,ariaInvalid:null,ariaKeyShortcuts:null,ariaLabel:null,ariaLabelledBy:F,ariaLevel:P,ariaLive:null,ariaModal:or,ariaMultiLine:or,ariaMultiSelectable:or,ariaOrientation:null,ariaOwns:F,ariaPlaceholder:null,ariaPosInSet:P,ariaPressed:or,ariaReadOnly:or,ariaRelevant:null,ariaRequired:or,ariaRoleDescription:F,ariaRowCount:P,ariaRowIndex:P,ariaRowSpan:P,ariaSelected:or,ariaSetSize:P,ariaSort:null,ariaValueMax:P,ariaValueMin:P,ariaValueNow:P,ariaValueText:null,role:null},transform(e,t){return t===`role`?t:`aria-`+t.slice(4).toLowerCase()}});function gr(e,t){return t in e?e[t]:t}function _r(e,t){return gr(e,t.toLowerCase())}var vr=mr({attributes:{acceptcharset:`accept-charset`,classname:`class`,htmlfor:`for`,httpequiv:`http-equiv`},mustUseProperty:[`checked`,`multiple`,`muted`,`selected`],properties:{abbr:null,accept:cr,acceptCharset:F,accessKey:F,action:null,allow:null,allowFullScreen:N,allowPaymentRequest:N,allowUserMedia:N,alpha:N,alt:null,as:null,async:N,autoCapitalize:null,autoComplete:F,autoFocus:N,autoPlay:N,blocking:F,capture:null,charSet:null,checked:N,cite:null,className:F,closedBy:null,colorSpace:null,cols:P,colSpan:P,command:null,commandFor:null,content:null,contentEditable:or,controls:N,controlsList:F,coords:P|cr,crossOrigin:null,data:null,dateTime:null,decoding:null,default:N,defer:N,dir:null,dirName:null,disabled:N,download:sr,draggable:or,encType:null,enterKeyHint:null,fetchPriority:null,form:null,formAction:null,formEncType:null,formMethod:null,formNoValidate:N,formTarget:null,headers:F,height:P,hidden:sr,high:P,href:null,hrefLang:null,htmlFor:F,httpEquiv:F,id:null,imageSizes:null,imageSrcSet:null,inert:N,inputMode:null,integrity:null,is:null,isMap:N,itemId:null,itemProp:F,itemRef:F,itemScope:N,itemType:F,kind:null,label:null,lang:null,language:null,list:null,loading:null,loop:N,low:P,manifest:null,max:null,maxLength:P,media:null,method:null,min:null,minLength:P,multiple:N,muted:N,name:null,nonce:null,noModule:N,noValidate:N,onAbort:null,onAfterPrint:null,onAuxClick:null,onBeforeMatch:null,onBeforePrint:null,onBeforeToggle:null,onBeforeUnload:null,onBlur:null,onCancel:null,onCanPlay:null,onCanPlayThrough:null,onChange:null,onClick:null,onClose:null,onContextLost:null,onContextMenu:null,onContextRestored:null,onCopy:null,onCueChange:null,onCut:null,onDblClick:null,onDrag:null,onDragEnd:null,onDragEnter:null,onDragExit:null,onDragLeave:null,onDragOver:null,onDragStart:null,onDrop:null,onDurationChange:null,onEmptied:null,onEnded:null,onError:null,onFocus:null,onFormData:null,onHashChange:null,onInput:null,onInvalid:null,onKeyDown:null,onKeyPress:null,onKeyUp:null,onLanguageChange:null,onLoad:null,onLoadedData:null,onLoadedMetadata:null,onLoadEnd:null,onLoadStart:null,onMessage:null,onMessageError:null,onMouseDown:null,onMouseEnter:null,onMouseLeave:null,onMouseMove:null,onMouseOut:null,onMouseOver:null,onMouseUp:null,onOffline:null,onOnline:null,onPageHide:null,onPageShow:null,onPaste:null,onPause:null,onPlay:null,onPlaying:null,onPopState:null,onProgress:null,onRateChange:null,onRejectionHandled:null,onReset:null,onResize:null,onScroll:null,onScrollEnd:null,onSecurityPolicyViolation:null,onSeeked:null,onSeeking:null,onSelect:null,onSlotChange:null,onStalled:null,onStorage:null,onSubmit:null,onSuspend:null,onTimeUpdate:null,onToggle:null,onUnhandledRejection:null,onUnload:null,onVolumeChange:null,onWaiting:null,onWheel:null,open:N,optimum:P,pattern:null,ping:F,placeholder:null,playsInline:N,popover:null,popoverTarget:null,popoverTargetAction:null,poster:null,preload:null,readOnly:N,referrerPolicy:null,rel:F,required:N,reversed:N,rows:P,rowSpan:P,sandbox:F,scope:null,scoped:N,seamless:N,selected:N,shadowRootClonable:N,shadowRootCustomElementRegistry:N,shadowRootDelegatesFocus:N,shadowRootMode:null,shadowRootSerializable:N,shape:null,size:P,sizes:null,slot:null,span:P,spellCheck:or,src:null,srcDoc:null,srcLang:null,srcSet:null,start:P,step:null,style:null,tabIndex:P,target:null,title:null,translate:null,type:null,typeMustMatch:N,useMap:null,value:or,width:P,wrap:null,writingSuggestions:null,align:null,aLink:null,archive:F,axis:null,background:null,bgColor:null,border:P,borderColor:null,bottomMargin:P,cellPadding:null,cellSpacing:null,char:null,charOff:null,classId:null,clear:null,code:null,codeBase:null,codeType:null,color:null,compact:N,declare:N,event:null,face:null,frame:null,frameBorder:null,hSpace:P,leftMargin:P,link:null,longDesc:null,lowSrc:null,marginHeight:P,marginWidth:P,noResize:N,noHref:N,noShade:N,noWrap:N,object:null,profile:null,prompt:null,rev:null,rightMargin:P,rules:null,scheme:null,scrolling:or,standby:null,summary:null,text:null,topMargin:P,valueType:null,version:null,vAlign:null,vLink:null,vSpace:P,allowTransparency:null,autoCorrect:null,autoSave:null,credentialless:N,disablePictureInPicture:N,disableRemotePlayback:N,exportParts:cr,part:F,prefix:null,property:null,results:P,security:null,unselectable:null},space:`html`,transform:_r}),yr=mr({attributes:{accentHeight:`accent-height`,alignmentBaseline:`alignment-baseline`,arabicForm:`arabic-form`,baselineShift:`baseline-shift`,capHeight:`cap-height`,className:`class`,clipPath:`clip-path`,clipRule:`clip-rule`,colorInterpolation:`color-interpolation`,colorInterpolationFilters:`color-interpolation-filters`,colorProfile:`color-profile`,colorRendering:`color-rendering`,crossOrigin:`crossorigin`,dataType:`datatype`,dominantBaseline:`dominant-baseline`,enableBackground:`enable-background`,fillOpacity:`fill-opacity`,fillRule:`fill-rule`,floodColor:`flood-color`,floodOpacity:`flood-opacity`,fontFamily:`font-family`,fontSize:`font-size`,fontSizeAdjust:`font-size-adjust`,fontStretch:`font-stretch`,fontStyle:`font-style`,fontVariant:`font-variant`,fontWeight:`font-weight`,glyphName:`glyph-name`,glyphOrientationHorizontal:`glyph-orientation-horizontal`,glyphOrientationVertical:`glyph-orientation-vertical`,hrefLang:`hreflang`,horizAdvX:`horiz-adv-x`,horizOriginX:`horiz-origin-x`,horizOriginY:`horiz-origin-y`,imageRendering:`image-rendering`,letterSpacing:`letter-spacing`,lightingColor:`lighting-color`,markerEnd:`marker-end`,markerMid:`marker-mid`,markerStart:`marker-start`,maskType:`mask-type`,navDown:`nav-down`,navDownLeft:`nav-down-left`,navDownRight:`nav-down-right`,navLeft:`nav-left`,navNext:`nav-next`,navPrev:`nav-prev`,navRight:`nav-right`,navUp:`nav-up`,navUpLeft:`nav-up-left`,navUpRight:`nav-up-right`,onAbort:`onabort`,onActivate:`onactivate`,onAfterPrint:`onafterprint`,onBeforePrint:`onbeforeprint`,onBegin:`onbegin`,onCancel:`oncancel`,onCanPlay:`oncanplay`,onCanPlayThrough:`oncanplaythrough`,onChange:`onchange`,onClick:`onclick`,onClose:`onclose`,onCopy:`oncopy`,onCueChange:`oncuechange`,onCut:`oncut`,onDblClick:`ondblclick`,onDrag:`ondrag`,onDragEnd:`ondragend`,onDragEnter:`ondragenter`,onDragExit:`ondragexit`,onDragLeave:`ondragleave`,onDragOver:`ondragover`,onDragStart:`ondragstart`,onDrop:`ondrop`,onDurationChange:`ondurationchange`,onEmptied:`onemptied`,onEnd:`onend`,onEnded:`onended`,onError:`onerror`,onFocus:`onfocus`,onFocusIn:`onfocusin`,onFocusOut:`onfocusout`,onHashChange:`onhashchange`,onInput:`oninput`,onInvalid:`oninvalid`,onKeyDown:`onkeydown`,onKeyPress:`onkeypress`,onKeyUp:`onkeyup`,onLoad:`onload`,onLoadedData:`onloadeddata`,onLoadedMetadata:`onloadedmetadata`,onLoadStart:`onloadstart`,onMessage:`onmessage`,onMouseDown:`onmousedown`,onMouseEnter:`onmouseenter`,onMouseLeave:`onmouseleave`,onMouseMove:`onmousemove`,onMouseOut:`onmouseout`,onMouseOver:`onmouseover`,onMouseUp:`onmouseup`,onMouseWheel:`onmousewheel`,onOffline:`onoffline`,onOnline:`ononline`,onPageHide:`onpagehide`,onPageShow:`onpageshow`,onPaste:`onpaste`,onPause:`onpause`,onPlay:`onplay`,onPlaying:`onplaying`,onPopState:`onpopstate`,onProgress:`onprogress`,onRateChange:`onratechange`,onRepeat:`onrepeat`,onReset:`onreset`,onResize:`onresize`,onScroll:`onscroll`,onSeeked:`onseeked`,onSeeking:`onseeking`,onSelect:`onselect`,onShow:`onshow`,onStalled:`onstalled`,onStorage:`onstorage`,onSubmit:`onsubmit`,onSuspend:`onsuspend`,onTimeUpdate:`ontimeupdate`,onToggle:`ontoggle`,onUnload:`onunload`,onVolumeChange:`onvolumechange`,onWaiting:`onwaiting`,onZoom:`onzoom`,overlinePosition:`overline-position`,overlineThickness:`overline-thickness`,paintOrder:`paint-order`,panose1:`panose-1`,pointerEvents:`pointer-events`,referrerPolicy:`referrerpolicy`,renderingIntent:`rendering-intent`,shapeRendering:`shape-rendering`,stopColor:`stop-color`,stopOpacity:`stop-opacity`,strikethroughPosition:`strikethrough-position`,strikethroughThickness:`strikethrough-thickness`,strokeDashArray:`stroke-dasharray`,strokeDashOffset:`stroke-dashoffset`,strokeLineCap:`stroke-linecap`,strokeLineJoin:`stroke-linejoin`,strokeMiterLimit:`stroke-miterlimit`,strokeOpacity:`stroke-opacity`,strokeWidth:`stroke-width`,tabIndex:`tabindex`,textAnchor:`text-anchor`,textDecoration:`text-decoration`,textRendering:`text-rendering`,transformOrigin:`transform-origin`,typeOf:`typeof`,underlinePosition:`underline-position`,underlineThickness:`underline-thickness`,unicodeBidi:`unicode-bidi`,unicodeRange:`unicode-range`,unitsPerEm:`units-per-em`,vAlphabetic:`v-alphabetic`,vHanging:`v-hanging`,vIdeographic:`v-ideographic`,vMathematical:`v-mathematical`,vectorEffect:`vector-effect`,vertAdvY:`vert-adv-y`,vertOriginX:`vert-origin-x`,vertOriginY:`vert-origin-y`,wordSpacing:`word-spacing`,writingMode:`writing-mode`,xHeight:`x-height`,playbackOrder:`playbackorder`,timelineBegin:`timelinebegin`},properties:{about:lr,accentHeight:P,accumulate:null,additive:null,alignmentBaseline:null,alphabetic:P,amplitude:P,arabicForm:null,ascent:P,attributeName:null,attributeType:null,azimuth:P,bandwidth:null,baselineShift:null,baseFrequency:null,baseProfile:null,bbox:null,begin:null,bias:P,by:null,calcMode:null,capHeight:P,className:F,clip:null,clipPath:null,clipPathUnits:null,clipRule:null,color:null,colorInterpolation:null,colorInterpolationFilters:null,colorProfile:null,colorRendering:null,content:null,contentScriptType:null,contentStyleType:null,crossOrigin:null,cursor:null,cx:null,cy:null,d:null,dataType:null,defaultAction:null,descent:P,diffuseConstant:P,direction:null,display:null,dur:null,divisor:P,dominantBaseline:null,download:N,dx:null,dy:null,edgeMode:null,editable:null,elevation:P,enableBackground:null,end:null,event:null,exponent:P,externalResourcesRequired:null,fill:null,fillOpacity:P,fillRule:null,filter:null,filterRes:null,filterUnits:null,floodColor:null,floodOpacity:null,focusable:null,focusHighlight:null,fontFamily:null,fontSize:null,fontSizeAdjust:null,fontStretch:null,fontStyle:null,fontVariant:null,fontWeight:null,format:null,fr:null,from:null,fx:null,fy:null,g1:cr,g2:cr,glyphName:cr,glyphOrientationHorizontal:null,glyphOrientationVertical:null,glyphRef:null,gradientTransform:null,gradientUnits:null,handler:null,hanging:P,hatchContentUnits:null,hatchUnits:null,height:null,href:null,hrefLang:null,horizAdvX:P,horizOriginX:P,horizOriginY:P,id:null,ideographic:P,imageRendering:null,initialVisibility:null,in:null,in2:null,intercept:P,k:P,k1:P,k2:P,k3:P,k4:P,kernelMatrix:lr,kernelUnitLength:null,keyPoints:null,keySplines:null,keyTimes:null,kerning:null,lang:null,lengthAdjust:null,letterSpacing:null,lightingColor:null,limitingConeAngle:P,local:null,markerEnd:null,markerMid:null,markerStart:null,markerHeight:null,markerUnits:null,markerWidth:null,mask:null,maskContentUnits:null,maskType:null,maskUnits:null,mathematical:null,max:null,media:null,mediaCharacterEncoding:null,mediaContentEncodings:null,mediaSize:P,mediaTime:null,method:null,min:null,mode:null,name:null,navDown:null,navDownLeft:null,navDownRight:null,navLeft:null,navNext:null,navPrev:null,navRight:null,navUp:null,navUpLeft:null,navUpRight:null,numOctaves:null,observer:null,offset:null,onAbort:null,onActivate:null,onAfterPrint:null,onBeforePrint:null,onBegin:null,onCancel:null,onCanPlay:null,onCanPlayThrough:null,onChange:null,onClick:null,onClose:null,onCopy:null,onCueChange:null,onCut:null,onDblClick:null,onDrag:null,onDragEnd:null,onDragEnter:null,onDragExit:null,onDragLeave:null,onDragOver:null,onDragStart:null,onDrop:null,onDurationChange:null,onEmptied:null,onEnd:null,onEnded:null,onError:null,onFocus:null,onFocusIn:null,onFocusOut:null,onHashChange:null,onInput:null,onInvalid:null,onKeyDown:null,onKeyPress:null,onKeyUp:null,onLoad:null,onLoadedData:null,onLoadedMetadata:null,onLoadStart:null,onMessage:null,onMouseDown:null,onMouseEnter:null,onMouseLeave:null,onMouseMove:null,onMouseOut:null,onMouseOver:null,onMouseUp:null,onMouseWheel:null,onOffline:null,onOnline:null,onPageHide:null,onPageShow:null,onPaste:null,onPause:null,onPlay:null,onPlaying:null,onPopState:null,onProgress:null,onRateChange:null,onRepeat:null,onReset:null,onResize:null,onScroll:null,onSeeked:null,onSeeking:null,onSelect:null,onShow:null,onStalled:null,onStorage:null,onSubmit:null,onSuspend:null,onTimeUpdate:null,onToggle:null,onUnload:null,onVolumeChange:null,onWaiting:null,onZoom:null,opacity:null,operator:null,order:null,orient:null,orientation:null,origin:null,overflow:null,overlay:null,overlinePosition:P,overlineThickness:P,paintOrder:null,panose1:null,path:null,pathLength:P,patternContentUnits:null,patternTransform:null,patternUnits:null,phase:null,ping:F,pitch:null,playbackOrder:null,pointerEvents:null,points:null,pointsAtX:P,pointsAtY:P,pointsAtZ:P,preserveAlpha:null,preserveAspectRatio:null,primitiveUnits:null,propagate:null,property:lr,r:null,radius:null,referrerPolicy:null,refX:null,refY:null,rel:lr,rev:lr,renderingIntent:null,repeatCount:null,repeatDur:null,requiredExtensions:lr,requiredFeatures:lr,requiredFonts:lr,requiredFormats:lr,resource:null,restart:null,result:null,rotate:null,rx:null,ry:null,scale:null,seed:null,shapeRendering:null,side:null,slope:null,snapshotTime:null,specularConstant:P,specularExponent:P,spreadMethod:null,spacing:null,startOffset:null,stdDeviation:null,stemh:null,stemv:null,stitchTiles:null,stopColor:null,stopOpacity:null,strikethroughPosition:P,strikethroughThickness:P,string:null,stroke:null,strokeDashArray:lr,strokeDashOffset:null,strokeLineCap:null,strokeLineJoin:null,strokeMiterLimit:P,strokeOpacity:P,strokeWidth:null,style:null,surfaceScale:P,syncBehavior:null,syncBehaviorDefault:null,syncMaster:null,syncTolerance:null,syncToleranceDefault:null,systemLanguage:lr,tabIndex:P,tableValues:null,target:null,targetX:P,targetY:P,textAnchor:null,textDecoration:null,textRendering:null,textLength:null,timelineBegin:null,title:null,transformBehavior:null,type:null,typeOf:lr,to:null,transform:null,transformOrigin:null,u1:null,u2:null,underlinePosition:P,underlineThickness:P,unicode:null,unicodeBidi:null,unicodeRange:null,unitsPerEm:P,values:null,vAlphabetic:P,vMathematical:P,vectorEffect:null,vHanging:P,vIdeographic:P,version:null,vertAdvY:P,vertOriginX:P,vertOriginY:P,viewBox:null,viewTarget:null,visibility:null,width:null,widths:null,wordSpacing:null,writingMode:null,x:null,x1:null,x2:null,xChannelSelector:null,xHeight:P,y:null,y1:null,y2:null,yChannelSelector:null,z:null,zoomAndPan:null},space:`svg`,transform:gr}),br=mr({properties:{xLinkActuate:null,xLinkArcRole:null,xLinkHref:null,xLinkRole:null,xLinkShow:null,xLinkTitle:null,xLinkType:null},space:`xlink`,transform(e,t){return`xlink:`+t.slice(5).toLowerCase()}}),xr=mr({attributes:{xmlnsxlink:`xmlns:xlink`},properties:{xmlnsXLink:null,xmlns:null},space:`xmlns`,transform:_r}),Sr=mr({properties:{xmlBase:null,xmlLang:null,xmlSpace:null},space:`xml`,transform(e,t){return`xml:`+t.slice(3).toLowerCase()}}),Cr={classId:`classID`,dataType:`datatype`,itemId:`itemID`,strokeDashArray:`strokeDasharray`,strokeDashOffset:`strokeDashoffset`,strokeLineCap:`strokeLinecap`,strokeLineJoin:`strokeLinejoin`,strokeMiterLimit:`strokeMiterlimit`,typeOf:`typeof`,xLinkActuate:`xlinkActuate`,xLinkArcRole:`xlinkArcrole`,xLinkHref:`xlinkHref`,xLinkRole:`xlinkRole`,xLinkShow:`xlinkShow`,xLinkTitle:`xlinkTitle`,xLinkType:`xlinkType`,xmlnsXLink:`xmlnsXlink`},wr=/[A-Z]/g,Tr=/-[a-z]/g,Er=/^data[-\w.:]+$/i;function Dr(e,t){let n=nr(t),r=t,i=rr;if(n in e.normal)return e.property[e.normal[n]];if(n.length>4&&n.slice(0,4)===`data`&&Er.test(t)){if(t.charAt(4)===`-`){let e=t.slice(5).replace(Tr,kr);r=`data`+e.charAt(0).toUpperCase()+e.slice(1)}else{let e=t.slice(4);if(!Tr.test(e)){let n=e.replace(wr,Or);n.charAt(0)!==`-`&&(n=`-`+n),t=`data`+n}}i=fr}return new i(r,t)}function Or(e){return`-`+e.toLowerCase()}function kr(e){return e.charAt(1).toUpperCase()}var Ar=tr([hr,vr,br,xr,Sr],`html`),jr=tr([hr,yr,br,xr,Sr],`svg`);function Mr(e){return e.join(` `).trim()}var Nr=o(((e,t)=>{var n=/\/\*[^*]*\*+([^/*][^*]*\*+)*\//g,r=/\n/g,i=/^\s*/,a=/^(\*?[-#/*\\\w]+(\[[0-9a-z_-]+\])?)\s*/,o=/^:\s*/,s=/^((?:'(?:\\'|.)*?'|"(?:\\"|.)*?"|\([^)]*?\)|[^};])+)/,c=/^[;\s]*/,l=/^\s+|\s+$/g;function u(e,t){if(typeof e!=`string`)throw TypeError(`First argument must be a string`);if(!e)return[];t||={};var l=1,u=1;function f(e){var t=e.match(r);t&&(l+=t.length);var n=e.lastIndexOf(`
 `);u=~n?e.length-n:u+e.length}function p(){var e={line:l,column:u};return function(t){return t.position=new m(e),_(),t}}function m(e){this.start=e,this.end={line:l,column:u},this.source=t.source}m.prototype.content=e;function h(n){var r=Error(t.source+`:`+l+`:`+u+`: `+n);if(r.reason=n,r.filename=t.source,r.line=l,r.column=u,r.source=e,!t.silent)throw r}function g(t){var n=t.exec(e);if(n){var r=n[0];return f(r),e=e.slice(r.length),n}}function _(){g(i)}function v(e){var t;for(e||=[];t=y();)t!==!1&&e.push(t);return e}function y(){var t=p();if(e.charAt(0)==`/`&&e.charAt(1)==`*`){for(var n=2;e.charAt(n)!=``&&(e.charAt(n)!=`*`||e.charAt(n+1)!=`/`);)++n;if(n+=2,e.charAt(n-1)===``)return h(`End of comment missing`);var r=e.slice(2,n-2);return u+=2,f(r),e=e.slice(n),u+=2,t({type:`comment`,comment:r})}}function b(){var e=p(),t=g(a);if(t){if(y(),!g(o))return h(`property missing ':'`);var r=g(s),i=e({type:`declaration`,property:d(t[0].replace(n,``)),value:r?d(r[0].replace(n,``)):``});return g(c),i}}function x(){var e=[];v(e);for(var t;t=b();)t!==!1&&(e.push(t),v(e));return e}return _(),x()}function d(e){return e?e.replace(l,``):``}t.exports=u})),Pr=o((e=>{var t=e&&e.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(e,"__esModule",{value:!0}),e.default=r;var n=t(Nr());function r(e,t){let r=null;if(!e||typeof e!=`string`)return r;let i=(0,n.default)(e),a=typeof t==`function`;return i.forEach(e=>{if(e.type!==`declaration`)return;let{property:n,value:i}=e;a?t(n,i,e):i&&(r||={},r[n]=i)}),r}})),Fr=o((e=>{Object.defineProperty(e,"__esModule",{value:!0}),e.camelCase=void 0;var t=/^--[a-zA-Z0-9_-]+$/,n=/-([a-z])/g,r=/^[^-]+$/,i=/^-(webkit|moz|ms|o|khtml)-/,a=/^-(ms)-/,o=function(e){return!e||r.test(e)||t.test(e)},s=function(e,t){return t.toUpperCase()},c=function(e,t){return`${t}-`};e.camelCase=function(e,t){return t===void 0&&(t={}),o(e)?e:(e=e.toLowerCase(),e=t.reactCompat?e.replace(a,c):e.replace(i,c),e.replace(n,s))}})),Ir=o(((e,t)=>{var n=(e&&e.__importDefault||function(e){return e&&e.__esModule?e:{default:e}})(Pr()),r=Fr();function i(e,t){var i={};return!e||typeof e!=`string`||(0,n.default)(e,function(e,n){e&&n&&(i[(0,r.camelCase)(e,t)]=n)}),i}i.default=i,t.exports=i})),Lr=zr(`end`),Rr=zr(`start`);function zr(e){return t;function t(t){let n=t&&t.position&&t.position[e]||{};if(typeof n.line==`number`&&n.line>0&&typeof n.column==`number`&&n.column>0)return{line:n.line,column:n.column,offset:typeof n.offset==`number`&&n.offset>-1?n.offset:void 0}}}function Br(e){let t=Rr(e),n=Lr(e);if(t&&n)return{start:t,end:n}}function Vr(e){return!e||typeof e!=`object`?``:`position`in e||`type`in e?Ur(e.position):`start`in e||`end`in e?Ur(e):`line`in e||`column`in e?Hr(e):``}function Hr(e){return Wr(e&&e.line)+`:`+Wr(e&&e.column)}function Ur(e){return Hr(e&&e.start)+`-`+Hr(e&&e.end)}function Wr(e){return e&&typeof e==`number`?e:1}var Gr=class extends Error{constructor(e,t,n){super(),typeof t==`string`&&(n=t,t=void 0);let r=``,i={},a=!1;if(t&&(i=`line`in t&&`column`in t||`start`in t&&`end`in t?{place:t}:`type`in t?{ancestors:[t],place:t.position}:{...t}),typeof e==`string`?r=e:!i.cause&&e&&(a=!0,r=e.message,i.cause=e),!i.ruleId&&!i.source&&typeof n==`string`){let e=n.indexOf(`:`);e===-1?i.ruleId=n:(i.source=n.slice(0,e),i.ruleId=n.slice(e+1))}if(!i.place&&i.ancestors&&i.ancestors){let e=i.ancestors[i.ancestors.length-1];e&&(i.place=e.position)}let o=i.place&&`start`in i.place?i.place.start:i.place;this.ancestors=i.ancestors||void 0,this.cause=i.cause||void 0,this.column=o?o.column:void 0,this.fatal=void 0,this.file=``,this.message=r,this.line=o?o.line:void 0,this.name=Vr(i.place)||`1:1`,this.place=i.place||void 0,this.reason=this.message,this.ruleId=i.ruleId||void 0,this.source=i.source||void 0,this.stack=a&&i.cause&&typeof i.cause.stack==`string`?i.cause.stack:``,this.actual=void 0,this.expected=void 0,this.note=void 0,this.url=void 0}};Gr.prototype.file=``,Gr.prototype.name=``,Gr.prototype.reason=``,Gr.prototype.message=``,Gr.prototype.stack=``,Gr.prototype.column=void 0,Gr.prototype.line=void 0,Gr.prototype.ancestors=void 0,Gr.prototype.cause=void 0,Gr.prototype.fatal=void 0,Gr.prototype.place=void 0,Gr.prototype.ruleId=void 0,Gr.prototype.source=void 0;var Kr=l(Ir(),1),qr={}.hasOwnProperty,Jr=new Map,Yr=/[A-Z]/g,Xr=new Set([`table`,`tbody`,`thead`,`tfoot`,`tr`]),Zr=new Set([`td`,`th`]),Qr=`https://github.com/syntax-tree/hast-util-to-jsx-runtime`;function $r(e,t){if(!t||t.Fragment===void 0)throw TypeError("Expected `Fragment` in options");let n=t.filePath||void 0,r;if(t.development){if(typeof t.jsxDEV!=`function`)throw TypeError("Expected `jsxDEV` in options when `development: true`");r=ui(n,t.jsxDEV)}else{if(typeof t.jsx!=`function`)throw TypeError("Expected `jsx` in production options");if(typeof t.jsxs!=`function`)throw TypeError("Expected `jsxs` in production options");r=li(n,t.jsx,t.jsxs)}let i={Fragment:t.Fragment,ancestors:[],components:t.components||{},create:r,elementAttributeNameCase:t.elementAttributeNameCase||`react`,evaluater:t.createEvaluater?t.createEvaluater():void 0,filePath:n,ignoreInvalidStyle:t.ignoreInvalidStyle||!1,passKeys:t.passKeys!==!1,passNode:t.passNode||!1,schema:t.space===`svg`?jr:Ar,stylePropertyNameCase:t.stylePropertyNameCase||`dom`,tableCellAlignToStyle:t.tableCellAlignToStyle!==!1},a=ei(i,e,void 0);return a&&typeof a!=`string`?a:i.create(e,i.Fragment,{children:a||void 0},void 0)}function ei(e,t,n){if(t.type===`element`)return ti(e,t,n);if(t.type===`mdxFlowExpression`||t.type===`mdxTextExpression`)return ni(e,t);if(t.type===`mdxJsxFlowElement`||t.type===`mdxJsxTextElement`)return ii(e,t,n);if(t.type===`mdxjsEsm`)return ri(e,t);if(t.type===`root`)return ai(e,t,n);if(t.type===`text`)return oi(e,t)}function ti(e,t,n){let r=e.schema,i=r;t.tagName.toLowerCase()===`svg`&&r.space===`html`&&(i=jr,e.schema=i),e.ancestors.push(t);let a=gi(e,t.tagName,!1),o=di(e,t),s=pi(e,t);return Xr.has(t.tagName)&&(s=s.filter(function(e){return typeof e!=`string`||!Qn(e)})),si(e,o,a,t),ci(o,s),e.ancestors.pop(),e.schema=r,e.create(t,a,o,n)}function ni(e,t){if(t.data&&t.data.estree&&e.evaluater){let n=t.data.estree.body[0];return n.type,e.evaluater.evaluateExpression(n.expression)}_i(e,t.position)}function ri(e,t){if(t.data&&t.data.estree&&e.evaluater)return e.evaluater.evaluateProgram(t.data.estree);_i(e,t.position)}function ii(e,t,n){let r=e.schema,i=r;t.name===`svg`&&r.space===`html`&&(i=jr,e.schema=i),e.ancestors.push(t);let a=t.name===null?e.Fragment:gi(e,t.name,!0),o=fi(e,t),s=pi(e,t);return si(e,o,a,t),ci(o,s),e.ancestors.pop(),e.schema=r,e.create(t,a,o,n)}function ai(e,t,n){let r={};return ci(r,pi(e,t)),e.create(t,e.Fragment,r,n)}function oi(e,t){return t.value}function si(e,t,n,r){typeof n!=`string`&&n!==e.Fragment&&e.passNode&&(t.node=r)}function ci(e,t){if(t.length>0){let n=t.length>1?t:t[0];n&&(e.children=n)}}function li(e,t,n){return r;function r(e,r,i,a){let o=Array.isArray(i.children)?n:t;return a?o(r,i,a):o(r,i)}}function ui(e,t){return n;function n(n,r,i,a){let o=Array.isArray(i.children),s=Rr(n);return t(r,i,a,o,{columnNumber:s?s.column-1:void 0,fileName:e,lineNumber:s?s.line:void 0},void 0)}}function di(e,t){let n={},r,i;for(i in t.properties)if(i!==`children`&&qr.call(t.properties,i)){let a=mi(e,i,t.properties[i]);if(a){let[i,o]=a;e.tableCellAlignToStyle&&i===`align`&&typeof o==`string`&&Zr.has(t.tagName)?r=o:n[i]=o}}if(r){let t=n.style||={};t[e.stylePropertyNameCase===`css`?`text-align`:`textAlign`]=r}return n}function fi(e,t){let n={};for(let r of t.attributes)if(r.type===`mdxJsxExpressionAttribute`){if(r.data&&r.data.estree&&e.evaluater){let t=r.data.estree.body[0];t.type;let i=t.expression;i.type;let a=i.properties[0];a.type,Object.assign(n,e.evaluater.evaluateExpression(a.argument))}else _i(e,t.position)}else{let i=r.name,a;if(r.value&&typeof r.value==`object`){if(r.value.data&&r.value.data.estree&&e.evaluater){let t=r.value.data.estree.body[0];t.type,a=e.evaluater.evaluateExpression(t.expression)}else _i(e,t.position)}else a=r.value===null||r.value;n[i]=a}return n}function pi(e,t){let n=[],r=-1,i=e.passKeys?new Map:Jr;for(;++r<t.children.length;){let a=t.children[r],o;if(e.passKeys){let e=a.type===`element`?a.tagName:a.type===`mdxJsxFlowElement`||a.type===`mdxJsxTextElement`?a.name:void 0;if(e){let t=i.get(e)||0;o=e+`-`+t,i.set(e,t+1)}}let s=ei(e,a,o);s!==void 0&&n.push(s)}return n}function mi(e,t,n){let r=Dr(e.schema,t);if(!(n==null||typeof n==`number`&&Number.isNaN(n))){if(Array.isArray(n)&&(n=r.commaSeparated?Kn(n):Mr(n)),r.property===`style`){let t=typeof n==`object`?n:hi(e,String(n));return e.stylePropertyNameCase===`css`&&(t=vi(t)),[`style`,t]}return[e.elementAttributeNameCase===`react`&&r.space?Cr[r.property]||r.property:r.attribute,n]}}function hi(e,t){try{return(0,Kr.default)(t,{reactCompat:!0})}catch(t){if(e.ignoreInvalidStyle)return{};let n=t,r=new Gr("Cannot parse `style` attribute",{ancestors:e.ancestors,cause:n,ruleId:`style`,source:`hast-util-to-jsx-runtime`});throw r.file=e.filePath||void 0,r.url=Qr+`#cannot-parse-style-attribute`,r}}function gi(e,t,n){let r;if(!n)r={type:`Literal`,value:t};else if(t.includes(`.`)){let e=t.split(`.`),n=-1,i;for(;++n<e.length;){let t=Xn(e[n])?{type:`Identifier`,name:e[n]}:{type:`Literal`,value:e[n]};i=i?{type:`MemberExpression`,object:i,property:t,computed:!!(n&&t.type===`Literal`),optional:!1}:t}r=i}else r=Xn(t)&&!/^[a-z]/.test(t)?{type:`Identifier`,name:t}:{type:`Literal`,value:t};if(r.type===`Literal`){let t=r.value;return qr.call(e.components,t)?e.components[t]:t}if(e.evaluater)return e.evaluater.evaluateExpression(r);_i(e)}function _i(e,t){let n=new Gr("Cannot handle MDX estrees without `createEvaluater`",{ancestors:e.ancestors,place:t,ruleId:`mdx-estree`,source:`hast-util-to-jsx-runtime`});throw n.file=e.filePath||void 0,n.url=Qr+`#cannot-handle-mdx-estrees-without-createevaluater`,n}function vi(e){let t={},n;for(n in e)qr.call(e,n)&&(t[yi(n)]=e[n]);return t}function yi(e){let t=e.replace(Yr,bi);return t.slice(0,3)===`ms-`&&(t=`-`+t),t}function bi(e){return`-`+e.toLowerCase()}var xi={action:[`form`],cite:[`blockquote`,`del`,`ins`,`q`],data:[`object`],formAction:[`button`,`input`],href:[`a`,`area`,`base`,`link`],icon:[`menuitem`],itemId:null,manifest:[`html`],ping:[`a`,`area`],poster:[`video`],src:[`audio`,`embed`,`iframe`,`img`,`input`,`script`,`source`,`track`,`video`]},Si={};function Ci(e,t){let n=t||Si;return wi(e,typeof n.includeImageAlt!=`boolean`||n.includeImageAlt,typeof n.includeHtml!=`boolean`||n.includeHtml)}function wi(e,t,n){if(Ei(e)){if(`value`in e)return e.type===`html`&&!n?``:e.value;if(t&&`alt`in e&&e.alt)return e.alt;if(`children`in e)return Ti(e.children,t,n)}return Array.isArray(e)?Ti(e,t,n):``}function Ti(e,t,n){let r=[],i=-1;for(;++i<e.length;)r[i]=wi(e[i],t,n);return r.join(``)}function Ei(e){return!!(e&&typeof e==`object`)}var Di=document.createElement(`i`);function Oi(e){let t=`&`+e+`;`;Di.innerHTML=t;let n=Di.textContent;return n.charCodeAt(n.length-1)===59&&e!==`semi`?!1:n!==t&&n}function ki(e,t,n,r){let i=e.length,a=0,o;if(t=t<0?-t>i?0:i+t:t>i?i:t,n=n>0?n:0,r.length<1e4)o=Array.from(r),o.unshift(t,n),e.splice(...o);else for(n&&e.splice(t,n);a<r.length;)o=r.slice(a,a+1e4),o.unshift(t,0),e.splice(...o),a+=1e4,t+=1e4}function Ai(e,t){return e.length>0?(ki(e,e.length,0,t),e):t}var ji={}.hasOwnProperty;function Mi(e){let t={},n=-1;for(;++n<e.length;)Ni(t,e[n]);return t}function Ni(e,t){let n;for(n in t){let r=(ji.call(e,n)?e[n]:void 0)||(e[n]={}),i=t[n],a;if(i)for(a in i){ji.call(r,a)||(r[a]=[]);let e=i[a];Pi(r[a],Array.isArray(e)?e:e?[e]:[])}}}function Pi(e,t){let n=-1,r=[];for(;++n<t.length;)(t[n].add===`after`?e:r).push(t[n]);ki(e,0,0,r)}function Fi(e,t){let n=Number.parseInt(e,t);return n<9||n===11||n>13&&n<32||n>126&&n<160||n>55295&&n<57344||n>64975&&n<65008||(n&65535)==65535||(n&65535)==65534||n>1114111?`�`:String.fromCodePoint(n)}function I(e){return e.replace(/[\t\n\r ]+/g,` `).replace(/^ | $/g,``).toLowerCase().toUpperCase()}var L=Ui(/[A-Za-z]/),R=Ui(/[\dA-Za-z]/),Ii=Ui(/[#-'*+\--9=?A-Z^-~]/);function Li(e){return e!==null&&(e<32||e===127)}var Ri=Ui(/\d/),zi=Ui(/[\dA-Fa-f]/),Bi=Ui(/[!-/:-@[-`{-~]/);function z(e){return e!==null&&e<-2}function B(e){return e!==null&&(e<0||e===32)}function V(e){return e===-2||e===-1||e===32}var Vi=Ui(/\p{P}|\p{S}/u),Hi=Ui(/\s/);function Ui(e){return t;function t(t){return t!==null&&t>-1&&e.test(String.fromCharCode(t))}}function Wi(e){let t=[],n=-1,r=0,i=0;for(;++n<e.length;){let a=e.charCodeAt(n),o=``;if(a===37&&R(e.charCodeAt(n+1))&&R(e.charCodeAt(n+2)))i=2;else if(a<128)/[!#$&-;=?-Z_a-z~]/.test(String.fromCharCode(a))||(o=String.fromCharCode(a));else if(a>55295&&a<57344){let t=e.charCodeAt(n+1);a<56320&&t>56319&&t<57344?(o=String.fromCharCode(a,t),i=1):o=`�`}else o=String.fromCharCode(a);o&&=(t.push(e.slice(r,n),encodeURIComponent(o)),r=n+i+1,``),i&&=(n+=i,0)}return t.join(``)+e.slice(r)}function H(e,t,n,r){let i=r?r-1:1/0,a=0;return o;function o(r){return V(r)?(e.enter(n),s(r)):t(r)}function s(r){return V(r)&&a++<i?(e.consume(r),s):(e.exit(n),t(r))}}var Gi={tokenize:Ki};function Ki(e){let t=e.attempt(this.parser.constructs.contentInitial,r,i),n;return t;function r(n){if(n===null){e.consume(n);return}return e.enter(`lineEnding`),e.consume(n),e.exit(`lineEnding`),H(e,t,`linePrefix`)}function i(t){return e.enter(`paragraph`),a(t)}function a(t){let r=e.enter(`chunkText`,{contentType:`text`,previous:n});return n&&(n.next=r),n=r,o(t)}function o(t){if(t===null){e.exit(`chunkText`),e.exit(`paragraph`),e.consume(t);return}return z(t)?(e.consume(t),e.exit(`chunkText`),a):(e.consume(t),o)}}var qi={tokenize:Yi},Ji={tokenize:Xi};function Yi(e){let t=this,n=[],r=0,i,a,o;return s;function s(i){if(r<n.length){let a=n[r];return t.containerState=a[1],e.attempt(a[0].continuation,c,l)(i)}return l(i)}function c(e){if(r++,t.containerState._closeFlow){t.containerState._closeFlow=void 0,i&&v();let n=t.events.length,a=n,o;for(;a--;)if(t.events[a][0]===`exit`&&t.events[a][1].type===`chunkFlow`){o=t.events[a][1].end;break}_(r);let s=n;for(;s<t.events.length;)t.events[s][1].end={...o},s++;return ki(t.events,a+1,0,t.events.slice(n)),t.events.length=s,l(e)}return s(e)}function l(a){if(r===n.length){if(!i)return f(a);if(i.currentConstruct&&i.currentConstruct.concrete)return m(a);t.interrupt=!!(i.currentConstruct&&!i._gfmTableDynamicInterruptHack)}return t.containerState={},e.check(Ji,u,d)(a)}function u(e){return i&&v(),_(r),f(e)}function d(e){return t.parser.lazy[t.now().line]=r!==n.length,o=t.now().offset,m(e)}function f(n){return t.containerState={},e.attempt(Ji,p,m)(n)}function p(e){return r++,n.push([t.currentConstruct,t.containerState]),f(e)}function m(n){if(n===null){i&&v(),_(0),e.consume(n);return}return i||=t.parser.flow(t.now()),e.enter(`chunkFlow`,{_tokenizer:i,contentType:`flow`,previous:a}),h(n)}function h(n){if(n===null){g(e.exit(`chunkFlow`),!0),_(0),e.consume(n);return}return z(n)?(e.consume(n),g(e.exit(`chunkFlow`)),r=0,t.interrupt=void 0,s):(e.consume(n),h)}function g(e,n){let s=t.sliceStream(e);if(n&&s.push(null),e.previous=a,a&&(a.next=e),a=e,i.defineSkip(e.start),i.write(s),t.parser.lazy[e.start.line]){let e=i.events.length;for(;e--;)if(i.events[e][1].start.offset<o&&(!i.events[e][1].end||i.events[e][1].end.offset>o))return;let n=t.events.length,a=n,s,c;for(;a--;)if(t.events[a][0]===`exit`&&t.events[a][1].type===`chunkFlow`){if(s){c=t.events[a][1].end;break}s=!0}for(_(r),e=n;e<t.events.length;)t.events[e][1].end={...c},e++;ki(t.events,a+1,0,t.events.slice(n)),t.events.length=e}}function _(r){let i=n.length;for(;i-->r;){let r=n[i];t.containerState=r[1],r[0].exit.call(t,e)}n.length=r}function v(){i.write([null]),a=void 0,i=void 0,t.containerState._closeFlow=void 0}}function Xi(e,t,n){return H(e,e.attempt(this.parser.constructs.document,t,n),`linePrefix`,this.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)}function Zi(e){if(e===null||B(e)||Hi(e))return 1;if(Vi(e))return 2}function Qi(e,t,n){let r=[],i=-1;for(;++i<e.length;){let a=e[i].resolveAll;a&&!r.includes(a)&&(t=a(t,n),r.push(a))}return t}var $i={name:`attention`,resolveAll:ea,tokenize:ta};function ea(e,t){let n=-1,r,i,a,o,s,c,l,u;for(;++n<e.length;)if(e[n][0]===`enter`&&e[n][1].type===`attentionSequence`&&e[n][1]._close){for(r=n;r--;)if(e[r][0]===`exit`&&e[r][1].type===`attentionSequence`&&e[r][1]._open&&t.sliceSerialize(e[r][1]).charCodeAt(0)===t.sliceSerialize(e[n][1]).charCodeAt(0)){if((e[r][1]._close||e[n][1]._open)&&(e[n][1].end.offset-e[n][1].start.offset)%3&&!((e[r][1].end.offset-e[r][1].start.offset+e[n][1].end.offset-e[n][1].start.offset)%3))continue;c=e[r][1].end.offset-e[r][1].start.offset>1&&e[n][1].end.offset-e[n][1].start.offset>1?2:1;let d={...e[r][1].end},f={...e[n][1].start};na(d,-c),na(f,c),o={type:c>1?`strongSequence`:`emphasisSequence`,start:d,end:{...e[r][1].end}},s={type:c>1?`strongSequence`:`emphasisSequence`,start:{...e[n][1].start},end:f},a={type:c>1?`strongText`:`emphasisText`,start:{...e[r][1].end},end:{...e[n][1].start}},i={type:c>1?`strong`:`emphasis`,start:{...o.start},end:{...s.end}},e[r][1].end={...o.start},e[n][1].start={...s.end},l=[],e[r][1].end.offset-e[r][1].start.offset&&(l=Ai(l,[[`enter`,e[r][1],t],[`exit`,e[r][1],t]])),l=Ai(l,[[`enter`,i,t],[`enter`,o,t],[`exit`,o,t],[`enter`,a,t]]),l=Ai(l,Qi(t.parser.constructs.insideSpan.null,e.slice(r+1,n),t)),l=Ai(l,[[`exit`,a,t],[`enter`,s,t],[`exit`,s,t],[`exit`,i,t]]),e[n][1].end.offset-e[n][1].start.offset?(u=2,l=Ai(l,[[`enter`,e[n][1],t],[`exit`,e[n][1],t]])):u=0,ki(e,r-1,n-r+3,l),n=r+l.length-u-2;break}}for(n=-1;++n<e.length;)e[n][1].type===`attentionSequence`&&(e[n][1].type=`data`);return e}function ta(e,t){let n=this.parser.constructs.attentionMarkers.null,r=this.previous,i=Zi(r),a;return o;function o(t){return a=t,e.enter(`attentionSequence`),s(t)}function s(o){if(o===a)return e.consume(o),s;let c=e.exit(`attentionSequence`),l=Zi(o),u=!l||l===2&&i||n.includes(o),d=!i||i===2&&l||n.includes(r);return c._open=!!(a===42?u:u&&(i||!d)),c._close=!!(a===42?d:d&&(l||!u)),t(o)}}function na(e,t){e.column+=t,e.offset+=t,e._bufferIndex+=t}var ra={name:`autolink`,tokenize:ia};function ia(e,t,n){let r=0;return i;function i(t){return e.enter(`autolink`),e.enter(`autolinkMarker`),e.consume(t),e.exit(`autolinkMarker`),e.enter(`autolinkProtocol`),a}function a(t){return L(t)?(e.consume(t),o):t===64?n(t):l(t)}function o(e){return e===43||e===45||e===46||R(e)?(r=1,s(e)):l(e)}function s(t){return t===58?(e.consume(t),r=0,c):(t===43||t===45||t===46||R(t))&&r++<32?(e.consume(t),s):(r=0,l(t))}function c(r){return r===62?(e.exit(`autolinkProtocol`),e.enter(`autolinkMarker`),e.consume(r),e.exit(`autolinkMarker`),e.exit(`autolink`),t):r===null||r===32||r===60||Li(r)?n(r):(e.consume(r),c)}function l(t){return t===64?(e.consume(t),u):Ii(t)?(e.consume(t),l):n(t)}function u(e){return R(e)?d(e):n(e)}function d(n){return n===46?(e.consume(n),r=0,u):n===62?(e.exit(`autolinkProtocol`).type=`autolinkEmail`,e.enter(`autolinkMarker`),e.consume(n),e.exit(`autolinkMarker`),e.exit(`autolink`),t):f(n)}function f(t){if((t===45||R(t))&&r++<63){let n=t===45?f:d;return e.consume(t),n}return n(t)}}var aa={partial:!0,tokenize:oa};function oa(e,t,n){return r;function r(t){return V(t)?H(e,i,`linePrefix`)(t):i(t)}function i(e){return e===null||z(e)?t(e):n(e)}}var sa={continuation:{tokenize:la},exit:ua,name:`blockQuote`,tokenize:ca};function ca(e,t,n){let r=this;return i;function i(t){if(t===62){let n=r.containerState;return n.open||=(e.enter(`blockQuote`,{_container:!0}),!0),e.enter(`blockQuotePrefix`),e.enter(`blockQuoteMarker`),e.consume(t),e.exit(`blockQuoteMarker`),a}return n(t)}function a(n){return V(n)?(e.enter(`blockQuotePrefixWhitespace`),e.consume(n),e.exit(`blockQuotePrefixWhitespace`),e.exit(`blockQuotePrefix`),t):(e.exit(`blockQuotePrefix`),t(n))}}function la(e,t,n){let r=this;return i;function i(t){return V(t)?H(e,a,`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(t):a(t)}function a(r){return e.attempt(sa,t,n)(r)}}function ua(e){e.exit(`blockQuote`)}var da={name:`characterEscape`,tokenize:fa};function fa(e,t,n){return r;function r(t){return e.enter(`characterEscape`),e.enter(`escapeMarker`),e.consume(t),e.exit(`escapeMarker`),i}function i(r){return Bi(r)?(e.enter(`characterEscapeValue`),e.consume(r),e.exit(`characterEscapeValue`),e.exit(`characterEscape`),t):n(r)}}var pa={name:`characterReference`,tokenize:ma};function ma(e,t,n){let r=this,i=0,a,o;return s;function s(t){return e.enter(`characterReference`),e.enter(`characterReferenceMarker`),e.consume(t),e.exit(`characterReferenceMarker`),c}function c(t){return t===35?(e.enter(`characterReferenceMarkerNumeric`),e.consume(t),e.exit(`characterReferenceMarkerNumeric`),l):(e.enter(`characterReferenceValue`),a=31,o=R,u(t))}function l(t){return t===88||t===120?(e.enter(`characterReferenceMarkerHexadecimal`),e.consume(t),e.exit(`characterReferenceMarkerHexadecimal`),e.enter(`characterReferenceValue`),a=6,o=zi,u):(e.enter(`characterReferenceValue`),a=7,o=Ri,u(t))}function u(s){if(s===59&&i){let i=e.exit(`characterReferenceValue`);return o===R&&!Oi(r.sliceSerialize(i))?n(s):(e.enter(`characterReferenceMarker`),e.consume(s),e.exit(`characterReferenceMarker`),e.exit(`characterReference`),t)}return o(s)&&i++<a?(e.consume(s),u):n(s)}}var ha={partial:!0,tokenize:va},ga={concrete:!0,name:`codeFenced`,tokenize:_a};function _a(e,t,n){let r=this,i={partial:!0,tokenize:x},a=0,o=0,s;return c;function c(e){return l(e)}function l(t){let n=r.events[r.events.length-1];return a=n&&n[1].type===`linePrefix`?n[2].sliceSerialize(n[1],!0).length:0,s=t,e.enter(`codeFenced`),e.enter(`codeFencedFence`),e.enter(`codeFencedFenceSequence`),u(t)}function u(t){return t===s?(o++,e.consume(t),u):o<3?n(t):(e.exit(`codeFencedFenceSequence`),V(t)?H(e,d,`whitespace`)(t):d(t))}function d(n){return n===null||z(n)?(e.exit(`codeFencedFence`),r.interrupt?t(n):e.check(ha,h,b)(n)):(e.enter(`codeFencedFenceInfo`),e.enter(`chunkString`,{contentType:`string`}),f(n))}function f(t){return t===null||z(t)?(e.exit(`chunkString`),e.exit(`codeFencedFenceInfo`),d(t)):V(t)?(e.exit(`chunkString`),e.exit(`codeFencedFenceInfo`),H(e,p,`whitespace`)(t)):t===96&&t===s?n(t):(e.consume(t),f)}function p(t){return t===null||z(t)?d(t):(e.enter(`codeFencedFenceMeta`),e.enter(`chunkString`,{contentType:`string`}),m(t))}function m(t){return t===null||z(t)?(e.exit(`chunkString`),e.exit(`codeFencedFenceMeta`),d(t)):t===96&&t===s?n(t):(e.consume(t),m)}function h(t){return e.attempt(i,b,g)(t)}function g(t){return e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),_}function _(t){return a>0&&V(t)?H(e,v,`linePrefix`,a+1)(t):v(t)}function v(t){return t===null||z(t)?e.check(ha,h,b)(t):(e.enter(`codeFlowValue`),y(t))}function y(t){return t===null||z(t)?(e.exit(`codeFlowValue`),v(t)):(e.consume(t),y)}function b(n){return e.exit(`codeFenced`),t(n)}function x(e,t,n){let i=0;return a;function a(t){return e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),c}function c(t){return e.enter(`codeFencedFence`),V(t)?H(e,l,`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(t):l(t)}function l(t){return t===s?(e.enter(`codeFencedFenceSequence`),u(t)):n(t)}function u(t){return t===s?(i++,e.consume(t),u):i>=o?(e.exit(`codeFencedFenceSequence`),V(t)?H(e,d,`whitespace`)(t):d(t)):n(t)}function d(r){return r===null||z(r)?(e.exit(`codeFencedFence`),t(r)):n(r)}}}function va(e,t,n){let r=this;return i;function i(t){return t===null?n(t):(e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),a)}function a(e){return r.parser.lazy[r.now().line]?n(e):t(e)}}var ya={name:`codeIndented`,tokenize:xa},ba={partial:!0,tokenize:Sa};function xa(e,t,n){let r=this;return i;function i(t){return e.enter(`codeIndented`),H(e,a,`linePrefix`,5)(t)}function a(e){let t=r.events[r.events.length-1];return t&&t[1].type===`linePrefix`&&t[2].sliceSerialize(t[1],!0).length>=4?o(e):n(e)}function o(t){return t===null?c(t):z(t)?e.attempt(ba,o,c)(t):(e.enter(`codeFlowValue`),s(t))}function s(t){return t===null||z(t)?(e.exit(`codeFlowValue`),o(t)):(e.consume(t),s)}function c(n){return e.exit(`codeIndented`),t(n)}}function Sa(e,t,n){let r=this;return i;function i(t){return r.parser.lazy[r.now().line]?n(t):z(t)?(e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),i):H(e,a,`linePrefix`,5)(t)}function a(e){let a=r.events[r.events.length-1];return a&&a[1].type===`linePrefix`&&a[2].sliceSerialize(a[1],!0).length>=4?t(e):z(e)?i(e):n(e)}}var Ca={name:`codeText`,previous:Ta,resolve:wa,tokenize:Ea};function wa(e){let t=e.length-4,n=3,r,i;if((e[n][1].type===`lineEnding`||e[n][1].type===`space`)&&(e[t][1].type===`lineEnding`||e[t][1].type===`space`)){for(r=n;++r<t;)if(e[r][1].type===`codeTextData`){e[n][1].type=`codeTextPadding`,e[t][1].type=`codeTextPadding`,n+=2,t-=2;break}}for(r=n-1,t++;++r<=t;)i===void 0?r!==t&&e[r][1].type!==`lineEnding`&&(i=r):(r===t||e[r][1].type===`lineEnding`)&&(e[i][1].type=`codeTextData`,r!==i+2&&(e[i][1].end=e[r-1][1].end,e.splice(i+2,r-i-2),t-=r-i-2,r=i+2),i=void 0);return e}function Ta(e){return e!==96||this.events[this.events.length-1][1].type===`characterEscape`}function Ea(e,t,n){let r=0,i,a;return o;function o(t){return e.enter(`codeText`),e.enter(`codeTextSequence`),s(t)}function s(t){return t===96?(e.consume(t),r++,s):(e.exit(`codeTextSequence`),c(t))}function c(t){return t===null?n(t):t===32?(e.enter(`space`),e.consume(t),e.exit(`space`),c):t===96?(a=e.enter(`codeTextSequence`),i=0,u(t)):z(t)?(e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),c):(e.enter(`codeTextData`),l(t))}function l(t){return t===null||t===32||t===96||z(t)?(e.exit(`codeTextData`),c(t)):(e.consume(t),l)}function u(n){return n===96?(e.consume(n),i++,u):i===r?(e.exit(`codeTextSequence`),e.exit(`codeText`),t(n)):(a.type=`codeTextData`,l(n))}}var Da=class{constructor(e){this.left=e?[...e]:[],this.right=[]}get(e){if(e<0||e>=this.left.length+this.right.length)throw RangeError("Cannot access index `"+e+"` in a splice buffer of size `"+(this.left.length+this.right.length)+"`");return e<this.left.length?this.left[e]:this.right[this.right.length-e+this.left.length-1]}get length(){return this.left.length+this.right.length}shift(){return this.setCursor(0),this.right.pop()}slice(e,t){let n=t??1/0;return n<this.left.length?this.left.slice(e,n):e>this.left.length?this.right.slice(this.right.length-n+this.left.length,this.right.length-e+this.left.length).reverse():this.left.slice(e).concat(this.right.slice(this.right.length-n+this.left.length).reverse())}splice(e,t,n){let r=t||0;this.setCursor(Math.trunc(e));let i=this.right.splice(this.right.length-r,1/0);return n&&Oa(this.left,n),i.reverse()}pop(){return this.setCursor(1/0),this.left.pop()}push(e){this.setCursor(1/0),this.left.push(e)}pushMany(e){this.setCursor(1/0),Oa(this.left,e)}unshift(e){this.setCursor(0),this.right.push(e)}unshiftMany(e){this.setCursor(0),Oa(this.right,e.reverse())}setCursor(e){if(!(e===this.left.length||e>this.left.length&&this.right.length===0||e<0&&this.left.length===0)){if(e<this.left.length){let t=this.left.splice(e,1/0);Oa(this.right,t.reverse())}else{let t=this.right.splice(this.left.length+this.right.length-e,1/0);Oa(this.left,t.reverse())}}}};function Oa(e,t){let n=0;if(t.length<1e4)e.push(...t);else for(;n<t.length;)e.push(...t.slice(n,n+1e4)),n+=1e4}function ka(e){let t={},n=-1,r,i,a,o,s,c,l,u=new Da(e);for(;++n<u.length;){for(;n in t;)n=t[n];if(r=u.get(n),n&&r[1].type===`chunkFlow`&&u.get(n-1)[1].type===`listItemPrefix`&&(c=r[1]._tokenizer.events,a=0,a<c.length&&c[a][1].type===`lineEndingBlank`&&(a+=2),a<c.length&&c[a][1].type===`content`))for(;++a<c.length&&c[a][1].type!==`content`;)c[a][1].type===`chunkText`&&(c[a][1]._isInFirstContentOfListItem=!0,a++);if(r[0]===`enter`)r[1].contentType&&(Object.assign(t,Aa(u,n)),n=t[n],l=!0);else if(r[1]._container){for(a=n,i=void 0;a--;)if(o=u.get(a),o[1].type===`lineEnding`||o[1].type===`lineEndingBlank`)o[0]===`enter`&&(i&&(u.get(i)[1].type=`lineEndingBlank`),o[1].type=`lineEnding`,i=a);else if(o[1].type!==`linePrefix`&&o[1].type!==`listItemIndent`)break;i&&(r[1].end={...u.get(i)[1].start},s=u.slice(i,n),s.unshift(r),u.splice(i,n-i+1,s))}}return ki(e,0,1/0,u.slice(0)),!l}function Aa(e,t){let n=e.get(t)[1],r=e.get(t)[2],i=t-1,a=[],o=n._tokenizer;o||(o=r.parser[n.contentType](n.start),n._contentTypeTextTrailing&&(o._contentTypeTextTrailing=!0));let s=o.events,c=[],l={},u,d,f=-1,p=n,m=0,h=0,g=[h];for(;p;){for(;e.get(++i)[1]!==p;);a.push(i),p._tokenizer||(u=r.sliceStream(p),p.next||u.push(null),d&&o.defineSkip(p.start),p._isInFirstContentOfListItem&&(o._gfmTasklistFirstContentOfListItem=!0),o.write(u),p._isInFirstContentOfListItem&&(o._gfmTasklistFirstContentOfListItem=void 0)),d=p,p=p.next}for(p=n;++f<s.length;)s[f][0]===`exit`&&s[f-1][0]===`enter`&&s[f][1].type===s[f-1][1].type&&s[f][1].start.line!==s[f][1].end.line&&(h=f+1,g.push(h),p._tokenizer=void 0,p.previous=void 0,p=p.next);for(o.events=[],p?(p._tokenizer=void 0,p.previous=void 0):g.pop(),f=g.length;f--;){let t=s.slice(g[f],g[f+1]),n=a.pop();c.push([n,n+t.length-1]),e.splice(n,2,t)}for(c.reverse(),f=-1;++f<c.length;)l[m+c[f][0]]=m+c[f][1],m+=c[f][1]-c[f][0]-1;return l}var ja={resolve:Na,tokenize:Pa},Ma={partial:!0,tokenize:Fa};function Na(e){return ka(e),e}function Pa(e,t){let n;return r;function r(t){return e.enter(`content`),n=e.enter(`chunkContent`,{contentType:`content`}),i(t)}function i(t){return t===null?a(t):z(t)?e.check(Ma,o,a)(t):(e.consume(t),i)}function a(n){return e.exit(`chunkContent`),e.exit(`content`),t(n)}function o(t){return e.consume(t),e.exit(`chunkContent`),n.next=e.enter(`chunkContent`,{contentType:`content`,previous:n}),n=n.next,i}}function Fa(e,t,n){let r=this;return i;function i(t){return e.exit(`chunkContent`),e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),H(e,a,`linePrefix`)}function a(i){if(i===null||z(i))return n(i);let a=r.events[r.events.length-1];return!r.parser.constructs.disable.null.includes(`codeIndented`)&&a&&a[1].type===`linePrefix`&&a[2].sliceSerialize(a[1],!0).length>=4?t(i):e.interrupt(r.parser.constructs.flow,n,t)(i)}}function Ia(e,t,n,r,i,a,o,s,c){let l=c||1/0,u=0;return d;function d(t){return t===60?(e.enter(r),e.enter(i),e.enter(a),e.consume(t),e.exit(a),f):t===null||t===32||t===41||Li(t)?n(t):(e.enter(r),e.enter(o),e.enter(s),e.enter(`chunkString`,{contentType:`string`}),h(t))}function f(n){return n===62?(e.enter(a),e.consume(n),e.exit(a),e.exit(i),e.exit(r),t):(e.enter(s),e.enter(`chunkString`,{contentType:`string`}),p(n))}function p(t){return t===62?(e.exit(`chunkString`),e.exit(s),f(t)):t===null||t===60||z(t)?n(t):(e.consume(t),t===92?m:p)}function m(t){return t===60||t===62||t===92?(e.consume(t),p):p(t)}function h(i){return!u&&(i===null||i===41||B(i))?(e.exit(`chunkString`),e.exit(s),e.exit(o),e.exit(r),t(i)):u<l&&i===40?(e.consume(i),u++,h):i===41?(e.consume(i),u--,h):i===null||i===32||i===40||Li(i)?n(i):(e.consume(i),i===92?g:h)}function g(t){return t===40||t===41||t===92?(e.consume(t),h):h(t)}}function La(e,t,n,r,i,a){let o=this,s=0,c;return l;function l(t){return e.enter(r),e.enter(i),e.consume(t),e.exit(i),e.enter(a),u}function u(l){return s>999||l===null||l===91||l===93&&!c||l===94&&!s&&`_hiddenFootnoteSupport`in o.parser.constructs?n(l):l===93?(e.exit(a),e.enter(i),e.consume(l),e.exit(i),e.exit(r),t):z(l)?(e.enter(`lineEnding`),e.consume(l),e.exit(`lineEnding`),u):(e.enter(`chunkString`,{contentType:`string`}),d(l))}function d(t){return t===null||t===91||t===93||z(t)||s++>999?(e.exit(`chunkString`),u(t)):(e.consume(t),c||=!V(t),t===92?f:d)}function f(t){return t===91||t===92||t===93?(e.consume(t),s++,d):d(t)}}function Ra(e,t,n,r,i,a){let o;return s;function s(t){return t===34||t===39||t===40?(e.enter(r),e.enter(i),e.consume(t),e.exit(i),o=t===40?41:t,c):n(t)}function c(n){return n===o?(e.enter(i),e.consume(n),e.exit(i),e.exit(r),t):(e.enter(a),l(n))}function l(t){return t===o?(e.exit(a),c(o)):t===null?n(t):z(t)?(e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),H(e,l,`linePrefix`)):(e.enter(`chunkString`,{contentType:`string`}),u(t))}function u(t){return t===o||t===null||z(t)?(e.exit(`chunkString`),l(t)):(e.consume(t),t===92?d:u)}function d(t){return t===o||t===92?(e.consume(t),u):u(t)}}function za(e,t){let n;return r;function r(i){return z(i)?(e.enter(`lineEnding`),e.consume(i),e.exit(`lineEnding`),n=!0,r):V(i)?H(e,r,n?`linePrefix`:`lineSuffix`)(i):t(i)}}var Ba={name:`definition`,tokenize:Ha},Va={partial:!0,tokenize:Ua};function Ha(e,t,n){let r=this,i;return a;function a(t){return e.enter(`definition`),o(t)}function o(t){return La.call(r,e,s,n,`definitionLabel`,`definitionLabelMarker`,`definitionLabelString`)(t)}function s(t){return i=I(r.sliceSerialize(r.events[r.events.length-1][1]).slice(1,-1)),t===58?(e.enter(`definitionMarker`),e.consume(t),e.exit(`definitionMarker`),c):n(t)}function c(t){return B(t)?za(e,l)(t):l(t)}function l(t){return Ia(e,u,n,`definitionDestination`,`definitionDestinationLiteral`,`definitionDestinationLiteralMarker`,`definitionDestinationRaw`,`definitionDestinationString`)(t)}function u(t){return e.attempt(Va,d,d)(t)}function d(t){return V(t)?H(e,f,`whitespace`)(t):f(t)}function f(a){return a===null||z(a)?(e.exit(`definition`),r.parser.defined.push(i),t(a)):n(a)}}function Ua(e,t,n){return r;function r(t){return B(t)?za(e,i)(t):n(t)}function i(t){return Ra(e,a,n,`definitionTitle`,`definitionTitleMarker`,`definitionTitleString`)(t)}function a(t){return V(t)?H(e,o,`whitespace`)(t):o(t)}function o(e){return e===null||z(e)?t(e):n(e)}}var Wa={name:`hardBreakEscape`,tokenize:Ga};function Ga(e,t,n){return r;function r(t){return e.enter(`hardBreakEscape`),e.consume(t),i}function i(r){return z(r)?(e.exit(`hardBreakEscape`),t(r)):n(r)}}var Ka={name:`headingAtx`,resolve:qa,tokenize:Ja};function qa(e,t){let n=e.length-2,r=3,i,a;return e[r][1].type===`whitespace`&&(r+=2),n-2>r&&e[n][1].type===`whitespace`&&(n-=2),e[n][1].type===`atxHeadingSequence`&&(r===n-1||n-4>r&&e[n-2][1].type===`whitespace`)&&(n-=r+1===n?2:4),n>r&&(i={type:`atxHeadingText`,start:e[r][1].start,end:e[n][1].end},a={type:`chunkText`,start:e[r][1].start,end:e[n][1].end,contentType:`text`},ki(e,r,n-r+1,[[`enter`,i,t],[`enter`,a,t],[`exit`,a,t],[`exit`,i,t]])),e}function Ja(e,t,n){let r=0;return i;function i(t){return e.enter(`atxHeading`),a(t)}function a(t){return e.enter(`atxHeadingSequence`),o(t)}function o(t){return t===35&&r++<6?(e.consume(t),o):t===null||B(t)?(e.exit(`atxHeadingSequence`),s(t)):n(t)}function s(n){return n===35?(e.enter(`atxHeadingSequence`),c(n)):n===null||z(n)?(e.exit(`atxHeading`),t(n)):V(n)?H(e,s,`whitespace`)(n):(e.enter(`atxHeadingText`),l(n))}function c(t){return t===35?(e.consume(t),c):(e.exit(`atxHeadingSequence`),s(t))}function l(t){return t===null||t===35||B(t)?(e.exit(`atxHeadingText`),s(t)):(e.consume(t),l)}}var Ya=`address.article.aside.base.basefont.blockquote.body.caption.center.col.colgroup.dd.details.dialog.dir.div.dl.dt.fieldset.figcaption.figure.footer.form.frame.frameset.h1.h2.h3.h4.h5.h6.head.header.hr.html.iframe.legend.li.link.main.menu.menuitem.nav.noframes.ol.optgroup.option.p.param.search.section.summary.table.tbody.td.tfoot.th.thead.title.tr.track.ul`.split(`.`),Xa=[`pre`,`script`,`style`,`textarea`],Za={concrete:!0,name:`htmlFlow`,resolveTo:eo,tokenize:to},Qa={partial:!0,tokenize:ro},$a={partial:!0,tokenize:no};function eo(e){let t=e.length;for(;t--&&(e[t][0]!==`enter`||e[t][1].type!==`htmlFlow`););return t>1&&e[t-2][1].type===`linePrefix`&&(e[t][1].start=e[t-2][1].start,e[t+1][1].start=e[t-2][1].start,e.splice(t-2,2)),e}function to(e,t,n){let r=this,i,a,o,s,c;return l;function l(e){return u(e)}function u(t){return e.enter(`htmlFlow`),e.enter(`htmlFlowData`),e.consume(t),d}function d(s){return s===33?(e.consume(s),f):s===47?(e.consume(s),a=!0,h):s===63?(e.consume(s),i=3,r.interrupt?t:O):L(s)?(e.consume(s),o=String.fromCharCode(s),g):n(s)}function f(a){return a===45?(e.consume(a),i=2,p):a===91?(e.consume(a),i=5,s=0,m):L(a)?(e.consume(a),i=4,r.interrupt?t:O):n(a)}function p(i){return i===45?(e.consume(i),r.interrupt?t:O):n(i)}function m(i){return i===`CDATA[`.charCodeAt(s++)?(e.consume(i),s===6?r.interrupt?t:E:m):n(i)}function h(t){return L(t)?(e.consume(t),o=String.fromCharCode(t),g):n(t)}function g(s){if(s===null||s===47||s===62||B(s)){let c=s===47,l=o.toLowerCase();return!c&&!a&&Xa.includes(l)?(i=1,r.interrupt?t(s):E(s)):Ya.includes(o.toLowerCase())?(i=6,c?(e.consume(s),_):r.interrupt?t(s):E(s)):(i=7,r.interrupt&&!r.parser.lazy[r.now().line]?n(s):a?v(s):y(s))}return s===45||R(s)?(e.consume(s),o+=String.fromCharCode(s),g):n(s)}function _(i){return i===62?(e.consume(i),r.interrupt?t:E):n(i)}function v(t){return V(t)?(e.consume(t),v):T(t)}function y(t){return t===47?(e.consume(t),T):t===58||t===95||L(t)?(e.consume(t),b):V(t)?(e.consume(t),y):T(t)}function b(t){return t===45||t===46||t===58||t===95||R(t)?(e.consume(t),b):x(t)}function x(t){return t===61?(e.consume(t),ee):V(t)?(e.consume(t),x):y(t)}function ee(t){return t===null||t===60||t===61||t===62||t===96?n(t):t===34||t===39?(e.consume(t),c=t,S):V(t)?(e.consume(t),ee):C(t)}function S(t){return t===c?(e.consume(t),c=null,w):t===null||z(t)?n(t):(e.consume(t),S)}function C(t){return t===null||t===34||t===39||t===47||t===60||t===61||t===62||t===96||B(t)?x(t):(e.consume(t),C)}function w(e){return e===47||e===62||V(e)?y(e):n(e)}function T(t){return t===62?(e.consume(t),te):n(t)}function te(t){return t===null||z(t)?E(t):V(t)?(e.consume(t),te):n(t)}function E(t){return t===45&&i===2?(e.consume(t),ie):t===60&&i===1?(e.consume(t),ae):t===62&&i===4?(e.consume(t),k):t===63&&i===3?(e.consume(t),O):t===93&&i===5?(e.consume(t),se):z(t)&&(i===6||i===7)?(e.exit(`htmlFlowData`),e.check(Qa,ce,ne)(t)):t===null||z(t)?(e.exit(`htmlFlowData`),ne(t)):(e.consume(t),E)}function ne(t){return e.check($a,D,ce)(t)}function D(t){return e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),re}function re(t){return t===null||z(t)?ne(t):(e.enter(`htmlFlowData`),E(t))}function ie(t){return t===45?(e.consume(t),O):E(t)}function ae(t){return t===47?(e.consume(t),o=``,oe):E(t)}function oe(t){if(t===62){let n=o.toLowerCase();return Xa.includes(n)?(e.consume(t),k):E(t)}return L(t)&&o.length<8?(e.consume(t),o+=String.fromCharCode(t),oe):E(t)}function se(t){return t===93?(e.consume(t),O):E(t)}function O(t){return t===62?(e.consume(t),k):t===45&&i===2?(e.consume(t),O):E(t)}function k(t){return t===null||z(t)?(e.exit(`htmlFlowData`),ce(t)):(e.consume(t),k)}function ce(n){return e.exit(`htmlFlow`),t(n)}}function no(e,t,n){let r=this;return i;function i(t){return z(t)?(e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),a):n(t)}function a(e){return r.parser.lazy[r.now().line]?n(e):t(e)}}function ro(e,t,n){return r;function r(r){return e.enter(`lineEnding`),e.consume(r),e.exit(`lineEnding`),e.attempt(aa,t,n)}}var io={name:`htmlText`,tokenize:ao};function ao(e,t,n){let r=this,i,a,o;return s;function s(t){return e.enter(`htmlText`),e.enter(`htmlTextData`),e.consume(t),c}function c(t){return t===33?(e.consume(t),l):t===47?(e.consume(t),x):t===63?(e.consume(t),y):L(t)?(e.consume(t),C):n(t)}function l(t){return t===45?(e.consume(t),u):t===91?(e.consume(t),a=0,m):L(t)?(e.consume(t),v):n(t)}function u(t){return t===45?(e.consume(t),p):n(t)}function d(t){return t===null?n(t):t===45?(e.consume(t),f):z(t)?(o=d,ae(t)):(e.consume(t),d)}function f(t){return t===45?(e.consume(t),p):d(t)}function p(e){return e===62?ie(e):e===45?f(e):d(e)}function m(t){return t===`CDATA[`.charCodeAt(a++)?(e.consume(t),a===6?h:m):n(t)}function h(t){return t===null?n(t):t===93?(e.consume(t),g):z(t)?(o=h,ae(t)):(e.consume(t),h)}function g(t){return t===93?(e.consume(t),_):h(t)}function _(t){return t===62?ie(t):t===93?(e.consume(t),_):h(t)}function v(t){return t===null||t===62?ie(t):z(t)?(o=v,ae(t)):(e.consume(t),v)}function y(t){return t===null?n(t):t===63?(e.consume(t),b):z(t)?(o=y,ae(t)):(e.consume(t),y)}function b(e){return e===62?ie(e):y(e)}function x(t){return L(t)?(e.consume(t),ee):n(t)}function ee(t){return t===45||R(t)?(e.consume(t),ee):S(t)}function S(t){return z(t)?(o=S,ae(t)):V(t)?(e.consume(t),S):ie(t)}function C(t){return t===45||R(t)?(e.consume(t),C):t===47||t===62||B(t)?w(t):n(t)}function w(t){return t===47?(e.consume(t),ie):t===58||t===95||L(t)?(e.consume(t),T):z(t)?(o=w,ae(t)):V(t)?(e.consume(t),w):ie(t)}function T(t){return t===45||t===46||t===58||t===95||R(t)?(e.consume(t),T):te(t)}function te(t){return t===61?(e.consume(t),E):z(t)?(o=te,ae(t)):V(t)?(e.consume(t),te):w(t)}function E(t){return t===null||t===60||t===61||t===62||t===96?n(t):t===34||t===39?(e.consume(t),i=t,ne):z(t)?(o=E,ae(t)):V(t)?(e.consume(t),E):(e.consume(t),D)}function ne(t){return t===i?(e.consume(t),i=void 0,re):t===null?n(t):z(t)?(o=ne,ae(t)):(e.consume(t),ne)}function D(t){return t===null||t===34||t===39||t===60||t===61||t===96?n(t):t===47||t===62||B(t)?w(t):(e.consume(t),D)}function re(e){return e===47||e===62||B(e)?w(e):n(e)}function ie(r){return r===62?(e.consume(r),e.exit(`htmlTextData`),e.exit(`htmlText`),t):n(r)}function ae(t){return e.exit(`htmlTextData`),e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),oe}function oe(t){return V(t)?H(e,se,`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(t):se(t)}function se(t){return e.enter(`htmlTextData`),o(t)}}var oo={name:`labelEnd`,resolveAll:U,resolveTo:W,tokenize:uo},so={tokenize:fo},co={tokenize:po},lo={tokenize:mo};function U(e){let t=-1,n=[];for(;++t<e.length;){let r=e[t][1];if(n.push(e[t]),r.type===`labelImage`||r.type===`labelLink`||r.type===`labelEnd`){let e=r.type===`labelImage`?4:2;r.type=`data`,t+=e}}return e.length!==n.length&&ki(e,0,e.length,n),e}function W(e,t){let n=e.length,r=0,i,a,o,s;for(;n--;)if(i=e[n][1],a){if(i.type===`link`||i.type===`labelLink`&&i._inactive)break;e[n][0]===`enter`&&i.type===`labelLink`&&(i._inactive=!0)}else if(o){if(e[n][0]===`enter`&&(i.type===`labelImage`||i.type===`labelLink`)&&!i._balanced&&(a=n,i.type!==`labelLink`)){r=2;break}}else i.type===`labelEnd`&&(o=n);let c={type:e[a][1].type===`labelLink`?`link`:`image`,start:{...e[a][1].start},end:{...e[e.length-1][1].end}},l={type:`label`,start:{...e[a][1].start},end:{...e[o][1].end}},u={type:`labelText`,start:{...e[a+r+2][1].end},end:{...e[o-2][1].start}};return s=[[`enter`,c,t],[`enter`,l,t]],s=Ai(s,e.slice(a+1,a+r+3)),s=Ai(s,[[`enter`,u,t]]),s=Ai(s,Qi(t.parser.constructs.insideSpan.null,e.slice(a+r+4,o-3),t)),s=Ai(s,[[`exit`,u,t],e[o-2],e[o-1],[`exit`,l,t]]),s=Ai(s,e.slice(o+1)),s=Ai(s,[[`exit`,c,t]]),ki(e,a,e.length,s),e}function uo(e,t,n){let r=this,i=r.events.length,a,o;for(;i--;)if((r.events[i][1].type===`labelImage`||r.events[i][1].type===`labelLink`)&&!r.events[i][1]._balanced){a=r.events[i][1];break}return s;function s(t){return a?a._inactive?d(t):(o=r.parser.defined.includes(I(r.sliceSerialize({start:a.end,end:r.now()}))),e.enter(`labelEnd`),e.enter(`labelMarker`),e.consume(t),e.exit(`labelMarker`),e.exit(`labelEnd`),c):n(t)}function c(t){return t===40?e.attempt(so,u,o?u:d)(t):t===91?e.attempt(co,u,o?l:d)(t):o?u(t):d(t)}function l(t){return e.attempt(lo,u,d)(t)}function u(e){return t(e)}function d(e){return a._balanced=!0,n(e)}}function fo(e,t,n){return r;function r(t){return e.enter(`resource`),e.enter(`resourceMarker`),e.consume(t),e.exit(`resourceMarker`),i}function i(t){return B(t)?za(e,a)(t):a(t)}function a(t){return t===41?u(t):Ia(e,o,s,`resourceDestination`,`resourceDestinationLiteral`,`resourceDestinationLiteralMarker`,`resourceDestinationRaw`,`resourceDestinationString`,32)(t)}function o(t){return B(t)?za(e,c)(t):u(t)}function s(e){return n(e)}function c(t){return t===34||t===39||t===40?Ra(e,l,n,`resourceTitle`,`resourceTitleMarker`,`resourceTitleString`)(t):u(t)}function l(t){return B(t)?za(e,u)(t):u(t)}function u(r){return r===41?(e.enter(`resourceMarker`),e.consume(r),e.exit(`resourceMarker`),e.exit(`resource`),t):n(r)}}function po(e,t,n){let r=this;return i;function i(t){return La.call(r,e,a,o,`reference`,`referenceMarker`,`referenceString`)(t)}function a(e){return r.parser.defined.includes(I(r.sliceSerialize(r.events[r.events.length-1][1]).slice(1,-1)))?t(e):n(e)}function o(e){return n(e)}}function mo(e,t,n){return r;function r(t){return e.enter(`reference`),e.enter(`referenceMarker`),e.consume(t),e.exit(`referenceMarker`),i}function i(r){return r===93?(e.enter(`referenceMarker`),e.consume(r),e.exit(`referenceMarker`),e.exit(`reference`),t):n(r)}}var ho={name:`labelStartImage`,resolveAll:oo.resolveAll,tokenize:go};function go(e,t,n){let r=this;return i;function i(t){return e.enter(`labelImage`),e.enter(`labelImageMarker`),e.consume(t),e.exit(`labelImageMarker`),a}function a(t){return t===91?(e.enter(`labelMarker`),e.consume(t),e.exit(`labelMarker`),e.exit(`labelImage`),o):n(t)}function o(e){return e===94&&`_hiddenFootnoteSupport`in r.parser.constructs?n(e):t(e)}}var _o={name:`labelStartLink`,resolveAll:oo.resolveAll,tokenize:vo};function vo(e,t,n){let r=this;return i;function i(t){return e.enter(`labelLink`),e.enter(`labelMarker`),e.consume(t),e.exit(`labelMarker`),e.exit(`labelLink`),a}function a(e){return e===94&&`_hiddenFootnoteSupport`in r.parser.constructs?n(e):t(e)}}var yo={name:`lineEnding`,tokenize:bo};function bo(e,t){return n;function n(n){return e.enter(`lineEnding`),e.consume(n),e.exit(`lineEnding`),H(e,t,`linePrefix`)}}var xo={name:`thematicBreak`,tokenize:So};function So(e,t,n){let r=0,i;return a;function a(t){return e.enter(`thematicBreak`),o(t)}function o(e){return i=e,s(e)}function s(a){return a===i?(e.enter(`thematicBreakSequence`),c(a)):r>=3&&(a===null||z(a))?(e.exit(`thematicBreak`),t(a)):n(a)}function c(t){return t===i?(e.consume(t),r++,c):(e.exit(`thematicBreakSequence`),V(t)?H(e,s,`whitespace`)(t):s(t))}}var Co={continuation:{tokenize:Do},exit:ko,name:`list`,tokenize:Eo},wo={partial:!0,tokenize:Ao},To={partial:!0,tokenize:Oo};function Eo(e,t,n){let r=this,i=r.events[r.events.length-1],a=i&&i[1].type===`linePrefix`?i[2].sliceSerialize(i[1],!0).length:0,o=0;return s;function s(t){let i=r.containerState.type||(t===42||t===43||t===45?`listUnordered`:`listOrdered`);if(i===`listUnordered`?!r.containerState.marker||t===r.containerState.marker:Ri(t)){if(r.containerState.type||(r.containerState.type=i,e.enter(i,{_container:!0})),i===`listUnordered`)return e.enter(`listItemPrefix`),t===42||t===45?e.check(xo,n,l)(t):l(t);if(!r.interrupt||t===49)return e.enter(`listItemPrefix`),e.enter(`listItemValue`),c(t)}return n(t)}function c(t){return Ri(t)&&++o<10?(e.consume(t),c):(!r.interrupt||o<2)&&(r.containerState.marker?t===r.containerState.marker:t===41||t===46)?(e.exit(`listItemValue`),l(t)):n(t)}function l(t){return e.enter(`listItemMarker`),e.consume(t),e.exit(`listItemMarker`),r.containerState.marker=r.containerState.marker||t,e.check(aa,r.interrupt?n:u,e.attempt(wo,f,d))}function u(e){return r.containerState.initialBlankLine=!0,a++,f(e)}function d(t){return V(t)?(e.enter(`listItemPrefixWhitespace`),e.consume(t),e.exit(`listItemPrefixWhitespace`),f):n(t)}function f(n){return r.containerState.size=a+r.sliceSerialize(e.exit(`listItemPrefix`),!0).length,t(n)}}function Do(e,t,n){let r=this;return r.containerState._closeFlow=void 0,e.check(aa,i,a);function i(n){return r.containerState.furtherBlankLines=r.containerState.furtherBlankLines||r.containerState.initialBlankLine,H(e,t,`listItemIndent`,r.containerState.size+1)(n)}function a(n){return r.containerState.furtherBlankLines||!V(n)?(r.containerState.furtherBlankLines=void 0,r.containerState.initialBlankLine=void 0,o(n)):(r.containerState.furtherBlankLines=void 0,r.containerState.initialBlankLine=void 0,e.attempt(To,t,o)(n))}function o(i){return r.containerState._closeFlow=!0,r.interrupt=void 0,H(e,e.attempt(Co,t,n),`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(i)}}function Oo(e,t,n){let r=this;return H(e,i,`listItemIndent`,r.containerState.size+1);function i(e){let i=r.events[r.events.length-1];return i&&i[1].type===`listItemIndent`&&i[2].sliceSerialize(i[1],!0).length===r.containerState.size?t(e):n(e)}}function ko(e){e.exit(this.containerState.type)}function Ao(e,t,n){let r=this;return H(e,i,`listItemPrefixWhitespace`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:5);function i(e){let i=r.events[r.events.length-1];return!V(e)&&i&&i[1].type===`listItemPrefixWhitespace`?t(e):n(e)}}var jo={name:`setextUnderline`,resolveTo:Mo,tokenize:No};function Mo(e,t){let n=e.length,r,i,a;for(;n--;)if(e[n][0]===`enter`){if(e[n][1].type===`content`){r=n;break}e[n][1].type===`paragraph`&&(i=n)}else e[n][1].type===`content`&&e.splice(n,1),!a&&e[n][1].type===`definition`&&(a=n);let o={type:`setextHeading`,start:{...e[r][1].start},end:{...e[e.length-1][1].end}};return e[i][1].type=`setextHeadingText`,a?(e.splice(i,0,[`enter`,o,t]),e.splice(a+1,0,[`exit`,e[r][1],t]),e[r][1].end={...e[a][1].end}):e[r][1]=o,e.push([`exit`,o,t]),e}function No(e,t,n){let r=this,i;return a;function a(t){let a=r.events.length,s;for(;a--;)if(r.events[a][1].type!==`lineEnding`&&r.events[a][1].type!==`linePrefix`&&r.events[a][1].type!==`content`){s=r.events[a][1].type===`paragraph`;break}return!r.parser.lazy[r.now().line]&&(r.interrupt||s)?(e.enter(`setextHeadingLine`),i=t,o(t)):n(t)}function o(t){return e.enter(`setextHeadingLineSequence`),s(t)}function s(t){return t===i?(e.consume(t),s):(e.exit(`setextHeadingLineSequence`),V(t)?H(e,c,`lineSuffix`)(t):c(t))}function c(r){return r===null||z(r)?(e.exit(`setextHeadingLine`),t(r)):n(r)}}var Po={tokenize:Fo};function Fo(e){let t=this,n=e.attempt(aa,r,e.attempt(this.parser.constructs.flowInitial,i,H(e,e.attempt(this.parser.constructs.flow,i,e.attempt(ja,i)),`linePrefix`)));return n;function r(r){if(r===null){e.consume(r);return}return e.enter(`lineEndingBlank`),e.consume(r),e.exit(`lineEndingBlank`),t.currentConstruct=void 0,n}function i(r){if(r===null){e.consume(r);return}return e.enter(`lineEnding`),e.consume(r),e.exit(`lineEnding`),t.currentConstruct=void 0,n}}var Io={resolveAll:Bo()},Lo=zo(`string`),Ro=zo(`text`);function zo(e){return{resolveAll:Bo(e===`text`?Vo:void 0),tokenize:t};function t(t){let n=this,r=this.parser.constructs[e],i=t.attempt(r,a,o);return a;function a(e){return c(e)?i(e):o(e)}function o(e){if(e===null){t.consume(e);return}return t.enter(`data`),t.consume(e),s}function s(e){return c(e)?(t.exit(`data`),i(e)):(t.consume(e),s)}function c(e){if(e===null)return!0;let t=r[e],i=-1;if(t)for(;++i<t.length;){let e=t[i];if(!e.previous||e.previous.call(n,n.previous))return!0}return!1}}}function Bo(e){return t;function t(t,n){let r=-1,i;for(;++r<=t.length;)i===void 0?t[r]&&t[r][1].type===`data`&&(i=r,r++):(!t[r]||t[r][1].type!==`data`)&&(r!==i+2&&(t[i][1].end=t[r-1][1].end,t.splice(i+2,r-i-2),r=i+2),i=void 0);return e?e(t,n):t}}function Vo(e,t){let n=0;for(;++n<=e.length;)if((n===e.length||e[n][1].type===`lineEnding`)&&e[n-1][1].type===`data`){let r=e[n-1][1],i=t.sliceStream(r),a=i.length,o=-1,s=0,c;for(;a--;){let e=i[a];if(typeof e==`string`){for(o=e.length;e.charCodeAt(o-1)===32;)s++,o--;if(o)break;o=-1}else if(e===-2)c=!0,s++;else if(e!==-1){a++;break}}if(t._contentTypeTextTrailing&&n===e.length&&(s=0),s){let i={type:n===e.length||c||s<2?`lineSuffix`:`hardBreakTrailing`,start:{_bufferIndex:a?o:r.start._bufferIndex+o,_index:r.start._index+a,line:r.end.line,column:r.end.column-s,offset:r.end.offset-s},end:{...r.end}};r.end={...i.start},r.start.offset===r.end.offset?Object.assign(r,i):(e.splice(n,0,[`enter`,i,t],[`exit`,i,t]),n+=2)}n++}return e}var Ho=s({attentionMarkers:()=>Xo,contentInitial:()=>Wo,disable:()=>Zo,document:()=>Uo,flow:()=>Ko,flowInitial:()=>Go,insideSpan:()=>Yo,string:()=>qo,text:()=>Jo}),Uo={42:Co,43:Co,45:Co,48:Co,49:Co,50:Co,51:Co,52:Co,53:Co,54:Co,55:Co,56:Co,57:Co,62:sa},Wo={91:Ba},Go={[-2]:ya,[-1]:ya,32:ya},Ko={35:Ka,42:xo,45:[jo,xo],60:Za,61:jo,95:xo,96:ga,126:ga},qo={38:pa,92:da},Jo={[-5]:yo,[-4]:yo,[-3]:yo,33:ho,38:pa,42:$i,60:[ra,io],91:_o,92:[Wa,da],93:oo,95:$i,96:Ca},Yo={null:[$i,Io]},Xo={null:[42,95]},Zo={null:[]};function Qo(e,t,n){let r={_bufferIndex:-1,_index:0,line:n&&n.line||1,column:n&&n.column||1,offset:n&&n.offset||0},i={},a=[],o=[],s=[],c={attempt:S(x),check:S(ee),consume:v,enter:y,exit:b,interrupt:S(ee,{interrupt:!0})},l={code:null,containerState:{},defineSkip:h,events:[],now:m,parser:e,previous:null,sliceSerialize:f,sliceStream:p,write:d},u=t.tokenize.call(l,c);return t.resolveAll&&a.push(t),l;function d(e){return o=Ai(o,e),g(),o[o.length-1]===null?(C(t,0),l.events=Qi(a,l.events,l),l.events):[]}function f(e,t){return es(p(e),t)}function p(e){return $o(o,e)}function m(){let{_bufferIndex:e,_index:t,line:n,column:i,offset:a}=r;return{_bufferIndex:e,_index:t,line:n,column:i,offset:a}}function h(e){i[e.line]=e.column,T()}function g(){let e;for(;r._index<o.length;){let t=o[r._index];if(typeof t==`string`)for(e=r._index,r._bufferIndex<0&&(r._bufferIndex=0);r._index===e&&r._bufferIndex<t.length;)_(t.charCodeAt(r._bufferIndex));else _(t)}}function _(e){u=u(e)}function v(e){z(e)?(r.line++,r.column=1,r.offset+=e===-3?2:1,T()):e!==-1&&(r.column++,r.offset++),r._bufferIndex<0?r._index++:(r._bufferIndex++,r._bufferIndex===o[r._index].length&&(r._bufferIndex=-1,r._index++)),l.previous=e}function y(e,t){let n=t||{};return n.type=e,n.start=m(),l.events.push([`enter`,n,l]),s.push(n),n}function b(e){let t=s.pop();return t.end=m(),l.events.push([`exit`,t,l]),t}function x(e,t){C(e,t.from)}function ee(e,t){t.restore()}function S(e,t){return n;function n(n,r,i){let a,o,s,u;return Array.isArray(n)?f(n):`tokenize`in n?f([n]):d(n);function d(e){return t;function t(t){let n=t!==null&&e[t],r=t!==null&&e.null;return f([...Array.isArray(n)?n:n?[n]:[],...Array.isArray(r)?r:r?[r]:[]])(t)}}function f(e){return a=e,o=0,e.length===0?i:p(e[o])}function p(e){return n;function n(n){return u=w(),s=e,e.partial||(l.currentConstruct=e),e.name&&l.parser.constructs.disable.null.includes(e.name)?h(n):e.tokenize.call(t?Object.assign(Object.create(l),t):l,c,m,h)(n)}}function m(t){return e(s,u),r}function h(e){return u.restore(),++o<a.length?p(a[o]):i}}}function C(e,t){e.resolveAll&&!a.includes(e)&&a.push(e),e.resolve&&ki(l.events,t,l.events.length-t,e.resolve(l.events.slice(t),l)),e.resolveTo&&(l.events=e.resolveTo(l.events,l))}function w(){let e=m(),t=l.previous,n=l.currentConstruct,i=l.events.length,a=Array.from(s);return{from:i,restore:o};function o(){r=e,l.previous=t,l.currentConstruct=n,l.events.length=i,s=a,T()}}function T(){r.line in i&&r.column<2&&(r.column=i[r.line],r.offset+=i[r.line]-1)}}function $o(e,t){let n=t.start._index,r=t.start._bufferIndex,i=t.end._index,a=t.end._bufferIndex,o;if(n===i)o=[e[n].slice(r,a)];else{if(o=e.slice(n,i),r>-1){let e=o[0];typeof e==`string`?o[0]=e.slice(r):o.shift()}a>0&&o.push(e[i].slice(0,a))}return o}function es(e,t){let n=-1,r=[],i;for(;++n<e.length;){let a=e[n],o;if(typeof a==`string`)o=a;else switch(a){case-5:o=`\r`;break;case-4:o=`
@@ -36,7 +36,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
 `))+1))}let o=`#`.repeat(i),s=n.enter(`headingAtx`),c=n.enter(`phrasing`);a.move(o+` `);let l=n.containerPhrasing(e,{before:`# `,after:`
 `,...a.current()});return/^[\t ]/.test(l)&&(l=Eu(l.charCodeAt(0))+l.slice(1)),l=l?o+` `+l:o,n.options.closeAtx&&(l+=` `+o),c(),s(),l}Mu.peek=Nu;function Mu(e){return e.value||``}function Nu(){return`<`}Pu.peek=Fu;function Pu(e,t,n,r){let i=Cu(n),a=i===`"`?`Quote`:`Apostrophe`,o=n.enter(`image`),s=n.enter(`label`),c=n.createTracker(r),l=c.move(`![`);return l+=c.move(n.safe(e.alt,{before:l,after:`]`,...c.current()})),l+=c.move(`](`),s(),!e.url&&e.title||/[\0- \u007F]/.test(e.url)?(s=n.enter(`destinationLiteral`),l+=c.move(`<`),l+=c.move(n.safe(e.url,{before:l,after:`>`,...c.current()})),l+=c.move(`>`)):(s=n.enter(`destinationRaw`),l+=c.move(n.safe(e.url,{before:l,after:e.title?` `:`)`,...c.current()}))),s(),e.title&&(s=n.enter(`title${a}`),l+=c.move(` `+i),l+=c.move(n.safe(e.title,{before:l,after:i,...c.current()})),l+=c.move(i),s()),l+=c.move(`)`),o(),l}function Fu(){return`!`}Iu.peek=Lu;function Iu(e,t,n,r){let i=e.referenceType,a=n.enter(`imageReference`),o=n.enter(`label`),s=n.createTracker(r),c=s.move(`![`),l=n.safe(e.alt,{before:c,after:`]`,...s.current()});c+=s.move(l+`][`),o();let u=n.stack;n.stack=[],o=n.enter(`reference`);let d=n.safe(n.associationId(e),{before:c,after:`]`,...s.current()});return o(),n.stack=u,a(),i===`full`||!l||l!==d?c+=s.move(d+`]`):i===`shortcut`?c=c.slice(0,-1):c+=s.move(`]`),c}function Lu(){return`!`}Ru.peek=zu;function Ru(e,t,n){let r=e.value||``,i="`",a=-1;for(;RegExp("(^|[^`])"+i+"([^`]|$)").test(r);)i+="`";for(/[^ \r\n]/.test(r)&&(/^[ \r\n]/.test(r)&&/[ \r\n]$/.test(r)||/^`|`$/.test(r))&&(r=` `+r+` `);++a<n.unsafe.length;){let e=n.unsafe[a],t=n.compilePattern(e),i;if(e.atBreak)for(;i=t.exec(r);){let e=i.index;r.charCodeAt(e)===10&&r.charCodeAt(e-1)===13&&e--,r=r.slice(0,e)+` `+r.slice(i.index+1)}}return i+r+i}function zu(){return"`"}function Bu(e,t){let n=Ci(e);return!!(!t.options.resourceLink&&e.url&&!e.title&&e.children&&e.children.length===1&&e.children[0].type===`text`&&(n===e.url||`mailto:`+n===e.url)&&/^[a-z][a-z+.-]+:/i.test(e.url)&&!/[\0- <>\u007F]/.test(e.url))}Vu.peek=Hu;function Vu(e,t,n,r){let i=Cu(n),a=i===`"`?`Quote`:`Apostrophe`,o=n.createTracker(r),s,c;if(Bu(e,n)){let t=n.stack;n.stack=[],s=n.enter(`autolink`);let r=o.move(`<`);return r+=o.move(n.containerPhrasing(e,{before:r,after:`>`,...o.current()})),r+=o.move(`>`),s(),n.stack=t,r}s=n.enter(`link`),c=n.enter(`label`);let l=o.move(`[`);return l+=o.move(n.containerPhrasing(e,{before:l,after:`](`,...o.current()})),l+=o.move(`](`),c(),!e.url&&e.title||/[\0- \u007F]/.test(e.url)?(c=n.enter(`destinationLiteral`),l+=o.move(`<`),l+=o.move(n.safe(e.url,{before:l,after:`>`,...o.current()})),l+=o.move(`>`)):(c=n.enter(`destinationRaw`),l+=o.move(n.safe(e.url,{before:l,after:e.title?` `:`)`,...o.current()}))),c(),e.title&&(c=n.enter(`title${a}`),l+=o.move(` `+i),l+=o.move(n.safe(e.title,{before:l,after:i,...o.current()})),l+=o.move(i),c()),l+=o.move(`)`),s(),l}function Hu(e,t,n){return Bu(e,n)?`<`:`[`}Uu.peek=Wu;function Uu(e,t,n,r){let i=e.referenceType,a=n.enter(`linkReference`),o=n.enter(`label`),s=n.createTracker(r),c=s.move(`[`),l=n.containerPhrasing(e,{before:c,after:`]`,...s.current()});c+=s.move(l+`][`),o();let u=n.stack;n.stack=[],o=n.enter(`reference`);let d=n.safe(n.associationId(e),{before:c,after:`]`,...s.current()});return o(),n.stack=u,a(),i===`full`||!l||l!==d?c+=s.move(d+`]`):i===`shortcut`?c=c.slice(0,-1):c+=s.move(`]`),c}function Wu(){return`[`}function Gu(e){let t=e.options.bullet||`*`;if(t!==`*`&&t!==`+`&&t!==`-`)throw Error("Cannot serialize items with `"+t+"` for `options.bullet`, expected `*`, `+`, or `-`");return t}function X(e){let t=Gu(e),n=e.options.bulletOther;if(!n)return t===`*`?`-`:`*`;if(n!==`*`&&n!==`+`&&n!==`-`)throw Error("Cannot serialize items with `"+n+"` for `options.bulletOther`, expected `*`, `+`, or `-`");if(n===t)throw Error("Expected `bullet` (`"+t+"`) and `bulletOther` (`"+n+"`) to be different");return n}function Ku(e){let t=e.options.bulletOrdered||`.`;if(t!==`.`&&t!==`)`)throw Error("Cannot serialize items with `"+t+"` for `options.bulletOrdered`, expected `.` or `)`");return t}function qu(e){let t=e.options.rule||`*`;if(t!==`*`&&t!==`-`&&t!==`_`)throw Error("Cannot serialize rules with `"+t+"` for `options.rule`, expected `*`, `-`, or `_`");return t}function Ju(e,t,n,r){let i=n.enter(`list`),a=n.bulletCurrent,o=e.ordered?Ku(n):Gu(n),s=e.ordered?o===`.`?`)`:`.`:X(n),c=t&&n.bulletLastUsed?o===n.bulletLastUsed:!1;if(!e.ordered){let t=e.children?e.children[0]:void 0;if((o===`*`||o===`-`)&&t&&(!t.children||!t.children[0])&&n.stack[n.stack.length-1]===`list`&&n.stack[n.stack.length-2]===`listItem`&&n.stack[n.stack.length-3]===`list`&&n.stack[n.stack.length-4]===`listItem`&&n.indexStack[n.indexStack.length-1]===0&&n.indexStack[n.indexStack.length-2]===0&&n.indexStack[n.indexStack.length-3]===0&&(c=!0),qu(n)===o&&t){let t=-1;for(;++t<e.children.length;){let n=e.children[t];if(n&&n.type===`listItem`&&n.children&&n.children[0]&&n.children[0].type===`thematicBreak`){c=!0;break}}}}c&&(o=s),n.bulletCurrent=o;let l=n.containerFlow(e,r);return n.bulletLastUsed=o,n.bulletCurrent=a,i(),l}function Yu(e){let t=e.options.listItemIndent||`one`;if(t!==`tab`&&t!==`one`&&t!==`mixed`)throw Error("Cannot serialize items with `"+t+"` for `options.listItemIndent`, expected `tab`, `one`, or `mixed`");return t}function Xu(e,t,n,r){let i=Yu(n),a=n.bulletCurrent||Gu(n);t&&t.type===`list`&&t.ordered&&(a=(typeof t.start==`number`&&t.start>-1?t.start:1)+(n.options.incrementListMarker===!1?0:t.children.indexOf(e))+a);let o=a.length+1;(i===`tab`||i===`mixed`&&(t&&t.type===`list`&&t.spread||e.spread))&&(o=Math.ceil(o/4)*4);let s=n.createTracker(r);s.move(a+` `.repeat(o-a.length)),s.shift(o);let c=n.enter(`listItem`),l=n.indentLines(n.containerFlow(e,s.current()),u);return c(),l;function u(e,t,n){return t?(n?``:` `.repeat(o))+e:(n?a:a+` `.repeat(o-a.length))+e}}function Zu(e,t,n,r){let i=n.enter(`paragraph`),a=n.enter(`phrasing`),o=n.containerPhrasing(e,r);return a(),i(),o}var Qu=dc([`break`,`delete`,`emphasis`,`footnote`,`footnoteReference`,`image`,`imageReference`,`inlineCode`,`inlineMath`,`link`,`linkReference`,`mdxJsxTextElement`,`mdxTextExpression`,`strong`,`text`,`textDirective`]);function $u(e,t,n,r){return(e.children.some(function(e){return Qu(e)})?n.containerPhrasing:n.containerFlow).call(n,e,r)}function ed(e){let t=e.options.strong||`*`;if(t!==`*`&&t!==`_`)throw Error("Cannot serialize strong with `"+t+"` for `options.strong`, expected `*`, or `_`");return t}td.peek=nd;function td(e,t,n,r){let i=ed(n),a=n.enter(`strong`),o=n.createTracker(r),s=o.move(i+i),c=o.move(n.containerPhrasing(e,{after:i,before:s,...o.current()})),l=c.charCodeAt(0),u=Du(r.before.charCodeAt(r.before.length-1),l,i);u.inside&&(c=Eu(l)+c.slice(1));let d=c.charCodeAt(c.length-1),f=Du(r.after.charCodeAt(0),d,i);f.inside&&(c=c.slice(0,-1)+Eu(d));let p=o.move(i+i);return a(),n.attentionEncodeSurroundingInfo={after:f.outside,before:u.outside},s+c+p}function nd(e,t,n){return n.options.strong||`*`}function rd(e,t,n,r){return n.safe(e.value,r)}function id(e){let t=e.options.ruleRepetition||3;if(t<3)throw Error("Cannot serialize rules with repetition `"+t+"` for `options.ruleRepetition`, expected `3` or more");return t}function ad(e,t,n){let r=(qu(n)+(n.options.ruleSpaces?` `:``)).repeat(id(n));return n.options.ruleSpaces?r.slice(0,-1):r}var od={blockquote:pu,break:_u,code:xu,definition:wu,emphasis:Ou,hardBreak:_u,heading:ju,html:Mu,image:Pu,imageReference:Iu,inlineCode:Ru,link:Vu,linkReference:Uu,list:Ju,listItem:Xu,paragraph:Zu,root:$u,strong:td,text:rd,thematicBreak:ad};function sd(){return{enter:{table:cd,tableData:fd,tableHeader:fd,tableRow:ud},exit:{codeText:pd,table:ld,tableData:dd,tableHeader:dd,tableRow:dd}}}function cd(e){let t=e._align;this.enter({type:`table`,align:t.map(function(e){return e===`none`?null:e}),children:[]},e),this.data.inTable=!0}function ld(e){this.exit(e),this.data.inTable=void 0}function ud(e){this.enter({type:`tableRow`,children:[]},e)}function dd(e){this.exit(e)}function fd(e){this.enter({type:`tableCell`,children:[]},e)}function pd(e){let t=this.resume();this.data.inTable&&(t=t.replace(/\\([\\|])/g,md));let n=this.stack[this.stack.length-1];n.type,n.value=t,this.exit(e)}function md(e,t){return t===`|`?t:e}function hd(e){let t=e||{},n=t.tableCellPadding,r=t.tablePipeAlign,i=t.stringLength,a=n?` `:`|`;return{unsafe:[{character:`\r`,inConstruct:`tableCell`},{character:`
 `,inConstruct:`tableCell`},{atBreak:!0,character:`|`,after:`[	 :-]`},{character:`|`,inConstruct:`tableCell`},{atBreak:!0,character:`:`,after:`-`},{atBreak:!0,character:`-`,after:`[:|-]`}],handlers:{inlineCode:f,table:o,tableCell:c,tableRow:s}};function o(e,t,n,r){return l(u(e,n,r),e.align)}function s(e,t,n,r){let i=l([d(e,n,r)]);return i.slice(0,i.indexOf(`
-`))}function c(e,t,n,r){let i=n.enter(`tableCell`),o=n.enter(`phrasing`),s=n.containerPhrasing(e,{...r,before:a,after:a});return o(),i(),s}function l(e,t){return uu(e,{align:t,alignDelimiters:r,padding:n,stringLength:i})}function u(e,t,n){let r=e.children,i=-1,a=[],o=t.enter(`table`);for(;++i<r.length;)a[i]=d(r[i],t,n);return o(),a}function d(e,t,n){let r=e.children,i=-1,a=[],o=t.enter(`tableRow`);for(;++i<r.length;)a[i]=c(r[i],e,t,n);return o(),a}function f(e,t,n){let r=od.inlineCode(e,t,n);return n.stack.includes(`tableCell`)&&(r=r.replace(/\|/g,`\\$&`)),r}}function gd(){return{exit:{taskListCheckValueChecked:vd,taskListCheckValueUnchecked:vd,paragraph:yd}}}function _d(){return{unsafe:[{atBreak:!0,character:`-`,after:`[:|-]`}],handlers:{listItem:bd}}}function vd(e){let t=this.stack[this.stack.length-2];t.type,t.checked=e.type===`taskListCheckValueChecked`}function yd(e){let t=this.stack[this.stack.length-2];if(t&&t.type===`listItem`&&typeof t.checked==`boolean`){let e=this.stack[this.stack.length-1];e.type;let n=e.children[0];if(n&&n.type===`text`){let r=t.children,i=-1,a;for(;++i<r.length;){let e=r[i];if(e.type===`paragraph`){a=e;break}}a===e&&(n.value=n.value.slice(1),n.value.length===0?e.children.shift():e.position&&n.position&&typeof n.position.start.offset==`number`&&(n.position.start.column++,n.position.start.offset++,e.position.start=Object.assign({},n.position.start)))}}this.exit(e)}function bd(e,t,n,r){let i=e.children[0],a=typeof e.checked==`boolean`&&i&&i.type===`paragraph`,o=`[`+(e.checked?`x`:` `)+`] `,s=n.createTracker(r);a&&s.move(o);let c=od.listItem(e,t,n,{...r,...s.current()});return a&&(c=c.replace(/^(?:[*+-]|\d+\.)([\r\n]| {1,3})/,l)),c;function l(e){return e+o}}function Z(){return[Nl(),Ql(),ru(),sd(),gd()]}function xd(e){return{extensions:[Pl(),$l(e),iu(),hd(e),_d()]}}var Sd={tokenize:Fd,partial:!0},Cd={tokenize:Id,partial:!0},wd={tokenize:Ld,partial:!0},Td={tokenize:Rd,partial:!0},Ed={tokenize:zd,partial:!0},Dd={name:`wwwAutolink`,tokenize:Q,previous:Bd},Od={name:`protocolAutolink`,tokenize:Pd,previous:Vd},kd={name:`emailAutolink`,tokenize:Nd,previous:Hd},Ad={};function jd(){return{text:Ad}}for(var Md=48;Md<123;)Ad[Md]=kd,Md++,Md===58?Md=65:Md===91&&(Md=97);Ad[43]=kd,Ad[45]=kd,Ad[46]=kd,Ad[95]=kd,Ad[72]=[kd,Od],Ad[104]=[kd,Od],Ad[87]=[kd,Dd],Ad[119]=[kd,Dd];function Nd(e,t,n){let r=this,i,a;return o;function o(t){return!Ud(t)||!Hd.call(r,r.previous)||Wd(r.events)?n(t):(e.enter(`literalAutolink`),e.enter(`literalAutolinkEmail`),s(t))}function s(t){return Ud(t)?(e.consume(t),s):t===64?(e.consume(t),c):n(t)}function c(t){return t===46?e.check(Ed,u,l)(t):t===45||t===95||R(t)?(a=!0,e.consume(t),c):u(t)}function l(t){return e.consume(t),i=!0,c}function u(o){return a&&i&&L(r.previous)?(e.exit(`literalAutolinkEmail`),e.exit(`literalAutolink`),t(o)):n(o)}}function Q(e,t,n){let r=this;return i;function i(t){return t!==87&&t!==119||!Bd.call(r,r.previous)||Wd(r.events)?n(t):(e.enter(`literalAutolink`),e.enter(`literalAutolinkWww`),e.check(Sd,e.attempt(Cd,e.attempt(wd,a),n),n)(t))}function a(n){return e.exit(`literalAutolinkWww`),e.exit(`literalAutolink`),t(n)}}function Pd(e,t,n){let r=this,i=``,a=!1;return o;function o(t){return(t===72||t===104)&&Vd.call(r,r.previous)&&!Wd(r.events)?(e.enter(`literalAutolink`),e.enter(`literalAutolinkHttp`),i+=String.fromCodePoint(t),e.consume(t),s):n(t)}function s(t){if(L(t)&&i.length<5)return i+=String.fromCodePoint(t),e.consume(t),s;if(t===58){let n=i.toLowerCase();if(n===`http`||n===`https`)return e.consume(t),c}return n(t)}function c(t){return t===47?(e.consume(t),a?l:(a=!0,c)):n(t)}function l(t){return t===null||Li(t)||B(t)||Hi(t)||Vi(t)?n(t):e.attempt(Cd,e.attempt(wd,u),n)(t)}function u(n){return e.exit(`literalAutolinkHttp`),e.exit(`literalAutolink`),t(n)}}function Fd(e,t,n){let r=0;return i;function i(t){return(t===87||t===119)&&r<3?(r++,e.consume(t),i):t===46&&r===3?(e.consume(t),a):n(t)}function a(e){return e===null?n(e):t(e)}}function Id(e,t,n){let r,i,a;return o;function o(t){return t===46||t===95?e.check(Td,c,s)(t):t===null||B(t)||Hi(t)||t!==45&&Vi(t)?c(t):(a=!0,e.consume(t),o)}function s(t){return t===95?r=!0:(i=r,r=void 0),e.consume(t),o}function c(e){return i||r||!a?n(e):t(e)}}function Ld(e,t){let n=0,r=0;return i;function i(o){return o===40?(n++,e.consume(o),i):o===41&&r<n?a(o):o===33||o===34||o===38||o===39||o===41||o===42||o===44||o===46||o===58||o===59||o===60||o===63||o===93||o===95||o===126?e.check(Td,t,a)(o):o===null||B(o)||Hi(o)?t(o):(e.consume(o),i)}function a(t){return t===41&&r++,e.consume(t),i}}function Rd(e,t,n){return r;function r(o){return o===33||o===34||o===39||o===41||o===42||o===44||o===46||o===58||o===59||o===63||o===95||o===126?(e.consume(o),r):o===38?(e.consume(o),a):o===93?(e.consume(o),i):o===60||o===null||B(o)||Hi(o)?t(o):n(o)}function i(e){return e===null||e===40||e===91||B(e)||Hi(e)?t(e):r(e)}function a(e){return L(e)?o(e):n(e)}function o(t){return t===59?(e.consume(t),r):L(t)?(e.consume(t),o):n(t)}}function zd(e,t,n){return r;function r(t){return e.consume(t),i}function i(e){return R(e)?n(e):t(e)}}function Bd(e){return e===null||e===40||e===42||e===95||e===91||e===93||e===126||B(e)}function Vd(e){return!L(e)}function Hd(e){return!(e===47||Ud(e))}function Ud(e){return e===43||e===45||e===46||e===95||R(e)}function Wd(e){let t=e.length,n=!1;for(;t--;){let r=e[t][1];if((r.type===`labelLink`||r.type===`labelImage`)&&!r._balanced){n=!0;break}if(r._gfmAutolinkLiteralWalkedInto){n=!1;break}}return e.length>0&&!n&&(e[e.length-1][1]._gfmAutolinkLiteralWalkedInto=!0),n}var Gd={tokenize:$d,partial:!0};function Kd(){return{document:{91:{name:`gfmFootnoteDefinition`,tokenize:Xd,continuation:{tokenize:Zd},exit:Qd}},text:{91:{name:`gfmFootnoteCall`,tokenize:Yd},93:{name:`gfmPotentialFootnoteCall`,add:`after`,tokenize:qd,resolveTo:Jd}}}}function qd(e,t,n){let r=this,i=r.events.length,a=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),o;for(;i--;){let e=r.events[i][1];if(e.type===`labelImage`){o=e;break}if(e.type===`gfmFootnoteCall`||e.type===`labelLink`||e.type===`label`||e.type===`image`||e.type===`link`)break}return s;function s(i){if(!o||!o._balanced)return n(i);let s=I(r.sliceSerialize({start:o.end,end:r.now()}));return s.codePointAt(0)!==94||!a.includes(s.slice(1))?n(i):(e.enter(`gfmFootnoteCallLabelMarker`),e.consume(i),e.exit(`gfmFootnoteCallLabelMarker`),t(i))}}function Jd(e,t){let n=e.length;for(;n--;)if(e[n][1].type===`labelImage`&&e[n][0]===`enter`){e[n][1];break}e[n+1][1].type=`data`,e[n+3][1].type=`gfmFootnoteCallLabelMarker`;let r={type:`gfmFootnoteCall`,start:Object.assign({},e[n+3][1].start),end:Object.assign({},e[e.length-1][1].end)},i={type:`gfmFootnoteCallMarker`,start:Object.assign({},e[n+3][1].end),end:Object.assign({},e[n+3][1].end)};i.end.column++,i.end.offset++,i.end._bufferIndex++;let a={type:`gfmFootnoteCallString`,start:Object.assign({},i.end),end:Object.assign({},e[e.length-1][1].start)},o={type:`chunkString`,contentType:`string`,start:Object.assign({},a.start),end:Object.assign({},a.end)},s=[e[n+1],e[n+2],[`enter`,r,t],e[n+3],e[n+4],[`enter`,i,t],[`exit`,i,t],[`enter`,a,t],[`enter`,o,t],[`exit`,o,t],[`exit`,a,t],e[e.length-2],e[e.length-1],[`exit`,r,t]];return e.splice(n,e.length-n+1,...s),e}function Yd(e,t,n){let r=this,i=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),a=0,o;return s;function s(t){return e.enter(`gfmFootnoteCall`),e.enter(`gfmFootnoteCallLabelMarker`),e.consume(t),e.exit(`gfmFootnoteCallLabelMarker`),c}function c(t){return t===94?(e.enter(`gfmFootnoteCallMarker`),e.consume(t),e.exit(`gfmFootnoteCallMarker`),e.enter(`gfmFootnoteCallString`),e.enter(`chunkString`).contentType=`string`,l):n(t)}function l(s){if(a>999||s===93&&!o||s===null||s===91||B(s))return n(s);if(s===93){e.exit(`chunkString`);let a=e.exit(`gfmFootnoteCallString`);return i.includes(I(r.sliceSerialize(a)))?(e.enter(`gfmFootnoteCallLabelMarker`),e.consume(s),e.exit(`gfmFootnoteCallLabelMarker`),e.exit(`gfmFootnoteCall`),t):n(s)}return B(s)||(o=!0),a++,e.consume(s),s===92?u:l}function u(t){return t===91||t===92||t===93?(e.consume(t),a++,l):l(t)}}function Xd(e,t,n){let r=this,i=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),a,o=0,s;return c;function c(t){return e.enter(`gfmFootnoteDefinition`)._container=!0,e.enter(`gfmFootnoteDefinitionLabel`),e.enter(`gfmFootnoteDefinitionLabelMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionLabelMarker`),l}function l(t){return t===94?(e.enter(`gfmFootnoteDefinitionMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionMarker`),e.enter(`gfmFootnoteDefinitionLabelString`),e.enter(`chunkString`).contentType=`string`,u):n(t)}function u(t){if(o>999||t===93&&!s||t===null||t===91||B(t))return n(t);if(t===93){e.exit(`chunkString`);let n=e.exit(`gfmFootnoteDefinitionLabelString`);return a=I(r.sliceSerialize(n)),e.enter(`gfmFootnoteDefinitionLabelMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionLabelMarker`),e.exit(`gfmFootnoteDefinitionLabel`),f}return B(t)||(s=!0),o++,e.consume(t),t===92?d:u}function d(t){return t===91||t===92||t===93?(e.consume(t),o++,u):u(t)}function f(t){return t===58?(e.enter(`definitionMarker`),e.consume(t),e.exit(`definitionMarker`),i.includes(a)||i.push(a),H(e,p,`gfmFootnoteDefinitionWhitespace`)):n(t)}function p(e){return t(e)}}function Zd(e,t,n){return e.check(aa,t,e.attempt(Gd,t,n))}function Qd(e){e.exit(`gfmFootnoteDefinition`)}function $d(e,t,n){let r=this;return H(e,i,`gfmFootnoteDefinitionIndent`,5);function i(e){let i=r.events[r.events.length-1];return i&&i[1].type===`gfmFootnoteDefinitionIndent`&&i[2].sliceSerialize(i[1],!0).length===4?t(e):n(e)}}function ef(e){let t=(e||{}).singleTilde,n={name:`strikethrough`,tokenize:i,resolveAll:r};return t??=!0,{text:{126:n},insideSpan:{null:[n]},attentionMarkers:{null:[126]}};function r(e,t){let n=-1;for(;++n<e.length;)if(e[n][0]===`enter`&&e[n][1].type===`strikethroughSequenceTemporary`&&e[n][1]._close){let r=n;for(;r--;)if(e[r][0]===`exit`&&e[r][1].type===`strikethroughSequenceTemporary`&&e[r][1]._open&&e[n][1].end.offset-e[n][1].start.offset===e[r][1].end.offset-e[r][1].start.offset){e[n][1].type=`strikethroughSequence`,e[r][1].type=`strikethroughSequence`;let i={type:`strikethrough`,start:Object.assign({},e[r][1].start),end:Object.assign({},e[n][1].end)},a={type:`strikethroughText`,start:Object.assign({},e[r][1].end),end:Object.assign({},e[n][1].start)},o=[[`enter`,i,t],[`enter`,e[r][1],t],[`exit`,e[r][1],t],[`enter`,a,t]],s=t.parser.constructs.insideSpan.null;s&&ki(o,o.length,0,Qi(s,e.slice(r+1,n),t)),ki(o,o.length,0,[[`exit`,a,t],[`enter`,e[n][1],t],[`exit`,e[n][1],t],[`exit`,i,t]]),ki(e,r-1,n-r+3,o),n=r+o.length-2;break}}for(n=-1;++n<e.length;)e[n][1].type===`strikethroughSequenceTemporary`&&(e[n][1].type=`data`);return e}function i(e,n,r){let i=this.previous,a=this.events,o=0;return s;function s(t){return i===126&&a[a.length-1][1].type!==`characterEscape`?r(t):(e.enter(`strikethroughSequenceTemporary`),c(t))}function c(a){let s=Zi(i);if(a===126)return o>1?r(a):(e.consume(a),o++,c);if(o<2&&!t)return r(a);let l=e.exit(`strikethroughSequenceTemporary`),u=Zi(a);return l._open=!u||u===2&&!!s,l._close=!s||s===2&&!!u,n(a)}}}var tf=class{constructor(){this.map=[]}add(e,t,n){nf(this,e,t,n)}consume(e){if(this.map.sort(function(e,t){return e[0]-t[0]}),this.map.length===0)return;let t=this.map.length,n=[];for(;t>0;)--t,n.push(e.slice(this.map[t][0]+this.map[t][1]),this.map[t][2]),e.length=this.map[t][0];n.push(e.slice()),e.length=0;let r=n.pop();for(;r;){for(let t of r)e.push(t);r=n.pop()}this.map.length=0}};function nf(e,t,n,r){let i=0;if(n!==0||r.length!==0){for(;i<e.map.length;){if(e.map[i][0]===t){e.map[i][1]+=n,e.map[i][2].push(...r);return}i+=1}e.map.push([t,n,r])}}function rf(e,t){let n=!1,r=[];for(;t<e.length;){let i=e[t];if(n){if(i[0]===`enter`)i[1].type===`tableContent`&&r.push(e[t+1][1].type===`tableDelimiterMarker`?`left`:`none`);else if(i[1].type===`tableContent`){if(e[t-1][1].type===`tableDelimiterMarker`){let e=r.length-1;r[e]=r[e]===`left`?`center`:`right`}}else if(i[1].type===`tableDelimiterRow`)break}else i[0]===`enter`&&i[1].type===`tableDelimiterRow`&&(n=!0);t+=1}return r}function af(){return{flow:{null:{name:`table`,tokenize:of,resolveAll:sf}}}}function of(e,t,n){let r=this,i=0,a=0,o;return s;function s(e){let t=r.events.length-1;for(;t>-1;){let e=r.events[t][1].type;if(e===`lineEnding`||e===`linePrefix`)t--;else break}let i=t>-1?r.events[t][1].type:null,a=i===`tableHead`||i===`tableRow`?ee:c;return a===ee&&r.parser.lazy[r.now().line]?n(e):a(e)}function c(t){return e.enter(`tableHead`),e.enter(`tableRow`),l(t)}function l(e){return e===124?u(e):(o=!0,a+=1,u(e))}function u(t){return t===null?n(t):z(t)?a>1?(a=0,r.interrupt=!0,e.exit(`tableRow`),e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),p):n(t):V(t)?H(e,u,`whitespace`)(t):(a+=1,o&&(o=!1,i+=1),t===124?(e.enter(`tableCellDivider`),e.consume(t),e.exit(`tableCellDivider`),o=!0,u):(e.enter(`data`),d(t)))}function d(t){return t===null||t===124||B(t)?(e.exit(`data`),u(t)):(e.consume(t),t===92?f:d)}function f(t){return t===92||t===124?(e.consume(t),d):d(t)}function p(t){return r.interrupt=!1,r.parser.lazy[r.now().line]?n(t):(e.enter(`tableDelimiterRow`),o=!1,V(t)?H(e,m,`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(t):m(t))}function m(t){return t===45||t===58?g(t):t===124?(o=!0,e.enter(`tableCellDivider`),e.consume(t),e.exit(`tableCellDivider`),h):x(t)}function h(t){return V(t)?H(e,g,`whitespace`)(t):g(t)}function g(t){return t===58?(a+=1,o=!0,e.enter(`tableDelimiterMarker`),e.consume(t),e.exit(`tableDelimiterMarker`),_):t===45?(a+=1,_(t)):t===null||z(t)?b(t):x(t)}function _(t){return t===45?(e.enter(`tableDelimiterFiller`),v(t)):x(t)}function v(t){return t===45?(e.consume(t),v):t===58?(o=!0,e.exit(`tableDelimiterFiller`),e.enter(`tableDelimiterMarker`),e.consume(t),e.exit(`tableDelimiterMarker`),y):(e.exit(`tableDelimiterFiller`),y(t))}function y(t){return V(t)?H(e,b,`whitespace`)(t):b(t)}function b(n){return n===124?m(n):n===null||z(n)?!o||i!==a?x(n):(e.exit(`tableDelimiterRow`),e.exit(`tableHead`),t(n)):x(n)}function x(e){return n(e)}function ee(t){return e.enter(`tableRow`),S(t)}function S(n){return n===124?(e.enter(`tableCellDivider`),e.consume(n),e.exit(`tableCellDivider`),S):n===null||z(n)?(e.exit(`tableRow`),t(n)):V(n)?H(e,S,`whitespace`)(n):(e.enter(`data`),C(n))}function C(t){return t===null||t===124||B(t)?(e.exit(`data`),S(t)):(e.consume(t),t===92?w:C)}function w(t){return t===92||t===124?(e.consume(t),C):C(t)}}function sf(e,t){let n=-1,r=!0,i=0,a=[0,0,0,0],o=[0,0,0,0],s=!1,c=0,l,u,d,f=new tf;for(;++n<e.length;){let p=e[n],m=p[1];p[0]===`enter`?m.type===`tableHead`?(s=!1,c!==0&&(lf(f,t,c,l,u),u=void 0,c=0),l={type:`table`,start:Object.assign({},m.start),end:Object.assign({},m.end)},f.add(n,0,[[`enter`,l,t]])):m.type===`tableRow`||m.type===`tableDelimiterRow`?(r=!0,d=void 0,a=[0,0,0,0],o=[0,n+1,0,0],s&&(s=!1,u={type:`tableBody`,start:Object.assign({},m.start),end:Object.assign({},m.end)},f.add(n,0,[[`enter`,u,t]])),i=m.type===`tableDelimiterRow`?2:u?3:1):i&&(m.type===`data`||m.type===`tableDelimiterMarker`||m.type===`tableDelimiterFiller`)?(r=!1,o[2]===0&&(a[1]!==0&&(o[0]=o[1],d=cf(f,t,a,i,void 0,d),a=[0,0,0,0]),o[2]=n)):m.type===`tableCellDivider`&&(r?r=!1:(a[1]!==0&&(o[0]=o[1],d=cf(f,t,a,i,void 0,d)),a=o,o=[a[1],n,0,0])):m.type===`tableHead`?(s=!0,c=n):m.type===`tableRow`||m.type===`tableDelimiterRow`?(c=n,a[1]===0?o[1]!==0&&(d=cf(f,t,o,i,n,d)):(o[0]=o[1],d=cf(f,t,a,i,n,d)),i=0):i&&(m.type===`data`||m.type===`tableDelimiterMarker`||m.type===`tableDelimiterFiller`)&&(o[3]=n)}for(c!==0&&lf(f,t,c,l,u),f.consume(t.events),n=-1;++n<t.events.length;){let e=t.events[n];e[0]===`enter`&&e[1].type===`table`&&(e[1]._align=rf(t.events,n))}return e}function cf(e,t,n,r,i,a){let o=r===1?`tableHeader`:r===2?`tableDelimiter`:`tableData`;n[0]!==0&&(a.end=Object.assign({},uf(t.events,n[0])),e.add(n[0],0,[[`exit`,a,t]]));let s=uf(t.events,n[1]);if(a={type:o,start:Object.assign({},s),end:Object.assign({},s)},e.add(n[1],0,[[`enter`,a,t]]),n[2]!==0){let i=uf(t.events,n[2]),a=uf(t.events,n[3]),o={type:`tableContent`,start:Object.assign({},i),end:Object.assign({},a)};if(e.add(n[2],0,[[`enter`,o,t]]),r!==2){let r=t.events[n[2]],i=t.events[n[3]];if(r[1].end=Object.assign({},i[1].end),r[1].type=`chunkText`,r[1].contentType=`text`,n[3]>n[2]+1){let t=n[2]+1,r=n[3]-n[2]-1;e.add(t,r,[])}}e.add(n[3]+1,0,[[`exit`,o,t]])}return i!==void 0&&(a.end=Object.assign({},uf(t.events,i)),e.add(i,0,[[`exit`,a,t]]),a=void 0),a}function lf(e,t,n,r,i){let a=[],o=uf(t.events,n);i&&(i.end=Object.assign({},o),a.push([`exit`,i,t])),r.end=Object.assign({},o),a.push([`exit`,r,t]),e.add(n+1,0,a)}function uf(e,t){let n=e[t],r=n[0]===`enter`?`start`:`end`;return n[1][r]}var df={name:`tasklistCheck`,tokenize:pf};function ff(){return{text:{91:df}}}function pf(e,t,n){let r=this;return i;function i(t){return r.previous!==null||!r._gfmTasklistFirstContentOfListItem?n(t):(e.enter(`taskListCheck`),e.enter(`taskListCheckMarker`),e.consume(t),e.exit(`taskListCheckMarker`),a)}function a(t){return B(t)?(e.enter(`taskListCheckValueUnchecked`),e.consume(t),e.exit(`taskListCheckValueUnchecked`),o):t===88||t===120?(e.enter(`taskListCheckValueChecked`),e.consume(t),e.exit(`taskListCheckValueChecked`),o):n(t)}function o(t){return t===93?(e.enter(`taskListCheckMarker`),e.consume(t),e.exit(`taskListCheckMarker`),e.exit(`taskListCheck`),s):n(t)}function s(r){return z(r)?t(r):V(r)?e.check({tokenize:mf},t,n)(r):n(r)}}function mf(e,t,n){return H(e,r,`whitespace`);function r(e){return e===null?n(e):t(e)}}function hf(e){return Mi([jd(),Kd(),ef(e),af(),ff()])}var gf={};function _f(e){let t=this,n=e||gf,r=t.data(),i=r.micromarkExtensions||=[],a=r.fromMarkdownExtensions||=[],o=r.toMarkdownExtensions||=[];i.push(hf(n)),a.push(Z()),o.push(xd(n))}var vf=Object.assign({}),yf={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},bf={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function xf({content:e}){return(0,M.jsx)(`div`,{className:`prose`,style:{width:`100%`,maxWidth:`100%`,boxSizing:`border-box`,maxHeight:`75vh`,overflowY:`auto`,padding:24},children:(0,M.jsx)(bl,{remarkPlugins:[_f],components:{img:({src:e,alt:t,...n})=>{let r=e;if(e?.startsWith(`../images/`)){let t=`../../assets/CWD/images/${e.split(`/`).pop()}`;vf[t]&&(r=vf[t])}return(0,M.jsx)(`img`,{src:r,alt:t,...n,style:{maxWidth:`100%`,height:`auto`,display:`block`,margin:`24px auto`}})}},children:e||`No concept available for this topic.`})})}function Sf({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16,width:`100%`,maxWidth:`100%`,minWidth:0},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,maxWidth:`100%`,boxSizing:`border-box`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function Cf({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`,width:`100%`,maxWidth:`100%`,boxSizing:`border-box`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,gap:10,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400,minWidth:0,overflowWrap:`anywhere`},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:bf[e.difficulty]||`#E6F1FB`,color:yf[e.difficulty]||`#185FA5`,flexShrink:0},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`,overflowWrap:`anywhere`},children:e.title})]})}function wf({recipe:e}){let[t,n]=(0,v.useState)(`concept`);return(0,M.jsxs)(`div`,{style:{padding:24,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`,width:`100%`,maxWidth:`100%`,minWidth:0,boxSizing:`border-box`,overflow:`hidden`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,gap:16,marginBottom:18,flexWrap:`wrap`},children:[(0,M.jsxs)(`div`,{style:{minWidth:0,flex:`1 1 250px`},children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 0`,fontSize:22,fontWeight:500,overflowWrap:`anywhere`},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4,flexWrap:`wrap`},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:bf[e.difficulty]||`#E6F1FB`,color:yf[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,flexWrap:`wrap`},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>n(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:t===e?500:400,color:t===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:t===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),t===`concept`&&(0,M.jsx)(xf,{content:e.concept}),t===`code`&&(0,M.jsx)(Sf,{code:e.code})]})}function Tf({recipes:e,categories:t,selected:n,onSelect:r,category:i,setCategory:a,search:o,setSearch:s}){let c=e.filter(e=>{let t=i===`All`||e.category===i,n=o.trim().toLowerCase(),r=!n||e.title?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&r});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,width:`100%`,maxWidth:`100%`,minWidth:0,height:`100%`},children:[(0,M.jsx)(`div`,{style:{paddingBottom:16},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:o,onChange:e=>s(e.target.value),style:{width:`100%`,maxWidth:`100%`,boxSizing:`border-box`,padding:`9px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13,outline:`none`}})}),(0,M.jsxs)(`div`,{style:{marginBottom:16,width:`100%`},children:[(0,M.jsx)(`label`,{htmlFor:`category-select`,style:{display:`block`,fontSize:12,color:`var(--color-text-secondary)`,marginBottom:6,fontWeight:500},children:`Category`}),(0,M.jsx)(`select`,{id:`category-select`,value:i,onChange:e=>a(e.target.value),style:{width:`100%`,padding:`9px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13,cursor:`pointer`,outline:`none`,boxSizing:`border-box`},children:t.map(e=>(0,M.jsx)(`option`,{value:e,children:e},e))})]}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1,minHeight:0},children:c.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):c.map(e=>(0,M.jsx)(Cf,{recipe:e,onSelect:r,selected:n?.id===e.id},e.id))})]})}function Ef({title:e,subtitle:t,icon:n,totalCount:r,categoryCount:i,patternLabel:a}){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16,flexWrap:`wrap`,width:`100%`,maxWidth:`100%`,boxSizing:`border-box`},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,minWidth:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:n}),(0,M.jsxs)(`div`,{style:{minWidth:0,flex:`1 1 220px`},children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`,overflowWrap:`anywhere`},children:e}),t&&(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`,overflowWrap:`anywhere`},children:t})]}),(0,M.jsxs)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20,flexWrap:`wrap`},children:[(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:r}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:`Questions`})]}),(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:i}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:a})]})]})]})}function $({data:e,title:t,subtitle:n,icon:r=`📚`,patternLabel:i=`Categories`}){let[a,o]=(0,v.useState)(e?.[0]||null),[s,c]=(0,v.useState)(`All`),[l,u]=(0,v.useState)(``),d=[`All`,...new Set(e.map(e=>e.category).filter(Boolean))];return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,width:`100%`,maxWidth:`100%`,minHeight:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, #020617)`,color:`var(--color-text-primary)`,boxSizing:`border-box`,overflowX:`hidden`},children:[(0,M.jsx)(Ef,{title:t,subtitle:n,icon:r,totalCount:e.length,categoryCount:d.length-1,patternLabel:i}),(0,M.jsxs)(`div`,{className:`cookbook-layout`,style:{display:`flex`,flex:1,minHeight:0,width:`100%`,maxWidth:`100%`,overflow:`hidden`},children:[(0,M.jsx)(`div`,{className:`cookbook-sidebar`,style:{width:320,minWidth:260,padding:`20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`,boxSizing:`border-box`,flexShrink:0},children:(0,M.jsx)(Tf,{recipes:e,categories:d,selected:a,onSelect:o,category:s,setCategory:c,search:l,setSearch:u})}),(0,M.jsx)(`div`,{className:`cookbook-content`,style:{flex:1,minWidth:0,overflowY:`auto`,overflowX:`hidden`,padding:`24px 28px`,boxSizing:`border-box`},children:a?(0,M.jsx)(wf,{recipe:a}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started.`})})]}),(0,M.jsx)(`style`,{children:`
+`))}function c(e,t,n,r){let i=n.enter(`tableCell`),o=n.enter(`phrasing`),s=n.containerPhrasing(e,{...r,before:a,after:a});return o(),i(),s}function l(e,t){return uu(e,{align:t,alignDelimiters:r,padding:n,stringLength:i})}function u(e,t,n){let r=e.children,i=-1,a=[],o=t.enter(`table`);for(;++i<r.length;)a[i]=d(r[i],t,n);return o(),a}function d(e,t,n){let r=e.children,i=-1,a=[],o=t.enter(`tableRow`);for(;++i<r.length;)a[i]=c(r[i],e,t,n);return o(),a}function f(e,t,n){let r=od.inlineCode(e,t,n);return n.stack.includes(`tableCell`)&&(r=r.replace(/\|/g,`\\$&`)),r}}function gd(){return{exit:{taskListCheckValueChecked:vd,taskListCheckValueUnchecked:vd,paragraph:yd}}}function _d(){return{unsafe:[{atBreak:!0,character:`-`,after:`[:|-]`}],handlers:{listItem:bd}}}function vd(e){let t=this.stack[this.stack.length-2];t.type,t.checked=e.type===`taskListCheckValueChecked`}function yd(e){let t=this.stack[this.stack.length-2];if(t&&t.type===`listItem`&&typeof t.checked==`boolean`){let e=this.stack[this.stack.length-1];e.type;let n=e.children[0];if(n&&n.type===`text`){let r=t.children,i=-1,a;for(;++i<r.length;){let e=r[i];if(e.type===`paragraph`){a=e;break}}a===e&&(n.value=n.value.slice(1),n.value.length===0?e.children.shift():e.position&&n.position&&typeof n.position.start.offset==`number`&&(n.position.start.column++,n.position.start.offset++,e.position.start=Object.assign({},n.position.start)))}}this.exit(e)}function bd(e,t,n,r){let i=e.children[0],a=typeof e.checked==`boolean`&&i&&i.type===`paragraph`,o=`[`+(e.checked?`x`:` `)+`] `,s=n.createTracker(r);a&&s.move(o);let c=od.listItem(e,t,n,{...r,...s.current()});return a&&(c=c.replace(/^(?:[*+-]|\d+\.)([\r\n]| {1,3})/,l)),c;function l(e){return e+o}}function Z(){return[Nl(),Ql(),ru(),sd(),gd()]}function xd(e){return{extensions:[Pl(),$l(e),iu(),hd(e),_d()]}}var Sd={tokenize:Fd,partial:!0},Cd={tokenize:Id,partial:!0},wd={tokenize:Ld,partial:!0},Td={tokenize:Rd,partial:!0},Ed={tokenize:zd,partial:!0},Dd={name:`wwwAutolink`,tokenize:Q,previous:Bd},Od={name:`protocolAutolink`,tokenize:Pd,previous:Vd},kd={name:`emailAutolink`,tokenize:Nd,previous:Hd},Ad={};function jd(){return{text:Ad}}for(var Md=48;Md<123;)Ad[Md]=kd,Md++,Md===58?Md=65:Md===91&&(Md=97);Ad[43]=kd,Ad[45]=kd,Ad[46]=kd,Ad[95]=kd,Ad[72]=[kd,Od],Ad[104]=[kd,Od],Ad[87]=[kd,Dd],Ad[119]=[kd,Dd];function Nd(e,t,n){let r=this,i,a;return o;function o(t){return!Ud(t)||!Hd.call(r,r.previous)||Wd(r.events)?n(t):(e.enter(`literalAutolink`),e.enter(`literalAutolinkEmail`),s(t))}function s(t){return Ud(t)?(e.consume(t),s):t===64?(e.consume(t),c):n(t)}function c(t){return t===46?e.check(Ed,u,l)(t):t===45||t===95||R(t)?(a=!0,e.consume(t),c):u(t)}function l(t){return e.consume(t),i=!0,c}function u(o){return a&&i&&L(r.previous)?(e.exit(`literalAutolinkEmail`),e.exit(`literalAutolink`),t(o)):n(o)}}function Q(e,t,n){let r=this;return i;function i(t){return t!==87&&t!==119||!Bd.call(r,r.previous)||Wd(r.events)?n(t):(e.enter(`literalAutolink`),e.enter(`literalAutolinkWww`),e.check(Sd,e.attempt(Cd,e.attempt(wd,a),n),n)(t))}function a(n){return e.exit(`literalAutolinkWww`),e.exit(`literalAutolink`),t(n)}}function Pd(e,t,n){let r=this,i=``,a=!1;return o;function o(t){return(t===72||t===104)&&Vd.call(r,r.previous)&&!Wd(r.events)?(e.enter(`literalAutolink`),e.enter(`literalAutolinkHttp`),i+=String.fromCodePoint(t),e.consume(t),s):n(t)}function s(t){if(L(t)&&i.length<5)return i+=String.fromCodePoint(t),e.consume(t),s;if(t===58){let n=i.toLowerCase();if(n===`http`||n===`https`)return e.consume(t),c}return n(t)}function c(t){return t===47?(e.consume(t),a?l:(a=!0,c)):n(t)}function l(t){return t===null||Li(t)||B(t)||Hi(t)||Vi(t)?n(t):e.attempt(Cd,e.attempt(wd,u),n)(t)}function u(n){return e.exit(`literalAutolinkHttp`),e.exit(`literalAutolink`),t(n)}}function Fd(e,t,n){let r=0;return i;function i(t){return(t===87||t===119)&&r<3?(r++,e.consume(t),i):t===46&&r===3?(e.consume(t),a):n(t)}function a(e){return e===null?n(e):t(e)}}function Id(e,t,n){let r,i,a;return o;function o(t){return t===46||t===95?e.check(Td,c,s)(t):t===null||B(t)||Hi(t)||t!==45&&Vi(t)?c(t):(a=!0,e.consume(t),o)}function s(t){return t===95?r=!0:(i=r,r=void 0),e.consume(t),o}function c(e){return i||r||!a?n(e):t(e)}}function Ld(e,t){let n=0,r=0;return i;function i(o){return o===40?(n++,e.consume(o),i):o===41&&r<n?a(o):o===33||o===34||o===38||o===39||o===41||o===42||o===44||o===46||o===58||o===59||o===60||o===63||o===93||o===95||o===126?e.check(Td,t,a)(o):o===null||B(o)||Hi(o)?t(o):(e.consume(o),i)}function a(t){return t===41&&r++,e.consume(t),i}}function Rd(e,t,n){return r;function r(o){return o===33||o===34||o===39||o===41||o===42||o===44||o===46||o===58||o===59||o===63||o===95||o===126?(e.consume(o),r):o===38?(e.consume(o),a):o===93?(e.consume(o),i):o===60||o===null||B(o)||Hi(o)?t(o):n(o)}function i(e){return e===null||e===40||e===91||B(e)||Hi(e)?t(e):r(e)}function a(e){return L(e)?o(e):n(e)}function o(t){return t===59?(e.consume(t),r):L(t)?(e.consume(t),o):n(t)}}function zd(e,t,n){return r;function r(t){return e.consume(t),i}function i(e){return R(e)?n(e):t(e)}}function Bd(e){return e===null||e===40||e===42||e===95||e===91||e===93||e===126||B(e)}function Vd(e){return!L(e)}function Hd(e){return!(e===47||Ud(e))}function Ud(e){return e===43||e===45||e===46||e===95||R(e)}function Wd(e){let t=e.length,n=!1;for(;t--;){let r=e[t][1];if((r.type===`labelLink`||r.type===`labelImage`)&&!r._balanced){n=!0;break}if(r._gfmAutolinkLiteralWalkedInto){n=!1;break}}return e.length>0&&!n&&(e[e.length-1][1]._gfmAutolinkLiteralWalkedInto=!0),n}var Gd={tokenize:$d,partial:!0};function Kd(){return{document:{91:{name:`gfmFootnoteDefinition`,tokenize:Xd,continuation:{tokenize:Zd},exit:Qd}},text:{91:{name:`gfmFootnoteCall`,tokenize:Yd},93:{name:`gfmPotentialFootnoteCall`,add:`after`,tokenize:qd,resolveTo:Jd}}}}function qd(e,t,n){let r=this,i=r.events.length,a=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),o;for(;i--;){let e=r.events[i][1];if(e.type===`labelImage`){o=e;break}if(e.type===`gfmFootnoteCall`||e.type===`labelLink`||e.type===`label`||e.type===`image`||e.type===`link`)break}return s;function s(i){if(!o||!o._balanced)return n(i);let s=I(r.sliceSerialize({start:o.end,end:r.now()}));return s.codePointAt(0)!==94||!a.includes(s.slice(1))?n(i):(e.enter(`gfmFootnoteCallLabelMarker`),e.consume(i),e.exit(`gfmFootnoteCallLabelMarker`),t(i))}}function Jd(e,t){let n=e.length;for(;n--;)if(e[n][1].type===`labelImage`&&e[n][0]===`enter`){e[n][1];break}e[n+1][1].type=`data`,e[n+3][1].type=`gfmFootnoteCallLabelMarker`;let r={type:`gfmFootnoteCall`,start:Object.assign({},e[n+3][1].start),end:Object.assign({},e[e.length-1][1].end)},i={type:`gfmFootnoteCallMarker`,start:Object.assign({},e[n+3][1].end),end:Object.assign({},e[n+3][1].end)};i.end.column++,i.end.offset++,i.end._bufferIndex++;let a={type:`gfmFootnoteCallString`,start:Object.assign({},i.end),end:Object.assign({},e[e.length-1][1].start)},o={type:`chunkString`,contentType:`string`,start:Object.assign({},a.start),end:Object.assign({},a.end)},s=[e[n+1],e[n+2],[`enter`,r,t],e[n+3],e[n+4],[`enter`,i,t],[`exit`,i,t],[`enter`,a,t],[`enter`,o,t],[`exit`,o,t],[`exit`,a,t],e[e.length-2],e[e.length-1],[`exit`,r,t]];return e.splice(n,e.length-n+1,...s),e}function Yd(e,t,n){let r=this,i=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),a=0,o;return s;function s(t){return e.enter(`gfmFootnoteCall`),e.enter(`gfmFootnoteCallLabelMarker`),e.consume(t),e.exit(`gfmFootnoteCallLabelMarker`),c}function c(t){return t===94?(e.enter(`gfmFootnoteCallMarker`),e.consume(t),e.exit(`gfmFootnoteCallMarker`),e.enter(`gfmFootnoteCallString`),e.enter(`chunkString`).contentType=`string`,l):n(t)}function l(s){if(a>999||s===93&&!o||s===null||s===91||B(s))return n(s);if(s===93){e.exit(`chunkString`);let a=e.exit(`gfmFootnoteCallString`);return i.includes(I(r.sliceSerialize(a)))?(e.enter(`gfmFootnoteCallLabelMarker`),e.consume(s),e.exit(`gfmFootnoteCallLabelMarker`),e.exit(`gfmFootnoteCall`),t):n(s)}return B(s)||(o=!0),a++,e.consume(s),s===92?u:l}function u(t){return t===91||t===92||t===93?(e.consume(t),a++,l):l(t)}}function Xd(e,t,n){let r=this,i=r.parser.gfmFootnotes||(r.parser.gfmFootnotes=[]),a,o=0,s;return c;function c(t){return e.enter(`gfmFootnoteDefinition`)._container=!0,e.enter(`gfmFootnoteDefinitionLabel`),e.enter(`gfmFootnoteDefinitionLabelMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionLabelMarker`),l}function l(t){return t===94?(e.enter(`gfmFootnoteDefinitionMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionMarker`),e.enter(`gfmFootnoteDefinitionLabelString`),e.enter(`chunkString`).contentType=`string`,u):n(t)}function u(t){if(o>999||t===93&&!s||t===null||t===91||B(t))return n(t);if(t===93){e.exit(`chunkString`);let n=e.exit(`gfmFootnoteDefinitionLabelString`);return a=I(r.sliceSerialize(n)),e.enter(`gfmFootnoteDefinitionLabelMarker`),e.consume(t),e.exit(`gfmFootnoteDefinitionLabelMarker`),e.exit(`gfmFootnoteDefinitionLabel`),f}return B(t)||(s=!0),o++,e.consume(t),t===92?d:u}function d(t){return t===91||t===92||t===93?(e.consume(t),o++,u):u(t)}function f(t){return t===58?(e.enter(`definitionMarker`),e.consume(t),e.exit(`definitionMarker`),i.includes(a)||i.push(a),H(e,p,`gfmFootnoteDefinitionWhitespace`)):n(t)}function p(e){return t(e)}}function Zd(e,t,n){return e.check(aa,t,e.attempt(Gd,t,n))}function Qd(e){e.exit(`gfmFootnoteDefinition`)}function $d(e,t,n){let r=this;return H(e,i,`gfmFootnoteDefinitionIndent`,5);function i(e){let i=r.events[r.events.length-1];return i&&i[1].type===`gfmFootnoteDefinitionIndent`&&i[2].sliceSerialize(i[1],!0).length===4?t(e):n(e)}}function ef(e){let t=(e||{}).singleTilde,n={name:`strikethrough`,tokenize:i,resolveAll:r};return t??=!0,{text:{126:n},insideSpan:{null:[n]},attentionMarkers:{null:[126]}};function r(e,t){let n=-1;for(;++n<e.length;)if(e[n][0]===`enter`&&e[n][1].type===`strikethroughSequenceTemporary`&&e[n][1]._close){let r=n;for(;r--;)if(e[r][0]===`exit`&&e[r][1].type===`strikethroughSequenceTemporary`&&e[r][1]._open&&e[n][1].end.offset-e[n][1].start.offset===e[r][1].end.offset-e[r][1].start.offset){e[n][1].type=`strikethroughSequence`,e[r][1].type=`strikethroughSequence`;let i={type:`strikethrough`,start:Object.assign({},e[r][1].start),end:Object.assign({},e[n][1].end)},a={type:`strikethroughText`,start:Object.assign({},e[r][1].end),end:Object.assign({},e[n][1].start)},o=[[`enter`,i,t],[`enter`,e[r][1],t],[`exit`,e[r][1],t],[`enter`,a,t]],s=t.parser.constructs.insideSpan.null;s&&ki(o,o.length,0,Qi(s,e.slice(r+1,n),t)),ki(o,o.length,0,[[`exit`,a,t],[`enter`,e[n][1],t],[`exit`,e[n][1],t],[`exit`,i,t]]),ki(e,r-1,n-r+3,o),n=r+o.length-2;break}}for(n=-1;++n<e.length;)e[n][1].type===`strikethroughSequenceTemporary`&&(e[n][1].type=`data`);return e}function i(e,n,r){let i=this.previous,a=this.events,o=0;return s;function s(t){return i===126&&a[a.length-1][1].type!==`characterEscape`?r(t):(e.enter(`strikethroughSequenceTemporary`),c(t))}function c(a){let s=Zi(i);if(a===126)return o>1?r(a):(e.consume(a),o++,c);if(o<2&&!t)return r(a);let l=e.exit(`strikethroughSequenceTemporary`),u=Zi(a);return l._open=!u||u===2&&!!s,l._close=!s||s===2&&!!u,n(a)}}}var tf=class{constructor(){this.map=[]}add(e,t,n){nf(this,e,t,n)}consume(e){if(this.map.sort(function(e,t){return e[0]-t[0]}),this.map.length===0)return;let t=this.map.length,n=[];for(;t>0;)--t,n.push(e.slice(this.map[t][0]+this.map[t][1]),this.map[t][2]),e.length=this.map[t][0];n.push(e.slice()),e.length=0;let r=n.pop();for(;r;){for(let t of r)e.push(t);r=n.pop()}this.map.length=0}};function nf(e,t,n,r){let i=0;if(n!==0||r.length!==0){for(;i<e.map.length;){if(e.map[i][0]===t){e.map[i][1]+=n,e.map[i][2].push(...r);return}i+=1}e.map.push([t,n,r])}}function rf(e,t){let n=!1,r=[];for(;t<e.length;){let i=e[t];if(n){if(i[0]===`enter`)i[1].type===`tableContent`&&r.push(e[t+1][1].type===`tableDelimiterMarker`?`left`:`none`);else if(i[1].type===`tableContent`){if(e[t-1][1].type===`tableDelimiterMarker`){let e=r.length-1;r[e]=r[e]===`left`?`center`:`right`}}else if(i[1].type===`tableDelimiterRow`)break}else i[0]===`enter`&&i[1].type===`tableDelimiterRow`&&(n=!0);t+=1}return r}function af(){return{flow:{null:{name:`table`,tokenize:of,resolveAll:sf}}}}function of(e,t,n){let r=this,i=0,a=0,o;return s;function s(e){let t=r.events.length-1;for(;t>-1;){let e=r.events[t][1].type;if(e===`lineEnding`||e===`linePrefix`)t--;else break}let i=t>-1?r.events[t][1].type:null,a=i===`tableHead`||i===`tableRow`?ee:c;return a===ee&&r.parser.lazy[r.now().line]?n(e):a(e)}function c(t){return e.enter(`tableHead`),e.enter(`tableRow`),l(t)}function l(e){return e===124?u(e):(o=!0,a+=1,u(e))}function u(t){return t===null?n(t):z(t)?a>1?(a=0,r.interrupt=!0,e.exit(`tableRow`),e.enter(`lineEnding`),e.consume(t),e.exit(`lineEnding`),p):n(t):V(t)?H(e,u,`whitespace`)(t):(a+=1,o&&(o=!1,i+=1),t===124?(e.enter(`tableCellDivider`),e.consume(t),e.exit(`tableCellDivider`),o=!0,u):(e.enter(`data`),d(t)))}function d(t){return t===null||t===124||B(t)?(e.exit(`data`),u(t)):(e.consume(t),t===92?f:d)}function f(t){return t===92||t===124?(e.consume(t),d):d(t)}function p(t){return r.interrupt=!1,r.parser.lazy[r.now().line]?n(t):(e.enter(`tableDelimiterRow`),o=!1,V(t)?H(e,m,`linePrefix`,r.parser.constructs.disable.null.includes(`codeIndented`)?void 0:4)(t):m(t))}function m(t){return t===45||t===58?g(t):t===124?(o=!0,e.enter(`tableCellDivider`),e.consume(t),e.exit(`tableCellDivider`),h):x(t)}function h(t){return V(t)?H(e,g,`whitespace`)(t):g(t)}function g(t){return t===58?(a+=1,o=!0,e.enter(`tableDelimiterMarker`),e.consume(t),e.exit(`tableDelimiterMarker`),_):t===45?(a+=1,_(t)):t===null||z(t)?b(t):x(t)}function _(t){return t===45?(e.enter(`tableDelimiterFiller`),v(t)):x(t)}function v(t){return t===45?(e.consume(t),v):t===58?(o=!0,e.exit(`tableDelimiterFiller`),e.enter(`tableDelimiterMarker`),e.consume(t),e.exit(`tableDelimiterMarker`),y):(e.exit(`tableDelimiterFiller`),y(t))}function y(t){return V(t)?H(e,b,`whitespace`)(t):b(t)}function b(n){return n===124?m(n):n===null||z(n)?!o||i!==a?x(n):(e.exit(`tableDelimiterRow`),e.exit(`tableHead`),t(n)):x(n)}function x(e){return n(e)}function ee(t){return e.enter(`tableRow`),S(t)}function S(n){return n===124?(e.enter(`tableCellDivider`),e.consume(n),e.exit(`tableCellDivider`),S):n===null||z(n)?(e.exit(`tableRow`),t(n)):V(n)?H(e,S,`whitespace`)(n):(e.enter(`data`),C(n))}function C(t){return t===null||t===124||B(t)?(e.exit(`data`),S(t)):(e.consume(t),t===92?w:C)}function w(t){return t===92||t===124?(e.consume(t),C):C(t)}}function sf(e,t){let n=-1,r=!0,i=0,a=[0,0,0,0],o=[0,0,0,0],s=!1,c=0,l,u,d,f=new tf;for(;++n<e.length;){let p=e[n],m=p[1];p[0]===`enter`?m.type===`tableHead`?(s=!1,c!==0&&(lf(f,t,c,l,u),u=void 0,c=0),l={type:`table`,start:Object.assign({},m.start),end:Object.assign({},m.end)},f.add(n,0,[[`enter`,l,t]])):m.type===`tableRow`||m.type===`tableDelimiterRow`?(r=!0,d=void 0,a=[0,0,0,0],o=[0,n+1,0,0],s&&(s=!1,u={type:`tableBody`,start:Object.assign({},m.start),end:Object.assign({},m.end)},f.add(n,0,[[`enter`,u,t]])),i=m.type===`tableDelimiterRow`?2:u?3:1):i&&(m.type===`data`||m.type===`tableDelimiterMarker`||m.type===`tableDelimiterFiller`)?(r=!1,o[2]===0&&(a[1]!==0&&(o[0]=o[1],d=cf(f,t,a,i,void 0,d),a=[0,0,0,0]),o[2]=n)):m.type===`tableCellDivider`&&(r?r=!1:(a[1]!==0&&(o[0]=o[1],d=cf(f,t,a,i,void 0,d)),a=o,o=[a[1],n,0,0])):m.type===`tableHead`?(s=!0,c=n):m.type===`tableRow`||m.type===`tableDelimiterRow`?(c=n,a[1]===0?o[1]!==0&&(d=cf(f,t,o,i,n,d)):(o[0]=o[1],d=cf(f,t,a,i,n,d)),i=0):i&&(m.type===`data`||m.type===`tableDelimiterMarker`||m.type===`tableDelimiterFiller`)&&(o[3]=n)}for(c!==0&&lf(f,t,c,l,u),f.consume(t.events),n=-1;++n<t.events.length;){let e=t.events[n];e[0]===`enter`&&e[1].type===`table`&&(e[1]._align=rf(t.events,n))}return e}function cf(e,t,n,r,i,a){let o=r===1?`tableHeader`:r===2?`tableDelimiter`:`tableData`;n[0]!==0&&(a.end=Object.assign({},uf(t.events,n[0])),e.add(n[0],0,[[`exit`,a,t]]));let s=uf(t.events,n[1]);if(a={type:o,start:Object.assign({},s),end:Object.assign({},s)},e.add(n[1],0,[[`enter`,a,t]]),n[2]!==0){let i=uf(t.events,n[2]),a=uf(t.events,n[3]),o={type:`tableContent`,start:Object.assign({},i),end:Object.assign({},a)};if(e.add(n[2],0,[[`enter`,o,t]]),r!==2){let r=t.events[n[2]],i=t.events[n[3]];if(r[1].end=Object.assign({},i[1].end),r[1].type=`chunkText`,r[1].contentType=`text`,n[3]>n[2]+1){let t=n[2]+1,r=n[3]-n[2]-1;e.add(t,r,[])}}e.add(n[3]+1,0,[[`exit`,o,t]])}return i!==void 0&&(a.end=Object.assign({},uf(t.events,i)),e.add(i,0,[[`exit`,a,t]]),a=void 0),a}function lf(e,t,n,r,i){let a=[],o=uf(t.events,n);i&&(i.end=Object.assign({},o),a.push([`exit`,i,t])),r.end=Object.assign({},o),a.push([`exit`,r,t]),e.add(n+1,0,a)}function uf(e,t){let n=e[t],r=n[0]===`enter`?`start`:`end`;return n[1][r]}var df={name:`tasklistCheck`,tokenize:pf};function ff(){return{text:{91:df}}}function pf(e,t,n){let r=this;return i;function i(t){return r.previous!==null||!r._gfmTasklistFirstContentOfListItem?n(t):(e.enter(`taskListCheck`),e.enter(`taskListCheckMarker`),e.consume(t),e.exit(`taskListCheckMarker`),a)}function a(t){return B(t)?(e.enter(`taskListCheckValueUnchecked`),e.consume(t),e.exit(`taskListCheckValueUnchecked`),o):t===88||t===120?(e.enter(`taskListCheckValueChecked`),e.consume(t),e.exit(`taskListCheckValueChecked`),o):n(t)}function o(t){return t===93?(e.enter(`taskListCheckMarker`),e.consume(t),e.exit(`taskListCheckMarker`),e.exit(`taskListCheck`),s):n(t)}function s(r){return z(r)?t(r):V(r)?e.check({tokenize:mf},t,n)(r):n(r)}}function mf(e,t,n){return H(e,r,`whitespace`);function r(e){return e===null?n(e):t(e)}}function hf(e){return Mi([jd(),Kd(),ef(e),af(),ff()])}var gf={};function _f(e){let t=this,n=e||gf,r=t.data(),i=r.micromarkExtensions||=[],a=r.fromMarkdownExtensions||=[],o=r.toMarkdownExtensions||=[];i.push(hf(n)),a.push(Z()),o.push(xd(n))}var vf=Object.assign({}),yf={Beginner:`#0F6E56`,Intermediate:`#185FA5`,Advanced:`#993C1D`},bf={Beginner:`#E1F5EE`,Intermediate:`#E6F1FB`,Advanced:`#FAECE7`};function xf({content:e}){return(0,M.jsx)(`div`,{className:`prose`,style:{width:`100%`,maxWidth:`100%`,boxSizing:`border-box`,maxHeight:`75vh`,overflowY:`auto`,padding:24},children:(0,M.jsx)(bl,{remarkPlugins:[_f],components:{img:({src:e,alt:t,...n})=>{let r=e;if(e?.startsWith(`../images/`)){let t=`../../assets/CWD/images/${e.split(`/`).pop()}`;vf[t]&&(r=vf[t])}return(0,M.jsx)(`img`,{src:r,alt:t,...n,style:{maxWidth:`100%`,height:`auto`,display:`block`,margin:`24px auto`}})}},children:e||`No concept available for this topic.`})})}function Sf({code:e}){let[t,n]=(0,v.useState)(!1);return(0,M.jsxs)(`div`,{style:{position:`relative`,marginTop:16,width:`100%`,maxWidth:`100%`,minWidth:0},children:[(0,M.jsx)(`button`,{onClick:async()=>{try{await navigator.clipboard.writeText(e||``),n(!0),setTimeout(()=>{n(!1)},1800)}catch(e){console.error(`Failed to copy code:`,e)}},style:{position:`absolute`,top:8,right:8,padding:`4px 10px`,borderRadius:6,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,cursor:`pointer`,fontSize:12,color:`var(--color-text-secondary)`,zIndex:1},children:t?`✓ Copied`:`Copy`}),(0,M.jsx)(`pre`,{style:{margin:0,padding:`14px 16px`,borderRadius:10,overflowX:`auto`,maxWidth:`100%`,boxSizing:`border-box`,background:`var(--color-background-secondary)`,border:`0.5px solid var(--color-border-tertiary)`,fontSize:12,lineHeight:1.65,fontFamily:`var(--font-mono)`,color:`var(--color-text-primary)`,whiteSpace:`pre`},children:(0,M.jsx)(`code`,{children:e||`// No code available.`})})]})}function Cf({recipe:e,onSelect:t,selected:n}){return(0,M.jsxs)(`div`,{onClick:()=>t(e),style:{padding:`16px 18px`,borderRadius:12,cursor:`pointer`,border:n?`1.5px solid #185FA5`:`0.5px solid var(--color-border-tertiary)`,background:n?`#061320`:`var(--color-background-primary)`,transition:`all 0.15s`,width:`100%`,maxWidth:`100%`,boxSizing:`border-box`},children:[(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,gap:10,marginBottom:6},children:[(0,M.jsx)(`span`,{style:{fontSize:13,color:`var(--color-text-secondary)`,fontWeight:400,minWidth:0,overflowWrap:`anywhere`},children:e.category}),(0,M.jsx)(`span`,{style:{fontSize:11,padding:`2px 8px`,borderRadius:20,fontWeight:500,background:bf[e.difficulty]||`#E6F1FB`,color:yf[e.difficulty]||`#185FA5`,flexShrink:0},children:e.difficulty})]}),(0,M.jsx)(`div`,{style:{fontWeight:500,fontSize:15,marginBottom:4,color:`var(--color-text-primary)`,overflowWrap:`anywhere`},children:e.title})]})}function wf({onPrev:e,onNext:t,hasPrev:n,hasNext:r,position:i}){return(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`center`,gap:10,marginTop:i===`bottom`?20:0,marginBottom:i===`top`?16:0},children:[(0,M.jsx)(`button`,{onClick:e,disabled:!n,style:{padding:`8px 16px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:n?`var(--color-text-primary)`:`var(--color-text-tertiary)`,fontSize:13,fontWeight:500,cursor:n?`pointer`:`not-allowed`,opacity:n?1:.5},children:`← Previous`}),(0,M.jsx)(`button`,{onClick:t,disabled:!r,style:{padding:`8px 18px`,borderRadius:8,border:`none`,background:r?`#185FA5`:`var(--color-background-secondary)`,color:r?`#fff`:`var(--color-text-tertiary)`,fontSize:13,fontWeight:500,cursor:r?`pointer`:`not-allowed`,opacity:r?1:.5},children:`Next →`})]})}function Tf({recipe:e,recipeList:t,onSelect:n}){let[r,i]=(0,v.useState)(`concept`),a=t.findIndex(t=>t.id===e.id),o=a>0,s=a>=0&&a<t.length-1,c=()=>{o&&(i(`concept`),n(t[a-1]))},l=()=>{s&&(i(`concept`),n(t[a+1]))};return(0,M.jsxs)(`div`,{style:{padding:24,borderRadius:14,background:`var(--color-background-primary)`,border:`0.5px solid var(--color-border-tertiary)`,width:`100%`,maxWidth:`100%`,minWidth:0,boxSizing:`border-box`,overflow:`hidden`},children:[(0,M.jsx)(wf,{position:`top`,onPrev:c,onNext:l,hasPrev:o,hasNext:s}),(0,M.jsxs)(`div`,{style:{display:`flex`,justifyContent:`space-between`,alignItems:`flex-start`,gap:16,marginBottom:18,flexWrap:`wrap`},children:[(0,M.jsxs)(`div`,{style:{minWidth:0,flex:`1 1 250px`},children:[(0,M.jsx)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:e.category}),(0,M.jsx)(`h2`,{style:{margin:`4px 0 0`,fontSize:22,fontWeight:500,overflowWrap:`anywhere`},children:e.title})]}),(0,M.jsxs)(`div`,{style:{display:`flex`,gap:8,alignItems:`center`,paddingTop:4,flexWrap:`wrap`},children:[(0,M.jsx)(`span`,{style:{fontSize:12,padding:`3px 10px`,borderRadius:20,fontWeight:500,background:bf[e.difficulty]||`#E6F1FB`,color:yf[e.difficulty]||`#185FA5`},children:e.difficulty}),e.time&&(0,M.jsxs)(`span`,{style:{fontSize:12,color:`var(--color-text-tertiary)`},children:[`⏱ `,e.time]})]})]}),(0,M.jsx)(`div`,{style:{display:`flex`,gap:4,marginBottom:18,borderBottom:`0.5px solid var(--color-border-tertiary)`,flexWrap:`wrap`},children:[`concept`,`code`].map(e=>(0,M.jsx)(`button`,{onClick:()=>i(e),style:{padding:`8px 16px`,border:`none`,background:`none`,cursor:`pointer`,fontSize:14,fontWeight:r===e?500:400,color:r===e?`var(--color-text-primary)`:`var(--color-text-secondary)`,borderBottom:r===e?`2px solid #185FA5`:`2px solid transparent`,marginBottom:-1,transition:`all 0.12s`},children:e===`concept`?`Concept`:`Code`},e))}),r===`concept`&&(0,M.jsx)(xf,{content:e.concept}),r===`code`&&(0,M.jsx)(Sf,{code:e.code}),(0,M.jsx)(wf,{position:`bottom`,onPrev:c,onNext:l,hasPrev:o,hasNext:s})]})}function Ef({recipes:e,categories:t,selected:n,onSelect:r,category:i,setCategory:a,search:o,setSearch:s}){let c=e.filter(e=>{let t=i===`All`||e.category===i,n=o.trim().toLowerCase(),r=!n||e.title?.toLowerCase().includes(n)||e.category?.toLowerCase().includes(n);return t&&r});return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,width:`100%`,maxWidth:`100%`,minWidth:0,height:`100%`},children:[(0,M.jsx)(`div`,{style:{paddingBottom:16},children:(0,M.jsx)(`input`,{type:`text`,placeholder:`Search questions…`,value:o,onChange:e=>s(e.target.value),style:{width:`100%`,maxWidth:`100%`,boxSizing:`border-box`,padding:`9px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13,outline:`none`}})}),(0,M.jsxs)(`div`,{style:{marginBottom:16,width:`100%`},children:[(0,M.jsx)(`label`,{htmlFor:`category-select`,style:{display:`block`,fontSize:12,color:`var(--color-text-secondary)`,marginBottom:6,fontWeight:500},children:`Category`}),(0,M.jsx)(`select`,{id:`category-select`,value:i,onChange:e=>a(e.target.value),style:{width:`100%`,padding:`9px 12px`,borderRadius:8,border:`0.5px solid var(--color-border-secondary)`,background:`var(--color-background-secondary)`,color:`var(--color-text-primary)`,fontSize:13,cursor:`pointer`,outline:`none`,boxSizing:`border-box`},children:t.map(e=>(0,M.jsx)(`option`,{value:e,children:e},e))})]}),(0,M.jsx)(`div`,{style:{display:`flex`,flexDirection:`column`,gap:10,overflowY:`auto`,flex:1,minHeight:0},children:c.length===0?(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,fontSize:13,padding:`12px 0`},children:`No questions found.`}):c.map(e=>(0,M.jsx)(Cf,{recipe:e,onSelect:r,selected:n?.id===e.id},e.id))})]})}function Df({title:e,subtitle:t,icon:n,totalCount:r,categoryCount:i,patternLabel:a}){return(0,M.jsxs)(`div`,{style:{padding:`20px 32px 16px`,borderBottom:`0.5px solid var(--color-border-tertiary)`,display:`flex`,alignItems:`center`,gap:16,flexWrap:`wrap`,width:`100%`,maxWidth:`100%`,boxSizing:`border-box`},children:[(0,M.jsx)(`div`,{style:{width:40,height:40,minWidth:40,borderRadius:10,background:`#E6F1FB`,display:`flex`,alignItems:`center`,justifyContent:`center`,fontSize:20},children:n}),(0,M.jsxs)(`div`,{style:{minWidth:0,flex:`1 1 220px`},children:[(0,M.jsx)(`h1`,{style:{margin:0,fontSize:20,fontWeight:500,letterSpacing:`-0.3px`,overflowWrap:`anywhere`},children:e}),t&&(0,M.jsx)(`p`,{style:{margin:0,fontSize:13,color:`var(--color-text-secondary)`,overflowWrap:`anywhere`},children:t})]}),(0,M.jsxs)(`div`,{style:{marginLeft:`auto`,display:`flex`,gap:20,flexWrap:`wrap`},children:[(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:r}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:`Questions`})]}),(0,M.jsxs)(`div`,{style:{textAlign:`center`},children:[(0,M.jsx)(`div`,{style:{fontSize:18,fontWeight:500},children:i}),(0,M.jsx)(`div`,{style:{fontSize:11,color:`var(--color-text-tertiary)`},children:a})]})]})]})}function $({data:e,title:t,subtitle:n,icon:r=`📚`,patternLabel:i=`Categories`}){let[a,o]=(0,v.useState)(e?.[0]||null),[s,c]=(0,v.useState)(`All`),[l,u]=(0,v.useState)(``),d=[`All`,...new Set(e.map(e=>e.category).filter(Boolean))];return(0,M.jsxs)(`div`,{style:{display:`flex`,flexDirection:`column`,width:`100%`,maxWidth:`100%`,minHeight:`100vh`,fontFamily:`var(--font-sans, system-ui, sans-serif)`,background:`var(--color-background-tertiary, #020617)`,color:`var(--color-text-primary)`,boxSizing:`border-box`,overflowX:`hidden`},children:[(0,M.jsx)(Df,{title:t,subtitle:n,icon:r,totalCount:e.length,categoryCount:d.length-1,patternLabel:i}),(0,M.jsxs)(`div`,{className:`cookbook-layout`,style:{display:`flex`,flex:1,minHeight:0,width:`100%`,maxWidth:`100%`,overflow:`hidden`},children:[(0,M.jsx)(`div`,{className:`cookbook-sidebar`,style:{width:320,minWidth:260,padding:`20px`,borderRight:`0.5px solid var(--color-border-tertiary)`,background:`var(--color-background-primary)`,overflowY:`auto`,boxSizing:`border-box`,flexShrink:0},children:(0,M.jsx)(Ef,{recipes:e,categories:d,selected:a,onSelect:o,category:s,setCategory:c,search:l,setSearch:u})}),(0,M.jsx)(`div`,{className:`cookbook-content`,style:{flex:1,minWidth:0,overflowY:`auto`,overflowX:`hidden`,padding:`24px 28px`,boxSizing:`border-box`},children:a?(0,M.jsx)(Tf,{recipe:a,recipeList:e,onSelect:o}):(0,M.jsx)(`div`,{style:{color:`var(--color-text-tertiary)`,padding:40,textAlign:`center`},children:`Select a question to get started.`})})]}),(0,M.jsx)(`style`,{children:`
         @media (max-width: 750px) {
 
           .cookbook-layout {
@@ -117,7 +117,7 @@ Please change the parent <Route path="${e}"> to <Route path="${e===`/`?`*`:`${e}
             padding: 16px !important;
           }
         }
-      `})]})}var Df=[{id:`what-is-mcp`,category:`MCP`,title:`What is MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the Model Context Protocol (MCP), its purpose, architecture, core components, and how it standardizes connections between AI applications and external tools, resources, and services.`,concept:`# Model Context Protocol (MCP) — Enterprise Interview Guide\r
+      `})]})}var Of=[{id:`what-is-mcp`,category:`MCP`,title:`What is MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand the Model Context Protocol (MCP), its purpose, architecture, core components, and how it standardizes connections between AI applications and external tools, resources, and services.`,concept:`# Model Context Protocol (MCP) — Enterprise Interview Guide\r
 \r
 ## 1. What is MCP?\r
 \r
@@ -15272,7 +15272,7 @@ Execute\r
   ↓\r
 Audit\r
 \`\`\`\r
-`,code:``}];function Of(){return(0,M.jsx)($,{data:Df,title:`MCPQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var kf=[{id:`what-is-a2a`,category:`Agentic AI Protocols`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,concept:`# A2A (Agent2Agent) – Complete Enterprise Explanation\r
+`,code:``}];function kf(){return(0,M.jsx)($,{data:Of,title:`MCPQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var Af=[{id:`what-is-a2a`,category:`Agentic AI Protocols`,title:`What is A2A?`,difficulty:`Advanced`,time:`~15 min`,concept:`# A2A (Agent2Agent) – Complete Enterprise Explanation\r
 \r
 ## Interview Topic\r
 \r
@@ -23684,7 +23684,7 @@ The flow could be:\r
 ### One-liner to remember\r
 \r
 **A2A connects the agents; MCP connects the agents to the world.**\r
-`,code:``}];function Af(){return(0,M.jsx)($,{data:kf,title:`A2AQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var jf=[{id:`scenario-repeated-tool-calls`,category:`Agentic AI Troubleshooting`,title:`Your agent keeps calling the same tool repeatedly. How would you fix it?`,difficulty:`Expert`,time:`~20 min`,description:`Diagnose repeated tool execution using loop detection, state tracking, iteration limits, tool-result validation, termination conditions, idempotency, retry policies, prompt improvements, and workflow-level controls.`,concept:`## Your agent keeps calling the same tool repeatedly. How would you fix it?\r
+`,code:``}];function jf(){return(0,M.jsx)($,{data:Af,title:`A2AQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var Mf=[{id:`scenario-repeated-tool-calls`,category:`Agentic AI Troubleshooting`,title:`Your agent keeps calling the same tool repeatedly. How would you fix it?`,difficulty:`Expert`,time:`~20 min`,description:`Diagnose repeated tool execution using loop detection, state tracking, iteration limits, tool-result validation, termination conditions, idempotency, retry policies, prompt improvements, and workflow-level controls.`,concept:`## Your agent keeps calling the same tool repeatedly. How would you fix it?\r
 \r
 ### 🎯 Strong Interview Answer\r
 \r
@@ -30556,7 +30556,7 @@ A strong answer is:\r
 \r
 \r
 \r
-`,code:``}];function Mf(){return(0,M.jsx)($,{data:jf,title:`AgenticScenarioBasedQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var Nf=`\`\`\`\`md\r
+`,code:``}];function Nf(){return(0,M.jsx)($,{data:Mf,title:`AgenticScenarioBasedQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var Pf=`\`\`\`\`md\r
 # What Problem Specifically Did A2A Solve in Your Architecture?\r
 \r
 ## Interview Question\r
@@ -31023,7 +31023,7 @@ MCP = agent-to-tool/data integration.\r
 \r
 \`\`\`\r
 \`\`\`\r
-`,Pf=`Here is the **single \`.md\` interview script**, focused only on the important points for this question.\r
+`,Ff=`Here is the **single \`.md\` interview script**, focused only on the important points for this question.\r
 \r
 \`\`\`\`md\r
 # Why Did You Choose A2A Instead of REST APIs for Agent Communication?\r
@@ -31423,7 +31423,7 @@ where both sides participate as autonomous agents.\r
 \r
 > **"I chose A2A because my requirement was agent collaboration, not just API invocation. REST gives me transport and service APIs, but A2A gives me an agent-oriented communication model for capabilities, tasks, context, status, and results. I still use REST for traditional enterprise services. So A2A is for agent-to-agent collaboration, while REST is for conventional service integration."**\r
 \r
-`,Ff=`# Can A2A Work Without LangGraph?\r
+`,If=`# Can A2A Work Without LangGraph?\r
 \r
 ## Interview Question\r
 \r
@@ -31735,7 +31735,7 @@ Why use both?\r
         ↓\r
 LangGraph → Orchestration\r
 A2A       → Agent Communication\r
-`,If=`# How Do You Prevent Agents From Repeatedly Calling Each Other?\r
+`,Lf=`# How Do You Prevent Agents From Repeatedly Calling Each Other?\r
 \r
 ## Interview Question\r
 \r
@@ -32454,7 +32454,7 @@ A sudden increase in these metrics can indicate a routing or prompt-design probl
 ### Architect Principle\r
 \r
 > **Agents should have autonomy within boundaries—not unlimited autonomy.**\r
-`,Lf=`# How Does an Agent Discover Another Agent?\r
+`,Rf=`# How Does an Agent Discover Another Agent?\r
 \r
 ## Interview Question\r
 \r
@@ -33081,7 +33081,7 @@ A2A INVOKE\r
 \`\`\`\r
 \r
 **Discovery → Capability Match → Policy → Selection → A2A Communication**\r
-`,Rf=`# How Did You Decide the Number of Agents in Your Architecture?\r
+`,zf=`# How Did You Decide the Number of Agents in Your Architecture?\r
 \r
 ## Interview Question\r
 \r
@@ -33658,7 +33658,7 @@ Ask:\r
 And:\r
 \r
 > **If it can be a tool, make it a tool. If it needs autonomous reasoning, consider an agent. If it is only workflow logic, keep it in the workflow.**\r
-`,zf=`# How Does an Agent Discover Another Agent?\r
+`,Bf=`# How Does an Agent Discover Another Agent?\r
 \r
 ## Interview Question\r
 \r
@@ -34285,7 +34285,7 @@ A2A INVOKE\r
 \`\`\`\r
 \r
 **Discovery → Capability Match → Policy → Selection → A2A Communication**\r
-`,Bf=`# How Do You Monitor and Trace the Complete Multi-Agent Execution?\r
+`,Vf=`# How Do You Monitor and Trace the Complete Multi-Agent Execution?\r
 \r
 ## Interview Question\r
 \r
@@ -35101,7 +35101,7 @@ Correctness, groundedness, routing, tool selection\r
 # Architect Principle\r
 \r
 > **“If I cannot trace a user request across every agent, model, tool, and enterprise dependency, I don't consider the Agentic AI system production-ready.”**\r
-`,Vf=`# How Does Your Architecture Impact Cost?\r
+`,Hf=`# How Does Your Architecture Impact Cost?\r
 \r
 ## Interview Question\r
 \r
@@ -35707,7 +35707,7 @@ Answer:\r
 ## Strong Architect Principle\r
 \r
 > **“Every agent boundary should have a measurable business or architectural benefit. If an agent adds cost without adding meaningful capability, it should probably be a tool or workflow step instead.”**\r
-`,Hf=`# How Does Your Architecture Impact Latency?\r
+`,Uf=`# How Does Your Architecture Impact Latency?\r
 \r
 ## Interview Question\r
 \r
@@ -36264,7 +36264,7 @@ After this answer, an interviewer may ask:\r
 8. **“How would you optimize token usage?”**\r
 9. **“How does A2A affect latency compared with direct invocation?”**\r
 10. **“How would you design the architecture for a strict 2-second SLA?”**\r
-`,Uf=`# Isn't Your Agentic AI Architecture Over-Engineered?\r
+`,Wf=`# Isn't Your Agentic AI Architecture Over-Engineered?\r
 \r
 ## Interview Question\r
 \r
@@ -36777,7 +36777,7 @@ MCP\r
 \`\`\`\r
 \r
 **The architect's goal is not maximum sophistication — it is the right level of sophistication.**\r
-`,Wf=`# What Is the Biggest Limitation of Your Current Agentic AI Architecture?\r
+`,Gf=`# What Is the Biggest Limitation of Your Current Agentic AI Architecture?\r
 \r
 ## Interview Question\r
 \r
@@ -37204,7 +37204,7 @@ I would say:\r
 ### Final Architect Principle\r
 \r
 > **“Use multiple agents when they create meaningful architectural boundaries, but minimize unnecessary agent hops.”**\r
-`,Gf=`# Would You Build Your Own Agentic AI Orchestration Framework?\r
+`,Kf=`# Would You Build Your Own Agentic AI Orchestration Framework?\r
 \r
 ## Interview Question\r
 \r
@@ -37277,7 +37277,7 @@ For example:\r
                   Result Aggregator\r
                          |\r
                          v\r
-                    Final Answer`,Kf=`# What Happens If Two Agents Return Conflicting Answers?\r
+                    Final Answer`,qf=`# What Happens If Two Agents Return Conflicting Answers?\r
 \r
 ## Interview Question\r
 \r
@@ -37749,7 +37749,7 @@ The final decision is based on **correlated evidence**, not simply agent confide
 **H — Human Escalation**\r
 \r
 > **Conflict → Evidence → Validate → Human if unresolved**\r
-`,qf=`# How Did You Define the Responsibility and Boundary of Each Agent?\r
+`,Jf=`# How Did You Define the Responsibility and Boundary of Each Agent?\r
 \r
 ## Interview Question\r
 \r
@@ -38662,7 +38662,7 @@ Worker      → EXECUTE THE CAPABILITY\r
 \`\`\`\r
 \r
 That is the cleanest way to explain **why your Coordinator → Delegator → Worker hierarchy exists**.\r
-`,Jf=`# Why Did You Choose a Coordinator → Delegator → Worker Architecture?\r
+`,Yf=`# Why Did You Choose a Coordinator → Delegator → Worker Architecture?\r
 \r
 ## Interview Question\r
 \r
@@ -39302,7 +39302,7 @@ Worker      → EXECUTE the specific task.\r
 ### Final Architecture Principle\r
 \r
 > **“The hierarchy is not about adding more agents; it is about managing complexity through clear responsibility boundaries.”**\r
-`,Yf=`# How Does Your Coordinator Decide Which Delegator to Invoke?\r
+`,Xf=`# How Does Your Coordinator Decide Which Delegator to Invoke?\r
 \r
 ## Interview Question\r
 \r
@@ -39735,7 +39735,7 @@ EXECUTE\r
 \`\`\`\r
 \r
 **Intent → Domain → Capability → Policy → Delegator**\r
-`,Xf=`# Why Not Use a Coordinator → Worker Architecture Directly?\r
+`,Zf=`# Why Not Use a Coordinator → Worker Architecture Directly?\r
 \r
 ## Interview Question\r
 \r
@@ -40276,7 +40276,7 @@ Worker\r
 ### Final Principle\r
 \r
 > **“Coordinator → Worker is simpler; Coordinator → Delegator → Worker is more scalable when domain complexity grows.”**\r
-`,Zf=`# How Do You Maintain State Across Agents?\r
+`,Qf=`# How Do You Maintain State Across Agents?\r
 \r
 ## Interview Question\r
 \r
@@ -40976,7 +40976,7 @@ Minimum required information\r
 * **TRACE** → Request ID + Task ID + correlation\r
 \r
 > **“Centralized workflow state, scoped context, independent agent execution.”**\r
-`,Qf=`# How Does the Delegator Select the Appropriate Worker?\r
+`,$f=`# How Does the Delegator Select the Appropriate Worker?\r
 \r
 ## Interview Question\r
 \r
@@ -41557,7 +41557,7 @@ EXECUTE\r
 **Worker = Execution**\r
 \r
 > **“The Coordinator chooses the domain, the Delegator chooses the capability, and the Worker performs the specialized execution.”**\r
-`,$f=`# What Alternatives Did You Evaluate Before Selecting LangGraph?\r
+`,ep=`# What Alternatives Did You Evaluate Before Selecting LangGraph?\r
 \r
 ## Interview Question\r
 \r
@@ -42152,7 +42152,7 @@ LangGraph\r
 **Decision principle:**\r
 \r
 > **“Choose the orchestration model first; choose the framework second.”**\r
-`,ep=`# What Are the Limitations of LangGraph?\r
+`,tp=`# What Are the Limitations of LangGraph?\r
 \r
 ## Interview Question\r
 \r
@@ -42890,7 +42890,7 @@ If the interviewer pushes further:\r
 ### One sentence to memorize\r
 \r
 > **"LangGraph trades simplicity for control — and for complex enterprise workflows, I was willing to make that trade because control was more important than minimal code."**\r
-`,tp=`# What Trade-offs Did You Accept by Choosing LangGraph?\r
+`,np=`# What Trade-offs Did You Accept by Choosing LangGraph?\r
 \r
 ## Interview Question\r
 \r
@@ -43243,7 +43243,7 @@ But:\r
 **More Control → More Complexity → More Operations**\r
 \r
 That is the trade-off an architect should acknowledge.\r
-`,np=`# Why Did You Choose LangGraph Instead of AutoGen?\r
+`,rp=`# Why Did You Choose LangGraph Instead of AutoGen?\r
 \r
 ## Interview Question\r
 \r
@@ -43813,7 +43813,7 @@ LangGraph → "What happens next based on state?"\r
 \`\`\`\r
 \r
 **For your Coordinator → Delegator → Worker architecture, that distinction is the key reason to choose LangGraph.**\r
-`,rp=`# Why Did You Choose LangGraph Instead of CrewAI?\r
+`,ip=`# Why Did You Choose LangGraph Instead of CrewAI?\r
 \r
 ## Interview Question\r
 \r
@@ -44344,7 +44344,7 @@ LangGraph → "What should happen next?"\r
 \`\`\`\r
 \r
 **For your CWD architecture, the second question is the more important one.**\r
-`,ip=[{id:`why-langgraph`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph for your project?`,difficulty:`Advanced`,time:`~15 min`,tags:[`langgraph`,`agentic ai`,`agent orchestration`,`multi-agent`,`state management`,`workflow`,`architecture`,`enterprise ai`],concept:`# Why did you choose LangGraph for your project?\r
+`,ap=[{id:`why-langgraph`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph for your project?`,difficulty:`Advanced`,time:`~15 min`,tags:[`langgraph`,`agentic ai`,`agent orchestration`,`multi-agent`,`state management`,`workflow`,`architecture`,`enterprise ai`],concept:`# Why did you choose LangGraph for your project?\r
 \r
 ## Interview Answer\r
 \r
@@ -46212,7 +46212,7 @@ LangGraph\r
 ### Strong closing statement\r
 \r
 > **"LangGraph was not selected simply because it supports agents. I selected it because it gave me an orchestration framework where I could explicitly control state transitions, agent routing, execution, recovery and governance while still using LLMs for reasoning."**\r
-`,code:``},{id:`langgraph-vs-langchain-agents`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of LangChain Agents?`,difficulty:`Advanced`,time:`~15 min`,concept:rp,code:``},{id:`langgraph-vs-crewai`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of CrewAI?`,difficulty:`Advanced`,time:`~15 min`,concept:rp,code:``},{id:`langgraph-vs-autogen`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of AutoGen?`,difficulty:`Advanced`,time:`~15 min`,concept:np,code:``},{id:`langgraph-vs-semantic-kernel`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of Semantic Kernel?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Did You Choose LangGraph Instead of Semantic Kernel?\r
+`,code:``},{id:`langgraph-vs-langchain-agents`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of LangChain Agents?`,difficulty:`Advanced`,time:`~15 min`,concept:ip,code:``},{id:`langgraph-vs-crewai`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of CrewAI?`,difficulty:`Advanced`,time:`~15 min`,concept:ip,code:``},{id:`langgraph-vs-autogen`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of AutoGen?`,difficulty:`Advanced`,time:`~15 min`,concept:rp,code:``},{id:`langgraph-vs-semantic-kernel`,category:`Agentic AI Frameworks`,title:`Why did you choose LangGraph instead of Semantic Kernel?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Did You Choose LangGraph Instead of Semantic Kernel?\r
 \r
 ## Interview Question\r
 \r
@@ -48351,7 +48351,7 @@ Therefore:\r
 9. Scalability / Production Readiness\r
 10. Developer Experience & Maintainability\r
 \`\`\`\r
-`,code:``},{id:`langgraph-limitations`,category:`Agentic AI Frameworks`,title:`What are the limitations of LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:ep,code:``},{id:`when-not-langgraph`,category:`Agentic AI Frameworks`,title:`When would you not use LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When Would You Not Use LangGraph?\r
+`,code:``},{id:`langgraph-limitations`,category:`Agentic AI Frameworks`,title:`What are the limitations of LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:tp,code:``},{id:`when-not-langgraph`,category:`Agentic AI Frameworks`,title:`When would you not use LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When Would You Not Use LangGraph?\r
 \r
 ## Interview Question\r
 \r
@@ -49008,7 +49008,7 @@ Deterministic business process\r
       ↓\r
 Traditional workflow/BPM engine\r
 \`\`\`\r
-`,code:``},{id:`build-own-agent-framework`,category:`Agentic AI Frameworks`,title:`Would you build your own Agentic AI orchestration framework? Why or why not?`,difficulty:`Advanced`,time:`~15 min`,concept:Gf,code:``},{id:`why-a2a`,category:`Agentic AI Protocols`,title:`Why did you use A2A in your project?`,difficulty:`Advanced`,time:`~15 min`,concept:`\r
+`,code:``},{id:`build-own-agent-framework`,category:`Agentic AI Frameworks`,title:`Would you build your own Agentic AI orchestration framework? Why or why not?`,difficulty:`Advanced`,time:`~15 min`,concept:Kf,code:``},{id:`why-a2a`,category:`Agentic AI Protocols`,title:`Why did you use A2A in your project?`,difficulty:`Advanced`,time:`~15 min`,concept:`\r
 \`\`\`\`md\r
 # Why Did You Use A2A in Your Project?\r
 \r
@@ -49362,7 +49362,7 @@ MCP = Agent-to-Tool / Agent-to-Data Communication\r
 \r
 \`\`\`\r
 \`\`\`\r
-`,code:``},{id:`a2a-vs-rest`,category:`Agentic AI Protocols`,title:`Why did you choose A2A instead of REST APIs for agent communication?`,difficulty:`Advanced`,time:`~15 min`,concept:Pf,code:``},{id:`a2a-problem-solved`,category:`Agentic AI Protocols`,title:`What problem specifically did A2A solve in your architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:Nf,code:``},{id:`langgraph-a2a-combination`,category:`Agentic AI Architecture`,title:`Why did you use both LangGraph and A2A?`,difficulty:`Advanced`,time:`~15 min`,concept:`\`\`\`\`md\r
+`,code:``},{id:`a2a-vs-rest`,category:`Agentic AI Protocols`,title:`Why did you choose A2A instead of REST APIs for agent communication?`,difficulty:`Advanced`,time:`~15 min`,concept:Ff,code:``},{id:`a2a-problem-solved`,category:`Agentic AI Protocols`,title:`What problem specifically did A2A solve in your architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:Pf,code:``},{id:`langgraph-a2a-combination`,category:`Agentic AI Architecture`,title:`Why did you use both LangGraph and A2A?`,difficulty:`Advanced`,time:`~15 min`,concept:`\`\`\`\`md\r
 # Why Did You Use Both LangGraph and A2A?\r
 \r
 ## Interview Question\r
@@ -50151,7 +50151,7 @@ A2A       → Agent Communication\r
 \r
 \`\`\`\r
 \`\`\`\r
-`,code:``},{id:`a2a-without-langgraph`,category:`Agentic AI Architecture`,title:`Can A2A work without LangGraph?`,difficulty:`Advanced`,time:`~10 min`,concept:Ff,code:``},{id:`mcp-a2a-together`,category:`Agentic AI Protocols`,title:`Why did you use MCP and A2A together?`,difficulty:`Advanced`,time:`~15 min`,concept:`\`\`\`\`md id="73164"\r
+`,code:``},{id:`a2a-without-langgraph`,category:`Agentic AI Architecture`,title:`Can A2A work without LangGraph?`,difficulty:`Advanced`,time:`~10 min`,concept:If,code:``},{id:`mcp-a2a-together`,category:`Agentic AI Protocols`,title:`Why did you use MCP and A2A together?`,difficulty:`Advanced`,time:`~15 min`,concept:`\`\`\`\`md id="73164"\r
 # Why Did You Use MCP and A2A Together?\r
 \r
 ## Interview Question\r
@@ -51323,7 +51323,7 @@ Tools / APIs / Data\r
 And the architect's rule:\r
 \r
 > **“Use multi-agent because of architectural boundaries, not because multiple agents sound more advanced.”**\r
-`,code:``},{id:`coordinator-delegator-worker`,category:`Multi-Agent Architecture`,title:`Why did you choose a Coordinator → Delegator → Worker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:Jf,code:``},{id:`coordinator-worker-direct`,category:`Multi-Agent Architecture`,title:`Why not use a Coordinator → Worker architecture directly?`,difficulty:`Advanced`,time:`~15 min`,concept:Xf,code:``},{id:`multiple-agent-layers`,category:`Multi-Agent Architecture`,title:`Why do you need multiple layers of agents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Do You Need Multiple Layers of Agents?\r
+`,code:``},{id:`coordinator-delegator-worker`,category:`Multi-Agent Architecture`,title:`Why did you choose a Coordinator → Delegator → Worker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:Yf,code:``},{id:`coordinator-worker-direct`,category:`Multi-Agent Architecture`,title:`Why not use a Coordinator → Worker architecture directly?`,difficulty:`Advanced`,time:`~15 min`,concept:Zf,code:``},{id:`multiple-agent-layers`,category:`Multi-Agent Architecture`,title:`Why do you need multiple layers of agents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Do You Need Multiple Layers of Agents?\r
 \r
 ## Interview Question\r
 \r
@@ -51972,7 +51972,7 @@ Task complexity\r
 ### Final Principle\r
 \r
 > **“Every agent layer must have a distinct responsibility; if two layers have the same responsibility, one of them probably isn't necessary.”**\r
-`,code:``},{id:`agent-count-decision`,category:`Multi-Agent Architecture`,title:`How did you decide the number of agents in your architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:Rf,code:``},{id:`agent-boundaries`,category:`Multi-Agent Architecture`,title:`How did you define the responsibility and boundary of each agent?`,difficulty:`Advanced`,time:`~15 min`,concept:qf,code:``},{id:`why-hierarchical-agents`,category:`Multi-Agent Architecture`,title:`Why did you choose hierarchical agents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Did You Choose Hierarchical Agents?\r
+`,code:``},{id:`agent-count-decision`,category:`Multi-Agent Architecture`,title:`How did you decide the number of agents in your architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:zf,code:``},{id:`agent-boundaries`,category:`Multi-Agent Architecture`,title:`How did you define the responsibility and boundary of each agent?`,difficulty:`Advanced`,time:`~15 min`,concept:Jf,code:``},{id:`why-hierarchical-agents`,category:`Multi-Agent Architecture`,title:`Why did you choose hierarchical agents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Did You Choose Hierarchical Agents?\r
 \r
 ## Interview Question\r
 \r
@@ -54382,7 +54382,7 @@ Tools / Enterprise Data\r
 > **“Multi-agent architecture doesn't eliminate complexity; it moves complexity from inside one large agent to the interactions between multiple specialized agents.”**\r
 \r
 That is the key trade-off an **architect** should demonstrate you understand.\r
-`,code:``},{id:`agentic-overengineering`,category:`Agentic AI Architecture`,title:`Isn't your Agentic AI architecture over-engineered?`,difficulty:`Advanced`,time:`~15 min`,concept:Uf,code:``},{id:`single-llm-vs-multi-agent`,category:`Agentic AI Architecture`,title:`Why can't a single powerful LLM perform all these tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Can't a Single Powerful LLM Perform All These Tasks?\r
+`,code:``},{id:`agentic-overengineering`,category:`Agentic AI Architecture`,title:`Isn't your Agentic AI architecture over-engineered?`,difficulty:`Advanced`,time:`~15 min`,concept:Wf,code:``},{id:`single-llm-vs-multi-agent`,category:`Agentic AI Architecture`,title:`Why can't a single powerful LLM perform all these tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why Can't a Single Powerful LLM Perform All These Tasks?\r
 \r
 ## Interview Question\r
 \r
@@ -55006,7 +55006,7 @@ Multi-Agent\r
    separated, governed, secured,\r
    scaled, and operated\r
 \`\`\`\r
-`,code:``},{id:`framework-alternatives`,category:`Agentic AI Frameworks`,title:`What alternatives did you evaluate before selecting LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:$f,code:``},{id:`langgraph-tradeoffs`,category:`Agentic AI Frameworks`,title:`What trade-offs did you accept by choosing LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:tp,code:``},{id:`redesign-agentic-architecture`,category:`Agentic AI Architecture`,title:`What would you change if you redesigned the architecture today?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What Would You Change If You Redesigned the Architecture Today?\r
+`,code:``},{id:`framework-alternatives`,category:`Agentic AI Frameworks`,title:`What alternatives did you evaluate before selecting LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:ep,code:``},{id:`langgraph-tradeoffs`,category:`Agentic AI Frameworks`,title:`What trade-offs did you accept by choosing LangGraph?`,difficulty:`Advanced`,time:`~15 min`,concept:np,code:``},{id:`redesign-agentic-architecture`,category:`Agentic AI Architecture`,title:`What would you change if you redesigned the architecture today?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What Would You Change If You Redesigned the Architecture Today?\r
 \r
 ## Interview Question\r
 \r
@@ -55977,7 +55977,7 @@ then a graph-based orchestration layer still has strong value.\r
 ### Architect Principle\r
 \r
 > **“Don't simplify by removing capabilities; simplify by removing unnecessary boundaries.”**\r
-`,code:``},{id:`biggest-agentic-limitation`,category:`Agentic AI Architecture`,title:`What is the biggest limitation of your current Agentic AI architecture?`,difficulty:`Advanced`,time:`~10 min`,concept:Wf,code:``},{id:`agentic-latency`,category:`Agentic AI Architecture`,title:`How does your architecture impact latency?`,difficulty:`Advanced`,time:`~15 min`,concept:Hf,code:``},{id:`agentic-cost`,category:`Agentic AI Architecture`,title:`How does your architecture impact cost?`,difficulty:`Advanced`,time:`~15 min`,concept:Vf,code:``},{id:`justify-agentic-complexity`,category:`Agentic AI Architecture`,title:`How do you justify the additional complexity of a multi-agent architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How Do You Justify the Additional Complexity of a Multi-Agent Architecture?\r
+`,code:``},{id:`biggest-agentic-limitation`,category:`Agentic AI Architecture`,title:`What is the biggest limitation of your current Agentic AI architecture?`,difficulty:`Advanced`,time:`~10 min`,concept:Gf,code:``},{id:`agentic-latency`,category:`Agentic AI Architecture`,title:`How does your architecture impact latency?`,difficulty:`Advanced`,time:`~15 min`,concept:Uf,code:``},{id:`agentic-cost`,category:`Agentic AI Architecture`,title:`How does your architecture impact cost?`,difficulty:`Advanced`,time:`~15 min`,concept:Hf,code:``},{id:`justify-agentic-complexity`,category:`Agentic AI Architecture`,title:`How do you justify the additional complexity of a multi-agent architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How Do You Justify the Additional Complexity of a Multi-Agent Architecture?\r
 \r
 ## Interview Question\r
 \r
@@ -56532,7 +56532,7 @@ These solve different architectural problems.\r
 ### Final Architect Principle\r
 \r
 > **“Multi-agent is justified when the system has multiple independent responsibilities. If the responsibilities are tightly coupled, a multi-agent architecture is probably adding complexity without enough value.”**\r
-`,code:``},{id:`coordinator-routing`,category:`Multi-Agent Architecture`,title:`How does your Coordinator decide which Delegator to invoke?`,difficulty:`Advanced`,time:`~15 min`,concept:Yf,code:``},{id:`delegator-worker-selection`,category:`Multi-Agent Architecture`,title:`How does the Delegator select the appropriate Worker?`,difficulty:`Advanced`,time:`~15 min`,concept:Qf,code:``},{id:`agent-discovery`,category:`Agentic AI Protocols`,title:`How does an agent discover another agent?`,difficulty:`Advanced`,time:`~15 min`,concept:zf,code:``},{id:`agent-communication`,category:`Multi-Agent Architecture`,title:`How do your agents communicate with each other?`,difficulty:`Advanced`,time:`~15 min`,concept:Lf,code:``},{id:`cross-agent-state`,category:`Multi-Agent Architecture`,title:`How do you maintain state across agents?`,difficulty:`Advanced`,time:`~15 min`,concept:Zf,code:``},{id:`worker-failure`,category:`Multi-Agent Reliability`,title:`How do you handle failure of a Worker agent?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How Do You Handle Failure of a Worker Agent?\r
+`,code:``},{id:`coordinator-routing`,category:`Multi-Agent Architecture`,title:`How does your Coordinator decide which Delegator to invoke?`,difficulty:`Advanced`,time:`~15 min`,concept:Xf,code:``},{id:`delegator-worker-selection`,category:`Multi-Agent Architecture`,title:`How does the Delegator select the appropriate Worker?`,difficulty:`Advanced`,time:`~15 min`,concept:$f,code:``},{id:`agent-discovery`,category:`Agentic AI Protocols`,title:`How does an agent discover another agent?`,difficulty:`Advanced`,time:`~15 min`,concept:Bf,code:``},{id:`agent-communication`,category:`Multi-Agent Architecture`,title:`How do your agents communicate with each other?`,difficulty:`Advanced`,time:`~15 min`,concept:Rf,code:``},{id:`cross-agent-state`,category:`Multi-Agent Architecture`,title:`How do you maintain state across agents?`,difficulty:`Advanced`,time:`~15 min`,concept:Qf,code:``},{id:`worker-failure`,category:`Multi-Agent Reliability`,title:`How do you handle failure of a Worker agent?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How Do You Handle Failure of a Worker Agent?\r
 \r
 ## Interview Question\r
 \r
@@ -57228,7 +57228,7 @@ TRACE\r
 **P**artial result / Policy\r
 **R**ecover\r
 **T**race\r
-`,code:``},{id:`coordinator-wrong-routing`,category:`Multi-Agent Reliability`,title:`What happens if the Coordinator makes the wrong routing decision?`,difficulty:`Advanced`,time:`~15 min`,concept:Yf,code:``},{id:`conflicting-agent-results`,category:`Multi-Agent Reliability`,title:`What happens if two agents return conflicting answers?`,difficulty:`Advanced`,time:`~15 min`,concept:Kf,code:``},{id:`agent-circular-dependency`,category:`Multi-Agent Reliability`,title:`How do you prevent agents from repeatedly calling each other?`,difficulty:`Advanced`,time:`~15 min`,concept:If,code:``},{id:`agent-observability`,category:`Agentic AI Operations`,title:`How do you monitor and trace the complete multi-agent execution?`,difficulty:`Advanced`,time:`~15 min`,concept:Bf,code:``}];function ap(){return(0,M.jsx)($,{data:ip,title:`AgentTopQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var op=[{id:`what-is-rag`,category:`RAG Fundamentals`,title:`What is RAG?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What Is RAG?
+`,code:``},{id:`coordinator-wrong-routing`,category:`Multi-Agent Reliability`,title:`What happens if the Coordinator makes the wrong routing decision?`,difficulty:`Advanced`,time:`~15 min`,concept:Xf,code:``},{id:`conflicting-agent-results`,category:`Multi-Agent Reliability`,title:`What happens if two agents return conflicting answers?`,difficulty:`Advanced`,time:`~15 min`,concept:qf,code:``},{id:`agent-circular-dependency`,category:`Multi-Agent Reliability`,title:`How do you prevent agents from repeatedly calling each other?`,difficulty:`Advanced`,time:`~15 min`,concept:Lf,code:``},{id:`agent-observability`,category:`Agentic AI Operations`,title:`How do you monitor and trace the complete multi-agent execution?`,difficulty:`Advanced`,time:`~15 min`,concept:Vf,code:``}];function op(){return(0,M.jsx)($,{data:ap,title:`AgentTopQuestion Cookbook`,subtitle:`Complete Workflow Design`,icon:`🧩`,patternLabel:`Topics`})}var sp=[{id:`what-is-rag`,category:`RAG Fundamentals`,title:`What is RAG?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What Is RAG?
 
 Retrieval-Augmented Generation (RAG) is a technique that combines a large language model (LLM) with an external knowledge source. Instead of relying only on what the model learned during training, RAG retrieves relevant documents or passages at query time and feeds them into the model's context so it can generate answers grounded in that retrieved information.
 
@@ -58344,7 +58344,7 @@ Many real-world documents (PDFs, slide decks, technical manuals) contain critica
 - Higher storage and compute costs for image embeddings and vision-model inference.
 
 Multimodal RAG is increasingly important as knowledge bases include technical diagrams, charts, screenshots, and scanned documents where the visual content itself carries meaning.
-`,code:``}];function sp(){return(0,M.jsx)($,{data:op,title:`RAG Interview Questions Cookbook`,subtitle:`Retrieval-Augmented Generation`,icon:`🔎`,patternLabel:`Topics`})}var cp=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Explain the CWD project end-to-end.`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`,concept:`### Business Problem\r
+`,code:``}];function cp(){return(0,M.jsx)($,{data:sp,title:`RAG Interview Questions Cookbook`,subtitle:`Retrieval-Augmented Generation`,icon:`🔎`,patternLabel:`Topics`})}var lp=[{id:`cwd-project-overview`,category:`Project Overview`,title:`Explain the CWD project end-to-end.`,difficulty:`Intermediate`,time:`~45 min`,description:`Understand the CWD project from an end-to-end business and technical perspective, including the business context, problem statement, objectives, current state, target state, transition to agentic AI, and the business value delivered by the platform.`,concept:`### Business Problem\r
 \r
 The business had information distributed across multiple enterprise systems and knowledge sources. Engineers and business users often had to manually search different systems, understand the information, and perform multiple steps to complete a task.\r
 \r
@@ -63895,7 +63895,7 @@ Answer:\r
 **The one sentence I want you to remember for interviews:**\r
 \r
 > **State is the execution memory of CWD; LangGraph manages the state transitions, checkpoint storage makes the state durable, and the Coordinator/Delegators use that state to know what has happened and what should happen next.**\r
-`,code:``}];function lp(){return(0,M.jsx)($,{data:cp,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var up=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`,concept:`# CWD Architecture\r
+`,code:``}];function up(){return(0,M.jsx)($,{data:lp,title:`CWD Project Overview Cookbook`,subtitle:`Business context, problem, objectives, architecture evolution and value`,icon:`📘`,patternLabel:`Topics`})}var dp=[{id:`cwd-architecture`,category:`CWD Architecture`,title:`CWD Architecture`,difficulty:`Advanced`,time:`~60 min`,description:`Understand the complete CWD enterprise multi-agent architecture, including its layers, components, deployment model, interactions, and end-to-end execution flow.`,concept:`# CWD Architecture\r
 \r
 ## 1. Architectural Overview\r
 \r
@@ -69920,7 +69920,7 @@ FINAL BUSINESS RESPONSE\r
 USER\r
 \`\`\`\r
 \r
-**This is the core runtime flow that turns CWD from an AI orchestration framework into a production enterprise AI execution platform.**`,code:``}];function dp(){return(0,M.jsx)($,{data:up,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var fp=[{id:`AboutMe`,category:`Pooja`,title:`Pooja self Intro`,difficulty:`Advanced`,time:`~60 min`,description:`Tell me about your self`,concept:`Hi, I’m Pooja Sunkara. I’m an AI/ML and Generative AI professional with 10+ years of experience designing and delivering enterprise AI solutions.\r
+**This is the core runtime flow that turns CWD from an AI orchestration framework into a production enterprise AI execution platform.**`,code:``}];function fp(){return(0,M.jsx)($,{data:dp,title:`CWD Architecture Cookbook`,subtitle:`Multi-agent architecture, components, layers and end-to-end flow`,icon:`🏗️`,patternLabel:`Topics`})}var pp=[{id:`AboutMe`,category:`Pooja`,title:`Pooja self Intro`,difficulty:`Advanced`,time:`~60 min`,description:`Tell me about your self`,concept:`Hi, I’m Pooja Sunkara. I’m an AI/ML and Generative AI professional with 10+ years of experience designing and delivering enterprise AI solutions.\r
 \r
 I started my career as an AI/ML Engineer, where I worked on developing machine learning solutions and solving business problems using data and AI. Over time, I moved into senior engineering and technical leadership roles, where I started taking more ownership of solution design, architecture, and leading teams.\r
 \r
@@ -70015,7 +70015,7 @@ The biggest architectural challenge was balancing the intelligence of the agents
 The main value of CWD was that it provided a modular enterprise AI architecture. New business capabilities and Workers could be added without redesigning the entire system, while the Coordinator and Delegator layers provided controlled orchestration.\r
 \r
 So overall, CWD was an end-to-end enterprise Agentic AI platform, and my involvement covered **business analysis, solution architecture, hands-on development, integration, testing, deployment, and production readiness**.\r
-`}];function pp(){return(0,M.jsx)($,{data:fp,title:`AboutPooja Communication Cookbook`,subtitle:`AboutPooja`,icon:`🧩`,patternLabel:`Topics`})}var mp=[{id:`25-what-makes-cwd-enterprise-architecture-not-simple-chatbot`,category:`Architecture`,title:`What makes CWD an enterprise architecture rather than a simple chatbot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:`CWD is not just a chatbot that sends a prompt to an LLM and returns an answer. It is an enterprise orchestration platform that securely connects users to multiple business systems, plans and executes multi-step workflows through Coordinator → Delegator → Worker agents, maintains durable state, enforces enterprise policies, validates results, and provides observability, security, reliability, and governance.`,code:``},{id:`26-major-architectural-trade-offs`,category:`Architecture`,title:`What are the major architectural trade-offs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:`For your **CWD (Coordinator → Delegator → Worker)** architecture, "architectural trade-offs" means:\r
+`}];function mp(){return(0,M.jsx)($,{data:pp,title:`AboutPooja Communication Cookbook`,subtitle:`AboutPooja`,icon:`🧩`,patternLabel:`Topics`})}var hp=[{id:`25-what-makes-cwd-enterprise-architecture-not-simple-chatbot`,category:`Architecture`,title:`What makes CWD an enterprise architecture rather than a simple chatbot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:`CWD is not just a chatbot that sends a prompt to an LLM and returns an answer. It is an enterprise orchestration platform that securely connects users to multiple business systems, plans and executes multi-step workflows through Coordinator → Delegator → Worker agents, maintains durable state, enforces enterprise policies, validates results, and provides observability, security, reliability, and governance.`,code:``},{id:`26-major-architectural-trade-offs`,category:`Architecture`,title:`What are the major architectural trade-offs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: enterprise architecture, trade-offs, risks and failure points.`,concept:`For your **CWD (Coordinator → Delegator → Worker)** architecture, "architectural trade-offs" means:\r
 \r
 > **Every architecture decision gives you some benefits but introduces some costs or risks. As an architect, you choose the design based on business requirements such as reliability, latency, security, scalability, cost, and maintainability.**\r
 \r
@@ -72733,7 +72733,7 @@ Remember this sequence:\r
 And don't claim that redundancy makes the system **“failure-proof.”** The goal is:\r
 \r
 > **“A single component failure should not cause an unacceptable system-wide outage or loss of workflow state.”**\r
-`,code:``}];function hp(){return(0,M.jsx)($,{data:mp,title:`CWD Architecture Cookbook`,subtitle:`Enterprise architecture, trade-offs, risks and failure points`,icon:`🧭`,patternLabel:`Questions`})}var gp=[{id:`61-what-exactly-is-the-coordinator`,category:`Coordinator Agent`,title:`What exactly is the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:`In your **CWD architecture**, the **Coordinator** is the **top-level orchestration component**. It is the entry point that understands the user's business request, creates an execution plan, decides **which Delegators are needed**, coordinates their execution, validates the results, and returns the final response.\r
+`,code:``}];function gp(){return(0,M.jsx)($,{data:hp,title:`CWD Architecture Cookbook`,subtitle:`Enterprise architecture, trade-offs, risks and failure points`,icon:`🧭`,patternLabel:`Questions`})}var _p=[{id:`61-what-exactly-is-the-coordinator`,category:`Coordinator Agent`,title:`What exactly is the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: intent understanding, planning, routing, state and orchestration.`,concept:`In your **CWD architecture**, the **Coordinator** is the **top-level orchestration component**. It is the entry point that understands the user's business request, creates an execution plan, decides **which Delegators are needed**, coordinates their execution, validates the results, and returns the final response.\r
 \r
 ### Simple definition\r
 \r
@@ -80513,7 +80513,7 @@ Conceptually:\r
 ### One line to memorize\r
 \r
 > **“Delegators aggregate within their domain; the Coordinator validates and aggregates across Delegators; the LLM only synthesizes the validated combined result.”**\r
-`,code:``}];function _p(){return(0,M.jsx)($,{data:gp,title:`CWD Coordinator Agent Cookbook`,subtitle:`Intent understanding, planning, routing, state and orchestration`,icon:`🎯`,patternLabel:`Questions`})}var vp=[{id:`90-why-introduce-delegators`,category:`Delegator Architecture`,title:`Why did you introduce Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:`## Why did you introduce Delegators in CWD?\r
+`,code:``}];function vp(){return(0,M.jsx)($,{data:_p,title:`CWD Coordinator Agent Cookbook`,subtitle:`Intent understanding, planning, routing, state and orchestration`,icon:`🎯`,patternLabel:`Questions`})}var yp=[{id:`90-why-introduce-delegators`,category:`Delegator Architecture`,title:`Why did you introduce Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: delegator responsibilities, worker orchestration, aggregation and idempotency.`,concept:`## Why did you introduce Delegators in CWD?\r
 \r
 We introduced the **Delegator layer** because CWD is an **enterprise multi-domain system**, and the Coordinator should not directly manage every Worker.\r
 \r
@@ -86102,7 +86102,7 @@ Return Result\r
 **One line to remember:**\r
 \r
 **Same operation → same idempotency key → atomic claim → execute once → reuse the stored result on retries.**\r
-`,code:``}];function yp(){return(0,M.jsx)($,{data:vp,title:`CWD Delegator Architecture Cookbook`,subtitle:`Delegator responsibilities, worker orchestration, aggregation and idempotency`,icon:`🧩`,patternLabel:`Questions`})}var bp=[{id:`113-what-exactly-is-a-worker`,category:`Worker Architecture`,title:`What exactly is a Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:`## What exactly is a Worker?\r
+`,code:``}];function bp(){return(0,M.jsx)($,{data:yp,title:`CWD Delegator Architecture Cookbook`,subtitle:`Delegator responsibilities, worker orchestration, aggregation and idempotency`,icon:`🧩`,patternLabel:`Questions`})}var xp=[{id:`113-what-exactly-is-a-worker`,category:`Worker Architecture`,title:`What exactly is a Worker?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: worker design, MCP integration, tool safety and enterprise systems.`,concept:`## What exactly is a Worker?\r
 \r
 A **Worker is a specialized agent/component that performs one specific business task** in the CWD architecture.\r
 \r
@@ -91247,7 +91247,7 @@ For your CWD architecture, I would describe the production pattern as:\r
 ### One-line answer\r
 \r
 > **"Validate every MCP response against a schema; if invalid, don't pass it to the LLM—retry when appropriate, otherwise fail safely and let the Coordinator handle the structured error."**\r
-`,code:``}];function xp(){return(0,M.jsx)($,{data:bp,title:`CWD Worker Architecture Cookbook`,subtitle:`Worker design, MCP integration, tool safety and enterprise systems`,icon:`⚙️`,patternLabel:`Questions`})}var Sp=[{id:`137-what-is-mcp`,category:`MCP Deep Interview`,title:`What is MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:`## What is MCP?\r
+`,code:``}];function Sp(){return(0,M.jsx)($,{data:xp,title:`CWD Worker Architecture Cookbook`,subtitle:`Worker design, MCP integration, tool safety and enterprise systems`,icon:`⚙️`,patternLabel:`Questions`})}var Cp=[{id:`137-what-is-mcp`,category:`MCP Deep Interview`,title:`What is MCP?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: mCP concepts, security, versioning, approvals and monitoring.`,concept:`## What is MCP?\r
 \r
 **MCP (Model Context Protocol)** is an open protocol that standardizes **how an AI agent/LLM connects to external tools, APIs, and enterprise data sources**.\r
 \r
@@ -97952,7 +97952,7 @@ Safe retry policy\r
 And for write operations:\r
 \r
 > **“Never blindly retry a transaction when you don't know whether the first attempt succeeded.”**\r
-`,code:``}];function Cp(){return(0,M.jsx)($,{data:Sp,title:`CWD MCP Deep Interview Cookbook`,subtitle:`MCP concepts, security, versioning, approvals and monitoring`,icon:`🔌`,patternLabel:`Questions`})}var wp=[{id:`161-why-did-you-use-a2a`,category:`A2A — Agent Communication`,title:`Why did you use A2A?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`Yes. In your **CWD (Coordinator → Delegator → Worker)** architecture, A2A is mainly used for **agent-to-agent communication**—especially when the Coordinator and Delegators are independent agent services.\r
+`,code:``}];function wp(){return(0,M.jsx)($,{data:Cp,title:`CWD MCP Deep Interview Cookbook`,subtitle:`MCP concepts, security, versioning, approvals and monitoring`,icon:`🔌`,patternLabel:`Questions`})}var Tp=[{id:`161-why-did-you-use-a2a`,category:`A2A — Agent Communication`,title:`Why did you use A2A?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: agent-to-agent communication, identity, tracing and failure handling.`,concept:`Yes. In your **CWD (Coordinator → Delegator → Worker)** architecture, A2A is mainly used for **agent-to-agent communication**—especially when the Coordinator and Delegators are independent agent services.\r
 \r
 ### 1. Why did we use A2A in CWD?\r
 \r
@@ -102293,7 +102293,7 @@ Now we know the problem isn't the Coordinator or A2A communication—the Service
 **Span → one operation**\r
 \r
 **OpenTelemetry → connects the whole execution path**\r
-`,code:``}];function Tp(){return(0,M.jsx)($,{data:wp,title:`CWD A2A — Agent Communication Cookbook`,subtitle:`Agent-to-agent communication, identity, tracing and failure handling`,icon:`🤝`,patternLabel:`Questions`})}var Ep=[{id:`176-why-langgraph`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:`For **CWD**, I chose **LangGraph** because CWD is not a simple single-agent chatbot. It is a **stateful, multi-step, multi-agent workflow** where the Coordinator and Delegators need routing, parallel execution, retries, checkpoints, and controlled recovery.\r
+`,code:``}];function Ep(){return(0,M.jsx)($,{data:Tp,title:`CWD A2A — Agent Communication Cookbook`,subtitle:`Agent-to-agent communication, identity, tracing and failure handling`,icon:`🤝`,patternLabel:`Questions`})}var Dp=[{id:`176-why-langgraph`,category:`LangGraph`,title:`Why LangGraph?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: graph state, nodes, edges, checkpointing, debugging and testing.`,concept:`For **CWD**, I chose **LangGraph** because CWD is not a simple single-agent chatbot. It is a **stateful, multi-step, multi-agent workflow** where the Coordinator and Delegators need routing, parallel execution, retries, checkpoints, and controlled recovery.\r
 \r
 ### Why LangGraph in CWD?\r
 \r
@@ -108184,7 +108184,7 @@ This helps identify whether a slow workflow is caused by LangGraph, an agent, MC
 ### Easy memory\r
 \r
 **Complete graph testing = Happy path + Routing + Parallelism + Failure/Retry + Resume + Security + MCP + LLM + Observability + Performance.**\r
-`,code:``}];function Dp(){return(0,M.jsx)($,{data:Ep,title:`CWD LangGraph Cookbook`,subtitle:`Graph state, nodes, edges, checkpointing, debugging and testing`,icon:`🕸️`,patternLabel:`Questions`})}var Op=[{id:`198-why-does-cwd-need-rag`,category:`RAG Architecture`,title:`Why does CWD need RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:`## Why does CWD need RAG?\r
+`,code:``}];function Op(){return(0,M.jsx)($,{data:Dp,title:`CWD LangGraph Cookbook`,subtitle:`Graph state, nodes, edges, checkpointing, debugging and testing`,icon:`🕸️`,patternLabel:`Questions`})}var kp=[{id:`198-why-does-cwd-need-rag`,category:`RAG Architecture`,title:`Why does CWD need RAG?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation.`,concept:`## Why does CWD need RAG?\r
 \r
 CWD needs **RAG (Retrieval-Augmented Generation)** because the LLM should not depend only on its training knowledge. It needs to retrieve **current, private, enterprise information** before generating an answer.\r
 \r
@@ -112756,7 +112756,7 @@ And remember:\r
 \r
 > **Document changed → reprocess that document.**\r
 > **Embedding/chunking strategy changed → consider re-indexing the corpus.**\r
-`,code:``}];function kp(){return(0,M.jsx)($,{data:Op,title:`CWD RAG Architecture Cookbook`,subtitle:`Ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation`,icon:`📚`,patternLabel:`Questions`})}var Ap=[{id:`233-which-llms-did-you-use`,category:`LLM Architecture`,title:`Which LLMs did you use?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:`## Which LLMs did you use?\r
+`,code:``}];function Ap(){return(0,M.jsx)($,{data:kp,title:`CWD RAG Architecture Cookbook`,subtitle:`Ingestion, chunking, hybrid search, ACL filtering and retrieval evaluation`,icon:`📚`,patternLabel:`Questions`})}var jp=[{id:`233-which-llms-did-you-use`,category:`LLM Architecture`,title:`Which LLMs did you use?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: model selection, token control, fallback, routing and structured output.`,concept:`## Which LLMs did you use?\r
 \r
 For your **CWD Onsemi enterprise AI platform**, the primary LLM choice is **Azure OpenAI**, because the solution is Azure-based and requires enterprise security, governance, and private enterprise-data integration.\r
 \r
@@ -116188,7 +116188,7 @@ This connects directly to the model-routing strategy we discussed.\r
 Key interview line:\r
 \r
 > **“I don't optimize for the lowest token count; I optimize for the lowest cost that still meets the required quality and SLA.”**\r
-`,code:``}];function jp(){return(0,M.jsx)($,{data:Ap,title:`CWD LLM Architecture Cookbook`,subtitle:`Model selection, token control, fallback, routing and structured output`,icon:`🧠`,patternLabel:`Questions`})}var Mp=[{id:`253-how-to-prevent-hallucinations`,category:`Hallucination & Grounding`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:`# What are hallucinations, and how do you prevent them in CWD?\r
+`,code:``}];function Mp(){return(0,M.jsx)($,{data:jp,title:`CWD LLM Architecture Cookbook`,subtitle:`Model selection, token control, fallback, routing and structured output`,icon:`🧠`,patternLabel:`Questions`})}var Np=[{id:`253-how-to-prevent-hallucinations`,category:`Hallucination & Grounding`,title:`How do you prevent hallucinations?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: grounding, faithfulness, citations and unsupported-claim detection.`,concept:`# What are hallucinations, and how do you prevent them in CWD?\r
 \r
 ## 1. What is a hallucination?\r
 \r
@@ -118839,7 +118839,7 @@ I monitor:\r
 ### Easy memory\r
 \r
 **Claim → Evidence → Match → Supported? → Keep; otherwise Reject/Regenerate/Abstain.**\r
-`,code:``}];function Np(){return(0,M.jsx)($,{data:Mp,title:`CWD Hallucination & Grounding Cookbook`,subtitle:`Grounding, faithfulness, citations and unsupported-claim detection`,icon:`🔍`,patternLabel:`Questions`})}var Pp=[{id:`267-how-do-you-evaluate-your-cwd-system`,category:`LLM Evaluation`,title:`How do you evaluate your CWD system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:`## How do you evaluate your CWD system?\r
+`,code:``}];function Pp(){return(0,M.jsx)($,{data:Np,title:`CWD Hallucination & Grounding Cookbook`,subtitle:`Grounding, faithfulness, citations and unsupported-claim detection`,icon:`🔍`,patternLabel:`Questions`})}var Fp=[{id:`267-how-do-you-evaluate-your-cwd-system`,category:`LLM Evaluation`,title:`How do you evaluate your CWD system?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: offline and online evaluation, metrics, regression testing and CI/CD.`,concept:`## How do you evaluate your CWD system?\r
 \r
 I evaluate CWD at **multiple levels**, because an agentic system can be technically healthy but still produce a wrong business answer.\r
 \r
@@ -124869,7 +124869,7 @@ Production\r
 \r
 **Easy memory:**\r
 **Automated evaluation = scale. Human evaluation = judgment. Human feedback → golden dataset → regression → improvement.**\r
-`,code:``}];function Fp(){return(0,M.jsx)($,{data:Pp,title:`CWD LLM Evaluation Cookbook`,subtitle:`Offline and online evaluation, metrics, regression testing and CI/CD`,icon:`📊`,patternLabel:`Questions`})}var Ip=[{id:`293-how-is-cwd-authenticated`,category:`Security Architecture`,title:`How is CWD authenticated?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:`## How is CWD authenticated?\r
+`,code:``}];function Ip(){return(0,M.jsx)($,{data:Fp,title:`CWD LLM Evaluation Cookbook`,subtitle:`Offline and online evaluation, metrics, regression testing and CI/CD`,icon:`📊`,patternLabel:`Questions`})}var Lp=[{id:`293-how-is-cwd-authenticated`,category:`Security Architecture`,title:`How is CWD authenticated?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: identity, access control, data protection, prompt injection and network security.`,concept:`## How is CWD authenticated?\r
 \r
 In CWD, authentication happens at **multiple layers**. We don't rely on the LLM or an \`agent_id\` field to prove identity.\r
 \r
@@ -131891,7 +131891,7 @@ The LLM should not:\r
 **Strong interview line:**\r
 \r
 > **“The LLM decides what it wants to do; the policy layer decides whether it is allowed to do it.”**\r
-`,code:``}];function Lp(){return(0,M.jsx)($,{data:Ip,title:`CWD Security Architecture Cookbook`,subtitle:`Identity, access control, data protection, prompt injection and network security`,icon:`🔐`,patternLabel:`Questions`})}var Rp=[{id:`341-what-does-observability-mean-in-genai`,category:`Observability`,title:`What does observability mean in GenAI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:`## What does observability mean in GenAI?\r
+`,code:``}];function Rp(){return(0,M.jsx)($,{data:Lp,title:`CWD Security Architecture Cookbook`,subtitle:`Identity, access control, data protection, prompt injection and network security`,icon:`🔐`,patternLabel:`Questions`})}var zp=[{id:`341-what-does-observability-mean-in-genai`,category:`Observability`,title:`What does observability mean in GenAI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: tracing, metrics, logging, alerting and GenAI monitoring.`,concept:`## What does observability mean in GenAI?\r
 \r
 **GenAI observability means being able to understand not just whether the AI system failed, but *why* it failed.**\r
 \r
@@ -137213,7 +137213,7 @@ Alert\r
 ### Strong interview line\r
 \r
 > **“I don't alert only on infrastructure metrics. For an Agentic AI system, I also alert on business-level signals like task completion, tool success, routing failures and abnormal agent behavior.”**\r
-`,code:``}];function zp(){return(0,M.jsx)($,{data:Rp,title:`CWD Observability Cookbook`,subtitle:`Tracing, metrics, logging, alerting and GenAI monitoring`,icon:`📡`,patternLabel:`Questions`})}var Bp=[{id:`365-what-happens-if-the-coordinator-fails`,category:`Reliability & Failure Handling`,title:`What happens if the Coordinator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:`## What happens if the Coordinator fails?\r
+`,code:``}];function Bp(){return(0,M.jsx)($,{data:zp,title:`CWD Observability Cookbook`,subtitle:`Tracing, metrics, logging, alerting and GenAI monitoring`,icon:`📡`,patternLabel:`Questions`})}var Vp=[{id:`365-what-happens-if-the-coordinator-fails`,category:`Reliability & Failure Handling`,title:`What happens if the Coordinator fails?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: failures, retries, circuit breakers, DLQs and graceful degradation.`,concept:`## What happens if the Coordinator fails?\r
 \r
 In **CWD**, the Coordinator is the main orchestration component, so I design it to be **stateless at runtime and recoverable through persisted state/checkpoints**.\r
 \r
@@ -141708,7 +141708,7 @@ The **IT/ServiceNow failure remains isolated** rather than taking down Sales cap
 ### Easy memory\r
 \r
 **Timeout → Retry → Backoff → Circuit Breaker → Bulkhead → Limit concurrency → Queue → Degrade/Fallback → Recover.**\r
-`,code:``}];function Vp(){return(0,M.jsx)($,{data:Bp,title:`CWD Reliability & Failure Handling Cookbook`,subtitle:`Failures, retries, circuit breakers, DLQs and graceful degradation`,icon:`♻️`,patternLabel:`Questions`})}var Hp=[{id:`389-how-many-concurrent-users-can-cwd-support`,category:`Scalability`,title:`How many concurrent users can CWD support?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:`## How many concurrent users can CWD support?\r
+`,code:``}];function Hp(){return(0,M.jsx)($,{data:Vp,title:`CWD Reliability & Failure Handling Cookbook`,subtitle:`Failures, retries, circuit breakers, DLQs and graceful degradation`,icon:`♻️`,patternLabel:`Questions`})}var Up=[{id:`389-how-many-concurrent-users-can-cwd-support`,category:`Scalability`,title:`How many concurrent users can CWD support?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: scaling, backpressure, quotas, multi-region and disaster recovery.`,concept:`## How many concurrent users can CWD support?\r
 \r
 There is **no fixed number** I would claim without load-testing the actual CWD deployment. Capacity depends on the Coordinator instances, Worker concurrency, LLM limits, MCP/enterprise API limits, database throughput, and request complexity.\r
 \r
@@ -147104,7 +147104,7 @@ Resume from checkpoint\r
 ### 🎯 Interview answer\r
 \r
 > **“RPO stands for Recovery Point Objective. It defines the maximum amount of data or workflow progress that we can afford to lose after a disaster. In CWD, I achieve the required RPO by frequently persisting LangGraph checkpoints and replicating critical workflow state to the DR region. During failover, the new Coordinator loads the latest checkpoint and resumes the pending work instead of restarting the entire workflow.”**\r
-`,code:``}];function Up(){return(0,M.jsx)($,{data:Hp,title:`CWD Scalability Cookbook`,subtitle:`Scaling, backpressure, quotas, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wp=[{id:`407-what-is-the-end-to-end-latency`,category:`Performance & Optimization`,title:`What is the end-to-end latency?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:`## What is the end-to-end latency in CWD?\r
+`,code:``}];function Wp(){return(0,M.jsx)($,{data:Up,title:`CWD Scalability Cookbook`,subtitle:`Scaling, backpressure, quotas, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Gp=[{id:`407-what-is-the-end-to-end-latency`,category:`Performance & Optimization`,title:`What is the end-to-end latency?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, caching, parallelism and token optimization.`,concept:`## What is the end-to-end latency in CWD?\r
 \r
 **End-to-end latency** is the **total time from when the user sends a request until CWD returns the final business response**.\r
 \r
@@ -151231,7 +151231,7 @@ Validated response\r
 \r
 **Filter → Hybrid → Top-K → Rerank → Chunk → Deduplicate → Scale → Cache → Measure quality + latency**\r
 \r
-`,code:``}];function Gp(){return(0,M.jsx)($,{data:Wp,title:`CWD Performance & Optimization Cookbook`,subtitle:`Latency, caching, parallelism and token optimization`,icon:`⚡`,patternLabel:`Questions`})}var Kp=[{id:`424-what-is-the-biggest-cost-component`,category:`Cost Optimization`,title:`What is the biggest cost component?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:`## What is the biggest cost component in CWD?\r
+`,code:``}];function Kp(){return(0,M.jsx)($,{data:Gp,title:`CWD Performance & Optimization Cookbook`,subtitle:`Latency, caching, parallelism and token optimization`,icon:`⚡`,patternLabel:`Questions`})}var qp=[{id:`424-what-is-the-biggest-cost-component`,category:`Cost Optimization`,title:`What is the biggest cost component?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cost drivers, budgets, model routing and cost monitoring.`,concept:`## What is the biggest cost component in CWD?\r
 \r
 In an **Agentic AI / CWD system, the LLM is usually one of the biggest variable cost components**, especially when workflows involve multiple LLM calls, large prompts, long outputs, or agent loops.\r
 \r
@@ -154851,7 +154851,7 @@ and calculate its total and average cost.\r
 \r
 > **Strong interview line:**\r
 > **“I don't treat Worker cost as just LLM cost; I measure the complete execution path of the Worker.”**\r
-`,code:``}];function qp(){return(0,M.jsx)($,{data:Kp,title:`CWD Cost Optimization Cookbook`,subtitle:`Cost drivers, budgets, model routing and cost monitoring`,icon:`💰`,patternLabel:`Questions`})}var Jp=[{id:`438-what-data-does-cwd-store`,category:`Data Architecture`,title:`What data does CWD store?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:`# What data does CWD store?\r
+`,code:``}];function Jp(){return(0,M.jsx)($,{data:qp,title:`CWD Cost Optimization Cookbook`,subtitle:`Cost drivers, budgets, model routing and cost monitoring`,icon:`💰`,patternLabel:`Questions`})}var Yp=[{id:`438-what-data-does-cwd-store`,category:`Data Architecture`,title:`What data does CWD store?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: state, registries, versioning, retention and data deletion.`,concept:`# What data does CWD store?\r
 \r
 In CWD, I **don't store everything the LLM sees**. I store the data required for **workflow recovery, auditability, security, observability, evaluation, and business results**.\r
 \r
@@ -158227,7 +158227,7 @@ It should incorporate the relevant authorization/tenant context.\r
 **Authenticate → Authorize → Minimize → Isolate → Encrypt → Secure MCP → Protect secrets → Redact logs → Detect injection → Retain/Delete**\r
 \r
 > **Strong interview line:** **“The LLM is never my security boundary. Identity, authorization, policy, and tool controls enforce what data the Agent is actually allowed to access.”**\r
-`,code:``}];function Yp(){return(0,M.jsx)($,{data:Jp,title:`CWD Data Architecture Cookbook`,subtitle:`State, registries, versioning, retention and data deletion`,icon:`🗄️`,patternLabel:`Questions`})}var Xp=[{id:`454-how-does-cwd-integrate-with-salesforce`,category:`Enterprise Integration`,title:`How does CWD integrate with Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:`## How does CWD integrate with Salesforce?\r
+`,code:``}];function Xp(){return(0,M.jsx)($,{data:Yp,title:`CWD Data Architecture Cookbook`,subtitle:`State, registries, versioning, retention and data deletion`,icon:`🗄️`,patternLabel:`Questions`})}var Zp=[{id:`454-how-does-cwd-integrate-with-salesforce`,category:`Enterprise Integration`,title:`How does CWD integrate with Salesforce?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration.`,concept:`## How does CWD integrate with Salesforce?\r
 \r
 In CWD, **Workers do not directly connect to Salesforce**. They access Salesforce through an **MCP Server**, which provides controlled Salesforce tools.\r
 \r
@@ -162705,7 +162705,7 @@ LLM Summary\r
 **Strong interview line:**\r
 \r
 > **“I never hide data conflicts from the LLM or the user; I resolve them deterministically when possible and preserve provenance when they cannot be resolved.”**\r
-`,code:``}];function Zp(){return(0,M.jsx)($,{data:Xp,title:`CWD Enterprise Integration Cookbook`,subtitle:`Salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration`,icon:`🔗`,patternLabel:`Questions`})}var Qp=[{id:`467-why-fastapi`,category:`API & Backend Architecture`,title:`Why FastAPI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:`## Why FastAPI in CWD?\r
+`,code:``}];function Qp(){return(0,M.jsx)($,{data:Zp,title:`CWD Enterprise Integration Cookbook`,subtitle:`Salesforce, ServiceNow, SharePoint, Snowflake, Oracle and MCP integration`,icon:`🔗`,patternLabel:`Questions`})}var $p=[{id:`467-why-fastapi`,category:`API & Backend Architecture`,title:`Why FastAPI?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: fastAPI, API security, async workflows and status retrieval.`,concept:`## Why FastAPI in CWD?\r
 \r
 In CWD, I use **FastAPI as the API entry point** between the user/client applications and the Coordinator.\r
 \r
@@ -166211,7 +166211,7 @@ I avoid logging secrets, tokens, and unnecessary sensitive payloads.\r
 ### Strong interview line\r
 \r
 > **“Authentication establishes identity; authorization determines access, and I enforce authorization again at the MCP and enterprise boundaries.”**\r
-`,code:``}];function $p(){return(0,M.jsx)($,{data:Qp,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var em=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy CWD?\r
+`,code:``}];function em(){return(0,M.jsx)($,{data:$p,title:`CWD API & Backend Architecture Cookbook`,subtitle:`FastAPI, API security, async workflows and status retrieval`,icon:`🌐`,patternLabel:`Questions`})}var tm=[{id:`481-how-do-you-deploy-cwd`,category:`Production Deployment / DevOps`,title:`How do you deploy CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: cI/CD, deployments, rollbacks, quality gates and configuration.`,concept:`## How do you deploy CWD?\r
 \r
 For CWD, I deploy it as **containerized microservices** with separate deployment units for the API, Coordinator/Delegators/Workers, and MCP services.\r
 \r
@@ -170959,41 +170959,3468 @@ The Agent receives the minimum trusted context it needs.\r
 ### Strong interview line\r
 \r
 > **“I build once and configure per environment; I don't maintain separate application codebases for DEV, QA and PROD.”**\r
-`,code:``}];function tm(){return(0,M.jsx)($,{data:em,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var nm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function rm(){return(0,M.jsx)($,{data:nm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var im=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function am(){return(0,M.jsx)($,{data:im,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var om=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function sm(){return(0,M.jsx)($,{data:om,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var cm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function lm(){return(0,M.jsx)($,{data:cm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var um=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function dm(){return(0,M.jsx)($,{data:um,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var fm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function pm(){return(0,M.jsx)($,{data:fm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var mm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete AWS architecture for CWD.
+`,code:``}];function nm(){return(0,M.jsx)($,{data:tm,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var rm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function im(){return(0,M.jsx)($,{data:rm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var am=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function om(){return(0,M.jsx)($,{data:am,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var sm=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function cm(){return(0,M.jsx)($,{data:sm,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var lm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function um(){return(0,M.jsx)($,{data:lm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var dm=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function fm(){return(0,M.jsx)($,{data:dm,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var pm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`For an interview, I’d answer this as **“I would evolve CWD rather than completely replace it.”** The current Coordinator → Delegator → Worker model is useful, but I would make it more **event-driven, policy-driven, observable, and evaluation-driven**.\r
+\r
+### Interview answer\r
+\r
+> **If I were redesigning CWD today, I would keep the Coordinator–Delegator–Worker separation because it gives us clear ownership and scalability, but I would make five major improvements.**\r
+>\r
+> **First, I would make orchestration more event-driven.** Instead of keeping every operation synchronous, I would use queues/events for long-running or independent Workers. For example, Salesforce and ServiceNow Workers could execute in parallel through Amazon EventBridge/SQS, while the Coordinator tracks workflow state.\r
+>\r
+> **Second, I would introduce a centralized policy and guardrail layer.** Before a Worker can execute an MCP tool, I would validate identity, authorization, data classification, tool permissions, and input parameters. This gives us an **entitlement-first architecture** instead of relying only on Worker-level checks.\r
+>\r
+> **Third, I would make observability and evaluation first-class components.** Every request would have a correlation ID and workflow/run ID, with tracing across Coordinator → Delegator → Worker → MCP → enterprise system. I would also capture latency, token usage, cost, tool success rate, retrieval quality, groundedness, and LLM evaluation scores.\r
+>\r
+> **Fourth, I would improve resilience.** I would add durable checkpoints, idempotency keys, retries with exponential backoff, circuit breakers, dead-letter queues, timeout policies, and compensation logic. If one Worker fails, the workflow should resume from the failed step instead of starting the entire request again.\r
+>\r
+> **Fifth, I would introduce model and prompt routing.** Instead of using one LLM for everything, simple classification and extraction could use a smaller model, while complex reasoning could use a more capable model. Prompts and models would be versioned and promoted through CI/CD with automated evaluation gates.\r
+>\r
+> **So the redesigned CWD would look like:**\r
+>\r
+> **API → Identity/Policy → Coordinator → Delegators → Workers → MCP → Enterprise Systems**\r
+>\r
+> with **Event Bus, Durable State, Observability, Evaluation, Security/Guardrails, and Model/Prompt Registry** as cross-cutting platform services.\r
+>\r
+> **The main goal would be to make CWD easier to scale, cheaper to operate, safer to execute, easier to troubleshoot, and more resilient without losing the clear Coordinator–Delegator–Worker architecture.**\r
+\r
+### What I would specifically change\r
+\r
+| Area              | Current CWD                | Redesigned CWD                                     |\r
+| ----------------- | -------------------------- | -------------------------------------------------- |\r
+| Orchestration     | LangGraph workflow         | LangGraph + event-driven execution                 |\r
+| Communication     | A2A + MCP                  | A2A + MCP + events                                 |\r
+| Long-running work | Mostly workflow-controlled | SQS/EventBridge + durable workflow                 |\r
+| State             | Redis/Cosmos DB            | Durable workflow state + Redis cache               |\r
+| Security          | Entra/RBAC/ACL             | Centralized policy + entitlement checks            |\r
+| MCP security      | Worker/tool controls       | Policy-enforced tool gateway                       |\r
+| Failure handling  | Retry/checkpoint           | Retry + circuit breaker + DLQ + replay             |\r
+| Observability     | App Insights/Langfuse      | End-to-end distributed tracing + LLM observability |\r
+| Evaluation        | Golden datasets            | Evaluation gates in CI/CD                          |\r
+| Models            | Primarily selected model   | Dynamic model routing                              |\r
+| Prompts           | Registry/versioning        | Registry + automated evaluation + promotion        |\r
+| Cost              | Monitor usage              | Cost-aware routing and budgets                     |\r
+| Deployment        | Blue/green/canary          | Evaluation-gated blue/green/canary                 |\r
+| Human approval    | HITL where required        | Policy-driven HITL for high-risk actions           |\r
+\r
+### One important architectural improvement\r
+\r
+I would **not remove the Delegator layer**.\r
+\r
+For your CWD, the hierarchy should remain:\r
+\r
+\`\`\`text\r
+                    User Request\r
+                         |\r
+                         v\r
+                  +-------------+\r
+                  | Coordinator |\r
+                  +-------------+\r
+                         |\r
+             Intent + entities + plan\r
+                         |\r
+          +--------------+--------------+\r
+          |                             |\r
+          v                             v\r
+  +---------------+             +---------------+\r
+  |Sales Delegator|             |IT Delegator   |\r
+  +---------------+             +---------------+\r
+       |                              |\r
+   +---+---+                      +---+---+\r
+   |       |                      |       |\r
+   v       v                      v       v\r
+Salesforce CRM Worker       ServiceNow Worker\r
+Customer Data Worker        Incident Worker\r
+   |       |                      |       |\r
+   +-------+----------+-----------+-------+\r
+                       |\r
+                       v\r
+                      MCP\r
+                       |\r
+             Enterprise Systems\r
+\`\`\`\r
+\r
+The **big redesign is around this core**, not replacing it.\r
+\r
+### Strong closing statement\r
+\r
+> **“The original CWD architecture solved the orchestration problem. If I redesigned it today, I would focus on solving the production-scale problems around orchestration: resilience, policy enforcement, observability, evaluation, cost optimization, and event-driven execution. That would allow us to move from an agentic prototype architecture to a highly governed enterprise AI platform.”**\r
+\r
+That last sentence is particularly strong for an **AI Architect** interview because it shows you understand that production agentic AI is not just about adding more agents—it is about **operability, governance, reliability, and measurable quality**.\r
+`,code:``},{id:`580-what-is-the-biggest-architectural-weakness-of-cwd`,category:`Senior/Principal Architect Questions`,title:`What is the biggest architectural weakness of CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`The **biggest architectural weakness of CWD is orchestration complexity**.\r
+\r
+### Interview answer\r
+\r
+> **The biggest weakness is that the Coordinator becomes a central dependency for planning, routing, state management, aggregation, validation, and error recovery.**\r
+>\r
+> In a simple workflow this works well, but as the number of Delegators and Workers grows, the Coordinator can become a **bottleneck and a potential single point of failure**.\r
+>\r
+> For example, a Customer Briefing request may flow:\r
+>\r
+> \`Coordinator → Sales Delegator → Salesforce Worker\`\r
+>\r
+> and\r
+>\r
+> \`Coordinator → IT Delegator → ServiceNow Worker\`\r
+>\r
+> If the Coordinator is responsible for maintaining the complete workflow state, coordinating parallel execution, handling retries, validating results, and aggregating responses, its responsibilities can grow significantly.\r
+>\r
+> I would address this by making orchestration **durable and distributed**: persist workflow state externally, use asynchronous events/queues for long-running tasks, make Workers independently retryable and idempotent, and keep the Coordinator focused primarily on **intent, planning, routing, and final business-level aggregation**.\r
+\r
+### Why this matters\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                /     |      \\\r
+               /      |       \\\r
+        Delegator  Delegator  Delegator\r
+           / \\        / \\        / \\\r
+       Workers     Workers    Workers\r
+\`\`\`\r
+\r
+As CWD grows:\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+                      |\r
+        +-------------+-------------+\r
+        |             |             |\r
+     Planning      State         Recovery\r
+        |             |             |\r
+     Routing       Tracking      Retry/DLQ\r
+        |             |             |\r
+     Validation    Aggregation   Resume\r
+        |             |             |\r
+        +-------------+-------------+\r
+                      |\r
+              Complexity increases\r
+\`\`\`\r
+\r
+The concern isn't simply **"the Coordinator is slow."** The deeper concern is **responsibility concentration**.\r
+\r
+### How I would fix it\r
+\r
+**1. Keep the Coordinator stateless where possible**\r
+\r
+Store durable workflow state in something like DynamoDB/Cosmos DB rather than keeping important state only inside the Coordinator.\r
+\r
+**2. Separate orchestration from execution**\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Workflow Engine\r
+    ↓\r
+Event Bus / Queue\r
+    ↓\r
+Delegators\r
+    ↓\r
+Workers\r
+\`\`\`\r
+\r
+The Coordinator decides **what should happen**; durable workflow infrastructure manages **how the work progresses and resumes**.\r
+\r
+**3. Make Workers independently resilient**\r
+\r
+Each Worker should have:\r
+\r
+* timeout\r
+* retry\r
+* idempotency\r
+* circuit breaker\r
+* structured error response\r
+* correlation ID\r
+\r
+**4. Use asynchronous execution**\r
+\r
+If Salesforce and ServiceNow are independent:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     +----> Sales Delegator ----> Salesforce Worker\r
+     |\r
+     +----> IT Delegator -------> ServiceNow Worker\r
+\`\`\`\r
+\r
+They can execute independently rather than making the entire workflow synchronous.\r
+\r
+**5. Persist checkpoints**\r
+\r
+If:\r
+\r
+\`\`\`text\r
+W1 → SUCCESS\r
+W2 → SUCCESS\r
+W3 → FAILED\r
+\`\`\`\r
+\r
+don't restart everything.\r
+\r
+Persist:\r
+\r
+\`\`\`text\r
+W1 = COMPLETED\r
+W2 = COMPLETED\r
+W3 = FAILED\r
+\`\`\`\r
+\r
+Then after recovery:\r
+\r
+\`\`\`text\r
+Resume → W3 → Aggregation → Validation → Response\r
+\`\`\`\r
+\r
+### One-line answer to memorize\r
+\r
+> **“The biggest weakness of CWD is responsibility concentration in the Coordinator. As the system scales, planning, routing, state, recovery, validation, and aggregation can make the Coordinator a bottleneck and single point of failure. I would mitigate that with durable workflow state, asynchronous events, independently resilient Workers, and a thinner Coordinator focused on planning and business-level orchestration.”**\r
+`,code:``},{id:`581-what-would-you-remove-from-cwd`,category:`Senior/Principal Architect Questions`,title:`What would you remove from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would not remove the Coordinator–Delegator–Worker pattern because that separation is valuable for enterprise scale. Instead, I would remove unnecessary complexity around it.**\r
+>\r
+> **First, I would remove synchronous orchestration where it isn't required.** Independent Workers such as Salesforce and ServiceNow should execute asynchronously rather than forcing the Coordinator to wait on every operation.\r
+>\r
+> **Second, I would remove duplicated business logic from the Coordinator and Delegators.** The Coordinator should plan and route; Delegators should select and coordinate Workers; Workers should execute. Validation, authorization, and business logic shouldn't be repeated across multiple layers.\r
+>\r
+> **Third, I would remove direct dependencies between Workers.** Workers should communicate through workflow state or events rather than calling each other directly. This keeps them independently deployable and testable.\r
+>\r
+> **Fourth, I would remove unnecessary LLM involvement.** I wouldn't use an LLM for deterministic tasks such as routing based on explicit rules, parameter validation, authorization, retries, or aggregation. Those should use deterministic code or policy engines.\r
+>\r
+> **Finally, I would remove redundant state and observability systems.** If multiple components independently maintain workflow state or duplicate traces, that creates inconsistency and operational complexity. I would establish clear ownership for durable state and end-to-end tracing.\r
+\r
+### What I would keep vs remove\r
+\r
+| CWD component                 | Decision                                                      | Reason                                           |\r
+| ----------------------------- | ------------------------------------------------------------- | ------------------------------------------------ |\r
+| Coordinator                   | **Keep, simplify**                                            | Enterprise-level planning/routing                |\r
+| Delegators                    | **Keep**                                                      | Domain-level coordination                        |\r
+| Workers                       | **Keep**                                                      | Isolated business capabilities                   |\r
+| MCP                           | **Keep**                                                      | Standardized tool access                         |\r
+| A2A                           | **Keep where agents truly need agent-to-agent communication** | Avoid unnecessary agent coupling                 |\r
+| LangGraph                     | **Keep**                                                      | Stateful workflow/orchestration                  |\r
+| LLM everywhere                | **Remove unnecessary usage**                                  | Deterministic logic is cheaper and more reliable |\r
+| Synchronous calls everywhere  | **Remove**                                                    | Introduce async execution where appropriate      |\r
+| Worker-to-Worker direct calls | **Remove**                                                    | Creates tight coupling                           |\r
+| Duplicate state stores        | **Remove**                                                    | Establish one clear source of workflow truth     |\r
+| Duplicate validation          | **Remove**                                                    | Centralize common validation/policy              |\r
+| Excessive agent layers        | **Remove where unnecessary**                                  | Avoid agent proliferation                        |\r
+\r
+### Strongest interview response\r
+\r
+> **“I would remove complexity, not capability. Specifically, I would remove unnecessary synchronous orchestration, direct Worker-to-Worker dependencies, duplicated validation and state management, and unnecessary LLM calls. I would keep the Coordinator, Delegator, Worker, MCP, and LangGraph concepts because they provide useful separation of concerns. My goal would be a thinner Coordinator, autonomous Workers, deterministic controls wherever possible, and event-driven execution for long-running work.”**\r
+`,code:``},{id:`582-what-would-you-add`,category:`Senior/Principal Architect Questions`,title:`What would you add?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **If I were redesigning CWD, I would add the capabilities needed to make it production-grade at enterprise scale: stronger resilience, centralized governance, better observability, continuous evaluation, and cost-aware model routing.**\r
+>\r
+> **First, I would add a durable workflow engine and event-driven execution.** This would allow long-running Workers to execute asynchronously and resume from checkpoints instead of restarting the entire workflow.\r
+>\r
+> **Second, I would add a centralized AI policy and guardrail layer.** Every request and tool call would be checked for identity, authorization, data classification, PII/DLP, allowed tools, and high-risk actions before execution.\r
+>\r
+> **Third, I would add an enterprise agent gateway.** Instead of every Worker independently implementing security, throttling, auditing, and tool access, the gateway would provide common controls around MCP/A2A communication.\r
+>\r
+> **Fourth, I would add end-to-end observability.** I would trace:\r
+>\r
+> \`User → Coordinator → Delegator → Worker → MCP → Enterprise System\`\r
+>\r
+> using correlation IDs and capture latency, failures, token usage, cost, tool success rate, retrieval quality, and model behavior.\r
+>\r
+> **Fifth, I would add an LLM evaluation platform integrated with CI/CD.** Prompts, models, RAG changes, and agent workflows would be evaluated against golden datasets before production deployment.\r
+>\r
+> **Sixth, I would add intelligent model routing.** Simple classification or extraction could use a smaller model, while complex reasoning could use a more capable model. Routing would consider quality, latency, and cost.\r
+>\r
+> **Finally, I would add stronger recovery mechanisms:** idempotency keys, circuit breakers, exponential backoff, DLQs, replay, compensation actions, and human approval for high-risk operations.\r
+\r
+### What I would add\r
+\r
+\`\`\`text\r
+                    User\r
+                      |\r
+                      v\r
+             +----------------+\r
+             | API / Identity |\r
+             +----------------+\r
+                      |\r
+                      v\r
+             +----------------+\r
+             | Policy &       |\r
+             | Guardrails     |\r
+             +----------------+\r
+                      |\r
+                      v\r
+             +----------------+\r
+             |  Coordinator   |\r
+             +----------------+\r
+                      |\r
+          +-----------+-----------+\r
+          |                       |\r
+          v                       v\r
+   Sales Delegator          IT Delegator\r
+          |                       |\r
+      Workers                  Workers\r
+          |                       |\r
+          +-----------+-----------+\r
+                      |\r
+                      v\r
+                MCP Gateway\r
+                      |\r
+              Enterprise APIs\r
+\`\`\`\r
+\r
+And around the whole architecture:\r
+\r
+\`\`\`text\r
++-------------------------------------------------------------+\r
+| Observability | Evaluation | Security | Cost Management    |\r
+|               |            |           |                   |\r
+| Tracing       | Golden     | RBAC      | Token tracking    |\r
+| Metrics       | datasets   | DLP       | Model routing    |\r
+| Logs          | LLM eval   | Policies  | Budgets          |\r
++-------------------------------------------------------------+\r
+\r
+        Durable State + Event Bus + DLQ + Replay\r
+\`\`\`\r
+\r
+### The 7 additions I'd emphasize in an interview\r
+\r
+| Add                              | Why                                                 |\r
+| -------------------------------- | --------------------------------------------------- |\r
+| **Durable workflow/state**       | Resume failed workflows                             |\r
+| **Event bus/queues**             | Decouple long-running operations                    |\r
+| **Policy & guardrail layer**     | Centralized security/governance                     |\r
+| **MCP/Agent Gateway**            | Standardize tool/agent access                       |\r
+| **End-to-end observability**     | Troubleshoot production agents                      |\r
+| **LLM evaluation + CI/CD gates** | Prevent bad prompts/models from reaching production |\r
+| **Cost-aware model routing**     | Control latency and LLM cost                        |\r
+\r
+### One-line answer to memorize\r
+\r
+> **“I would add durable event-driven orchestration, centralized policy and guardrails, an MCP/agent gateway, end-to-end LLM observability, continuous evaluation gates, intelligent model routing, and stronger recovery mechanisms such as idempotency, circuit breakers, DLQs, replay, and HITL.”**\r
+`,code:``},{id:`583-how-would-you-reduce-complexity`,category:`Senior/Principal Architect Questions`,title:`How would you reduce complexity?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would reduce CWD complexity by enforcing clear responsibilities and using deterministic mechanisms wherever possible. The goal is not to remove the Coordinator–Delegator–Worker pattern, but to make each layer thinner and simpler.**\r
+>\r
+> **First, I would keep the Coordinator focused on intent, planning, routing, and final aggregation.** I would remove detailed business logic and tool execution from it.\r
+>\r
+> **Second, I would keep Delegators domain-focused.** A Sales Delegator should know which Sales Workers are required, while an IT Delegator should know which IT Workers are required. They should not contain infrastructure, security, or retry logic.\r
+>\r
+> **Third, I would make Workers independently executable.** Each Worker should perform one well-defined capability through MCP and return a structured result.\r
+>\r
+> **Fourth, I would avoid using an LLM for deterministic decisions.** Authentication, authorization, schema validation, routing rules, retries, timeouts, and aggregation should primarily be code or policy-driven. The LLM should handle tasks that actually require reasoning.\r
+>\r
+> **Fifth, I would standardize interfaces.** Every Worker should follow a common contract such as:\r
+>\r
+> \`\`\`text\r
+> WorkerRequest\r
+>   → request_id\r
+>   → customer_id\r
+>   → context\r
+>   → parameters\r
+>\r
+> WorkerResponse\r
+>   → status\r
+>   → data\r
+>   → error\r
+>   → metadata\r
+> \`\`\`\r
+>\r
+> This prevents every Worker from implementing its own communication pattern.\r
+>\r
+> **Sixth, I would centralize cross-cutting concerns.** Security, tracing, authentication, rate limiting, auditing, and policy enforcement should be platform capabilities instead of being implemented separately by every Worker.\r
+>\r
+> **Finally, I would use asynchronous execution only where it provides value.** I wouldn't introduce queues, agents, or workflows simply because they are available. For a simple synchronous lookup, a direct call is simpler.\r
+\r
+### Before vs. after\r
+\r
+**Over-complex CWD:**\r
+\r
+\`\`\`text\r
+Coordinator\r
+   ↓\r
+LLM routing\r
+   ↓\r
+Delegator\r
+   ↓\r
+LLM routing\r
+   ↓\r
+Worker\r
+   ↓\r
+Custom security\r
+   ↓\r
+Custom retry\r
+   ↓\r
+Custom logging\r
+   ↓\r
+MCP\r
+   ↓\r
+Enterprise API\r
+\`\`\`\r
+\r
+**Simplified CWD:**\r
+\r
+\`\`\`text\r
+                 Coordinator\r
+              /              \\\r
+       Sales Delegator     IT Delegator\r
+            |                  |\r
+        CRM Worker         Incident Worker\r
+            |                  |\r
+            +------- MCP ------+\r
+                     |\r
+              Enterprise APIs\r
+\`\`\`\r
+\r
+With shared platform services:\r
+\r
+\`\`\`text\r
+        Security | Observability | Policy\r
+                    |\r
+              All Components\r
+\`\`\`\r
+\r
+### The key principle\r
+\r
+**Every layer should have one primary responsibility:**\r
+\r
+| Layer               | Responsibility             |\r
+| ------------------- | -------------------------- |\r
+| **Coordinator**     | Plan, route, aggregate     |\r
+| **Delegator**       | Domain-level coordination  |\r
+| **Worker**          | Execute one capability     |\r
+| **MCP**             | Standardized tool access   |\r
+| **Policy layer**    | Authorization/governance   |\r
+| **Observability**   | Trace/measure              |\r
+| **Workflow engine** | Durable execution/recovery |\r
+\r
+### Strong closing answer\r
+\r
+> **“I reduce complexity by making the Coordinator thinner, keeping Delegators domain-focused, making Workers independently executable, removing unnecessary LLM decisions, standardizing Worker contracts, and centralizing cross-cutting concerns such as security and observability. I also avoid introducing agents, queues, or asynchronous workflows unless they solve a real business or scalability problem. The architectural principle is: use the simplest mechanism that satisfies the requirement.”**\r
+`,code:``},{id:`584-how-would-you-reduce-operational-cost`,category:`Senior/Principal Architect Questions`,title:`How would you reduce operational cost?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would reduce CWD operational cost by reducing unnecessary LLM usage first, then optimizing infrastructure, retrieval, tool calls, and workflow execution. I would focus on cost per successful business outcome rather than simply reducing the number of resources.**\r
+>\r
+> **First, I would introduce model routing.** I wouldn't use an expensive reasoning model for every task. Simple intent classification, extraction, summarization, and validation could use smaller models, while complex reasoning would use a larger model.\r
+>\r
+> **Second, I would reduce token consumption.** I would control conversation history, use targeted context retrieval, summarize long histories, remove duplicate context, and retrieve only the relevant documents.\r
+>\r
+> **Third, I would optimize RAG.** Instead of retrieving 20–30 documents and sending all of them to the LLM, I would use hybrid search, metadata/ACL filtering, reranking, and a smaller top-K before generation.\r
+>\r
+> **Fourth, I would cache expensive operations.** For example, frequently requested customer metadata, embeddings, retrieval results where appropriate, and deterministic intermediate results could be cached using Redis.\r
+>\r
+> **Fifth, I would reduce unnecessary agent execution.** Not every request needs Coordinator → Delegator → multiple Workers. A simple lookup should follow the shortest deterministic path.\r
+>\r
+> **Sixth, I would optimize infrastructure.** For variable workloads, I would use serverless or autoscaling services and scale AKS/containers based on actual demand rather than maintaining oversized capacity.\r
+>\r
+> **Seventh, I would reduce unnecessary enterprise API calls.** If Salesforce and ServiceNow information is already available from a trusted cache or recent workflow state, I wouldn't repeatedly call those systems.\r
+>\r
+> **Finally, I would introduce cost observability and budgets.** Every request should have a cost record covering model tokens, retrieval, compute, and external API calls. We could then identify the most expensive workflows and optimize them based on actual usage.\r
+\r
+### CWD cost optimization\r
+\r
+\`\`\`text\r
+User\r
+  |\r
+  v\r
+Coordinator\r
+  |\r
+  +---- Simple request ----> Deterministic path\r
+  |\r
+  +---- Complex request ---> Model routing\r
+                                |\r
+                    +-----------+-----------+\r
+                    |                       |\r
+              Small/cheap model       Large model\r
+              simple tasks            complex reasoning\r
+\`\`\`\r
+\r
+For RAG:\r
+\r
+\`\`\`text\r
+Documents\r
+   ↓\r
+Hybrid Search\r
+   ↓\r
+ACL + Metadata Filter\r
+   ↓\r
+Top-K\r
+   ↓\r
+Reranker\r
+   ↓\r
+Small relevant context\r
+   ↓\r
+LLM\r
+\`\`\`\r
+\r
+Instead of:\r
+\r
+\`\`\`text\r
+Documents\r
+   ↓\r
+Retrieve many documents\r
+   ↓\r
+Send everything to LLM\r
+   ↓\r
+High token cost\r
+\`\`\`\r
+\r
+### The main cost levers\r
+\r
+| Area                | Optimization                                   |\r
+| ------------------- | ---------------------------------------------- |\r
+| **LLM**             | Model routing                                  |\r
+| **Tokens**          | Context reduction + summarization              |\r
+| **RAG**             | Hybrid search + reranking + smaller Top-K      |\r
+| **Caching**         | Redis for reusable results                     |\r
+| **Agents**          | Avoid unnecessary agent hops                   |\r
+| **MCP**             | Avoid duplicate tool calls                     |\r
+| **Enterprise APIs** | Cache/reuse recent results                     |\r
+| **Compute**         | Autoscaling/serverless                         |\r
+| **Workflow**        | Async execution for long-running jobs          |\r
+| **Monitoring**      | Cost per request/workflow                      |\r
+| **Deployment**      | Shut down non-production resources when unused |\r
+\r
+### A strong CWD example\r
+\r
+Suppose a **Customer Briefing** request needs:\r
+\r
+\`\`\`text\r
+Salesforce customer information\r
++\r
+ServiceNow incidents\r
++\r
+LLM summarization\r
+\`\`\`\r
+\r
+I would execute Salesforce and ServiceNow retrieval **in parallel**, cache reusable data, send only the relevant results to the LLM, and use the least expensive model that meets the quality threshold.\r
+\r
+So instead of optimizing only:\r
+\r
+> **“How much does one LLM call cost?”**\r
+\r
+I would measure:\r
+\r
+> **“How much does it cost to successfully complete one Customer Briefing?”**\r
+\r
+That includes **LLM + tokens + retrieval + compute + MCP/API calls + retries**.\r
+\r
+### One-line answer to memorize\r
+\r
+> **“I would reduce CWD cost through model routing, token and context optimization, efficient RAG, caching, fewer unnecessary agent and MCP calls, autoscaling infrastructure, and cost-per-workflow observability. The goal is not simply cheaper models—it is minimizing the total cost of producing a successful business outcome while maintaining the required quality.”**\r
+`,code:``},{id:`585-how-would-you-make-it-cloud-neutral`,category:`Senior/Principal Architect Questions`,title:`How would you make it cloud-neutral?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would make CWD cloud-neutral by separating the core agent architecture from cloud-specific infrastructure.** The Coordinator, Delegators, Workers, MCP, A2A, workflow contracts, and business logic should remain portable, while AWS, Azure, or GCP services are implemented behind standard interfaces.\r
+>\r
+> **First, I would keep the agent layer cloud-agnostic.** LangGraph, MCP, A2A, Python/FastAPI, Pydantic contracts, and business logic should not directly depend on Azure or AWS SDKs.\r
+>\r
+> **Second, I would create an abstraction layer for infrastructure services.** For example, the application should call \`ObjectStore\`, \`VectorStore\`, \`SecretProvider\`, \`Queue\`, \`WorkflowStore\`, and \`LLMProvider\` interfaces rather than directly calling S3, Azure Blob, DynamoDB, or Cosmos DB.\r
+>\r
+> **Third, I would isolate LLM providers.** Instead of embedding Azure OpenAI-specific code throughout Workers, I would define a common model interface so the implementation can switch between Azure OpenAI, Amazon Bedrock, Google Vertex AI, or another provider.\r
+>\r
+> **Fourth, I would standardize deployment using containers and Kubernetes.** Docker + Kubernetes/Helm gives us a common deployment model across AKS, EKS, and GKE.\r
+>\r
+> **Finally, I would use infrastructure-as-code with modules.** Terraform can define the common architecture while cloud-specific modules map the abstractions to each provider.\r
+\r
+### Cloud-neutral CWD\r
+\r
+\`\`\`text\r
+                    CWD APPLICATION\r
+                         |\r
+       +-----------------+-----------------+\r
+       |                 |                 |\r
+ Coordinator         Delegators         Workers\r
+       |                 |                 |\r
+       +-----------------+-----------------+\r
+                         |\r
+              Cloud-Neutral Interfaces\r
+                         |\r
+       +---------+-------+-------+---------+\r
+       |         |       |       |         |\r
+      LLM      Vector   Queue   Storage   Secrets\r
+    Provider   Store           Store      Provider\r
+       |         |       |       |         |\r
+       +---------+-------+-------+---------+\r
+                         |\r
+              Cloud Adapter Layer\r
+              /        |        \\\r
+             /         |         \\\r
+          AWS        Azure       GCP\r
+\`\`\`\r
+\r
+### Example\r
+\r
+Instead of doing this inside a Worker:\r
+\r
+\`\`\`python\r
+from azure.storage.blob import BlobServiceClient\r
+\r
+client = BlobServiceClient(...)\r
+\`\`\`\r
+\r
+I would use:\r
+\r
+\`\`\`python\r
+class ObjectStore:\r
+    def get(self, key: str):\r
+        raise NotImplementedError\r
+\`\`\`\r
+\r
+Then provide implementations:\r
+\r
+\`\`\`text\r
+ObjectStore\r
+   ├── S3ObjectStore\r
+   ├── AzureBlobObjectStore\r
+   └── GCSObjectStore\r
+\`\`\`\r
+\r
+The Worker only knows:\r
+\r
+\`\`\`python\r
+store.get("customer/123/profile")\r
+\`\`\`\r
+\r
+It doesn't care whether the data comes from **S3, Azure Blob, or GCS**.\r
+\r
+### CWD service mapping\r
+\r
+| Capability     | AWS              | Azure                      | GCP                     |\r
+| -------------- | ---------------- | -------------------------- | ----------------------- |\r
+| LLM            | Bedrock          | Azure OpenAI               | Vertex AI               |\r
+| Object storage | S3               | Blob Storage               | Cloud Storage           |\r
+| Queue          | SQS              | Service Bus                | Pub/Sub                 |\r
+| NoSQL/state    | DynamoDB         | Cosmos DB                  | Firestore               |\r
+| Vector search  | OpenSearch/other | Azure AI Search            | Vertex AI Vector Search |\r
+| Secrets        | Secrets Manager  | Key Vault                  | Secret Manager          |\r
+| Container      | EKS/ECS          | AKS/Container Apps         | GKE/Cloud Run           |\r
+| API gateway    | API Gateway      | APIM                       | API Gateway             |\r
+| Monitoring     | CloudWatch       | Azure Monitor/App Insights | Cloud Monitoring        |\r
+| Identity       | IAM              | Entra ID                   | IAM                     |\r
+\r
+The **business logic does not change**; only the adapter implementations change.\r
+\r
+### What I would *not* abstract\r
+\r
+I wouldn't create an abstraction for everything.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Coordinator\r
+Delegator\r
+Worker\r
+MCP\r
+A2A\r
+LangGraph\r
+Business rules\r
+       ↓\r
+Cloud-neutral\r
+\`\`\`\r
+\r
+But:\r
+\r
+\`\`\`text\r
+Storage\r
+Queue\r
+Secrets\r
+LLM\r
+Vector DB\r
+Identity\r
+Observability\r
+       ↓\r
+Provider adapters\r
+\`\`\`\r
+\r
+This avoids creating a huge abstraction framework that itself becomes difficult to maintain.\r
+\r
+### Strong closing answer\r
+\r
+> **“My goal wouldn't be 100% cloud independence at every layer. I would make the business and agent layers cloud-neutral and isolate unavoidable cloud-specific capabilities behind well-defined adapters. That gives us portability without sacrificing the native capabilities of AWS, Azure, or GCP.”**\r
+\r
+**Key phrase to remember:** **“Portable core, provider-specific adapters.”**\r
+`,code:``},{id:`586-how-would-you-make-it-multi-tenant`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-tenant?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would make CWD multi-tenant by treating \`tenant_id\` as a first-class security and isolation boundary across the entire request lifecycle—not just as a database column.**\r
+>\r
+> Every request would be authenticated, mapped to a tenant, and then the \`tenant_id\` would flow through **Coordinator → Delegator → Worker → MCP → enterprise systems**. Every data access, tool call, cache entry, vector search, workflow state, and audit record would be tenant-scoped.\r
+>\r
+> I would combine **logical isolation by default** with **stronger physical isolation for high-security tenants**.\r
+\r
+### Multi-tenant CWD\r
+\r
+\`\`\`text\r
+                         User\r
+                          |\r
+                          v\r
+                 +----------------+\r
+                 | Identity       |\r
+                 | Entra / IAM    |\r
+                 +----------------+\r
+                          |\r
+                    tenant_id = T1\r
+                          |\r
+                          v\r
+                 +----------------+\r
+                 | Tenant Context |\r
+                 +----------------+\r
+                          |\r
+                          v\r
+                    Coordinator\r
+                          |\r
+              +-----------+-----------+\r
+              |                       |\r
+              v                       v\r
+       Sales Delegator          IT Delegator\r
+              |                       |\r
+          Workers                  Workers\r
+              |                       |\r
+              +-----------+-----------+\r
+                          |\r
+                          v\r
+                     MCP Gateway\r
+                          |\r
+                          v\r
+                Enterprise Systems\r
+\`\`\`\r
+\r
+### 1. Tenant identification\r
+\r
+At authentication time, I would establish:\r
+\r
+\`\`\`text\r
+user_id\r
+tenant_id\r
+roles\r
+permissions\r
+claims\r
+\`\`\`\r
+\r
+I would **not trust \`tenant_id\` supplied by the client request body**.\r
+\r
+For example:\r
+\r
+\`\`\`json\r
+{\r
+  "user": "user123",\r
+  "tenant_id": "tenant-A",\r
+  "roles": ["sales_user"]\r
+}\r
+\`\`\`\r
+\r
+The backend derives the tenant context from the authenticated identity/token and propagates it internally.\r
+\r
+---\r
+\r
+### 2. Tenant-aware authorization\r
+\r
+Every layer validates the tenant context.\r
+\r
+\`\`\`text\r
+Request\r
+   ↓\r
+Authentication\r
+   ↓\r
+Tenant identification\r
+   ↓\r
+Authorization\r
+   ↓\r
+Coordinator\r
+   ↓\r
+Delegator\r
+   ↓\r
+Worker\r
+   ↓\r
+MCP Tool\r
+\`\`\`\r
+\r
+A Worker should never simply ask:\r
+\r
+> "Does this user have permission?"\r
+\r
+It should effectively enforce:\r
+\r
+> **Does this user, in this tenant, have permission to perform this operation on this resource?**\r
+\r
+---\r
+\r
+### 3. Tenant-isolated data\r
+\r
+For shared databases:\r
+\r
+\`\`\`text\r
+tenant_id | customer_id | data\r
+----------|-------------|------\r
+T1        | C101        | ...\r
+T1        | C102        | ...\r
+T2        | C201        | ...\r
+T2        | C202        | ...\r
+\`\`\`\r
+\r
+Every query must include tenant filtering.\r
+\r
+\`\`\`sql\r
+SELECT *\r
+FROM customer\r
+WHERE tenant_id = :tenant_id\r
+AND customer_id = :customer_id;\r
+\`\`\`\r
+\r
+I would also enforce this at the data-access layer so developers don't accidentally omit the filter.\r
+\r
+---\r
+\r
+### 4. Tenant-aware RAG\r
+\r
+This is particularly important for CWD.\r
+\r
+I would store tenant information as metadata:\r
+\r
+\`\`\`text\r
+document_id\r
+tenant_id\r
+department\r
+classification\r
+ACL\r
+embedding\r
+\`\`\`\r
+\r
+Search becomes:\r
+\r
+\`\`\`text\r
+User Query\r
+    ↓\r
+Tenant + ACL filter\r
+    ↓\r
+Hybrid/vector search\r
+    ↓\r
+Reranking\r
+    ↓\r
+LLM\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+tenant_id = T1\r
+AND user has access\r
+AND classification <= user's clearance\r
+\`\`\`\r
+\r
+This prevents a user from Tenant A retrieving documents belonging to Tenant B.\r
+\r
+---\r
+\r
+### 5. Tenant-isolated MCP tools\r
+\r
+The MCP layer should also receive tenant context.\r
+\r
+\`\`\`text\r
+Worker\r
+  |\r
+  | tenant_id + user identity + authorization context\r
+  v\r
+MCP Gateway\r
+  |\r
+  v\r
+MCP Server\r
+  |\r
+  v\r
+Salesforce / ServiceNow / SharePoint\r
+\`\`\`\r
+\r
+The MCP server should validate that the requested enterprise resource belongs to the appropriate tenant and that the user is authorized to access it.\r
+\r
+**The tenant boundary must not disappear when the request crosses MCP.**\r
+\r
+---\r
+\r
+### 6. Tenant-aware cache\r
+\r
+This is an easy place to accidentally create a security issue.\r
+\r
+Bad:\r
+\r
+\`\`\`text\r
+cache["customer_123"]\r
+\`\`\`\r
+\r
+Better:\r
+\r
+\`\`\`text\r
+cache["tenantA:customer_123"]\r
+\`\`\`\r
+\r
+Even better, include relevant authorization context where required:\r
+\r
+\`\`\`text\r
+tenantA:user123:customer123\r
+\`\`\`\r
+\r
+Otherwise, one tenant could potentially receive cached information generated for another tenant.\r
+\r
+---\r
+\r
+### 7. Tenant-isolated workflow state\r
+\r
+For your LangGraph/CWD workflow:\r
+\r
+\`\`\`text\r
+workflow_id\r
+tenant_id\r
+user_id\r
+request_id\r
+status\r
+checkpoint\r
+\`\`\`\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Tenant A\r
+  └── Workflow 1001\r
+       ├── Sales Worker → completed\r
+       ├── IT Worker → completed\r
+       └── Aggregation → completed\r
+\r
+Tenant B\r
+  └── Workflow 2001\r
+       ├── Sales Worker → running\r
+       └── IT Worker → failed\r
+\`\`\`\r
+\r
+The checkpoint store must enforce tenant boundaries when reading or resuming workflows.\r
+\r
+---\r
+\r
+### 8. Tenant-aware observability\r
+\r
+Every log, trace, and metric should contain:\r
+\r
+\`\`\`text\r
+tenant_id\r
+user_id\r
+request_id\r
+workflow_id\r
+agent_id\r
+worker_id\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+tenant=T1\r
+workflow=WF123\r
+worker=ServiceNowWorker\r
+latency=2.4s\r
+tokens=1200\r
+status=SUCCESS\r
+\`\`\`\r
+\r
+But I would also be careful with **PII and sensitive business data in logs**.\r
+\r
+---\r
+\r
+### 9. Tenant-specific quotas and cost controls\r
+\r
+One tenant shouldn't be able to consume all platform resources.\r
+\r
+I would introduce:\r
+\r
+\`\`\`text\r
+Tenant A\r
+ ├── 10 requests/sec\r
+ ├── 100 concurrent workflows\r
+ ├── $500/day LLM budget\r
+ └── 50 MCP calls/sec\r
+\r
+Tenant B\r
+ ├── 5 requests/sec\r
+ ├── 50 concurrent workflows\r
+ ├── $200/day LLM budget\r
+ └── 20 MCP calls/sec\r
+\`\`\`\r
+\r
+This provides **fairness, cost control, and noisy-neighbor protection**.\r
+\r
+---\r
+\r
+### 10. Different isolation levels\r
+\r
+I would support multiple isolation models.\r
+\r
+| Model                               | Example                   | Use                      |\r
+| ----------------------------------- | ------------------------- | ------------------------ |\r
+| **Shared application**              | Same Coordinator/Workers  | Most tenants             |\r
+| **Shared DB + tenant partitioning** | \`tenant_id\` isolation     | Cost-efficient           |\r
+| **Separate DB/schema**              | Tenant-specific storage   | Higher isolation         |\r
+| **Dedicated infrastructure**        | Dedicated compute/network | Highly sensitive tenants |\r
+\r
+So I wouldn't automatically give every tenant dedicated infrastructure because that increases operational cost.\r
+\r
+### One important architectural principle\r
+\r
+I would make **tenant context immutable after authentication**:\r
+\r
+\`\`\`text\r
+JWT / Identity\r
+      ↓\r
+Tenant Context\r
+      ↓\r
+Coordinator\r
+      ↓\r
+Delegator\r
+      ↓\r
+Worker\r
+      ↓\r
+MCP\r
+\`\`\`\r
+\r
+A Worker should **never be allowed to change \`tenant_id\`** based on LLM output or user input.\r
+\r
+### Strong closing answer\r
+\r
+> **“I would make tenant isolation a security boundary, not just a data attribute. Tenant identity would be established from authentication and propagated through the entire CWD execution path. I would enforce tenant-aware authorization, database and vector-store filtering, MCP authorization, cache and workflow isolation, tenant-aware observability, and per-tenant quotas and cost controls. For highly sensitive customers, I would support dedicated storage or infrastructure. The key principle is that tenant context is established once, trusted internally, and enforced at every boundary.”**\r
+`,code:``},{id:`587-how-would-you-make-it-multi-region`,category:`Senior/Principal Architect Questions`,title:`How would you make it multi-region?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **I would make CWD multi-region by deploying the complete application stack in at least two regions, keeping the application layer stateless where possible, replicating only the state that needs to be shared, and routing users to the healthiest region.**\r
+>\r
+> The key design principle is **“active-active for stateless services, carefully replicated state, and regional isolation for failure.”**\r
+\r
+### Multi-region CWD architecture\r
+\r
+\`\`\`text\r
+                         Global DNS / Traffic Manager\r
+                                  |\r
+                    +-------------+-------------+\r
+                    |                           |\r
+                    v                           v\r
+              Region A                     Region B\r
+              Primary                    Secondary/Active\r
+                    |                           |\r
+             +------+-------+             +-----+------+\r
+             |              |             |            |\r
+        Coordinator     Delegators    Coordinator   Delegators\r
+             |              |             |            |\r
+          Workers         Workers       Workers      Workers\r
+             |              |             |            |\r
+             +------+-------+             +-----+------+\r
+                    |                           |\r
+                  MCP                         MCP\r
+                    |                           |\r
+              Enterprise Systems / APIs\r
+\`\`\`\r
+\r
+### 1. Deploy CWD in multiple regions\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+AWS:\r
+us-east-1  ←→  us-west-2\r
+\r
+Azure:\r
+East US    ←→  Central US\r
+\r
+GCP:\r
+us-central1 ←→ us-east4\r
+\`\`\`\r
+\r
+Each region should contain the required application components:\r
+\r
+* API layer\r
+* Coordinator\r
+* Delegators\r
+* Workers\r
+* MCP services\r
+* observability agents\r
+* caching\r
+* regional queues\r
+* required data services\r
+\r
+That prevents a single region from becoming a single point of failure.\r
+\r
+---\r
+\r
+### 2. Make Coordinator and Workers stateless\r
+\r
+This is one of the most important changes.\r
+\r
+I would **not store important workflow state inside the Coordinator's memory**.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Coordinator\r
+     |\r
+     +----> Durable State Store\r
+     |\r
+     +----> Event/Queue\r
+\`\`\`\r
+\r
+Then another Coordinator instance in another region can resume the workflow.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Region A Coordinator\r
+       |\r
+       X  Region failure\r
+       |\r
+       ↓\r
+Region B Coordinator\r
+       |\r
+       ↓\r
+Resume from checkpoint\r
+\`\`\`\r
+\r
+---\r
+\r
+### 3. Replicate workflow state\r
+\r
+CWD needs to preserve:\r
+\r
+\`\`\`text\r
+tenant_id\r
+workflow_id\r
+request_id\r
+current_step\r
+completed_workers\r
+failed_workers\r
+results\r
+retry_count\r
+checkpoint\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+WF-123\r
+\r
+W1 = COMPLETED\r
+W2 = COMPLETED\r
+W3 = FAILED\r
+checkpoint = W3\r
+\`\`\`\r
+\r
+If Region A fails, Region B can continue from:\r
+\r
+\`\`\`text\r
+W3 → Aggregate → Validate → Response\r
+\`\`\`\r
+\r
+instead of starting from the beginning.\r
+\r
+---\r
+\r
+### 4. Use regional queues\r
+\r
+I would avoid putting every request into one global queue.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+Region A\r
+   ↓\r
+SQS / Service Bus / Pub/Sub\r
+   ↓\r
+Regional Workers\r
+\r
+Region B\r
+   ↓\r
+SQS / Service Bus / Pub/Sub\r
+   ↓\r
+Regional Workers\r
+\`\`\`\r
+\r
+This keeps failures and traffic localized.\r
+\r
+For cross-region recovery, messages can be replicated or replayed from a durable event source.\r
+\r
+---\r
+\r
+### 5. Global traffic routing\r
+\r
+A global routing layer would direct requests to the appropriate region.\r
+\r
+\`\`\`text\r
+                  User\r
+                   |\r
+                   v\r
+             Global Router\r
+             /           \\\r
+            /             \\\r
+       Region A         Region B\r
+       Healthy          Healthy\r
+\`\`\`\r
+\r
+If Region A becomes unhealthy:\r
+\r
+\`\`\`text\r
+                  User\r
+                   |\r
+                   v\r
+             Global Router\r
+                   |\r
+             Region B\r
+\`\`\`\r
+\r
+Routing can consider:\r
+\r
+* health\r
+* latency\r
+* geography\r
+* capacity\r
+* tenant placement\r
+* regional availability\r
+\r
+---\r
+\r
+### 6. Handle tenant affinity\r
+\r
+Since we just designed CWD as multi-tenant, I would combine the two designs.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Tenant A → Region A preferred\r
+Tenant B → Region B preferred\r
+\`\`\`\r
+\r
+But either region should be capable of serving the tenant during disaster recovery if the data and dependencies are available there.\r
+\r
+This gives:\r
+\r
+\`\`\`text\r
+Normal:\r
+Tenant A → Region A\r
+\r
+Region A failure:\r
+Tenant A → Region B\r
+\`\`\`\r
+\r
+---\r
+\r
+### 7. Multi-region RAG\r
+\r
+This is especially important for your CWD.\r
+\r
+Azure AI Search / OpenSearch / vector databases should not become a single-region dependency.\r
+\r
+I would maintain regional replicas/indexes:\r
+\r
+\`\`\`text\r
+                Source Documents\r
+                       |\r
+              +--------+--------+\r
+              |                 |\r
+              v                 v\r
+         Region A Index    Region B Index\r
+              |                 |\r
+          RAG Worker         RAG Worker\r
+\`\`\`\r
+\r
+Documents and embeddings need a defined replication/update strategy so the regions don't serve significantly different knowledge.\r
+\r
+---\r
+\r
+### 8. MCP should also be region-aware\r
+\r
+The Worker shouldn't depend on one MCP server.\r
+\r
+\`\`\`text\r
+Worker\r
+   |\r
+   v\r
+MCP Gateway\r
+   |\r
+   +------ Region A MCP\r
+   |\r
+   +------ Region B MCP\r
+\`\`\`\r
+\r
+If Region A's MCP infrastructure fails, traffic can move to Region B.\r
+\r
+But there's an important caveat:\r
+\r
+**The downstream enterprise system may itself be single-region.**\r
+\r
+For example, if Salesforce or ServiceNow is unavailable, simply having another MCP server doesn't solve the dependency failure.\r
+\r
+So I would classify dependencies:\r
+\r
+\`\`\`text\r
+CWD Regional\r
+     ↓\r
+MCP Regional\r
+     ↓\r
+Enterprise API\r
+     ↓\r
+Is enterprise dependency multi-region?\r
+\`\`\`\r
+\r
+---\r
+\r
+### 9. Idempotency is critical\r
+\r
+Multi-region retry can create duplicate operations.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Region A:\r
+Create ServiceNow ticket\r
+      ↓\r
+Request succeeds\r
+      ↓\r
+Response lost\r
+\`\`\`\r
+\r
+CWD doesn't know whether it succeeded.\r
+\r
+It fails over:\r
+\r
+\`\`\`text\r
+Region B:\r
+Retry Create Ticket\r
+\`\`\`\r
+\r
+Without idempotency, we could create **two tickets**.\r
+\r
+Therefore every transactional Worker should use an idempotency key:\r
+\r
+\`\`\`text\r
+tenant_id + workflow_id + worker_id + operation_id\r
+\`\`\`\r
+\r
+The downstream system or integration layer should recognize duplicate requests.\r
+\r
+---\r
+\r
+### 10. Data consistency strategy\r
+\r
+I wouldn't try to make everything strongly consistent across regions.\r
+\r
+I would classify data.\r
+\r
+| Data                          | Strategy                   |\r
+| ----------------------------- | -------------------------- |\r
+| Workflow checkpoint           | Strong/durable replication |\r
+| Tenant/security configuration | Strong consistency         |\r
+| User/session state            | Replicated as required     |\r
+| Cache                         | Eventually consistent      |\r
+| Vector indexes                | Async replication          |\r
+| Metrics/logs                  | Eventually consistent      |\r
+| Audit records                 | Durable replication        |\r
+| Temporary Worker state        | Regional                   |\r
+\r
+This is important because **multi-region architecture is fundamentally a consistency vs. availability tradeoff**.\r
+\r
+---\r
+\r
+### 11. Regional disaster recovery\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Region A\r
+Coordinator → Delegators → Workers\r
+                 |\r
+                 X\r
+             Region failure\r
+\`\`\`\r
+\r
+The recovery flow becomes:\r
+\r
+\`\`\`text\r
+Global Router\r
+      ↓\r
+Region B\r
+      ↓\r
+Load existing checkpoint\r
+      ↓\r
+Identify completed Workers\r
+      ↓\r
+Resume failed/incomplete Workers\r
+      ↓\r
+Aggregate\r
+      ↓\r
+Validate\r
+      ↓\r
+Return response\r
+\`\`\`\r
+\r
+### Strong CWD interview answer\r
+\r
+> **“I would make CWD multi-region by deploying the Coordinator, Delegators, Workers, MCP gateway, and supporting services across multiple regions. The application layer would be stateless, while workflow checkpoints, tenant configuration, security state, and required business state would be durably replicated. Global traffic management would route users to a healthy region, and regional queues would isolate failures. I would also make MCP and RAG region-aware, use idempotency to prevent duplicate transactions during failover, and define consistency requirements per data type rather than forcing strong consistency everywhere.”**\r
+\r
+### One sentence to memorize\r
+\r
+> **“Multi-region CWD means active-active stateless compute, replicated durable state, regional queues and dependencies, global health-based routing, and idempotent workflow recovery.”**\r
+`,code:``},{id:`588-how-would-you-support-10x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 10× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **To support 10× traffic, I would avoid simply adding 10× compute. I would first identify the bottlenecks—LLM calls, Coordinator orchestration, MCP calls, databases, vector search, and downstream enterprise APIs—and then scale each layer independently.**\r
+>\r
+> **First, I would horizontally scale the API, Coordinator, Delegators, and Workers.** These services should be stateless so multiple instances can run behind a load balancer.\r
+>\r
+> **Second, I would introduce asynchronous processing for long-running workloads.** SQS/EventBridge in AWS, Service Bus/Event Grid in Azure, or Pub/Sub in GCP can absorb traffic spikes and allow Workers to process requests based on available capacity.\r
+>\r
+> **Third, I would scale the LLM layer carefully.** Ten times the traffic can mean ten times the token consumption. I would use model routing, prompt/context optimization, caching, batching where supported, and rate-limit management rather than blindly increasing model calls.\r
+>\r
+> **Fourth, I would scale RAG independently.** I would use partitioning/sharding, replicas, metadata filtering, caching, and optimized Top-K retrieval so vector search doesn't become the bottleneck.\r
+>\r
+> **Fifth, I would protect downstream systems.** Salesforce, ServiceNow, and other enterprise APIs may not scale 10× with us. I would use connection pooling, queues, rate limits, circuit breakers, caching, and backpressure to prevent overwhelming them.\r
+>\r
+> **Finally, I would load-test the complete CWD workflow before production and establish SLOs for latency, throughput, error rate, and cost per successful request.**\r
+\r
+### 10× CWD architecture\r
+\r
+\`\`\`text\r
+                         Users\r
+                           |\r
+                           v\r
+                 Global Load Balancer\r
+                           |\r
+                    +------+------+\r
+                    |             |\r
+                    v             v\r
+                 API x N       API x N\r
+                    |             |\r
+                    +------+------+\r
+                           |\r
+                    Coordinator x N\r
+                           |\r
+                +----------+----------+\r
+                |                     |\r
+                v                     v\r
+         Sales Delegators       IT Delegators\r
+             x N                    x N\r
+                |                     |\r
+                v                     v\r
+          Workers x N             Workers x N\r
+                |                     |\r
+                +----------+----------+\r
+                           |\r
+                      MCP Gateway\r
+                           |\r
+                    +------+------+\r
+                    |             |\r
+                 Queue          Queue\r
+                    |             |\r
+               Enterprise APIs / Systems\r
+\`\`\`\r
+\r
+### The important scaling techniques\r
+\r
+| Bottleneck            | 10× strategy                          |\r
+| --------------------- | ------------------------------------- |\r
+| API                   | Horizontal scaling + load balancing   |\r
+| Coordinator           | Stateless replicas                    |\r
+| Delegators            | Horizontal scaling                    |\r
+| Workers               | Independent autoscaling               |\r
+| Long workflows        | Queue/event-driven processing         |\r
+| LLM                   | Model routing + token optimization    |\r
+| RAG                   | Replicas + partitioning + caching     |\r
+| Redis/cache           | Cluster + appropriate TTLs            |\r
+| Database              | Read replicas/partitioning            |\r
+| MCP                   | Horizontally scaled gateway/servers   |\r
+| Salesforce/ServiceNow | Rate limiting + queues + backpressure |\r
+| Traffic spikes        | Queue buffering                       |\r
+| Failures              | Circuit breakers + retries + DLQ      |\r
+| Cost                  | Per-workflow cost monitoring          |\r
+\r
+### A critical point: backpressure\r
+\r
+Imagine traffic suddenly goes from:\r
+\r
+\`\`\`text\r
+100 requests/sec\r
+        ↓\r
+1,000 requests/sec\r
+\`\`\`\r
+\r
+But ServiceNow can only safely handle:\r
+\r
+\`\`\`text\r
+200 requests/sec\r
+\`\`\`\r
+\r
+If we simply scale Workers to 1,000 requests/sec, we may overwhelm ServiceNow.\r
+\r
+Instead:\r
+\r
+\`\`\`text\r
+1,000 req/s\r
+     ↓\r
+CWD\r
+     ↓\r
+Queue\r
+     ↓\r
+Workers process at 200 req/s\r
+     ↓\r
+ServiceNow\r
+\`\`\`\r
+\r
+The queue absorbs the spike.\r
+\r
+This is **backpressure**: the system controls downstream execution rather than allowing upstream traffic to cascade into failures.\r
+\r
+### I would also separate scaling dimensions\r
+\r
+A particularly strong architectural point is:\r
+\r
+> **“I wouldn't scale the entire CWD stack uniformly.”**\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Traffic increase\r
+      |\r
+      +---- API:       10x\r
+      |\r
+      +---- Coordinator: 5x\r
+      |\r
+      +---- Sales Workers: 8x\r
+      |\r
+      +---- IT Workers:    3x\r
+      |\r
+      +---- RAG:           6x\r
+      |\r
+      +---- LLM:           capacity-controlled\r
+\`\`\`\r
+\r
+Each component gets an autoscaling policy based on its actual bottleneck.\r
+\r
+### How I would prove it\r
+\r
+Before claiming that CWD supports 10× traffic, I would run:\r
+\r
+1. **Load testing** — sustained 10× expected traffic.\r
+2. **Spike testing** — sudden 10× increase.\r
+3. **Stress testing** — continue beyond 10× until failure.\r
+4. **Soak testing** — sustained traffic for hours.\r
+5. **Failure testing** — Worker, queue, database, MCP, and model failures during high load.\r
+\r
+I would monitor:\r
+\r
+\`\`\`text\r
+Throughput\r
+p50 / p95 / p99 latency\r
+Error rate\r
+Queue depth\r
+Worker utilization\r
+LLM latency\r
+LLM token consumption\r
+MCP latency\r
+Database latency\r
+Downstream API throttling\r
+Cost/request\r
+\`\`\`\r
+\r
+### Strong closing answer\r
+\r
+> **“For 10× traffic, I would horizontally scale stateless CWD components, introduce queues and backpressure for asynchronous workloads, independently scale Workers and RAG, use caching and model/token optimization, protect downstream enterprise systems with rate limits and circuit breakers, and use autoscaling based on real bottlenecks. Most importantly, I would validate the architecture through load, spike, stress, soak, and failure testing rather than assuming 10× scalability from infrastructure size alone.”**\r
+`,code:``},{id:`589-how-would-you-support-100x-traffic`,category:`Senior/Principal Architect Questions`,title:`How would you support 100× traffic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### Interview answer\r
+\r
+> **For 100× traffic, I would not treat it as simply a larger version of 10× scaling. At that level, I would redesign CWD around cell-based architecture, asynchronous execution, aggressive caching, workload isolation, and strict protection of shared dependencies.**\r
+>\r
+> The key principle is: **scale horizontally and isolate failures so one traffic surge doesn't bring down the entire platform.**\r
+\r
+### 1. Move from one large CWD to cells\r
+\r
+Instead of:\r
+\r
+\`\`\`text id="f9x2k3"\r
+                 CWD\r
+                  |\r
+        +---------+---------+\r
+        |         |         |\r
+     Workers   Workers   Workers\r
+\`\`\`\r
+\r
+I would use **multiple independent cells**:\r
+\r
+\`\`\`text id="n4k8pz"\r
+                    Global Router\r
+                         |\r
+       +-----------------+-----------------+\r
+       |                 |                 |\r
+       v                 v                 v\r
+    Cell 1            Cell 2            Cell 3\r
+       |                 |                 |\r
+ Coordinator         Coordinator        Coordinator\r
+ Delegators          Delegators         Delegators\r
+ Workers             Workers            Workers\r
+\`\`\`\r
+\r
+Traffic can be partitioned by **tenant, geography, workload type, or hash**.\r
+\r
+If Cell 2 has a problem, Cell 1 and Cell 3 continue serving traffic.\r
+\r
+---\r
+\r
+### 2. Make the Coordinator horizontally scalable\r
+\r
+I would make the Coordinator **stateless**.\r
+\r
+\`\`\`text id="8h1m5r"\r
+              Load Balancer\r
+                    |\r
+        +-----------+-----------+\r
+        |           |           |\r
+    Coord-1     Coord-2     Coord-3\r
+        |           |           |\r
+        +-----------+-----------+\r
+                    |\r
+             Durable State\r
+\`\`\`\r
+\r
+No important workflow state should live only in Coordinator memory.\r
+\r
+---\r
+\r
+### 3. Push work asynchronously\r
+\r
+At 100× traffic, synchronous chains become dangerous.\r
+\r
+Instead:\r
+\r
+\`\`\`text id="j6v0fz"\r
+Request\r
+   |\r
+Coordinator\r
+   |\r
+Event / Queue\r
+   |\r
++--+---------+----------+\r
+|            |          |\r
+v            v          v\r
+Sales       IT        Other\r
+Worker      Worker     Worker\r
+\`\`\`\r
+\r
+Queues provide:\r
+\r
+* buffering\r
+* backpressure\r
+* workload smoothing\r
+* retry\r
+* DLQ\r
+* independent scaling\r
+\r
+---\r
+\r
+### 4. Partition the workload\r
+\r
+I would avoid putting every request into one giant queue or Worker pool.\r
+\r
+For example:\r
+\r
+\`\`\`text id="d2k7qa"\r
+                    CWD\r
+                     |\r
+          +----------+----------+\r
+          |          |          |\r
+       Sales Q     IT Q      Support Q\r
+          |          |          |\r
+       Workers    Workers    Workers\r
+\`\`\`\r
+\r
+Now Sales traffic can scale independently from IT traffic.\r
+\r
+This is especially useful for your CWD because **Salesforce and ServiceNow workloads have different traffic patterns and downstream limits**.\r
+\r
+---\r
+\r
+### 5. Protect the LLM layer\r
+\r
+At 100× traffic, LLM cost and provider capacity can become major constraints.\r
+\r
+I would introduce:\r
+\r
+\`\`\`text id="a3q9kw"\r
+                LLM Gateway\r
+                     |\r
+       +-------------+-------------+\r
+       |             |             |\r
+    Small Model   Medium Model   Large Model\r
+\`\`\`\r
+\r
+Use:\r
+\r
+* smaller models for classification/extraction\r
+* larger models only for complex reasoning\r
+* prompt/context reduction\r
+* semantic caching\r
+* response caching where safe\r
+* token budgets\r
+* concurrency limits\r
+* provider rate-limit handling\r
+* fallback models/providers where appropriate\r
+\r
+The goal is **not 100× LLM calls simply because traffic increased 100×**.\r
+\r
+---\r
+\r
+### 6. Aggressive caching\r
+\r
+At 100× traffic, repeatedly fetching the same information becomes expensive.\r
+\r
+For example:\r
+\r
+\`\`\`text id="x4y7mt"\r
+1000 requests\r
+     |\r
+     +---- Customer profile\r
+     |\r
+     +---- Same customer data\r
+     |\r
+     v\r
+   Cache\r
+     |\r
+  One backend call\r
+\`\`\`\r
+\r
+But cache keys must include tenant/security context:\r
+\r
+\`\`\`text id="d4j9ps"\r
+tenant + resource + authorization context\r
+\`\`\`\r
+\r
+Otherwise caching can create a data-isolation problem.\r
+\r
+---\r
+\r
+### 7. Protect enterprise systems\r
+\r
+This is one of the **most important interview points**.\r
+\r
+Even if CWD can process:\r
+\r
+\`\`\`text id="w8g2j1"\r
+100,000 requests/sec\r
+\`\`\`\r
+\r
+Salesforce or ServiceNow may not safely accept that volume.\r
+\r
+Therefore:\r
+\r
+\`\`\`text id="g5r8xa"\r
+CWD\r
+ |\r
+Queue\r
+ |\r
+Rate Limiter\r
+ |\r
+Circuit Breaker\r
+ |\r
+Enterprise API\r
+\`\`\`\r
+\r
+Use:\r
+\r
+* rate limiting\r
+* connection pooling\r
+* batching where supported\r
+* caching\r
+* circuit breakers\r
+* backpressure\r
+* retries with jitter\r
+* DLQ\r
+\r
+**The platform must scale independently of downstream system capacity.**\r
+\r
+---\r
+\r
+### 8. Use multi-region cells\r
+\r
+For 100× global traffic, I would combine cell architecture with multi-region deployment:\r
+\r
+\`\`\`text id="5s0p8e"\r
+                    Global Traffic Manager\r
+                         /      |      \\\r
+                        /       |       \\\r
+                       v        v        v\r
+                   US-East   US-West   EU\r
+                     |          |       |\r
+                  Cells       Cells   Cells\r
+\`\`\`\r
+\r
+This provides:\r
+\r
+* geographic distribution\r
+* lower latency\r
+* regional failure isolation\r
+* independent scaling\r
+* disaster recovery\r
+\r
+---\r
+\r
+### 9. Partition data\r
+\r
+A single database can become a bottleneck.\r
+\r
+I would partition by appropriate business dimensions, potentially:\r
+\r
+\`\`\`text id="n7f3ck"\r
+tenant_id\r
+region\r
+customer/domain\r
+workload\r
+\`\`\`\r
+\r
+And use:\r
+\r
+* read replicas\r
+* sharding/partitioning\r
+* distributed caches\r
+* asynchronous writes where acceptable\r
+* separate analytical workloads from transactional workloads\r
+\r
+---\r
+\r
+### 10. Don't scale everything equally\r
+\r
+At 100×, this is critical.\r
+\r
+Suppose traffic looks like:\r
+\r
+\`\`\`text id="k5s1dt"\r
+Sales requests       → 60%\r
+IT requests           → 25%\r
+Other requests        → 15%\r
+\`\`\`\r
+\r
+I would scale accordingly:\r
+\r
+\`\`\`text id="q8h3vz"\r
+Sales Workers       → 60% capacity\r
+IT Workers          → 25% capacity\r
+Other Workers       → 15% capacity\r
+\`\`\`\r
+\r
+Rather than deploying the same number of instances everywhere.\r
+\r
+---\r
+\r
+### 11. Introduce admission control\r
+\r
+At extreme load, accepting every request can cause cascading failure.\r
+\r
+I would implement:\r
+\r
+\`\`\`text id="r3c7ym"\r
+Traffic\r
+   |\r
+Admission Control\r
+   |\r
+   +---- High priority → Process\r
+   |\r
+   +---- Normal        → Queue\r
+   |\r
+   +---- Excess        → Throttle / Retry-After\r
+\`\`\`\r
+\r
+For example, critical enterprise workflows could receive higher priority than non-critical analytics requests.\r
+\r
+---\r
+\r
+### 12. Observability becomes mandatory\r
+\r
+At 100×, logs alone aren't enough.\r
+\r
+I would monitor:\r
+\r
+\`\`\`text\r
+                    CWD\r
+                     |\r
+       +-------------+-------------+\r
+       |             |             |\r
+    Traffic       Queues        Workers\r
+       |             |             |\r
+     RPS          Depth        Utilization\r
+     p99          Lag          Errors\r
+       |\r
+     LLM\r
+       |\r
+   Tokens / Cost / Latency\r
+\`\`\`\r
+\r
+Key SLOs:\r
+\r
+* requests/sec\r
+* p95/p99 latency\r
+* error rate\r
+* queue lag\r
+* Worker saturation\r
+* MCP latency\r
+* enterprise API throttling\r
+* LLM token usage\r
+* cost per successful workflow\r
+\r
+---\r
+\r
+## 10× vs 100×\r
+\r
+This is a good distinction to make in an interview:\r
+\r
+| 10×                    | 100×                                 |\r
+| ---------------------- | ------------------------------------ |\r
+| Horizontal scaling     | **Cell-based architecture**          |\r
+| Autoscaling            | **Partitioned workloads**            |\r
+| Queues                 | **Multiple isolated queues/cells**   |\r
+| Caching                | **Aggressive multi-level caching**   |\r
+| Rate limiting          | **Admission control + backpressure** |\r
+| Multi-instance Workers | **Independent workload pools**       |\r
+| Single-region can work | **Multi-region becomes important**   |\r
+| Optimize bottlenecks   | **Redesign bottlenecks**             |\r
+\r
+### Strong closing answer\r
+\r
+> **“At 100× traffic, I would move beyond simple horizontal scaling and introduce cell-based architecture. Each cell would contain its own Coordinator, Delegators, Workers, queues, and supporting services, with global routing distributing traffic across cells and regions. I would partition workloads, use asynchronous queues and backpressure, aggressively cache safe data, introduce model routing and token controls, and protect Salesforce, ServiceNow, and other downstream systems with rate limiting and circuit breakers. I would also use admission control and workload prioritization so overload in one area doesn't cascade through the entire platform.”**\r
+\r
+### One sentence to memorize\r
+\r
+> **“10× requires scaling the architecture; 100× requires changing the architecture—through cells, partitioning, asynchronous execution, backpressure, caching, workload isolation, and multi-region distribution.”**\r
+`,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function mm(){return(0,M.jsx)($,{data:pm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var hm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`For your **CWD (Coordinator → Delegators → Workers)** project, I would explain the AWS architecture in an interview as an **enterprise, production-grade multi-agent architecture**, not just as a collection of AWS services.
 
-## Short answer
-CWD on AWS is a layered, private, IAM-based architecture: edge and API, orchestration and agents, tools, AI and data services, state and messaging, and a platform layer for security, observability and delivery.
+## 1. High-level AWS architecture
 
-## Key points
-- Edge: optional CloudFront and AWS WAF → API Gateway (JWT or Cognito authorisation, throttling, validation) → VPC Link to a private ALB.
-- Orchestration: Coordinator (LangGraph) on ECS Fargate, routing to Delegators and Workers; Lambda for light, short paths.
-- Tools: Workers call MCP servers (ECS) that wrap Salesforce, ServiceNow, SharePoint, Snowflake and Oracle.
-- AI and data: Amazon Bedrock (LLMs, embeddings, Guardrails), OpenSearch Serverless (RAG), S3 plus Glue for ingestion, SageMaker for custom models.
-- State and async: DynamoDB, ElastiCache (Redis/Valkey), SQS, Step Functions, EventBridge.
-- Platform: IAM roles, KMS, Secrets Manager, private subnets with VPC endpoints, CloudWatch / X-Ray / CloudTrail, CodePipeline / CodeBuild / ECR, infrastructure as code.
+\`\`\`text
+                         ┌─────────────────────────────┐
+                         │        Enterprise User      │
+                         │ Web / App / Internal Portal │
+                         └──────────────┬──────────────┘
+                                        │
+                                        ▼
+                         ┌─────────────────────────────┐
+                         │       Amazon API Gateway    │
+                         │   Auth / Throttling / WAF   │
+                         └──────────────┬──────────────┘
+                                        │
+                                        ▼
+                         ┌─────────────────────────────┐
+                         │     CWD API / FastAPI       │
+                         │   ECS Fargate / EKS         │
+                         └──────────────┬──────────────┘
+                                        │
+                                        ▼
+                    ┌──────────────────────────────────────┐
+                    │            COORDINATOR               │
+                    │                                      │
+                    │ Intent detection                     │
+                    │ Entity extraction                    │
+                    │ Planning                              │
+                    │ Delegator selection                  │
+                    └──────────────┬───────────────────────┘
+                                   │
+                     ┌─────────────┼──────────────┐
+                     │             │              │
+                     ▼             ▼              ▼
+              ┌────────────┐ ┌────────────┐ ┌────────────┐
+              │   Sales    │ │    IT /    │ │Manufacturing│
+              │ Delegator  │ │  Service   │ │ Delegator  │
+              └─────┬──────┘ │ Delegator  │ └─────┬──────┘
+                    │        └─────┬──────┘       │
+          ┌─────────┼───────┐      │        ┌─────┼─────────┐
+          ▼         ▼       ▼      ▼        ▼     ▼         ▼
+       Worker    Worker  Worker  Worker   Worker Worker   Worker
+          │         │       │      │        │     │         │
+          └─────────┴───────┴──────┴────────┴─────┴─────────┘
+                                   │
+                                   ▼
+                         ┌─────────────────────┐
+                         │    MCP Tool Layer   │
+                         └──────────┬──────────┘
+                                    │
+                  ┌─────────────────┼──────────────────┐
+                  ▼                 ▼                  ▼
+             Salesforce        ServiceNow          SharePoint
+             / CRM             / ITSM              / M365
+\`\`\`
 
-## CWD context
-Everything sits in private subnets across multiple AZs; only API Gateway (and CloudFront) face the internet.
+The key point is:
 
-## Interview tip
-Walk one request left to right and name the job of each box.
-`,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which AWS services did you use in CWD and why?
+> **Coordinator decides the overall plan → Delegator decides which Workers are needed → Workers execute business capabilities → MCP connects Workers to enterprise systems → results flow back for validation and aggregation.**
 
-## Short answer
-Each service does one job, and the design favours managed, serverless and private-by-default options.
+That layered separation is important in your CWD architecture.
 
-## Key points
-- Bedrock: LLM reasoning, embeddings and guardrails through one IAM-secured API.
-- API Gateway: secured, throttled front door. Lambda: event-driven glue. ECS Fargate: long-running Coordinator, Delegators, Workers and MCP servers.
-- SQS and Step Functions: async work, retries and durable workflows. EventBridge: event routing.
-- DynamoDB: durable state. ElastiCache: cache. OpenSearch Serverless: hybrid retrieval. S3: document lake.
-- IAM, KMS, Secrets Manager, VPC endpoints: security. CloudWatch, X-Ray, CloudTrail: observability. CodePipeline, CodeBuild, ECR: delivery.
+---
 
-## CWD context
-Be ready to say what you rejected for each (Lambda vs Fargate, Step Functions vs LangGraph, and so on).
+# 2. AWS service mapping
 
-## Interview tip
-Lead with the job each service does, not the product name.
+Here is how I would map the architecture to AWS.
+
+| CWD Component   | AWS Technology                                | Responsibility                         |
+| --------------- | --------------------------------------------- | -------------------------------------- |
+| API entry       | **Amazon API Gateway**                        | API exposure, throttling               |
+| Security edge   | **AWS WAF**                                   | Web/API protection                     |
+| Application     | **ECS Fargate / EKS**                         | Run FastAPI and agent services         |
+| Coordinator     | **ECS/EKS + LangGraph**                       | Orchestration                          |
+| Delegators      | **ECS/EKS**                                   | Domain-level orchestration             |
+| Workers         | **ECS/EKS/Lambda**                            | Business capabilities                  |
+| LLM             | **Amazon Bedrock**                            | Foundation models                      |
+| Embeddings      | **Bedrock embedding models**                  | Vector embeddings                      |
+| RAG             | **Amazon OpenSearch Serverless**              | Vector/hybrid retrieval                |
+| Object storage  | **Amazon S3**                                 | Documents, artifacts, datasets         |
+| Queue           | **Amazon SQS**                                | Async processing                       |
+| Eventing        | **Amazon EventBridge**                        | Domain events                          |
+| Workflow        | **AWS Step Functions**                        | Long-running workflows                 |
+| Database        | **Amazon DynamoDB**                           | Session/task/workflow state            |
+| Cache           | **ElastiCache for Redis**                     | Fast state/cache                       |
+| Secrets         | **AWS Secrets Manager**                       | Credentials/secrets                    |
+| Encryption      | **AWS KMS**                                   | Encryption/key management              |
+| Identity        | **IAM / Cognito / enterprise IdP federation** | Authentication/authorization           |
+| Monitoring      | **CloudWatch**                                | Metrics/logs/alarms                    |
+| Tracing         | **AWS X-Ray / OpenTelemetry**                 | Distributed tracing                    |
+| Containers      | **ECR**                                       | Container images                       |
+| CI/CD           | **CodePipeline / CodeBuild**                  | Deployment pipeline                    |
+| Data processing | **AWS Glue**                                  | ETL/data preparation                   |
+| ML              | **Amazon SageMaker**                          | Custom ML/model lifecycle where needed |
+
+---
+
+# 3. User request enters the system
+
+Suppose the user asks:
+
+> "Give me a customer briefing for customer 12345."
+
+The request first reaches:
+
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+FastAPI
+  ↓
+Coordinator
+\`\`\`
+
+### API Gateway handles:
+
+* authentication integration
+* request throttling
+* request validation
+* API protection
+* routing
+
+AWS WAF can sit in front of API Gateway for additional protection.
+
+---
+
+# 4. Authentication and authorization
+
+Before the Coordinator executes anything, I would establish the user's identity and permissions.
+
+\`\`\`text
+User
+ ↓
+Identity Provider
+ ↓
+API Gateway
+ ↓
+JWT / identity claims
+ ↓
+CWD
+\`\`\`
+
+The system determines:
+
+\`\`\`text
+user_id
+tenant_id
+roles
+groups
+permissions
+data_entitlements
+\`\`\`
+
+For AWS-native authorization, IAM policies and roles can be used for AWS resources, while enterprise identity can be federated into AWS.
+
+For example:
+
+\`\`\`text
+User:
+    pooja
+
+Role:
+    Sales_Manager
+
+Permissions:
+    Salesforce: READ
+    ServiceNow: READ
+    SharePoint: READ
+\`\`\`
+
+The important architecture principle is:
+
+> **Authorization happens before the agent accesses enterprise data.**
+
+---
+
+# 5. Coordinator
+
+The Coordinator is the top-level orchestration component.
+
+I would run it as a containerized service on:
+
+\`\`\`text
+ECS Fargate
+       OR
+EKS
+\`\`\`
+
+with LangGraph managing the workflow.
+
+For:
+
+> "Give me a customer briefing for customer 12345."
+
+the Coordinator converts the request into something like:
+
+\`\`\`text
+Intent:
+    CustomerBriefing
+
+Entities:
+    customer_id = 12345
+
+Required domains:
+    Customer
+    Sales
+    IT/Service
+
+Plan:
+    1. Get customer information
+    2. Get sales information
+    3. Get incidents/tickets
+    4. Aggregate results
+    5. Validate response
+    6. Generate briefing
+\`\`\`
+
+---
+
+# 6. Coordinator → Delegator
+
+The Coordinator doesn't directly execute every Worker.
+
+Instead:
+
+\`\`\`text
+Coordinator
+      |
+      +----> Sales Delegator
+      |
+      +----> IT/Service Delegator
+\`\`\`
+
+This is an important architectural distinction.
+
+### Coordinator
+
+Responsible for:
+
+* understanding the request
+* creating the overall plan
+* selecting domain Delegators
+* coordinating execution
+* aggregating final results
+
+### Delegator
+
+Responsible for:
+
+* understanding its domain
+* selecting appropriate Workers
+* managing Worker dependencies
+* executing domain workflow
+* validating domain-level results
+
+### Worker
+
+Responsible for:
+
+* one specific business capability
+* calling tools
+* retrieving data
+* transforming data
+* returning structured results
+
+---
+
+# 7. Delegator → Workers
+
+For example:
+
+\`\`\`text
+Sales Delegator
+       |
+       +── Customer Profile Worker
+       |
+       +── CRM Opportunity Worker
+       |
+       +── Sales History Worker
+\`\`\`
+
+And:
+
+\`\`\`text
+IT/Service Delegator
+       |
+       +── Incident Worker
+       |
+       +── Service Ticket Worker
+       |
+       +── Support History Worker
+\`\`\`
+
+Workers should remain relatively small and capability-oriented.
+
+---
+
+# 8. Where does LangGraph fit?
+
+LangGraph would run the stateful agent workflow.
+
+For example:
+
+\`\`\`text
+START
+  ↓
+Parse Request
+  ↓
+Identify Intent
+  ↓
+Create Plan
+  ↓
+Select Delegators
+  ↓
+Execute Delegators
+  ↓
+Execute Workers
+  ↓
+Validate Results
+  ↓
+Aggregate
+  ↓
+Generate Response
+  ↓
+END
+\`\`\`
+
+The important part is that LangGraph maintains workflow state.
+
+For example:
+
+\`\`\`python
+state = {
+    "request_id": "...",
+    "customer_id": "12345",
+    "intent": "customer_briefing",
+    "delegators": [],
+    "worker_results": {},
+    "errors": [],
+    "final_response": None
+}
+\`\`\`
+
+---
+
+# 9. A2A communication
+
+For agent-to-agent communication:
+
+\`\`\`text
+Coordinator
+      ↓ A2A
+Sales Delegator
+      ↓ A2A
+Sales Workers
+\`\`\`
+
+A2A is useful when agents need to communicate as autonomous components.
+
+For example:
+
+\`\`\`text
+Coordinator:
+"Sales Delegator, prepare sales information for customer 12345."
+
+Sales Delegator:
+"Understood. I'll invoke Customer Profile and Opportunity Workers."
+\`\`\`
+
+You can expose the agent services through internal APIs and service discovery/load balancing inside AWS.
+
+---
+
+# 10. MCP layer
+
+MCP is different.
+
+I would explain it this way:
+
+> **A2A handles agent-to-agent communication. MCP handles agent-to-tool communication.**
+
+For example:
+
+\`\`\`text
+Sales Worker
+     |
+     | MCP
+     ▼
+Salesforce MCP Server
+     |
+     ▼
+Salesforce
+\`\`\`
+
+Another Worker:
+
+\`\`\`text
+Incident Worker
+     |
+     | MCP
+     ▼
+ServiceNow MCP Server
+     |
+     ▼
+ServiceNow
+\`\`\`
+
+And:
+
+\`\`\`text
+Document Worker
+     |
+     | MCP
+     ▼
+SharePoint MCP Server
+     |
+     ▼
+SharePoint / M365
+\`\`\`
+
+This gives you a clean separation:
+
+\`\`\`text
+Agent ↔ Agent       = A2A
+
+Agent ↔ Tool        = MCP
+
+Application ↔ API   = REST/API Gateway
+\`\`\`
+
+---
+
+# 11. Amazon Bedrock
+
+For the LLM layer:
+
+\`\`\`text
+Coordinator
+     |
+Delegator
+     |
+Worker
+     |
+     ▼
+Amazon Bedrock
+     |
+     ├── Foundation Model
+     ├── Embedding Model
+     └── Model Guardrails
+\`\`\`
+
+Bedrock can provide model access without your application directly managing model infrastructure.
+
+I would also avoid allowing every Worker to freely choose a model.
+
+Instead, create a model-routing policy:
+
+\`\`\`text
+Simple classification
+       ↓
+Smaller/cheaper model
+
+Complex reasoning
+       ↓
+More capable model
+
+High-volume extraction
+       ↓
+Cost-optimized model
+\`\`\`
+
+This helps with both cost and latency.
+
+---
+
+# 12. RAG architecture
+
+For enterprise RAG:
+
+\`\`\`text
+Documents
+    ↓
+S3
+    ↓
+AWS Glue / ingestion pipeline
+    ↓
+Chunking
+    ↓
+Embedding
+    ↓
+OpenSearch Serverless
+\`\`\`
+
+At runtime:
+
+\`\`\`text
+Worker
+   ↓
+Query
+   ↓
+Embedding
+   ↓
+OpenSearch
+   ↓
+Relevant documents
+   ↓
+Authorization filtering
+   ↓
+LLM
+\`\`\`
+
+You can use OpenSearch Serverless for vector/hybrid retrieval.
+
+The important security point is:
+
+\`\`\`text
+Retrieve
+   ↓
+Filter by tenant / user / ACL
+   ↓
+Only then provide context to LLM
+\`\`\`
+
+---
+
+# 13. DynamoDB for state
+
+I would use DynamoDB for durable workflow state.
+
+For example:
+
+\`\`\`text
+PK = SESSION#123
+SK = TASK#456
+\`\`\`
+
+And store:
+
+\`\`\`text
+session_id
+task_id
+run_id
+current_node
+workflow_status
+worker_status
+retry_count
+results
+timestamps
+\`\`\`
+
+This becomes important when a workflow fails.
+
+---
+
+# 14. What happens when Worker 3 fails?
+
+Suppose:
+
+\`\`\`text
+Worker 1 → SUCCESS
+Worker 2 → SUCCESS
+Worker 3 → FAILED
+\`\`\`
+
+Don't restart everything.
+
+Instead:
+
+\`\`\`text
+W1 ── SUCCESS ─────┐
+W2 ── SUCCESS ─────┤
+                   ├── Persisted State
+W3 ── FAILED ──────┘
+        ↓
+      Retry
+        ↓
+   W3 succeeds
+        ↓
+   Aggregate
+\`\`\`
+
+The state is persisted in DynamoDB.
+
+LangGraph maintains the workflow state/checkpoint.
+
+So after recovery:
+
+\`\`\`text
+Resume from failed node
+        ↓
+Worker 3
+        ↓
+Aggregation
+        ↓
+Validation
+        ↓
+Final response
+\`\`\`
+
+This is much better than restarting the entire workflow.
+
+---
+
+# 15. SQS for asynchronous work
+
+Not everything should be synchronous.
+
+For example:
+
+\`\`\`text
+API
+ ↓
+Coordinator
+ ↓
+SQS
+ ↓
+Worker
+\`\`\`
+
+Use SQS for:
+
+* long-running jobs
+* document processing
+* batch workloads
+* retryable work
+* decoupling services
+
+You can have:
+
+\`\`\`text
+Main Queue
+     ↓
+Worker
+
+Failure
+     ↓
+Retry
+
+Repeated failure
+     ↓
+DLQ
+\`\`\`
+
+---
+
+# 16. Step Functions
+
+For workflows that are long-running or require durable AWS-managed workflow execution:
+
+\`\`\`text
+Coordinator
+      ↓
+Step Functions
+      ↓
+ ┌────┼────┐
+ ↓    ↓    ↓
+W1   W2   W3
+\`\`\`
+
+Step Functions can manage:
+
+* retries
+* timeouts
+* parallel execution
+* error handling
+* workflow state
+* human approval steps
+
+I would use **LangGraph for agent reasoning/orchestration** and **Step Functions for infrastructure/workflow-level orchestration where appropriate**, rather than making them compete for the same responsibility.
+
+---
+
+# 17. Caching
+
+Use ElastiCache/Redis for frequently accessed data.
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+Redis
+  ↓ cache hit
+Return immediately
+\`\`\`
+
+Potential cached data:
+
+\`\`\`text
+Customer profile
+Tool metadata
+Configuration
+Session state
+Frequently used retrieval results
+\`\`\`
+
+But I would avoid caching highly dynamic or authorization-sensitive data without appropriate TTL and entitlement checks.
+
+---
+
+# 18. Security architecture
+
+This is one of the areas I would emphasize heavily in an AWS Architect interview.
+
+\`\`\`text
+                    AWS IAM
+                       │
+                       ▼
+User → API Gateway → CWD
+                       │
+             ┌─────────┼──────────┐
+             ▼         ▼          ▼
+          Bedrock     S3      Enterprise APIs
+             │         │          │
+             └──── KMS / IAM ─────┘
+\`\`\`
+
+Use:
+
+### IAM
+
+Least-privilege permissions.
+
+### KMS
+
+Encryption keys.
+
+### Secrets Manager
+
+Store:
+
+* API credentials
+* database credentials
+* external service secrets
+
+Never hardcode them.
+
+### VPC
+
+Private networking for internal services.
+
+### Security Groups
+
+Network-level access control.
+
+### WAF
+
+Protect API endpoints.
+
+### CloudTrail
+
+Audit AWS API activity.
+
+---
+
+# 19. Observability
+
+This is especially important for an AI architecture.
+
+I would monitor the request across the entire chain:
+
+\`\`\`text
+User Request
+     │
+     ▼
+API Gateway
+     │
+     ▼
+Coordinator
+     │
+     ├── Sales Delegator
+     │       ├── Worker 1
+     │       └── Worker 2
+     │
+     └── IT Delegator
+             ├── Worker 3
+             └── Worker 4
+\`\`\`
+
+Every request receives:
+
+\`\`\`text
+correlation_id
+trace_id
+session_id
+task_id
+run_id
+\`\`\`
+
+Then you can answer:
+
+> "Why did this customer briefing take 18 seconds?"
+
+You can trace:
+
+\`\`\`text
+API Gateway              100 ms
+Coordinator              400 ms
+Sales Worker 1           800 ms
+Sales Worker 2          1200 ms
+IT Worker                600 ms
+MCP call                5000 ms
+Bedrock                 4000 ms
+Aggregation              300 ms
+\`\`\`
+
+Now you know the bottleneck.
+
+---
+
+# 20. CloudWatch + X-Ray/OpenTelemetry
+
+The observability layer could look like:
+
+\`\`\`text
+Applications
+    │
+    ├── Logs
+    ├── Metrics
+    └── Traces
+         │
+         ▼
+CloudWatch / OpenTelemetry
+         │
+         ▼
+Dashboards + Alarms
+\`\`\`
+
+Track AI-specific metrics too:
+
+### Performance
+
+\`\`\`text
+P50 latency
+P95 latency
+P99 latency
+\`\`\`
+
+### LLM
+
+\`\`\`text
+input tokens
+output tokens
+cost/request
+model latency
+model errors
+\`\`\`
+
+### Agent
+
+\`\`\`text
+agent success rate
+tool success rate
+delegator failure rate
+workflow completion rate
+retry rate
+\`\`\`
+
+### RAG
+
+\`\`\`text
+retrieval latency
+retrieval relevance
+groundedness
+context precision
+\`\`\`
+
+---
+
+# 21. LLM evaluation
+
+For production, I would not rely only on traditional application testing.
+
+Create an evaluation pipeline:
+
+\`\`\`text
+Golden Dataset
+      ↓
+Prompt / Model Version
+      ↓
+CWD
+      ↓
+Evaluation
+      ↓
+Quality Gates
+      ↓
+Deployment
+\`\`\`
+
+Evaluate:
+
+\`\`\`text
+Answer correctness
+Groundedness
+Relevance
+Tool-call accuracy
+Task completion
+Hallucination rate
+Latency
+Cost
+\`\`\`
+
+For example:
+
+\`\`\`text
+Groundedness >= threshold
+Tool success >= threshold
+Regression score >= threshold
+Latency <= threshold
+\`\`\`
+
+Only then promote the model/prompt.
+
+---
+
+# 22. CI/CD architecture
+
+I would use:
+
+\`\`\`text
+Developer
+    ↓
+Git
+    ↓
+CodePipeline
+    ↓
+CodeBuild
+    ↓
+Unit Tests
+    ↓
+Integration Tests
+    ↓
+LLM Evaluation
+    ↓
+Security Scan
+    ↓
+Docker Build
+    ↓
+ECR
+    ↓
+ECS / EKS
+\`\`\`
+
+For prompts and agent configurations:
+
+\`\`\`text
+Prompt Version 1
+Prompt Version 2
+Prompt Version 3
+\`\`\`
+
+Treat prompts as versioned production artifacts.
+
+---
+
+# 23. Deployment strategy
+
+For production:
+
+\`\`\`text
+                Load Balancer
+                     │
+          ┌──────────┴──────────┐
+          ▼                     ▼
+       Version A             Version B
+       90% traffic            10%
+\`\`\`
+
+You can perform:
+
+* blue/green deployment
+* canary deployment
+* rollback
+
+For example:
+
+\`\`\`text
+Prompt v5
+     ↓
+10% traffic
+     ↓
+Evaluate
+     ↓
+Quality good
+     ↓
+50%
+     ↓
+100%
+\`\`\`
+
+---
+
+# 24. AWS data layer
+
+A typical architecture could be:
+
+\`\`\`text
+                  ┌──────────────┐
+                  │      S3      │
+                  │ Documents    │
+                  └──────┬───────┘
+                         │
+                         ▼
+                  ┌──────────────┐
+                  │     Glue     │
+                  │ ETL/Ingestion│
+                  └──────┬───────┘
+                         │
+                         ▼
+                  ┌──────────────┐
+                  │  OpenSearch  │
+                  │ Vector/RAG   │
+                  └──────────────┘
+
+
+                  ┌──────────────┐
+                  │  DynamoDB    │
+                  │ Workflow     │
+                  │ State        │
+                  └──────────────┘
+
+                  ┌──────────────┐
+                  │ ElastiCache  │
+                  │ Redis        │
+                  └──────────────┘
+\`\`\`
+
+---
+
+# 25. Where SageMaker fits
+
+You don't necessarily need SageMaker for every CWD request.
+
+I would say:
+
+> "For foundation-model inference, I would primarily use Bedrock. I would introduce SageMaker when I have custom ML models, custom inference endpoints, fine-tuning/model lifecycle requirements, or ML workloads that require SageMaker-specific capabilities."
+
+For example:
+
+\`\`\`text
+CWD
+ │
+ ├── Bedrock
+ │      └── LLM reasoning
+ │
+ └── SageMaker
+        ├── Custom ML model
+        ├── Classification
+        ├── Prediction
+        └── Custom inference
+\`\`\`
+
+This shows you understand that **AWS services should be selected based on workload rather than simply using every AWS service.**
+
+---
+
+# 26. Where AWS Glue fits
+
+Glue is primarily in the **data ingestion/ETL path**, not the real-time agent path.
+
+\`\`\`text
+Enterprise Sources
+      ↓
+S3
+      ↓
+AWS Glue
+      ↓
+Clean / Transform
+      ↓
+Chunk / Embed
+      ↓
+OpenSearch
+      ↓
+RAG
+\`\`\`
+
+For example, historical customer documents could be processed offline by Glue before becoming searchable.
+
+---
+
+# 27. Complete end-to-end request
+
+This is the version I would memorize for your interview.
+
+### User
+
+\`\`\`text
+"Give me a customer briefing for customer 12345."
+\`\`\`
+
+### Step 1 — API
+
+\`\`\`text
+User
+ ↓
+AWS WAF
+ ↓
+API Gateway
+\`\`\`
+
+### Step 2 — Authentication
+
+\`\`\`text
+API Gateway
+ ↓
+Identity / IAM / enterprise federation
+ ↓
+Authorized request
+\`\`\`
+
+### Step 3 — Application
+
+\`\`\`text
+API Gateway
+ ↓
+FastAPI
+ ↓
+Coordinator
+\`\`\`
+
+### Step 4 — Planning
+
+\`\`\`text
+Coordinator
+ ↓
+Intent = Customer Briefing
+Entity = customer_id 12345
+ ↓
+Create execution plan
+\`\`\`
+
+### Step 5 — Delegation
+
+\`\`\`text
+Coordinator
+ ├── Sales Delegator
+ └── IT Delegator
+\`\`\`
+
+### Step 6 — Worker execution
+
+\`\`\`text
+Sales Delegator
+ ├── Customer Worker
+ ├── Opportunity Worker
+ └── Sales History Worker
+
+IT Delegator
+ ├── Incident Worker
+ └── Ticket Worker
+\`\`\`
+
+### Step 7 — Enterprise tools
+
+\`\`\`text
+Workers
+   ↓
+MCP
+   ↓
+Salesforce / ServiceNow / SharePoint
+\`\`\`
+
+### Step 8 — RAG
+
+\`\`\`text
+Worker
+ ↓
+OpenSearch
+ ↓
+Relevant enterprise context
+ ↓
+Bedrock
+\`\`\`
+
+### Step 9 — State
+
+\`\`\`text
+Workflow state
+      ↓
+DynamoDB
+
+Cache
+      ↓
+Redis
+\`\`\`
+
+### Step 10 — Failure handling
+
+\`\`\`text
+Worker failure
+     ↓
+Retry
+     ↓
+Timeout?
+     ↓
+DLQ / error handling
+     ↓
+Resume from checkpoint
+\`\`\`
+
+### Step 11 — Aggregation
+
+\`\`\`text
+Sales results
+      +
+IT results
+      ↓
+Coordinator
+      ↓
+Validation
+      ↓
+Bedrock
+      ↓
+Final customer briefing
+\`\`\`
+
+### Step 12 — Response
+
+\`\`\`text
+Coordinator
+ ↓
+FastAPI
+ ↓
+API Gateway
+ ↓
+User
+\`\`\`
+
+At the same time:
+
+\`\`\`text
+Logs → CloudWatch
+Traces → X-Ray/OpenTelemetry
+Metrics → CloudWatch
+Audit → CloudTrail
+\`\`\`
+
+---
+
+# 28. The 60-second interview answer
+
+If the interviewer says **"Explain your AWS architecture"**, don't explain every service first. Say this:
+
+> **"For CWD, I designed a layered multi-agent architecture on AWS. The request enters through WAF and API Gateway and reaches our FastAPI-based application running on ECS or EKS. The Coordinator, implemented using LangGraph, interprets the user's intent, extracts entities such as customer ID, creates an execution plan, and selects the appropriate domain Delegators.**
+>
+> **Each Delegator owns a business domain such as Sales or IT and decides which specialized Workers need to execute. Workers perform specific capabilities and use MCP to securely access enterprise systems such as Salesforce, ServiceNow, and SharePoint. For agent-to-agent communication we use A2A, while MCP is used for agent-to-tool communication.**
+>
+> **Amazon Bedrock provides foundation-model capabilities, and OpenSearch Serverless supports our enterprise RAG and vector retrieval layer. S3 and Glue support document ingestion and processing. DynamoDB persists workflow state and checkpoints, while Redis can be used for caching and fast session data.**
+>
+> **For reliability, I use SQS and DLQs for asynchronous workloads and Step Functions where durable infrastructure-level workflows are appropriate. The services run inside a secured AWS network using IAM, KMS, Secrets Manager, VPC controls, and least-privilege access.**
+>
+> **For observability, I capture correlation IDs, traces, logs, latency, token usage, model cost, tool success rate, retrieval quality, and agent workflow metrics using CloudWatch and OpenTelemetry/X-Ray. Finally, our CI/CD pipeline validates code, security, prompts, models, and LLM evaluation results before promoting changes into production."**
+
+### The architecture you should remember as one line:
+
+\`\`\`text
+User
+ ↓
+WAF → API Gateway
+ ↓
+FastAPI
+ ↓
+Coordinator
+ ↓
+Delegators
+ ↓
+Workers
+ ↓
+MCP
+ ↓
+Enterprise Systems
+
+        ↘ Bedrock
+        ↘ OpenSearch
+        ↘ DynamoDB
+        ↘ Redis
+        ↘ SQS / Step Functions
+
+        ↓
+CloudWatch + OpenTelemetry
+\`\`\`
+
+**Most important interview distinction:**
+**Coordinator = overall plan, Delegator = domain plan, Worker = business capability, A2A = agent communication, MCP = tool communication, Bedrock = model, OpenSearch = RAG, DynamoDB = durable state, SQS = asynchronous decoupling, CloudWatch/OpenTelemetry = observability.**
+`,code:``},{id:`002-which-aws-services-did-you-use-in-cwd-and-why`,category:`AWS Architecture`,title:`Which AWS services did you use in CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`For your **CWD interview**, I would answer this as a **service → responsibility → why** mapping. Don't just list AWS services.
+
+### AWS services used in CWD
+
+| AWS Service                      | Where I used it                               | Why I used it                                                           |
+| -------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------- |
+| **Amazon API Gateway**           | API entry point                               | Secure API exposure, throttling, routing, request control               |
+| **AWS WAF**                      | In front of APIs                              | Protect APIs from common web attacks                                    |
+| **Amazon ECS / EKS**             | Run FastAPI, Coordinator, Delegators, Workers | Containerized, scalable agent services                                  |
+| **Amazon Bedrock**               | LLM layer                                     | Foundation-model access without managing model infrastructure           |
+| **Amazon OpenSearch Serverless** | RAG/vector search                             | Store embeddings and perform semantic/vector/hybrid retrieval           |
+| **Amazon S3**                    | Document/data storage                         | Store enterprise documents, files, artifacts and ingestion data         |
+| **AWS Glue**                     | Data ingestion/ETL                            | Clean and transform documents/data before RAG ingestion                 |
+| **Amazon DynamoDB**              | Workflow/session state                        | Persist session, task, run, worker status and checkpoints               |
+| **ElastiCache for Redis**        | Cache                                         | Fast access to frequently used state/data                               |
+| **Amazon SQS**                   | Async processing                              | Decouple services and handle retries/long-running jobs                  |
+| **Amazon EventBridge**           | Event-driven communication                    | Publish and route business/domain events                                |
+| **AWS Step Functions**           | Durable workflows                             | Manage retries, parallel execution, timeouts and long-running workflows |
+| **IAM**                          | Authorization                                 | Least-privilege access to AWS resources                                 |
+| **AWS KMS**                      | Encryption                                    | Encrypt data and manage encryption keys                                 |
+| **AWS Secrets Manager**          | Secrets                                       | Securely store API keys, credentials and secrets                        |
+| **CloudWatch**                   | Monitoring                                    | Logs, metrics, alarms and dashboards                                    |
+| **CloudTrail**                   | Auditing                                      | Track AWS API activity and security events                              |
+| **ECR**                          | Container registry                            | Store Docker images used by ECS/EKS                                     |
+| **CodePipeline / CodeBuild**     | CI/CD                                         | Build, test and deploy application changes                              |
+| **SageMaker**                    | Custom ML workloads                           | Use when custom ML models/inference are required                        |
+
+### How they fit together
+
+\`\`\`text
+                         USER
+                           |
+                           v
+                     AWS WAF
+                           |
+                           v
+                    API Gateway
+                           |
+                           v
+                 FastAPI / ECS / EKS
+                           |
+                           v
+                    COORDINATOR
+                    (LangGraph)
+                           |
+              +------------+------------+
+              |                         |
+              v                         v
+       SALES DELEGATOR          IT DELEGATOR
+              |                         |
+        +-----+-----+             +-----+-----+
+        |           |             |           |
+        v           v             v           v
+     Worker      Worker        Worker      Worker
+        |           |             |           |
+        +-----------+-------------+-----------+
+                            |
+                           MCP
+                            |
+              +-------------+-------------+
+              |             |             |
+          Salesforce     ServiceNow    SharePoint
+\`\`\`
+
+Supporting services:
+
+\`\`\`text
+             +------------------+
+             |   Amazon Bedrock |
+             |       LLM        |
+             +---------+--------+
+                       |
+                       v
+                  AI reasoning
+
+
+             +------------------+
+             | OpenSearch       |
+             | Serverless       |
+             | Vector / Hybrid  |
+             +------------------+
+                       |
+                       v
+                      RAG
+
+
+S3 → Glue → Chunking → Embeddings → OpenSearch
+
+
+DynamoDB
+   ↓
+Session / Task / Run / Worker State
+
+
+Redis
+   ↓
+Cache / Fast State
+
+
+SQS → Async Jobs → Workers → DLQ
+
+
+CloudWatch + OpenTelemetry
+   ↓
+Logs + Metrics + Traces
+\`\`\`
+
+## The important "WHY" behind each major service
+
+### 1. API Gateway — API entry
+
+> "I used API Gateway as the controlled entry point for CWD. It provides API routing, throttling and integration with our security layer."
+
+### 2. ECS/EKS — Agent runtime
+
+> "I ran the FastAPI application and agent components as containerized services. ECS or EKS gives us horizontal scaling and independent deployment of Coordinator, Delegators and Workers."
+
+### 3. Bedrock — LLM
+
+> "I used Amazon Bedrock for foundation-model access. It lets the application consume managed foundation models without us managing the underlying model infrastructure."
+
+### 4. OpenSearch — RAG
+
+> "I used OpenSearch Serverless for vector and hybrid retrieval. Enterprise documents are converted into embeddings and retrieved based on the user's query."
+
+### 5. S3 — Documents
+
+> "S3 is our durable object storage layer for documents, files and processing artifacts."
+
+### 6. Glue — Data preparation
+
+> "Glue is used for data preparation and ETL, especially for batch ingestion pipelines before documents become available to the RAG layer."
+
+### 7. DynamoDB — Workflow state
+
+This one is particularly important for your CWD.
+
+> "I used DynamoDB to persist workflow state such as session ID, task ID, run ID, current node, Worker status, retry information and results. This allows the workflow to resume instead of restarting from the beginning."
+
+For example:
+
+\`\`\`text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → FAILED
+             ↓
+        DynamoDB
+             ↓
+         Fix W3
+             ↓
+       Resume W3
+             ↓
+        Aggregate
+\`\`\`
+
+### 8. SQS — Reliability and decoupling
+
+> "I use SQS when processing doesn't need to be synchronous. It decouples producers and consumers, supports retries and provides DLQs for repeatedly failed messages."
+
+### 9. Step Functions — Durable workflows
+
+> "Step Functions is useful for infrastructure-level workflows requiring durable execution, retries, timeouts and parallel branches. I would use it alongside LangGraph rather than replacing LangGraph's agent reasoning."
+
+### 10. IAM/KMS/Secrets Manager — Security
+
+\`\`\`text
+IAM
+ ↓
+Who can access what?
+
+KMS
+ ↓
+How is data encrypted?
+
+Secrets Manager
+ ↓
+Where are credentials stored?
+\`\`\`
+
+My principle is:
+
+> **Least privilege + encryption + no hardcoded secrets.**
+
+### 11. CloudWatch/OpenTelemetry — Observability
+
+For CWD, I would monitor both traditional application metrics and AI-specific metrics:
+
+\`\`\`text
+Latency
+Token usage
+LLM cost
+Model errors
+Worker success rate
+MCP success rate
+Tool latency
+RAG retrieval quality
+Agent completion rate
+Retry rate
+\`\`\`
+
+For example:
+
+\`\`\`text
+Request
+  ↓
+Coordinator       300 ms
+  ↓
+Sales Worker      800 ms
+  ↓
+MCP               2 sec
+  ↓
+Bedrock           3 sec
+\`\`\`
+
+Distributed tracing lets me identify exactly where the latency occurred.
+
+---
+
+## ⭐ Best interview answer — 45 seconds
+
+If they ask **"Which AWS services did you use in CWD and why?"**, I would say:
+
+> **"For CWD, I used API Gateway as the secure API entry point and ECS/EKS to run our FastAPI and multi-agent services. The Coordinator, Delegators and Workers were implemented as containerized services, with LangGraph managing stateful agent orchestration.**
+>
+> **For the AI layer, I used Amazon Bedrock for foundation models and OpenSearch Serverless for vector and hybrid RAG retrieval. S3 stored documents and artifacts, while Glue supported data preparation and ingestion.**
+>
+> **DynamoDB persisted session, task, run and workflow state so we could resume partially failed workflows. Redis was used for low-latency caching. SQS and DLQs handled asynchronous processing and failures, while Step Functions could manage durable infrastructure workflows.**
+>
+> **For security, I used IAM, KMS, Secrets Manager and private networking with least-privilege access. For observability, I used CloudWatch, CloudTrail and distributed tracing with OpenTelemetry. ECR stored container images and CodePipeline/CodeBuild supported CI/CD.**
+>
+> **The key design principle was to use each AWS service for a specific responsibility rather than putting everything into one service."**
+
+### One-line memory trick
+
+**API → Compute → Agents → LLM → RAG → State → Async → Security → Observability**
+
+\`\`\`text
+API Gateway
+     ↓
+ECS/EKS
+     ↓
+Coordinator → Delegators → Workers
+     ↓
+Bedrock + MCP
+     ↓
+OpenSearch + S3 + Glue
+     ↓
+DynamoDB + Redis
+     ↓
+SQS + Step Functions
+     ↓
+IAM + KMS + Secrets Manager
+     ↓
+CloudWatch + CloudTrail
+\`\`\`
+
+This is the cleanest way to explain the AWS stack without sounding like you're simply listing AWS services.
 `,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose Amazon Bedrock?
 
 ## Short answer
@@ -171155,7 +174582,7 @@ A request flows from the client through API Gateway to the Coordinator, out to W
 
 ## CWD context
 The synchronous path is the user-facing critical path; everything slow goes async.
-`,code:``}];function hm(){return(0,M.jsx)($,{data:mm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var gm=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Amazon Bedrock instead of directly calling an LLM API?
+`,code:``}];function gm(){return(0,M.jsx)($,{data:hm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var _m=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Amazon Bedrock instead of directly calling an LLM API?
 
 ## Short answer
 Bedrock gives multiple models behind IAM, PrivateLink and CloudTrail, rather than a separate vendor API with keys and a separate trust boundary.
@@ -171343,7 +174770,7 @@ Evaluate a new model on your data, with quality, safety, latency, cost and quota
 
 ## CWD context
 The evaluation report is an artifact attached to the release approval.
-`,code:``}];function _m(){return(0,M.jsx)($,{data:gm,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var vm=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use API Gateway for CWD?
+`,code:``}];function vm(){return(0,M.jsx)($,{data:_m,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var ym=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use API Gateway for CWD?
 
 ## Short answer
 API Gateway centralises security and traffic control so the CWD backend stays simple.
@@ -171524,7 +174951,7 @@ Attach AWS WAF to REST API stages, or place WAF on CloudFront or an ALB in front
 
 ## CWD context
 Tune rules against real traffic to avoid blocking legitimate long prompts.
-`,code:``}];function ym(){return(0,M.jsx)($,{data:vm,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var bm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Lambda in CWD?
+`,code:``}];function bm(){return(0,M.jsx)($,{data:ym,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var xm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Lambda in CWD?
 
 ## Short answer
 Lambda gives CWD serverless, event-driven compute for short, stateless tasks.
@@ -171710,7 +175137,7 @@ Lambda's limits make it a poor host for long-running agent loops.
 
 ## CWD context
 Use Fargate for the agent runtime and Step Functions for long workflows.
-`,code:``}];function xm(){return(0,M.jsx)($,{data:bm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Sm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you deploy CWD on ECS/Fargate?
+`,code:``}];function Sm(){return(0,M.jsx)($,{data:xm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Cm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you deploy CWD on ECS/Fargate?
 
 ## Short answer
 ECS Fargate runs containers without managing servers, with per-task IAM and networking.
@@ -171891,7 +175318,7 @@ Move from ECS to EKS only when a concrete requirement demands it.
 
 ## CWD context
 Simplicity is a feature; do not migrate for fashion.
-`,code:``}];function Cm(){return(0,M.jsx)($,{data:Sm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var wm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS in CWD?
+`,code:``}];function wm(){return(0,M.jsx)($,{data:Cm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var Tm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS in CWD?
 
 ## Short answer
 Use SQS between components wherever work is slow, bursty or needs retries.
@@ -172070,7 +175497,7 @@ Survive a 100× spike by absorbing, scaling, protecting and degrading gracefully
 
 ## CWD context
 Say which limit breaks first (usually Bedrock quota) and how you would handle it.
-`,code:``}];function Tm(){return(0,M.jsx)($,{data:wm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Em=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use AWS Step Functions in CWD?
+`,code:``}];function Em(){return(0,M.jsx)($,{data:Tm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Dm=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use AWS Step Functions in CWD?
 
 ## Short answer
 Step Functions gives durable, visual, code-light orchestration for multi-step workflows across AWS services.
@@ -172248,7 +175675,7 @@ Control cost by reducing state transitions and choosing the right workflow type.
 
 ## CWD context
 Set budgets and alerts on Step Functions spend.
-`,code:``}];function Dm(){return(0,M.jsx)($,{data:Em,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var Om=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use DynamoDB for CWD state?
+`,code:``}];function Om(){return(0,M.jsx)($,{data:Dm,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var km=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use DynamoDB for CWD state?
 
 ## Short answer
 DynamoDB offers serverless, low-latency, key-based storage that fits CWD's operational state.
@@ -172427,7 +175854,7 @@ DynamoDB is a durable system of record; ElastiCache is a fast, volatile cache.
 
 ## CWD context
 Use both: DynamoDB for truth, ElastiCache for speed.
-`,code:``}];function km(){return(0,M.jsx)($,{data:Om,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var Am=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What would you store in S3?
+`,code:``}];function Am(){return(0,M.jsx)($,{data:km,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var jm=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What would you store in S3?
 
 ## Short answer
 Store documents, artifacts and payloads that are too large or too durable for other stores.
@@ -172571,7 +175998,7 @@ Control access to documents at several layers.
 
 ## CWD context
 Users never get direct bucket access.
-`,code:``}];function jm(){return(0,M.jsx)($,{data:Am,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Mm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why OpenSearch Serverless for CWD?
+`,code:``}];function Mm(){return(0,M.jsx)($,{data:jm,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Nm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why OpenSearch Serverless for CWD?
 
 ## Short answer
 OpenSearch Serverless gives managed vector, keyword and hybrid search with no cluster to operate.
@@ -172748,7 +176175,7 @@ Reduce OpenSearch cost by capping capacity and shrinking what is stored.
 
 ## CWD context
 The OCU baseline makes small workloads relatively expensive.
-`,code:``}];function Nm(){return(0,M.jsx)($,{data:Mm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Pm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain IAM architecture for CWD.
+`,code:``}];function Pm(){return(0,M.jsx)($,{data:Nm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Fm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain IAM architecture for CWD.
 
 ## Short answer
 IAM architecture is multi-account, role-based and least-privilege, with guardrails at the organisation level.
@@ -172904,7 +176331,7 @@ CloudTrail records AWS API activity: who did what, when and from where.
 
 ## CWD context
 It is an audit trail of AWS actions, not application logging.
-`,code:``}];function Fm(){return(0,M.jsx)($,{data:Pm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Im=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use AWS KMS?
+`,code:``}];function Im(){return(0,M.jsx)($,{data:Fm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Lm=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use AWS KMS?
 
 ## Short answer
 Use KMS wherever data at rest or secrets need controlled, auditable encryption.
@@ -173034,7 +176461,7 @@ Prevent secrets in logs by design and by detection.
 
 ## CWD context
 Prompts and tool arguments are commonly logged, so treat them as a leak path.
-`,code:``}];function Lm(){return(0,M.jsx)($,{data:Im,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var Rm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the AWS network architecture for CWD.
+`,code:``}];function Rm(){return(0,M.jsx)($,{data:Lm,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var zm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the AWS network architecture for CWD.
 
 ## Short answer
 CWD runs in a multi-AZ VPC with public, private and isolated tiers, and private endpoints for AWS services.
@@ -173200,7 +176627,7 @@ Troubleshoot networking by tracing the path in a fixed order.
 
 ## CWD context
 Test from the same subnet as the failing workload.
-`,code:``}];function zm(){return(0,M.jsx)($,{data:Rm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Bm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement CWD monitoring using CloudWatch?
+`,code:``}];function Bm(){return(0,M.jsx)($,{data:zm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Vm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement CWD monitoring using CloudWatch?
 
 ## Short answer
 Implement monitoring with structured logs, metrics, alarms, traces and dashboards in CloudWatch and X-Ray.
@@ -173384,7 +176811,7 @@ CloudWatch shows performance, CloudTrail shows who did what, and X-Ray shows the
 
 ## CWD context
 Example: X-Ray finds a slow Bedrock call, CloudWatch shows throttles, CloudTrail shows who changed the quota or policy.
-`,code:``}];function Vm(){return(0,M.jsx)($,{data:Bm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Hm=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale CWD horizontally?
+`,code:``}];function Hm(){return(0,M.jsx)($,{data:Vm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Um=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale CWD horizontally?
 
 ## Short answer
 Scale horizontally by keeping compute stateless and pushing state and load into managed, scalable services.
@@ -173572,7 +176999,7 @@ RTO is how long recovery may take; RPO is how much data loss is acceptable; set 
 
 ## CWD context
 Different data classes can have different targets.
-`,code:``}];function Um(){return(0,M.jsx)($,{data:Hm,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Wm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is the biggest cost driver in CWD?
+`,code:``}];function Wm(){return(0,M.jsx)($,{data:Um,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Gm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is the biggest cost driver in CWD?
 
 ## Short answer
 The biggest cost driver is usually Bedrock token usage, followed by fixed-capacity services.
@@ -173695,7 +177122,7 @@ Investigate a bill increase from broad to narrow, then link it to a change.
 
 ## CWD context
 Set budgets and anomaly alerts before the next spike.
-`,code:``}];function Gm(){return(0,M.jsx)($,{data:Wm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var Km=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy CWD on AWS?
+`,code:``}];function Km(){return(0,M.jsx)($,{data:Gm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var qm=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy CWD on AWS?
 
 ## Short answer
 Deploy CWD through infrastructure as code and a pipeline that promotes one artifact through accounts.
@@ -173878,7 +177305,7 @@ Prevent untested models from reaching production with technical gates.
 
 ## CWD context
 Make the safe path the only path.
-`,code:``}];function qm(){return(0,M.jsx)($,{data:Km,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Jm=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you use AWS Glue in CWD?
+`,code:``}];function Jm(){return(0,M.jsx)($,{data:qm,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Ym=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you use AWS Glue in CWD?
 
 ## Short answer
 Glue provides serverless ETL and a data catalogue, so CWD can ingest and prepare enterprise data at scale without managing clusters.
@@ -174323,7 +177750,7 @@ Reduce Glue cost with right-sizing, incremental work and cheaper execution optio
 
 ## CWD context
 Idle workers and full reloads are the usual waste.
-`,code:``}];function Ym(){return(0,M.jsx)($,{data:Jm,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Xm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you use SageMaker in CWD?
+`,code:``}];function Xm(){return(0,M.jsx)($,{data:Ym,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Zm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you use SageMaker in CWD?
 
 ## Short answer
 SageMaker provides the build, train, deploy and monitor lifecycle for custom ML models that Bedrock does not cover.
@@ -174930,42 +178357,1387 @@ Optimise inference latency by optimising the model, the hardware and the path.
 
 ## CWD context
 Measure model latency versus overhead before optimising.
-`,code:``}];function Zm(){return(0,M.jsx)($,{data:Xm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var Qm=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete Azure architecture for CWD.
+`,code:``}];function Qm(){return(0,M.jsx)($,{data:Zm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var $m=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`For your **CWD (Coordinator → Delegators → Workers)** project, I would explain the Azure architecture as an **enterprise-grade multi-agent platform** where Azure provides the secure runtime, identity, AI, data, integration, observability, and deployment layers.
 
-## Short answer
-CWD on Azure is a layered, private, identity-based architecture: edge and API, orchestration, agents and tools, AI and data services, state and messaging, and a platform layer for security, observability and DevOps.
+## 1. Azure CWD architecture — big picture
 
-## Key points
-- Edge: Front Door / Application Gateway (WAF) → API Management (Entra token validation, throttling, versioning).
-- Orchestration: FastAPI service on Container Apps hosting the Coordinator (LangGraph), which routes to Delegators and Workers.
-- Tools: Workers call MCP servers that wrap Salesforce, ServiceNow, SharePoint, Snowflake and Oracle instead of embedding those APIs.
-- AI and data: Azure OpenAI (managed through AI Foundry) for reasoning and embeddings, Azure AI Search for RAG, Data Factory / Databricks into ADLS Gen2 for ingestion, Azure ML for custom models.
-- State and async: Cosmos DB (session, workflow state, checkpoints), Redis (cache), Service Bus (async Worker jobs, DLQ).
-- Platform: Entra ID and managed identities, Key Vault, VNet with private endpoints, Azure Monitor / Application Insights, Azure DevOps with Bicep or Terraform.
+\`\`\`text
+                         ┌───────────────────────────────┐
+                         │        Enterprise Users       │
+                         │ Sales | Manufacturing | IT    │
+                         └───────────────┬───────────────┘
+                                         │
+                                         ▼
+                         ┌───────────────────────────────┐
+                         │     Azure Application Gateway │
+                         │       / API Management         │
+                         └───────────────┬───────────────┘
+                                         │
+                                         ▼
+                         ┌───────────────────────────────┐
+                         │          FastAPI API           │
+                         │      Enterprise AI Gateway     │
+                         └───────────────┬───────────────┘
+                                         │
+                              Authentication
+                                         │
+                                         ▼
+                         ┌───────────────────────────────┐
+                         │       Microsoft Entra ID       │
+                         │   RBAC | Managed Identity      │
+                         └───────────────┬───────────────┘
+                                         │
+                                         ▼
+              ┌─────────────────────────────────────────────────┐
+              │                 CWD ORCHESTRATION                │
+              │                                                   │
+              │              ┌──────────────┐                     │
+              │              │ Coordinator  │                     │
+              │              └──────┬───────┘                     │
+              │                     │                             │
+              │          ┌──────────┴──────────┐                  │
+              │          ▼                     ▼                  │
+              │ ┌─────────────────┐   ┌─────────────────┐         │
+              │ │ Sales Delegator │   │ IT Delegator    │         │
+              │ └───────┬─────────┘   └────────┬────────┘         │
+              │         │                      │                  │
+              │    ┌────┼────┐            ┌────┼────┐             │
+              │    ▼    ▼    ▼            ▼    ▼    ▼             │
+              │   W1   W2   W3           W4   W5   W6             │
+              │                                                   │
+              │ LangGraph | A2A | MCP | State | Retry | HITL     │
+              └─────────────────────────────────────────────────┘
+                         │                 │
+              ┌──────────┘                 └─────────────┐
+              ▼                                          ▼
+ ┌──────────────────────────┐              ┌─────────────────────────┐
+ │ Azure OpenAI / AI Foundry│              │    Azure AI Search      │
+ │ LLMs | Embeddings        │              │ Hybrid + Vector + ACL   │
+ └──────────────────────────┘              └─────────────────────────┘
+              │                                          │
+              └────────────────┬─────────────────────────┘
+                               ▼
+                    ┌───────────────────────┐
+                    │ Enterprise Data       │
+                    │ Salesforce            │
+                    │ ServiceNow            │
+                    │ SharePoint / M365     │
+                    │ Snowflake             │
+                    │ Oracle                │
+                    └───────────────────────┘
 
-## CWD context
-Everything sits inside a VNet with private endpoints; users reach it only through APIM.
+        ┌───────────────────────────────────────────────────┐
+        │ Azure Platform Services                           │
+        │ Key Vault | Redis | Cosmos DB | Service Bus        │
+        │ App Insights | Log Analytics | Azure Monitor       │
+        │ Container Apps / AKS | Azure DevOps | Private VNet │
+        └───────────────────────────────────────────────────┘
+\`\`\`
 
-## Interview tip
-Draw it left to right following one request, then name the job of each box.
-`,code:``},{id:`002-which-azure-services-did-you-use-and-why`,category:`Azure Architecture`,title:`Which Azure services did you use and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which Azure services did you use and why?
+---
 
-## Short answer
-Each service was picked for one clear job, favouring managed PaaS, private networking and identity-based access.
+# 2. Start with the business problem
 
-## Key points
-- Azure OpenAI / AI Foundry: LLM reasoning, embeddings, evaluation and governance.
-- Azure AI Search: hybrid retrieval with document-level security filters.
-- API Management: one secured front door with authentication, rate limits and versioning.
-- Container Apps (AKS if needed) for Coordinator, Delegators, Workers and MCP servers; Azure Functions for event-driven glue.
-- Service Bus for async Worker execution; Cosmos DB for durable state; Redis for cache.
-- Entra ID, Key Vault and Private Link for security; Azure Monitor for observability; Azure DevOps for CI/CD.
+In an interview, **don't start with Azure services**.
 
-## CWD context
-For every service, be ready to say what you rejected and why (Functions vs Container Apps, Cosmos vs SQL, and so on).
+Start like this:
 
-## Interview tip
-Lead with the job each service does, not the product name.
+> "At Onsemi, we wanted to provide a secure enterprise AI entry point where a user could ask a business question in natural language, and the system could dynamically coordinate multiple specialized agents and enterprise systems."
+
+For example:
+
+\`\`\`text
+User:
+"Give me a complete briefing for customer ABC123."
+\`\`\`
+
+The system needs information from multiple domains:
+
+\`\`\`text
+Customer / CRM
+       +
+ServiceNow incidents
+       +
+Sales information
+       +
+Enterprise documents
+       ↓
+Customer Briefing
+\`\`\`
+
+That's where CWD comes in.
+
+---
+
+# 3. Layer 1 — User/API layer
+
+The request enters through:
+
+\`\`\`text
+User
+  ↓
+Application / UI
+  ↓
+Azure Application Gateway
+  ↓
+Azure API Management
+  ↓
+FastAPI
+\`\`\`
+
+### Azure API Management
+
+APIM acts as the enterprise API gateway.
+
+It provides:
+
+* API routing
+* authentication integration
+* rate limiting
+* throttling
+* API policies
+* request validation
+* versioning
+* monitoring
+
+For example:
+
+\`\`\`text
+POST /api/v1/agent/query
+\`\`\`
+
+Request:
+
+\`\`\`json
+{
+  "query": "Give me a briefing for customer ABC123"
+}
+\`\`\`
+
+---
+
+# 4. Layer 2 — Identity and security
+
+We use:
+
+\`\`\`text
+Microsoft Entra ID
+        ↓
+JWT / OAuth2
+        ↓
+FastAPI
+\`\`\`
+
+The user's identity is established before the request reaches the agent layer.
+
+The token can contain information such as:
+
+\`\`\`text
+user_id
+tenant_id
+roles
+groups
+permissions
+\`\`\`
+
+Then CWD performs **authorization**, not just authentication.
+
+For example:
+
+\`\`\`text
+User
+ ↓
+Can access Customer ABC123?
+ ↓
+Can access Sales data?
+ ↓
+Can access ServiceNow incidents?
+ ↓
+Can execute this tool?
+\`\`\`
+
+This is important for enterprise AI because an LLM should **never decide authorization by itself**.
+
+Authorization is enforced by deterministic application/security controls.
+
+---
+
+# 5. Layer 3 — Coordinator
+
+This is the brain of the **workflow**, not necessarily the LLM itself.
+
+I would describe it like this:
+
+> "The Coordinator receives the user request, converts it into a structured intent, determines which Delegators are required, creates the execution plan, manages state, and aggregates the final business response."
+
+Example:
+
+\`\`\`text
+User request:
+
+"Give me a customer briefing for ABC123."
+
+        ↓
+
+Coordinator
+
+Intent:
+Customer Briefing
+
+Entity:
+customer_id = ABC123
+
+Required domains:
+- Customer
+- Sales
+- IT/Service
+\`\`\`
+
+Then:
+
+\`\`\`text
+Coordinator
+      │
+      ├── Sales Delegator
+      │
+      └── IT Delegator
+\`\`\`
+
+---
+
+# 6. Why Delegators are important
+
+Your CWD architecture has **three levels**:
+
+\`\`\`text
+Coordinator
+      │
+      ├── Sales Delegator
+      │       ├── Customer Worker
+      │       ├── CRM Worker
+      │       └── Sales Worker
+      │
+      └── IT Delegator
+              ├── Incident Worker
+              ├── ServiceNow Worker
+              └── Knowledge Worker
+\`\`\`
+
+This is important to emphasize in your interview.
+
+### Coordinator
+
+Enterprise-level orchestration.
+
+### Delegator
+
+Domain-level orchestration.
+
+### Worker
+
+Performs a specific capability.
+
+For example:
+
+\`\`\`text
+Coordinator
+     ↓
+IT Delegator
+     ↓
+ServiceNow Worker
+     ↓
+MCP
+     ↓
+ServiceNow
+\`\`\`
+
+---
+
+# 7. LangGraph on Azure
+
+The orchestration layer is implemented using **LangGraph** running on Azure compute.
+
+For example:
+
+\`\`\`text
+FastAPI
+   ↓
+LangGraph
+   ↓
+Coordinator graph
+   ↓
+Delegator subgraph
+   ↓
+Worker nodes
+\`\`\`
+
+LangGraph gives us:
+
+* stateful execution
+* conditional routing
+* parallel execution
+* retries
+* checkpoints
+* interrupts
+* human-in-the-loop
+* resumability
+* workflow control
+
+Conceptually:
+
+\`\`\`text
+START
+  ↓
+Parse Intent
+  ↓
+Validate Authorization
+  ↓
+Create Plan
+  ↓
+Select Delegators
+  ↓
+Execute Delegators
+  ↓
+Execute Workers
+  ↓
+Validate Results
+  ↓
+Aggregate
+  ↓
+Generate Response
+  ↓
+END
+\`\`\`
+
+---
+
+# 8. Azure OpenAI / Azure AI Foundry
+
+The LLM layer uses Azure's enterprise AI capabilities.
+
+\`\`\`text
+Coordinator / Worker
+        ↓
+Azure OpenAI
+        ↓
+LLM
+\`\`\`
+
+We can use LLMs for:
+
+* intent understanding
+* planning
+* reasoning
+* tool selection
+* summarization
+* response generation
+* structured extraction
+
+But the LLM does **not** get unrestricted access to enterprise systems.
+
+Instead:
+
+\`\`\`text
+LLM
+ ↓
+Worker
+ ↓
+MCP Client
+ ↓
+MCP Server
+ ↓
+Authorized Enterprise Tool
+\`\`\`
+
+That separation is extremely important.
+
+---
+
+# 9. MCP layer
+
+MCP handles **tool communication**.
+
+Example:
+
+\`\`\`text
+ServiceNow Worker
+       ↓
+    MCP Client
+       ↓
+    MCP Server
+       ↓
+ServiceNow API
+\`\`\`
+
+Another:
+
+\`\`\`text
+Customer Worker
+       ↓
+    MCP Client
+       ↓
+Salesforce MCP Server
+       ↓
+Salesforce API
+\`\`\`
+
+Another:
+
+\`\`\`text
+Knowledge Worker
+       ↓
+MCP
+       ↓
+SharePoint / M365
+\`\`\`
+
+So in your interview:
+
+> **A2A handles agent-to-agent communication, while MCP handles agent/worker-to-tool communication.**
+
+---
+
+# 10. A2A layer
+
+A2A is used between the CWD agent components.
+
+For example:
+
+\`\`\`text
+Coordinator
+     │
+     │ A2A
+     ▼
+Sales Delegator
+     │
+     │ A2A
+     ▼
+Sales Worker
+\`\`\`
+
+Conceptually:
+
+\`\`\`text
+Agent ↔ Agent = A2A
+
+Agent/Worker → Tool = MCP
+\`\`\`
+
+This separation makes the architecture more modular.
+
+---
+
+# 11. Azure AI Search — RAG layer
+
+For enterprise knowledge, we use Azure AI Search.
+
+\`\`\`text
+Documents
+   ↓
+Chunking
+   ↓
+Embedding
+   ↓
+Azure AI Search
+   ↓
+Vector + Keyword + Semantic Search
+\`\`\`
+
+For a query:
+
+\`\`\`text
+User Question
+      ↓
+Embedding
+      ↓
+Vector Search
+      +
+BM25 / Keyword Search
+      +
+Semantic Ranking
+      ↓
+Relevant Documents
+      ↓
+LLM
+\`\`\`
+
+I would specifically mention **hybrid search** in an interview.
+
+\`\`\`text
+Hybrid Search =
+Vector Search
++
+BM25
++
+Semantic Ranking
++
+Metadata/ACL Filtering
+\`\`\`
+
+---
+
+# 12. Security trimming / ACL filtering
+
+This is one of the most important enterprise architecture pieces.
+
+Suppose:
+
+\`\`\`text
+Document A → accessible to Sales
+Document B → accessible to HR
+Document C → accessible to Engineering
+\`\`\`
+
+A Sales user searches:
+
+\`\`\`text
+"Customer ABC123 contract"
+\`\`\`
+
+We don't simply retrieve everything and tell the LLM to ignore restricted information.
+
+Instead:
+
+\`\`\`text
+User identity
+     ↓
+Authorization context
+     ↓
+Azure AI Search filter
+     ↓
+Only authorized documents
+     ↓
+LLM
+\`\`\`
+
+This is the **entitlement-first** approach.
+
+---
+
+# 13. State management
+
+CWD needs durable state because an agent workflow may take multiple steps.
+
+Example:
+
+\`\`\`text
+Session
+   ↓
+Task
+   ↓
+Run
+   ↓
+Turn
+   ↓
+Step
+\`\`\`
+
+Azure services can be used for different state requirements.
+
+### Redis
+
+For fast operational state:
+
+\`\`\`text
+Active workflow
+Agent state
+Cache
+Short-lived memory
+Locks
+\`\`\`
+
+### Cosmos DB
+
+For durable application state:
+
+\`\`\`text
+Workflow state
+Execution metadata
+Agent metadata
+Conversation metadata
+Audit-related records
+\`\`\`
+
+Conceptually:
+
+\`\`\`text
+LangGraph
+    ↓
+Checkpoint
+    ↓
+Redis / Cosmos DB
+\`\`\`
+
+---
+
+# 14. Failure handling with Azure Service Bus
+
+Suppose:
+
+\`\`\`text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → FAILED
+\`\`\`
+
+We don't necessarily restart everything.
+
+Instead:
+
+\`\`\`text
+W1 ── SUCCESS ───────┐
+                     │
+W2 ── SUCCESS ───────┼──→ Aggregator
+                     │
+W3 ── FAILED ──→ Retry
+                  ↓
+              Service Bus
+                  ↓
+              W3 retry
+\`\`\`
+
+Azure Service Bus can provide:
+
+* asynchronous processing
+* retries
+* dead-letter queues
+* decoupling
+* workload buffering
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+Service Bus
+  ↓
+Consumer
+  ↓
+Worker execution
+\`\`\`
+
+If repeated retries fail:
+
+\`\`\`text
+Service Bus
+     ↓
+Dead Letter Queue
+\`\`\`
+
+Then an operator can investigate or replay the failed task.
+
+---
+
+# 15. Compute layer
+
+You can deploy CWD using either **Azure Container Apps or AKS**, depending on the scale and operational requirements.
+
+For example:
+
+\`\`\`text
+Azure Container Apps
+       │
+       ├── FastAPI
+       ├── Coordinator
+       ├── Delegators
+       └── Workers
+\`\`\`
+
+For a larger enterprise platform:
+
+\`\`\`text
+Azure Kubernetes Service
+       │
+       ├── API pods
+       ├── Coordinator pods
+       ├── Delegator pods
+       └── Worker pods
+\`\`\`
+
+The benefit is independent scaling.
+
+For example:
+
+\`\`\`text
+Sales Worker → 10 replicas
+
+ServiceNow Worker → 20 replicas
+
+Customer Worker → 5 replicas
+\`\`\`
+
+You don't have to scale the entire platform uniformly.
+
+---
+
+# 16. Azure Key Vault
+
+Secrets should not be embedded in:
+
+\`\`\`text
+Python code
+.env files
+Docker images
+GitHub
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Application
+     ↓
+Managed Identity
+     ↓
+Azure Key Vault
+     ↓
+Secrets / certificates / keys
+\`\`\`
+
+Examples:
+
+\`\`\`text
+Salesforce credentials
+ServiceNow credentials
+API keys
+Database secrets
+Encryption keys
+\`\`\`
+
+Where possible, use **Managed Identity** rather than storing long-lived credentials.
+
+---
+
+# 17. Networking
+
+For an enterprise Onsemi environment, I would isolate the platform using:
+
+\`\`\`text
+Azure Virtual Network
+        │
+        ├── Application subnet
+        ├── Agent subnet
+        ├── Data subnet
+        └── Private endpoints
+\`\`\`
+
+Private connectivity can be used for services such as:
+
+\`\`\`text
+Azure OpenAI
+Azure AI Search
+Key Vault
+Storage
+Cosmos DB
+\`\`\`
+
+External enterprise systems can be accessed through controlled APIs/connectivity.
+
+The goal is:
+
+\`\`\`text
+Internet
+   X
+   │
+Public enterprise data access
+
+Instead:
+
+User
+ ↓
+APIM
+ ↓
+Private application
+ ↓
+Authorized service
+ ↓
+Enterprise system
+\`\`\`
+
+---
+
+# 18. Observability
+
+This is especially important for your recent AI Architect interview preparation.
+
+Use:
+
+\`\`\`text
+Azure Monitor
+      +
+Application Insights
+      +
+Log Analytics
+\`\`\`
+
+And propagate:
+
+\`\`\`text
+correlation_id
+trace_id
+session_id
+task_id
+run_id
+agent_id
+worker_id
+\`\`\`
+
+Example:
+
+\`\`\`text
+Request
+  correlation_id = ABC123
+
+Coordinator
+  trace_id = XYZ
+
+Sales Delegator
+  ↓
+Customer Worker
+  ↓
+MCP
+  ↓
+Salesforce
+\`\`\`
+
+Now you can trace the entire request.
+
+---
+
+# 19. LLM observability
+
+Traditional infrastructure monitoring isn't enough for CWD.
+
+You also monitor:
+
+\`\`\`text
+LLM latency
+Token usage
+Input tokens
+Output tokens
+Cost
+Tool-call success
+Tool-call failure
+Hallucination rate
+Groundedness
+Retrieval relevance
+Agent success rate
+Workflow completion rate
+\`\`\`
+
+You can integrate an LLM observability platform such as **Langfuse** alongside Azure Monitor.
+
+So:
+
+\`\`\`text
+Azure Monitor
+     ↓
+Infrastructure / application observability
+
+Langfuse
+     ↓
+LLM / agent observability
+\`\`\`
+
+---
+
+# 20. Evaluation pipeline
+
+Before production:
+
+\`\`\`text
+Code
+ ↓
+Unit Tests
+ ↓
+Integration Tests
+ ↓
+Golden Dataset
+ ↓
+LLM Evaluation
+ ↓
+Security Tests
+ ↓
+Performance Tests
+ ↓
+Deployment
+\`\`\`
+
+Evaluate:
+
+\`\`\`text
+Groundedness
+Answer relevance
+Retrieval quality
+Tool-selection accuracy
+Tool success rate
+Latency
+Token consumption
+Cost
+Safety
+\`\`\`
+
+For example:
+
+\`\`\`text
+Golden Question
+       ↓
+Expected Answer
+       ↓
+Agent Answer
+       ↓
+Evaluator
+       ↓
+Score
+       ↓
+Quality Gate
+\`\`\`
+
+A bad model/prompt/version should fail the quality gate before production.
+
+---
+
+# 21. CI/CD
+
+A typical Azure deployment pipeline:
+
+\`\`\`text
+Developer
+   ↓
+Git Repository
+   ↓
+Azure DevOps Pipeline
+   ↓
+Build
+   ↓
+Unit Tests
+   ↓
+Security Scan
+   ↓
+LLM Evaluation
+   ↓
+Docker Build
+   ↓
+Container Registry
+   ↓
+Deploy
+   ↓
+Dev
+   ↓
+QA
+   ↓
+Staging
+   ↓
+Production
+\`\`\`
+
+Use:
+
+\`\`\`text
+Azure Container Registry
++
+Azure DevOps
++
+AKS / Container Apps
+\`\`\`
+
+---
+
+# 22. Prompt and model management
+
+Don't hard-code prompts into every Worker.
+
+Create:
+
+\`\`\`text
+Prompt Registry
+       │
+       ├── Coordinator prompt
+       ├── Sales prompt
+       ├── Customer prompt
+       ├── ServiceNow prompt
+       └── Knowledge prompt
+\`\`\`
+
+Similarly:
+
+\`\`\`text
+Model Registry
+       │
+       ├── Model A
+       ├── Model B
+       └── Embedding model
+\`\`\`
+
+Then you can version:
+
+\`\`\`text
+prompt-v1
+prompt-v2
+prompt-v3
+\`\`\`
+
+and roll back a bad prompt without redeploying the entire application.
+
+---
+
+# 23. Complete request flow
+
+This is the **most important part to memorize for interviews**.
+
+Suppose the user asks:
+
+> "Give me a customer briefing for ABC123."
+
+### Step 1 — Request
+
+\`\`\`text
+User
+ ↓
+APIM
+\`\`\`
+
+### Step 2 — Authentication
+
+\`\`\`text
+APIM
+ ↓
+Entra ID
+ ↓
+JWT validation
+\`\`\`
+
+### Step 3 — API
+
+\`\`\`text
+FastAPI
+ ↓
+Coordinator
+\`\`\`
+
+### Step 4 — Intent
+
+\`\`\`text
+Intent = Customer Briefing
+customer_id = ABC123
+\`\`\`
+
+### Step 5 — Authorization
+
+\`\`\`text
+Can user access ABC123?
+       ↓
+Yes
+\`\`\`
+
+### Step 6 — Planning
+
+\`\`\`text
+Coordinator
+     │
+     ├── Sales Delegator
+     │
+     └── IT Delegator
+\`\`\`
+
+### Step 7 — Delegator execution
+
+\`\`\`text
+Sales Delegator
+     │
+     ├── Customer Worker
+     └── CRM Worker
+
+IT Delegator
+     │
+     ├── Incident Worker
+     └── ServiceNow Worker
+\`\`\`
+
+### Step 8 — Worker tool calls
+
+\`\`\`text
+Worker
+ ↓
+MCP Client
+ ↓
+MCP Server
+ ↓
+Enterprise API
+\`\`\`
+
+For example:
+
+\`\`\`text
+CRM Worker → MCP → Salesforce
+Incident Worker → MCP → ServiceNow
+\`\`\`
+
+### Step 9 — RAG
+
+If enterprise documents are required:
+
+\`\`\`text
+Worker
+ ↓
+Azure AI Search
+ ↓
+Hybrid retrieval
+ ↓
+ACL filtering
+ ↓
+Relevant documents
+\`\`\`
+
+### Step 10 — Results
+
+\`\`\`text
+Sales Workers ──┐
+                │
+IT Workers ─────┼──→ Delegators
+                │
+RAG ────────────┘
+\`\`\`
+
+### Step 11 — Aggregation
+
+\`\`\`text
+Delegators
+     ↓
+Coordinator
+     ↓
+Validate results
+     ↓
+Aggregate
+\`\`\`
+
+### Step 12 — Final response
+
+\`\`\`text
+Coordinator
+     ↓
+Azure OpenAI
+     ↓
+Structured customer briefing
+     ↓
+FastAPI
+     ↓
+APIM
+     ↓
+User
+\`\`\`
+
+---
+
+# 24. Azure service mapping
+
+| CWD responsibility   | Azure technology                     |
+| -------------------- | ------------------------------------ |
+| API Gateway          | Azure API Management                 |
+| Application/API      | FastAPI                              |
+| Identity             | Microsoft Entra ID                   |
+| Authorization        | Entra ID + RBAC + application policy |
+| Orchestration        | LangGraph                            |
+| LLM                  | Azure OpenAI                         |
+| AI platform          | Azure AI Foundry                     |
+| RAG                  | Azure AI Search                      |
+| Agent communication  | A2A                                  |
+| Tool communication   | MCP                                  |
+| Compute              | AKS / Azure Container Apps           |
+| Container registry   | Azure Container Registry             |
+| Durable state        | Cosmos DB                            |
+| Fast state/cache     | Azure Cache for Redis                |
+| Async messaging      | Azure Service Bus                    |
+| Secrets              | Azure Key Vault                      |
+| Monitoring           | Azure Monitor                        |
+| Application tracing  | Application Insights                 |
+| Logs                 | Log Analytics                        |
+| CI/CD                | Azure DevOps                         |
+| Networking           | Azure VNet / Private Link            |
+| Enterprise documents | SharePoint / M365                    |
+| CRM                  | Salesforce                           |
+| ITSM                 | ServiceNow                           |
+| Enterprise data      | Snowflake / Oracle                   |
+
+---
+
+# 25. The architecture in one interview diagram
+
+If the interviewer gives you **2 minutes**, draw this:
+
+\`\`\`text
+                    USER
+                      │
+                      ▼
+             Azure API Management
+                      │
+                      ▼
+              Microsoft Entra ID
+                      │
+                      ▼
+                   FastAPI
+                      │
+                      ▼
+                COORDINATOR
+                LangGraph
+                      │
+             ┌────────┴────────┐
+             ▼                 ▼
+      SALES DELEGATOR      IT DELEGATOR
+             │                 │
+       ┌─────┼─────┐     ┌─────┼─────┐
+       ▼     ▼     ▼     ▼     ▼     ▼
+      W1    W2    W3    W4    W5    W6
+       │     │     │     │     │     │
+       └─────┴─────┴─────┴─────┴─────┘
+                      │
+                MCP / A2A
+                      │
+       ┌──────────────┼──────────────┐
+       ▼              ▼              ▼
+   Salesforce      ServiceNow     SharePoint
+                                      │
+                                      ▼
+                              Azure AI Search
+                                      │
+                                      ▼
+                                Azure OpenAI
+
+    ┌─────────────────────────────────────────┐
+    │ Cosmos DB | Redis | Service Bus          │
+    │ Key Vault | Azure Monitor | App Insights │
+    │ AKS / Container Apps | ACR               │
+    └─────────────────────────────────────────┘
+\`\`\`
+
+## 26. Your 60-second interview answer
+
+You can memorize this:
+
+> **"For CWD, I designed the Azure architecture as a secure, stateful, multi-agent enterprise AI platform. The request enters through API Management and is authenticated with Microsoft Entra ID before reaching our FastAPI application. The Coordinator, implemented using LangGraph, converts the natural-language request into an intent and execution plan. It then routes the request to the appropriate domain Delegators, such as Sales or IT, and each Delegator coordinates specialized Workers.**
+>
+> **Workers use A2A for agent-to-agent communication and MCP for controlled access to enterprise tools such as Salesforce, ServiceNow and SharePoint. For enterprise knowledge, we use Azure AI Search with hybrid vector and keyword retrieval plus authorization filtering, and Azure OpenAI provides the LLM capabilities.**
+>
+> **For reliability, we use persistent state through Cosmos DB and Redis, asynchronous processing and retries through Service Bus, and Key Vault with Managed Identity for secrets. The workloads run on AKS or Azure Container Apps, with Azure Monitor, Application Insights and Log Analytics providing end-to-end observability. Finally, Azure DevOps handles CI/CD, with automated security, integration, performance and LLM evaluation gates before production."**
+
+### The key architecture principle
+
+The strongest way to explain CWD is:
+
+**Azure provides the enterprise platform; LangGraph provides orchestration; Coordinator → Delegator → Worker provides the agent hierarchy; A2A connects agents; MCP connects workers to tools; Azure AI Search provides governed RAG; Azure OpenAI provides the LLM layer; and Azure security/observability/reliability services make the system production-ready.**
+`,code:``},{id:`002-which-azure-services-did-you-use-and-why`,category:`Azure Architecture`,title:`Which Azure services did you use and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`For an interview, I would answer this as **service → purpose → why we chose it**, rather than just listing Azure services.
+
+### Interview answer
+
+> **"For CWD, we used Azure services across six main areas: API and security, AI and orchestration, enterprise search, data and state, integration, and observability."**
+
+| Azure service                  | What we used it for       | Why we used it                                                              |
+| ------------------------------ | ------------------------- | --------------------------------------------------------------------------- |
+| **Azure API Management**       | API gateway               | Centralized authentication, throttling, policies, routing, and API security |
+| **Microsoft Entra ID**         | Identity & authentication | Enterprise SSO, OAuth/JWT, RBAC and user identity                           |
+| **Azure OpenAI**               | LLM capabilities          | Intent understanding, reasoning, summarization, structured generation       |
+| **Azure AI Foundry**           | AI/agent platform         | Model, prompt, evaluation and AI application lifecycle management           |
+| **Azure AI Search**            | RAG                       | Hybrid vector + keyword search, semantic ranking, metadata/ACL filtering    |
+| **Azure Container Apps / AKS** | Application runtime       | Run FastAPI, Coordinator, Delegators and Workers with independent scaling   |
+| **Azure Cosmos DB**            | Durable state             | Persist workflow, agent and execution state                                 |
+| **Azure Cache for Redis**      | Fast state/cache          | Low-latency session state, caching and temporary workflow data              |
+| **Azure Service Bus**          | Async processing          | Decoupling, retries, queues, DLQ and reliable worker execution              |
+| **Azure Key Vault**            | Secrets                   | Secure API keys, credentials, certificates and secrets                      |
+| **Azure Monitor**              | Platform monitoring       | Infrastructure health, metrics and alerts                                   |
+| **Application Insights**       | Application tracing       | End-to-end request/agent tracing and dependency monitoring                  |
+| **Log Analytics**              | Centralized logs          | Query and correlate application/platform logs                               |
+| **Azure Container Registry**   | Container images          | Store and version Docker images for deployment                              |
+| **Azure DevOps**               | CI/CD                     | Build, test, security scanning, evaluation and deployment pipelines         |
+| **Azure VNet / Private Link**  | Network security          | Private connectivity and isolation for enterprise services                  |
+
+### How they fit together
+
+\`\`\`text
+                         USER
+                           │
+                           ▼
+                Azure API Management
+                           │
+                           ▼
+                  Microsoft Entra ID
+                           │
+                           ▼
+                        FastAPI
+                           │
+                           ▼
+                     Coordinator
+                       LangGraph
+                           │
+              ┌────────────┴────────────┐
+              ▼                         ▼
+       Sales Delegator            IT Delegator
+              │                         │
+         Workers                    Workers
+              │                         │
+              └────────────┬────────────┘
+                           │
+                     A2A / MCP
+                           │
+          ┌────────────────┼────────────────┐
+          ▼                ▼                ▼
+      Salesforce       ServiceNow       SharePoint
+                                             │
+                                             ▼
+                                     Azure AI Search
+                                             │
+                                             ▼
+                                      Azure OpenAI
+\`\`\`
+
+Supporting the whole platform:
+
+\`\`\`text
+      Cosmos DB ─────── Durable state
+      Redis ─────────── Cache / fast state
+      Service Bus ───── Async / retry / DLQ
+      Key Vault ─────── Secrets
+      ACR ───────────── Container images
+      AKS/Container Apps ─ Runtime
+      Azure Monitor ─── Monitoring
+      App Insights ──── Tracing
+      Log Analytics ─── Logs
+      Azure DevOps ──── CI/CD
+\`\`\`
+
+### The important "why" points
+
+**Why Azure OpenAI?**
+
+> "We needed an enterprise-managed LLM service with Azure integration, security controls, networking, monitoring and the ability to select appropriate models for different workloads."
+
+**Why Azure AI Search?**
+
+> "Because CWD needed enterprise RAG. We needed hybrid retrieval, semantic ranking and, importantly, authorization-aware filtering so users only retrieve information they're entitled to see."
+
+**Why Entra ID?**
+
+> "Because identity and authorization are fundamental in an enterprise agent platform. We don't allow the LLM to determine access; identity and authorization are enforced through enterprise security controls."
+
+**Why Service Bus?**
+
+> "Not every agent operation needs to be synchronous. Service Bus allows us to decouple long-running or retryable work and gives us retry and dead-letter capabilities."
+
+**Why Cosmos DB + Redis?**
+
+> "Cosmos DB gives us durable application and workflow state, while Redis provides low-latency temporary state and caching."
+
+**Why Key Vault?**
+
+> "We never want credentials or API secrets embedded in application code or containers. Applications use managed identity to access secrets securely."
+
+**Why Application Insights + Azure Monitor?**
+
+> "Traditional infrastructure monitoring isn't enough for an agentic system. We need to trace a request across Coordinator, Delegator, Worker, MCP calls and enterprise APIs, while also measuring latency, failures and dependencies."
+
+### One strong closing statement
+
+> **"The key point is that I didn't select Azure services individually. I designed the platform around enterprise requirements: secure identity with Entra ID, governed AI with Azure OpenAI and AI Foundry, RAG with Azure AI Search, reliable state with Cosmos DB and Redis, asynchronous execution with Service Bus, secure secrets with Key Vault, scalable compute with AKS or Container Apps, and end-to-end observability with Azure Monitor and Application Insights."**
+
+That last statement is particularly useful in an **AI Architect interview**, because it shows you understand **why each service exists in the architecture**, rather than simply memorizing Azure service names.
 `,code:``},{id:`003-explain-the-end-to-end-request-flow-in-azure`,category:`Azure Architecture`,title:`Explain the end-to-end request flow in Azure.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the end-to-end request flow in Azure.
 
 ## Short answer
@@ -175144,7 +179916,7 @@ Every choice traded something; name the trade-off, not just the technology.
 
 ## CWD context
 Interviewers reward "we chose X, accepted Y, and mitigated it with Z".
-`,code:``}];function $m(){return(0,M.jsx)($,{data:Qm,title:`Azure Architecture Cookbook`,subtitle:`End-to-end Azure architecture, request flow, trade-offs and resilience`,icon:`🏗️`,patternLabel:`Questions`})}var eh=[{id:`016-why-azure-openai-for-cwd`,category:`Azure OpenAI`,title:`Why Azure OpenAI for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure OpenAI for CWD?
+`,code:``}];function eh(){return(0,M.jsx)($,{data:$m,title:`Azure Architecture Cookbook`,subtitle:`End-to-end Azure architecture, request flow, trade-offs and resilience`,icon:`🏗️`,patternLabel:`Questions`})}var th=[{id:`016-why-azure-openai-for-cwd`,category:`Azure OpenAI`,title:`Why Azure OpenAI for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure OpenAI for CWD?
 
 ## Short answer
 Azure OpenAI provides OpenAI-class models with enterprise controls: private networking, Entra authentication, content filtering, regional data residency and Azure compliance.
@@ -175382,7 +180154,7 @@ Keep sensitive data out of the model by controlling what is retrieved and what i
 
 ## CWD context
 The LLM never decides access; authorization happens before the prompt is built.
-`,code:``}];function th(){return(0,M.jsx)($,{data:eh,title:`Azure OpenAI Cookbook`,subtitle:`Model selection, rate limits, retries, cost, safety and fallback`,icon:`🧠`,patternLabel:`Questions`})}var nh=[{id:`034-what-is-azure-ai-foundrys-role-in-cwd`,category:`Azure AI Foundry`,title:`What is Azure AI Foundry's role in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Azure AI Foundry's role in CWD?
+`,code:``}];function nh(){return(0,M.jsx)($,{data:th,title:`Azure OpenAI Cookbook`,subtitle:`Model selection, rate limits, retries, cost, safety and fallback`,icon:`🧠`,patternLabel:`Questions`})}var rh=[{id:`034-what-is-azure-ai-foundrys-role-in-cwd`,category:`Azure AI Foundry`,title:`What is Azure AI Foundry's role in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Azure AI Foundry's role in CWD?
 
 ## Short answer
 AI Foundry is the control plane for building, evaluating, governing and operating GenAI; it may appear as Microsoft Foundry in newer portals and docs.
@@ -175548,7 +180320,7 @@ Version everything that can change behaviour and stamp it on each request.
 
 ## CWD context
 This lets you say exactly which combination produced a bad answer.
-`,code:``}];function rh(){return(0,M.jsx)($,{data:nh,title:`Azure AI Foundry Cookbook`,subtitle:`Model and prompt management, evaluation, agent lifecycle and versioning`,icon:`🏭`,patternLabel:`Questions`})}var ih=[{id:`047-why-azure-ai-search-for-cwd`,category:`Azure AI Search`,title:`Why Azure AI Search for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure AI Search for CWD?
+`,code:``}];function ih(){return(0,M.jsx)($,{data:rh,title:`Azure AI Foundry Cookbook`,subtitle:`Model and prompt management, evaluation, agent lifecycle and versioning`,icon:`🏭`,patternLabel:`Questions`})}var ah=[{id:`047-why-azure-ai-search-for-cwd`,category:`Azure AI Search`,title:`Why Azure AI Search for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure AI Search for CWD?
 
 ## Short answer
 Azure AI Search is a managed retrieval engine that combines keyword, vector and semantic ranking with security filters, so CWD does not have to build and run that stack itself.
@@ -175775,7 +180547,7 @@ AI Search is the retrieval engine; Foundry knowledge-base or agentic-retrieval f
 
 ## CWD context
 Use AI Search directly where security filters and custom chunking matter; evaluate the higher-level option where it reduces work.
-`,code:``}];function ah(){return(0,M.jsx)($,{data:ih,title:`Azure AI Search Cookbook`,subtitle:`Vector and hybrid search, ACL filtering, updates and performance`,icon:`🔎`,patternLabel:`Questions`})}var oh=[{id:`065-why-azure-data-factory`,category:`Azure Data Factory / Data Integration`,title:`Why Azure Data Factory?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Data Factory?
+`,code:``}];function oh(){return(0,M.jsx)($,{data:ah,title:`Azure AI Search Cookbook`,subtitle:`Vector and hybrid search, ACL filtering, updates and performance`,icon:`🔎`,patternLabel:`Questions`})}var sh=[{id:`065-why-azure-data-factory`,category:`Azure Data Factory / Data Integration`,title:`Why Azure Data Factory?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Data Factory?
 
 ## Short answer
 Azure Data Factory is a managed data-movement and orchestration service with a wide connector set.
@@ -175973,7 +180745,7 @@ Implement lineage with Microsoft Purview and with metadata carried in the data.
 
 ## CWD context
 A citation should trace chunk → document → source system.
-`,code:``}];function sh(){return(0,M.jsx)($,{data:oh,title:`Azure Data Factory Cookbook`,subtitle:`Enterprise ingestion, incremental loads, schema changes and lineage`,icon:`🔄`,patternLabel:`Questions`})}var ch=[{id:`081-why-use-azure-databricks-in-cwd`,category:`Azure Databricks`,title:`Why use Azure Databricks in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Azure Databricks in CWD?
+`,code:``}];function ch(){return(0,M.jsx)($,{data:sh,title:`Azure Data Factory Cookbook`,subtitle:`Enterprise ingestion, incremental loads, schema changes and lineage`,icon:`🔄`,patternLabel:`Questions`})}var lh=[{id:`081-why-use-azure-databricks-in-cwd`,category:`Azure Databricks`,title:`Why use Azure Databricks in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Azure Databricks in CWD?
 
 ## Short answer
 Databricks handles large-scale data engineering on a Delta Lake lakehouse, which complements ADF's orchestration role.
@@ -176164,7 +180936,7 @@ Publish Databricks output to AI Search as chunk documents with deterministic IDs
 
 ## CWD context
 Record the embedding model version in each document.
-`,code:``}];function lh(){return(0,M.jsx)($,{data:ch,title:`Azure Databricks Cookbook`,subtitle:`Spark ETL, Delta Lake, schema evolution and AI Search integration`,icon:`🧱`,patternLabel:`Questions`})}var uh=[{id:`096-why-azure-machine-learning-in-cwd`,category:`Azure Machine Learning`,title:`Why Azure Machine Learning in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Machine Learning in CWD?
+`,code:``}];function uh(){return(0,M.jsx)($,{data:lh,title:`Azure Databricks Cookbook`,subtitle:`Spark ETL, Delta Lake, schema evolution and AI Search integration`,icon:`🧱`,patternLabel:`Questions`})}var dh=[{id:`096-why-azure-machine-learning-in-cwd`,category:`Azure Machine Learning`,title:`Why Azure Machine Learning in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Machine Learning in CWD?
 
 ## Short answer
 Use Azure ML for custom predictive models that an LLM API is the wrong tool for.
@@ -176468,7 +181240,7 @@ Reduce inference cost by right-sizing and matching the endpoint type to the work
 
 ## CWD context
 Track cost per prediction alongside latency.
-`,code:``}];function dh(){return(0,M.jsx)($,{data:uh,title:`Azure Machine Learning Cookbook`,subtitle:`Training, registry, endpoints, drift, MLOps and inference cost`,icon:`🤖`,patternLabel:`Questions`})}var fh=[{id:`121-why-azure-functions`,category:`Azure Functions`,title:`Why Azure Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Functions?
+`,code:``}];function fh(){return(0,M.jsx)($,{data:dh,title:`Azure Machine Learning Cookbook`,subtitle:`Training, registry, endpoints, drift, MLOps and inference cost`,icon:`🤖`,patternLabel:`Questions`})}var ph=[{id:`121-why-azure-functions`,category:`Azure Functions`,title:`Why Azure Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Functions?
 
 ## Short answer
 Azure Functions is event-driven serverless compute with rich triggers and bindings, ideal for small, reactive pieces of CWD.
@@ -176611,7 +181383,7 @@ Trigger from Service Bus with the trigger binding using an identity-based connec
 
 ## CWD context
 Scale follows queue depth automatically.
-`,code:``}];function ph(){return(0,M.jsx)($,{data:fh,title:`Azure Functions Cookbook`,subtitle:`Serverless design, cold starts, retries, idempotency and scaling`,icon:`⚡`,patternLabel:`Questions`})}var mh=[{id:`133-why-azure-container-apps-for-cwd`,category:`Azure Container Apps / AKS`,title:`Why Azure Container Apps for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Container Apps for CWD?
+`,code:``}];function mh(){return(0,M.jsx)($,{data:ph,title:`Azure Functions Cookbook`,subtitle:`Serverless design, cold starts, retries, idempotency and scaling`,icon:`⚡`,patternLabel:`Questions`})}var hh=[{id:`133-why-azure-container-apps-for-cwd`,category:`Azure Container Apps / AKS`,title:`Why Azure Container Apps for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Container Apps for CWD?
 
 ## Short answer
 Container Apps gives serverless containers with KEDA scaling and revisions without running Kubernetes.
@@ -176796,7 +181568,7 @@ Choose AKS when Container Apps cannot meet a specific requirement.
 
 ## CWD context
 Otherwise stay on Container Apps.
-`,code:``}];function hh(){return(0,M.jsx)($,{data:mh,title:`Azure Container Apps / AKS Cookbook`,subtitle:`Containerized agents, autoscaling, health checks and zero-downtime deploys`,icon:`📦`,patternLabel:`Questions`})}var gh=[{id:`148-why-azure-api-management`,category:`Azure API Management`,title:`Why Azure API Management?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure API Management?
+`,code:``}];function gh(){return(0,M.jsx)($,{data:hh,title:`Azure Container Apps / AKS Cookbook`,subtitle:`Containerized agents, autoscaling, health checks and zero-downtime deploys`,icon:`📦`,patternLabel:`Questions`})}var _h=[{id:`148-why-azure-api-management`,category:`Azure API Management`,title:`Why Azure API Management?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure API Management?
 
 ## Short answer
 API Management is the managed gateway that centralises security, traffic control and versioning in front of CWD.
@@ -176968,7 +181740,7 @@ Place APIM in a private network and expose it only through a controlled entry po
 
 ## CWD context
 Verify tier features against requirements before choosing.
-`,code:``}];function _h(){return(0,M.jsx)($,{data:gh,title:`Azure API Management Cookbook`,subtitle:`Authentication, throttling, validation, versioning and private networking`,icon:`🚪`,patternLabel:`Questions`})}var vh=[{id:`162-why-azure-service-bus-in-cwd`,category:`Azure Service Bus`,title:`Why Azure Service Bus in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Service Bus in CWD?
+`,code:``}];function vh(){return(0,M.jsx)($,{data:_h,title:`Azure API Management Cookbook`,subtitle:`Authentication, throttling, validation, versioning and private networking`,icon:`🚪`,patternLabel:`Questions`})}var yh=[{id:`162-why-azure-service-bus-in-cwd`,category:`Azure Service Bus`,title:`Why Azure Service Bus in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Azure Service Bus in CWD?
 
 ## Short answer
 Service Bus is an enterprise message broker that decouples producers from consumers with reliable delivery.
@@ -177146,7 +181918,7 @@ Use Event Hubs for high-volume streaming and Service Bus for transactional messa
 
 ## CWD context
 Telemetry and log streams go to Event Hubs; workflow commands to Service Bus.
-`,code:``}];function yh(){return(0,M.jsx)($,{data:vh,title:`Azure Service Bus Cookbook`,subtitle:`Queues, topics, DLQs, duplicates, ordering and scalability`,icon:`📬`,patternLabel:`Questions`})}var bh=[{id:`177-why-cosmos-db-for-cwd`,category:`Cosmos DB`,title:`Why Cosmos DB for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Cosmos DB for CWD?
+`,code:``}];function bh(){return(0,M.jsx)($,{data:yh,title:`Azure Service Bus Cookbook`,subtitle:`Queues, topics, DLQs, duplicates, ordering and scalability`,icon:`📬`,patternLabel:`Questions`})}var xh=[{id:`177-why-cosmos-db-for-cwd`,category:`Cosmos DB`,title:`Why Cosmos DB for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Cosmos DB for CWD?
 
 ## Short answer
 Cosmos DB gives low-latency, elastic, globally distributed document storage that fits CWD's state, which is JSON-shaped and accessed by key.
@@ -177290,7 +182062,7 @@ Cosmos DB is a durable system of record; Redis is a fast, volatile cache.
 
 ## CWD context
 Use both: Cosmos for truth, Redis for speed.
-`,code:``}];function xh(){return(0,M.jsx)($,{data:bh,title:`Cosmos DB Cookbook`,subtitle:`Workflow state, partition keys, concurrency, TTL and recovery`,icon:`🗃️`,patternLabel:`Questions`})}var Sh=[{id:`189-why-use-redis-in-cwd`,category:`Azure Cache for Redis`,title:`Why use Redis in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Redis in CWD?
+`,code:``}];function Sh(){return(0,M.jsx)($,{data:xh,title:`Cosmos DB Cookbook`,subtitle:`Workflow state, partition keys, concurrency, TTL and recovery`,icon:`🗃️`,patternLabel:`Questions`})}var Ch=[{id:`189-why-use-redis-in-cwd`,category:`Azure Cache for Redis`,title:`Why use Redis in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Redis in CWD?
 
 ## Short answer
 Redis reduces latency and cost by keeping hot, reusable data in memory.
@@ -177413,7 +182185,7 @@ Every cache hit avoids an Azure OpenAI call.
 
 ## CWD context
 Report savings as a KPI.
-`,code:``}];function Ch(){return(0,M.jsx)($,{data:Sh,title:`Azure Cache for Redis Cookbook`,subtitle:`Caching strategy, invalidation, LLM and embedding caches, failure handling`,icon:`🧊`,patternLabel:`Questions`})}var wh=[{id:`199-why-entra-id-for-cwd-authentication`,category:`Microsoft Entra ID`,title:`Why Entra ID for CWD authentication?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Entra ID for CWD authentication?
+`,code:``}];function wh(){return(0,M.jsx)($,{data:Ch,title:`Azure Cache for Redis Cookbook`,subtitle:`Caching strategy, invalidation, LLM and embedding caches, failure handling`,icon:`🧊`,patternLabel:`Questions`})}var Th=[{id:`199-why-entra-id-for-cwd-authentication`,category:`Microsoft Entra ID`,title:`Why Entra ID for CWD authentication?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Entra ID for CWD authentication?
 
 ## Short answer
 Entra ID is the enterprise identity provider that authenticates users and workloads and issues tokens.
@@ -177582,7 +182354,7 @@ Enforce customer-level access by validating every customer ID against the user's
 
 ## CWD context
 This is the core of "entitlement-first" security.
-`,code:``}];function Th(){return(0,M.jsx)($,{data:wh,title:`Microsoft Entra ID Cookbook`,subtitle:`Authentication, RBAC, managed identities and least privilege`,icon:`🔐`,patternLabel:`Questions`})}var Eh=[{id:`213-why-key-vault`,category:`Azure Key Vault`,title:`Why Key Vault?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Key Vault?
+`,code:``}];function Eh(){return(0,M.jsx)($,{data:Th,title:`Microsoft Entra ID Cookbook`,subtitle:`Authentication, RBAC, managed identities and least privilege`,icon:`🔐`,patternLabel:`Questions`})}var Dh=[{id:`213-why-key-vault`,category:`Azure Key Vault`,title:`Why Key Vault?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Key Vault?
 
 ## Short answer
 Key Vault is the central, audited store for secrets, keys and certificates.
@@ -177693,7 +182465,7 @@ Audit access with diagnostic logs and alerting.
 
 ## CWD context
 Know which identity read which secret and when.
-`,code:``}];function Dh(){return(0,M.jsx)($,{data:Eh,title:`Azure Key Vault Cookbook`,subtitle:`Secrets, keys, certificates, rotation and auditing`,icon:`🗝️`,patternLabel:`Questions`})}var Oh=[{id:`222-explain-the-vnet-architecture-for-cwd`,category:`Azure Networking`,title:`Explain the VNet architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the VNet architecture for CWD.
+`,code:``}];function Oh(){return(0,M.jsx)($,{data:Dh,title:`Azure Key Vault Cookbook`,subtitle:`Secrets, keys, certificates, rotation and auditing`,icon:`🗝️`,patternLabel:`Questions`})}var kh=[{id:`222-explain-the-vnet-architecture-for-cwd`,category:`Azure Networking`,title:`Explain the VNet architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the VNet architecture for CWD.
 
 ## Short answer
 Use a hub-spoke VNet design with segmented subnets and private connectivity.
@@ -177841,7 +182613,7 @@ Troubleshoot connectivity in a fixed order: DNS, network rules, routing, service
 
 ## CWD context
 Test from the same subnet as the failing workload.
-`,code:``}];function kh(){return(0,M.jsx)($,{data:Oh,title:`Azure Networking Cookbook`,subtitle:`VNets, private endpoints, Private Link and connectivity troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Ah=[{id:`234-how-do-you-implement-observability-in-cwd`,category:`Azure Monitor / Application Insights`,title:`How do you implement observability in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement observability in CWD?
+`,code:``}];function Ah(){return(0,M.jsx)($,{data:kh,title:`Azure Networking Cookbook`,subtitle:`VNets, private endpoints, Private Link and connectivity troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var jh=[{id:`234-how-do-you-implement-observability-in-cwd`,category:`Azure Monitor / Application Insights`,title:`How do you implement observability in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement observability in CWD?
 
 ## Short answer
 Observability in CWD means being able to explain any request end to end using logs, metrics and traces, plus GenAI-specific signals.
@@ -178037,7 +182809,7 @@ Troubleshoot an incident with a repeatable path from impact to root cause.
 
 ## CWD context
 Mitigate first, investigate second.
-`,code:``}];function jh(){return(0,M.jsx)($,{data:Ah,title:`Azure Monitor / Application Insights Cookbook`,subtitle:`Tracing, correlation IDs, metrics, alerts and incident troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Mh=[{id:`250-explain-your-azure-ci-cd-pipeline`,category:`Azure DevOps / CI/CD`,title:`Explain your Azure CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain your Azure CI/CD pipeline.
+`,code:``}];function Mh(){return(0,M.jsx)($,{data:jh,title:`Azure Monitor / Application Insights Cookbook`,subtitle:`Tracing, correlation IDs, metrics, alerts and incident troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Nh=[{id:`250-explain-your-azure-ci-cd-pipeline`,category:`Azure DevOps / CI/CD`,title:`Explain your Azure CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain your Azure CI/CD pipeline.
 
 ## Short answer
 The pipeline is a multi-stage Azure Pipelines YAML that builds once and promotes the same artifact.
@@ -178221,4 +182993,4 @@ Bicep is Azure-native infrastructure as code; Terraform is multi-cloud with a la
 
 ## CWD context
 Consistency across the team matters more than the tool.
-`,code:``}];function Nh(){return(0,M.jsx)($,{data:Mh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Ph=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function Fh(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let l=e=>{t(t=>t===e?null:e)},u=()=>{t(null)},d=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>l(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:u,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:Ph,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(d,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(d,{name:`AgenticAI`,topics:a}),(0,M.jsx)(d,{name:`CWD Project`,topics:o}),(0,M.jsx)(d,{name:`AWS`,topics:s}),(0,M.jsx)(d,{name:`Azure`,topics:c})]})]})}function Ih(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(Fh,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(sp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(Of,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(Af,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Mf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(ap,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(lp,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(dp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(_p,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(yp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(Cp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Tp,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Dp,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Np,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Fp,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Lp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(zp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Up,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Yp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Zp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)($p,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(tm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(rm,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(am,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(sm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(lm,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(dm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(pm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(hm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(_m,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(ym,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(xm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(Cm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Tm,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Dm,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(km,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(jm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Nm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Fm,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Lm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(zm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Vm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Um,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Gm,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(qm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Ym,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Zm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)($m,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(th,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(rh,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(ah,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(sh,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(lh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(dh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(ph,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(hh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(_h,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(yh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(xh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(Ch,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Th,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Dh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(kh,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(jh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Nh,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(Ih,{})}));
+`,code:``}];function Ph(){return(0,M.jsx)($,{data:Nh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Fh=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function Ih(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let l=e=>{t(t=>t===e?null:e)},u=()=>{t(null)},d=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>l(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:u,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:Fh,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(d,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(d,{name:`AgenticAI`,topics:a}),(0,M.jsx)(d,{name:`CWD Project`,topics:o}),(0,M.jsx)(d,{name:`AWS`,topics:s}),(0,M.jsx)(d,{name:`Azure`,topics:c})]})]})}function Lh(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(Ih,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(cp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(kf,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(jf,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Nf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(op,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(up,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(fp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(Sp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ep,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Op,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(Mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Ip,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Rp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(em,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(nm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(im,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(om,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(um,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(fm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(mm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(gm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(vm,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(Sm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(wm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Em,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Om,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(Mm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Pm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Im,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Rm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(Bm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Wm,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Km,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(Jm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Xm,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)(eh,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(nh,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(ih,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(oh,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(ch,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(uh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(fh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(mh,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(gh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(vh,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(bh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(wh,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Eh,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Oh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(Mh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Ph,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(Lh,{})}));
