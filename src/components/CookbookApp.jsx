@@ -254,11 +254,90 @@ function RecipeCard({
 }
 
 // ============================================================
+// NAV BUTTON (Prev / Next)
+// ============================================================
+
+function NavBar({ onPrev, onNext, hasPrev, hasNext, position }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: 10,
+        marginTop: position === "bottom" ? 20 : 0,
+        marginBottom: position === "top" ? 16 : 0,
+      }}
+    >
+      <button
+        onClick={onPrev}
+        disabled={!hasPrev}
+        style={{
+          padding: "8px 16px",
+          borderRadius: 8,
+          border: "0.5px solid var(--color-border-secondary)",
+          background: "var(--color-background-secondary)",
+          color: hasPrev
+            ? "var(--color-text-primary)"
+            : "var(--color-text-tertiary)",
+          fontSize: 13,
+          fontWeight: 500,
+          cursor: hasPrev ? "pointer" : "not-allowed",
+          opacity: hasPrev ? 1 : 0.5,
+        }}
+      >
+        ← Previous
+      </button>
+
+      <button
+        onClick={onNext}
+        disabled={!hasNext}
+        style={{
+          padding: "8px 18px",
+          borderRadius: 8,
+          border: "none",
+          background: hasNext ? "#185FA5" : "var(--color-background-secondary)",
+          color: hasNext ? "#fff" : "var(--color-text-tertiary)",
+          fontSize: 13,
+          fontWeight: 500,
+          cursor: hasNext ? "pointer" : "not-allowed",
+          opacity: hasNext ? 1 : 0.5,
+        }}
+      >
+        Next →
+      </button>
+    </div>
+  );
+}
+
+// ============================================================
 // RECIPE DETAIL
 // ============================================================
 
-function RecipeDetail({ recipe }) {
+function RecipeDetail({ recipe, recipeList, onSelect }) {
   const [tab, setTab] = useState("concept");
+
+  const currentIndex = recipeList.findIndex(
+    (r) => r.id === recipe.id
+  );
+
+  const hasPrev = currentIndex > 0;
+  const hasNext =
+    currentIndex >= 0 && currentIndex < recipeList.length - 1;
+
+  const goPrev = () => {
+    if (hasPrev) {
+      setTab("concept");
+      onSelect(recipeList[currentIndex - 1]);
+    }
+  };
+
+  const goNext = () => {
+    if (hasNext) {
+      setTab("concept");
+      onSelect(recipeList[currentIndex + 1]);
+    }
+  };
 
   return (
     <div
@@ -276,6 +355,15 @@ function RecipeDetail({ recipe }) {
         overflow: "hidden",
       }}
     >
+      {/* TOP NAV */}
+      <NavBar
+        position="top"
+        onPrev={goPrev}
+        onNext={goNext}
+        hasPrev={hasPrev}
+        hasNext={hasNext}
+      />
+
       {/* HEADER */}
       <div
         style={{
@@ -406,6 +494,15 @@ function RecipeDetail({ recipe }) {
       {tab === "code" && (
         <CodeBlock code={recipe.code} />
       )}
+
+      {/* BOTTOM NAV */}
+      <NavBar
+        position="bottom"
+        onPrev={goPrev}
+        onNext={goNext}
+        hasPrev={hasPrev}
+        hasNext={hasNext}
+      />
     </div>
   );
 }
@@ -883,6 +980,8 @@ export default function CookbookApp({
           {selected ? (
             <RecipeDetail
               recipe={selected}
+              recipeList={data}
+              onSelect={setSelected}
             />
           ) : (
             <div
