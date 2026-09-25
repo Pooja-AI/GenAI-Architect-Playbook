@@ -1,12 +1,38 @@
-# CloudWatch vs CloudTrail vs X-Ray?
+### CloudWatch vs CloudTrail vs X-Ray
 
-## Short answer
-CloudWatch shows performance, CloudTrail shows who did what, and X-Ray shows the request path.
+| Tool           | Main purpose                      | Simple question                 |
+| -------------- | --------------------------------- | ------------------------------- |
+| **CloudWatch** | Metrics, logs, alarms, dashboards | **“Is something wrong?”**       |
+| **CloudTrail** | AWS API activity/audit            | **“Who did what?”**             |
+| **X-Ray**      | Distributed request tracing       | **“Where is it slow/failing?”** |
 
-## Key points
-- CloudWatch: metrics, logs and alarms.
-- CloudTrail: API audit trail of account activity.
-- X-Ray: distributed tracing and latency breakdown.
+### CWD example
 
-## CWD context
-Example: X-Ray finds a slow Bedrock call, CloudWatch shows throttles, CloudTrail shows who changed the quota or policy.
+```text
+User Request
+     ↓
+API Gateway
+     ↓
+Coordinator → Delegator → Worker
+     ↓
+CloudWatch → metrics + logs + alarms
+     ↓
+X-Ray → end-to-end request trace
+
+CloudTrail → records AWS API actions
+              ↓
+        Who / What / When
+```
+
+**Example:**
+
+* ECS CPU suddenly goes to 95% → **CloudWatch**
+* Someone changes an IAM policy → **CloudTrail**
+* Customer request takes 10 seconds → **X-Ray** to identify whether Coordinator, MCP, OpenSearch, or Bedrock caused the delay.
+
+### Interview answer
+
+> “CloudWatch is for monitoring metrics, logs, and alarms. CloudTrail is for auditing AWS API activity and identifying who performed an action. X-Ray is for distributed tracing and finding where a request is slow or failing. In CWD, I would use all three together.”
+
+**Memory:**
+**CloudWatch = Monitor | CloudTrail = Audit | X-Ray = Trace**

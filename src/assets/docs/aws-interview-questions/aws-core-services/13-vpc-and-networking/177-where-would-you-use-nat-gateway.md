@@ -1,12 +1,43 @@
-# Where would you use NAT Gateway?
+## Where would you use NAT Gateway?
 
-## Short answer
-Use NAT for outbound internet access that endpoints cannot provide.
+In CWD, I would use a **NAT Gateway when a private-subnet workload needs outbound internet access**.
 
-## Key points
-- Calls from Workers and MCP servers to Salesforce, ServiceNow and other SaaS APIs.
-- Fixed Elastic IPs for vendor allow-lists.
-- One NAT per AZ; optionally Network Firewall for egress control.
+```text
+Private ECS Worker
+       ↓
+NAT Gateway
+       ↓
+Internet Gateway
+       ↓
+External API
+```
 
-## CWD context
-Use VPC endpoints for S3, ECR, Bedrock and similar to cut NAT cost.
+### CWD examples
+
+Use NAT when a Worker needs to call:
+
+* External third-party APIs
+* External SaaS services
+* Public package/repository endpoints during controlled operations
+* External services that don't have private connectivity
+
+### When I would NOT use NAT
+
+If the destination is an AWS service that supports a suitable **VPC endpoint**, I would prefer the VPC endpoint.
+
+```text
+ECS → VPC Endpoint → S3
+```
+
+instead of:
+
+```text
+ECS → NAT → Internet → S3
+```
+
+### 🎯 Strong interview answer
+
+> **“I use NAT Gateway only when private CWD workloads need outbound internet access, such as calling an external API. I would not use NAT unnecessarily; for supported AWS services like S3, I prefer VPC endpoints for private connectivity. NAT provides outbound access but does not allow unsolicited inbound connections to the private workload.”**
+
+**Memory:**
+**NAT = Private workload → External Internet**

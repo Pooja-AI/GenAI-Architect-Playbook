@@ -1,12 +1,35 @@
-# How would you monitor ECS?
+### Monitor ECS
 
-## Short answer
-Monitor ECS with Container Insights, service metrics and task events.
+Use **CloudWatch + ECS service metrics + ALB metrics**.
 
-## Key points
-- CPU, memory, network, running versus desired task count.
-- Stopped-task reasons through EventBridge task state change events.
-- ALB target health, deployment events and logs.
+```text id="e8c4n1"
+ECS/Fargate
+   ↓
+CloudWatch
+   ├── CPU / Memory
+   ├── Task Count
+   ├── Restarts
+   ├── Errors
+   └── Logs
+        ↓
+     Alarms
+```
 
-## CWD context
-Alert when running tasks fall below desired for more than a few minutes.
+Monitor:
+
+* **CPUUtilization** → CPU pressure
+* **MemoryUtilization** → memory pressure
+* **RunningTaskCount** → capacity/availability
+* **Task failures/restarts** → unhealthy containers
+* **ALB 4xx/5xx** → application errors
+* **ALB P95/P99 latency** → response performance
+* **Container logs** → exceptions and failures
+
+For CWD, I would also track **Coordinator/Delegator/Worker latency and failure rates** using custom CloudWatch metrics.
+
+### Interview answer
+
+> “I monitor ECS using CloudWatch for CPU, memory, task count, and container failures. I also monitor ALB 4xx/5xx and P95/P99 latency. Application logs include correlation IDs, so I can trace a failed ECS request end-to-end. I configure CloudWatch alarms and autoscaling based on these metrics.”
+
+**Memory:**
+**CPU → Memory → Tasks → Errors → Latency → Logs → Scale**

@@ -1,12 +1,32 @@
-# How would you monitor SQS?
+### Monitor SQS
 
-## Short answer
-Monitor SQS for backlog, age and dead letters.
+Use **CloudWatch metrics + DLQ monitoring**.
 
-## Key points
-- Visible and in-flight messages, oldest-message age, messages sent, received and deleted.
-- Alarm when the DLQ has any visible message.
-- Consumer lag drives auto scaling.
+```text id="x2m7qa"
+Producer
+   ↓
+ SQS Queue
+   ↓
+ Worker
+   ↓
+CloudWatch
+ ├── Queue Depth
+ ├── Message Age
+ ├── DLQ Messages
+ └── Processing/Failure
+```
 
-## CWD context
-Oldest-message age is the best SLO signal.
+Monitor:
+
+* **ApproximateNumberOfMessagesVisible** → queue backlog
+* **ApproximateAgeOfOldestMessage** → processing delay
+* **ApproximateNumberOfMessagesNotVisible** → messages currently being processed
+* **DLQ message count** → repeatedly failed messages
+* **NumberOfMessagesSent/Received/Deleted** → traffic and processing behavior
+
+### Interview answer
+
+> “I monitor SQS using CloudWatch for queue depth, oldest message age, in-flight messages, and DLQ messages. If the backlog or message age increases, I check whether consumers are slow or failing and scale the Workers. If messages move to the DLQ, I investigate the failure before controlled replay.”
+
+**Memory:**
+**Backlog → Age → In-flight → DLQ → Scale**

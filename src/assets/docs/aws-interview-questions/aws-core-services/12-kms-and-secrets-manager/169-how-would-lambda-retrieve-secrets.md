@@ -1,12 +1,43 @@
-# How would Lambda retrieve secrets?
+## How would Lambda retrieve secrets?
 
-## Short answer
-Lambda retrieves secrets at initialisation with a scoped role and caching.
+I would give the **Lambda function an execution role** that has permission to read only the required secret from **AWS Secrets Manager**.
 
-## Key points
-- GetSecretValue via the SDK or the Parameters and Secrets extension.
-- Refresh the cache on authentication failure to pick up rotation.
-- VPC endpoint if in a VPC; never log values.
+```text
+Lambda
+  ↓
+Lambda Execution Role
+  ↓
+Secrets Manager
+  ↓
+KMS
+  ↓
+Secret
+```
 
-## CWD context
-The role should allow only that function's secrets.
+### Example
+
+```text
+CWD Document Lambda
+        ↓
+CWDDocumentLambdaRole
+        ↓
+secretsmanager:GetSecretValue
+        ↓
+CWD/Salesforce/API
+```
+
+### Security
+
+* No secret in source code or deployment package.
+* IAM role uses **least privilege**.
+* Secret encrypted with **KMS**.
+* Don't log the secret.
+* Enable rotation where applicable.
+* CloudTrail can audit secret access.
+
+### 🎯 Strong interview answer
+
+> **“Lambda retrieves secrets from Secrets Manager using its execution IAM role. I grant only `GetSecretValue` access to the specific secret required by that function. The secret is KMS-encrypted, retrieved at runtime, never hard-coded or logged, and access is audited through CloudTrail.”**
+
+**Memory:**
+**Lambda → IAM Role → Secrets Manager → KMS → Secret**

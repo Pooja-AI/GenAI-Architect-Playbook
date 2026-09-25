@@ -1,11 +1,53 @@
-# Public subnet vs private subnet?
+## Public subnet vs Private subnet
 
-## Short answer
-A public subnet has a route to an internet gateway; a private subnet does not.
+The main difference is **whether resources have a route to the Internet Gateway**.
 
-## Key points
-- Public: resources can have public IPs and be reached from the internet.
-- Private: outbound traffic goes through a NAT gateway or VPC endpoints; inbound only from inside the VPC or through a load balancer.
+|                        | Public Subnet                 | Private Subnet                     |
+| ---------------------- | ----------------------------- | ---------------------------------- |
+| Internet Gateway route | ✅ Yes                         | ❌ No direct route                  |
+| Public IP              | Can have one                  | Typically no public IP             |
+| Internet inbound       | Possible with proper controls | Not directly                       |
+| Typical CWD use        | ALB, NAT Gateway              | ECS Coordinator/Delegators/Workers |
+| Security               | More exposed                  | More isolated                      |
 
-## CWD context
-Only edge components belong in public subnets.
+### CWD example
+
+```text
+Internet
+   ↓
+Internet Gateway
+   ↓
+Public Subnet
+   ↓
+ALB
+   ↓
+Private Subnet
+   ↓
+ECS/Fargate
+ ┌──────┼──────┐
+Coordinator
+Delegators
+Workers
+```
+
+### Private ECS needs internet?
+
+It can use:
+
+```text
+Private ECS
+    ↓
+NAT Gateway
+    ↓
+Internet
+```
+
+The ECS task can make **outbound** connections, but the internet cannot directly initiate connections to the ECS task.
+
+### 🎯 Strong interview answer
+
+> **“A public subnet has a route to an Internet Gateway, so resources such as an internet-facing ALB can be placed there. A private subnet does not have direct Internet Gateway access, so I would place CWD ECS services there for isolation. If those services need outbound internet access, they can use a NAT Gateway.”**
+
+**Memory:**
+**Public = Internet Gateway route**
+**Private = No direct Internet Gateway route**

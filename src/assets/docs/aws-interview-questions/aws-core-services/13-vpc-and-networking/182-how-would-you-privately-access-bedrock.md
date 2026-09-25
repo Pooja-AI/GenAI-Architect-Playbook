@@ -1,12 +1,31 @@
-# How would you privately access Bedrock?
+## How would you privately access Bedrock?
 
-## Short answer
-Access Bedrock privately through interface endpoints for the runtime API.
+For CWD, I would use an **Interface VPC Endpoint powered by AWS PrivateLink** for the supported Amazon Bedrock APIs.
 
-## Key points
-- Endpoint for bedrock-runtime (and the control plane or agent runtime endpoints if used) in private subnets.
-- Security group allowing 443 from workloads; private DNS enabled; endpoint policy limiting models.
-- No NAT needed for Bedrock traffic.
+```text
+Private ECS Worker
+       ↓
+Private Subnet
+       ↓
+Interface VPC Endpoint
+       ↓
+AWS PrivateLink
+       ↓
+Amazon Bedrock
+```
 
-## CWD context
-Combine with IAM restrictions on approved model ARNs.
+### Security
+
+* **No public IP** on ECS Worker
+* Private connectivity through the VPC endpoint
+* **Security Group** controls access to the endpoint
+* **IAM Task Role** controls which Bedrock APIs/models the Worker can invoke
+* **TLS** encrypts communication
+* **CloudTrail/CloudWatch** for auditing and monitoring
+
+### 🎯 Strong interview answer
+
+> **“For private Bedrock access, I would use an interface VPC endpoint through AWS PrivateLink, where the required Bedrock API is supported. The ECS Worker remains in a private subnet and communicates through the endpoint. I would secure the endpoint with security groups and IAM task roles, use TLS for encryption, and monitor access through CloudTrail and CloudWatch.”**
+
+**Memory:**
+**Private ECS → Interface Endpoint → PrivateLink → Bedrock**
