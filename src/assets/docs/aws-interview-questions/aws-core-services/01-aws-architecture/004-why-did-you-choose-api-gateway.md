@@ -9,7 +9,6 @@ API Gateway is the managed front door that offloads authentication, throttling, 
 - Custom domains, stages, access logs and metrics.
 - Private integrations to ECS through VPC Link.
 
-## Why did you choose API Gateway?
 
 For the **AWS version of CWD**, I chose Amazon Web Services **API Gateway** as the **secure API entry point** between external clients and our CWD backend.
 
