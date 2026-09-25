@@ -174524,7 +174524,6 @@ API Gateway is the managed front door that offloads authentication, throttling, 
 - Custom domains, stages, access logs and metrics.
 - Private integrations to ECS through VPC Link.
 
-## Why did you choose API Gateway?
 
 For the **AWS version of CWD**, I chose Amazon Web Services **API Gateway** as the **secure API entry point** between external clients and our CWD backend.
 
@@ -183131,6 +183130,343 @@ Throttle at account, stage, method and usage-plan levels.
 
 ## CWD context
 Gateway throttling protects the backend; token quotas protect Bedrock.
+# How do you implement throttling?
+
+## Short answer
+
+For CWD, I implement throttling at **multiple layers**, starting at **API Gateway** and then controlling concurrency for expensive downstream resources such as **Bedrock, MCP, Salesforce, and ServiceNow**.
+
+The goal is to prevent traffic spikes from overwhelming the system.
+
+\`\`\`text id="j6w2kp"
+User
+ ↓
+API Gateway
+ ↓  ← Request throttling
+CWD API
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Workers
+ ↓
+┌───────────────┬──────────────┬──────────────┐
+Bedrock        MCP           RAG/DB
+ ↓              ↓               ↓
+Token/          Connection/     Query
+Concurrency     Rate limits     limits
+\`\`\`
+
+---
+
+## Key points
+
+### 1. API Gateway throttling
+
+At the external API boundary, I configure:
+
+\`\`\`text id="2xq4bn"
+Requests per second
+Burst capacity
+Rate limits
+Quotas
+\`\`\`
+
+Example:
+
+\`\`\`text id="p8s3hm"
+Normal rate = 100 requests/sec
+Burst = 200
+\`\`\`
+
+If traffic exceeds the configured limit:
+
+\`\`\`text id="c1v7dz"
+Too many requests
+      ↓
+API Gateway
+      ↓
+429 Too Many Requests
+\`\`\`
+
+This protects the CWD backend.
+
+---
+
+## 2. Throttle based on consumer where needed
+
+For enterprise CWD, I may apply different limits based on:
+
+\`\`\`text id="g9k2rs"
+User
+Application
+API key
+Tenant
+Endpoint
+\`\`\`
+
+Example:
+
+\`\`\`text id="x4m8qa"
+Application A → 100 req/sec
+Application B → 50 req/sec
+\`\`\`
+
+This prevents one client from consuming all available capacity.
+
+---
+
+# 3. Control Bedrock concurrency
+
+API Gateway throttling alone isn't enough.
+
+Suppose one request triggers:
+
+\`\`\`text id="w1f5jy"
+Coordinator
+    ↓
+3 Delegators
+    ↓
+10 Workers
+    ↓
+10 Bedrock calls
+\`\`\`
+
+100 user requests could potentially create:
+
+\`\`\`text
+100 × 10 = 1,000
+\`\`\`
+
+concurrent model calls.
+
+So I also implement a **model concurrency limit**.
+
+\`\`\`text id="h3t7cv"
+Workers
+   ↓
+Concurrency Controller
+   ↓
+Maximum 20 Bedrock calls
+   ↓
+Bedrock
+\`\`\`
+
+Additional requests wait in a queue or are rejected gracefully.
+
+---
+
+# 4. Use SQS for asynchronous workloads
+
+For workloads that don't need an immediate response:
+
+\`\`\`text id="a2k6pq"
+CWD
+ ↓
+SQS
+ ↓
+Worker
+ ↓
+Bedrock / MCP
+\`\`\`
+
+SQS acts as a buffer during traffic spikes.
+
+Example:
+
+\`\`\`text id="r5y9uk"
+Incoming work = 10,000
+        ↓
+      SQS
+        ↓
+Process at controlled rate
+\`\`\`
+
+This prevents the downstream service from being overwhelmed.
+
+---
+
+# 5. Protect enterprise systems
+
+CWD may call:
+
+\`\`\`text id="s7n2mc"
+Salesforce
+ServiceNow
+SharePoint
+Databases
+\`\`\`
+
+These systems may have their own API limits.
+
+So I apply per-system controls.
+
+\`\`\`text id="e8d4va"
+Workers
+   ↓
+MCP
+   ↓
+Rate Limiter
+   ↓
+Salesforce
+\`\`\`
+
+For example:
+
+\`\`\`text id="z3q6pw"
+Salesforce limit
+       ↓
+MCP concurrency = 10
+       ↓
+Additional requests queued
+\`\`\`
+
+This prevents CWD from overwhelming the enterprise API.
+
+---
+
+# 6. Token throttling for Bedrock
+
+There are two different things to control:
+
+### Request rate
+
+\`\`\`text
+Requests / second
+\`\`\`
+
+### Token rate
+
+\`\`\`text
+Tokens / minute
+\`\`\`
+
+For Bedrock, I monitor both because multiple CWD Workers can consume tokens concurrently.
+
+\`\`\`text id="v5h8jx"
+Workers
+   ↓
+Token / Concurrency Controller
+   ↓
+Bedrock
+\`\`\`
+
+---
+
+# 7. Retry carefully after throttling
+
+If Bedrock or another service returns \`429\`:
+
+\`\`\`text id="u2k9fw"
+429
+ ↓
+Retry-After
+ ↓
+Exponential backoff
+ ↓
+Jitter
+ ↓
+Retry
+\`\`\`
+
+I don't immediately retry thousands of requests because that can create a **retry storm**.
+
+Example:
+
+\`\`\`text id="b6r1ty"
+Request
+ ↓
+429
+ ↓
+wait
+ ↓
+retry
+ ↓
+still 429
+ ↓
+bounded retry
+ ↓
+fallback / fail gracefully
+\`\`\`
+
+---
+
+# 8. Use circuit breaker for persistent failures
+
+If a downstream service remains overloaded:
+
+\`\`\`text id="q8m4ns"
+Repeated failures
+      ↓
+Circuit breaker OPEN
+      ↓
+Stop sending traffic temporarily
+      ↓
+Protect system
+      ↓
+Health check
+      ↓
+Recover
+\`\`\`
+
+This is especially useful for MCP → Salesforce/ServiceNow integrations.
+
+---
+
+# CWD throttling architecture
+
+\`\`\`text id="w7k3pz"
+                 User
+                   ↓
+             API Gateway
+                   ↓
+          Request Throttling
+                   ↓
+               CWD API
+                   ↓
+             Coordinator
+                   ↓
+              Delegators
+                   ↓
+               Workers
+              /    |     \\
+             /     |      \\
+        Bedrock   MCP     RAG
+           ↓       ↓       ↓
+      Concurrency Rate    Query
+       control    limit   limit
+           ↓       ↓       ↓
+       AWS/Bedrock Enterprise Systems
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement throttling at multiple layers. At the API boundary, API Gateway controls request rate and burst traffic. Inside CWD, I control concurrency for expensive resources such as Bedrock and MCP calls, because one user request can fan out into multiple Workers. For asynchronous workloads, I use SQS to buffer traffic and process it at a controlled rate. I also enforce downstream limits for systems such as Salesforce and ServiceNow. When a service returns 429, I use bounded retries with exponential backoff and jitter, and for persistent failures I use a circuit breaker. This prevents traffic spikes and retry storms from cascading through the CWD architecture.”**
+
+## Easy memory trick
+
+**API → Concurrency → Queue → Downstream → Retry**
+
+* **API** → throttle incoming requests
+* **Concurrency** → limit parallel Workers/LLM calls
+* **Queue** → absorb spikes
+* **Downstream** → protect Salesforce/ServiceNow
+* **Retry** → backoff instead of retry storms
+
+### Key distinction
+
+**Throttling** = control how much traffic enters or executes.
+
+**Rate limiting** = enforce a request-rate limit.
+
+**Concurrency limiting** = limit simultaneous operations.
+
+**Queuing** = hold excess work until capacity is available.
+
+**Circuit breaker** = stop calling a failing dependency temporarily.
 `,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you protect APIs from abuse?
 
 ## Short answer
@@ -190455,1220 +190791,17602 @@ For an interview, don't say **“EKS is better than ECS.”** Say **“I choose 
 `,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize the Coordinator?
 
 ## Short answer
-Containerise the Coordinator as a stateless FastAPI and LangGraph service.
 
-## Key points
-- Slim, non-root image with pinned dependencies; health endpoint; graceful SIGTERM.
-- Checkpoints in DynamoDB so any task can resume a run.
-- ECS service with two or more tasks across AZs behind a private ALB.
-- Task role limited to approved Bedrock models, its DynamoDB table and its queues.
+I would package the **CWD Coordinator** as a Docker container containing the **FastAPI application, LangGraph orchestration code, configuration, and required Python dependencies**.
 
-## CWD context
-Statelessness is what makes scaling and restarts safe.
+Then I would deploy that container as an **ECS/Fargate service** with environment-specific configuration, IAM permissions, health checks, logging, autoscaling, and private networking.
+
+## CWD flow
+
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+ALB
+  ↓
+ECS/Fargate
+  ↓
+┌──────────────────────────────┐
+│      Coordinator Container   │
+│                              │
+│ FastAPI                      │
+│    ↓                         │
+│ Coordinator                  │
+│    ↓                         │
+│ LangGraph                    │
+│    ↓                         │
+│ Agent Registry / State       │
+└──────────────────────────────┘
+  ↓
+Delegators
+  ↓
+Workers
+\`\`\`
+
+---
+
+## 1. Create the Coordinator application
+
+For example:
+
+\`\`\`text
+coordinator/
+├── app/
+│   ├── main.py
+│   ├── coordinator.py
+│   ├── graph.py
+│   ├── state.py
+│   ├── routing.py
+│   └── config.py
+├── requirements.txt
+├── Dockerfile
+└── .dockerignore
+\`\`\`
+
+\`main.py\` exposes the FastAPI API.
+
+\`\`\`python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/health")
+def health():
+    return {"status": "healthy"}
+\`\`\`
+
+The Coordinator/LangGraph logic is called from the API layer.
+
+---
+
+## 2. Create the Dockerfile
+
+A simple example:
+
+\`\`\`dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app/ ./app/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+\`\`\`
+
+The important idea is:
+
+\`\`\`text
+Docker Image
+    ↓
+Python Runtime
+    +
+Dependencies
+    +
+Coordinator Code
+    +
+LangGraph
+    +
+FastAPI
+\`\`\`
+
+---
+
+## 3. Build the image
+
+\`\`\`bash
+docker build -t cwd-coordinator:1.0 .
+\`\`\`
+
+Then test locally:
+
+\`\`\`bash
+docker run -p 8000:8000 cwd-coordinator:1.0
+\`\`\`
+
+Test:
+
+\`\`\`text
+GET /health
+\`\`\`
+
+---
+
+## 4. Push the image to ECR
+
+I would use **Amazon ECR** as the container registry.
+
+\`\`\`text
+Developer
+   ↓
+Docker Build
+   ↓
+Docker Image
+   ↓
+Amazon ECR
+   ↓
+ECS/Fargate
+\`\`\`
+
+I would tag images with an immutable version, for example:
+
+\`\`\`text
+cwd-coordinator:1.4.2
+\`\`\`
+
+rather than relying only on \`latest\`.
+
+---
+
+## 5. Deploy to ECS/Fargate
+
+Create an ECS task definition containing:
+
+\`\`\`text
+Container
+ ├── Image → ECR
+ ├── CPU
+ ├── Memory
+ ├── Port 8000
+ ├── Environment variables
+ ├── IAM task role
+ ├── Log configuration
+ └── Health check
+\`\`\`
+
+Example:
+
+\`\`\`text
+ECS Service
+     ↓
+Fargate Task 1
+     ↓
+Coordinator Container
+
+Fargate Task 2
+     ↓
+Coordinator Container
+\`\`\`
+
+Multiple tasks allow horizontal scaling.
+
+---
+
+## 6. Don't put secrets inside the image
+
+For example, I would **not** put this in the Dockerfile:
+
+\`\`\`text
+OPENAI_API_KEY=xxxx
+\`\`\`
+
+Instead:
+
+\`\`\`text
+ECS Task
+   ↓
+IAM Task Role
+   ↓
+Secrets Manager / Parameter Store
+\`\`\`
+
+For CWD, configuration could include:
+
+\`\`\`text
+ENVIRONMENT=prod
+AWS_REGION=us-east-1
+MODEL_ID=...
+OPENSEARCH_INDEX=...
+MCP_ENDPOINT=...
+\`\`\`
+
+Secrets such as credentials should come from **Secrets Manager**.
+
+---
+
+## 7. Add health checks
+
+The Coordinator should expose something like:
+
+\`\`\`text
+GET /health
+\`\`\`
+
+ECS can use the health check to determine whether the container is healthy.
+
+For example:
+
+\`\`\`text
+ALB
+ ↓
+Coordinator Task 1 → healthy
+Coordinator Task 2 → healthy
+Coordinator Task 3 → unhealthy
+                         ↓
+                   ECS replaces task
+\`\`\`
+
+---
+
+## 8. Add logging and tracing
+
+Every request should carry a correlation ID.
+
+\`\`\`text
+API Gateway
+    ↓
+Coordinator
+    ↓
+Delegator
+    ↓
+Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+Example:
+
+\`\`\`text
+correlation_id = RUN123
+\`\`\`
+
+I would send container logs to **CloudWatch** and use distributed tracing/OpenTelemetry where appropriate.
+
+Monitor:
+
+* Request count
+* Errors
+* P50/P95/P99 latency
+* CPU
+* Memory
+* Container restarts
+* Downstream latency
+* Bedrock latency
+* MCP failures
+
+---
+
+## 9. Scale the Coordinator
+
+If traffic increases:
+
+\`\`\`text
+Low traffic
+
+ECS
+ └── Coordinator Task 1
+
+
+High traffic
+
+ECS
+ ├── Coordinator Task 1
+ ├── Coordinator Task 2
+ ├── Coordinator Task 3
+ └── Coordinator Task 4
+\`\`\`
+
+ECS Service Auto Scaling can increase/decrease task count.
+
+But an important point is that **Coordinator state should not live only inside the container**.
+
+Use external stores such as:
+
+\`\`\`text
+DynamoDB → durable workflow/application state
+Redis    → cache / short-lived state
+\`\`\`
+
+This allows another Coordinator task to continue processing when necessary.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would containerize the CWD Coordinator as a Dockerized FastAPI and LangGraph application. I would create a lightweight Docker image containing the Python runtime, dependencies, and Coordinator code, build and test it, push the versioned image to Amazon ECR, and deploy it as an ECS/Fargate service behind API Gateway and an ALB. Configuration would come from environment variables or Parameter Store, while secrets would come from Secrets Manager using the ECS task IAM role. I would add health checks, CloudWatch logging, correlation IDs, distributed tracing, and ECS autoscaling. I would keep workflow state outside the container so the Coordinator remains stateless and horizontally scalable.”**
+
+## Easy memory trick
+
+**Code → Docker → ECR → Fargate → Health → Scale → Monitor**
+
+\`\`\`text
+Coordinator Code
+      ↓
+   Docker
+      ↓
+     ECR
+      ↓
+  Fargate
+      ↓
+ Health Check
+      ↓
+ Auto Scaling
+      ↓
+ CloudWatch
+\`\`\`
+
+### Key architectural point
+
+**Containerize the Coordinator runtime, but don't containerize its durable state.**
+
+\`\`\`text
+Container
+ ├── FastAPI
+ ├── LangGraph
+ ├── Coordinator logic
+ └── Configuration
+
+External
+ ├── DynamoDB → state
+ ├── Redis → cache
+ ├── Secrets Manager → secrets
+ └── CloudWatch → logs
+\`\`\`
 `,code:``},{id:`065-how-would-you-containerize-delegators`,category:`ECS / Fargate / EKS`,title:`How would you containerize Delegators?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize Delegators?
 
 ## Short answer
-Run each Delegator as its own ECS service, per domain.
 
-## Key points
-- Own task role with least privilege; internal load balancer or Service Connect.
-- Registered in the Agent Registry with capabilities and endpoint.
-- Scale on requests or CPU.
+I would package each **Delegator as a containerized service** with its own domain-specific orchestration logic.
 
-## CWD context
-A fault in one domain must not stop the others.
+For CWD, for example:
+
+\`\`\`text
+CWD
+ ↓
+Coordinator
+ ↓
+ ┌──────────────────────┐
+ │ Sales Delegator      │ → Sales Workers
+ │ IT/Service Delegator │ → IT Workers
+ └──────────────────────┘
+\`\`\`
+
+Each Delegator can run as an **ECS/Fargate task**, allowing independent scaling and deployment.
+
+---
+
+## 1. What goes inside a Delegator container?
+
+A Delegator container would typically contain:
+
+\`\`\`text
+Delegator Container
+├── FastAPI / service interface
+├── Delegator logic
+├── Worker registry client
+├── Worker selection logic
+├── Fan-out / fan-in logic
+├── Retry / timeout handling
+├── Result aggregation
+├── Authorization checks
+├── Logging / tracing
+└── Configuration
+\`\`\`
+
+For example:
+
+\`\`\`text
+Sales Delegator
+    ↓
+Worker Registry
+    ↓
+Select Workers
+    ↓
+Customer Worker
+Opportunity Worker
+Salesforce Worker
+    ↓
+Aggregate results
+\`\`\`
+
+---
+
+## 2. Create separate Docker images
+
+You can either create separate images:
+
+\`\`\`text
+sales-delegator:1.0
+service-delegator:1.0
+\`\`\`
+
+or use the same base image with different configuration.
+
+For example:
+
+\`\`\`text
+ECR
+├── cwd-sales-delegator
+└── cwd-service-delegator
+\`\`\`
+
+I generally prefer **separate deployable services** when the Delegators have significantly different dependencies or release cycles.
+
+---
+
+## 3. Example Dockerfile
+
+\`\`\`dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app/ ./app/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app",
+     "--host", "0.0.0.0",
+     "--port", "8000"]
+\`\`\`
+
+The image contains the Delegator code and its dependencies, but **not secrets or environment-specific configuration**.
+
+---
+
+## 4. Deploy to ECS/Fargate
+
+Example:
+
+\`\`\`text
+                   ECS Cluster
+                       │
+          ┌────────────┴────────────┐
+          ↓                         ↓
+   Sales Delegator          IT Delegator
+   Fargate Task             Fargate Task
+          ↓                         ↓
+   Sales Workers             IT Workers
+\`\`\`
+
+The Coordinator can communicate with the Delegators through an internal service endpoint.
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+Service Discovery / Internal LB
+    ↓
+Sales Delegator
+\`\`\`
+
+---
+
+## 5. Delegator should remain stateless
+
+This is important for scaling.
+
+Don't keep workflow state only inside the container:
+
+\`\`\`text
+❌ Delegator Container
+      ↓
+   local memory
+      ↓
+   workflow state
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Delegator
+   ↓
+DynamoDB → durable state
+Redis    → cache
+\`\`\`
+
+Then ECS can run multiple instances:
+
+\`\`\`text
+Sales Delegator
+ ├── Task 1
+ ├── Task 2
+ └── Task 3
+\`\`\`
+
+Any task can process the request.
+
+---
+
+## 6. Handle Worker fan-out
+
+A Delegator may call multiple Workers:
+
+\`\`\`text
+Sales Delegator
+      ↓
+ ┌────┼─────┐
+ ↓    ↓     ↓
+W1   W2     W3
+ ↓    ↓     ↓
+CRM  Sales  Customer
+\`\`\`
+
+The Delegator should control:
+
+* Maximum concurrency
+* Worker timeout
+* Retry policy
+* Mandatory vs optional Workers
+* Correlation IDs
+* Result aggregation
+
+For example:
+
+\`\`\`text
+W1 → SUCCESS
+W2 → SUCCESS
+W3 → TIMEOUT
+\`\`\`
+
+If W3 is optional:
+
+\`\`\`text
+Delegator
+    ↓
+Aggregate W1 + W2
+    ↓
+Return partial result
+\`\`\`
+
+If W3 is mandatory:
+
+\`\`\`text
+Delegator
+    ↓
+Fail / retry workflow
+\`\`\`
+
+---
+
+## 7. Containerize, but don't duplicate responsibilities
+
+This is important in an interview.
+
+\`\`\`text
+Coordinator
+    ↓
+Overall workflow
+    ↓
+Delegator
+    ↓
+Domain-level orchestration
+    ↓
+Worker
+    ↓
+Specific capability
+\`\`\`
+
+For example:
+
+\`\`\`text
+Coordinator
+   ↓
+Sales Delegator
+   ↓
+Customer Worker
+   ↓
+Salesforce MCP
+\`\`\`
+
+The **Delegator shouldn't become another Coordinator**.
+
+### Coordinator
+
+Responsible for:
+
+* Overall intent
+* Global planning
+* Selecting Delegators
+* Cross-domain coordination
+* Final response synthesis
+
+### Delegator
+
+Responsible for:
+
+* Domain-specific worker selection
+* Worker fan-out/fan-in
+* Domain-level dependencies
+* Worker failures
+* Aggregating domain results
+
+### Worker
+
+Responsible for:
+
+* One specific capability
+* MCP/API/RAG operation
+* Returning structured results
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would containerize each CWD Delegator as an independently deployable service and run it on ECS/Fargate. For example, Sales Delegator and IT Service Delegator can have separate containers and scale independently. Each Delegator contains domain-specific worker discovery, worker selection, fan-out/fan-in, timeout, retry, failure handling and result aggregation logic. I would keep workflow state outside the container in DynamoDB or Redis, use IAM task roles for AWS access, Secrets Manager for secrets, and CloudWatch/OpenTelemetry for logging and tracing. The Coordinator handles overall orchestration, while the Delegator handles domain-level orchestration.”**
+
+## Easy memory trick
+
+**Delegator = Domain + Select + Fan-out + Aggregate**
+
+\`\`\`text
+Coordinator
+     ↓
+Delegator
+     ↓
+Select Workers
+     ↓
+Fan-out
+     ↓
+Workers
+     ↓
+Fan-in
+     ↓
+Aggregate
+     ↓
+Coordinator
+\`\`\`
+
+### Key distinction
+
+**Coordinator = “Which domains should participate?”**
+
+**Delegator = “Which Workers should execute within my domain?”**
+
+**Worker = “How do I perform this specific capability?”**
 `,code:``},{id:`066-how-would-you-containerize-workers`,category:`ECS / Fargate / EKS`,title:`How would you containerize Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize Workers?
 
 ## Short answer
-Run Workers as ECS services that consume SQS queues, or as tasks started by Step Functions.
+
+I would containerize each **complex or long-running CWD Worker as an independently deployable Docker service** and run it on **ECS/Fargate**.
+
+Each Worker should focus on **one specific capability**, for example:
+
+\`\`\`text
+Coordinator
+    ↓
+Sales Delegator
+    ↓
+Customer Worker
+    ↓
+MCP Client
+    ↓
+MCP Server
+    ↓
+Salesforce
+\`\`\`
+
+For lightweight, short-lived Workers, I could use **Lambda instead of ECS/Fargate**.
+
+---
 
 ## Key points
-- One queue and service per Worker type; scale on backlog per task.
-- Own task role; Fargate Spot for non-critical work.
-- Idempotent handlers and graceful shutdown so in-flight messages return to the queue.
 
-## CWD context
-Workers call MCP servers rather than embedding system integrations.
-`,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does ECS service auto scaling work?
+1. **One Worker = one clear capability**
+2. Package Worker code and dependencies into Docker.
+3. Store image in **Amazon ECR**.
+4. Deploy complex Workers on **ECS/Fargate**.
+5. Use **IAM task roles** for AWS access.
+6. Use **Secrets Manager** for secrets.
+7. Keep Worker state outside the container.
+8. Add health checks, logging and tracing.
+9. Scale Workers independently.
+10. Use timeouts, retries and idempotency for downstream calls.
+
+---
+
+## 1. What goes inside a Worker container?
+
+For example, a Salesforce Customer Worker:
+
+\`\`\`text
+Customer Worker Container
+├── FastAPI / Worker API
+├── Business logic
+├── MCP Client
+├── Salesforce adapter
+├── Input validation
+├── Response schema
+├── Retry/timeout handling
+├── Logging/tracing
+└── Configuration
+\`\`\`
+
+The Worker should **not contain credentials directly**.
+
+---
+
+## 2. Example Worker structure
+
+\`\`\`text
+customer-worker/
+├── app/
+│   ├── main.py
+│   ├── worker.py
+│   ├── mcp_client.py
+│   ├── salesforce.py
+│   ├── models.py
+│   └── config.py
+├── requirements.txt
+├── Dockerfile
+└── .dockerignore
+\`\`\`
+
+---
+
+## 3. Dockerize the Worker
+
+Example:
+
+\`\`\`dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app/ ./app/
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app",
+     "--host", "0.0.0.0",
+     "--port", "8000"]
+\`\`\`
+
+Build:
+
+\`\`\`bash
+docker build -t cwd-customer-worker:1.0 .
+\`\`\`
+
+Test:
+
+\`\`\`bash
+docker run -p 8000:8000 cwd-customer-worker:1.0
+\`\`\`
+
+Then push the image to ECR.
+
+\`\`\`text
+Docker
+   ↓
+ECR
+   ↓
+ECS/Fargate
+\`\`\`
+
+---
+
+# 4. Deploy Workers independently
+
+This is one of the biggest benefits.
+
+\`\`\`text
+ECS Cluster
+│
+├── Customer Worker
+│    ├── Task 1
+│    └── Task 2
+│
+├── Incident Worker
+│    └── Task 1
+│
+├── Knowledge Worker
+│    ├── Task 1
+│    ├── Task 2
+│    └── Task 3
+│
+└── Document Worker
+     └── Task 1
+\`\`\`
+
+If the Knowledge Worker gets heavy traffic, I can scale **only that Worker**.
+
+\`\`\`text
+Knowledge Worker
+1 task → 5 tasks
+\`\`\`
+
+I don't need to scale the entire CWD platform.
+
+---
+
+# 5. Worker communication
+
+The Delegator calls the appropriate Worker:
+
+\`\`\`text
+Sales Delegator
+      ↓
+Service Discovery / Internal API
+      ↓
+Customer Worker
+      ↓
+MCP Client
+      ↓
+MCP Server
+      ↓
+Salesforce
+\`\`\`
+
+For example:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+The Worker validates the input before calling Salesforce.
+
+---
+
+# 6. Keep state outside the container
+
+Containers are replaceable.
+
+So I wouldn't store important workflow state in Worker memory.
+
+\`\`\`text
+Worker Container
+      ↓
+DynamoDB → durable state
+Redis    → cache
+S3       → documents
+\`\`\`
+
+For example:
+
+\`\`\`text
+RUN123
+  ↓
+Customer Worker
+  ↓
+IN_PROGRESS
+  ↓
+Salesforce result
+  ↓
+COMPLETED
+\`\`\`
+
+---
+
+# 7. Handle Worker failures
+
+Suppose:
+
+\`\`\`text
+Customer Worker
+      ↓
+MCP
+      ↓
+Salesforce
+      ↓
+503 Service Unavailable
+\`\`\`
+
+The Worker can:
+
+\`\`\`text
+Timeout
+   ↓
+Retry
+   ↓
+Exponential Backoff + Jitter
+   ↓
+Retry limit reached
+   ↓
+Failure
+\`\`\`
+
+Then the Delegator determines whether the Worker is **mandatory or optional**.
+
+\`\`\`text
+Optional Worker → continue with partial result
+Mandatory Worker → fail/retry workflow
+\`\`\`
+
+---
+
+# 8. Secure the Worker
+
+For AWS access:
+
+\`\`\`text
+Worker
+   ↓
+ECS Task IAM Role
+   ↓
+AWS services
+\`\`\`
+
+For secrets:
+
+\`\`\`text
+Worker
+   ↓
+Secrets Manager
+   ↓
+Credential
+\`\`\`
+
+Use:
+
+* IAM least privilege
+* Private subnets
+* Security groups
+* Secrets Manager
+* KMS
+* TLS
+* Network restrictions
+* Input validation
+* MCP authorization
+
+---
+
+# 9. Monitor every Worker
+
+Every Worker should produce structured telemetry:
+
+\`\`\`text
+correlation_id
+run_id
+delegator_id
+worker_id
+status
+duration
+retry_count
+downstream_service
+error_type
+\`\`\`
+
+Example:
+
+\`\`\`text
+RUN123
+SalesDelegator
+CustomerWorker
+Salesforce
+SUCCESS
+2.4 seconds
+\`\`\`
+
+Monitor through:
+
+* CloudWatch
+* OpenTelemetry/X-Ray
+* Application logs
+* P50/P95/P99 latency
+* Error rate
+* Retry rate
+* MCP latency
+* Downstream failures
+
+---
+
+# 10. Lambda vs ECS for Workers
+
+This is an important interview point.
+
+\`\`\`text
+                  Worker
+                    ↓
+       ┌────────────┴────────────┐
+       ↓                         ↓
+Short + Stateless          Complex/Long-running
+       ↓                         ↓
+    Lambda                  ECS/Fargate
+\`\`\`
+
+### Lambda
+
+Use for:
+
+\`\`\`text
+S3 preprocessing
+Event processing
+Simple validation
+Lightweight transformation
+Small event-driven Worker
+\`\`\`
+
+### ECS/Fargate
+
+Use for:
+
+\`\`\`text
+Complex RAG Worker
+Complex MCP Worker
+Long-running Worker
+Heavy dependency Worker
+Resource-intensive Worker
+Persistent service Worker
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would containerize each complex CWD Worker as an independently deployable Docker image and run it on ECS/Fargate. Each Worker would have a single clear capability, such as Customer, Incident, RAG or Document processing. I would package the Worker code and dependencies into Docker, push the versioned image to ECR, and deploy it as an ECS service with IAM task roles, Secrets Manager, health checks, autoscaling and CloudWatch/OpenTelemetry monitoring. The Worker would communicate with enterprise systems through MCP and keep durable state outside the container. For short, stateless, event-driven Workers, I would use Lambda instead of Fargate.”**
+
+## Easy memory trick
+
+**Worker = Capability + Container + MCP + Scale**
+
+\`\`\`text
+Worker
+  ↓
+Docker
+  ↓
+ECR
+  ↓
+Fargate
+  ↓
+MCP
+  ↓
+Enterprise System
+\`\`\`
+
+### Key distinction
+
+\`\`\`text
+Coordinator → Overall orchestration
+     ↓
+Delegator   → Domain orchestration
+     ↓
+Worker      → Specific capability
+     ↓
+MCP         → Tool/system access
+\`\`\`
+
+**The Worker should do one capability well; it should not become another Coordinator or Delegator.**
+`,code:``},{id:`067-how-does-ecs-service-auto-scaling-work`,category:`ECS / Fargate / EKS`,title:`How does ECS service auto scaling work?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does ECS Service Auto Scaling work?
 
 ## Short answer
-ECS Service Auto Scaling uses Application Auto Scaling policies on metrics.
+
+**ECS Service Auto Scaling automatically increases or decreases the number of running ECS tasks based on workload.**
+
+For CWD, if traffic increases, ECS can increase the number of **Coordinator, Delegator, or Worker containers**. When traffic decreases, it can reduce them.
+
+\`\`\`text
+Low traffic
+   ↓
+2 ECS tasks
+
+High traffic
+   ↓
+6 ECS tasks
+\`\`\`
 
 ## Key points
-- Target tracking on CPU, memory or ALB requests per target.
-- Custom metric such as SQS backlog per running task.
-- Set minimum and maximum capacity, cooldowns and scale-in protection.
 
-## CWD context
-Scale Workers on backlog, the API on request count.
+1. **CloudWatch metrics** measure workload.
+2. **Scaling policy** decides when to scale.
+3. **ECS Service** changes desired task count.
+4. ECS/Fargate starts or stops tasks.
+5. **ALB** distributes traffic across healthy tasks.
+6. ECS maintains the desired number of healthy tasks.
+
+---
+
+## CWD flow
+
+\`\`\`text
+Users
+  ↓
+API Gateway
+  ↓
+ALB
+  ↓
+ECS Service
+  ↓
+┌─────────────┐
+│ Coordinator │
+│ Task 1      │
+│ Task 2      │
+│ Task 3      │
+└─────────────┘
+       ↓
+   Delegators
+       ↓
+    Workers
+\`\`\`
+
+Suppose we start with:
+
+\`\`\`text
+Desired tasks = 2
+Minimum = 2
+Maximum = 10
+\`\`\`
+
+Traffic increases:
+
+\`\`\`text
+CPU / Request Count / Latency
+           ↓
+      Scaling policy
+           ↓
+      ECS launches
+       Task 3
+       Task 4
+       Task 5
+\`\`\`
+
+Now:
+
+\`\`\`text
+2 tasks → 5 tasks
+\`\`\`
+
+When traffic falls:
+
+\`\`\`text
+5 tasks → 3 tasks → 2 tasks
+\`\`\`
+
+ECS doesn't go below the configured minimum.
+
+---
+
+# 1. What triggers scaling?
+
+Common metrics include:
+
+### CPU utilization
+
+Example:
+
+\`\`\`text
+CPU > 70%
+   ↓
+Scale out
+\`\`\`
+
+If CPU stays low:
+
+\`\`\`text
+CPU < 30%
+   ↓
+Scale in
+\`\`\`
+
+### Memory utilization
+
+\`\`\`text
+Memory > 75%
+   ↓
+Scale out
+\`\`\`
+
+### ALB request count
+
+For an API service, this can be more meaningful than CPU.
+
+\`\`\`text
+Requests per target increasing
+          ↓
+      Scale out
+\`\`\`
+
+### Custom CloudWatch metrics
+
+For CWD, custom metrics can be particularly useful:
+
+\`\`\`text
+Active requests
+Worker queue depth
+Agent workflow count
+Requests per second
+MCP queue depth
+Bedrock queue depth
+\`\`\`
+
+---
+
+# 2. Target tracking
+
+One common approach is **target tracking**.
+
+Example:
+
+\`\`\`text
+Target CPU = 60%
+\`\`\`
+
+If average CPU goes significantly above the target:
+
+\`\`\`text
+60% → 75% → scale out
+\`\`\`
+
+If it stays below the target:
+
+\`\`\`text
+60% → 35% → scale in
+\`\`\`
+
+ECS adjusts the desired task count automatically.
+
+---
+
+# 3. Step scaling
+
+You can also define explicit thresholds.
+
+Example:
+
+\`\`\`text
+CPU < 40%       → remove 1 task
+CPU 40–70%      → no change
+CPU 70–85%      → add 2 tasks
+CPU > 85%       → add 3 tasks
+\`\`\`
+
+This gives you more explicit control.
+
+---
+
+# 4. CWD example
+
+Imagine Customer Briefing traffic increases.
+
+\`\`\`text
+100 users
+   ↓
+Coordinator
+   ↓
+2 Fargate tasks
+\`\`\`
+
+Traffic becomes:
+
+\`\`\`text
+500 users
+   ↓
+CPU/request count increases
+   ↓
+CloudWatch
+   ↓
+ECS Auto Scaling
+   ↓
+5 Fargate tasks
+\`\`\`
+
+Now:
+
+\`\`\`text
+             ALB
+              ↓
+       ┌──────┼──────┐
+       ↓      ↓      ↓
+      C1     C2     C3 ...
+\`\`\`
+
+The ALB distributes requests across healthy tasks.
+
+---
+
+# 5. Important: scaling Coordinator doesn't automatically scale Workers
+
+This is a **very important CWD interview point**.
+
+Suppose:
+
+\`\`\`text
+Coordinator
+    ↓
+10 Workers
+\`\`\`
+
+If Coordinator scales:
+
+\`\`\`text
+2 Coordinators
+\`\`\`
+
+that could potentially increase Worker traffic dramatically.
+
+For example:
+
+\`\`\`text
+2 users × 10 Workers = 20 operations
+
+100 users × 10 Workers = 1,000 operations
+\`\`\`
+
+So I would implement **independent scaling and concurrency controls** for different components.
+
+\`\`\`text
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker concurrency limit
+     ↓
+MCP / Salesforce / ServiceNow / Bedrock
+\`\`\`
+
+Otherwise, scaling CWD could overwhelm downstream systems.
+
+---
+
+# 6. Protect downstream systems
+
+For example, Salesforce can only handle a certain amount of traffic safely.
+
+I might configure:
+
+\`\`\`text
+Worker
+  ↓
+Concurrency limit = 20
+  ↓
+Queue
+  ↓
+Salesforce
+\`\`\`
+
+Similarly, for Bedrock:
+
+\`\`\`text
+Workers
+   ↓
+Concurrency control
+   ↓
+Bedrock
+\`\`\`
+
+This prevents ECS scaling from creating uncontrolled downstream fan-out.
+
+---
+
+# 7. Health checks
+
+ECS should only route traffic to healthy tasks.
+
+\`\`\`text
+ALB
+ ↓
+Health check
+ ↓
+Task 1 → Healthy → receive traffic
+Task 2 → Healthy → receive traffic
+Task 3 → Unhealthy → no traffic
+\`\`\`
+
+ECS can replace unhealthy tasks.
+
+---
+
+# 8. Scale-out vs scale-in
+
+### Scale-out
+
+\`\`\`text
+Traffic ↑
+CPU/Memory ↑
+Queue ↑
+Request count ↑
+       ↓
+Launch more tasks
+\`\`\`
+
+### Scale-in
+
+\`\`\`text
+Traffic ↓
+CPU/Memory ↓
+Queue ↓
+       ↓
+Stop unnecessary tasks
+\`\`\`
+
+I would configure **cooldown/stabilization behavior** so the service doesn't constantly oscillate:
+
+\`\`\`text
+2 → 5 → 2 → 5 → 2
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“ECS Service Auto Scaling changes the desired number of running tasks based on CloudWatch metrics and scaling policies. For CWD, I could scale the Coordinator or Worker services based on CPU, memory, ALB request count, or custom metrics such as active requests or queue depth. For example, if request volume increases and the target utilization is exceeded, ECS launches additional Fargate tasks and the ALB distributes traffic across them. When demand decreases, ECS scales in within the configured minimum and maximum limits. Importantly, I would scale Coordinator, Delegator and Worker services independently and use concurrency limits and queues to protect downstream systems like Salesforce, ServiceNow and Bedrock.”**
+
+## Easy memory trick
+
+**Measure → Decide → Add/Remove → Load Balance**
+
+\`\`\`text
+CloudWatch
+    ↓
+Scaling Policy
+    ↓
+ECS Service
+    ↓
+Add / Remove Tasks
+    ↓
+ALB
+    ↓
+Healthy Tasks
+\`\`\`
+
+### Key distinction
+
+**ECS Auto Scaling = number of containers/tasks**
+
+**Lambda concurrency = number of simultaneous function executions**
+
+**Application concurrency = how many Workers you allow to execute simultaneously**
+
+These are related, but **they are not the same thing**.
 `,code:``},{id:`068-how-do-you-implement-health-checks`,category:`ECS / Fargate / EKS`,title:`How do you implement health checks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement health checks?
 
 ## Short answer
-Combine load balancer and container health checks, with a startup grace period.
 
-## Key points
-- ALB target-group health checks on a shallow /health endpoint.
-- Container health check command in the task definition.
-- healthCheckGracePeriodSeconds for slow start; keep dependency checks shallow.
+For CWD, I would implement **health checks at multiple levels**:
 
-## CWD context
-Deep dependency checks in health endpoints can cause cascading restarts.
+1. **Container health** – Is the application process alive?
+2. **ECS task health** – Is the container healthy?
+3. **ALB health** – Can the service receive traffic?
+4. **Dependency health** – Are critical dependencies reachable?
+5. **Application health** – Is CWD actually able to process requests?
+
+The important point is: **don't make the health endpoint perform expensive LLM or enterprise calls.**
+
+---
+
+## CWD flow
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+ALB
+ ↓
+ECS/Fargate
+ ↓
+┌──────────────────────┐
+│ CWD Container        │
+│                      │
+│ /health/live         │
+│ /health/ready        │
+└──────────────────────┘
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Workers
+\`\`\`
+
+---
+
+# 1. Liveness check
+
+Liveness answers:
+
+> **“Is my application process running?”**
+
+Example:
+
+\`\`\`python
+@app.get("/health/live")
+def liveness():
+    return {"status": "alive"}
+\`\`\`
+
+Response:
+
+\`\`\`json
+{
+  "status": "alive"
+}
+\`\`\`
+
+This should be very lightweight.
+
+If it fails repeatedly, ECS can replace the unhealthy task.
+
+---
+
+# 2. Readiness check
+
+Readiness answers:
+
+> **“Is this instance ready to receive traffic?”**
+
+Example:
+
+\`\`\`python
+@app.get("/health/ready")
+def readiness():
+    return {"status": "ready"}
+\`\`\`
+
+A more realistic implementation might check only critical local dependencies/configuration.
+
+For example:
+
+\`\`\`text
+Configuration loaded?       ✓
+Required initialization?    ✓
+Required internal service?  ✓
+        ↓
+      READY
+\`\`\`
+
+If the application isn't ready, the load balancer should not send new traffic to that task.
+
+---
+
+# 3. Configure ECS container health check
+
+Example Dockerfile:
+
+\`\`\`dockerfile
+HEALTHCHECK --interval=30s \\
+            --timeout=5s \\
+            --start-period=30s \\
+            --retries=3 \\
+            CMD curl -f http://localhost:8000/health/live || exit 1
+\`\`\`
+
+This tells ECS:
+
+\`\`\`text
+Every 30 seconds
+      ↓
+Call /health/live
+      ↓
+Success → Healthy
+Failure → Unhealthy
+\`\`\`
+
+---
+
+# 4. Configure ALB health check
+
+The ALB can also check the application.
+
+\`\`\`text
+ALB
+ ↓
+GET /health/ready
+ ↓
+ECS Task
+\`\`\`
+
+For example:
+
+\`\`\`text
+Path: /health/ready
+Port: 8000
+Protocol: HTTP
+Healthy status: 200
+\`\`\`
+
+If:
+
+\`\`\`text
+Task 1 → 200 → Healthy
+Task 2 → 200 → Healthy
+Task 3 → 503 → Unhealthy
+\`\`\`
+
+The ALB stops sending normal traffic to Task 3.
+
+---
+
+# 5. Dependency health checks
+
+This needs some care.
+
+I would **not** make the normal liveness endpoint call:
+
+\`\`\`text
+Bedrock
+Salesforce
+ServiceNow
+OpenSearch
+\`\`\`
+
+every few seconds.
+
+Otherwise, health checks themselves create unnecessary traffic and cost.
+
+Instead, use lightweight dependency checks where needed:
+
+\`\`\`text
+/health/ready
+      ↓
+Critical local dependencies
+\`\`\`
+
+And monitor external dependencies separately:
+
+\`\`\`text
+CloudWatch
+   ↓
+Bedrock metrics
+Salesforce latency/errors
+MCP latency/errors
+OpenSearch health
+\`\`\`
+
+---
+
+# 6. CWD example
+
+Suppose the Customer Briefing Coordinator is running:
+
+\`\`\`text
+ECS Task
+   ↓
+Coordinator
+   ↓
+Delegators
+   ↓
+Workers
+\`\`\`
+
+The container crashes.
+
+\`\`\`text
+Container
+   ↓
+/health/live → failure
+\`\`\`
+
+ECS detects the unhealthy task:
+
+\`\`\`text
+Unhealthy Task
+      ↓
+Stop/replace
+      ↓
+New Fargate Task
+      ↓
+Health check
+      ↓
+Healthy
+      ↓
+ALB sends traffic
+\`\`\`
+
+---
+
+# 7. Startup considerations
+
+CWD may take some time to initialize:
+
+\`\`\`text
+Container starts
+      ↓
+Python initialization
+      ↓
+Load configuration
+      ↓
+Initialize application
+      ↓
+Ready
+\`\`\`
+
+So I would configure a **start period/grace period** so ECS doesn't kill a task while it is still starting.
+
+For example:
+
+\`\`\`text
+start-period = 30 seconds
+\`\`\`
+
+The actual value should be based on measured startup time.
+
+---
+
+# 8. Monitor health metrics
+
+I would monitor:
+
+\`\`\`text
+Healthy task count
+Unhealthy task count
+Task restart count
+Container exit count
+ALB 5xx
+ALB target response time
+Health-check failures
+ECS deployment failures
+CPU
+Memory
+\`\`\`
+
+And create CloudWatch alarms for important thresholds.
+
+---
+
+# 9. Health check vs monitoring
+
+This is an important interview distinction.
+
+### Health check
+
+Answers:
+
+> **“Can this instance currently serve traffic?”**
+
+### Monitoring
+
+Answers:
+
+> **“What is happening across my system?”**
+
+For example:
+
+\`\`\`text
+Health check
+     ↓
+Task is healthy
+
+CloudWatch
+     ↓
+But Bedrock latency increased
+     ↓
+P95 = 8 seconds
+\`\`\`
+
+The container can be **healthy** while the overall system is experiencing a performance problem.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement health checks at multiple levels. The container exposes lightweight liveness and readiness endpoints. ECS uses the container health check to determine whether the task is healthy, while the ALB uses the readiness endpoint to decide whether the task should receive traffic. I keep these checks lightweight and don't call expensive dependencies like Bedrock or Salesforce on every health check. Dependency health is monitored separately through CloudWatch and distributed tracing. If a task repeatedly fails its health check, ECS replaces it, and the ALB only routes traffic to healthy tasks.”**
+
+## Easy memory trick
+
+**Live → Ready → Route → Replace → Monitor**
+
+\`\`\`text
+Liveness
+   ↓
+Readiness
+   ↓
+ALB routes traffic
+   ↓
+ECS replaces unhealthy task
+   ↓
+CloudWatch monitors system
+\`\`\`
+
+### Key distinction
+
+**Liveness:** “Is the process alive?”
+
+**Readiness:** “Can I receive traffic?”
+
+**ALB health check:** “Should I send traffic here?”
+
+**CloudWatch monitoring:** “What is happening in the system?”
 `,code:``},{id:`069-how-do-you-perform-zero-downtime-deployment`,category:`ECS / Fargate / EKS`,title:`How do you perform zero-downtime deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you perform zero-downtime deployment?
 
 ## Short answer
-Achieve zero downtime with rolling or blue-green deployments and connection draining.
 
-## Key points
-- Rolling: minimum healthy 100 percent, maximum 200 percent; deployment circuit breaker with automatic rollback.
-- Blue-green through CodeDeploy with a test listener and traffic shifting.
-- Deregistration delay and SIGTERM handling; backward-compatible schema changes.
+For CWD on **ECS/Fargate**, I would use a **rolling deployment or blue-green deployment** so the old version continues serving traffic while the new version is started and health-checked.
 
-## CWD context
-In-flight workflows resume from checkpoints.
+For a critical CWD release, I would typically prefer **blue-green or canary deployment** when I need stronger control over risk.
+
+---
+
+## CWD deployment flow
+
+\`\`\`text
+                API Gateway
+                     ↓
+                    ALB
+                     ↓
+              ECS/Fargate
+                /       \\
+               /         \\
+        Old Version    New Version
+          v1.4           v1.5
+            ↓              ↓
+        Healthy          Healthy
+               \\          /
+                \\        /
+                 Traffic
+\`\`\`
+
+The key principle is:
+
+> **Never remove the healthy old version before the new version is ready.**
+
+---
+
+# 1. Build the new version
+
+For example:
+
+\`\`\`text
+CWD v1.4 → current production
+CWD v1.5 → new release
+\`\`\`
+
+Build Docker image:
+
+\`\`\`text
+Docker
+  ↓
+cwd-coordinator:1.5
+  ↓
+Amazon ECR
+\`\`\`
+
+I use an immutable version/tag rather than relying only on \`latest\`.
+
+---
+
+# 2. Start new ECS tasks
+
+ECS starts tasks using version \`1.5\`:
+
+\`\`\`text
+Before:
+
+v1.4
+v1.4
+v1.4
+
+
+During deployment:
+
+v1.4
+v1.4
+v1.4
+v1.5
+v1.5
+\`\`\`
+
+The old tasks continue serving traffic.
+
+---
+
+# 3. Perform health checks
+
+The new tasks must pass:
+
+\`\`\`text
+Container health check
+       ↓
+Readiness check
+       ↓
+ALB target health check
+\`\`\`
+
+Only healthy tasks receive traffic.
+
+\`\`\`text
+v1.5 Task 1 → Healthy ✓
+v1.5 Task 2 → Healthy ✓
+\`\`\`
+
+Then traffic can gradually move to the new version.
+
+---
+
+# 4. Remove old tasks gradually
+
+Once the new version is healthy:
+
+\`\`\`text
+v1.4 + v1.5
+      ↓
+Traffic moves to v1.5
+      ↓
+v1.4 tasks drained
+      ↓
+v1.4 stopped
+\`\`\`
+
+This prevents a gap where no healthy application instances exist.
+
+---
+
+# Blue-Green deployment
+
+For a stronger deployment strategy:
+
+\`\`\`text
+             ALB
+              ↓
+       ┌──────┴──────┐
+       ↓             ↓
+    Blue            Green
+    v1.4             v1.5
+  Production        New
+       ↓             ↓
+    Traffic       Health test
+\`\`\`
+
+Initially:
+
+\`\`\`text
+100% → Blue
+\`\`\`
+
+After Green is validated:
+
+\`\`\`text
+0% → Blue
+100% → Green
+\`\`\`
+
+If there is a problem:
+
+\`\`\`text
+100% → Blue
+\`\`\`
+
+This makes rollback very fast.
+
+---
+
+# Canary deployment
+
+For CWD, I can also use a canary:
+
+\`\`\`text
+v1.4 → 95% traffic
+v1.5 → 5% traffic
+\`\`\`
+
+Monitor:
+
+* Error rate
+* P95/P99 latency
+* Bedrock errors
+* MCP failures
+* Worker failures
+* Token usage
+* Cost
+* LLM evaluation metrics
+* Business success rate
+
+If healthy:
+
+\`\`\`text
+5% → 25% → 50% → 100%
+\`\`\`
+
+If unhealthy:
+
+\`\`\`text
+v1.5 → 0%
+v1.4 → 100%
+\`\`\`
+
+---
+
+# 5. Important for CWD: AI components
+
+Zero-downtime deployment isn't only about the Docker container.
+
+CWD also has:
+
+\`\`\`text
+Coordinator
+Delegators
+Workers
+Prompts
+Models
+MCP tools
+RAG configuration
+\`\`\`
+
+Suppose I deploy:
+
+\`\`\`text
+Coordinator v2
+\`\`\`
+
+but accidentally change the prompt or model configuration.
+
+The application may remain technically **healthy**, but answer quality could degrade.
+
+So I would monitor both:
+
+### Infrastructure health
+
+\`\`\`text
+CPU
+Memory
+5xx
+Latency
+Task health
+\`\`\`
+
+### AI quality
+
+\`\`\`text
+Groundedness
+Answer relevance
+Tool success
+Hallucination rate
+LLM evaluation score
+Token usage
+Cost
+\`\`\`
+
+---
+
+# 6. Database/state compatibility
+
+This is another important interview point.
+
+Suppose:
+
+\`\`\`text
+v1 → old schema
+v2 → new schema
+\`\`\`
+
+During deployment, both versions may temporarily run together.
+
+Therefore, I prefer **backward-compatible schema changes**:
+
+\`\`\`text
+Step 1 → Add new field
+Step 2 → Deploy v2
+Step 3 → Migrate data
+Step 4 → Remove old field later
+\`\`\`
+
+This avoids breaking the old version while it is still serving traffic.
+
+---
+
+# 7. Example CWD deployment
+
+Suppose production has:
+
+\`\`\`text
+Coordinator v1.4
+Sales Delegator v1.4
+Customer Worker v1.4
+\`\`\`
+
+I release:
+
+\`\`\`text
+Coordinator v1.5
+Sales Delegator v1.5
+Customer Worker v1.5
+\`\`\`
+
+Deployment:
+
+\`\`\`text
+Build
+  ↓
+Test
+  ↓
+LLM Evaluation
+  ↓
+Push images to ECR
+  ↓
+Deploy new ECS tasks
+  ↓
+Health checks
+  ↓
+Canary/Blue-Green
+  ↓
+Monitor
+  ↓
+100% traffic
+  ↓
+Remove old version
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For zero-downtime deployment of CWD on ECS/Fargate, I would use rolling, blue-green, or canary deployment. I build an immutable versioned Docker image, push it to ECR, and start new ECS tasks while the old version continues serving traffic. The new tasks must pass container and ALB health checks before receiving traffic. For critical releases, I can shift traffic gradually using canary or blue-green deployment and monitor infrastructure metrics as well as AI-specific metrics such as groundedness, tool success, latency, cost and error rate. If the new version fails, I immediately route traffic back to the previous version.”**
+
+## Easy memory trick
+
+**Build → Start → Health Check → Shift → Monitor → Rollback**
+
+\`\`\`text
+v1.4
+ ↓
+Build v1.5
+ ↓
+Start v1.5
+ ↓
+Health check
+ ↓
+Canary / Blue-Green
+ ↓
+Monitor
+ ↓
+100% v1.5
+\`\`\`
+
+### Key distinction
+
+**Rolling:** gradually replace old tasks.
+
+**Blue-Green:** keep two environments and switch traffic.
+
+**Canary:** send a small percentage of traffic to the new version first.
+
+For CWD interviews, a strong line is:
+
+> **“For normal releases I can use rolling deployment; for high-risk AI changes I prefer canary or blue-green because they give me controlled traffic shifting and fast rollback.”**
 `,code:``},{id:`070-how-do-you-handle-container-failures`,category:`ECS / Fargate / EKS`,title:`How do you handle container failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle container failures?
 
 ## Short answer
-ECS replaces failed tasks automatically, so design for tasks disappearing at any time.
 
-## Key points
-- Tasks spread across AZs; the scheduler maintains the desired count.
-- In-flight SQS messages return after the visibility timeout; state is checkpointed.
-- Alarms on running task count and stopped-task reasons (for example out-of-memory exits).
+For CWD on ECS/Fargate, I handle container failures using:
 
-## CWD context
-Investigate crash loops; do not just let them restart.
+**Detect → Health Check → Replace → Retry → Recover → Monitor**
+
+If a container becomes unhealthy or crashes, ECS removes it from service and starts a replacement task. For application/downstream failures, I use timeouts, retries, backoff, circuit breakers, idempotency, and durable state.
+
+---
+
+## CWD flow
+
+\`\`\`text
+                    ECS Service
+                        ↓
+              ┌─────────┴─────────┐
+              ↓                   ↓
+        CWD Task 1            CWD Task 2
+              ↓                   ↓
+          Healthy ✓           Healthy ✓
+\`\`\`
+
+Suppose Task 1 crashes:
+
+\`\`\`text
+Task 1
+  ↓
+Crash / Health check failure
+  ↓
+ALB stops sending traffic
+  ↓
+ECS detects unhealthy task
+  ↓
+Task 1 replaced
+  ↓
+New Task 3 starts
+  ↓
+Health check passes
+  ↓
+Traffic resumes
+\`\`\`
+
+---
+
+# 1. Detect the failure
+
+I use multiple signals:
+
+\`\`\`text
+Container exit
+Health-check failure
+5xx errors
+Timeouts
+High restart count
+CPU/memory problems
+ALB target unhealthy
+\`\`\`
+
+CloudWatch provides the metrics and logs.
+
+---
+
+# 2. Health checks
+
+For example:
+
+\`\`\`text
+GET /health/live
+GET /health/ready
+\`\`\`
+
+If the task repeatedly fails:
+
+\`\`\`text
+Healthy
+   ↓
+Unhealthy
+   ↓
+ECS replacement
+\`\`\`
+
+The ALB also stops routing traffic to an unhealthy task.
+
+---
+
+# 3. ECS automatically replaces failed tasks
+
+Suppose:
+
+\`\`\`text
+Desired count = 3
+\`\`\`
+
+Initially:
+
+\`\`\`text
+Task 1 ✓
+Task 2 ✓
+Task 3 ✓
+\`\`\`
+
+Task 2 crashes:
+
+\`\`\`text
+Task 1 ✓
+Task 2 ✗
+Task 3 ✓
+\`\`\`
+
+ECS launches:
+
+\`\`\`text
+Task 4
+\`\`\`
+
+After it becomes healthy:
+
+\`\`\`text
+Task 1 ✓
+Task 3 ✓
+Task 4 ✓
+\`\`\`
+
+So the service returns to the desired capacity.
+
+---
+
+# 4. Handle application failures
+
+Not every failure requires replacing the container.
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+MCP
+  ↓
+Salesforce
+  ↓
+503
+\`\`\`
+
+The container itself may still be healthy.
+
+I would use:
+
+\`\`\`text
+Timeout
+   ↓
+Retry
+   ↓
+Exponential Backoff + Jitter
+   ↓
+Retry limit
+   ↓
+Circuit breaker / failure
+\`\`\`
+
+---
+
+# 5. Handle Worker failures
+
+CWD has:
+
+\`\`\`text
+Coordinator
+    ↓
+Delegator
+    ↓
+Workers
+\`\`\`
+
+Suppose:
+
+\`\`\`text
+Sales Worker → SUCCESS
+CRM Worker   → SUCCESS
+Incident Worker → TIMEOUT
+\`\`\`
+
+The Delegator determines whether the Worker is mandatory.
+
+### Optional Worker
+
+\`\`\`text
+Continue
+   ↓
+Aggregate successful results
+   ↓
+Partial response
+\`\`\`
+
+### Mandatory Worker
+
+\`\`\`text
+Retry
+   ↓
+Failure
+   ↓
+Workflow failure / recovery
+\`\`\`
+
+The system should **not invent the missing information**.
+
+---
+
+# 6. Keep state outside the container
+
+This is critical.
+
+If a container crashes:
+
+\`\`\`text
+❌ Workflow state inside container memory
+\`\`\`
+
+could be lost.
+
+Instead:
+
+\`\`\`text
+CWD Container
+      ↓
+DynamoDB → durable workflow state
+Redis    → cache
+S3       → documents
+\`\`\`
+
+For example:
+
+\`\`\`text
+RUN123
+ ↓
+Step 1 COMPLETED
+Step 2 COMPLETED
+Step 3 IN_PROGRESS
+\`\`\`
+
+If the Worker/container crashes, the workflow can resume based on durable state/checkpointing rather than starting blindly from the beginning.
+
+---
+
+# 7. Prevent duplicate operations
+
+Suppose the container crashes **after Salesforce successfully created a ticket but before CWD recorded success**.
+
+A retry could accidentally create another ticket.
+
+So I use **idempotency**:
+
+\`\`\`text
+Request ID
+   ↓
+DynamoDB idempotency record
+   ↓
+Check existing operation
+   ↓
+Execute
+   ↓
+Store result
+\`\`\`
+
+For example:
+
+\`\`\`text
+RUN123-STEP05
+\`\`\`
+
+If the same operation is retried, the system can recognize it as the same logical request.
+
+---
+
+# 8. Handle memory/CPU failures
+
+Suppose:
+
+\`\`\`text
+Memory → 95%
+\`\`\`
+
+I would investigate:
+
+* Container memory limits
+* Memory leaks
+* Large prompts
+* Excessive RAG context
+* Too many concurrent Workers
+* Large document processing
+
+Then:
+
+\`\`\`text
+Immediate → replace unhealthy task if needed
+Long term → optimize resource usage
+\`\`\`
+
+I would **not blindly increase memory** without understanding the cause.
+
+---
+
+# 9. Handle repeated failures
+
+If a new container repeatedly fails:
+
+\`\`\`text
+New version
+    ↓
+Crash
+    ↓
+Restart
+    ↓
+Crash
+    ↓
+Restart
+\`\`\`
+
+I would stop treating it as a simple infrastructure problem.
+
+Check:
+
+\`\`\`text
+Application logs
+Configuration
+Secrets
+IAM permissions
+Dependency connectivity
+Image/version
+Environment variables
+Resource limits
+\`\`\`
+
+If the failure is caused by a bad deployment, rollback:
+
+\`\`\`text
+v1.5 ❌
+ ↓
+v1.4 ✓
+\`\`\`
+
+---
+
+# 10. Monitor failures
+
+I would monitor:
+
+\`\`\`text
+Task count
+Healthy/unhealthy task count
+Container restarts
+Exit codes
+5xx errors
+CPU
+Memory
+ALB target health
+P50/P95/P99 latency
+MCP failures
+Bedrock errors
+Worker failures
+Retry count
+DLQ messages
+\`\`\`
+
+And create CloudWatch alarms for important conditions.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I handle ECS container failures in multiple layers. First, I detect failures using container and ALB health checks, CloudWatch metrics and logs. ECS automatically replaces unhealthy or stopped tasks and the ALB routes traffic only to healthy tasks. For application and downstream failures, I use timeouts, bounded retries with exponential backoff and jitter, circuit breakers and idempotency. CWD workflow state is stored outside the container so a task failure doesn't lose the workflow, and the Delegator determines whether a failed Worker is mandatory or optional. For repeated failures caused by a deployment, I roll back to the previous healthy version.”**
+
+## Easy memory trick
+
+**Detect → Remove → Replace → Retry → Resume → Monitor**
+
+\`\`\`text
+Failure
+   ↓
+Detect
+   ↓
+ALB stops traffic
+   ↓
+ECS replaces task
+   ↓
+Retry downstream operation if transient
+   ↓
+Resume from durable state
+   ↓
+Monitor
+\`\`\`
+
+### Key distinction
+
+**Container failure** → ECS replaces the task.
+
+**Application failure** → Retry / recover / circuit breaker.
+
+**Worker failure** → Delegator decides partial vs failure.
+
+**Workflow state** → Persist outside the container.
+
+**Bad deployment** → Roll back.
 `,code:``},{id:`071-how-do-you-distribute-traffic-across-containers`,category:`ECS / Fargate / EKS`,title:`How do you distribute traffic across containers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you distribute traffic across containers?
 
 ## Short answer
-Distribute traffic with an Application Load Balancer across AZs.
 
-## Key points
-- Path- and host-based routing, weighted target groups, connection draining.
-- Cross-zone balancing; NLB for TCP needs.
-- Service-to-service traffic through Service Connect or an internal ALB.
+For CWD on **ECS/Fargate**, I would use an **Application Load Balancer (ALB)** to distribute incoming traffic across healthy ECS tasks.
 
-## CWD context
-Keep external and internal load balancers separate.
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+ALB
+ ↓
+┌────────────┬────────────┬────────────┐
+↓            ↓            ↓
+CWD Task 1   CWD Task 2   CWD Task 3
+\`\`\`
+
+The ALB continuously checks task health and sends traffic only to **healthy containers**.
+
+---
+
+## CWD flow
+
+\`\`\`text
+                    Users
+                      ↓
+                 API Gateway
+                      ↓
+                     ALB
+                      ↓
+          ┌───────────┼───────────┐
+          ↓           ↓           ↓
+      Fargate-1   Fargate-2   Fargate-3
+          ↓           ↓           ↓
+      Coordinator  Coordinator  Coordinator
+          ↓           ↓           ↓
+       Delegators  Delegators  Delegators
+\`\`\`
+
+All three containers can run the same CWD application version.
+
+---
+
+# 1. Register ECS tasks with ALB
+
+When ECS starts a task, it registers the task's IP/port with the ALB target group.
+
+For example:
+
+\`\`\`text
+Target Group
+
+10.0.1.10:8000 → Healthy
+10.0.1.11:8000 → Healthy
+10.0.1.12:8000 → Healthy
+\`\`\`
+
+The ALB can then route requests to these targets.
+
+---
+
+# 2. ALB performs health checks
+
+For example:
+
+\`\`\`text
+GET /health/ready
+\`\`\`
+
+Suppose:
+
+\`\`\`text
+Task 1 → 200 → Healthy
+Task 2 → 200 → Healthy
+Task 3 → 503 → Unhealthy
+\`\`\`
+
+The ALB stops sending normal traffic to Task 3.
+
+\`\`\`text
+             ALB
+              ↓
+       ┌──────┴──────┐
+       ↓             ↓
+    Task 1         Task 2
+    Healthy        Healthy
+
+    Task 3
+    Unhealthy
+       ✗
+\`\`\`
+
+---
+
+# 3. How does ALB choose a container?
+
+For a typical ALB target group, traffic is distributed among healthy targets using the configured load-balancing behavior, commonly **round robin**.
+
+Conceptually:
+
+\`\`\`text
+Request 1 → Task 1
+Request 2 → Task 2
+Request 3 → Task 3
+Request 4 → Task 1
+...
+\`\`\`
+
+But the important point is that **only healthy registered targets are eligible**.
+
+---
+
+# 4. ECS Auto Scaling adds/removes containers
+
+Suppose we initially have:
+
+\`\`\`text
+2 tasks
+\`\`\`
+
+Traffic increases:
+
+\`\`\`text
+CloudWatch
+    ↓
+ECS Auto Scaling
+    ↓
+4 tasks
+\`\`\`
+
+The new tasks become healthy and are registered with the ALB.
+
+\`\`\`text
+ALB
+ ↓
+┌────┬────┬────┬────┐
+T1   T2   T3   T4
+\`\`\`
+
+Traffic is then distributed across the healthy tasks.
+
+---
+
+# 5. What happens when a container fails?
+
+Suppose:
+
+\`\`\`text
+Task 2 → crashes
+\`\`\`
+
+The ALB health check detects the failure.
+
+\`\`\`text
+Task 2 → unhealthy
+          ↓
+ALB stops traffic
+          ↓
+ECS replaces task
+          ↓
+New Task 5
+          ↓
+Health check passes
+          ↓
+ALB adds Task 5
+\`\`\`
+
+So users don't need to know that an individual container failed.
+
+---
+
+# 6. CWD-specific consideration: don't blindly distribute everything
+
+This is important for your CWD architecture.
+
+If Coordinator containers are stateless:
+
+\`\`\`text
+Request
+   ↓
+ALB
+   ↓
+Coordinator 1 / 2 / 3
+\`\`\`
+
+that's straightforward.
+
+But **workflow state should not depend on a particular container**.
+
+Instead:
+
+\`\`\`text
+Coordinator 1 ─┐
+Coordinator 2 ─┼──→ DynamoDB
+Coordinator 3 ─┘
+\`\`\`
+
+And:
+
+\`\`\`text
+Coordinator 1 ─┐
+Coordinator 2 ─┼──→ Redis
+Coordinator 3 ─┘
+\`\`\`
+
+This means another container can continue processing when necessary.
+
+---
+
+# 7. What about Delegators and Workers?
+
+They can also be independently load balanced.
+
+For example:
+
+\`\`\`text
+Sales Delegator
+       ↓
+   ALB / Service
+       ↓
+┌──────┼──────┐
+↓      ↓      ↓
+W1     W2     W3
+\`\`\`
+
+If Workers are exposed as internal services, I would use **internal load balancing/service discovery** rather than exposing them publicly.
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+Sales Delegator
+    ↓
+Internal service
+    ↓
+Customer Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+---
+
+# 8. Don't use load balancing to solve downstream overload
+
+Suppose I have:
+
+\`\`\`text
+10 CWD containers
+   ↓
+100 Workers
+   ↓
+Salesforce
+\`\`\`
+
+Adding more containers can actually increase downstream pressure.
+
+So I also need:
+
+\`\`\`text
+CWD
+ ↓
+Concurrency limits
+ ↓
+Queue / backpressure
+ ↓
+Salesforce
+\`\`\`
+
+Similarly:
+
+\`\`\`text
+Workers
+ ↓
+Concurrency control
+ ↓
+Bedrock
+\`\`\`
+
+This protects downstream systems from uncontrolled agent fan-out.
+
+---
+
+# 9. Monitor traffic distribution
+
+I would monitor:
+
+* ALB request count
+* Target response time
+* Healthy/unhealthy targets
+* HTTP 4xx/5xx
+* Connection errors
+* ECS task count
+* CPU/memory
+* P50/P95/P99 latency
+* Request distribution
+* Downstream MCP/Bedrock latency
+
+For troubleshooting:
+
+\`\`\`text
+ALB = 100 ms
+CWD = 200 ms
+MCP = 2 seconds
+Salesforce = 3 seconds
+\`\`\`
+
+The bottleneck is likely downstream rather than the ALB.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD running on ECS/Fargate, I would place an Application Load Balancer in front of the ECS service. ECS registers healthy tasks with the ALB target group, and the ALB distributes requests across those healthy containers. Health checks remove unhealthy tasks from rotation, while ECS Service Auto Scaling adds or removes tasks based on workload. I would keep the Coordinator stateless and store workflow state in DynamoDB or Redis so any healthy container can process a request. For Delegators and Workers, I can use internal load balancing or service discovery, while concurrency controls protect downstream systems such as Salesforce, ServiceNow and Bedrock.”**
+
+## Easy memory trick
+
+**Register → Health Check → Route → Scale → Replace**
+
+\`\`\`text
+ECS Tasks
+   ↓
+Target Group
+   ↓
+ALB
+   ↓
+Healthy containers
+   ↓
+Traffic
+\`\`\`
+
+### Key distinction
+
+**ALB → distributes traffic**
+
+**ECS Auto Scaling → changes number of containers**
+
+**Health checks → decide which containers can receive traffic**
+
+**DynamoDB/Redis → keep state outside containers**
+
+**Concurrency limits/queues → protect downstream systems**
 `,code:``},{id:`072-how-would-you-implement-service-discovery`,category:`ECS / Fargate / EKS`,title:`How would you implement service discovery?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement service discovery?
 
 ## Short answer
-Use ECS Service Connect or Cloud Map for network discovery, and the Agent Registry for capability discovery.
 
-## Key points
-- Service Connect gives short service names, client-side load balancing and metrics.
-- Cloud Map provides DNS-based discovery.
-- The registry answers "which agent can do this and where is it".
+For CWD on **ECS/Fargate**, I would use **AWS Cloud Map** for service discovery, especially for internal communication between the **Coordinator → Delegators → Workers**.
 
-## CWD context
-Never hard-code Delegator endpoints.
+Instead of hardcoding container IP addresses, services discover each other through a **logical service name**.
+
+\`\`\`text
+Coordinator
+    ↓
+service discovery
+    ↓
+Sales Delegator
+    ↓
+service discovery
+    ↓
+Customer Worker
+\`\`\`
+
+## CWD flow
+
+\`\`\`text
+                     CWD
+                      ↓
+               Coordinator
+                      ↓
+             AWS Cloud Map
+             /            \\
+            ↓              ↓
+    Sales Delegator    IT Delegator
+            ↓              ↓
+      Cloud Map        Cloud Map
+            ↓              ↓
+    Customer Worker   Incident Worker
+\`\`\`
+
+---
+
+# 1. Why do we need service discovery?
+
+Imagine ECS creates containers dynamically:
+
+\`\`\`text
+Customer Worker
+10.0.1.25
+\`\`\`
+
+Later that container is replaced:
+
+\`\`\`text
+Customer Worker
+10.0.2.41
+\`\`\`
+
+If the Coordinator has:
+
+\`\`\`text
+CUSTOMER_WORKER_IP=10.0.1.25
+\`\`\`
+
+the application breaks.
+
+So we don't use container IPs directly.
+
+Instead:
+
+\`\`\`text
+customer-worker.cwd.local
+\`\`\`
+
+The IP can change, but the service name remains the same.
+
+---
+
+# 2. AWS Cloud Map
+
+AWS Cloud Map provides service discovery.
+
+Example:
+
+\`\`\`text
+Namespace:
+cwd.internal
+
+Services:
+├── coordinator
+├── sales-delegator
+├── service-delegator
+├── customer-worker
+└── incident-worker
+\`\`\`
+
+Then:
+
+\`\`\`text
+Coordinator
+     ↓
+sales-delegator.cwd.internal
+\`\`\`
+
+The service discovery system resolves that name to the currently available task.
+
+---
+
+# 3. ECS registers tasks
+
+Suppose we have:
+
+\`\`\`text
+Customer Worker
+ ├── Task 1 → 10.0.1.10
+ ├── Task 2 → 10.0.1.11
+ └── Task 3 → 10.0.1.12
+\`\`\`
+
+Cloud Map knows:
+
+\`\`\`text
+customer-worker.cwd.internal
+       ↓
+10.0.1.10
+10.0.1.11
+10.0.1.12
+\`\`\`
+
+If Task 2 disappears:
+
+\`\`\`text
+customer-worker.cwd.internal
+       ↓
+10.0.1.10
+10.0.1.12
+\`\`\`
+
+The application doesn't need to know that Task 2 was replaced.
+
+---
+
+# 4. Coordinator → Delegator
+
+For example:
+
+\`\`\`text
+Coordinator
+     ↓
+sales-delegator.cwd.internal
+     ↓
+Sales Delegator
+\`\`\`
+
+The Coordinator doesn't need:
+
+\`\`\`text
+10.0.1.25
+\`\`\`
+
+It uses:
+
+\`\`\`text
+sales-delegator.cwd.internal
+\`\`\`
+
+---
+
+# 5. Delegator → Worker
+
+Similarly:
+
+\`\`\`text
+Sales Delegator
+       ↓
+customer-worker.cwd.internal
+       ↓
+Customer Worker
+\`\`\`
+
+If we scale:
+
+\`\`\`text
+Customer Worker
+   ↓
+Task 1
+Task 2
+Task 3
+Task 4
+\`\`\`
+
+service discovery can resolve the service to available instances.
+
+---
+
+# 6. Service discovery vs ALB
+
+This is an important interview question.
+
+### ALB
+
+Use when you need:
+
+\`\`\`text
+HTTP/HTTPS
+Load balancing
+Health checks
+External or internal HTTP entry point
+\`\`\`
+
+Example:
+
+\`\`\`text
+API Gateway
+    ↓
+ALB
+    ↓
+Coordinator
+\`\`\`
+
+### Cloud Map
+
+Use when you need:
+
+\`\`\`text
+Internal service discovery
+Dynamic service addresses
+Service-to-service communication
+\`\`\`
+
+Example:
+
+\`\`\`text
+Coordinator
+    ↓
+Cloud Map
+    ↓
+Sales Delegator
+\`\`\`
+
+They can also be used together depending on the architecture.
+
+---
+
+# 7. Service discovery doesn't replace authorization
+
+Finding a service doesn't mean you're allowed to call it.
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+Discover Sales Worker
+    ↓
+IAM / network policy / application authorization
+    ↓
+Allowed?
+    ↓
+Call Worker
+\`\`\`
+
+I would still use:
+
+* IAM
+* Security groups
+* Private networking
+* Authentication
+* Authorization
+* Least privilege
+* mTLS where appropriate
+* Application-level access controls
+
+---
+
+# 8. Service discovery + MCP
+
+In CWD, there's another layer.
+
+\`\`\`text
+Coordinator
+   ↓
+Sales Delegator
+   ↓
+Customer Worker
+   ↓
+MCP Client
+   ↓
+MCP Server
+   ↓
+Salesforce
+\`\`\`
+
+Service discovery can help locate **internal Worker or MCP services**, but MCP itself handles **tool discovery**.
+
+So:
+
+**Cloud Map = Where is the service?**
+
+**MCP \`tools/list\` = What tools does this server provide?**
+
+That's a very important distinction.
+
+---
+
+# 9. Example
+
+Suppose CWD has:
+
+\`\`\`text
+Sales Delegator
+Customer Worker
+Opportunity Worker
+\`\`\`
+
+Cloud Map:
+
+\`\`\`text
+cwd.internal
+│
+├── sales-delegator
+├── customer-worker
+└── opportunity-worker
+\`\`\`
+
+Request:
+
+\`\`\`text
+Customer Briefing
+customer_id = C123
+\`\`\`
+
+Flow:
+
+\`\`\`text
+Coordinator
+    ↓
+Sales Delegator
+    ↓
+Cloud Map
+    ↓
+customer-worker.cwd.internal
+    ↓
+Customer Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For internal CWD service-to-service communication, I would use AWS Cloud Map for service discovery. ECS tasks are dynamically created and replaced, so I don't want the Coordinator or Delegators to hardcode container IP addresses. I would register services such as Sales Delegator, Customer Worker and Incident Worker in a private Cloud Map namespace and access them through stable service names. Cloud Map handles dynamic service registration and discovery, while security groups, IAM and application authorization control who can actually call the service. For HTTP load balancing I can use an ALB, while Cloud Map solves the service-discovery problem.”**
+
+## Easy memory trick
+
+**Cloud Map = “Where is the service?”**
+
+\`\`\`text
+Coordinator
+    ↓
+Cloud Map
+    ↓
+sales-delegator.cwd.internal
+    ↓
+Sales Delegator
+\`\`\`
+
+### Key distinction
+
+| Component            | Responsibility                        |
+| -------------------- | ------------------------------------- |
+| **Cloud Map**        | Discover internal services            |
+| **ALB**              | Load balance HTTP traffic             |
+| **ECS**              | Run/manage containers                 |
+| **IAM/Auth**         | Control permissions                   |
+| **MCP**              | Discover and invoke tools             |
+| **Service Registry** | CWD-level knowledge of agents/workers |
+
+**Interview one-liner:**
+
+> **“Cloud Map tells me where the service is; ALB distributes traffic; IAM and authorization determine whether I can call it.”**
 `,code:``},{id:`073-how-would-you-configure-ecs-networking`,category:`ECS / Fargate / EKS`,title:`How would you configure ECS networking?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you configure ECS networking?
 
 ## Short answer
-Run tasks in awsvpc mode in private subnets with security groups and endpoints.
 
-## Key points
-- One ENI and security group per task; subnets across AZs; no public IPs.
-- VPC endpoints for ECR, S3, CloudWatch Logs, Secrets Manager, STS and Bedrock; NAT only for what needs the internet.
-- Security group rules only from the load balancer and to required endpoints.
+For CWD, I would run **ECS/Fargate tasks inside a VPC using private subnets**. I would expose only the required entry points through **API Gateway + ALB**, and keep the Coordinator, Delegators, and Workers private.
 
-## CWD context
-Endpoints reduce NAT cost and keep traffic private.
+The basic design is:
+
+\`\`\`text
+Internet
+   ↓
+API Gateway
+   ↓
+ALB
+   ↓
+Private Subnets
+   ↓
+ECS/Fargate
+ ┌───────────────┐
+ │ Coordinator   │
+ │ Delegators    │
+ │ Workers       │
+ └───────────────┘
+   ↓
+Private AWS services / Enterprise systems
+\`\`\`
+
+---
+
+# 1. Create a VPC
+
+I would create a VPC with multiple Availability Zones.
+
+Example:
+
+\`\`\`text
+                    VPC
+                     │
+        ┌────────────┴────────────┐
+        ↓                         ↓
+       AZ-1                      AZ-2
+        │                         │
+ ┌──────┴──────┐           ┌──────┴──────┐
+ │ Public      │           │ Public      │
+ │ Subnet      │           │ Subnet      │
+ │ ALB         │           │ ALB         │
+ └─────────────┘           └─────────────┘
+        │                         │
+ ┌──────┴──────┐           ┌──────┴──────┐
+ │ Private     │           │ Private     │
+ │ Subnet      │           │ Subnet      │
+ │ ECS/Fargate │           │ ECS/Fargate │
+ └─────────────┘           └─────────────┘
+\`\`\`
+
+The important point is **multi-AZ** so one Availability Zone failure doesn't take down CWD.
+
+---
+
+# 2. Put ECS tasks in private subnets
+
+I would normally place:
+
+\`\`\`text
+Coordinator
+Delegators
+Workers
+\`\`\`
+
+in private subnets.
+
+For example:
+
+\`\`\`text
+Private Subnet
+    ↓
+ECS/Fargate
+    ├── Coordinator
+    ├── Sales Delegator
+    ├── IT Delegator
+    └── Workers
+\`\`\`
+
+The containers don't need public IP addresses.
+
+This reduces direct internet exposure.
+
+---
+
+# 3. Use an ALB for application traffic
+
+A common setup is:
+
+\`\`\`text
+API Gateway
+      ↓
+ALB
+      ↓
+ECS/Fargate
+\`\`\`
+
+The ALB forwards requests to healthy ECS tasks.
+
+For example:
+
+\`\`\`text
+ALB
+ ↓
+Target Group
+ ↓
+┌──────┬──────┬──────┐
+Task 1 Task 2 Task 3
+\`\`\`
+
+---
+
+# 4. Configure Security Groups
+
+I would use **least-privilege security-group rules**.
+
+Example:
+
+\`\`\`text
+API Gateway / ALB
+        ↓
+ECS Security Group
+        ↓
+Only required port
+\`\`\`
+
+For example:
+
+\`\`\`text
+ALB SG
+  ↓ TCP 8000
+ECS SG
+\`\`\`
+
+And I would avoid:
+
+\`\`\`text
+0.0.0.0/0 → ECS:8000
+\`\`\`
+
+unless there is a very specific reason.
+
+---
+
+# 5. Control outbound traffic
+
+The Worker may need to access:
+
+\`\`\`text
+Bedrock
+S3
+DynamoDB
+Secrets Manager
+CloudWatch
+OpenSearch
+MCP services
+Enterprise APIs
+\`\`\`
+
+I would control those connections rather than allowing unrestricted outbound access.
+
+For AWS services, where supported and appropriate, I can use **VPC endpoints/PrivateLink** so traffic stays on private AWS connectivity.
+
+---
+
+# 6. NAT Gateway
+
+If private ECS tasks need outbound internet access, I can use:
+
+\`\`\`text
+Private ECS
+     ↓
+NAT Gateway
+     ↓
+Internet Gateway
+     ↓
+Internet
+\`\`\`
+
+For example, if the container needs to access an external API that is not available through private connectivity.
+
+Important:
+
+> A NAT Gateway provides **outbound** internet connectivity; it does not make the ECS container publicly reachable.
+
+---
+
+# 7. Use VPC endpoints where appropriate
+
+For AWS services, I would prefer private connectivity where practical.
+
+Conceptually:
+
+\`\`\`text
+ECS/Fargate
+    ↓
+VPC Endpoint
+    ↓
+AWS Service
+\`\`\`
+
+Examples can include:
+
+\`\`\`text
+S3
+Secrets Manager
+ECR
+CloudWatch
+DynamoDB
+Bedrock-related AWS connectivity where supported
+\`\`\`
+
+This can reduce the need to send AWS-service traffic through NAT and provides stronger network isolation.
+
+---
+
+# 8. ECS service-to-service communication
+
+For:
+
+\`\`\`text
+Coordinator
+    ↓
+Delegator
+    ↓
+Worker
+\`\`\`
+
+I would use internal service discovery/load balancing.
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+Internal service
+    ↓
+Sales Delegator
+\`\`\`
+
+AWS Cloud Map can provide service discovery:
+
+\`\`\`text
+sales-delegator.cwd.internal
+customer-worker.cwd.internal
+\`\`\`
+
+The services remain private.
+
+---
+
+# 9. Network flow for CWD
+
+A good interview architecture is:
+
+\`\`\`text
+                         Internet
+                            ↓
+                       API Gateway
+                            ↓
+                           ALB
+                            ↓
+              ┌─────────────┴─────────────┐
+              ↓                           ↓
+          Private AZ-1                Private AZ-2
+              ↓                           ↓
+        ECS/Fargate                  ECS/Fargate
+              ↓                           ↓
+        Coordinator                  Coordinator
+              ↓                           ↓
+        Delegators                   Delegators
+              ↓                           ↓
+          Workers                      Workers
+              ↓                           ↓
+       ┌──────┴────────┐         ┌───────┴───────┐
+       ↓               ↓         ↓               ↓
+     MCP             AWS       Redis          DynamoDB
+       ↓             services
+ Salesforce/
+ ServiceNow
+\`\`\`
+
+---
+
+# 10. Network security for MCP
+
+For CWD, MCP is especially important.
+
+\`\`\`text
+Worker
+  ↓
+MCP Client
+  ↓
+MCP Server
+  ↓
+Enterprise System
+\`\`\`
+
+I would keep MCP servers private where possible and control communication using:
+
+* Security groups
+* Private subnets
+* Private DNS/service discovery
+* TLS
+* IAM/authentication
+* Authorization
+* Network ACLs where needed
+* Least-privilege access
+
+---
+
+# 11. Multi-AZ availability
+
+I wouldn't deploy the whole CWD platform in one subnet/AZ.
+
+Instead:
+
+\`\`\`text
+                 ALB
+              /       \\
+             ↓         ↓
+           AZ-1       AZ-2
+            ↓           ↓
+          ECS         ECS
+         Tasks       Tasks
+\`\`\`
+
+If AZ-1 has an issue:
+
+\`\`\`text
+AZ-1 ❌
+   ↓
+AZ-2 continues serving
+\`\`\`
+
+ECS can maintain the desired number of tasks across available AZs.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD, I would configure ECS/Fargate inside a multi-AZ VPC and place the Coordinator, Delegators and Workers in private subnets without public IPs. API Gateway would provide the external API boundary and an ALB would route traffic to healthy ECS tasks. I would use security groups with least-privilege rules, private service discovery for internal Coordinator-to-Delegator-to-Worker communication, and VPC endpoints for AWS services where appropriate. If private workloads need outbound internet access, I would use a NAT Gateway. This gives CWD high availability, network isolation and controlled access to AWS and enterprise systems.”**
+
+## Easy memory trick
+
+**VPC → Private Subnets → ALB → ECS → Security Groups → Private Services**
+
+\`\`\`text
+Internet
+   ↓
+API Gateway
+   ↓
+ALB
+   ↓
+Private ECS
+   ↓
+Coordinator
+   ↓
+Delegators
+   ↓
+Workers
+   ↓
+MCP / AWS / Enterprise
+\`\`\`
+
+### Key distinction
+
+* **VPC** → network boundary
+* **Subnets** → network segmentation
+* **ALB** → traffic distribution
+* **Security Groups** → traffic permissions
+* **NAT Gateway** → outbound internet
+* **VPC Endpoint** → private AWS-service connectivity
+* **Cloud Map** → internal service discovery
+* **ECS/Fargate** → runs the containers
+
+**Interview one-liner:**
+
+> **“I keep the CWD runtime private, expose only the API boundary, and allow only explicitly required network paths between components.”**
 `,code:``},{id:`074-how-would-you-secure-ecs-tasks`,category:`ECS / Fargate / EKS`,title:`How would you secure ECS tasks?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure ECS tasks?
 
 ## Short answer
-Secure ECS tasks with separate roles, hardened images and restricted access.
 
-## Key points
-- Task role (application permissions) separate from execution role (pull image, read secrets, write logs).
-- Secrets injected from Secrets Manager; read-only root filesystem, non-root user.
-- Image scanning (ECR, Inspector), immutable tags, GuardDuty runtime monitoring.
-- Restrict and audit ECS Exec.
+For CWD, I would use **defense in depth** to secure ECS/Fargate tasks:
 
-## CWD context
-Least privilege applies per Worker type.
+**Private network + Security Groups + IAM task roles + Secrets Manager + image security + least privilege + encryption + monitoring.**
+
+\`\`\`text id="8avz0e"
+                    API Gateway
+                         ↓
+                        ALB
+                         ↓
+                  Private ECS Tasks
+                ┌───────────────┐
+                │ Coordinator   │
+                │ Delegators    │
+                │ Workers       │
+                └───────────────┘
+                   ↓    ↓    ↓
+                 IAM  Secrets  MCP
+                   ↓    ↓    ↓
+                AWS services / Enterprise
+\`\`\`
+
+---
+
+# 1. Keep ECS tasks private
+
+I would deploy CWD tasks in **private subnets**.
+
+\`\`\`text id="s6c0hy"
+Internet
+   ↓
+API Gateway
+   ↓
+ALB
+   ↓
+Private Subnet
+   ↓
+ECS/Fargate
+\`\`\`
+
+I would avoid assigning public IPs to the application tasks unless there is a specific requirement.
+
+---
+
+# 2. Use Security Groups
+
+Security Groups should allow only required traffic.
+
+Example:
+
+\`\`\`text id="j1ngqx"
+ALB Security Group
+        ↓
+   TCP 8000
+        ↓
+ECS Security Group
+\`\`\`
+
+The ECS security group should **not** allow arbitrary inbound traffic from the internet.
+
+For internal services:
+
+\`\`\`text id="1e3q7x"
+Coordinator SG
+      ↓
+Delegator SG
+      ↓
+Worker SG
+\`\`\`
+
+Only the required ports and sources are allowed.
+
+---
+
+# 3. Use IAM Task Roles
+
+This is one of the most important controls.
+
+Instead of putting AWS credentials inside the container:
+
+\`\`\`text id="v0d2f1"
+❌ AWS_ACCESS_KEY_ID
+❌ AWS_SECRET_ACCESS_KEY
+\`\`\`
+
+use an ECS **task IAM role**.
+
+\`\`\`text id="0f8k2z"
+CWD Worker
+    ↓
+ECS Task Role
+    ↓
+Allowed AWS APIs
+\`\`\`
+
+For example, a Worker that only needs S3 read access should not have permissions to delete S3 objects.
+
+That's **least privilege**.
+
+---
+
+# 4. Separate Task Role and Execution Role
+
+This is a good interview detail.
+
+### Task execution role
+
+Used by ECS/Fargate to do things such as:
+
+\`\`\`text
+Pull image from ECR
+Send logs to CloudWatch
+\`\`\`
+
+### Task role
+
+Used by the **application inside the container**:
+
+\`\`\`text
+Coordinator
+Worker
+   ↓
+AWS APIs
+\`\`\`
+
+Memory:
+
+> **Execution role = ECS infrastructure operations**
+
+> **Task role = application permissions**
+
+---
+
+# 5. Store secrets in Secrets Manager
+
+Never put:
+
+\`\`\`text id="hkn3cq"
+Salesforce password
+API key
+database password
+\`\`\`
+
+inside:
+
+\`\`\`text id="zj4s7e"
+Dockerfile
+Git repository
+source code
+\`\`\`
+
+Instead:
+
+\`\`\`text id="0jv2pb"
+ECS Worker
+    ↓
+IAM Task Role
+    ↓
+Secrets Manager
+    ↓
+Secret
+\`\`\`
+
+Secrets can be encrypted with **AWS KMS**.
+
+---
+
+# 6. Secure the container image
+
+I would use:
+
+\`\`\`text id="i9j1vz"
+Developer
+   ↓
+Docker Image
+   ↓
+ECR
+   ↓
+Vulnerability scanning
+   ↓
+ECS/Fargate
+\`\`\`
+
+Security practices:
+
+* Use minimal base images.
+* Keep dependencies updated.
+* Scan images for vulnerabilities.
+* Don't run unnecessary packages.
+* Pin dependencies where appropriate.
+* Use immutable/versioned image tags.
+* Don't put secrets in the image.
+
+For example:
+
+\`\`\`text id="0u0d2p"
+python:3.12-slim
+\`\`\`
+
+is preferable to unnecessarily large base images.
+
+---
+
+# 7. Run the container with least privilege
+
+The application should not run with unnecessary operating-system privileges.
+
+Where supported by the runtime/design:
+
+* Run as a non-root user.
+* Use read-only filesystem where practical.
+* Drop unnecessary Linux capabilities.
+* Avoid privileged containers.
+* Restrict writable directories.
+
+Conceptually:
+
+\`\`\`text id="q1z6tq"
+Container
+ ├── Non-root user
+ ├── Minimal filesystem permissions
+ ├── No privileged mode
+ └── Minimal capabilities
+\`\`\`
+
+---
+
+# 8. Encrypt traffic
+
+For CWD:
+
+\`\`\`text id="l4xqjp"
+Client
+  ↓ HTTPS
+API Gateway
+  ↓
+ALB
+  ↓
+ECS
+  ↓
+MCP
+  ↓
+Enterprise Systems
+\`\`\`
+
+Use TLS for network communication.
+
+For sensitive AWS data:
+
+\`\`\`text id="w3j2p4"
+ECS
+ ↓
+KMS encryption
+ ↓
+S3 / DynamoDB / Secrets Manager
+\`\`\`
+
+---
+
+# 9. Protect MCP connections
+
+This is especially important for CWD.
+
+\`\`\`text id="rj4s0c"
+Worker
+ ↓
+MCP Client
+ ↓
+MCP Server
+ ↓
+Salesforce / ServiceNow
+\`\`\`
+
+I would apply:
+
+* Authentication
+* Authorization
+* TLS
+* Input validation
+* Least privilege
+* Tool-level permissions
+* Audit logging
+* Timeouts
+* Rate limits
+
+The Worker should **not** be able to call every MCP tool just because it is running inside ECS.
+
+---
+
+# 10. Protect against container escape / runtime threats
+
+I would also follow container hardening practices:
+
+\`\`\`text id="a0w1qg"
+Minimal image
+      ↓
+Non-root
+      ↓
+No privileged mode
+      ↓
+Least capabilities
+      ↓
+Private networking
+      ↓
+Runtime monitoring
+\`\`\`
+
+For sensitive workloads, I would also evaluate AWS/runtime-specific security controls appropriate to the environment.
+
+---
+
+# 11. Network segmentation
+
+I would separate components where useful.
+
+For example:
+
+\`\`\`text id="5hz7js"
+Public/API layer
+       ↓
+ALB
+       ↓
+Application subnet
+       ↓
+ECS Coordinator
+       ↓
+Internal services
+       ↓
+Enterprise integration
+\`\`\`
+
+The goal is to prevent:
+
+\`\`\`text id="d3p0zt"
+Compromised Worker
+       ↓
+❌ Access everything
+\`\`\`
+
+Instead:
+
+\`\`\`text id="axd5jb"
+Compromised Worker
+       ↓
+Only explicitly allowed resources
+\`\`\`
+
+---
+
+# 12. Monitor and audit
+
+I would monitor:
+
+\`\`\`text id="b9m7rj"
+CloudWatch
+ ├── ECS logs
+ ├── CPU/memory
+ ├── task failures
+ └── network/application errors
+
+CloudTrail
+ └── AWS API activity
+
+Security tooling
+ └── vulnerability / threat findings
+\`\`\`
+
+For CWD, I would also propagate:
+
+\`\`\`text id="f34bqz"
+correlation_id
+session_id
+run_id
+delegator_id
+worker_id
+\`\`\`
+
+so I can trace:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Enterprise System
+\`\`\`
+
+---
+
+# 13. Protect the AI layer
+
+Because CWD is an agentic system, container security alone isn't enough.
+
+For example:
+
+\`\`\`text id="z8myy1"
+Worker
+ ↓
+Untrusted MCP response
+ ↓
+LLM
+\`\`\`
+
+I would treat external content as **untrusted data**, validate tool parameters, enforce authorization outside the LLM, and restrict tools using least privilege.
+
+The LLM should **never decide authorization**.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I secure CWD ECS tasks using defense in depth. I place the tasks in private subnets, expose them only through the required ALB/API boundary, and use security groups with least-privilege rules. Each task gets an IAM task role with only the AWS permissions it needs, while secrets are stored in Secrets Manager and encrypted with KMS. I use minimal and vulnerability-scanned container images, run containers as non-root where practical, avoid privileged containers, and encrypt service-to-service traffic. For CWD specifically, I also secure MCP communication with authentication, authorization, tool-level permissions and auditing. Finally, I use CloudWatch, CloudTrail and security monitoring to detect and investigate runtime activity.”**
+
+## Easy memory trick
+
+**Network → IAM → Secrets → Image → Runtime → Encryption → Monitor**
+
+\`\`\`text id="y7v8k3"
+Private Network
+      ↓
+Security Groups
+      ↓
+IAM Task Role
+      ↓
+Secrets Manager
+      ↓
+Secure Image
+      ↓
+Non-root Container
+      ↓
+TLS/KMS
+      ↓
+CloudWatch/CloudTrail
+\`\`\`
+
+### Key distinction
+
+**Security Group** → *Who can connect to the task?*
+
+**IAM Task Role** → *What AWS resources can the application access?*
+
+**Secrets Manager** → *Where are sensitive credentials stored?*
+
+**Container hardening** → *What can the process do inside the container?*
+
+**MCP authorization** → *Which enterprise tools can the Worker actually execute?*
+
+**CloudWatch/CloudTrail** → *What happened and how do I investigate it?*
 `,code:``},{id:`075-when-would-you-move-from-ecs-to-eks`,category:`ECS / Fargate / EKS`,title:`When would you move from ECS to EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you move from ECS to EKS?
 
 ## Short answer
-Move from ECS to EKS only when a concrete requirement demands it.
 
-## Key points
-- Need for Kubernetes tooling, operators or service mesh.
-- Multi-cloud portability, complex scheduling or GPU pools.
-- Organisation standard on Kubernetes, with a team able to run it.
+I would move from **ECS/Fargate to EKS when CWD's Kubernetes requirements become strong enough to justify the additional operational complexity**.
 
-## CWD context
-Simplicity is a feature; do not migrate for fashion.
+I would **not move to EKS just because traffic increases**. ECS can scale significantly.
+
+\`\`\`text
+ECS/Fargate
+   ↓
+Traffic/scale increases
+   ↓
+First use ECS autoscaling, queues, caching, concurrency controls
+   ↓
+If Kubernetes-specific requirements emerge
+   ↓
+EKS
+\`\`\`
+
+## Key reasons to move to EKS
+
+### 1. Need advanced Kubernetes orchestration
+
+For example:
+
+* Kubernetes-native scheduling
+* Custom operators
+* Helm ecosystem
+* CRDs
+* Advanced pod placement
+* Kubernetes-native deployments
+
+If CWD becomes a large platform with many different agent services, these capabilities can become useful.
+
+---
+
+### 2. Need GPU workloads
+
+Suppose CWD starts hosting its own:
+
+\`\`\`text
+Embedding models
+Vision models
+Fine-tuned LLMs
+Speech models
+Large ML inference workloads
+\`\`\`
+
+and requires GPU scheduling.
+
+EKS provides Kubernetes-based GPU scheduling and ecosystem support.
+
+However, if you're using **Bedrock/Azure OpenAI as managed model services**, you may not need GPUs in your CWD containers.
+
+---
+
+### 3. Need Kubernetes ecosystem / service mesh
+
+If the organization standardizes on Kubernetes and wants:
+
+\`\`\`text
+EKS
+ ↓
+Istio / Envoy
+ ↓
+mTLS
+Traffic management
+Service-to-service policies
+Observability
+\`\`\`
+
+then EKS can make sense.
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+Service Mesh
+    ↓
+Delegators
+    ↓
+Service Mesh
+    ↓
+Workers
+\`\`\`
+
+---
+
+### 4. Need portability across Kubernetes environments
+
+Suppose the company wants:
+
+\`\`\`text
+AWS EKS
+   +
+On-prem Kubernetes
+   +
+Other cloud Kubernetes
+\`\`\`
+
+Using Kubernetes as the common platform can reduce application-level differences.
+
+This is useful when **Kubernetes portability is an actual organizational requirement**.
+
+---
+
+### 5. Very large microservice platform
+
+Imagine CWD evolves from:
+
+\`\`\`text
+1 Coordinator
+2 Delegators
+20 Workers
+\`\`\`
+
+to:
+
+\`\`\`text
+Multiple Coordinators
+100+ Delegators
+Thousands of Workers/services
+Multiple teams
+Multiple deployment patterns
+\`\`\`
+
+At that point, Kubernetes capabilities may become valuable for scheduling, deployment, service management and platform standardization.
+
+But **number of services alone isn't enough**—the operational benefits need to justify EKS.
+
+---
+
+# ECS vs EKS
+
+| Requirement                    | ECS/Fargate                                   | EKS                           |
+| ------------------------------ | --------------------------------------------- | ----------------------------- |
+| Simple AWS container platform  | ✅                                             | Possible                      |
+| Low operational complexity     | ✅                                             | ❌ More complexity             |
+| Long-running CWD services      | ✅                                             | ✅                             |
+| Auto scaling                   | ✅                                             | ✅                             |
+| Kubernetes ecosystem           | Limited                                       | ✅                             |
+| Helm/Operators/CRDs            | ❌                                             | ✅                             |
+| Advanced Kubernetes scheduling | Limited                                       | ✅                             |
+| GPU workloads                  | Possible, but more limited depending on setup | ✅ Strong Kubernetes ecosystem |
+| Kubernetes portability         | Limited                                       | ✅                             |
+| Service mesh                   | Possible                                      | ✅ Strong ecosystem            |
+| AWS-native simplicity          | ✅                                             | More complex                  |
+
+---
+
+# What would NOT make me move to EKS?
+
+These alone are not good reasons:
+
+### ❌ "Traffic increased"
+
+First use:
+
+\`\`\`text
+ECS Auto Scaling
++
+ALB
++
+SQS
++
+Redis
++
+Concurrency controls
+\`\`\`
+
+### ❌ "We have many users"
+
+ECS can scale horizontally.
+
+### ❌ "We have many containers"
+
+ECS can manage many containerized services.
+
+### ❌ "We need high availability"
+
+ECS supports multi-AZ deployments.
+
+### ❌ "We need zero-downtime deployments"
+
+ECS supports rolling/blue-green deployment patterns.
+
+---
+
+# CWD example
+
+Initially:
+
+\`\`\`text
+API Gateway
+     ↓
+ALB
+     ↓
+ECS/Fargate
+     ↓
+Coordinator
+     ↓
+Delegators
+     ↓
+Workers
+     ↓
+MCP / Bedrock / RAG
+\`\`\`
+
+This is a good fit when CWD is primarily an AWS-native container platform.
+
+Later, suppose CWD becomes a large enterprise AI platform:
+
+\`\`\`text
+                    EKS
+                     ↓
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+ Coordinator    Delegators     Workers
+        ↓            ↓            ↓
+      Agents       Agents       Agents
+        ↓            ↓            ↓
+       MCP          MCP          MCP
+\`\`\`
+
+And the organization requires:
+
+* Kubernetes standardization
+* GPU scheduling
+* service mesh
+* custom operators
+* advanced scheduling
+* Kubernetes portability
+
+Then I would evaluate migration to EKS.
+
+---
+
+# Migration approach
+
+I wouldn't migrate everything at once.
+
+\`\`\`text
+ECS
+ ↓
+Containerize consistently
+ ↓
+ECR
+ ↓
+Create Kubernetes manifests/Helm charts
+ ↓
+Deploy one non-critical Worker to EKS
+ ↓
+Validate networking/security/observability
+ ↓
+Canary
+ ↓
+Move more Workers
+ ↓
+Move Delegators
+ ↓
+Move Coordinator
+\`\`\`
+
+Keep the external API stable:
+
+\`\`\`text
+Client
+  ↓
+API Gateway
+  ↓
+EKS
+  ↓
+CWD
+\`\`\`
+
+So the client doesn't need to know that the underlying compute platform changed.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would move from ECS to EKS only when we have a concrete Kubernetes requirement that justifies the additional operational complexity. For CWD, examples would be advanced Kubernetes scheduling, GPU-based workloads, service mesh requirements, custom operators, Kubernetes standardization across the organization, or significant Kubernetes portability requirements. I would not move simply because traffic or the number of containers increased, because ECS can already provide horizontal scaling and high availability. I would first validate the requirement with ECS, then migrate incrementally, starting with a non-critical Worker and using canary or blue-green deployment.”**
+
+## Easy memory trick
+
+**EKS = Kubernetes requirement, not just more traffic.**
+
+Remember:
+
+> **Scale → ECS**
+> **Kubernetes complexity → EKS**
+
+### Key distinction
+
+**ECS/Fargate:**
+
+> “I want managed AWS containers with lower operational complexity.”
+
+**EKS:**
+
+> “I need Kubernetes capabilities and ecosystem enough to justify the added complexity.”
 `,code:``}];function wm(){return(0,M.jsx)($,{data:Cm,title:`ECS / Fargate / EKS Cookbook`,subtitle:`Containers, scaling, networking, deployments and EKS trade-offs`,icon:`📦`,patternLabel:`Questions`})}var Tm=[{id:`076-where-would-you-use-sqs-in-cwd`,category:`SQS & Asynchronous Processing`,title:`Where would you use SQS in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS in CWD?
 
-## Short answer
-Use SQS between components wherever work is slow, bursty or needs retries.
+I would use **Amazon SQS for asynchronous, decoupled work** in CWD—especially when I want to **buffer traffic, control concurrency, retry failures, and protect downstream systems**.
 
-## Key points
-- Delegator to Worker job queues and reply queues.
-- Ingestion tasks, audit events, retry buffers.
-- A rate-limited buffer in front of Bedrock or MCP servers.
+### CWD example
 
-## CWD context
-Every queue has a DLQ and an owner.
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+Coordinator
+  ↓
+Delegator
+  ↓
+   ┌───────────────┐
+   │ SQS Queue     │
+   └───────┬───────┘
+           ↓
+       Worker
+           ↓
+      MCP Client
+           ↓
+      MCP Server
+       ↙       ↘
+ Salesforce   ServiceNow
+\`\`\`
+
+## 1. Protect downstream systems
+
+Suppose 1,000 requests arrive but Salesforce can safely handle only 100 concurrent operations.
+
+Instead of calling Salesforce directly:
+
+\`\`\`text
+1000 requests
+     ↓
+   SQS
+     ↓
+Worker processes controlled number
+     ↓
+Salesforce
+\`\`\`
+
+SQS acts as a **buffer**.
+
+---
+
+## 2. Handle traffic spikes
+
+Example:
+
+\`\`\`text
+Normal:     20 requests/sec
+Peak:      500 requests/sec
+\`\`\`
+
+Instead of immediately creating 500 downstream calls:
+
+\`\`\`text
+500 requests
+     ↓
+   SQS Queue
+     ↓
+Workers gradually process
+\`\`\`
+
+This prevents sudden overload.
+
+---
+
+## 3. Retry failed Worker processing
+
+Suppose an Incident Worker calls ServiceNow and ServiceNow temporarily fails.
+
+\`\`\`text
+Worker
+  ↓
+ServiceNow
+  ↓
+Temporary failure
+  ↓
+Message retry
+  ↓
+Worker
+  ↓
+ServiceNow
+\`\`\`
+
+Use **visibility timeout + retry policy** and eventually move repeatedly failing messages to a **Dead-Letter Queue (DLQ)**.
+
+---
+
+## 4. Long-running/asynchronous tasks
+
+For example, a user asks CWD to process 10,000 documents.
+
+Instead of keeping the HTTP request open:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+SQS
+ ↓
+Document Workers
+ ↓
+Processing
+\`\`\`
+
+The API can return:
+
+\`\`\`text
+"Request accepted. Job ID = 12345"
+\`\`\`
+
+The user can later check the job status.
+
+---
+
+## 5. Decouple Coordinator and Workers
+
+Instead of tightly coupling services:
+
+\`\`\`text
+Coordinator → Worker
+\`\`\`
+
+you can have:
+
+\`\`\`text
+Coordinator
+     ↓
+   SQS
+     ↓
+   Worker
+\`\`\`
+
+Now the Worker can scale independently.
+
+---
+
+# Where exactly in CWD?
+
+I would primarily use SQS for:
+
+| CWD use case                        | SQS?                         |
+| ----------------------------------- | ---------------------------- |
+| Async Worker execution              | ✅                            |
+| Traffic buffering                   | ✅                            |
+| Downstream protection               | ✅                            |
+| Retry/DLQ                           | ✅                            |
+| Document ingestion                  | ✅                            |
+| Batch processing                    | ✅                            |
+| Long-running jobs                   | ✅                            |
+| Simple synchronous request/response | Usually ❌                    |
+| Agent reasoning/orchestration       | Usually ❌                    |
+| Agent state                         | ❌ DynamoDB                   |
+| Semantic cache                      | ❌ Redis                      |
+| Agent workflow                      | ❌ LangGraph / Step Functions |
+
+### Important distinction
+
+**SQS = Queue and buffer work.**
+
+**Step Functions = Orchestrate a defined workflow.**
+
+**LangGraph = Orchestrate dynamic agent reasoning.**
+
+For example:
+
+\`\`\`text
+Coordinator
+    ↓
+LangGraph
+    ↓
+Sales Delegator
+    ↓
+SQS  ← asynchronous work
+    ↓
+Customer Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I would use SQS mainly for asynchronous Worker execution, traffic buffering, retries, and downstream protection. For example, if many requests arrive simultaneously but Salesforce or ServiceNow has a concurrency limit, I can put the work into SQS and let Workers consume messages at a controlled rate. I would configure retries and a DLQ for persistent failures. I would not use SQS for agent reasoning or workflow state; LangGraph handles dynamic agent orchestration, while DynamoDB handles durable state.”**
+
+**Memory trick:**
+**SQS = Buffer → Decouple → Process → Retry → DLQ**
 `,code:``},{id:`077-why-sqs-instead-of-synchronous-api-calls`,category:`SQS & Asynchronous Processing`,title:`Why SQS instead of synchronous API calls?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why SQS instead of synchronous API calls?
 
 ## Short answer
-SQS decouples producers from consumers, absorbing spikes and surviving failures.
 
-## Key points
-- Durable buffering; retries; independent scaling.
-- Avoids the API Gateway timeout for long work.
-- Trade-offs: extra latency, eventual consistency and the need to track job status.
+I use **SQS when the work does not need to finish before I respond to the user**.
 
-## CWD context
-Use it for long or side-effecting work, not short reads.
-`,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Standard queue vs FIFO queue?
+Synchronous API:
 
-## Short answer
-Standard queues favour throughput; FIFO queues favour ordering and deduplication.
+\`\`\`text
+Request → Worker → Salesforce → Response
+\`\`\`
 
-## Key points
-- Standard: very high throughput, at-least-once, best-effort ordering.
-- FIFO: ordering per message group, deduplication within a window, lower throughput.
+SQS:
 
-## CWD context
-Default to standard with idempotent consumers; use FIFO only for per-entity ordering.
+\`\`\`text
+Request → SQS → Worker → Salesforce
+              ↓
+           Process later
+\`\`\`
+
+## Why SQS?
+
+### 1. Handle traffic spikes
+
+Suppose 1,000 requests arrive at once.
+
+Without SQS:
+
+\`\`\`text
+1000 requests
+     ↓
+1000 API calls
+     ↓
+Salesforce overloaded
+\`\`\`
+
+With SQS:
+
+\`\`\`text
+1000 requests
+     ↓
+   SQS
+     ↓
+10-20 Workers process at controlled rate
+     ↓
+Salesforce
+\`\`\`
+
+SQS acts as a **buffer**.
+
+---
+
+### 2. Protect downstream systems
+
+In CWD, Salesforce/ServiceNow may have API/concurrency limits.
+
+SQS allows me to control how many Workers process requests simultaneously.
+
+\`\`\`text
+SQS
+ ↓
+Worker 1
+Worker 2
+Worker 3
+...
+Worker 10
+ ↓
+ServiceNow
+\`\`\`
+
+This prevents a sudden traffic spike from overwhelming the downstream system.
+
+---
+
+### 3. Retry failures
+
+With synchronous calls:
+
+\`\`\`text
+Worker → ServiceNow → failure
+\`\`\`
+
+The request may fail immediately.
+
+With SQS:
+
+\`\`\`text
+SQS
+ ↓
+Worker
+ ↓
+ServiceNow
+ ↓
+Temporary failure
+ ↓
+Retry
+ ↓
+Worker
+\`\`\`
+
+Persistent failures can go to a **DLQ**.
+
+---
+
+### 4. Decouple services
+
+Synchronous:
+
+\`\`\`text
+Coordinator
+     ↓
+Worker
+\`\`\`
+
+Coordinator is directly dependent on Worker availability.
+
+SQS:
+
+\`\`\`text
+Coordinator
+     ↓
+    SQS
+     ↓
+   Worker
+\`\`\`
+
+The Worker can be temporarily unavailable while the message remains in the queue.
+
+---
+
+### 5. Better for long-running work
+
+For something like document processing:
+
+\`\`\`text
+User
+ ↓
+API
+ ↓
+SQS
+ ↓
+Document Worker
+ ↓
+OCR → Embedding → Indexing
+\`\`\`
+
+The user doesn't need to keep an HTTP connection open for the entire operation.
+
+---
+
+# But don't use SQS everywhere
+
+For a **real-time Customer Briefing**, the user may need an immediate answer:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Sales Delegator
+ ↓
+Customer Worker
+ ↓
+MCP
+ ↓
+Salesforce
+ ↓
+Response
+\`\`\`
+
+Here, synchronous calls can be appropriate.
+
+For asynchronous processing:
+
+\`\`\`text
+Document ingestion
+Batch processing
+Large report generation
+Background enrichment
+Bulk Salesforce updates
+\`\`\`
+
+SQS is more appropriate.
+
+## 🎯 Strong interview answer
+
+> **“I would use synchronous API calls when the user needs an immediate response. I would use SQS when the work can be processed asynchronously or when I need buffering, controlled concurrency, retries, and downstream protection. In CWD, for example, a real-time Customer Briefing could use synchronous MCP calls, while document ingestion or bulk processing could use SQS. This gives us resilience without adding unnecessary asynchronous complexity.”**
+
+### Easy memory trick
+
+**Synchronous = “I need the answer now.”**
+
+**SQS = “Process this reliably, but it doesn't have to finish now.”**
+
+### Key distinction
+
+**API call → immediate response**
+
+**SQS → durable work item + buffering + retry**
+`,code:``},{id:`078-standard-queue-vs-fifo-queue`,category:`SQS & Asynchronous Processing`,title:`Standard queue vs FIFO queue?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Standard Queue vs FIFO Queue in SQS
+
+The main difference is **ordering and duplicate handling**.
+
+| Feature            | Standard Queue             | FIFO Queue                                                       |
+| ------------------ | -------------------------- | ---------------------------------------------------------------- |
+| Ordering           | Best-effort ordering       | Strict ordering                                                  |
+| Throughput         | Very high                  | Lower / more controlled                                          |
+| Duplicate delivery | Possible                   | Designed for exactly-once processing with deduplication features |
+| Deduplication      | Application must handle it | Built-in deduplication                                           |
+| Use case           | General async processing   | Ordered business operations                                      |
+
+## 1. Standard Queue
+
+Use when **ordering is not important**.
+
+\`\`\`text
+SQS
+ ↓
+Worker 1
+Worker 2
+Worker 3
+Worker 4
+\`\`\`
+
+Messages can be processed concurrently.
+
+### CWD example
+
+Suppose you have:
+
+\`\`\`text
+Customer 101 → Fetch CRM data
+Customer 102 → Fetch CRM data
+Customer 103 → Fetch CRM data
+\`\`\`
+
+The order doesn't matter.
+
+So I would use **Standard SQS**.
+
+---
+
+## 2. FIFO Queue
+
+Use when **order matters**.
+
+Example:
+
+\`\`\`text
+1. Create customer
+2. Update customer
+3. Delete customer
+\`\`\`
+
+You don't want:
+
+\`\`\`text
+Delete
+ ↓
+Create
+ ↓
+Update
+\`\`\`
+
+You want:
+
+\`\`\`text
+Create → Update → Delete
+\`\`\`
+
+FIFO preserves the required ordering within a **message group**.
+
+### CWD example
+
+Suppose multiple operations for the same customer must execute sequentially:
+
+\`\`\`text
+Customer-101
+   ↓
+Create Case
+   ↓
+Update Case
+   ↓
+Close Case
+\`\`\`
+
+You could use:
+
+\`\`\`text
+MessageGroupId = Customer-101
+\`\`\`
+
+Messages for that group are processed in order.
+
+---
+
+# Important: FIFO does NOT mean everything is globally sequential
+
+You can have:
+
+\`\`\`text
+Customer-101 → Group A
+Customer-102 → Group B
+Customer-103 → Group C
+\`\`\`
+
+Each group maintains order while different groups can be processed concurrently.
+
+\`\`\`text
+Group A:  A1 → A2 → A3
+Group B:  B1 → B2 → B3
+Group C:  C1 → C2 → C3
+          ↓
+      Parallel groups
+\`\`\`
+
+This gives you **ordering + parallelism**.
+
+---
+
+# Which would I use in CWD?
+
+### Standard
+
+For:
+
+* Document processing
+* RAG ingestion
+* Independent Worker jobs
+* Batch processing
+* Async enrichment
+* Independent requests
+
+\`\`\`text
+Request → Standard SQS → Workers
+\`\`\`
+
+### FIFO
+
+For:
+
+* Ordered updates
+* Sequential business transactions
+* Operations where duplicate processing must be tightly controlled
+* Per-customer/per-account ordered workflows
+
+\`\`\`text
+Customer 101
+    ↓
+FIFO
+    ↓
+Create → Update → Close
+\`\`\`
+
+## 🎯 Strong interview answer
+
+> **“I would use a Standard SQS queue when messages are independent and strict ordering is not required. It provides high throughput and supports massive parallel processing. I would use FIFO when business correctness requires ordered processing or built-in deduplication. In CWD, document processing could use Standard SQS, while sequential operations for the same customer or case could use FIFO with a MessageGroupId. I would still design Workers to be idempotent because queue-based systems should not depend solely on deduplication.”**
+
+### Easy memory trick
+
+**Standard = Scale**
+
+**FIFO = Sequence**
+
+### Key distinction
+
+> **Standard:** “Process as much as possible.”
+
+> **FIFO:** “Process in the required order.”
 `,code:``},{id:`079-how-would-you-process-worker-jobs-asynchronously`,category:`SQS & Asynchronous Processing`,title:`How would you process Worker jobs asynchronously?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you process Worker jobs asynchronously?
 
-## Short answer
-Process Worker jobs asynchronously with a job message, a result store and a completion signal.
+In CWD, I would use **SQS between the Delegator and Worker** when the Worker job does not need to complete within the user's synchronous request.
 
-## Key points
-- Delegator sends a message with correlation ID, idempotency key, tenant and a payload pointer; the API returns 202 and a job ID.
-- Worker long-polls, runs the task through MCP, stores the result and signals completion.
-- The LangGraph run resumes from its checkpoint; failures go to the DLQ.
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+Coordinator
+  ↓
+Delegator
+  ↓
+SQS Queue
+  ↓
+Worker
+  ↓
+MCP
+  ↓
+Salesforce / ServiceNow / Other System
+\`\`\`
 
-## CWD context
-Put large payloads in S3 and send the reference.
+## Step-by-step
+
+### 1. Delegator creates a job
+
+The Delegator creates a message containing:
+
+\`\`\`text
+job_id
+workflow_id
+user_id
+worker_type
+customer_id
+request_payload
+priority
+correlation_id
+\`\`\`
+
+Example:
+
+\`\`\`json
+{
+  "job_id": "JOB-123",
+  "worker": "CustomerWorker",
+  "customer_id": "CUST-456",
+  "correlation_id": "RUN-789"
+}
+\`\`\`
+
+---
+
+### 2. Put the job into SQS
+
+\`\`\`text
+Delegator
+    ↓
+SQS
+\`\`\`
+
+SQS durably holds the job until a Worker processes it.
+
+The API can return:
+
+\`\`\`text
+Job accepted
+Job ID: JOB-123
+Status: QUEUED
+\`\`\`
+
+---
+
+### 3. Worker consumes the message
+
+\`\`\`text
+SQS
+ ↓
+Customer Worker
+\`\`\`
+
+The Worker:
+
+1. Receives message
+2. Validates payload
+3. Checks authorization
+4. Checks idempotency
+5. Calls MCP
+6. Gets Salesforce/ServiceNow data
+7. Processes result
+8. Updates job status
+
+---
+
+### 4. Update job status
+
+I would store status in DynamoDB:
+
+\`\`\`text
+JOB-123
+   ↓
+QUEUED
+   ↓
+PROCESSING
+   ↓
+COMPLETED
+\`\`\`
+
+If it fails:
+
+\`\`\`text
+PROCESSING
+     ↓
+FAILED
+     ↓
+Retry
+     ↓
+DLQ if persistent
+\`\`\`
+
+---
+
+### 5. Control Worker concurrency
+
+Suppose Salesforce allows only 20 concurrent operations.
+
+I can control the number of Workers consuming jobs:
+
+\`\`\`text
+              SQS
+               ↓
+       ┌───────┼───────┐
+       ↓       ↓       ↓
+    Worker  Worker   Worker
+      1       2        3
+       └───────┼───────┘
+               ↓
+          Salesforce
+\`\`\`
+
+This protects the downstream system.
+
+---
+
+## What happens if the Worker crashes?
+
+SQS provides **visibility timeout**.
+
+\`\`\`text
+SQS
+ ↓
+Worker receives message
+ ↓
+Worker crashes
+ ↓
+Message becomes visible again
+ ↓
+Another Worker processes it
+\`\`\`
+
+For repeated failures:
+
+\`\`\`text
+SQS
+ ↓
+Retry
+ ↓
+Retry
+ ↓
+Retry
+ ↓
+DLQ
+\`\`\`
+
+Then operations teams can investigate the DLQ.
+
+---
+
+## Important: Idempotency
+
+Suppose the Worker successfully updates Salesforce but crashes before acknowledging the SQS message.
+
+The message may be processed again.
+
+Therefore:
+
+\`\`\`text
+SQS
+ ↓
+Worker
+ ↓
+Idempotency check
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+Use a unique \`job_id\` / idempotency key so the same business operation isn't executed twice.
+
+---
+
+# Real CWD example
+
+Suppose the user requests:
+
+> "Generate a report for 10,000 customers."
+
+Instead of:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+10,000 synchronous Worker calls
+ ↓
+Wait...
+\`\`\`
+
+I would do:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+SQS
+ ↓
+┌───────────────┐
+│ Worker pool   │
+│ W1 W2 W3 W4   │
+│ W5 W6 ...     │
+└───────┬───────┘
+        ↓
+     MCP
+        ↓
+Enterprise systems
+        ↓
+   DynamoDB status
+\`\`\`
+
+The user gets a **Job ID** immediately and the work continues asynchronously.
+
+## 🎯 Strong interview answer
+
+> **“For asynchronous CWD Worker processing, the Delegator publishes a job message to SQS containing the job ID, Worker type, business parameters, correlation ID, and required context. Workers consume the messages independently, process the job, call MCP or other downstream systems, and update the job status in DynamoDB. I use visibility timeouts, retries, exponential backoff, and a DLQ for failures. I also use idempotency keys to prevent duplicate business operations. This gives us decoupling, buffering, controlled concurrency, and reliable background processing.”**
+
+### Easy memory trick
+
+**Create → Queue → Consume → Process → Update → Retry → DLQ**
+
+### Key distinction
+
+* **SQS** → holds the work
+* **ECS/Fargate** → runs the Worker
+* **DynamoDB** → stores job status
+* **MCP** → connects Worker to enterprise tools
+* **DLQ** → holds repeatedly failed jobs
 `,code:``},{id:`080-how-do-you-handle-message-duplication`,category:`SQS & Asynchronous Processing`,title:`How do you handle message duplication?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle message duplication?
 
-## Short answer
-Standard SQS delivers at least once, so duplicates can occur.
+In CWD, I assume **duplicate messages can happen**, especially with SQS. I handle them using **idempotency** rather than assuming every message is delivered only once.
 
-## Key points
-- Causes: retries, and visibility timeout expiring before processing finishes.
-- FIFO deduplication IDs help within a window.
-- Always make consumers idempotent.
+\`\`\`text
+SQS Message
+     ↓
+Worker
+     ↓
+Extract job_id / idempotency_key
+     ↓
+Check DynamoDB
+     ↓
+Already processed?
+   ↙          ↘
+ YES           NO
+  ↓             ↓
+Skip          Process
+                ↓
+          MCP / Salesforce
+                ↓
+          Mark COMPLETED
+\`\`\`
 
-## CWD context
-Broker features reduce duplicates; only idempotency removes their effect.
+## 1. Give every job a unique ID
+
+When the Delegator creates a job:
+
+\`\`\`json
+{
+  "job_id": "JOB-12345",
+  "customer_id": "CUST-100",
+  "operation": "UPDATE_CASE"
+}
+\`\`\`
+
+\`job_id\` becomes the **idempotency key**.
+
+---
+
+## 2. Check DynamoDB before processing
+
+Worker receives:
+
+\`\`\`text
+JOB-12345
+\`\`\`
+
+It checks:
+
+\`\`\`text
+DynamoDB:
+JOB-12345 → COMPLETED
+\`\`\`
+
+Then:
+
+\`\`\`text
+Already processed
+      ↓
+Skip business operation
+\`\`\`
+
+No second Salesforce update.
+
+---
+
+## 3. Use atomic conditional writes
+
+The important part is that the check and reservation shouldn't have a race condition.
+
+Conceptually:
+
+\`\`\`text
+Put JOB-12345
+ONLY IF job_id does not already exist
+\`\`\`
+
+If another Worker already claimed it:
+
+\`\`\`text
+Conditional write fails
+        ↓
+Duplicate detected
+        ↓
+Don't process again
+\`\`\`
+
+This is safer than:
+
+\`\`\`text
+if not exists:
+    process()
+\`\`\`
+
+because two Workers could otherwise check at the same time.
+
+---
+
+## 4. Make downstream operations idempotent
+
+For example, instead of blindly:
+
+\`\`\`text
+Create Salesforce Case
+\`\`\`
+
+use an idempotency/reference key:
+
+\`\`\`text
+CWD_JOB_ID = JOB-12345
+\`\`\`
+
+The Worker checks whether that operation has already been completed before creating it again.
+
+This is especially important for **side effects** such as:
+
+* Create/update Salesforce record
+* Create ServiceNow incident
+* Send notification
+* Submit transaction
+
+---
+
+## 5. Use SQS FIFO when appropriate
+
+For workflows where ordering and deduplication are important:
+
+\`\`\`text
+FIFO Queue
+   ↓
+MessageGroupId = customer-100
+\`\`\`
+
+FIFO provides queue-level deduplication capabilities, but I **still implement application-level idempotency**.
+
+Why?
+
+Because deduplication at the queue doesn't replace protection around the actual business operation.
+
+---
+
+## 6. What if Worker crashes after the business operation?
+
+This is a common interview scenario.
+
+\`\`\`text
+Worker
+  ↓
+Salesforce UPDATE succeeds
+  ↓
+Worker crashes
+  ↓
+SQS message becomes visible again
+  ↓
+Worker receives duplicate
+\`\`\`
+
+The second Worker sees:
+
+\`\`\`text
+JOB-12345 → COMPLETED
+\`\`\`
+
+and doesn't repeat the operation.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I handle SQS duplication using application-level idempotency. Every CWD job gets a unique job ID or idempotency key. When the Worker receives a message, it atomically checks and records that key in DynamoDB before performing the business operation. If the key has already been completed, the Worker skips the duplicate. For side-effecting operations such as Salesforce or ServiceNow updates, I also pass or persist the idempotency key at the business-operation level. FIFO queues can provide additional ordering and deduplication, but I don't rely on FIFO alone because the downstream operation must also be protected.”**
+
+### Easy memory trick
+
+**ID → Check → Claim → Process → Complete**
+
+### Key distinction
+
+**SQS deduplication** = prevents some duplicate messages.
+
+**Idempotency** = ensures the **business operation is safe even if the message is processed more than once**.
+
+That second point is the important one to mention in an architect interview.
 `,code:``},{id:`081-how-do-you-implement-idempotency`,category:`SQS & Asynchronous Processing`,title:`How do you implement idempotency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement idempotency?
 
-## Short answer
-Implement idempotency by recording the operation ID before the side effect.
+In CWD, I implement idempotency by giving every business operation a **unique idempotency key** and storing its processing state in **DynamoDB**.
 
-## Key points
-- DynamoDB conditional put keyed by message or business operation ID, with TTL.
-- Powertools idempotency utility; downstream idempotency tokens or upserts.
-- Mark complete after success.
+\`\`\`text
+Delegator
+   ↓
+Generate idempotency_key
+   ↓
+SQS
+   ↓
+Worker
+   ↓
+Atomic check in DynamoDB
+   ↓
+Already processed?
+   ├── YES → Return existing result / skip
+   └── NO  → Claim key → Process
+                    ↓
+              MCP / Salesforce
+                    ↓
+              Mark COMPLETED
+\`\`\`
 
-## CWD context
-Critical for write tools such as creating tickets.
-`,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a visibility timeout?
+## 1. Generate a unique key
 
-## Short answer
-The visibility timeout hides a received message from other consumers for a period.
+For example:
 
-## Key points
-- If the message is not deleted before the timeout ends, it becomes visible again and is redelivered.
-- Default 30 seconds, maximum 12 hours.
+\`\`\`text
+idempotency_key = JOB-12345
+\`\`\`
 
-## CWD context
-It is a lease on the message, not a delivery guarantee.
+For a business operation, I may construct it from:
+
+\`\`\`text
+tenant_id + customer_id + operation + request_id
+\`\`\`
+
+Example:
+
+\`\`\`text
+ONSEMI + CUST-100 + UPDATE_CASE + REQ-789
+\`\`\`
+
+The key must uniquely represent **one business operation**, not simply every HTTP retry.
+
+---
+
+## 2. Atomically claim the operation
+
+When the Worker receives the SQS message:
+
+\`\`\`text
+Worker
+  ↓
+DynamoDB
+  ↓
+Put JOB-12345
+ONLY IF it doesn't already exist
+\`\`\`
+
+DynamoDB might contain:
+
+\`\`\`json
+{
+  "idempotency_key": "JOB-12345",
+  "status": "PROCESSING"
+}
+\`\`\`
+
+The conditional write is important because two Workers could receive the same message.
+
+\`\`\`text
+Worker A ──┐
+           ├──→ DynamoDB
+Worker B ──┘
+
+Only ONE successfully claims JOB-12345
+\`\`\`
+
+---
+
+## 3. Process the operation
+
+After successfully claiming the key:
+
+\`\`\`text
+Worker
+  ↓
+Validate
+  ↓
+MCP
+  ↓
+Salesforce / ServiceNow
+\`\`\`
+
+For example:
+
+\`\`\`text
+Update ServiceNow incident
+INC-100
+\`\`\`
+
+---
+
+## 4. Mark it COMPLETED
+
+After successful processing:
+
+\`\`\`text
+DynamoDB
+
+JOB-12345
+    status = COMPLETED
+    result = ...
+\`\`\`
+
+If the same message arrives again:
+
+\`\`\`text
+Worker
+ ↓
+DynamoDB
+ ↓
+JOB-12345 = COMPLETED
+ ↓
+Don't execute again
+\`\`\`
+
+---
+
+# What if the Worker crashes?
+
+This is the important interview case.
+
+\`\`\`text
+Worker
+  ↓
+Claim JOB-12345
+  ↓
+Salesforce update succeeds
+  ↓
+Worker crashes
+  ↓
+Message delivered again
+\`\`\`
+
+The Worker checks:
+
+\`\`\`text
+JOB-12345 = COMPLETED
+\`\`\`
+
+and skips the operation.
+
+---
+
+## What if it crashes before completion?
+
+Suppose:
+
+\`\`\`text
+JOB-12345 = PROCESSING
+\`\`\`
+
+and the Worker crashes before calling Salesforce.
+
+You need a **recovery policy**.
+
+For example:
+
+\`\`\`text
+PROCESSING
+    ↓
+Lease/timeout expires
+    ↓
+Retry
+    ↓
+PROCESSING
+    ↓
+COMPLETED
+\`\`\`
+
+Don't permanently treat \`PROCESSING\` as completed.
+
+A common pattern is to store:
+
+\`\`\`text
+idempotency_key
+status
+created_at
+updated_at
+lease_expiry
+result
+\`\`\`
+
+and allow another Worker to reclaim a stale \`PROCESSING\` record after the lease expires.
+
+---
+
+# Very important: side effects
+
+For operations like:
+
+\`\`\`text
+Create Salesforce case
+Create ServiceNow incident
+Send payment
+Send email
+Update database
+\`\`\`
+
+idempotency must protect the **side effect**, not just the SQS message.
+
+For example:
+
+\`\`\`text
+SQS duplicate
+      ↓
+Worker
+      ↓
+Idempotency check
+      ↓
+Already completed?
+      ↓
+Don't create another ServiceNow incident
+\`\`\`
+
+If the downstream API itself supports an **idempotency key**, pass the same key to it.
+
+---
+
+# Simple CWD implementation
+
+\`\`\`text
+             Delegator
+                 ↓
+          JOB-12345 created
+                 ↓
+               SQS
+                 ↓
+              Worker
+                 ↓
+       DynamoDB conditional write
+          ↙              ↘
+   Already exists       New key
+        ↓                   ↓
+      Skip               Process
+                            ↓
+                          MCP
+                            ↓
+                    ServiceNow
+                            ↓
+                    Mark COMPLETED
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I implement idempotency using a unique idempotency key for every business operation. When the Worker receives an SQS message, it performs an atomic conditional write in DynamoDB to claim that key. If the key already exists in COMPLETED state, the Worker skips the duplicate. If it successfully claims the key, it performs the operation through MCP and then marks the record COMPLETED. I also handle stale PROCESSING records using a lease or timeout so failed Workers can be retried. For side-effecting operations such as Salesforce or ServiceNow updates, I propagate the idempotency key to the downstream system when supported. This makes the operation safe even when SQS delivers a message more than once.”**
+
+### Easy memory trick
+
+**Generate → Claim → Process → Complete → Retry safely**
+
+### Key distinction
+
+**Deduplication:**
+“Is this message a duplicate?”
+
+**Idempotency:**
+“Even if I process it twice, will the business result remain correct?”
+`,code:``},{id:`082-what-is-a-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`What is a visibility timeout?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Visibility Timeout?
+
+**Visibility timeout is the period during which an SQS message becomes temporarily invisible to other Workers after one Worker receives it.**
+
+It prevents multiple Workers from processing the same message **at the same time**.
+
+### Simple example
+
+\`\`\`text
+SQS
+ ↓
+Message JOB-123
+ ↓
+Worker A receives it
+ ↓
+Message becomes INVISIBLE
+ ↓
+Worker A processes it
+ ↓
+Delete message from SQS
+\`\`\`
+
+Suppose the visibility timeout is **60 seconds**.
+
+\`\`\`text
+0 sec       Worker receives message
+     ↓
+0–60 sec    Message invisible
+     ↓
+Worker finishes
+     ↓
+Delete message
+\`\`\`
+
+If Worker A crashes:
+
+\`\`\`text
+SQS
+ ↓
+Worker A receives JOB-123
+ ↓
+Message invisible for 60 sec
+ ↓
+Worker A crashes
+ ↓
+60 sec expires
+ ↓
+Message becomes visible again
+ ↓
+Worker B receives it
+\`\`\`
+
+This provides **automatic retry behavior**.
+
+---
+
+## CWD example
+
+\`\`\`text
+Delegator
+    ↓
+   SQS
+    ↓
+Customer Worker A
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+Suppose the Worker normally takes **30 seconds**.
+
+I might configure the visibility timeout longer than the expected processing time, for example **60 seconds**.
+
+If the Worker finishes successfully:
+
+\`\`\`text
+Worker
+ ↓
+Process successfully
+ ↓
+Delete SQS message
+\`\`\`
+
+If it fails:
+
+\`\`\`text
+Worker crashes
+ ↓
+Message not deleted
+ ↓
+Visibility timeout expires
+ ↓
+SQS makes message visible
+ ↓
+Another Worker retries
+\`\`\`
+
+---
+
+## What if the job takes longer?
+
+You can **extend the visibility timeout** while processing.
+
+\`\`\`text
+Initial timeout = 60 sec
+
+Worker processing
+       ↓
+Still running at 50 sec
+       ↓
+Extend visibility timeout
+       ↓
+Continue processing
+\`\`\`
+
+This is useful for long-running Worker jobs.
+
+---
+
+## Visibility timeout vs message retention
+
+Don't confuse these:
+
+| Concept                | Meaning                                                                   |
+| ---------------------- | ------------------------------------------------------------------------- |
+| **Visibility timeout** | How long a received message stays hidden from other consumers             |
+| **Message retention**  | How long SQS keeps the message if it isn't successfully processed/deleted |
+
+### Memory trick
+
+> **Visibility timeout = “Give this Worker some time to finish.”**
+
+### 🎯 Strong interview answer
+
+> **“Visibility timeout is the period for which an SQS message is hidden after a Worker receives it. It prevents another Worker from immediately processing the same message. If the Worker successfully completes the job, it deletes the message. If the Worker crashes or doesn't delete it before the visibility timeout expires, SQS makes the message visible again for retry. For long-running CWD Workers, I can extend the visibility timeout while processing.”**
 `,code:``},{id:`083-how-do-you-configure-visibility-timeout`,category:`SQS & Asynchronous Processing`,title:`How do you configure visibility timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you configure visibility timeout?
 
-## Short answer
-Set the visibility timeout above the maximum processing time, and extend it for long jobs.
+I configure the **SQS visibility timeout based on the expected maximum processing time of the Worker**, with some safety margin.
 
-## Key points
-- For Lambda consumers use several times the function timeout.
-- Use ChangeMessageVisibility as a heartbeat for long tasks.
-- Too short causes duplicates; too long slows recovery after a crash.
+### Simple rule
 
-## CWD context
-Measure real processing times before choosing.
+\`\`\`text
+Visibility Timeout
+        >
+Worker processing time
+        +
+Safety margin
+\`\`\`
+
+For example:
+
+\`\`\`text
+Typical Worker time = 30 sec
+Maximum expected    = 45 sec
+
+Visibility timeout = 60 sec
+\`\`\`
+
+## CWD example
+
+Suppose:
+
+\`\`\`text
+SQS
+ ↓
+Customer Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+The Worker normally takes **20–30 seconds**, but can sometimes take **45 seconds**.
+
+I could configure:
+
+\`\`\`text
+Visibility Timeout = 60 seconds
+\`\`\`
+
+Flow:
+
+\`\`\`text
+0 sec
+ ↓
+Worker receives message
+ ↓
+Message becomes invisible
+ ↓
+Worker processes
+ ↓
+45 sec → processing completed
+ ↓
+Delete message
+\`\`\`
+
+---
+
+## What if the Worker takes longer?
+
+For long-running jobs, I can **extend the visibility timeout dynamically**.
+
+\`\`\`text
+Initial timeout = 60 sec
+
+Worker starts
+    ↓
+50 sec
+    ↓
+Still processing
+    ↓
+Extend timeout
+    ↓
+Continue processing
+    ↓
+Complete
+    ↓
+Delete message
+\`\`\`
+
+This prevents the same message from becoming visible while the original Worker is still processing it.
+
+---
+
+## What if timeout is too short?
+
+Suppose:
+
+\`\`\`text
+Worker processing = 90 sec
+Visibility timeout = 60 sec
+\`\`\`
+
+Then:
+
+\`\`\`text
+Worker A receives message
+       ↓
+60 sec
+       ↓
+Message becomes visible
+       ↓
+Worker B receives same message
+\`\`\`
+
+Now **Worker A and Worker B could process the same job concurrently**.
+
+That's why the timeout must be long enough.
+
+---
+
+## What if timeout is too long?
+
+Suppose:
+
+\`\`\`text
+Worker crashes after 5 sec
+Visibility timeout = 30 minutes
+\`\`\`
+
+The failed message may remain invisible for a long time before another Worker can retry it.
+
+So don't make it unnecessarily large.
+
+---
+
+## How I choose it
+
+For CWD:
+
+\`\`\`text
+Measure actual Worker duration
+        ↓
+Look at P95 / P99
+        ↓
+Set appropriate timeout
+        ↓
+Extend for unusually long jobs
+        ↓
+Use idempotency as protection
+\`\`\`
+
+For example:
+
+| Worker          | Typical | Max expected | Visibility |
+| --------------- | ------: | -----------: | ---------: |
+| Customer Worker |     10s |          30s |        60s |
+| Incident Worker |     15s |          45s |     60–90s |
+| Document Worker |   2 min |        5 min |   6–10 min |
+
+These are **example values**, not universal settings.
+
+### 🎯 Strong interview answer
+
+> **“I configure SQS visibility timeout based on the Worker’s maximum expected processing time, with a safety margin. I measure actual processing latency, typically looking at P95/P99, and set the timeout high enough that a healthy Worker normally finishes before the message becomes visible again. For long-running jobs, I extend the visibility timeout while processing. If the Worker fails without deleting the message, the timeout expires and SQS makes the message available for retry. I also use idempotency so a duplicate delivery remains safe.”**
+
+### Easy memory trick
+
+**Measure → Set → Extend → Retry → Idempotency**
+
+**Key point:** Visibility timeout controls **when a failed/unacknowledged message can be retried**; it does **not** control how long SQS stores the message.
 `,code:``},{id:`084-what-happens-when-message-processing-fails`,category:`SQS & Asynchronous Processing`,title:`What happens when message processing fails?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What happens when message processing fails?
 
-## Short answer
-A failed message is not deleted, so it reappears and is retried until it reaches the DLQ.
+In CWD, I would use **retry + visibility timeout + exponential backoff + DLQ**.
 
-## Key points
-- The redrive policy moves it to the DLQ after maxReceiveCount.
-- Use partial batch failure responses to avoid retrying successes.
-- Increase the timeout on each failure for backoff; alert on DLQ growth.
+\`\`\`text
+SQS
+ ↓
+Worker receives message
+ ↓
+Processing fails
+ ↓
+Don't delete message
+ ↓
+Visibility timeout expires
+ ↓
+Message becomes visible again
+ ↓
+Worker retries
+ ↓
+ ┌───────────────┐
+ │ Success?      │
+ └───────┬───────┘
+       YES │ NO
+          ↓   ↓
+       Delete  Retry
+                ↓
+          Max retries?
+             ↓ YES
+             DLQ
+\`\`\`
 
-## CWD context
-Distinguish transient from permanent failures.
-`,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Dead Letter Queue?
+## Step-by-step
 
-## Short answer
-A dead-letter queue collects messages that repeatedly fail processing.
+### 1. Worker receives the message
 
-## Key points
-- Configured through a redrive policy with maxReceiveCount.
-- Set retention longer than the source queue; FIFO needs a FIFO DLQ.
-- Alarm when visible messages exceed zero; investigate, then redrive.
+\`\`\`text
+SQS → Worker
+\`\`\`
 
-## CWD context
-A DLQ with no owner is hidden data loss.
+The message becomes invisible because of the **visibility timeout**.
+
+---
+
+### 2. Worker processing fails
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+MCP
+  ↓
+ServiceNow
+  ↓
+Timeout / 5xx
+\`\`\`
+
+The Worker should **not delete the SQS message**.
+
+---
+
+### 3. Visibility timeout expires
+
+Suppose:
+
+\`\`\`text
+Visibility timeout = 60 seconds
+\`\`\`
+
+If the Worker doesn't successfully complete the job:
+
+\`\`\`text
+60 sec
+ ↓
+Message becomes visible again
+ ↓
+Worker can receive it again
+\`\`\`
+
+---
+
+### 4. Retry with backoff
+
+I don't want immediate repeated calls to ServiceNow:
+
+\`\`\`text
+Retry → Retry → Retry → Retry
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Attempt 1 → wait
+Attempt 2 → wait longer
+Attempt 3 → wait longer
+\`\`\`
+
+Use **exponential backoff + jitter**.
+
+Example concept:
+
+\`\`\`text
+1st retry → ~2 sec
+2nd retry → ~4 sec
+3rd retry → ~8 sec
+\`\`\`
+
+Actual values are configurable.
+
+---
+
+### 5. Maximum retry attempts
+
+Suppose the message keeps failing:
+
+\`\`\`text
+Attempt 1 ❌
+Attempt 2 ❌
+Attempt 3 ❌
+Attempt 4 ❌
+Attempt 5 ❌
+\`\`\`
+
+After the configured failure threshold, I route it to a **Dead-Letter Queue (DLQ)**.
+
+\`\`\`text
+Main Queue
+    ↓
+Worker
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+DLQ
+\`\`\`
+
+---
+
+## 6. Investigate the DLQ
+
+The DLQ allows operations teams to investigate:
+
+\`\`\`text
+job_id
+error
+Worker
+correlation_id
+timestamp
+failure count
+\`\`\`
+
+Then we can fix the underlying issue and potentially **replay** the message.
+
+---
+
+# Important: not every error should be retried
+
+### Retry transient errors
+
+Examples:
+
+\`\`\`text
+429 throttling
+503 Service Unavailable
+temporary network failure
+temporary downstream timeout
+\`\`\`
+
+### Don't blindly retry permanent errors
+
+Examples:
+
+\`\`\`text
+Invalid input
+Invalid customer_id
+Unauthorized request
+Malformed payload
+Business validation failure
+\`\`\`
+
+These may go directly to failure handling/DLQ depending on the design.
+
+---
+
+# CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Worker
+      ↓
+MCP
+      ↓
+Salesforce
+      ↓
+503 Service Unavailable
+\`\`\`
+
+Flow:
+
+\`\`\`text
+SQS
+ ↓
+Worker
+ ↓
+Salesforce 503
+ ↓
+Retry + exponential backoff
+ ↓
+Salesforce
+ ↓
+Success
+ ↓
+Delete message
+\`\`\`
+
+If Salesforce remains unavailable:
+
+\`\`\`text
+Retry 1 ❌
+Retry 2 ❌
+Retry 3 ❌
+ ↓
+DLQ
+\`\`\`
+
+---
+
+## Idempotency is still important
+
+A Worker might successfully update Salesforce but crash **before deleting the SQS message**.
+
+Then the message can be delivered again.
+
+That's why:
+
+\`\`\`text
+SQS retry
+   +
+Idempotency
+\`\`\`
+
+work together.
+
+The second Worker sees:
+
+\`\`\`text
+JOB-123 = COMPLETED
+\`\`\`
+
+and doesn't perform the business operation again.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“When a CWD Worker fails, I don't delete the SQS message. The visibility timeout eventually expires and the message becomes available for retry. For transient failures such as throttling, temporary network errors, or 5xx responses, I use bounded retries with exponential backoff and jitter. If the message continues to fail after the configured retry threshold, I move it to a Dead-Letter Queue for investigation and possible replay. I also use idempotency so that if a message is delivered again after a partial failure, the downstream Salesforce or ServiceNow operation isn't duplicated.”**
+
+### Easy memory trick
+
+**Fail → Don't Delete → Visibility Timeout → Retry → Backoff → DLQ**
+
+### Key distinction
+
+**Retry** handles temporary failures.
+
+**DLQ** handles repeatedly failed messages.
+
+**Idempotency** prevents retries from creating duplicate business operations.
+`,code:``},{id:`085-what-is-a-dead-letter-queue`,category:`SQS & Asynchronous Processing`,title:`What is a Dead Letter Queue?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Dead Letter Queue (DLQ)?
+
+A **Dead Letter Queue is a separate SQS queue where messages are moved after they repeatedly fail processing**.
+
+Think of it as a **quarantine area for failed jobs**.
+
+\`\`\`text id="z5y2rq"
+              Main SQS Queue
+                   ↓
+                Worker
+                   ↓
+              Processing
+              ↙       ↘
+          SUCCESS      FAIL
+             ↓           ↓
+          Delete      Retry
+                         ↓
+                      Retry
+                         ↓
+                   Max attempts
+                         ↓
+                       DLQ
+\`\`\`
+
+## CWD example
+
+Suppose the **Incident Worker** needs to update ServiceNow.
+
+\`\`\`text id="5s6y8k"
+SQS
+ ↓
+Incident Worker
+ ↓
+MCP
+ ↓
+ServiceNow
+ ↓
+503 Error
+\`\`\`
+
+The Worker retries:
+
+\`\`\`text id="s3x6l1"
+Attempt 1 ❌
+Attempt 2 ❌
+Attempt 3 ❌
+Attempt 4 ❌
+       ↓
+      DLQ
+\`\`\`
+
+The message is **not lost**. It is isolated for investigation.
+
+---
+
+## What do you do with DLQ messages?
+
+Operations can inspect:
+
+\`\`\`text id="u5h8fr"
+Job ID
+Worker
+Correlation ID
+Error
+Timestamp
+Request information
+Retry count
+\`\`\`
+
+Then determine the problem:
+
+\`\`\`text id="9xgq6h"
+Bad input?
+    → Fix data
+
+ServiceNow outage?
+    → Wait for recovery
+
+Worker bug?
+    → Fix application
+
+Configuration issue?
+    → Fix configuration
+\`\`\`
+
+After fixing the problem, the message can potentially be **replayed/reprocessed**.
+
+---
+
+# Why is DLQ important in CWD?
+
+Without a DLQ:
+
+\`\`\`text id="d8s6vf"
+Failed message
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+Retry forever ❌
+\`\`\`
+
+This can create:
+
+* Infinite retries
+* Queue congestion
+* Wasted compute
+* Repeated downstream calls
+* Difficult troubleshooting
+
+With DLQ:
+
+\`\`\`text id="6k0j2z"
+Main Queue
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+Retry
+    ↓
+DLQ
+    ↓
+Investigate / Fix / Replay
+\`\`\`
+
+---
+
+## DLQ + Idempotency
+
+These solve different problems:
+
+**DLQ:**
+
+> "This message keeps failing. Move it aside."
+
+**Idempotency:**
+
+> "If I process this message again, don't perform the business operation twice."
+
+Together:
+
+\`\`\`text id="0m2r2w"
+SQS
+ ↓
+Worker
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Idempotency check
+ ↓
+Still failing?
+ ↓
+DLQ
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“A Dead Letter Queue is a separate SQS queue used to isolate messages that repeatedly fail processing. In CWD, if a Worker cannot process a message after the configured retry attempts, I move it to the DLQ instead of retrying indefinitely. The DLQ gives us visibility for troubleshooting and allows controlled replay after the underlying issue is fixed. I also use idempotency so replaying a message doesn't create duplicate business operations.”**
+
+### Easy memory trick
+
+**DLQ = Failed messages → Isolate → Investigate → Fix → Replay**
 `,code:``},{id:`086-how-would-you-replay-failed-cwd-requests`,category:`SQS & Asynchronous Processing`,title:`How would you replay failed CWD requests?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you replay failed CWD requests?
 
-## Short answer
-Replay failed requests by redriving from the DLQ after fixing the cause.
+I would **replay a failed request from the DLQ after fixing the root cause**, while preserving the original \`job_id\` / \`correlation_id\` and using idempotency to prevent duplicate business operations.
 
-## Key points
-- SQS DLQ redrive moves messages back to the source queue.
-- Rate-limit the redrive; handlers must be idempotent.
-- Keep original IDs and attempt counts; archive requests older than DLQ retention.
+\`\`\`text
+Main SQS
+   ↓
+Worker
+   ↓
+FAIL
+   ↓
+Retry
+   ↓
+DLQ
+   ↓
+Investigate
+   ↓
+Fix root cause
+   ↓
+Validate message
+   ↓
+Replay
+   ↓
+Main SQS
+   ↓
+Worker
+   ↓
+Success
+\`\`\`
 
-## CWD context
-Replay should be a controlled, audited action.
+## 1. Identify the failed request
+
+DLQ message contains information such as:
+
+\`\`\`json
+{
+  "job_id": "JOB-12345",
+  "worker": "IncidentWorker",
+  "customer_id": "CUST-100",
+  "correlation_id": "RUN-789",
+  "attempt": 5,
+  "error": "ServiceNow timeout"
+}
+\`\`\`
+
+I first investigate **why it failed**.
+
+---
+
+## 2. Fix the root cause
+
+For example:
+
+\`\`\`text
+ServiceNow outage → Service restored
+Worker bug       → Deploy fix
+Bad configuration → Correct configuration
+Temporary 429    → Capacity recovered
+\`\`\`
+
+I don't blindly replay while the underlying problem still exists.
+
+---
+
+## 3. Validate the message
+
+Before replaying, check:
+
+* Is the payload still valid?
+* Is the customer/request still authorized?
+* Is the downstream system available?
+* Is the request still relevant?
+* Has the operation already completed?
+
+This is especially important for **old requests**.
+
+---
+
+## 4. Check idempotency
+
+Suppose the original Worker actually succeeded but crashed before acknowledging SQS.
+
+\`\`\`text
+Salesforce update → SUCCESS
+Worker → CRASH
+SQS → message goes to DLQ
+\`\`\`
+
+Before replaying:
+
+\`\`\`text
+JOB-12345
+    ↓
+DynamoDB
+    ↓
+COMPLETED?
+    ↓
+YES → Don't execute again
+\`\`\`
+
+This prevents duplicate business operations.
+
+---
+
+## 5. Replay to the main queue
+
+After validation:
+
+\`\`\`text
+DLQ
+ ↓
+Replay service / controlled operator action
+ ↓
+Main SQS
+ ↓
+Worker
+\`\`\`
+
+I prefer **controlled replay**, not automatically replaying thousands of DLQ messages at once.
+
+---
+
+## 6. Control replay rate
+
+Suppose the DLQ contains 10,000 failed messages.
+
+Don't do:
+
+\`\`\`text
+10,000 messages
+      ↓
+10,000 Workers
+      ↓
+Salesforce ❌
+\`\`\`
+
+Instead:
+
+\`\`\`text
+DLQ
+ ↓
+Controlled replay
+ ↓
+SQS
+ ↓
+10–20 Workers
+ ↓
+Salesforce
+\`\`\`
+
+This protects downstream systems.
+
+---
+
+## 7. Monitor the replay
+
+Track:
+
+\`\`\`text
+DLQ depth
+Replay rate
+Success rate
+Failure rate
+Retry count
+P95/P99 latency
+Downstream errors
+\`\`\`
+
+If failures start increasing again:
+
+\`\`\`text
+Pause replay
+   ↓
+Investigate
+\`\`\`
+
+---
+
+# CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Worker
+      ↓
+MCP
+      ↓
+ServiceNow
+      ↓
+503
+\`\`\`
+
+After several retries:
+
+\`\`\`text
+DLQ
+ ↓
+100 failed jobs
+\`\`\`
+
+ServiceNow becomes healthy.
+
+I would:
+
+\`\`\`text
+1. Confirm ServiceNow is healthy
+2. Check one sample message
+3. Check idempotency status
+4. Replay a small batch
+5. Monitor success/error rate
+6. Gradually increase replay rate
+7. Stop when all valid messages are processed
+\`\`\`
+
+---
+
+# Important distinction: Retry vs Replay
+
+**Retry:**
+
+\`\`\`text
+Automatic
+↓
+Same processing attempt
+↓
+Transient failure
+\`\`\`
+
+**Replay:**
+
+\`\`\`text
+Controlled recovery
+↓
+Message already moved to DLQ
+↓
+Root cause fixed
+↓
+Put message back for processing
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“For CWD, I would replay failed requests from the DLQ only after identifying and fixing the root cause. I would validate the message, authorization, downstream availability, and current business state, then check the idempotency key to ensure the operation wasn't already completed. After that, I would move the message back to the main SQS queue and process it at a controlled rate. I would start with a small batch, monitor success and downstream error rates, and gradually increase the replay rate. This avoids creating another downstream spike or duplicate business operations.”**
+
+### Easy memory trick
+
+**DLQ → Investigate → Fix → Validate → Idempotency → Replay → Monitor**
 `,code:``},{id:`087-how-do-you-monitor-queue-depth`,category:`SQS & Asynchronous Processing`,title:`How do you monitor queue depth?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor queue depth?
 
-## Short answer
-Monitor queue depth and message age, not just counts.
+In CWD, I would monitor **SQS queue depth using Amazon CloudWatch**.
 
-## Key points
-- Visible and in-flight messages, age of the oldest message, messages sent and deleted.
-- DLQ visible messages above zero should alarm.
-- Backlog per task drives auto scaling.
+**Queue depth = number of messages waiting to be processed.**
 
-## CWD context
-Oldest-message age is the best SLO signal.
-`,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is backpressure?
+\`\`\`text
+                 SQS
+                  ↓
+        ┌──────────────────┐
+        │ Queue Depth      │
+        │ 100 → 500 → 2000 │
+        └────────┬─────────┘
+                 ↓
+             CloudWatch
+                 ↓
+              Alarm
+                 ↓
+        ECS Worker Auto Scaling
+\`\`\`
 
-## Short answer
-Backpressure is slowing producers or consumption when downstream systems cannot keep up.
+## 1. Monitor \`ApproximateNumberOfMessagesVisible\`
 
-## Key points
-- SQS buffers naturally; add consumer concurrency limits.
-- Queue-depth-based admission control (429 or "accepted, wait" responses).
-- Per-tenant limits, rate limits toward Bedrock and MCP, shedding low-priority work.
+This is the main metric for messages currently available to be consumed.
 
-## CWD context
-Without backpressure a buffer just delays the overload.
+Example:
+
+\`\`\`text
+Queue depth = 50
+\`\`\`
+
+means approximately 50 messages are waiting.
+
+If it continuously increases:
+
+\`\`\`text
+100 → 500 → 1,000 → 5,000
+\`\`\`
+
+it indicates **Workers are not keeping up with incoming work**.
+
+---
+
+## 2. Monitor messages in flight
+
+Also monitor:
+
+**\`ApproximateNumberOfMessagesNotVisible\`**
+
+These are messages currently being processed or hidden because of visibility timeout.
+
+\`\`\`text
+Visible       = 500
+Not visible   = 100
+\`\`\`
+
+So you can understand:
+
+\`\`\`text
+Waiting work + currently processing
+\`\`\`
+
+---
+
+## 3. Monitor DLQ depth
+
+Very important for CWD:
+
+\`\`\`text
+Main Queue
+    ↓
+Worker
+    ↓
+Failures
+    ↓
+DLQ
+\`\`\`
+
+Monitor:
+
+**\`ApproximateNumberOfMessagesVisible\` on the DLQ**
+
+If:
+
+\`\`\`text
+DLQ depth = 0
+\`\`\`
+
+normally good.
+
+If:
+
+\`\`\`text
+DLQ depth = 50 → 500 → 2,000
+\`\`\`
+
+you have a growing processing problem that needs investigation.
+
+---
+
+# 4. Create CloudWatch alarms
+
+Example:
+
+\`\`\`text
+Queue depth > 1,000
+        ↓
+CloudWatch Alarm
+        ↓
+SNS / incident notification
+        ↓
+Operations team
+\`\`\`
+
+But the threshold should be based on **expected workload and SLA**, not an arbitrary number.
+
+---
+
+# 5. Use queue depth for ECS scaling
+
+This is particularly useful in CWD.
+
+\`\`\`text
+                SQS
+                 ↓
+           Queue depth
+                 ↓
+             CloudWatch
+                 ↓
+          ECS Auto Scaling
+          ↙            ↘
+    Add Workers      Remove Workers
+\`\`\`
+
+Example:
+
+\`\`\`text
+Queue depth < 100
+→ 3 Worker tasks
+
+Queue depth > 1,000
+→ scale to 10 Worker tasks
+\`\`\`
+
+You can use **custom CloudWatch metrics / Application Auto Scaling policies** based on workload characteristics.
+
+---
+
+# 6. Queue depth alone isn't enough
+
+I would also monitor:
+
+| Metric                    | Why                            |
+| ------------------------- | ------------------------------ |
+| Queue depth               | How much work is waiting       |
+| Messages not visible      | Work currently being processed |
+| Age of oldest message     | How long work is waiting       |
+| Message receive count     | Repeated retries               |
+| DLQ depth                 | Persistent failures            |
+| Worker CPU/memory         | Worker capacity                |
+| Worker processing latency | Processing speed               |
+| Success/failure rate      | Processing health              |
+| Downstream latency        | Salesforce/ServiceNow health   |
+
+### Very important: Age of oldest message
+
+Suppose:
+
+\`\`\`text
+Queue depth = 100
+\`\`\`
+
+That sounds manageable.
+
+But:
+
+\`\`\`text
+Oldest message age = 20 minutes
+\`\`\`
+
+means your users may already be experiencing a serious delay.
+
+So I pay particular attention to:
+
+**Queue depth + oldest message age.**
+
+---
+
+# CWD example
+
+\`\`\`text
+Customer Worker Queue
+
+Queue depth       = 2,500
+Oldest message    = 8 minutes
+Workers           = 5
+CPU               = 80%
+DLQ               = 0
+\`\`\`
+
+This tells me the system is receiving work faster than Workers are processing it.
+
+I could:
+
+\`\`\`text
+Increase Worker capacity
+        ↓
+Check downstream limits
+        ↓
+Scale gradually
+        ↓
+Monitor queue age
+\`\`\`
+
+I would **not blindly add Workers** if Salesforce/ServiceNow is already throttling us.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I monitor CWD SQS queues primarily through CloudWatch. I track visible message count for queue depth, not-visible messages for in-flight work, the age of the oldest message for user-facing delay, and DLQ depth for persistent failures. I configure CloudWatch alarms based on queue growth and message age, and I can use queue-based metrics to drive ECS Worker scaling. However, I also consider downstream limits such as Salesforce, ServiceNow, and Bedrock before increasing concurrency.”**
+
+### Easy memory trick
+
+**Depth → Age → In-flight → DLQ → Scale**
+
+### Key distinction
+
+**Queue depth tells me how much work is waiting.**
+
+**Oldest message age tells me how long users have been waiting.**
+`,code:``},{id:`088-what-is-backpressure`,category:`SQS & Asynchronous Processing`,title:`What is backpressure?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Backpressure?
+
+**Backpressure means slowing down incoming work when the downstream system cannot process work fast enough.**
+
+In simple words:
+
+> **“Don't send more work than the system can handle.”**
+
+### CWD example
+
+Suppose CWD receives **1,000 requests/sec**, but Workers can process only **300 requests/sec**.
+
+Without backpressure:
+
+\`\`\`text
+1000 req/sec
+     ↓
+Workers
+     ↓
+Overload
+     ↓
+Timeouts / 429 / failures
+\`\`\`
+
+With backpressure:
+
+\`\`\`text
+1000 req/sec
+     ↓
+     SQS
+     ↓
+Queue builds gradually
+     ↓
+Workers process at safe rate
+     ↓
+Salesforce / ServiceNow protected
+\`\`\`
+
+### How do you implement it?
+
+Common mechanisms:
+
+1. **SQS queue** → buffer incoming work
+2. **Concurrency limits** → limit Worker parallelism
+3. **Rate limiting** → control request rate
+4. **ECS Auto Scaling** → add Workers when workload increases
+5. **Circuit breaker** → stop calling an unhealthy downstream service
+6. **Retries with backoff** → avoid retry storms
+7. **Load shedding** → reject/defer non-critical work when overloaded
+
+### CWD example
+
+\`\`\`text
+Delegator
+    ↓
+   SQS
+    ↓
+Worker concurrency = 10
+    ↓
+ServiceNow
+\`\`\`
+
+If ServiceNow starts returning **429**, don't increase Workers from 10 → 100.
+
+Instead:
+
+\`\`\`text
+429 detected
+    ↓
+Reduce concurrency
+    ↓
+Queue requests in SQS
+    ↓
+Retry with backoff + jitter
+    ↓
+Resume gradually
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“Backpressure is a mechanism to prevent downstream overload when incoming traffic is higher than processing capacity. In CWD, I can use SQS to buffer work, control Worker concurrency, apply rate limits, and use retries with exponential backoff. If Salesforce, ServiceNow, or Bedrock becomes slow or throttled, I slow down processing instead of continuously sending more requests.”**
+
+**Memory trick:**
+**Too much work → Slow down → Buffer → Process safely**
+
+**Key distinction:**
+**Auto scaling increases capacity; backpressure controls the rate of work entering the system.**
 `,code:``},{id:`089-how-does-sqs-help-cwd-scalability`,category:`SQS & Asynchronous Processing`,title:`How does SQS help CWD scalability?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does SQS help CWD scalability?
 
-## Short answer
-SQS helps scalability by decoupling and smoothing load.
+**SQS helps CWD scale by decoupling request producers from Workers.** It acts as a **buffer** when traffic suddenly increases.
 
-## Key points
-- Near-unlimited standard-queue throughput; multi-AZ durability.
-- Consumers scale independently on backlog.
-- Per-tenant queues or message groups protect fairness.
+### Without SQS
 
-## CWD context
-Producers are not blocked by slow consumers.
+\`\`\`text
+Coordinator
+    ↓
+Worker
+    ↓
+Salesforce / ServiceNow
+\`\`\`
+
+If traffic jumps from 100 → 1,000 requests:
+
+\`\`\`text
+Worker overload
+   ↓
+Timeouts
+   ↓
+Failures
+\`\`\`
+
+### With SQS
+
+\`\`\`text
+Coordinator
+    ↓
+   SQS
+    ↓
+ ┌──┴──┬────┬────┐
+ W1   W2   W3   W4
+    ↓
+Enterprise Systems
+\`\`\`
+
+Now CWD can absorb the traffic spike in the queue while Workers process messages at a controlled rate.
+
+### How SQS improves scalability
+
+1. **Buffering**
+
+   * Handles traffic spikes without immediately overwhelming Workers.
+
+2. **Independent scaling**
+
+   * Coordinator and Workers can scale independently.
+   * ECS can add more Worker tasks when queue depth increases.
+
+3. **Backpressure**
+
+   * Queue naturally slows the flow toward Salesforce, ServiceNow, or other downstream systems.
+
+4. **Asynchronous processing**
+
+   * Long-running operations don't need to keep the user's request waiting.
+
+5. **Retry**
+
+   * Failed messages can be processed again instead of losing the request.
+
+6. **DLQ**
+
+   * Repeatedly failed messages move to a Dead Letter Queue instead of continuously consuming Worker capacity.
+
+### Example
+
+Suppose:
+
+\`\`\`text
+Incoming requests = 1,000/min
+Worker capacity   = 300/min
+\`\`\`
+
+SQS absorbs the difference:
+
+\`\`\`text
+1,000 requests
+      ↓
+     SQS
+      ↓
+300/min processed
+      ↓
+Remaining work stays queued
+\`\`\`
+
+When more Workers are available:
+
+\`\`\`text
+5 Workers
+   ↓
+10 Workers
+   ↓
+20 Workers
+\`\`\`
+
+the queue drains faster.
+
+### 🎯 Strong interview answer
+
+> **“SQS improves CWD scalability by decoupling the Coordinator and Workers and providing a durable buffer. During traffic spikes, requests can accumulate in the queue instead of overwhelming Workers or downstream systems. I can monitor queue depth and oldest-message age and use those signals to scale ECS Workers. SQS also provides retry and DLQ capabilities, making the system more resilient while scaling.”**
+
+**Memory trick:**
+**SQS = Buffer → Decouple → Scale → Retry → DLQ**
+
+**Key distinction:**
+**SQS doesn't directly make the Worker faster. It allows the overall system to handle more variable traffic safely.**
 `,code:``},{id:`090-how-would-you-handle-a-sudden-100x-traffic-spike`,category:`SQS & Asynchronous Processing`,title:`How would you handle a sudden 100× traffic spike?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle a sudden 100× traffic spike?
 
-## Short answer
-Survive a 100× spike by absorbing, scaling, protecting and degrading gracefully.
+For CWD, I would use **buffering + throttling + autoscaling + downstream protection** rather than simply adding 100× more containers.
 
-## Key points
-- Absorb: WAF and API throttling, then the async pattern with SQS as a buffer.
-- Scale: consumers on backlog; DynamoDB on-demand; OpenSearch OCUs; request quota increases in advance.
-- Protect Bedrock: cross-region inference, token budgets per tenant, smaller model or cache fallback.
-- Pre-scale for known events; shed non-critical work; load test.
+### Architecture
 
-## CWD context
-Say which limit breaks first (usually Bedrock quota) and how you would handle it.
+\`\`\`text
+                 100× Traffic
+                      ↓
+                API Gateway
+                      ↓
+             Rate Limit / Throttle
+                      ↓
+               CWD Coordinator
+                      ↓
+               ┌──────┴──────┐
+               ↓             ↓
+             SQS           SQS
+               ↓             ↓
+          Worker Pool   Worker Pool
+               ↓             ↓
+          MCP / APIs / Bedrock
+               ↓
+       Salesforce / ServiceNow
+\`\`\`
+
+### 1. Absorb the spike
+
+Use **SQS** as a buffer.
+
+\`\`\`text
+100× requests
+     ↓
+   SQS
+     ↓
+Workers process at sustainable rate
+\`\`\`
+
+This prevents the spike from immediately reaching Salesforce, ServiceNow, or Bedrock.
+
+### 2. Protect the API
+
+Use **API Gateway throttling/rate limits**.
+
+If the system can safely handle 5,000 requests/sec, don't allow unlimited traffic through just because 500,000 requests/sec arrive.
+
+For non-critical requests, I can return:
+
+\`\`\`text
+202 Accepted
+job_id = CWD-12345
+\`\`\`
+
+and process asynchronously.
+
+### 3. Scale Workers
+
+Monitor:
+
+* SQS queue depth
+* Oldest message age
+* ECS CPU/memory
+* Worker processing latency
+* Request rate
+
+Then scale ECS/Fargate Workers.
+
+\`\`\`text
+Queue depth ↑
+      ↓
+CloudWatch
+      ↓
+ECS Auto Scaling
+      ↓
+More Worker tasks
+\`\`\`
+
+But scaling must respect downstream limits.
+
+### 4. Protect downstream systems
+
+Suppose Salesforce supports only a certain concurrency level.
+
+Don't do:
+
+\`\`\`text
+100× traffic
+    ↓
+100× Workers
+    ↓
+Salesforce overload
+\`\`\`
+
+Instead:
+
+\`\`\`text
+100× traffic
+     ↓
+SQS
+     ↓
+Controlled Worker concurrency
+     ↓
+Salesforce
+\`\`\`
+
+Use **rate limits, concurrency limits, connection pools, circuit breakers and backoff**.
+
+### 5. Protect Bedrock
+
+A 100× spike can also cause model throttling.
+
+I would use:
+
+* concurrency limits
+* SQS buffering
+* exponential backoff + jitter
+* model routing
+* token limits
+* semantic caching where appropriate
+* approved fallback models where appropriate
+
+### 6. Prioritize critical requests
+
+If necessary:
+
+\`\`\`text
+             SQS
+              ↓
+       ┌──────┴──────┐
+       ↓             ↓
+   High Priority   Low Priority
+       ↓             ↓
+   Process first   Process later
+\`\`\`
+
+For example, critical IT incidents can receive higher priority than batch document processing.
+
+### 7. Monitor the system
+
+During the spike, watch:
+
+\`\`\`text
+Traffic
+Queue depth
+Oldest message age
+P50/P95/P99 latency
+ECS task count
+CPU / Memory
+429 rate
+5xx rate
+Bedrock latency
+MCP latency
+Salesforce/ServiceNow latency
+DLQ depth
+\`\`\`
+
+The key is to watch **queue age**, not just queue depth.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For a sudden 100× traffic spike, I would not simply scale everything by 100×. First, I would use API Gateway throttling and SQS to absorb and control the spike. Then I would autoscale ECS Workers based on queue depth, queue age, and resource utilization. I would apply concurrency and rate limits to protect downstream systems such as Salesforce, ServiceNow, and Bedrock, with retries, exponential backoff, circuit breakers, and DLQs. For critical workloads I would prioritize processing, while non-critical workloads can remain asynchronous. Throughout the event, I would monitor P95/P99 latency, queue age, 429s, errors, downstream latency, and DLQ depth.”**
+
+### Easy memory trick
+
+**100× spike → Protect → Buffer → Scale → Throttle → Prioritize → Monitor**
+
+### Key distinction
+
+**Autoscaling handles increased capacity.
+SQS handles increased workload.
+Backpressure protects downstream systems.**
 `,code:``}];function Em(){return(0,M.jsx)($,{data:Tm,title:`SQS & Asynchronous Processing Cookbook`,subtitle:`Queues, DLQs, visibility timeouts, idempotency and backpressure`,icon:`📬`,patternLabel:`Questions`})}var Dm=[{id:`091-why-use-aws-step-functions-in-cwd`,category:`Step Functions`,title:`Why use AWS Step Functions in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use AWS Step Functions in CWD?
 
-## Short answer
-Step Functions gives durable, visual, code-light orchestration for multi-step workflows across AWS services.
+**AWS Step Functions is useful in CWD for long-running, durable, predictable workflows that need retries, timeouts, branching, parallel execution, and recovery.**
 
-## Key points
-- Built-in retry, catch, timeout, parallel and Map states.
-- Direct service integrations reduce glue Lambdas; long waits cost no compute.
-- Execution history supports audit and debugging.
+The important distinction is:
 
-## CWD context
-Use it for ingestion pipelines, Worker fan-out and human-approval flows.
-`,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions Standard vs Express?
+> **LangGraph handles dynamic agent reasoning; Step Functions handles reliable workflow execution.**
 
-## Short answer
-Standard workflows are long-running and fully auditable; Express workflows are short and high-volume.
+### CWD example
 
-## Key points
-- Standard: up to a year, exactly-once execution, full history, task-token callbacks, billed per state transition.
-- Express: up to five minutes, at-least-once (async) or at-most-once (sync), very high rate, billed by requests and duration.
+Suppose a Customer Briefing requires:
 
-## CWD context
-Standard for CWD business workflows; Express for high-volume short transformations.
+\`\`\`text id="f2r8ac"
+Customer Briefing Request
+        ↓
+Coordinator
+        ↓
+Sales Delegator
+        ↓
+ ┌──────────────┬──────────────┐
+ ↓              ↓              ↓
+Customer      Sales Data    Support Data
+Worker        Worker         Worker
+ ↓              ↓              ↓
+Salesforce     Snowflake    ServiceNow
+        ↓
+     Aggregate
+        ↓
+   Final Briefing
+\`\`\`
+
+If this workflow involves **long-running or highly reliable orchestration**, Step Functions can manage the execution.
+
+---
+
+## What Step Functions gives us
+
+### 1. Retry
+
+If ServiceNow temporarily fails:
+
+\`\`\`text id="5w4hcv"
+ServiceNow
+    ↓
+Failure
+    ↓
+Step Functions Retry
+    ↓
+Backoff
+    ↓
+Try again
+\`\`\`
+
+### 2. Timeout
+
+Prevent a Worker from running indefinitely.
+
+\`\`\`text id="g5f8kd"
+Worker
+  ↓
+Timeout
+  ↓
+Failure / alternate path
+\`\`\`
+
+### 3. Parallel execution
+
+Independent operations can run simultaneously:
+
+\`\`\`text id="q2y8pm"
+             Customer Briefing
+                    ↓
+             Step Functions
+              ↙    ↓     ↘
+       Salesforce Snowflake ServiceNow
+              ↘    ↓     ↙
+               Aggregate
+\`\`\`
+
+This can reduce overall workflow time.
+
+### 4. Failure recovery
+
+Step Functions maintains workflow execution state, so a long-running workflow can continue from the appropriate step rather than rebuilding everything from scratch.
+
+### 5. Human approval
+
+For sensitive operations:
+
+\`\`\`text id="5y1s4k"
+Worker
+  ↓
+Sensitive operation
+  ↓
+Human approval
+  ↓
+Approved?
+ ↙      ↘
+Yes      No
+ ↓        ↓
+Execute   Stop
+\`\`\`
+
+### 6. Auditability
+
+Each workflow execution has a defined history, making it easier to understand:
+
+\`\`\`text id="z9f2dc"
+Execution
+  ↓
+Step 1 → Step 2 → Step 3 → Step 4
+\`\`\`
+
+---
+
+# Where would I use it in CWD?
+
+I would **not put every agent decision into Step Functions**.
+
+For example:
+
+\`\`\`text id="h4r8vp"
+User
+ ↓
+Coordinator
+ ↓
+LangGraph
+ ├── Decide intent
+ ├── Decide which Delegator
+ ├── Decide which Workers
+ └── Dynamic reasoning
+          ↓
+    Step Functions
+          ↓
+ ┌────────┼────────┐
+ ↓        ↓        ↓
+Worker   Worker   Worker
+\`\`\`
+
+Step Functions is particularly useful for **predefined/durable parts** of the workflow.
+
+Examples:
+
+* Customer onboarding
+* Document processing pipelines
+* Multi-step data processing
+* Long-running enterprise workflows
+* Approval workflows
+* Batch processing
+* Workflows requiring durable retries/recovery
+
+---
+
+## Step Functions vs LangGraph
+
+| LangGraph                 | Step Functions                  |
+| ------------------------- | ------------------------------- |
+| Agent reasoning           | Workflow execution              |
+| Dynamic decisions         | Defined state machine           |
+| Agent state               | Durable workflow state          |
+| Conditional agent routing | Workflow branching              |
+| Agent loops               | Controlled workflow execution   |
+| AI-centric                | Infrastructure/workflow-centric |
+
+### 🎯 Strong interview answer
+
+> **“I use Step Functions in CWD for durable, predictable, long-running workflows that require retries, timeouts, parallel execution, human approval, and recovery. I don't use it to replace LangGraph. LangGraph handles dynamic agent reasoning and routing, while Step Functions provides reliable execution for predefined workflow portions. For example, after the Coordinator determines the required business workflow, Step Functions can orchestrate parallel Worker activities, handle failures and retries, and maintain durable execution state.”**
+
+### Memory trick
+
+**Step Functions = Durable Workflow**
+
+**LangGraph = Dynamic Agent Reasoning**
+`,code:``},{id:`092-step-functions-standard-vs-express`,category:`Step Functions`,title:`Step Functions Standard vs Express?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions: Standard vs Express
+
+The easiest way to remember:
+
+> **Standard = long-running + durable + auditable**
+> **Express = short-running + high-volume + fast**
+
+|                              | **Standard**                              | **Express**                                            |
+| ---------------------------- | ----------------------------------------- | ------------------------------------------------------ |
+| Best for                     | Long-running workflows                    | High-volume short workflows                            |
+| Maximum duration             | Up to **1 year**                          | Up to **5 minutes**                                    |
+| Execution model              | Exactly-once workflow execution semantics | At-least-once or best-effort depending on Express type |
+| Execution history            | Detailed execution history                | Limited execution history                              |
+| Pricing                      | Per state transition                      | Based mainly on executions + duration + memory         |
+| Scale                        | High                                      | Very high                                              |
+| Human approval               | ✅ Good fit                                | ❌ Generally not suitable                               |
+| Long-running CWD workflow    | ✅                                         | ❌                                                      |
+| High-volume short processing | Possible                                  | ✅                                                      |
+
+### CWD example — Standard
+
+Suppose CWD needs a long-running enterprise workflow:
+
+\`\`\`text
+Customer Request
+      ↓
+Coordinator
+      ↓
+Step Functions Standard
+      ↓
+Salesforce
+      ↓
+Human Approval
+      ↓
+ServiceNow
+      ↓
+Generate Report
+      ↓
+Completed
+\`\`\`
+
+This is a good **Standard** use case because the workflow may run for minutes/hours and needs durable execution and recovery.
+
+---
+
+### CWD example — Express
+
+Suppose CWD receives thousands of small document-processing events:
+
+\`\`\`text
+S3 Event
+   ↓
+Express Workflow
+   ↓
+Extract Metadata
+   ↓
+Transform
+   ↓
+Store Result
+   ↓
+Done
+\`\`\`
+
+This is a good **Express** use case because executions are short and high-volume.
+
+---
+
+## Important interview point
+
+Don't choose based only on traffic.
+
+Ask:
+
+\`\`\`text
+Long-running?
+Need durable execution?
+Need detailed execution history?
+Human approval?
+Critical business workflow?
+        ↓
+      Standard
+\`\`\`
+
+Versus:
+
+\`\`\`text
+Short execution?
+Very high volume?
+Event-driven?
+Simple processing?
+        ↓
+      Express
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I choose Step Functions Standard for long-running, business-critical CWD workflows where I need durable execution, detailed execution history, retries, recovery, and potentially human approval. I choose Express for short-duration, high-volume, event-driven workflows where throughput and cost efficiency are more important than long-lived execution history. For example, a long-running Customer Briefing workflow would fit Standard, while high-volume document preprocessing could fit Express.”**
+
+**Memory trick:**
+**Standard = Long + Durable**
+**Express = Short + High Volume**
 `,code:``},{id:`093-how-would-you-model-worker-dependencies-using-step-functions`,category:`Step Functions`,title:`How would you model Worker dependencies using Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you model Worker dependencies using Step Functions?
 
-## Short answer
-Model dependencies as sequential Task states, Choice branches and Parallel or Map fan-out.
+I would model Worker dependencies using **States, \`Choice\`, \`Parallel\`, and sequential transitions**.
 
-## Key points
-- Independent Workers in Parallel branches; dynamic lists with Map.
-- Data passes through state input and output; large results go to S3 or DynamoDB because of payload limits.
+The key idea is:
 
-## CWD context
-The state machine expresses the dependency graph, not the Worker logic.
+> **If Worker B depends on Worker A, Step Functions executes B only after A succeeds.**
+
+### Example: CWD Customer Briefing
+
+Suppose:
+
+* Customer Worker gets customer information.
+* Sales Worker needs the customer information.
+* Incident Worker can run independently.
+* Final Briefing Worker needs all results.
+
+\`\`\`text id="k8p3dx"
+                Start
+                  ↓
+          Customer Worker
+                  ↓
+             ┌────┴────┐
+             ↓         ↓
+        Sales Worker  Incident Worker
+             ↓         ↓
+             └────┬────┘
+                  ↓
+        Final Briefing Worker
+                  ↓
+                 End
+\`\`\`
+
+## Step Functions model
+
+Conceptually:
+
+\`\`\`text id="q0d8va"
+CustomerWorker
+      ↓
+Parallel
+ ┌────┴─────────┐
+ ↓              ↓
+SalesWorker   IncidentWorker
+ └────┬─────────┘
+      ↓
+FinalBriefingWorker
+\`\`\`
+
+### 1. Sequential dependency
+
+If:
+
+\`\`\`text
+Customer Worker → Sales Worker
+\`\`\`
+
+then:
+
+\`\`\`text id="v5x9hz"
+CustomerWorker
+      ↓
+SalesWorker
+\`\`\`
+
+Sales Worker starts only after Customer Worker succeeds.
+
+---
+
+### 2. Parallel independent Workers
+
+If two Workers don't depend on each other:
+
+\`\`\`text id="r7y2mc"
+          Parallel
+         ↙       ↘
+   SalesWorker  IncidentWorker
+         ↘       ↙
+           Aggregate
+\`\`\`
+
+This reduces total execution time.
+
+---
+
+### 3. Conditional dependency
+
+You can use a \`Choice\` state:
+
+\`\`\`text id="w6n2qa"
+CustomerWorker
+      ↓
+   Choice
+   ↙    ↘
+Sales   No Sales
+ ↓        ↓
+Sales   Skip
+Worker
+   ↘    ↙
+   Final Worker
+\`\`\`
+
+For example, if the customer belongs to the Sales domain, execute Sales Worker; otherwise skip it.
+
+---
+
+### 4. Failure dependency
+
+You can define retry and catch behavior:
+
+\`\`\`text id="a4c7zs"
+SalesWorker
+    ↓
+  Failed
+    ↓
+ Retry
+    ↓
+ Still Failed
+    ↓
+  Catch
+    ↓
+Partial / Alternative path
+\`\`\`
+
+For a **mandatory Worker**, the workflow may fail.
+
+For an **optional Worker**, the workflow can continue with partial results.
+
+---
+
+# CWD example
+
+A more realistic workflow:
+
+\`\`\`text id="x2r9kb"
+                 Coordinator
+                      ↓
+              Step Functions
+                      ↓
+              Customer Worker
+                      ↓
+                 Parallel
+              ↙             ↘
+       Sales Worker     Incident Worker
+              ↓             ↓
+              └──────┬──────┘
+                     ↓
+             Validation/Aggregation
+                     ↓
+             Briefing Worker
+                     ↓
+                    End
+\`\`\`
+
+The important dependency rules are:
+
+\`\`\`text
+Customer Worker
+      ↓
+Sales Worker       ← depends on Customer
+Incident Worker    ← independent
+      ↓
+Briefing Worker    ← depends on required results
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I model Worker dependencies as a state graph in Step Functions. Sequential dependencies are represented by state transitions, independent Workers are executed using Parallel states, and Choice states handle conditional execution. For CWD, for example, the Customer Worker can run first, then Sales and Incident Workers can run in parallel, and the final Briefing Worker runs after the required results are available. I also use Retry and Catch for failure handling and distinguish mandatory Workers from optional Workers.”**
+
+### Easy memory trick
+
+**Dependency → Sequence**
+**Independent → Parallel**
+**Condition → Choice**
+**Failure → Retry/Catch**
+
+### Key distinction
+
+**Step Functions defines and executes the dependency graph.**
+
+**LangGraph can dynamically decide which Workers should participate based on the agent's reasoning.**
 `,code:``},{id:`094-how-would-you-execute-workers-in-parallel`,category:`Step Functions`,title:`How would you execute Workers in parallel?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you execute Workers in parallel?
 
-## Short answer
-Run Workers in parallel with a Parallel state (fixed branches) or a Map state (dynamic items).
+In CWD, I would use **parallel execution when Workers are independent of each other**.
 
-## Key points
-- Each branch calls SQS, Lambda or ECS; the state waits for all branches.
-- MaxConcurrency limits load; Distributed Map handles very large fan-outs.
-- ToleratedFailure supports partial success.
+For Step Functions, I would use a **\`Parallel\` state**.
 
-## CWD context
-Cap concurrency so downstream MCP servers and Bedrock are not overwhelmed.
-`,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle Worker failure?
+### CWD example
 
-## Short answer
-Handle Worker failure with Retry for transient errors and Catch for fallback paths.
+Suppose the Customer Briefing needs data from three independent systems:
 
-## Key points
-- Retry with backoff and jitter; Catch routes to compensation, notification or partial-result states.
-- Preserve the original input in the error path.
-- Alarm on failed executions.
+\`\`\`text
+                 Coordinator
+                      ↓
+              Step Functions
+                      ↓
+                  Parallel
+              ↙      ↓       ↘
+             ↓       ↓        ↓
+      Customer W   Sales W   Incident W
+          ↓           ↓          ↓
+      Salesforce   CRM       ServiceNow
+              ↘      ↓       ↙
+                Aggregate
+                    ↓
+            Briefing Worker
+\`\`\`
 
-## CWD context
-Decide which failures abort the whole workflow and which allow partial completion.
-`,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement retry and catch?
+All three Workers can start at approximately the same time.
 
-## Short answer
-Configure Retry and Catch per state, with specific error names.
+### Why parallel execution?
 
-## Key points
-- Retry transient errors (service exceptions, throttling, timeouts) with interval, backoff rate, maximum attempts and jitter.
-- Do not retry permanent errors; place States.ALL last.
-- Catch with ResultPath so the input and error both reach the handler.
+Without parallelism:
 
-## CWD context
-Retries and Catch make failure handling visible in the workflow definition.
+\`\`\`text
+Customer → Sales → Incident
+   2 sec     3 sec     4 sec
+
+Total ≈ 9 sec
+\`\`\`
+
+With parallelism:
+
+\`\`\`text
+Customer ── 2 sec ──┐
+Sales ───── 3 sec ──┼→ Aggregate
+Incident ── 4 sec ──┘
+
+Total ≈ 4 sec
+\`\`\`
+
+The total is approximately the **slowest branch**, plus orchestration/aggregation overhead.
+
+---
+
+## How I handle failures
+
+Each branch can have its own:
+
+* Timeout
+* Retry
+* Exponential backoff
+* Catch
+* Error classification
+
+Example:
+
+\`\`\`text
+Customer Worker ─── Success ───┐
+Sales Worker ─────── Success ───┼→ Aggregate
+Incident Worker ──── Failure ───┘
+                         ↓
+                    Optional?
+                    ↙       ↘
+                  Yes        No
+                   ↓          ↓
+             Partial result  Fail
+\`\`\`
+
+If Incident Worker is optional, I can continue with:
+
+\`\`\`text
+Customer data ✓
+Sales data    ✓
+Incident data ✗
+\`\`\`
+
+and clearly indicate that incident information was unavailable rather than inventing it.
+
+---
+
+## Important dependency rule
+
+Don't parallelize Workers that have dependencies.
+
+For example:
+
+\`\`\`text
+Customer Worker
+      ↓
+Sales Worker
+\`\`\`
+
+Sales Worker needs Customer Worker's output, so this must be sequential.
+
+But:
+
+\`\`\`text
+Customer Worker
+      ↓
+     Parallel
+    ↙       ↘
+ Sales     Incident
+\`\`\`
+
+Sales and Incident can run in parallel if they don't depend on each other.
+
+### 🎯 Strong interview answer
+
+> **“I use Step Functions Parallel states to execute independent CWD Workers concurrently. For example, Customer, Sales, and Incident Workers can query their respective systems at the same time. After all required branches complete, I aggregate the results and invoke the final Briefing Worker. Each branch has its own timeout, retry, and failure handling. I only parallelize independent Workers; if one Worker depends on another's output, I model that as a sequential dependency.”**
+
+**Memory trick:**
+**Independent → Parallel | Dependent → Sequential**
+
+**Key distinction:**
+Parallelism improves **latency and throughput**, but I still control **concurrency** so I don't overload Salesforce, ServiceNow, or Bedrock.
+`,code:``},{id:`095-how-would-you-handle-worker-failure`,category:`Step Functions`,title:`How would you handle Worker failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you execute Workers in parallel?
+
+In CWD, I would use **parallel execution when Workers are independent of each other**.
+
+For Step Functions, I would use a **\`Parallel\` state**.
+
+### CWD example
+
+Suppose the Customer Briefing needs data from three independent systems:
+
+\`\`\`text
+                 Coordinator
+                      ↓
+              Step Functions
+                      ↓
+                  Parallel
+              ↙      ↓       ↘
+             ↓       ↓        ↓
+      Customer W   Sales W   Incident W
+          ↓           ↓          ↓
+      Salesforce   CRM       ServiceNow
+              ↘      ↓       ↙
+                Aggregate
+                    ↓
+            Briefing Worker
+\`\`\`
+
+All three Workers can start at approximately the same time.
+
+### Why parallel execution?
+
+Without parallelism:
+
+\`\`\`text
+Customer → Sales → Incident
+   2 sec     3 sec     4 sec
+
+Total ≈ 9 sec
+\`\`\`
+
+With parallelism:
+
+\`\`\`text
+Customer ── 2 sec ──┐
+Sales ───── 3 sec ──┼→ Aggregate
+Incident ── 4 sec ──┘
+
+Total ≈ 4 sec
+\`\`\`
+
+The total is approximately the **slowest branch**, plus orchestration/aggregation overhead.
+
+---
+
+## How I handle failures
+
+Each branch can have its own:
+
+* Timeout
+* Retry
+* Exponential backoff
+* Catch
+* Error classification
+
+Example:
+
+\`\`\`text
+Customer Worker ─── Success ───┐
+Sales Worker ─────── Success ───┼→ Aggregate
+Incident Worker ──── Failure ───┘
+                         ↓
+                    Optional?
+                    ↙       ↘
+                  Yes        No
+                   ↓          ↓
+             Partial result  Fail
+\`\`\`
+
+If Incident Worker is optional, I can continue with:
+
+\`\`\`text
+Customer data ✓
+Sales data    ✓
+Incident data ✗
+\`\`\`
+
+and clearly indicate that incident information was unavailable rather than inventing it.
+
+---
+
+## Important dependency rule
+
+Don't parallelize Workers that have dependencies.
+
+For example:
+
+\`\`\`text
+Customer Worker
+      ↓
+Sales Worker
+\`\`\`
+
+Sales Worker needs Customer Worker's output, so this must be sequential.
+
+But:
+
+\`\`\`text
+Customer Worker
+      ↓
+     Parallel
+    ↙       ↘
+ Sales     Incident
+\`\`\`
+
+Sales and Incident can run in parallel if they don't depend on each other.
+
+### 🎯 Strong interview answer
+
+> **“I use Step Functions Parallel states to execute independent CWD Workers concurrently. For example, Customer, Sales, and Incident Workers can query their respective systems at the same time. After all required branches complete, I aggregate the results and invoke the final Briefing Worker. Each branch has its own timeout, retry, and failure handling. I only parallelize independent Workers; if one Worker depends on another's output, I model that as a sequential dependency.”**
+
+**Memory trick:**
+**Independent → Parallel | Dependent → Sequential**
+
+**Key distinction:**
+Parallelism improves **latency and throughput**, but I still control **concurrency** so I don't overload Salesforce, ServiceNow, or Bedrock.
+`,code:``},{id:`096-how-would-you-implement-retry-and-catch`,category:`Step Functions`,title:`How would you implement retry and catch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement Retry and Catch?
+
+In CWD, I use **Retry for temporary failures** and **Catch for failures that cannot be successfully retried**.
+
+\`\`\`text
+Worker
+  ↓
+Error
+  ↓
+Is it transient?
+ ↙          ↘
+Yes          No
+ ↓            ↓
+Retry        Catch
+ ↓            ↓
+Success?    Fallback / Partial Result / Fail
+\`\`\`
+
+## 1. Retry transient failures
+
+Examples:
+
+* Timeout
+* Temporary network error
+* HTTP 429 throttling
+* Temporary 5xx error
+* Temporary Salesforce/ServiceNow unavailability
+
+Example policy:
+
+\`\`\`text
+Attempt 1
+   ↓
+Wait 2 sec
+   ↓
+Attempt 2
+   ↓
+Wait 4 sec
+   ↓
+Attempt 3
+   ↓
+Wait 8 sec
+\`\`\`
+
+Use **exponential backoff** and preferably **jitter** to avoid many Workers retrying simultaneously.
+
+---
+
+## 2. Catch permanent/unrecoverable failures
+
+Examples:
+
+* Invalid request
+* Invalid tool parameters
+* Authorization failure
+* Business validation failure
+* Maximum retries exceeded
+
+Then use \`Catch\`:
+
+\`\`\`text
+Salesforce Worker
+       ↓
+     Retry
+       ↓
+ Still failing
+       ↓
+     Catch
+       ↓
+ ┌─────┴─────────┐
+ ↓               ↓
+Optional       Mandatory
+ ↓               ↓
+Continue       Fail workflow
+\`\`\`
+
+---
+
+## 3. CWD example
+
+Suppose the Incident Worker calls ServiceNow.
+
+\`\`\`text
+Incident Worker
+      ↓
+ServiceNow
+      ↓
+HTTP 503
+      ↓
+Retry
+      ↓
+HTTP 503
+      ↓
+Retry
+      ↓
+Success
+\`\`\`
+
+If all retries fail:
+
+\`\`\`text
+Incident Worker
+      ↓
+Retry exhausted
+      ↓
+Catch
+      ↓
+Incident Worker failed
+      ↓
+Is Incident optional?
+      ↓
+Yes
+      ↓
+Continue with Customer + Sales results
+\`\`\`
+
+The final response should explicitly indicate that incident information was unavailable.
+
+---
+
+## 4. Don't retry everything
+
+This is very important in an interview.
+
+\`\`\`text
+429 / timeout / temporary 5xx
+        → Retry
+
+400 invalid request
+        → Don't retry
+
+401/403 authorization
+        → Don't blindly retry
+
+Business validation error
+        → Don't retry
+\`\`\`
+
+Otherwise, you can create a **retry storm**.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I implement Retry for transient failures such as timeouts, throttling, temporary network failures, and selected 5xx errors. I use exponential backoff with jitter and a maximum retry count. If the error is non-retryable or retries are exhausted, I use Catch to route the workflow to an appropriate recovery path. In CWD, an optional Worker can return a partial result, while failure of a mandatory Worker can fail or pause the workflow. I also use idempotency so retries don't create duplicate Salesforce or ServiceNow operations.”**
+
+### Easy memory trick
+
+**Retry = Try again**
+
+**Catch = What should I do if retry doesn't work?**
+
+### Key distinction
+
+**Retry handles temporary failure.**
+**Catch handles the recovery path after an error cannot be successfully retried.**
 `,code:``},{id:`097-how-would-you-implement-timeout`,category:`Step Functions`,title:`How would you implement timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement timeout?
 
-## Short answer
-Set TimeoutSeconds on tasks and the execution, plus heartbeats for long tasks.
+In CWD, I would set **timeouts at multiple layers** so one slow Worker or downstream system cannot block the entire workflow indefinitely.
 
-## Key points
-- A timeout raises States.Timeout, which Retry or Catch can handle.
-- HeartbeatSeconds detects stalled long-running tasks.
-- Choose values from measured durations.
+\`\`\`text id="q4x8kp"
+Coordinator
+    ↓
+Step Functions
+    ↓
+Worker Timeout
+    ↓
+MCP/API Timeout
+    ↓
+Salesforce / ServiceNow
+\`\`\`
 
-## CWD context
-No task should be able to hang a workflow forever.
+## 1. Step Functions timeout
+
+For each Worker task, configure a timeout.
+
+Example:
+
+\`\`\`text id="9h3m2k"
+Salesforce Worker
+      ↓
+Maximum: 30 seconds
+      ↓
+Response?
+   ↙       ↘
+ Yes       No
+  ↓         ↓
+Continue   Timeout
+            ↓
+          Retry/Catch
+\`\`\`
+
+If the Worker doesn't finish within the limit, Step Functions marks the task as timed out.
+
+---
+
+## 2. MCP/API timeout
+
+The Worker should also have a timeout when calling MCP or downstream APIs.
+
+\`\`\`text id="j7v4cs"
+Worker
+  ↓
+MCP Client
+  ↓
+ServiceNow
+  ↓
+Timeout = 10 sec
+\`\`\`
+
+Don't allow the Worker to wait indefinitely.
+
+---
+
+## 3. Different timeouts for different operations
+
+Don't use one timeout everywhere.
+
+For example:
+
+\`\`\`text id="5j2v8m"
+Simple MCP lookup       → 5 sec
+Salesforce query        → 10 sec
+RAG retrieval           → 5 sec
+LLM generation         → 30 sec
+Long document process   → minutes
+\`\`\`
+
+The values should come from actual **P95/P99 latency and SLA requirements**, not arbitrary numbers.
+
+---
+
+## 4. Timeout → Retry → Catch
+
+A typical CWD flow:
+
+\`\`\`text id="q8c6da"
+Worker
+  ↓
+Call ServiceNow
+  ↓
+Timeout
+  ↓
+Retry + backoff
+  ↓
+Timeout again
+  ↓
+Retry
+  ↓
+Still timeout
+  ↓
+Catch
+  ↓
+Optional? ── Yes → Partial result
+    │
+    └──────── No → Fail workflow
+\`\`\`
+
+---
+
+## 5. Protect against retry storms
+
+A timeout shouldn't immediately cause unlimited retries.
+
+Use:
+
+* Maximum retry attempts
+* Exponential backoff
+* Jitter
+* Circuit breaker
+* Concurrency limits
+* Idempotency
+
+For example:
+
+\`\`\`text id="9t5v3a"
+Timeout
+ ↓
+2 sec
+ ↓
+Retry
+ ↓
+4 sec
+ ↓
+Retry
+ ↓
+8 sec
+ ↓
+Catch
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I implement timeouts at multiple layers in CWD. Step Functions provides the workflow-level timeout, while each Worker and MCP/API call has its own bounded timeout. I tune the values based on observed P95/P99 latency and business SLAs. When a timeout occurs, I classify it as potentially transient, apply bounded retries with exponential backoff and jitter, and then use Catch for recovery. For optional Workers I can continue with a partial result; for mandatory Workers I can fail or pause the workflow. This prevents a slow downstream system from blocking the entire CWD workflow indefinitely.”**
+
+### Memory trick
+
+**Timeout → Retry → Backoff → Catch → Recover**
+
+### Key distinction
+
+**Timeout controls how long we wait.**
+
+**Retry controls whether we try again.**
+
+**Catch controls what we do when the retry strategy cannot recover.**
 `,code:``},{id:`098-how-would-you-resume-a-workflow`,category:`Step Functions`,title:`How would you resume a workflow?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you resume a workflow?
 
-## Short answer
-Resume by using Standard workflow durability and redrive.
+In CWD, I would use **durable workflow state** so that if a Worker or service fails, I can continue from the **last successful step** instead of starting the entire workflow again.
 
-## Key points
-- Redrive restarts a failed execution from the failed state, reusing successful steps.
-- Callback tasks resume when SendTaskSuccess arrives with the task token.
-- Otherwise start a new execution using an idempotency key and stored progress.
+With **Step Functions**, the workflow execution state is persisted by the service.
 
-## CWD context
-Redrive works only within its time limit, so operate promptly.
+### Example
+
+Suppose:
+
+\`\`\`text
+Customer Worker
+      ↓
+Sales Worker       ✅
+      ↓
+Incident Worker    ❌
+      ↓
+Final Briefing
+\`\`\`
+
+If Incident Worker fails, I don't want to redo Customer and Sales unnecessarily.
+
+\`\`\`text
+Saved execution state
+        ↓
+Customer Worker ✅
+Sales Worker    ✅
+Incident Worker ❌
+        ↓
+Resume / retry Incident Worker
+        ↓
+Final Briefing
+\`\`\`
+
+## How I implement it
+
+### 1. Persist workflow state
+
+Keep important state such as:
+
+\`\`\`text
+workflow_id
+job_id
+correlation_id
+current_step
+completed_steps
+worker_results
+status
+\`\`\`
+
+Step Functions maintains the execution state, while application-specific state/results can be stored in DynamoDB or S3 when appropriate.
+
+### 2. Identify the failed step
+
+For example:
+
+\`\`\`text
+Workflow: CWD-123
+
+Customer Worker → COMPLETED
+Sales Worker    → COMPLETED
+Incident Worker → FAILED
+\`\`\`
+
+So recovery starts from the Incident Worker rather than repeating successful work.
+
+### 3. Retry transient failure
+
+\`\`\`text
+Incident Worker
+      ↓
+Timeout
+      ↓
+Retry
+      ↓
+Success
+      ↓
+Final Briefing
+\`\`\`
+
+### 4. Resume after a longer interruption
+
+For workflows that need explicit recovery, I preserve the workflow/job ID and external state, then start/re-drive the workflow from the appropriate recovery point according to the workflow design.
+
+**Idempotency is critical** because a previous side effect may have succeeded even if the workflow recorded a failure.
+
+For example:
+
+\`\`\`text
+ServiceNow update
+      ↓
+Update succeeds
+      ↓
+Worker crashes before acknowledging
+      ↓
+Workflow retries
+      ↓
+Idempotency check
+      ↓
+Don't perform duplicate update
+\`\`\`
+
+---
+
+## CWD example
+
+\`\`\`text
+             Step Functions
+                    ↓
+             Customer Worker
+                    ↓
+              Sales Worker ✅
+                    ↓
+            Incident Worker ❌
+                    ↓
+              Retry/Recover
+                    ↓
+            Incident Worker ✅
+                    ↓
+            Briefing Worker
+                    ↓
+                   Done
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I use durable workflow state to support recovery. In CWD, Step Functions maintains the execution state, so when a Worker fails, I can retry or recover the failed portion rather than unnecessarily reprocessing successful steps. I also persist application state and results where needed in DynamoDB or S3, and every business operation uses an idempotency key so that resuming a workflow cannot create duplicate Salesforce or ServiceNow transactions.”**
+
+### Easy memory trick
+
+**Persist → Identify failed step → Retry/Resume → Idempotency → Continue**
+
+### Key distinction
+
+**Checkpoint/state tells us where we were.**
+
+**Idempotency makes it safe to resume.**
 `,code:``},{id:`099-how-would-you-handle-long-running-workflows`,category:`Step Functions`,title:`How would you handle long-running workflows?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle long-running workflows?
 
-## Short answer
-Standard workflows can run for up to a year and wait without cost.
+For CWD, I would use **AWS Step Functions Standard** for long-running workflows because it provides durable execution, retries, timeouts, waiting, and recovery.
 
-## Key points
-- Wait states and waitForTaskToken for human approvals and external systems.
-- Heartbeats for stall detection; do not hold Lambdas open while waiting.
-- Cost depends on state transitions, not duration.
+### Example
 
-## CWD context
-Use callbacks instead of polling loops.
-`,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs SQS?
+Suppose a Customer Briefing workflow takes several minutes and requires human approval:
 
-## Short answer
-Step Functions orchestrates a multi-step flow; SQS buffers messages between two components.
+\`\`\`text id="m5f1wa"
+User Request
+     ↓
+Coordinator
+     ↓
+Step Functions Standard
+     ↓
+Customer Worker
+     ↓
+Sales Worker
+     ↓
+Human Approval
+     ↓
+Incident Worker
+     ↓
+Briefing Worker
+     ↓
+Completed
+\`\`\`
 
-## Key points
-- Step Functions: state, branching, retries, visibility.
-- SQS: decoupling, buffering, load levelling.
-- Combine them: Step Functions sends a message and waits for a task-token callback.
+## 1. Use asynchronous execution
 
-## CWD context
-They solve different problems and work well together.
-`,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs Lambda orchestration?
+Don't keep the user's HTTP request open for the entire workflow.
 
-## Short answer
-Step Functions is better than Lambda calling Lambda for orchestration.
+Instead:
 
-## Key points
-- Lambda orchestration couples functions, hits the 15-minute limit and pays for waiting.
-- Step Functions manages state, retries and waits and gives a visual trace.
-- Keep Lambdas for business logic only.
+\`\`\`text id="q7d3mx"
+User
+ ↓
+API Gateway
+ ↓
+Start Workflow
+ ↓
+Return job_id
+ ↓
+202 Accepted
+\`\`\`
 
-## CWD context
-Avoid custom retry and state code in functions.
-`,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs application-level orchestration?
+Then the workflow runs independently.
 
-## Short answer
-Application-level orchestration (LangGraph) is flexible for agent reasoning; Step Functions is durable for deterministic workflows.
+The user can later query:
 
-## Key points
-- LangGraph: dynamic LLM-driven loops, in-code state.
-- Step Functions: declarative, auditable, long waits, per-transition cost.
-- Hybrid: a LangGraph node starts a Step Functions workflow for long jobs.
+\`\`\`text
+GET /jobs/{job_id}
+\`\`\`
 
-## CWD context
-Do not force dynamic agent loops into a state machine.
-`,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you visualize workflow execution?
+to get:
 
-## Short answer
-Visualise executions in the Step Functions console and correlate with traces.
+\`\`\`text
+QUEUED
+RUNNING
+COMPLETED
+FAILED
+\`\`\`
 
-## Key points
-- Graph view with per-state status and input and output.
-- Workflow Studio for design; X-Ray service map.
-- Add correlation IDs to logs to link with the rest of CWD.
+---
 
-## CWD context
-The execution graph is useful for support and audits.
+## 2. Persist state
+
+Step Functions maintains workflow execution state.
+
+For application-specific state:
+
+\`\`\`text id="2n7z4k"
+Step Functions
+      ↓
+DynamoDB
+ ├── job status
+ ├── Worker results
+ ├── correlation ID
+ └── business metadata
+\`\`\`
+
+Large outputs/documents can go to **S3** instead of putting large payloads directly into the workflow state.
+
+---
+
+## 3. Use retries and timeouts
+
+\`\`\`text id="v8f6q2"
+Worker
+  ↓
+Timeout
+  ↓
+Retry + Backoff
+  ↓
+Success → Continue
+  ↓
+Failure → Catch / Recovery
+\`\`\`
+
+This prevents one temporary failure from killing the entire long-running workflow.
+
+---
+
+## 4. Handle waiting periods
+
+If the workflow needs human approval:
+
+\`\`\`text id="f0w9sa"
+Generate Recommendation
+        ↓
+Wait for Approval
+        ↓
+Human approves
+        ↓
+Continue workflow
+\`\`\`
+
+The workflow can pause rather than keeping an ECS container running and consuming resources.
+
+---
+
+## 5. Use SQS for long-running Worker jobs
+
+If a Worker itself performs a lengthy operation:
+
+\`\`\`text id="p3x5km"
+Step Functions
+      ↓
+     SQS
+      ↓
+Worker
+      ↓
+Long-running processing
+      ↓
+Update job status
+      ↓
+Continue workflow
+\`\`\`
+
+This gives you buffering, retry, DLQ, and independent Worker scaling.
+
+---
+
+## 6. Don't put everything into Step Functions
+
+For CWD:
+
+\`\`\`text id="c1z8py"
+LangGraph
+   ↓
+Dynamic agent reasoning
+   ↓
+Step Functions
+   ↓
+Durable workflow execution
+   ↓
+Workers
+\`\`\`
+
+**LangGraph** decides dynamically what the agents should do.
+
+**Step Functions** manages reliable execution of predefined workflow portions.
+
+---
+
+### 🎯 Strong interview answer
+
+> **“For long-running CWD workflows, I use Step Functions Standard with asynchronous execution. The API returns a job ID instead of keeping the HTTP request open. Step Functions maintains durable workflow state, while DynamoDB stores application-specific status and metadata and S3 stores large artifacts. I use retries, timeouts, and Catch for failure recovery, and SQS when Worker processing needs buffering or independent scaling. For human approvals or other long waits, the workflow can pause and resume without keeping an application container running.”**
+
+### Easy memory trick
+
+**Async → Durable → Wait → Retry → Resume → Monitor**
+
+### Key distinction
+
+**Long-running workflow ≠ long-running container.**
+
+The workflow can remain active in **Step Functions** while your ECS Workers run only when actual work needs to be performed.
+`,code:``},{id:`100-step-functions-vs-sqs`,category:`Step Functions`,title:`Step Functions vs SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs SQS
+
+The easiest way to remember:
+
+> **Step Functions = orchestrate a workflow**
+> **SQS = queue and buffer work**
+
+|                       | **Step Functions**                    | **SQS**                                                     |
+| --------------------- | ------------------------------------- | ----------------------------------------------------------- |
+| Main purpose          | Workflow orchestration                | Message queuing                                             |
+| Manages               | Multiple workflow steps               | Messages/jobs                                               |
+| Sequence              | ✅                                     | ❌                                                           |
+| Parallel branches     | ✅                                     | ❌                                                           |
+| Conditional branching | ✅                                     | ❌                                                           |
+| Retry / Catch         | ✅                                     | Basic retry through redelivery                              |
+| Long-running workflow | ✅ Standard                            | Queue can retain messages, but doesn't model workflow state |
+| Human approval        | ✅                                     | ❌                                                           |
+| Buffer traffic spikes | Not its main purpose                  | ✅ Excellent                                                 |
+| Backpressure          | Limited                               | ✅ Excellent                                                 |
+| DLQ                   | Can use SQS DLQ patterns around tasks | ✅ Native DLQ support                                        |
+| Worker scaling        | Indirectly                            | Excellent trigger/signal for scaling                        |
+| Workflow state        | ✅                                     | ❌                                                           |
+
+## CWD example
+
+### Step Functions
+
+Use it when you need to coordinate:
+
+\`\`\`text id="c8v5kx"
+Customer Worker
+      ↓
+Parallel
+ ↙         ↘
+Sales     Incident
+ ↘         ↙
+   Aggregate
+       ↓
+Briefing Worker
+\`\`\`
+
+It understands:
+
+**"What step comes next?"**
+
+---
+
+### SQS
+
+Use it when you need to buffer:
+
+\`\`\`text id="e7w3qs"
+1000 requests
+     ↓
+    SQS
+     ↓
+Worker Pool
+ ↙   ↓   ↘
+W1   W2   W3
+\`\`\`
+
+It answers:
+
+**"What work is waiting to be processed?"**
+
+---
+
+## They can work together
+
+In CWD, I would often use both:
+
+\`\`\`text id="d9j4mx"
+             Coordinator
+                  ↓
+          Step Functions
+                  ↓
+             SQS Queue
+                  ↓
+        ┌─────────┼─────────┐
+        ↓         ↓         ↓
+    Worker 1   Worker 2   Worker 3
+        ↓         ↓         ↓
+      MCP / Enterprise Systems
+\`\`\`
+
+**Step Functions** controls the workflow.
+
+**SQS** buffers and distributes asynchronous Worker jobs.
+
+---
+
+### 🎯 Strong interview answer
+
+> **“Step Functions and SQS solve different problems. I use Step Functions when I need to orchestrate a multi-step workflow with sequencing, parallel branches, conditions, retries, timeouts, and durable execution. I use SQS when I need to decouple producers and consumers, buffer traffic spikes, control concurrency, and provide retry and DLQ capabilities. In CWD, I can use Step Functions to orchestrate the overall durable workflow and SQS to distribute asynchronous Worker jobs.”**
+
+### Memory trick
+
+**Step Functions → What happens next?**
+
+**SQS → What work is waiting?**
+`,code:``},{id:`101-step-functions-vs-lambda-orchestration`,category:`Step Functions`,title:`Step Functions vs Lambda orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs Lambda orchestration
+
+The key idea:
+
+> **Lambda executes code. Step Functions orchestrates the workflow.**
+
+### Simple example
+
+\`\`\`text
+Step Functions
+      ↓
+ ┌────┼─────────┐
+ ↓    ↓         ↓
+Lambda Lambda  Lambda
+  ↓      ↓       ↓
+Sales   RAG    ServiceNow
+\`\`\`
+
+Here, **Step Functions decides the order, retries, branching, and dependencies**, while each Lambda performs a specific task.
+
+## Why not use Lambda to orchestrate everything?
+
+You could write one Lambda like:
+
+\`\`\`text
+Lambda
+ ↓
+call Worker 1
+ ↓
+call Worker 2
+ ↓
+call Worker 3
+ ↓
+handle retries
+ ↓
+handle errors
+ ↓
+wait
+ ↓
+call Worker 4
+\`\`\`
+
+But this creates problems:
+
+* Orchestration logic becomes application code.
+* Long waits consume Lambda execution time.
+* Retry/error logic becomes harder to maintain.
+* Workflow state becomes your responsibility.
+* Complex branching and parallelism become difficult.
+* Monitoring the complete workflow is harder.
+
+Instead:
+
+\`\`\`text
+Step Functions
+ ↓
+Worker 1
+ ↓
+Parallel
+ ├── Worker 2
+ └── Worker 3
+ ↓
+Worker 4
+\`\`\`
+
+Step Functions manages the workflow state and execution.
+
+---
+
+## CWD example
+
+For a short operation:
+
+\`\`\`text
+S3 Event
+   ↓
+Lambda
+   ↓
+Extract metadata
+   ↓
+Done
+\`\`\`
+
+**Lambda is enough.**
+
+For a multi-step CWD workflow:
+
+\`\`\`text
+Coordinator
+    ↓
+Step Functions
+    ↓
+Customer Worker
+    ↓
+Parallel
+ ┌──┴──────────┐
+ ↓             ↓
+Sales Worker  Incident Worker
+ └──┬──────────┘
+    ↓
+Briefing Worker
+\`\`\`
+
+**Step Functions is more appropriate for the orchestration layer.**
+
+---
+
+## When I choose Lambda
+
+Use Lambda for:
+
+* Short-lived functions
+* Event-driven processing
+* Lightweight transformations
+* S3/EventBridge/SQS handlers
+* Simple API operations
+* Stateless business logic
+
+## When I choose Step Functions
+
+Use Step Functions for:
+
+* Multi-step workflows
+* Sequential dependencies
+* Parallel execution
+* Retry/Catch
+* Timeouts
+* Conditional branching
+* Human approval
+* Long-running workflows
+* Durable workflow state
+
+### 🎯 Strong interview answer
+
+> **“I don't view Step Functions and Lambda as competitors. Lambda is primarily an execution unit, while Step Functions is the orchestration layer. In CWD, I might use Lambda for short, stateless tasks such as document preprocessing, and Step Functions to coordinate multiple Workers, retries, parallel branches, timeouts, and long-running business workflows. This keeps orchestration logic out of Lambda code and gives me durable workflow execution and better operational visibility.”**
+
+### Easy memory trick
+
+**Lambda = Do the work**
+
+**Step Functions = Coordinate the work**
+`,code:``},{id:`102-step-functions-vs-application-level-orchestration`,category:`Step Functions`,title:`Step Functions vs application-level orchestration?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Step Functions vs Application-Level Orchestration
+
+The key idea:
+
+> **Step Functions = managed workflow orchestration**
+> **Application-level orchestration = your code controls the workflow**
+
+For CWD, I would often use **both**, because they solve different layers of the problem.
+
+### 1. Application-level orchestration
+
+For example, your **Coordinator using LangGraph** can dynamically decide:
+
+\`\`\`text
+User Request
+    ↓
+Coordinator / LangGraph
+    ↓
+Understand intent
+    ↓
+Choose Delegators
+    ↓
+Choose Workers
+    ↓
+Dynamic routing
+\`\`\`
+
+The decision can depend on the actual request.
+
+Example:
+
+\`\`\`text
+"Give me a customer briefing"
+          ↓
+Coordinator
+          ↓
+Customer + Sales + IT needed?
+          ↓
+Dynamic decision
+\`\`\`
+
+This is difficult to model purely as a fixed Step Functions state machine.
+
+---
+
+### 2. Step Functions orchestration
+
+Once the workflow is known, Step Functions can reliably execute it:
+
+\`\`\`text
+Step Functions
+      ↓
+Customer Worker
+      ↓
+Parallel
+ ┌────┴─────┐
+ ↓          ↓
+Sales     Incident
+ ↓          ↓
+ └────┬─────┘
+      ↓
+Briefing
+\`\`\`
+
+It provides:
+
+* Durable execution
+* Retry
+* Catch
+* Timeout
+* Parallel execution
+* Conditional branches
+* Workflow history
+* Long-running execution
+
+---
+
+## CWD architecture
+
+I would use the layers like this:
+
+\`\`\`text id="k6x3nr"
+                User
+                  ↓
+             Coordinator
+             / LangGraph
+                  ↓
+        Dynamic agent decisions
+                  ↓
+            Delegators
+                  ↓
+       ┌─────────────────────┐
+       │   Step Functions    │
+       │                     │
+       │ Retry / Timeout     │
+       │ Parallel / Catch    │
+       │ Durable execution   │
+       └──────────┬──────────┘
+                  ↓
+               Workers
+                  ↓
+             MCP / APIs
+                  ↓
+          Enterprise Systems
+\`\`\`
+
+### Why not put everything in Step Functions?
+
+Because CWD is an **agentic system**.
+
+The Coordinator may dynamically decide:
+
+\`\`\`text
+Request A → Sales + Customer Workers
+Request B → IT + Incident Workers
+Request C → Customer + Sales + IT
+\`\`\`
+
+The exact path may not be known when the workflow starts.
+
+That's where **LangGraph/application orchestration** is useful.
+
+---
+
+## Comparison
+
+|                         | Step Functions          | Application orchestration |
+| ----------------------- | ----------------------- | ------------------------- |
+| Who controls workflow?  | AWS managed service     | Your application code     |
+| Dynamic agent reasoning | Limited                 | ✅                         |
+| Durable execution       | ✅                       | You must build it         |
+| Retry/timeout           | Built-in                | You implement             |
+| Parallel execution      | Built-in                | You implement             |
+| Workflow history        | Built-in                | You implement             |
+| Agent routing           | Not its primary purpose | ✅                         |
+| Long-running workflow   | ✅                       | More work                 |
+| Flexibility             | State-machine based     | Very high                 |
+| Operational effort      | Lower                   | Higher                    |
+
+### 🎯 Strong interview answer
+
+> **“I use application-level orchestration, such as LangGraph, when the workflow requires dynamic agent reasoning and runtime decisions—for example, determining which Delegators and Workers should participate in a CWD request. I use Step Functions when I need durable execution of a known workflow with built-in retries, timeouts, parallelism, failure handling, and long-running execution. So I don't replace one with the other. LangGraph decides dynamically, while Step Functions can reliably execute the predefined or operational workflow portions.”**
+
+### Easy memory trick
+
+**LangGraph → Decide**
+
+**Step Functions → Execute reliably**
+
+**Workers → Do the work**
+`,code:``},{id:`103-how-would-you-visualize-workflow-execution`,category:`Step Functions`,title:`How would you visualize workflow execution?`,difficulty:`Advanced`,time:`~15 min`,concept:`I would visualize CWD workflow execution as a **state-and-timeline view**, showing each Worker, status, duration, dependencies, retries, and failures.
+
+\`\`\`text
+User Request
+     │
+     ▼
+Coordinator ──────────────── 120 ms ✅
+     │
+     ▼
+Sales Delegator
+     │
+     ▼
+┌────────────── Parallel ──────────────┐
+│                                      │
+▼                                      ▼
+Customer Worker                    Incident Worker
+  1.2 sec ✅                         8.4 sec ⚠️
+     │                                  │
+     │                              Retry ×2
+     │                                  │
+     │                              12.1 sec ❌
+     └──────────────┬───────────────────┘
+                    ▼
+             Aggregation
+                    │
+                    ▼
+            Briefing Worker
+                    │
+                    ▼
+                 COMPLETED
+\`\`\`
+
+## What I would show
+
+For each execution:
+
+| Field        | Example           |
+| ------------ | ----------------- |
+| Workflow ID  | \`CWD-12345\`       |
+| Status       | \`RUNNING\`         |
+| Current step | \`Incident Worker\` |
+| Start time   | 10:20:15          |
+| Duration     | 18.4 sec          |
+| Workers      | 3                 |
+| Retries      | 2                 |
+| Errors       | 1                 |
+| Tokens       | 8,500             |
+| Cost         | \`$0.XX\`           |
+
+### Timeline view
+
+\`\`\`text
+10:20:15  Coordinator       ✅
+10:20:15  Sales Delegator   ✅
+10:20:16  Customer Worker   ✅
+10:20:16  Incident Worker   ⚠️
+10:20:20  Incident Retry    🔄
+10:20:28  Incident Worker   ❌
+10:20:28  Aggregate         ✅
+10:20:29  Final Response    ✅
+\`\`\`
+
+### In AWS
+
+For **Step Functions**, I would use the execution/state-machine view to see state transitions, failures, retries, and duration.
+
+For the broader CWD platform, I would correlate everything using:
+
+\`\`\`text
+session_id
+   ↓
+task_id
+   ↓
+run_id
+   ↓
+turn_id
+   ↓
+step_id
+   ↓
+worker_id
+   ↓
+MCP/tool call
+\`\`\`
+
+Then use **CloudWatch + X-Ray/OpenTelemetry + Langfuse** to trace the execution across Coordinator → Delegator → Worker → MCP → enterprise system.
+
+### 🎯 Strong interview answer
+
+> **“I visualize workflow execution as both a state graph and a timeline. For each CWD execution, I show the workflow ID, current state, Worker status, duration, retries, failures, and dependencies. Step Functions gives me the workflow execution and state-transition view, while CloudWatch and distributed tracing provide cross-service details. I correlate the entire execution using session, task, run, turn, and step IDs so I can trace a request from the Coordinator through Delegators, Workers, MCP calls, and downstream systems.”**
+
+**Memory trick:**
+**State → Timeline → Status → Duration → Retry → Trace**
+
+**Key distinction:**
+**Step Functions shows workflow execution; distributed tracing shows what happened inside each step.**
 `,code:``},{id:`104-how-would-you-monitor-step-functions`,category:`Step Functions`,title:`How would you monitor Step Functions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Step Functions?
 
-## Short answer
-Monitor Step Functions with metrics, logs, traces and event notifications.
+In CWD, I would monitor Step Functions at **three levels: workflow health, performance, and failures**.
 
-## Key points
-- Executions started, succeeded, failed, timed out, throttled; execution time.
-- Logging at error level to CloudWatch Logs (required for Express); X-Ray.
-- Alarms on failures, timeouts and throttling; EventBridge on status changes.
+\`\`\`text id="4kq8zn"
+              Step Functions
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+    Workflow     Performance   Failures
+      Health        Metrics      & Errors
+        │           │             │
+        └───────────┼─────────────┘
+                    ▼
+               CloudWatch
+                    ↓
+                 Alarms
+                    ↓
+              SNS / Alerting
+\`\`\`
 
-## CWD context
-Alert on stuck executions as well as failed ones.
+## 1. Monitor workflow status
+
+Track:
+
+* **ExecutionsStarted**
+* **ExecutionsSucceeded**
+* **ExecutionsFailed**
+* **ExecutionsTimedOut**
+* **ExecutionsAborted**
+
+For example:
+
+\`\`\`text id="m2x8qd"
+Started     = 10,000
+Succeeded   = 9,850
+Failed      = 100
+Timed out   = 50
+\`\`\`
+
+A sudden increase in failures or timeouts is an operational signal.
+
+---
+
+## 2. Monitor execution duration
+
+Track how long workflows take.
+
+\`\`\`text id="v6d3xa"
+P50 = 5 sec
+P95 = 12 sec
+P99 = 30 sec
+\`\`\`
+
+If P95/P99 suddenly increases:
+
+\`\`\`text id="r4h7sp"
+Step Functions
+      ↓
+Workflow slower
+      ↓
+Check which Worker/state is slow
+      ↓
+MCP / Salesforce / ServiceNow / Bedrock
+\`\`\`
+
+---
+
+## 3. Monitor individual states
+
+For CWD, I would identify:
+
+\`\`\`text id="9z5r7k"
+Coordinator
+   ↓
+Sales Worker       ← 2 sec
+Customer Worker    ← 1 sec
+Incident Worker    ← 15 sec ⚠️
+\`\`\`
+
+This helps identify the **slowest or failing Worker**.
+
+---
+
+## 4. Monitor retries
+
+A high retry count can indicate:
+
+* Downstream throttling
+* Timeouts
+* Network problems
+* Service instability
+* Bedrock 429s
+
+Example:
+
+\`\`\`text id="f1w5qk"
+Incident Worker
+     ↓
+Retry 1
+     ↓
+Retry 2
+     ↓
+Retry 3
+     ↓
+Catch
+\`\`\`
+
+A growing retry rate is often an early warning before complete workflow failures.
+
+---
+
+## 5. Monitor errors
+
+Track errors by category:
+
+\`\`\`text id="b8j2vd"
+Timeout
+429
+5xx
+Authorization
+Validation
+MCP failure
+Downstream failure
+\`\`\`
+
+Don't just monitor **"workflow failed."**
+
+I want to know **why it failed**.
+
+---
+
+## 6. CloudWatch alarms
+
+Examples:
+
+\`\`\`text id="z4q6ns"
+Failure rate > threshold
+        ↓
+CloudWatch Alarm
+        ↓
+SNS / Incident System
+\`\`\`
+
+Other useful alarms:
+
+* Workflow failure rate
+* Timeout rate
+* Execution duration/P95
+* Retry rate
+* Aborted executions
+* Backlog/queue age when SQS is involved
+
+---
+
+## 7. Distributed tracing
+
+For deeper troubleshooting:
+
+\`\`\`text id="0m3x7p"
+User
+ ↓
+API Gateway
+ ↓
+Coordinator
+ ↓
+Step Functions
+ ↓
+Sales Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+Use a common **correlation ID / execution ID** so I can follow the request across services.
+
+For CWD, I would combine:
+
+* **CloudWatch** → metrics/logs/alarms
+* **X-Ray / OpenTelemetry** → distributed tracing
+* **Langfuse** → LLM/agent-level tracing and token/cost/quality information
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I monitor Step Functions through CloudWatch by tracking execution success, failure, timeout, and abort rates, along with execution duration and retry behavior. At the state level, I identify which Worker or downstream dependency is slow or failing. I configure alarms for abnormal failure, timeout, latency, and retry rates. For troubleshooting, I correlate the Step Functions execution with CWD correlation IDs and use distributed tracing to follow the request through Coordinator, Delegators, Workers, MCP, and downstream systems. For AI-specific behavior, I use Langfuse to monitor model latency, tokens, cost, and quality.”**
+
+### Easy memory trick
+
+**Status → Duration → Retry → Error → Trace → Alert**
+
+### Key distinction
+
+**CloudWatch tells me *that* the workflow has a problem.**
+
+**Distributed tracing helps me find *where and why* the problem occurred.**
 `,code:``},{id:`105-how-would-you-control-step-functions-cost`,category:`Step Functions`,title:`How would you control Step Functions cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you control Step Functions cost?
 
-## Short answer
-Control cost by reducing state transitions and choosing the right workflow type.
+For CWD, I would control Step Functions cost by **reducing unnecessary state transitions and choosing the right workflow type**.
 
-## Key points
-- Combine steps; avoid polling loops by using callbacks and synchronous service integrations.
-- Express for high-volume short workflows; log at error level, not all.
-- Distributed Map only when the volume needs it; limit payloads.
+### 1. Reduce unnecessary state transitions
 
-## CWD context
-Set budgets and alerts on Step Functions spend.
+Every small action doesn't need to become a separate Step Functions state.
+
+Instead of:
+
+\`\`\`text id="4d8fmx"
+Step 1
+ ↓
+Step 2
+ ↓
+Step 3
+ ↓
+Step 4
+ ↓
+Step 5
+\`\`\`
+
+combine simple operations where appropriate:
+
+\`\`\`text id="8p3kva"
+Step 1
+ ↓
+Worker
+ └── performs related lightweight operations
+ ↓
+Step 2
+\`\`\`
+
+But I wouldn't combine states if it makes monitoring or failure recovery worse.
+
+---
+
+### 2. Choose Standard vs Express appropriately
+
+\`\`\`text id="6k9r2q"
+Long-running / critical
+        ↓
+Standard
+
+Short / high-volume
+        ↓
+Express
+\`\`\`
+
+For example:
+
+* Long-running Customer Briefing → **Standard**
+* High-volume short document preprocessing → **Express**
+
+This can significantly affect cost for high-volume workflows.
+
+---
+
+### 3. Avoid unnecessary workflow executions
+
+Before starting a workflow:
+
+\`\`\`text id="3m5q2p"
+Request
+  ↓
+Validate / deduplicate
+  ↓
+Already processing?
+ ↙          ↘
+Yes          No
+ ↓            ↓
+Reuse       Start workflow
+existing
+result
+\`\`\`
+
+Use **idempotency keys** and caching where appropriate.
+
+---
+
+### 4. Don't use Step Functions for everything
+
+For simple event processing:
+
+\`\`\`text id="x8v4nc"
+S3 Event
+   ↓
+Lambda
+   ↓
+Done
+\`\`\`
+
+You don't necessarily need a Step Functions workflow for a single simple operation.
+
+---
+
+### 5. Avoid unnecessary polling
+
+Instead of:
+
+\`\`\`text id="j3n8sw"
+Start job
+ ↓
+Wait 5 sec
+ ↓
+Check status
+ ↓
+Wait 5 sec
+ ↓
+Check status
+\`\`\`
+
+use event-driven callbacks/events where the architecture supports them.
+
+This avoids unnecessary workflow activity and improves efficiency.
+
+---
+
+### 6. Keep payloads small
+
+Don't pass large documents or large Worker results through every state.
+
+Instead:
+
+\`\`\`text id="5f2kcd"
+Large document
+      ↓
+     S3
+      ↓
+Step Functions
+      ↓
+S3 reference / object key
+\`\`\`
+
+Use DynamoDB/S3 for larger application data where appropriate.
+
+---
+
+### 7. Monitor cost and usage
+
+Track:
+
+\`\`\`text id="8n4vqy"
+Executions
+State transitions
+Execution duration
+Failed/retried states
+Standard vs Express usage
+\`\`\`
+
+Then identify expensive workflows.
+
+For CWD, I would correlate workflow cost with:
+
+\`\`\`text
+workflow_id
+worker
+model
+tokens
+execution duration
+\`\`\`
+
+so I can understand the total cost of a business workflow rather than looking only at Step Functions cost.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I control Step Functions cost by minimizing unnecessary state transitions, avoiding unnecessary workflow executions, choosing Standard versus Express based on workload characteristics, and avoiding polling where event-driven patterns are possible. I also keep large payloads in S3 or DynamoDB rather than passing them through every state. Finally, I monitor execution and transition metrics and correlate them with CWD workflow and Worker costs so I can optimize the overall workflow, not just the Step Functions bill.”**
+
+### Easy memory trick
+
+**Reduce → Choose → Deduplicate → Event-drive → Externalize → Monitor**
+
+### Key distinction
+
+**Step Functions cost optimization is not just about reducing state count.**
+
+The goal is to **reduce unnecessary orchestration while preserving reliability, observability, and recovery.**
 `,code:``}];function Om(){return(0,M.jsx)($,{data:Dm,title:`Step Functions Cookbook`,subtitle:`Workflow orchestration, retries, parallelism and cost`,icon:`🔀`,patternLabel:`Questions`})}var km=[{id:`106-why-use-dynamodb-for-cwd-state`,category:`DynamoDB`,title:`Why use DynamoDB for CWD state?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use DynamoDB for CWD state?
 
-## Short answer
-DynamoDB offers serverless, low-latency, key-based storage that fits CWD's operational state.
+For CWD, I use **DynamoDB to store durable application/workflow state outside the containers**.
 
-## Key points
-- Single-digit millisecond access at any scale; multi-AZ durability.
-- Conditional writes, TTL, streams, global tables and point-in-time recovery.
-- Fine-grained IAM access control.
+\`\`\`text
+User Request
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Workers
+     ↓
+DynamoDB
+ ┌─────────────────────────┐
+ │ session_id              │
+ │ task_id                 │
+ │ run_id                  │
+ │ current_step            │
+ │ worker_status           │
+ │ results / metadata      │
+ │ idempotency_key         │
+ └─────────────────────────┘
+\`\`\`
 
-## CWD context
-A natural store for session state, checkpoints and idempotency keys.
+### What state would I store?
+
+For example:
+
+\`\`\`text
+run_id: RUN123
+status: RUNNING
+current_step: IncidentWorker
+CustomerWorker: COMPLETED
+SalesWorker: COMPLETED
+IncidentWorker: FAILED
+retry_count: 2
+\`\`\`
+
+This allows the workflow to **resume instead of starting from scratch**.
+
+### Why DynamoDB?
+
+1. **Low latency** – fast reads/writes for workflow state.
+2. **Highly scalable** – handles large numbers of concurrent requests.
+3. **Highly available** – managed AWS service.
+4. **Durable** – state survives ECS/Fargate container replacement.
+5. **Flexible schema** – useful for session/task/run/step metadata.
+6. **Conditional writes** – useful for **idempotency and duplicate prevention**.
+7. **TTL** – automatically expire temporary state when appropriate.
+8. **Serverless** – no database servers to manage.
+
+### Important CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Worker  → SUCCESS
+Sales Worker     → SUCCESS
+Incident Worker  → FAILED
+\`\`\`
+
+DynamoDB stores this state.
+
+If the Incident Worker is retried or the container crashes:
+
+\`\`\`text
+DynamoDB
+    ↓
+Read RUN123
+    ↓
+Customer = SUCCESS
+Sales = SUCCESS
+Incident = FAILED
+    ↓
+Retry Incident only
+    ↓
+Continue workflow
+\`\`\`
+
+So we don't unnecessarily repeat successful work.
+
+### Why not store state inside ECS?
+
+Containers are **ephemeral**.
+
+\`\`\`text
+ECS Container
+    ↓
+Crash / replacement
+    ↓
+Local memory/state lost ❌
+\`\`\`
+
+With DynamoDB:
+
+\`\`\`text
+ECS Container
+    ↓
+Crash
+    ↓
+New Container
+    ↓
+Read DynamoDB
+    ↓
+Resume state ✅
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I use DynamoDB for CWD application and workflow state because it provides low-latency, highly scalable and durable state storage. I store session, task, run, step, Worker status, retry information and idempotency keys. Since ECS containers are stateless and can be replaced at any time, keeping state in DynamoDB allows another container or Worker to resume processing without losing progress. I also use DynamoDB conditional writes for idempotency and TTL for temporary state.”**
+
+### Easy memory trick
+
+**DynamoDB = Durable + Fast + Scalable + State**
+
+### Key distinction
+
+* **DynamoDB** → durable application/workflow state
+* **Redis** → fast temporary cache/session data
+* **S3** → large objects/documents
+* **OpenSearch** → search/vector/RAG data
+* **Step Functions** → durable workflow orchestration state
 `,code:``},{id:`107-what-cwd-data-would-you-store-in-dynamodb`,category:`DynamoDB`,title:`What CWD data would you store in DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What CWD data would you store in DynamoDB?
 
-## Short answer
-Store durable, key-addressed operational data in DynamoDB.
+In CWD, I would store **operational metadata and workflow state**, not large documents or vector embeddings.
 
-## Key points
-- Sessions, turns, steps, workflow state and checkpoints, run records.
-- Agent and prompt registries, idempotency keys, quotas and counters, tenant configuration, audit metadata.
-- Not large blobs (400 KB item limit; use S3), vectors or analytics.
+### 1. Session state
 
-## CWD context
-Keep items small and store big payloads in S3 with pointers.
+\`\`\`text
+session_id
+user_id
+tenant_id
+created_at
+last_activity
+\`\`\`
+
+Example:
+
+\`\`\`text
+S123 → User conversation/session information
+\`\`\`
+
+### 2. Task / Run state
+
+\`\`\`text
+task_id
+run_id
+status
+intent
+customer_id
+created_at
+completed_at
+\`\`\`
+
+Example:
+
+\`\`\`text
+RUN123
+status = RUNNING
+intent = CustomerBriefing
+customer_id = C123
+\`\`\`
+
+### 3. Worker execution state
+
+This is very important for CWD:
+
+\`\`\`text
+worker_id
+worker_name
+status
+start_time
+end_time
+retry_count
+error_code
+\`\`\`
+
+Example:
+
+\`\`\`text
+CustomerWorker → COMPLETED
+SalesWorker    → COMPLETED
+IncidentWorker → FAILED
+\`\`\`
+
+### 4. Workflow/checkpoint information
+
+\`\`\`text
+current_step
+completed_steps
+failed_step
+next_step
+\`\`\`
+
+This allows us to resume instead of restarting the entire workflow.
+
+\`\`\`text
+CustomerWorker ✅
+SalesWorker    ✅
+IncidentWorker ❌
+       ↓
+Retry IncidentWorker
+\`\`\`
+
+### 5. Idempotency information
+
+To prevent duplicate processing:
+
+\`\`\`text
+idempotency_key
+status
+result_reference
+created_at
+expires_at
+\`\`\`
+
+Example:
+
+\`\`\`text
+IDEMP-123 → COMPLETED
+\`\`\`
+
+If the same request arrives again, CWD can detect it and avoid executing the business operation twice.
+
+### 6. Agent/Worker metadata
+
+If needed, DynamoDB can store lightweight registry information:
+
+\`\`\`text
+agent_id
+agent_type
+domain
+capabilities
+endpoint
+version
+status
+\`\`\`
+
+For example:
+
+\`\`\`text
+SalesDelegator
+   ↓
+CustomerWorker
+   ↓
+capabilities = customer_lookup
+version = v2
+status = ACTIVE
+\`\`\`
+
+### 7. Result references
+
+I would **not store large results directly**.
+
+Instead:
+
+\`\`\`text
+DynamoDB
+   ↓
+result_s3_key = s3://cwd-results/RUN123.json
+\`\`\`
+
+Large documents/results → **S3**
+Metadata/reference → **DynamoDB**
+
+---
+
+## What I would NOT store in DynamoDB
+
+| Data                                | Store in            |
+| ----------------------------------- | ------------------- |
+| Session/task/run metadata           | **DynamoDB**        |
+| Worker status                       | **DynamoDB**        |
+| Idempotency keys                    | **DynamoDB**        |
+| Workflow checkpoints                | **DynamoDB**        |
+| Large PDFs/documents                | **S3**              |
+| Large generated reports             | **S3**              |
+| Vector embeddings                   | **OpenSearch**      |
+| RAG documents/index                 | **OpenSearch/S3**   |
+| Frequently accessed temporary cache | **Redis**           |
+| Secrets                             | **Secrets Manager** |
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I use DynamoDB mainly for operational state: session, task and run metadata, Worker execution status, checkpoints, retry information, idempotency keys, and lightweight agent or Worker metadata. I don't use it for large documents or vector data. Large artifacts go to S3, vector/search data goes to OpenSearch, and temporary high-speed cache goes to Redis. The key reason is that DynamoDB allows CWD to remain stateless at the container level while preserving durable workflow state.”**
+
+### Easy memory trick
+
+**Session → Run → Worker → Checkpoint → Idempotency**
+
+### Key distinction
+
+**DynamoDB stores “what is happening with the workflow.”**
+**S3/OpenSearch store the actual large knowledge/data used by the workflow.**
 `,code:``},{id:`108-how-would-you-design-the-dynamodb-partition-key`,category:`DynamoDB`,title:`How would you design the DynamoDB partition key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the DynamoDB partition key?
 
-## Short answer
-Choose a high-cardinality partition key that spreads load and matches your access pattern.
+For CWD, I would design the partition key around the **main access pattern**, not simply around the data type.
 
-## Key points
-- Example: SESSION#{sessionId}, optionally prefixed by tenant.
-- Avoid a tenant-only key for large tenants.
-- Use write sharding for unavoidable hot keys.
+For workflow state, a good design is:
 
-## CWD context
-Design from the queries backwards.
-`,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the sort key?
+\`\`\`text
+PK = TENANT#<tenant_id>#RUN#<run_id>
+SK = <entity_type>#<entity_id>
+\`\`\`
 
-## Short answer
-Use the sort key to group related items and support range queries.
+Example:
 
-## Key points
-- Example: RUN#{runId}#STEP#{sequence}, TURN#…, CKPT#…, META.
-- Zero-padded sequences or ISO timestamps keep ordering; begins_with queries fetch a subset.
-- GSIs provide alternate access such as tenant plus status or correlation ID.
+\`\`\`text
+PK = TENANT#ONsemi#RUN#RUN123
 
-## CWD context
-One Query call can fetch a whole session.
+SK = METADATA
+SK = WORKER#CUSTOMER
+SK = WORKER#SALES
+SK = WORKER#INCIDENT
+SK = CHECKPOINT#001
+\`\`\`
+
+### Example table
+
+| PK                  | SK                | Data                 |
+| ------------------- | ----------------- | -------------------- |
+| \`TENANT#ON#RUN#123\` | \`METADATA\`        | intent, user, status |
+| \`TENANT#ON#RUN#123\` | \`WORKER#CUSTOMER\` | status, start/end    |
+| \`TENANT#ON#RUN#123\` | \`WORKER#SALES\`    | status, retry        |
+| \`TENANT#ON#RUN#123\` | \`WORKER#INCIDENT\` | status, error        |
+| \`TENANT#ON#RUN#123\` | \`CHECKPOINT#001\`  | completed steps      |
+
+This gives me an efficient query:
+
+\`\`\`text
+Get all information for RUN123
+        ↓
+Query PK = TENANT#ON#RUN#123
+        ↓
+Metadata + Workers + Checkpoints
+\`\`\`
+
+## Why not use just \`run_id\`?
+
+You could use:
+
+\`\`\`text
+PK = RUN123
+\`\`\`
+
+But I prefer including the **tenant** when CWD is multi-tenant because it gives a clear tenant boundary and supports access-control/query patterns.
+
+## Avoid hot partitions
+
+I would also make sure the partition key has enough cardinality.
+
+Bad:
+
+\`\`\`text
+PK = CWD
+\`\`\`
+
+Almost all traffic goes to one partition → potential hot partition.
+
+Better:
+
+\`\`\`text
+PK = TENANT#ON#RUN#123
+PK = TENANT#ON#RUN#124
+PK = TENANT#ON#RUN#125
+\`\`\`
+
+Requests are distributed across many partition-key values.
+
+### For idempotency
+
+I would use a separate item/key pattern:
+
+\`\`\`text
+PK = IDEMPOTENCY#<idempotency_key>
+\`\`\`
+
+Then use a **conditional write**:
+
+\`\`\`text
+Put item
+IF attribute_not_exists(PK)
+\`\`\`
+
+This prevents two Workers from claiming the same operation simultaneously.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I design the DynamoDB partition key based on CWD's access patterns. For workflow state, I would typically use a composite partition key such as \`TENANT#tenantId#RUN#runId\`, with a sort key for metadata, Workers, and checkpoints. This allows me to retrieve the complete state of a workflow efficiently while providing good partition distribution. I avoid low-cardinality keys such as a constant \`CWD\` because they can create hot partitions. For idempotency, I use a separate idempotency-key item with conditional writes.”**
+
+### Easy memory trick
+
+**Access pattern → High cardinality → Even distribution → Efficient query**
+
+### Key distinction
+
+**Partition key = decides where the item is distributed.**
+**Sort key = organizes related items within that partition.**
+`,code:``},{id:`109-how-would-you-design-the-sort-key`,category:`DynamoDB`,title:`How would you design the sort key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the Sort Key?
+
+For CWD, I would use the **sort key to organize related items within one workflow/run** and make common queries efficient.
+
+If my partition key is:
+
+\`\`\`text
+PK = TENANT#ON#RUN#RUN123
+\`\`\`
+
+I can design the sort key as:
+
+\`\`\`text
+SK = <ENTITY_TYPE>#<ENTITY_ID>
+\`\`\`
+
+### Example
+
+\`\`\`text
+PK = TENANT#ON#RUN#RUN123
+
+SK = METADATA
+SK = WORKER#CUSTOMER
+SK = WORKER#SALES
+SK = WORKER#INCIDENT
+SK = CHECKPOINT#001
+SK = CHECKPOINT#002
+\`\`\`
+
+Then:
+
+\`\`\`text
+Query:
+PK = TENANT#ON#RUN#RUN123
+\`\`\`
+
+returns all related workflow information.
+
+---
+
+## 1. Worker status
+
+\`\`\`text
+SK = WORKER#CUSTOMER
+SK = WORKER#SALES
+SK = WORKER#INCIDENT
+\`\`\`
+
+Example:
+
+\`\`\`text
+WORKER#INCIDENT
+status = FAILED
+retry_count = 2
+error = TIMEOUT
+\`\`\`
+
+---
+
+## 2. Checkpoints
+
+For multiple checkpoints, I would make the sort key naturally ordered:
+
+\`\`\`text
+SK = CHECKPOINT#0001
+SK = CHECKPOINT#0002
+SK = CHECKPOINT#0003
+\`\`\`
+
+Then DynamoDB's sort-key ordering helps retrieve them sequentially.
+
+---
+
+## 3. Events / execution history
+
+If I need execution history:
+
+\`\`\`text
+SK = EVENT#2026-09-24T21:20:01Z
+SK = EVENT#2026-09-24T21:20:05Z
+SK = EVENT#2026-09-24T21:20:10Z
+\`\`\`
+
+I can query a specific range:
+
+\`\`\`text
+PK = TENANT#ON#RUN#RUN123
+SK begins_with "EVENT#"
+\`\`\`
+
+or use a range condition for timestamps.
+
+---
+
+## 4. Hierarchical sort keys
+
+For more complex CWD state:
+
+\`\`\`text
+SK =
+WORKER#SALES#STEP#01
+
+WORKER#SALES#STEP#02
+
+WORKER#INCIDENT#STEP#01
+\`\`\`
+
+This lets me query specific groups:
+
+\`\`\`text
+begins_with(SK, "WORKER#SALES")
+\`\`\`
+
+and retrieve all Sales Worker records.
+
+---
+
+## 5. Don't make the sort key too complicated
+
+I wouldn't put every possible attribute into the key.
+
+Keep it focused on **query patterns**.
+
+\`\`\`text
+Good:
+WORKER#SALES
+
+Good:
+EVENT#2026-09-24T21:20:01Z
+
+Avoid:
+WORKER#SALES#USER#123#MODEL#XYZ#TOKEN#5000#...
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I design the sort key based on how I need to query related records within a CWD workflow. For example, with \`PK = TENANT#tenantId#RUN#runId\`, I can use sort keys such as \`METADATA\`, \`WORKER#CUSTOMER\`, \`WORKER#SALES\`, \`WORKER#INCIDENT\`, and \`CHECKPOINT#0001\`. For execution history, I can use timestamp-based keys such as \`EVENT#timestamp\`. This gives me efficient prefix and range queries while keeping the key simple and aligned with access patterns.”**
+
+### Easy memory trick
+
+**Sort Key = Organize + Filter + Order**
+
+### Key distinction
+
+**Partition key → Which partition/workflow?**
+**Sort key → Which related item and in what logical order?**
 `,code:``},{id:`110-how-would-you-store-session-task-run-information`,category:`DynamoDB`,title:`How would you store session/task/run information?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you store session/task/run information?
 
-## Short answer
-Model a session and its runs, turns and steps as items in one item collection.
+For CWD, I would use **one DynamoDB table with different item types**, using the partition key and sort key to group related session/task/run data.
 
-## Key points
-- PK = SESSION#id; SK = META, RUN#r, RUN#r#TURN#t, RUN#r#STEP#n, CKPT#…
-- Attributes: status, version, updatedAt, ttl; pointers to S3 for large payloads.
-- GSI on tenant and updatedAt for listing.
+### Recommended structure
 
-## CWD context
-Add TTL on ephemeral items to control storage.
-`,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent hot partitions?
+\`\`\`text
+PK = TENANT#<tenant_id>#SESSION#<session_id>
+SK = TASK#<task_id>#RUN#<run_id>
+\`\`\`
 
-## Short answer
-Prevent hot partitions with good key design, and detect them early.
+But for easier querying, I would usually model them as separate items:
 
-## Key points
-- High-cardinality keys, write-sharding suffixes, no monotonic time-based partition keys.
-- Adaptive capacity helps but has per-partition limits.
-- Cache hot reads (DAX or Redis); use Contributor Insights and throttling metrics.
+\`\`\`text
+PK = TENANT#ON#SESSION#S123
+SK = METADATA
 
-## CWD context
-One huge tenant is the classic hot-key trap.
+PK = TENANT#ON#SESSION#S123
+SK = TASK#T456
+
+PK = TENANT#ON#SESSION#S123
+SK = TASK#T456#RUN#R789
+\`\`\`
+
+### Example
+
+\`\`\`text
+┌─────────────────────────────────────────────┐
+│ Session                                     │
+│ PK = TENANT#ON#SESSION#S123                 │
+│ SK = METADATA                               │
+│ user_id = U100                              │
+│ created_at = ...                            │
+└─────────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────┐
+│ Task                                        │
+│ PK = TENANT#ON#SESSION#S123                 │
+│ SK = TASK#T456                              │
+│ intent = CustomerBriefing                   │
+│ customer_id = C123                          │
+│ status = RUNNING                             │
+└─────────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────┐
+│ Run                                         │
+│ PK = TENANT#ON#SESSION#S123                 │
+│ SK = TASK#T456#RUN#R789                     │
+│ status = RUNNING                             │
+│ current_step = IncidentWorker               │
+│ retry_count = 1                              │
+└─────────────────────────────────────────────┘
+\`\`\`
+
+## What I store at each level
+
+### Session
+
+Represents the user's conversation/session.
+
+\`\`\`text
+session_id
+user_id
+tenant_id
+created_at
+last_activity
+\`\`\`
+
+### Task
+
+Represents a business request.
+
+\`\`\`text
+task_id
+session_id
+intent
+customer_id
+created_at
+status
+\`\`\`
+
+Example:
+
+\`\`\`text
+T456
+intent = CustomerBriefing
+customer_id = C123
+\`\`\`
+
+### Run
+
+Represents one execution attempt of that task.
+
+\`\`\`text
+run_id
+task_id
+status
+current_step
+completed_steps
+retry_count
+started_at
+completed_at
+error
+\`\`\`
+
+For example:
+
+\`\`\`text
+R789
+status = RUNNING
+current_step = IncidentWorker
+completed_steps = [CustomerWorker, SalesWorker]
+\`\`\`
+
+This distinction is important:
+
+\`\`\`text
+Session
+   ↓
+Task
+   ↓
+Run
+   ↓
+Steps / Workers
+\`\`\`
+
+A **Task** is the business request.
+A **Run** is a particular execution of that request.
+
+If the run fails and is retried, I can create another run while keeping the original task.
+
+---
+
+## Why this design?
+
+It gives me:
+
+* Efficient retrieval of a session's tasks and runs
+* Durable workflow state
+* Resume/recovery after container failure
+* Idempotency tracking
+* Clear execution history
+* Multi-tenant isolation
+* Easy status queries
+
+Large results should not be stored directly in DynamoDB.
+
+\`\`\`text
+Large result/document → S3
+Vector/search data     → OpenSearch
+Temporary cache        → Redis
+Workflow metadata      → DynamoDB
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I would model CWD state hierarchically as Session → Task → Run → Step/Worker. In DynamoDB, I would use composite keys to group related records, for example \`TENANT#tenantId#SESSION#sessionId\` as the partition key and \`METADATA\`, \`TASK#taskId\`, and \`TASK#taskId#RUN#runId\` as sort keys. The Session represents the conversation, the Task represents the business request, and the Run represents a specific execution. I would store status, current step, Worker status, retries, timestamps, and idempotency metadata. Large results would go to S3 rather than DynamoDB.”**
+
+### Easy memory trick
+
+**Session = Conversation**
+**Task = Business Request**
+**Run = Execution**
+**Step = Progress**
+`,code:``},{id:`111-how-would-you-prevent-hot-partitions`,category:`DynamoDB`,title:`How would you prevent hot partitions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent hot partitions in DynamoDB?
+
+A **hot partition** happens when too much traffic is concentrated on the same partition key.
+
+For CWD, I would prevent this mainly through **high-cardinality keys, good access-pattern design, and write distribution**.
+
+### 1. Avoid a constant partition key
+
+❌ Bad:
+
+\`\`\`text
+PK = CWD
+\`\`\`
+
+All requests go to the same partition.
+
+✅ Better:
+
+\`\`\`text
+PK = TENANT#ON#SESSION#S123
+PK = TENANT#ON#SESSION#S124
+PK = TENANT#ON#SESSION#S125
+\`\`\`
+
+Traffic is distributed across many partition-key values.
+
+---
+
+### 2. Use high-cardinality identifiers
+
+Good partition-key candidates:
+
+\`\`\`text
+tenant_id
+session_id
+run_id
+customer_id
+\`\`\`
+
+Avoid low-cardinality values such as:
+
+\`\`\`text
+status = RUNNING
+region = US
+type = WORKER
+\`\`\`
+
+because many requests could target the same value.
+
+---
+
+### 3. Avoid one extremely busy workflow partition
+
+Suppose one CWD run generates thousands of Worker events:
+
+\`\`\`text
+PK = RUN123
+\`\`\`
+
+and everything is written to that partition:
+
+\`\`\`text
+RUN123
+ ├── Worker1
+ ├── Worker2
+ ├── Worker3
+ ├── Event1
+ ├── Event2
+ ├── Event3
+ └── ...
+\`\`\`
+
+That can become a hotspot.
+
+For very high-volume execution history, I could distribute writes using a bucket/shard:
+
+\`\`\`text
+PK = RUN123#BUCKET#0
+PK = RUN123#BUCKET#1
+PK = RUN123#BUCKET#2
+\`\`\`
+
+For example, hash the event ID and select one of 10 buckets.
+
+---
+
+### 4. Don't use timestamps alone as the partition key
+
+❌
+
+\`\`\`text
+PK = 2026-09-24
+\`\`\`
+
+A huge number of requests on the same day could concentrate traffic.
+
+Instead:
+
+\`\`\`text
+PK = TENANT#ON#RUN#R123
+SK = EVENT#2026-09-24T21:30:15Z
+\`\`\`
+
+---
+
+### 5. Use adaptive capacity, but don't depend on it
+
+DynamoDB provides mechanisms to handle uneven traffic, but I still design the keys correctly.
+
+My first defense is:
+
+\`\`\`text
+Good access pattern
+        ↓
+High-cardinality partition key
+        ↓
+Distributed traffic
+        ↓
+Adaptive capacity
+\`\`\`
+
+---
+
+### 6. Monitor for hotspots
+
+I would monitor DynamoDB/CloudWatch metrics such as:
+
+* Throttled requests
+* Read/write throttling
+* Consumed read/write capacity
+* Latency
+* Hot partition behavior
+
+If throttling occurs, I investigate whether a particular partition key is receiving disproportionate traffic.
+
+---
+
+## CWD example
+
+A good design could be:
+
+\`\`\`text
+PK = TENANT#ON#SESSION#S123
+SK = TASK#T456#RUN#R789
+\`\`\`
+
+For normal workflow state, this is fine because sessions/runs naturally distribute traffic.
+
+For **very high-volume event logging**, I wouldn't force every event into one hot partition. I would distribute event records using buckets or a separate event-storage pattern.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I prevent DynamoDB hot partitions by designing high-cardinality partition keys based on access patterns. I avoid low-cardinality keys such as a constant CWD key or status-based keys. For CWD, session or run identifiers provide good distribution. If a single high-volume run generates excessive event writes, I can introduce write sharding or buckets to distribute those writes across multiple partition keys. I also monitor throttling and capacity metrics to identify hotspots and adjust the data model when necessary.”**
+
+### Easy memory trick
+
+**High Cardinality → Distribute → Shard if needed → Monitor**
+
+### Key distinction
+
+**Partition key design prevents hotspots.**
+**Auto scaling increases capacity.**
+
+You should fix a poor key design rather than simply adding more capacity.
 `,code:``},{id:`112-how-does-dynamodb-scale`,category:`DynamoDB`,title:`How does DynamoDB scale?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does DynamoDB scale?
 
-## Short answer
-DynamoDB scales horizontally by splitting partitions automatically.
+DynamoDB scales **horizontally** by distributing data and traffic across partitions. AWS manages the underlying infrastructure for you.
 
-## Key points
-- On-demand mode absorbs spikes; provisioned mode uses auto scaling.
-- Global tables replicate across regions.
-- Practical scale depends on key distribution.
+\`\`\`text id="6p8k2m"
+                DynamoDB Table
+                     │
+        ┌────────────┼────────────┐
+        ▼            ▼            ▼
+   Partition 1   Partition 2   Partition 3
+      ↓              ↓             ↓
+   Requests       Requests       Requests
+\`\`\`
 
-## CWD context
-For known extreme spikes, pre-warm capacity or plan ahead.
-`,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:`# On-demand vs provisioned capacity?
+## 1. Data is distributed across partitions
 
-## Short answer
-On-demand suits spiky or unknown traffic; provisioned suits steady, predictable traffic.
+DynamoDB uses the **partition key** to distribute items.
 
-## Key points
-- On-demand: pay per request, no capacity planning.
-- Provisioned: cheaper at steady load with auto scaling and reserved capacity.
-- Mode switching is limited in frequency.
+For CWD:
 
-## CWD context
-Start on-demand, then move stable tables to provisioned.
-`,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement TTL?
+\`\`\`text id="q7x3na"
+SESSION#S101 → Partition A
+SESSION#S102 → Partition B
+SESSION#S103 → Partition C
+SESSION#S104 → Partition A
+\`\`\`
 
-## Short answer
-TTL expires items automatically, without consuming write capacity.
+As data/traffic grows, DynamoDB can distribute it across more physical partitions.
 
-## Key points
-- Store an expiry timestamp in epoch seconds on a designated attribute.
-- Deletion is background and not instant, so filter expired items in queries.
-- Use for idempotency keys, old checkpoints and sessions; streams show TTL deletions.
+---
 
-## CWD context
-Align TTL with retention and privacy commitments.
-`,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle concurrent updates?
+## 2. On-demand capacity
 
-## Short answer
-Handle concurrent updates with conditional writes and optimistic locking.
+For unpredictable CWD traffic, I can use **On-Demand mode**.
 
-## Key points
-- Version attribute with a condition that it equals the expected value.
-- Atomic counters through update expressions; transactions for multi-item atomicity.
-- On conflict, re-read and retry.
+\`\`\`text id="0u9f5p"
+Low traffic
+   ↓
+Low usage/cost
 
-## CWD context
-Needed when several Workers update the same run.
-`,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are conditional writes?
+Traffic spike
+   ↓
+DynamoDB automatically handles increased capacity
+\`\`\`
 
-## Short answer
-A conditional write succeeds only if a condition on the existing item is true.
+This is useful when traffic is difficult to predict.
 
-## Key points
-- ConditionExpression such as attribute_not_exists(pk) or a version or status check.
-- Failure returns ConditionalCheckFailedException.
-- Enables idempotency, locks and safe state transitions without extra reads.
+Example:
 
-## CWD context
-The building block for exactly-once effects.
+\`\`\`text
+Normal → 1,000 requests/min
+Spike  → 100,000 requests/min
+\`\`\`
+
+---
+
+## 3. Provisioned capacity
+
+If CWD traffic is predictable, I can use **Provisioned capacity**.
+
+\`\`\`text id="5k2h8s"
+Expected workload
+      ↓
+Provision capacity
+      ↓
+Auto Scaling
+      ↓
+Increase/decrease capacity
+\`\`\`
+
+DynamoDB Auto Scaling can adjust provisioned capacity based on utilization.
+
+---
+
+## 4. Read scaling
+
+For read-heavy workloads, I can use:
+
+* DynamoDB read capacity
+* Eventually consistent reads where acceptable
+* **DynamoDB Accelerator (DAX)** for extremely low-latency read-heavy workloads
+
+For CWD, I might use Redis/ElastiCache for application-level caching instead when that better fits the access pattern.
+
+---
+
+## 5. Write scaling
+
+Writes scale by distributing them across partition keys.
+
+For example:
+
+\`\`\`text id="b2y7kc"
+Bad:
+PK = CWD
+       ↓
+All writes → same partition ❌
+
+Good:
+PK = SESSION#S1
+PK = SESSION#S2
+PK = SESSION#S3
+       ↓
+Distributed writes ✅
+\`\`\`
+
+This is why **partition-key design is critical**.
+
+---
+
+## 6. Global Tables for multi-region CWD
+
+If CWD needs multi-region availability:
+
+\`\`\`text id="w5p1qs"
+             CWD
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+   US Region      EU Region
+   DynamoDB       DynamoDB
+       │             │
+       └── Global ───┘
+           Tables
+\`\`\`
+
+DynamoDB Global Tables provide multi-region, multi-active replication.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“DynamoDB scales horizontally by distributing items and traffic across partitions based on the partition key. For unpredictable CWD traffic, I would typically consider on-demand capacity, while predictable workloads can use provisioned capacity with auto scaling. The most important part is good partition-key design so reads and writes are distributed and we avoid hot partitions. For multi-region CWD, DynamoDB Global Tables can provide multi-region replication and availability.”**
+
+### Easy memory trick
+
+**Partition → Distribute → Auto Scale → Cache → Multi-Region**
+
+### Key distinction
+
+**DynamoDB scaling is primarily horizontal.**
+
+You don't make one database server bigger; DynamoDB distributes the workload across its managed infrastructure.
+`,code:``},{id:`113-on-demand-vs-provisioned-capacity`,category:`DynamoDB`,title:`On-demand vs provisioned capacity?`,difficulty:`Advanced`,time:`~15 min`,concept:`# On-Demand vs Provisioned Capacity in DynamoDB
+
+The simple difference is:
+
+> **On-Demand = DynamoDB automatically handles capacity.**
+> **Provisioned = You specify capacity, and DynamoDB Auto Scaling can adjust it.**
+
+|                    | **On-Demand**       | **Provisioned**              |
+| ------------------ | ------------------- | ---------------------------- |
+| Capacity planning  | Minimal             | Required                     |
+| Scaling            | Automatic           | Auto Scaling available       |
+| Traffic pattern    | Unpredictable       | Predictable                  |
+| Cost model         | Pay per request     | Pay for provisioned capacity |
+| Operational effort | Lower               | Higher                       |
+| Good for           | Spiky/new workloads | Stable/high-volume workloads |
+
+### CWD example
+
+#### On-Demand
+
+If CWD traffic looks like:
+
+\`\`\`text
+100 req/min
+     ↓
+1,000 req/min
+     ↓
+50,000 req/min  ← sudden spike
+\`\`\`
+
+On-demand is useful because you don't have to constantly estimate capacity.
+
+#### Provisioned
+
+If CWD consistently receives:
+
+\`\`\`text
+10,000 requests/min
+10,000 requests/min
+10,000 requests/min
+\`\`\`
+
+and the workload is predictable, provisioned capacity can be considered, with Auto Scaling adjusting capacity as utilization changes.
+
+### 🎯 Strong interview answer
+
+> **“I would choose DynamoDB On-Demand when CWD traffic is unpredictable, spiky, or the workload is new because DynamoDB handles capacity automatically and I pay based on usage. I would consider Provisioned capacity when traffic is predictable and sustained because I can define expected capacity and use Auto Scaling to adjust it. For a new CWD workload with uncertain traffic, I would start with On-Demand and move to Provisioned if the workload becomes predictable and the economics justify it.”**
+
+### Easy memory trick
+
+**On-Demand = Unpredictable**
+**Provisioned = Predictable**
+
+### Important distinction
+
+Neither option fixes a **bad partition-key design**.
+
+Even with automatic scaling, you still need to avoid **hot partitions**.
+`,code:``},{id:`114-how-do-you-implement-ttl`,category:`DynamoDB`,title:`How do you implement TTL?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement TTL in DynamoDB?
+
+DynamoDB TTL (**Time to Live**) automatically removes items after a specified expiration time.
+
+For CWD, I would use TTL for **temporary data** such as session metadata, idempotency records, temporary workflow state, or old execution records.
+
+### 1. Add an expiration attribute
+
+Example:
+
+\`\`\`text id="1m9k2v"
+{
+  "PK": "TENANT#ON#SESSION#S123",
+  "SK": "METADATA",
+
+  "status": "ACTIVE",
+
+  "ttl": 1790276400
+}
+\`\`\`
+
+\`ttl\` contains a **Unix epoch timestamp in seconds**.
+
+---
+
+### 2. Enable TTL on the table
+
+Configure DynamoDB TTL using the attribute name:
+
+\`\`\`text id="x4v8qn"
+TTL attribute = ttl
+\`\`\`
+
+DynamoDB then identifies expired items and removes them automatically.
+
+---
+
+### 3. Set TTL when creating the item
+
+For example, if I want an idempotency record to live for 24 hours:
+
+\`\`\`text id="7m2p6c"
+current_time
+     +
+24 hours
+     ↓
+ttl
+\`\`\`
+
+Conceptually:
+
+\`\`\`python
+ttl = int(time.time()) + 86400
+\`\`\`
+
+---
+
+### 4. CWD example
+
+Suppose a request creates:
+
+\`\`\`text id="4b9jzs"
+PK = IDEMPOTENCY#ABC123
+status = COMPLETED
+ttl = +24 hours
+\`\`\`
+
+After the retention period, DynamoDB can automatically remove that record.
+
+This prevents the table from growing indefinitely with temporary records.
+
+---
+
+## Important: TTL is not an exact-time deletion mechanism
+
+If:
+
+\`\`\`text
+ttl = 10:00 AM
+\`\`\`
+
+don't design the application assuming the item disappears **exactly at 10:00 AM**.
+
+TTL deletion is asynchronous.
+
+So:
+
+\`\`\`text
+10:00 AM → eligible for deletion
+             ↓
+       DynamoDB removes it later
+\`\`\`
+
+Therefore, **application logic should not depend on exact deletion time**.
+
+---
+
+## What I would use TTL for in CWD
+
+| Data                                   | TTL?                                   |
+| -------------------------------------- | -------------------------------------- |
+| Temporary session data                 | ✅                                      |
+| Idempotency records                    | ✅                                      |
+| Temporary workflow metadata            | ✅                                      |
+| Old execution metadata                 | ✅, depending on retention requirements |
+| Audit records requiring long retention | ❌                                      |
+| Important business records             | ❌                                      |
+| Large documents                        | ❌ → S3 lifecycle policies              |
+
+### 🎯 Strong interview answer
+
+> **“I implement DynamoDB TTL by adding an expiration attribute containing a Unix epoch timestamp in seconds and enabling TTL on that attribute at the table level. For CWD, I would use it for temporary session data, idempotency records, and temporary workflow metadata. TTL deletion is asynchronous, so I would never depend on it for exact-time business logic. For large objects in S3, I would use S3 Lifecycle policies instead.”**
+
+### Easy memory trick
+
+**Set timestamp → Enable TTL → DynamoDB cleans up**
+
+### Key distinction
+
+**TTL = automatic cleanup of expired DynamoDB items.**
+
+It is **not** an exact scheduler or guaranteed deletion timestamp.
+`,code:``},{id:`115-how-do-you-handle-concurrent-updates`,category:`DynamoDB`,title:`How do you handle concurrent updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle concurrent updates in DynamoDB?
+
+For CWD, I would use **conditional writes and optimistic locking** to prevent two Workers from incorrectly updating the same state at the same time.
+
+### Example problem
+
+Suppose two Workers update the same run:
+
+\`\`\`text
+              RUN123
+             /      \\
+     Worker A        Worker B
+     status=         status=
+     PROCESSING      PROCESSING
+          \\            /
+           ↓          ↓
+            DynamoDB
+\`\`\`
+
+Without protection, one update could overwrite the other.
+
+---
+
+## 1. Use conditional writes
+
+For example, only allow a Worker to change:
+
+\`\`\`text
+PROCESSING → COMPLETED
+\`\`\`
+
+if the current state is still \`PROCESSING\`.
+
+Conceptually:
+
+\`\`\`text
+UPDATE RUN123
+SET status = COMPLETED
+WHERE status = PROCESSING
+\`\`\`
+
+If another Worker already changed it, the condition fails.
+
+---
+
+## 2. Use optimistic locking with a version
+
+Store:
+
+\`\`\`text
+version = 5
+\`\`\`
+
+Worker A reads version 5.
+
+Worker B also reads version 5.
+
+Worker A updates:
+
+\`\`\`text
+version 5 → 6
+\`\`\`
+
+Worker B tries:
+
+\`\`\`text
+version 5 → 6
+\`\`\`
+
+DynamoDB rejects Worker B because the version is no longer 5.
+
+\`\`\`text
+Worker A → version 5 → 6 ✅
+Worker B → version 5 → 6 ❌
+\`\`\`
+
+Worker B can then re-read the latest state and decide whether to retry.
+
+---
+
+## 3. Use atomic counters when appropriate
+
+If multiple Workers need to update a counter:
+
+\`\`\`text
+retry_count
+worker_count
+completed_count
+\`\`\`
+
+I would use DynamoDB's atomic update operations rather than:
+
+\`\`\`text
+Read → Add 1 → Write
+\`\`\`
+
+because two Workers could read the same value.
+
+---
+
+## 4. Use transactions when multiple items must change together
+
+For example:
+
+\`\`\`text
+Run status
++
+Idempotency record
+\`\`\`
+
+If both must be updated consistently, DynamoDB transactions can update multiple items atomically.
+
+---
+
+## CWD example
+
+Suppose:
+
+\`\`\`text
+IncidentWorker A → COMPLETED
+IncidentWorker B → COMPLETED
+\`\`\`
+
+Both accidentally process the same request.
+
+I would use:
+
+\`\`\`text
+Idempotency key
+       ↓
+Conditional Put
+       ↓
+Only one Worker claims operation
+       ↓
+Other Worker receives conditional failure
+       ↓
+Does not execute duplicate business operation
+\`\`\`
+
+This is especially important before calling:
+
+\`\`\`text
+Salesforce
+ServiceNow
+\`\`\`
+
+because duplicate writes could create duplicate business transactions.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For concurrent CWD updates, I use DynamoDB conditional writes and optimistic locking. Each state record can have a version number, and an update succeeds only if the version I read is still current. For operations that must be executed only once, such as Salesforce or ServiceNow updates, I use an idempotency key with an atomic conditional write. For multiple related records that must change together, I can use DynamoDB transactions. If a conditional update fails, the Worker re-reads the latest state and decides whether to retry.”**
+
+### Easy memory trick
+
+**Condition → Version → Atomic Update → Transaction → Retry**
+
+### Key distinction
+
+**Optimistic locking prevents conflicting updates.**
+
+**Idempotency prevents duplicate business operations.**
+
+In CWD, you often need **both**.
+`,code:``},{id:`116-what-are-conditional-writes`,category:`DynamoDB`,title:`What are conditional writes?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are Conditional Writes in DynamoDB?
+
+A **conditional write** means:
+
+> **“Update this DynamoDB item only if a specific condition is true.”**
+
+If the condition is false, DynamoDB **does not perform the update**.
+
+### Simple example
+
+Suppose CWD has:
+
+\`\`\`text
+status = PROCESSING
+version = 5
+\`\`\`
+
+Worker wants to mark it completed.
+
+\`\`\`text
+Update:
+status = COMPLETED
+version = 6
+
+Condition:
+version = 5
+\`\`\`
+
+If version is still \`5\`:
+
+\`\`\`text
+Condition TRUE
+      ↓
+Update succeeds ✅
+\`\`\`
+
+If another Worker already changed it to version \`6\`:
+
+\`\`\`text
+Condition FALSE
+      ↓
+Update rejected ❌
+\`\`\`
+
+This prevents one Worker from accidentally overwriting another Worker's update.
+
+---
+
+## CWD idempotency example
+
+Suppose two Workers receive the same SQS message:
+
+\`\`\`text
+        SQS
+         ↓
+    ┌────┴────┐
+    ↓         ↓
+Worker A   Worker B
+    ↓         ↓
+    └────┬────┘
+         ↓
+     DynamoDB
+\`\`\`
+
+Worker A tries:
+
+\`\`\`text
+idempotency_key = ABC123
+\`\`\`
+
+with:
+
+\`\`\`text
+attribute_not_exists(idempotency_key)
+\`\`\`
+
+Worker A succeeds:
+
+\`\`\`text
+ABC123 → PROCESSING ✅
+\`\`\`
+
+Worker B tries the same operation:
+
+\`\`\`text
+ABC123 already exists
+        ↓
+Condition fails ❌
+        ↓
+Don't execute duplicate operation
+\`\`\`
+
+This protects downstream systems such as **Salesforce or ServiceNow** from duplicate business operations.
+
+---
+
+## Common conditional operations
+
+### Create only if it doesn't exist
+
+\`\`\`text
+attribute_not_exists(PK)
+\`\`\`
+
+Useful for **idempotency**.
+
+### Update only if version matches
+
+\`\`\`text
+version = 5
+\`\`\`
+
+Useful for **optimistic locking**.
+
+### Update only if status is correct
+
+\`\`\`text
+status = PROCESSING
+\`\`\`
+
+Useful for **workflow state transitions**.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“A conditional write in DynamoDB means the write happens only when a specified condition is satisfied. In CWD, I use it for concurrency control and idempotency. For example, I can update a Worker record only when the version is still 5, preventing another Worker from overwriting a newer update. I can also use \`attribute_not_exists\` to atomically claim an idempotency key so duplicate SQS messages don't cause duplicate Salesforce or ServiceNow operations.”**
+
+### Easy memory trick
+
+**Check → Write if true → Reject if false**
+
+### Key distinction
+
+**Normal write:** “Write this value.”
+
+**Conditional write:** “Write this value **only if this condition is true**.”
 `,code:``},{id:`117-how-would-you-implement-idempotency-using-dynamodb`,category:`DynamoDB`,title:`How would you implement idempotency using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement idempotency using DynamoDB?
 
-## Short answer
-Implement idempotency with a conditional put keyed by the operation ID.
+For CWD, I would use a **unique idempotency key + DynamoDB conditional write** so that only one Worker can claim a business operation.
 
-## Key points
-- attribute_not_exists on the key so the first writer wins.
-- Store in-progress or completed status, the result and a TTL; duplicates return the stored result.
-- Handle expired in-progress locks; Powertools uses this pattern.
+### CWD flow
 
-## CWD context
-Use it for all write tools.
+\`\`\`text
+SQS Message
+    ↓
+Worker
+    ↓
+Generate / extract idempotency_key
+    ↓
+DynamoDB conditional write
+    ↓
+┌───────────────────────────┐
+│ Key already exists?       │
+└───────────────────────────┘
+      ↓              ↓
+     YES             NO
+      ↓              ↓
+Don't execute    Claim operation
+      ↓              ↓
+Return existing   Call Salesforce/
+result             ServiceNow
+                       ↓
+                  Mark COMPLETED
+\`\`\`
+
+## 1. Create a unique key
+
+For example:
+
+\`\`\`text
+idempotency_key = CUST123-CREATE-TICKET-456
+\`\`\`
+
+The key should represent the **business operation**, not just the HTTP request.
+
+---
+
+## 2. Atomically claim the operation
+
+Create an item in DynamoDB:
+
+\`\`\`text
+PK = IDEMPOTENCY#CUST123-CREATE-TICKET-456
+
+status = PROCESSING
+created_at = ...
+\`\`\`
+
+Use:
+
+\`\`\`text
+ConditionExpression:
+attribute_not_exists(PK)
+\`\`\`
+
+This is important because the check and insert happen atomically.
+
+---
+
+## 3. First Worker wins
+
+\`\`\`text
+Worker A → Conditional Put → SUCCESS ✅
+Worker B → Conditional Put → ConditionalCheckFailed ❌
+\`\`\`
+
+Only Worker A executes the business operation.
+
+---
+
+## 4. Store the result
+
+After successful processing:
+
+\`\`\`text
+PK = IDEMPOTENCY#ABC123
+
+status = COMPLETED
+result_reference = ...
+completed_at = ...
+\`\`\`
+
+Then if the same request arrives again:
+
+\`\`\`text
+ABC123 already exists
+        ↓
+status = COMPLETED
+        ↓
+Return existing result
+\`\`\`
+
+No duplicate Salesforce/ServiceNow operation.
+
+---
+
+## 5. Handle Worker crashes
+
+Suppose:
+
+\`\`\`text
+DynamoDB → PROCESSING
+        ↓
+Worker calls Salesforce
+        ↓
+Salesforce succeeds
+        ↓
+Worker crashes before marking COMPLETED
+\`\`\`
+
+The message may be delivered again.
+
+The new Worker sees:
+
+\`\`\`text
+status = PROCESSING
+\`\`\`
+
+You shouldn't blindly execute the operation again.
+
+Use a **lease/expiration timestamp** and, ideally, downstream idempotency support:
+
+\`\`\`text
+PROCESSING
+   ↓
+lease expires
+   ↓
+reclaim/reconcile
+   ↓
+check downstream result
+   ↓
+complete safely
+\`\`\`
+
+This is especially important for operations with external side effects.
+
+---
+
+## 6. Add TTL
+
+For temporary idempotency records:
+
+\`\`\`text
+PK = IDEMPOTENCY#ABC123
+status = COMPLETED
+ttl = <expiration timestamp>
+\`\`\`
+
+After the retention period, DynamoDB can clean up the record.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I implement idempotency in CWD by generating a unique business-operation idempotency key and storing it in DynamoDB using a conditional write such as \`attribute_not_exists(PK)\`. The first Worker successfully claims the key and processes the operation. A duplicate Worker gets a conditional-check failure and doesn't execute the business operation again. After successful processing, I update the record to \`COMPLETED\` and store the result reference. For crashes during processing, I use a lease or expiration mechanism and reconcile the downstream operation before retrying. I can use TTL to clean up old idempotency records.”**
+
+### Easy memory trick
+
+**Key → Claim → Process → Complete → Reuse**
+
+### Key distinction
+
+**Deduplication:** “Have I seen this message before?”
+
+**Idempotency:** “If I receive it again, can I safely avoid performing the business operation twice?”
+
+For CWD, DynamoDB conditional writes give you the **atomic claim** needed to implement this safely.
 `,code:``},{id:`118-how-would-you-recover-from-a-failed-workflow-using-dynamodb`,category:`DynamoDB`,title:`How would you recover from a failed workflow using DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you recover from a failed workflow using DynamoDB?
 
-## Short answer
-Recover a failed workflow from its last checkpoint stored in DynamoDB.
+For CWD, I would use DynamoDB as the **durable checkpoint/state store** so that after a failure, I can identify what already succeeded and resume from the failed step instead of restarting everything.
 
-## Key points
-- Find failed runs through a status GSI or DynamoDB Streams.
-- Load the last checkpoint and resume; increment an attempt counter with a condition.
-- Side effects must be idempotent; mark permanently failed after N attempts.
+### CWD flow
 
-## CWD context
-Route unrecoverable runs to a human queue.
-`,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs RDS?
+\`\`\`text id="c4v8qp"
+CWD Workflow
+     ↓
+DynamoDB
+     │
+     ├── CustomerWorker = COMPLETED
+     ├── SalesWorker    = COMPLETED
+     ├── IncidentWorker = FAILED
+     └── current_step   = IncidentWorker
+              ↓
+        Worker retries
+              ↓
+        IncidentWorker
+              ↓
+          COMPLETED
+              ↓
+        Continue workflow
+\`\`\`
 
-## Short answer
-DynamoDB suits key-based operational state; RDS or Aurora suits relational data and ad-hoc queries.
+## 1. Save state after each important step
 
-## Key points
-- DynamoDB: massive scale, serverless, flexible schema, limited query flexibility.
-- RDS: joins, SQL, cross-table transactions, reporting.
+For example:
 
-## CWD context
-Runtime state in DynamoDB; analytics in Athena, Redshift or Aurora.
-`,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs ElastiCache?
+\`\`\`text id="5w6h2a"
+RUN123
 
-## Short answer
-DynamoDB is a durable system of record; ElastiCache is a fast, volatile cache.
+CustomerWorker → COMPLETED
+SalesWorker    → COMPLETED
+IncidentWorker → FAILED
+\`\`\`
 
-## Key points
-- DynamoDB: durable, queryable, millisecond latency (DAX for microseconds).
-- ElastiCache: in-memory, sub-millisecond, cache and counters.
-- MemoryDB is a durable in-memory alternative.
+I would store:
 
-## CWD context
-Use both: DynamoDB for truth, ElastiCache for speed.
-`,code:``}];function Am(){return(0,M.jsx)($,{data:km,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var jm=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What would you store in S3?
+\`\`\`text id="x2q9bc"
+run_id
+status
+current_step
+completed_steps
+failed_step
+retry_count
+error_code
+updated_at
+\`\`\`
 
-## Short answer
-Store documents, artifacts and payloads that are too large or too durable for other stores.
+---
 
-## Key points
-- Raw and curated documents, extracted text and chunks.
-- Model artifacts, evaluation and golden datasets, Bedrock batch input and output, Glue outputs.
-- Log archives and large payload references.
+## 2. Detect the failure
 
-## CWD context
-S3 is the source of truth for documents.
+Suppose the Incident Worker fails because ServiceNow times out.
+
+\`\`\`text id="m7k3fp"
+IncidentWorker
+     ↓
+Timeout
+     ↓
+Retry
+     ↓
+Still fails
+     ↓
+DynamoDB = FAILED
+\`\`\`
+
+The workflow state remains durable even if the ECS container is replaced.
+
+---
+
+## 3. Read the checkpoint
+
+A new Worker/container can query:
+
+\`\`\`text id="7w0n6b"
+run_id = RUN123
+\`\`\`
+
+and discover:
+
+\`\`\`text id="0z2q5c"
+CustomerWorker = COMPLETED
+SalesWorker    = COMPLETED
+IncidentWorker = FAILED
+\`\`\`
+
+So it doesn't unnecessarily execute Customer or Sales again.
+
+---
+
+## 4. Retry only the failed step
+
+\`\`\`text id="8s5w1d"
+DynamoDB
+    ↓
+failed_step = IncidentWorker
+    ↓
+Retry IncidentWorker
+    ↓
+Success
+\`\`\`
+
+For transient failures, use bounded retries with exponential backoff and jitter.
+
+---
+
+## 5. Use idempotency
+
+This is critical.
+
+Suppose the Worker actually completed a Salesforce operation but crashed before updating DynamoDB.
+
+A retry could otherwise perform the operation twice.
+
+So:
+
+\`\`\`text id="1zq6vf"
+Retry
+  ↓
+Idempotency key
+  ↓
+DynamoDB conditional check
+  ↓
+Already completed?
+  ↓
+Return existing result
+\`\`\`
+
+This protects against duplicate side effects.
+
+---
+
+## 6. Handle permanently failed workflows
+
+If retries are exhausted:
+
+\`\`\`text id="n2p7mx"
+FAILED
+  ↓
+DLQ / failed-job queue
+  ↓
+Investigate
+  ↓
+Fix problem
+  ↓
+Controlled replay
+  ↓
+Resume from checkpoint
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I use DynamoDB as a durable checkpoint store for CWD. After each important Worker step, I persist the run status, completed steps, current step, retry count, and failure information. If a Worker or container fails, a new execution reads the run state from DynamoDB, identifies the last successful checkpoint and failed step, and resumes from there instead of restarting the entire workflow. I also use idempotency keys and conditional writes to prevent duplicate business operations during recovery. If retries are exhausted, I move the failed request to a DLQ and perform controlled replay after fixing the root cause.”**
+
+### Easy memory trick
+
+**Persist → Detect → Checkpoint → Retry → Idempotency → Resume**
+
+### Key distinction
+
+**DynamoDB tells CWD *where the workflow stopped*.**
+
+**Idempotency tells CWD *whether it is safe to execute the operation again*.**
+`,code:``},{id:`119-dynamodb-vs-rds`,category:`DynamoDB`,title:`DynamoDB vs RDS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs RDS
+
+The simplest distinction:
+
+> **DynamoDB = scalable NoSQL application state**
+> **RDS = relational SQL data with relationships and transactions**
+
+|               | **DynamoDB**                  | **RDS**                                            |
+| ------------- | ----------------------------- | -------------------------------------------------- |
+| Database type | NoSQL                         | Relational SQL                                     |
+| Data model    | Key-value / document          | Tables / rows                                      |
+| Schema        | Flexible                      | Structured                                         |
+| Scaling       | Horizontal                    | Primarily vertical + read replicas/scaling options |
+| Query style   | Access-pattern based          | SQL queries                                        |
+| Joins         | ❌ No traditional joins        | ✅ SQL joins                                        |
+| Transactions  | Supported                     | Strong relational transactions                     |
+| Best for      | High-scale operational state  | Relational business data                           |
+| CWD use       | Session/task/run/Worker state | Complex relational business data                   |
+
+## CWD example
+
+I would use **DynamoDB** for:
+
+\`\`\`text id="7m4y2v"
+Session
+Task
+Run
+Worker status
+Checkpoint
+Retry count
+Idempotency key
+\`\`\`
+
+Example:
+
+\`\`\`text id="u1p3gk"
+RUN123
+ ├── CustomerWorker = COMPLETED
+ ├── SalesWorker    = COMPLETED
+ └── IncidentWorker = FAILED
+\`\`\`
+
+Because CWD typically needs fast key-based access:
+
+\`\`\`text
+Get state for RUN123
+        ↓
+DynamoDB
+        ↓
+Very fast lookup
+\`\`\`
+
+---
+
+## When would I use RDS?
+
+Suppose the application needs:
+
+\`\`\`text id="q4e8az"
+Customer
+   ↓
+Orders
+   ↓
+Products
+   ↓
+Invoices
+   ↓
+Payments
+\`\`\`
+
+and needs queries such as:
+
+\`\`\`sql
+SELECT ...
+FROM customers
+JOIN orders ...
+JOIN invoices ...
+WHERE ...
+\`\`\`
+
+That's a strong relational database use case.
+
+---
+
+## Why not use RDS for CWD workflow state?
+
+You could, but if the dominant access pattern is:
+
+\`\`\`text
+Get RUN123
+Update Worker status
+Get checkpoint
+Check idempotency key
+\`\`\`
+
+DynamoDB fits naturally without requiring relational joins.
+
+RDS would make more sense if CWD needed **complex relational queries, joins, strong relational constraints, and SQL-based reporting**.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For CWD workflow state, I would prefer DynamoDB because the access patterns are primarily key-based: session, task, run, Worker status, checkpoints, and idempotency records. DynamoDB provides low-latency access and horizontal scalability without managing database servers. I would choose RDS when the data has strong relational relationships and the application requires SQL, joins, relational constraints, or complex transactional queries. So the decision is based on the data model and access patterns, not simply on which database is faster.”**
+
+### Easy memory trick
+
+**DynamoDB → Key-value + Scale**
+**RDS → Relationships + SQL**
+
+### Key distinction
+
+Don't say **“DynamoDB is better than RDS.”**
+
+Say:
+
+> **“DynamoDB fits key-value/high-scale access patterns; RDS fits relational/SQL access patterns.”**
+`,code:``},{id:`120-dynamodb-vs-elasticache`,category:`DynamoDB`,title:`DynamoDB vs ElastiCache?`,difficulty:`Advanced`,time:`~15 min`,concept:`# DynamoDB vs ElastiCache
+
+The simplest distinction:
+
+> **DynamoDB = durable application state**
+> **ElastiCache = fast temporary cache**
+
+|                 | **DynamoDB**                 | **ElastiCache (Redis)**                                              |
+| --------------- | ---------------------------- | -------------------------------------------------------------------- |
+| Primary purpose | Durable database             | Cache / in-memory data store                                         |
+| Persistence     | Durable                      | Primarily memory-based; persistence options exist depending on setup |
+| Latency         | Very low                     | Extremely low                                                        |
+| Data survival   | Designed for durable storage | Cache data can be lost/evicted depending on configuration            |
+| Scaling         | Horizontal                   | Horizontal/sharded depending on Redis architecture                   |
+| Best for        | Workflow/application state   | Frequently accessed temporary data                                   |
+| CWD example     | Run/checkpoint/idempotency   | LLM/RAG cache/session cache/rate limiting                            |
+
+## CWD example
+
+### DynamoDB
+
+Store important workflow state:
+
+\`\`\`text id="t6z1vy"
+RUN123
+ ├── status = RUNNING
+ ├── current_step = IncidentWorker
+ ├── retry_count = 2
+ └── completed_steps = [...]
+\`\`\`
+
+If the ECS container crashes:
+
+\`\`\`text id="d9s4ra"
+Container crashes
+      ↓
+New container
+      ↓
+Read DynamoDB
+      ↓
+Resume workflow
+\`\`\`
+
+### ElastiCache / Redis
+
+Store frequently accessed temporary information:
+
+\`\`\`text id="q9w2cx"
+User query
+    ↓
+Semantic cache
+    ↓
+Redis
+    ↓
+Cached answer
+\`\`\`
+
+Other examples:
+
+* LLM response cache
+* RAG retrieval cache
+* Session context
+* Rate limiting counters
+* Distributed locks
+* Frequently accessed configuration
+
+---
+
+## Why not use Redis for critical workflow state?
+
+Suppose:
+
+\`\`\`text id="3z7h1b"
+Redis
+  ↓
+RUN123 = COMPLETED
+  ↓
+Cache eviction / failure
+\`\`\`
+
+If that state is lost, CWD may not know where the workflow was.
+
+So I would keep **source-of-truth workflow state in DynamoDB** and use Redis to accelerate frequently accessed data.
+
+\`\`\`text id="9u5q4x"
+             CWD
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+  DynamoDB        Redis
+  Source of       Fast
+  Truth           Cache
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I use DynamoDB as the durable source of truth for CWD state such as session, task, run, Worker status, checkpoints, and idempotency records. I use ElastiCache Redis for temporary, frequently accessed data such as semantic LLM cache, RAG cache, rate limiting, session acceleration, and distributed locks. Redis improves latency and reduces repeated downstream or LLM calls, while DynamoDB provides durable state that survives container or cache failures.”**
+
+### Easy memory trick
+
+**DynamoDB = Remember**
+**Redis = Remember Fast**
+
+### Key distinction
+
+**DynamoDB answers:** *“What is the authoritative state?”*
+
+**Redis answers:** *“Can I get this frequently needed data faster?”*
+`,code:``}];function Am(){return(0,M.jsx)($,{data:km,title:`DynamoDB Cookbook`,subtitle:`State modelling, keys, capacity, TTL and conditional writes`,icon:`🗃️`,patternLabel:`Questions`})}var jm=[{id:`121-what-would-you-store-in-s3`,category:`S3`,title:`What would you store in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What would you store in S3 for CWD?
+
+For CWD, I would use **S3 for large, durable objects and artifacts**, not transactional workflow state.
+
+\`\`\`text id="2d7xq1"
+                    CWD
+                     │
+                     ▼
+                    S3
+          ┌──────────┼──────────┐
+          ▼          ▼          ▼
+       Documents   Artifacts   Data
+          │          │          │
+        PDFs       Reports      CSV
+        Word       Results      JSON
+        Excel      Models       Images
+        Images     Logs        Raw data
+\`\`\`
+
+## 1. Enterprise documents for RAG
+
+Store source documents such as:
+
+\`\`\`text id="w3f9pa"
+PDF
+Word
+Excel
+PowerPoint
+CSV
+TXT
+Images
+Scanned documents
+\`\`\`
+
+Example:
+
+\`\`\`text id="q0r7em"
+s3://cwd-documents/
+    ├── sales/
+    ├── manufacturing/
+    ├── it/
+    └── policies/
+\`\`\`
+
+These can then be processed and indexed into **OpenSearch** for RAG.
+
+---
+
+## 2. RAG ingestion data
+
+I would keep:
+
+\`\`\`text id="x2j8n4"
+Raw document
+    ↓
+S3
+    ↓
+Extraction / Chunking / Embedding
+    ↓
+OpenSearch
+\`\`\`
+
+S3 remains the **source of truth for the original document**.
+
+---
+
+## 3. Large workflow results
+
+If a Worker generates a large report:
+
+\`\`\`text id="k5z1pq"
+Worker
+  ↓
+Large result
+  ↓
+S3
+  ↓
+DynamoDB stores only:
+result_s3_key
+\`\`\`
+
+For example:
+
+\`\`\`text id="v8c3lm"
+DynamoDB:
+RUN123
+result_s3_key =
+reports/RUN123/customer-briefing.json
+\`\`\`
+
+This prevents DynamoDB items from becoming unnecessarily large.
+
+---
+
+## 4. Images and multimodal data
+
+For CWD's multimodal use cases:
+
+\`\`\`text id="n6a2wf"
+Product images
+Inspection images
+Scanned documents
+OCR input
+Vision-model artifacts
+\`\`\`
+
+can be stored in S3.
+
+---
+
+## 5. Evaluation datasets
+
+For GenAI/Agentic AI evaluation:
+
+\`\`\`text id="7r0x5k"
+Golden datasets
+Test prompts
+Expected answers
+Evaluation results
+Regression test data
+\`\`\`
+
+Example:
+
+\`\`\`text id="s3a9pd"
+s3://cwd-evaluation/
+    ├── golden/
+    ├── regression/
+    └── results/
+\`\`\`
+
+These can support CI/CD quality gates.
+
+---
+
+## 6. Generated reports and artifacts
+
+Examples:
+
+\`\`\`text id="e1m4ty"
+Customer briefing PDF
+Excel reports
+JSON outputs
+Agent execution artifacts
+Export files
+\`\`\`
+
+---
+
+## 7. Backups / archival data
+
+S3 can also be used for:
+
+* Long-term archives
+* Historical documents
+* Exported workflow artifacts
+* Backup datasets
+* Older evaluation results
+
+Use **S3 Lifecycle policies** to move older data to lower-cost storage classes when appropriate.
+
+---
+
+# What NOT to store in S3
+
+| Data                      | Better location       |
+| ------------------------- | --------------------- |
+| Session/task/run state    | **DynamoDB**          |
+| Worker status/checkpoints | **DynamoDB**          |
+| Idempotency keys          | **DynamoDB**          |
+| Frequently accessed cache | **ElastiCache/Redis** |
+| Vector/search index       | **OpenSearch**        |
+| Secrets                   | **Secrets Manager**   |
+
+---
+
+## 🎯 Strong interview answer
+
+> **“In CWD, I use S3 as the durable object store for large enterprise documents, RAG source data, images, generated reports, workflow artifacts, evaluation datasets, and archival data. For RAG, S3 holds the original documents while OpenSearch holds the searchable/vector representation. For large workflow results, I store the result in S3 and keep only the S3 reference in DynamoDB. This keeps transactional state separate from large objects and allows S3 lifecycle and storage policies to control long-term cost.”**
+
+### Easy memory trick
+
+**S3 = Store large, durable objects**
+
+### Key distinction
+
+**DynamoDB → workflow state**
+**S3 → large objects**
+**OpenSearch → search/vector**
+**Redis → fast cache**
 `,code:``},{id:`122-how-would-you-design-the-cwd-document-ingestion-pipeline`,category:`S3`,title:`How would you design the CWD document ingestion pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design the CWD document ingestion pipeline?
 
-## Short answer
-The ingestion pipeline is event-driven: land, validate, extract, chunk, embed, index and record.
+For CWD, I would design it as an **event-driven pipeline** where S3 is the source of truth, documents are processed asynchronously, and the final content is indexed into OpenSearch for RAG.
 
-## Key points
-- Sources land in a raw S3 prefix; an S3 event through EventBridge starts a Step Functions workflow.
-- Extract text (Textract for scans and tables), chunk, add metadata and ACLs, embed with Bedrock, bulk upsert into OpenSearch.
-- Record status in a DynamoDB manifest; failures go to a DLQ; Glue handles large batches.
+### End-to-end architecture
 
-## CWD context
-Every step is idempotent so reruns are safe.
-`,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure S3?
+\`\`\`text
+ Enterprise Sources
+       │
+       ▼
+ ┌─────────────┐
+ │     S3      │  ← Raw documents
+ └──────┬──────┘
+        │ ObjectCreated
+        ▼
+ ┌─────────────┐
+ │ EventBridge │
+ └──────┬──────┘
+        ▼
+ ┌─────────────┐
+ │     SQS     │  ← Buffer / retry / DLQ
+ └──────┬──────┘
+        ▼
+ ┌────────────────────┐
+ │ Ingestion Worker   │
+ │ ECS / Lambda       │
+ └─────────┬──────────┘
+           │
+     ┌─────┴───────────────┐
+     ▼                     ▼
+ Extract/OCR           Metadata
+     │                     │
+     └──────────┬──────────┘
+                ▼
+          Clean + Chunk
+                │
+                ▼
+           Embeddings
+                │
+                ▼
+       ┌─────────────────┐
+       │    OpenSearch   │
+       │ Vector + BM25   │
+       └─────────────────┘
+                │
+                ▼
+             RAG
+                │
+                ▼
+            Bedrock
+\`\`\`
 
-## Short answer
-Secure S3 with layered controls.
+## 1. Upload documents to S3
 
-## Key points
-- Block Public Access, TLS-only and VPC-endpoint conditions in bucket policies.
-- Least-privilege IAM, SSE-KMS, versioning and Object Lock for critical data.
-- CloudTrail data events, Macie for sensitive data discovery, access points.
+Documents can come from:
 
-## CWD context
-Assume misconfiguration is the main risk and automate detection.
-`,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement bucket policies?
+* SharePoint
+* Enterprise file systems
+* User uploads
+* Manufacturing systems
+* Sales documents
+* IT documentation
 
-## Short answer
-Bucket policies are resource-based rules that define who may access a bucket and under which conditions.
+They are stored in S3:
 
-## Key points
-- Deny requests that are not over TLS; restrict to a VPC endpoint or organisation.
-- Allow specific roles and prefixes; require encryption headers or a specific KMS key.
-- Explicit deny overrides allow; validate with IAM Access Analyzer.
+\`\`\`text
+s3://cwd-documents/raw/...
+\`\`\`
 
-## CWD context
-Keep policies in IaC and review them.
-`,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent public access?
+I would enable:
 
-## Short answer
-Prevent public access with account-level and bucket-level controls plus detection.
+* Encryption with KMS
+* Versioning
+* Block Public Access
+* Access controls
+* Lifecycle policies
 
-## Key points
-- S3 Block Public Access on all four settings; disable ACLs with bucket-owner-enforced ownership.
-- SCP to prevent disabling it; Access Analyzer and Config rules for detection.
-- Serve public content only through CloudFront with origin access control.
+---
 
-## CWD context
-Enforce at the account level so one bucket cannot opt out.
-`,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is S3 versioning?
+## 2. Generate an ingestion event
 
-## Short answer
-S3 versioning keeps every version of an object, protecting against overwrites and deletes.
+When a document arrives:
 
-## Key points
-- Deletes create delete markers; older versions can be restored.
-- Lifecycle rules expire non-current versions to control cost.
-- Required for cross-region replication.
+\`\`\`text
+S3 ObjectCreated
+       ↓
+EventBridge
+       ↓
+SQS
+\`\`\`
 
-## CWD context
-Useful for audit and rollback of documents.
-`,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document updates?
+I prefer SQS between the event and processing layer because it gives me:
 
-## Short answer
-Handle updates by detecting the change, re-processing and replacing old chunks.
+* Buffering
+* Retry
+* Backpressure
+* DLQ
+* Controlled concurrency
 
-## Key points
-- S3 event on the new version; compare ETag, version ID or hash.
-- Deterministic chunk IDs (documentId#n) so upserts replace; delete chunks no longer present.
-- ACL-only changes update metadata without re-embedding.
+---
 
-## CWD context
-Record document version and ingest time on each chunk.
-`,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion?
+## 3. Ingestion Worker processes the document
 
-## Short answer
-Handle deletions with events and a reconciliation safety net.
+The Worker reads the S3 object and determines its type.
 
-## Key points
-- ObjectRemoved events trigger deletion of chunks in OpenSearch by document ID and manifest cleanup.
-- Permanently delete versions for erasure requests; purge caches.
-- Periodic reconciliation between the S3 listing and the index.
+\`\`\`text
+PDF
+Word
+Excel
+Image
+Scanned PDF
+\`\`\`
 
-## CWD context
-Fast index deletion matters most for confidentiality.
+Then performs extraction.
+
+For scanned documents:
+
+\`\`\`text
+Document
+   ↓
+OCR
+   ↓
+Text + layout
+\`\`\`
+
+For images:
+
+\`\`\`text
+Image
+  ↓
+Vision/OCR
+  ↓
+Text + metadata
+\`\`\`
+
+---
+
+## 4. Preserve metadata and security information
+
+This is extremely important for enterprise RAG.
+
+I would attach metadata such as:
+
+\`\`\`text
+document_id
+source
+file_name
+department
+document_type
+version
+created_at
+updated_at
+classification
+tenant_id
+ACL
+\`\`\`
+
+For example:
+
+\`\`\`text
+document_id = DOC123
+department = Sales
+customer_id = C456
+ACL = [SalesTeam]
+version = 3
+\`\`\`
+
+The **ACL must travel with the chunks**.
+
+---
+
+## 5. Clean and chunk the content
+
+After extraction:
+
+\`\`\`text
+Raw text
+   ↓
+Clean
+   ↓
+Remove unnecessary noise
+   ↓
+Chunk
+\`\`\`
+
+For example, I might start around **500–700 tokens with 10–15% overlap**, then tune based on retrieval evaluation.
+
+For tables, I preserve the relationship between:
+
+\`\`\`text
+Column → Row → Value
+\`\`\`
+
+rather than blindly splitting every row.
+
+---
+
+## 6. Generate embeddings
+
+For each chunk:
+
+\`\`\`text
+Chunk
+  ↓
+Embedding model
+  ↓
+Vector
+\`\`\`
+
+The embedding is associated with the original metadata and ACL.
+
+---
+
+## 7. Index into OpenSearch
+
+Store:
+
+\`\`\`text
+chunk_id
+document_id
+text
+embedding
+metadata
+ACL
+version
+\`\`\`
+
+Then CWD can perform:
+
+\`\`\`text
+User Query
+    ↓
+Hybrid Search
+ ┌──────────────┐
+ │ BM25         │
+ │ Vector       │
+ └──────┬───────┘
+        ↓
+    Reranking
+        ↓
+    Top chunks
+        ↓
+      Worker
+        ↓
+     Bedrock
+\`\`\`
+
+This supports both:
+
+* **Keyword/exact search**
+* **Semantic search**
+
+---
+
+## 8. Handle document updates
+
+Don't blindly insert a new copy.
+
+Use:
+
+\`\`\`text
+DOC123 v1
+   ↓
+DOC123 v2
+   ↓
+Reprocess changed document
+   ↓
+Update affected chunks
+\`\`\`
+
+I would maintain document version/hash information so unchanged documents don't get reprocessed unnecessarily.
+
+---
+
+## 9. Handle deleted documents
+
+If a source document is deleted:
+
+\`\`\`text
+Source deletion
+      ↓
+Deletion event
+      ↓
+Find document_id
+      ↓
+Delete/deactivate its chunks
+      ↓
+OpenSearch updated
+\`\`\`
+
+This prevents deleted information from continuing to appear in RAG.
+
+---
+
+## 10. Handle failures
+
+\`\`\`text
+Ingestion Worker
+      ↓
+Failure
+      ↓
+SQS retry
+      ↓
+Retry succeeds? ── Yes → OpenSearch
+      │
+      No
+      ↓
+DLQ
+      ↓
+Investigate → Fix → Replay
+\`\`\`
+
+I would also make ingestion **idempotent** using:
+
+\`\`\`text
+document_id + version/hash
+\`\`\`
+
+so the same document event doesn't create duplicate chunks.
+
+---
+
+## 11. Monitor the pipeline
+
+I would monitor:
+
+\`\`\`text
+Documents received
+Documents processed
+Processing failures
+Queue depth
+Oldest message age
+Processing latency
+OCR failures
+Embedding failures
+OpenSearch indexing failures
+DLQ count
+\`\`\`
+
+For AI/RAG quality:
+
+\`\`\`text
+Retrieval Recall@K
+Precision@K
+MRR / NDCG
+RAGAS metrics
+Answer faithfulness
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would design CWD document ingestion as an event-driven pipeline. Documents from enterprise sources land in S3, which is the source of truth. S3 events go through EventBridge into SQS for buffering, retries, and DLQ handling. An ingestion Worker extracts text using parsers or OCR, cleans and chunks the content, preserves document metadata and ACLs, generates embeddings, and indexes the chunks into OpenSearch using hybrid BM25 and vector search. I would make the pipeline idempotent using document IDs and versions or hashes, handle updates and deletions, and monitor both pipeline health and RAG retrieval quality. Large source documents remain in S3, while OpenSearch stores the searchable representation.”**
+
+### Easy memory trick
+
+**S3 → Event → Queue → Extract → Metadata → Chunk → Embed → Index → Monitor**
+
+### Key distinction
+
+**S3 = source of truth**
+**SQS = ingestion buffer**
+**Ingestion Worker = processing**
+**OpenSearch = retrieval index**
+**Bedrock = generation**
+`,code:``},{id:`123-how-would-you-secure-s3`,category:`S3`,title:`How would you secure S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement S3 bucket policies?
+
+For CWD, I would use the **S3 bucket policy as a resource-level security layer**, together with IAM roles. The goal is to allow only the required CWD services to access the required S3 paths.
+
+### CWD example
+
+\`\`\`text id="bkt01"
+CWD Ingestion Worker
+        │
+        │ IAM Role
+        ▼
+   S3 Bucket Policy
+        │
+        ├── Allow GetObject
+        ├── Allow PutObject
+        └── Deny insecure access
+\`\`\`
+
+## 1. Allow only the required IAM role
+
+For example, the ingestion Worker needs to read raw documents:
+
+\`\`\`json
+{
+  "Effect": "Allow",
+  "Principal": {
+    "AWS": "arn:aws:iam::123456789012:role/CWDIngestionRole"
+  },
+  "Action": [
+    "s3:GetObject"
+  ],
+  "Resource": "arn:aws:s3:::cwd-documents/raw/*"
+}
+\`\`\`
+
+So the Worker can read:
+
+\`\`\`text
+cwd-documents/raw/*
+\`\`\`
+
+but not necessarily the entire bucket.
+
+---
+
+## 2. Restrict access by prefix
+
+Separate CWD data:
+
+\`\`\`text
+cwd-documents/
+├── raw/
+├── processed/
+├── evaluation/
+└── reports/
+\`\`\`
+
+Then give different services different permissions.
+
+\`\`\`text id="bkt02"
+Ingestion Worker
+   ↓
+raw/* → READ
+
+Processing Worker
+   ↓
+processed/* → READ/WRITE
+
+Reporting Service
+   ↓
+reports/* → READ
+\`\`\`
+
+This follows **least privilege**.
+
+---
+
+## 3. Explicitly deny insecure transport
+
+I would add a bucket-level deny for requests that don't use HTTPS:
+
+\`\`\`json
+{
+  "Effect": "Deny",
+  "Principal": "*",
+  "Action": "s3:*",
+  "Resource": [
+    "arn:aws:s3:::cwd-documents",
+    "arn:aws:s3:::cwd-documents/*"
+  ],
+  "Condition": {
+    "Bool": {
+      "aws:SecureTransport": "false"
+    }
+  }
+}
+\`\`\`
+
+This is an important pattern because the **Deny overrides an Allow**.
+
+---
+
+## 4. Require encryption for uploads
+
+For sensitive CWD documents, I can require SSE-KMS for uploads.
+
+Conceptually:
+
+\`\`\`text id="bkt03"
+PutObject
+   ↓
+Is encryption header present?
+   ↓
+YES → Allow
+NO  → Deny
+\`\`\`
+
+This prevents clients from uploading unencrypted objects when the policy is designed to enforce that requirement.
+
+---
+
+## 5. Combine bucket policy + IAM
+
+I don't rely on the bucket policy alone.
+
+\`\`\`text id="bkt04"
+Request
+   ↓
+IAM permission
+   +
+Bucket policy
+   +
+KMS permission
+   +
+Network controls
+   ↓
+Access
+\`\`\`
+
+For example:
+
+\`\`\`text id="bkt05"
+ECS Task
+  ↓
+IAM Task Role
+  ↓
+S3 Bucket Policy
+  ↓
+KMS
+  ↓
+S3 Object
+\`\`\`
+
+The ECS task should use its **task role**, not hardcoded AWS credentials.
+
+---
+
+## 6. Protect against public access
+
+I would enable:
+
+\`\`\`text
+Block Public Access = ON
+\`\`\`
+
+and avoid policies that grant:
+
+\`\`\`text
+Principal = "*"
+Action = s3:GetObject
+\`\`\`
+
+unless there is a very specific, reviewed public-access requirement.
+
+---
+
+## 7. Monitor policy and access changes
+
+I would use:
+
+\`\`\`text id="bkt06"
+CloudTrail
+   ↓
+S3 API activity
+   ↓
+CloudWatch / Security monitoring
+\`\`\`
+
+Especially monitor:
+
+* Bucket policy changes
+* Public-access changes
+* Unexpected object access
+* Delete operations
+* KMS-related access failures
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For CWD, I implement S3 bucket policies using least privilege. I allow specific IAM roles to access only the required prefixes, such as allowing the ingestion Worker to read \`raw/*\` rather than the entire bucket. I also explicitly deny non-TLS access, enforce encryption requirements where appropriate, and keep Block Public Access enabled. I combine the bucket policy with IAM task roles, KMS permissions, and network controls rather than relying on one security mechanism. Finally, I monitor bucket-policy and object-access activity through CloudTrail and CloudWatch.”**
+
+### Easy memory trick
+
+**Role → Prefix → TLS → Encryption → Public Access → Monitor**
+
+### Key distinction
+
+**IAM policy:** *What can this identity do?*
+**Bucket policy:** *What does this bucket allow or deny?*
+**KMS policy:** *Who can use the encryption key?*
+`,code:``},{id:`124-how-would-you-implement-bucket-policies`,category:`S3`,title:`How would you implement bucket policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent public access to S3?
+
+For CWD, I would use **multiple layers**, with **S3 Block Public Access as the primary control**.
+
+\`\`\`text id="pub01"
+                S3 Bucket
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+ Block Public     IAM       Bucket Policy
+    Access       Roles        Controls
+        │           │           │
+        └───────────┼───────────┘
+                    ▼
+             Private Access
+\`\`\`
+
+## 1. Enable Block Public Access
+
+At the account and bucket level, enable all S3 Block Public Access settings.
+
+This prevents common ways of accidentally exposing objects publicly.
+
+\`\`\`text id="pub02"
+Block Public Access
+        ↓
+Public bucket/object access blocked
+\`\`\`
+
+For CWD enterprise documents, I would keep this enabled.
+
+---
+
+## 2. Don't use public \`Principal: "*"\`
+
+Avoid policies such as:
+
+\`\`\`json id="pub03"
+{
+  "Effect": "Allow",
+  "Principal": "*",
+  "Action": "s3:GetObject"
+}
+\`\`\`
+
+Instead:
+
+\`\`\`text id="pub04"
+Principal
+   ↓
+Specific CWD IAM role
+\`\`\`
+
+Example:
+
+\`\`\`text id="pub05"
+CWDIngestionRole
+        ↓
+s3:GetObject
+        ↓
+cwd-documents/raw/*
+\`\`\`
+
+---
+
+## 3. Use IAM least privilege
+
+Only authorized CWD services receive S3 permissions.
+
+\`\`\`text id="pub06"
+Ingestion Worker
+    ↓
+IAM Task Role
+    ↓
+GetObject
+    ↓
+raw/*
+\`\`\`
+
+The Worker doesn't automatically get access to every bucket/object.
+
+---
+
+## 4. Use bucket policies to enforce security
+
+For example, explicitly deny non-TLS access:
+
+\`\`\`json id="pub07"
+{
+  "Effect": "Deny",
+  "Principal": "*",
+  "Action": "s3:*",
+  "Resource": [
+    "arn:aws:s3:::cwd-documents",
+    "arn:aws:s3:::cwd-documents/*"
+  ],
+  "Condition": {
+    "Bool": {
+      "aws:SecureTransport": "false"
+    }
+  }
+}
+\`\`\`
+
+This means requests must use secure transport.
+
+---
+
+## 5. Keep CWD workloads private
+
+For ECS/Fargate workloads:
+
+\`\`\`text id="pub08"
+Private ECS Tasks
+       ↓
+S3 VPC Endpoint
+       ↓
+S3
+\`\`\`
+
+This avoids requiring public internet access for the normal CWD-to-S3 path.
+
+---
+
+## 6. Encrypt the data
+
+Use:
+
+\`\`\`text id="pub09"
+S3
+ ↓
+SSE-KMS
+ ↓
+KMS Key
+\`\`\`
+
+Encryption doesn't itself prevent public access, but it's another layer of protection if unauthorized access somehow occurs.
+
+---
+
+## 7. Monitor for accidental exposure
+
+Monitor:
+
+\`\`\`text id="pub10"
+Bucket policy changes
+Public-access configuration changes
+Unexpected GetObject requests
+Unexpected principals
+\`\`\`
+
+Use CloudTrail and security monitoring/alerts.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For CWD, I prevent S3 public access primarily by enabling Block Public Access at the account and bucket level. I avoid public principals such as \`Principal: "*"\`, use least-privilege IAM task roles, and restrict bucket policies to specific services and prefixes. I also enforce HTTPS, use KMS encryption, and allow private ECS workloads to access S3 through a VPC endpoint where appropriate. Finally, I monitor bucket-policy and public-access configuration changes using CloudTrail and security alerts.”**
+
+### Easy memory trick
+
+**Block → Restrict → Encrypt → Private → Monitor**
+
+### Key distinction
+
+**Block Public Access** prevents public exposure.
+
+**IAM + Bucket Policy** controls which authorized identities can access the bucket.
+
+**VPC Endpoint** keeps private workloads on a private network path to S3.
+`,code:``},{id:`125-how-would-you-prevent-public-access`,category:`S3`,title:`How would you prevent public access?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What is S3 Versioning?
+
+**S3 Versioning keeps multiple versions of the same object instead of permanently replacing the previous version.**
+
+### Simple example
+
+Suppose CWD stores:
+
+\`\`\`text
+customer_policy.pdf
+\`\`\`
+
+First upload:
+
+\`\`\`text
+customer_policy.pdf → Version 1
+\`\`\`
+
+Later, someone updates it:
+
+\`\`\`text
+customer_policy.pdf → Version 2
+\`\`\`
+
+S3 keeps both versions:
+
+\`\`\`text
+S3 Bucket
+│
+└── customer_policy.pdf
+      ├── Version 1
+      └── Version 2  ← Current
+\`\`\`
+
+If Version 2 is accidentally deleted or overwritten, you can recover Version 1.
+
+---
+
+## Why use it in CWD?
+
+For enterprise RAG documents:
+
+\`\`\`text
+New document
+     ↓
+S3
+     ↓
+Version 1
+     ↓
+Document updated
+     ↓
+Version 2
+     ↓
+Ingestion pipeline
+     ↓
+OpenSearch updated
+\`\`\`
+
+It helps with:
+
+* **Accidental overwrite recovery**
+* **Accidental deletion recovery**
+* Document history
+* Auditability
+* RAG document rollback
+
+---
+
+## What happens when you delete?
+
+With versioning enabled, deleting an object normally creates a **delete marker** rather than immediately removing the previous version.
+
+\`\`\`text
+Version 1
+Version 2
+Delete
+  ↓
+Delete Marker
+\`\`\`
+
+The older versions can still be recovered unless they are permanently deleted.
+
+---
+
+## Versioning + CWD RAG
+
+I would store document metadata such as:
+
+\`\`\`text
+document_id
+version_id
+file_name
+updated_at
+content_hash
+\`\`\`
+
+Then the ingestion pipeline can determine which document version should be indexed.
+
+\`\`\`text
+S3 Version
+     ↓
+Extract
+     ↓
+Chunk
+     ↓
+Embed
+     ↓
+OpenSearch
+\`\`\`
+
+### Important distinction
+
+**S3 Versioning ≠ backup.**
+
+Versioning helps recover previous object versions, but I would still use appropriate **backup, retention, lifecycle, and replication strategies** for broader disaster recovery requirements.
+
+### 🎯 Interview answer
+
+> **“S3 Versioning allows us to keep multiple versions of the same object instead of permanently overwriting the previous version. In CWD, I would enable versioning for important enterprise documents so accidental updates or deletions can be recovered. I can also use the S3 version ID and document metadata to track which version was processed into OpenSearch for RAG.”**
+
+**Memory trick:**
+**Versioning = Keep the history of the object.**
+`,code:``},{id:`126-what-is-s3-versioning`,category:`S3`,title:`What is S3 versioning?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# How would you handle document updates in CWD?
+
+I would use an **event-driven, incremental ingestion pipeline**. When a document changes in S3, I process **only that document/version**, re-index its affected chunks, and remove the old version from active search.
+
+\`\`\`text
+User / Enterprise Source
+          ↓
+       S3 Upload
+          ↓
+    New Object Version
+          ↓
+   S3 Event / EventBridge
+          ↓
+        SQS
+          ↓
+   Ingestion Worker
+          ↓
+   Extract + Chunk
+          ↓
+      Embedding
+          ↓
+     OpenSearch
+          ↓
+   Updated RAG Index
+\`\`\`
+
+## 1. Detect the update
+
+Enable S3 versioning and capture the S3 event.
+
+For example:
+
+\`\`\`text
+customer_policy.pdf
+       ↓
+Version 1
+       ↓
+Document updated
+       ↓
+Version 2
+\`\`\`
+
+The event contains information such as the bucket, object key and version information.
+
+---
+
+## 2. Put the update into SQS
+
+\`\`\`text
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+Ingestion Worker
+\`\`\`
+
+Why SQS?
+
+* Buffer traffic spikes
+* Retry failures
+* DLQ for repeated failures
+* Decouple S3 from processing
+
+---
+
+## 3. Check whether the document really changed
+
+I would maintain metadata such as:
+
+\`\`\`text
+document_id
+version_id
+content_hash
+updated_at
+status
+\`\`\`
+
+For example:
+
+\`\`\`text
+Old hash = ABC123
+New hash = XYZ789
+\`\`\`
+
+Different hash → process the document.
+
+Same hash → skip unnecessary processing.
+
+This prevents unnecessary embedding and indexing.
+
+---
+
+## 4. Reprocess the changed document
+
+The ingestion Worker:
+
+\`\`\`text
+Download new version
+       ↓
+Extract text/OCR
+       ↓
+Clean
+       ↓
+Chunk
+       ↓
+Generate embeddings
+       ↓
+Index new chunks
+\`\`\`
+
+For example:
+
+\`\`\`text
+Version 1
+  ├── chunk-001
+  ├── chunk-002
+  └── chunk-003
+
+Version 2
+  ├── chunk-001
+  ├── chunk-002
+  ├── chunk-003
+  └── chunk-004
+\`\`\`
+
+---
+
+## 5. Remove old chunks from active search
+
+This is important.
+
+Suppose Version 1 contains:
+
+> "Warranty is 1 year."
+
+Version 2 says:
+
+> "Warranty is 2 years."
+
+I don't want RAG to retrieve both versions.
+
+So I use:
+
+\`\`\`text
+document_id + version_id
+\`\`\`
+
+and mark/delete the old chunks from the active OpenSearch index.
+
+\`\`\`text
+OpenSearch
+
+Old Version → inactive
+New Version → active
+\`\`\`
+
+I prefer **soft-delete/version filtering** when auditability is important.
+
+---
+
+## 6. Make the update idempotent
+
+Use a unique processing key such as:
+
+\`\`\`text
+document_id + version_id
+\`\`\`
+
+Store it in DynamoDB.
+
+\`\`\`text
+Already processed?
+      │
+   ┌──┴──┐
+  YES    NO
+   ↓      ↓
+ Skip   Process
+\`\`\`
+
+This prevents duplicate SQS events from causing duplicate indexing.
+
+---
+
+## 7. Handle failures
+
+\`\`\`text
+Ingestion Worker
+      ↓
+   Failure
+      ↓
+SQS retry
+      ↓
+Retry + backoff
+      ↓
+Repeated failure
+      ↓
+DLQ
+\`\`\`
+
+After fixing the issue, I can replay the failed document version.
+
+---
+
+## 8. Important: live data vs documents
+
+For **documents**:
+
+\`\`\`text
+S3 → OpenSearch → RAG
+\`\`\`
+
+For **live transactional data**:
+
+\`\`\`text
+Worker → MCP → Salesforce / ServiceNow
+\`\`\`
+
+I wouldn't depend on an old OpenSearch copy of highly dynamic Salesforce or ServiceNow data.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would handle document updates using an event-driven incremental ingestion pipeline. When a document is updated in S3, versioning gives me the new version, and the S3 event goes through EventBridge and SQS to an ingestion Worker. The Worker checks the document ID, version and content hash to avoid unnecessary or duplicate processing. If the content changed, I extract, chunk and embed only that document, then update OpenSearch and mark the previous chunks inactive so RAG doesn't return stale content. I would use DynamoDB for idempotency and SQS retries with a DLQ for failures. This allows us to update only changed documents instead of rebuilding the entire RAG index.”**
+
+### Easy memory trick
+
+**Detect → Queue → Compare → Reprocess → Reindex → Deactivate old → Monitor**
+
+### Key distinction
+
+**S3 Versioning** tells me **which version of the document exists**.
+
+**Content hash** tells me **whether the content actually changed**.
+
+**OpenSearch** stores the **active searchable representation** used by RAG.
+`,code:``},{id:`127-how-would-you-handle-document-updates`,category:`S3`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion in CWD?
+
+I would treat deletion as an **event-driven cleanup operation**. When a document is deleted from S3, I make sure its corresponding chunks are removed or marked inactive in OpenSearch so **RAG cannot retrieve stale content**.
+
+\`\`\`text
+S3
+ │
+ │ Delete
+ ▼
+S3 Event / EventBridge
+ │
+ ▼
+SQS
+ │
+ ▼
+Deletion Worker
+ │
+ ├── Find document_id
+ ├── Remove/deactivate chunks
+ └── Update metadata
+ │
+ ▼
+OpenSearch
+\`\`\`
+
+## 1. Detect the deletion
+
+With S3 Versioning enabled, a normal delete creates a **delete marker**.
+
+\`\`\`text
+customer_policy.pdf
+        ↓
+Delete
+        ↓
+Delete Marker
+\`\`\`
+
+The deletion event triggers the cleanup pipeline.
+
+---
+
+## 2. Send the event through SQS
+
+\`\`\`text
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+Deletion Worker
+\`\`\`
+
+SQS gives us:
+
+* Retry
+* Buffering
+* DLQ
+* Controlled processing
+
+---
+
+## 3. Identify the document
+
+The deletion event contains the object information.
+
+I would maintain metadata such as:
+
+\`\`\`text
+document_id
+s3_key
+version_id
+status
+\`\`\`
+
+Example:
+
+\`\`\`text
+document_id = DOC123
+s3_key      = /policies/customer_policy.pdf
+\`\`\`
+
+The Worker uses \`document_id\` to find all corresponding chunks in OpenSearch.
+
+---
+
+## 4. Remove the document from OpenSearch
+
+Suppose the document produced:
+
+\`\`\`text
+DOC123
+ ├── chunk-001
+ ├── chunk-002
+ ├── chunk-003
+ └── chunk-004
+\`\`\`
+
+After deletion:
+
+\`\`\`text
+DOC123
+ ├── chunk-001 → deleted/inactive
+ ├── chunk-002 → deleted/inactive
+ ├── chunk-003 → deleted/inactive
+ └── chunk-004 → deleted/inactive
+\`\`\`
+
+I can either:
+
+### Hard delete
+
+Physically remove the chunks from OpenSearch.
+
+### Soft delete
+
+Mark:
+
+\`\`\`text
+active = false
+\`\`\`
+
+and filter inactive documents during retrieval.
+
+For enterprise systems where audit/history matters, **soft deletion plus retention** can be useful.
+
+---
+
+## 5. Make deletion idempotent
+
+The same deletion event might be delivered more than once.
+
+So I use something like:
+
+\`\`\`text
+idempotency_key =
+document_id + version_id + DELETE
+\`\`\`
+
+Then:
+
+\`\`\`text
+Already deleted?
+      │
+   ┌──┴──┐
+  YES    NO
+   ↓      ↓
+ Skip   Delete
+\`\`\`
+
+This prevents duplicate deletion operations from causing problems.
+
+---
+
+## 6. Handle failure
+
+\`\`\`text
+Deletion Worker
+      ↓
+OpenSearch failure
+      ↓
+SQS retry
+      ↓
+Retry + backoff
+      ↓
+Repeated failure
+      ↓
+DLQ
+\`\`\`
+
+After fixing the issue, I replay the deletion event.
+
+---
+
+## 7. Important security point
+
+Deleting the S3 document is **not enough**.
+
+Imagine:
+
+\`\`\`text
+S3 document → deleted
+        ↓
+OpenSearch chunks → still exist
+        ↓
+RAG retrieves old content ❌
+\`\`\`
+
+Therefore, I need deletion propagation:
+
+\`\`\`text
+S3 deletion
+     ↓
+OpenSearch deletion/deactivation
+     ↓
+RAG no longer retrieves document
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would handle document deletion as an event-driven cleanup workflow. When a document is deleted from S3, the deletion event goes through EventBridge and SQS to a deletion Worker. The Worker identifies the document ID and removes or marks all corresponding chunks inactive in OpenSearch. I would use idempotency so duplicate deletion events are safe, and SQS retries with a DLQ for failures. Most importantly, I would verify that the deleted document is no longer retrievable from the RAG index, because deleting the S3 source alone is not sufficient.”**
+
+### Easy memory trick
+
+**Detect → Identify → Delete → Verify → Retry**
+
+### Key distinction
+
+**S3 deletion removes the source document.**
+
+**OpenSearch cleanup removes the document from RAG retrieval.**
+`,code:``},{id:`128-how-would-you-handle-document-deletion`,category:`S3`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion in CWD?
+
+I would handle deletion as an **event-driven cleanup process** and make sure the deleted document is removed from both **S3 and the RAG/OpenSearch index**.
+
+\`\`\`text
+S3 Delete
+   ↓
+S3 Event
+   ↓
+EventBridge
+   ↓
+SQS
+   ↓
+Deletion Worker
+   ↓
+Find document_id
+   ↓
+Delete / deactivate OpenSearch chunks
+   ↓
+Verify
+\`\`\`
+
+### 1. Detect deletion
+
+When the document is deleted from S3, capture the deletion event.
+
+If S3 Versioning is enabled, the delete normally creates a **delete marker**.
+
+### 2. Queue the deletion
+
+Send the event through:
+
+\`\`\`text
+S3 → EventBridge → SQS → Deletion Worker
+\`\`\`
+
+SQS gives us retry, buffering, and DLQ handling.
+
+### 3. Find all related chunks
+
+I maintain metadata such as:
+
+\`\`\`text
+document_id
+s3_key
+version_id
+\`\`\`
+
+Example:
+
+\`\`\`text
+DOC123
+ ├── chunk-001
+ ├── chunk-002
+ ├── chunk-003
+ └── chunk-004
+\`\`\`
+
+The Worker finds all chunks belonging to \`DOC123\`.
+
+### 4. Remove from OpenSearch
+
+I can either:
+
+**Hard delete:**
+
+\`\`\`text
+Delete chunks completely
+\`\`\`
+
+or **soft delete:**
+
+\`\`\`text
+active = false
+\`\`\`
+
+and exclude inactive chunks during retrieval.
+
+For enterprise systems, soft deletion can be useful when audit/history requirements exist.
+
+### 5. Make deletion idempotent
+
+Use an idempotency key such as:
+
+\`\`\`text
+document_id + version_id + DELETE
+\`\`\`
+
+If the same deletion event arrives twice:
+
+\`\`\`text
+Already deleted?
+     ↓
+   YES → Skip
+   NO  → Delete
+\`\`\`
+
+This protects against duplicate event delivery.
+
+### 6. Handle failures
+
+\`\`\`text
+OpenSearch failure
+      ↓
+SQS retry
+      ↓
+Backoff
+      ↓
+Still failing?
+      ↓
+DLQ
+\`\`\`
+
+After fixing the problem, replay the deletion event.
+
+### 7. Verify RAG cannot retrieve it
+
+This is very important.
+
+\`\`\`text
+S3 document deleted
+        ↓
+OpenSearch chunks deleted/inactive
+        ↓
+RAG search
+        ↓
+Document should NOT be returned
+\`\`\`
+
+Deleting the S3 source alone is **not enough**, because stale chunks could still exist in OpenSearch.
+
+## 🎯 Strong interview answer
+
+> **“I would handle document deletion as an event-driven cleanup workflow. When a document is deleted from S3, the event goes through EventBridge and SQS to a deletion Worker. The Worker identifies the document ID and removes or marks all corresponding chunks inactive in OpenSearch. I would make the operation idempotent so duplicate deletion events are safe, and use SQS retries and a DLQ for failures. Finally, I would verify that the deleted document is no longer retrievable from the RAG index, because deleting the S3 source alone does not remove stale indexed content.”**
+
+**Memory:** **Detect → Queue → Identify → Delete → Verify → Retry**
+
+**Key distinction:**
+**S3 deletion = remove the source.**
+**OpenSearch cleanup = remove it from RAG retrieval.**
 `,code:``},{id:`129-how-would-you-encrypt-s3-data`,category:`S3`,title:`How would you encrypt S3 data?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt S3 data?
 
-## Short answer
-Encrypt S3 data at rest with SSE-KMS using customer-managed keys, and in transit with TLS.
+For CWD, I would use **encryption at rest with SSE-KMS** and **TLS encryption in transit**.
 
-## Key points
-- Default bucket encryption; Bucket Keys reduce KMS request cost.
-- Key policies limit who can decrypt; separate keys per data classification.
-- Enforce encryption through bucket policy.
+\`\`\`text
+CWD Worker
+    │
+    │ HTTPS / TLS
+    ▼
+   S3
+    │
+    │ SSE-KMS
+    ▼
+ KMS Key
+\`\`\`
 
-## CWD context
-Encryption is the default; access control is the real protection.
-`,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# S3 SSE-S3 vs SSE-KMS?
+## 1. Encrypt data at rest
 
-## Short answer
-SSE-S3 is simple and free; SSE-KMS gives control and auditability.
+I would use:
 
-## Key points
-- SSE-S3: AWS-managed keys, no per-key control or audit trail.
-- SSE-KMS: key policies, CloudTrail audit of key use, revocation and cross-account control; KMS request cost and quotas (reduced with Bucket Keys).
+**SSE-KMS = Server-Side Encryption with AWS KMS**
 
-## CWD context
-Use SSE-KMS for sensitive enterprise documents.
+\`\`\`text
+Document
+   ↓
+S3
+   ↓
+SSE-KMS
+   ↓
+KMS Key
+   ↓
+Encrypted Object
+\`\`\`
+
+The data stored in S3 is encrypted automatically.
+
+---
+
+## 2. Use a customer-managed KMS key
+
+For sensitive enterprise CWD documents, I would typically use a **customer-managed KMS key** when we need stronger control over key policies, access, auditing, rotation, or separation of duties.
+
+Example:
+
+\`\`\`text
+CWDIngestionRole
+       ↓
+   KMS permissions
+       ↓
+Customer-managed KMS key
+       ↓
+      S3
+\`\`\`
+
+The IAM role needs permission to use the key, such as \`kms:Encrypt\` / \`kms:Decrypt\`, depending on the operation.
+
+---
+
+## 3. Enforce encryption through bucket policy
+
+I can prevent uploads that don't use the required encryption configuration.
+
+Conceptually:
+
+\`\`\`text
+PutObject
+    ↓
+SSE-KMS specified?
+   / \\
+ YES  NO
+ ↓     ↓
+Allow  Deny
+\`\`\`
+
+This prevents a client from accidentally uploading an unencrypted object.
+
+---
+
+## 4. Encrypt data in transit
+
+When CWD communicates with S3:
+
+\`\`\`text
+ECS/Fargate
+     ↓
+ HTTPS/TLS
+     ↓
+    S3
+\`\`\`
+
+I would also enforce secure transport using an S3 bucket policy.
+
+---
+
+## 5. Control who can use the KMS key
+
+Encryption is only useful if key access is controlled.
+
+I would use:
+
+* IAM policies
+* KMS key policy
+* Least privilege
+* Separate roles for different workloads
+* CloudTrail auditing
+
+For example:
+
+\`\`\`text
+CWD Worker
+    ↓
+IAM authorization
+    ↓
+KMS key policy
+    ↓
+Decrypt
+\`\`\`
+
+---
+
+## 6. Key rotation
+
+For a customer-managed KMS key, I would enable appropriate **automatic key rotation** according to the organization's security requirements.
+
+The application generally doesn't need to manage encryption keys itself.
+
+---
+
+## 7. CWD example
+
+For a RAG document:
+
+\`\`\`text
+Enterprise PDF
+      ↓
+     S3
+      ↓
+ SSE-KMS encryption
+      ↓
+Encrypted storage
+      ↓
+Ingestion Worker
+      ↓
+Extract / Chunk / Embed
+      ↓
+OpenSearch
+\`\`\`
+
+The original document remains protected in S3.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD, I would encrypt S3 data both at rest and in transit. For data at rest, I would use SSE-KMS, typically with a customer-managed KMS key when we need stronger control over key policies and auditing. I would grant KMS permissions only to the required CWD IAM roles and enforce the required encryption configuration through the S3 bucket policy. For data in transit, I would require HTTPS/TLS and deny insecure transport. I would also enable key rotation and monitor key and S3 access through CloudTrail.”**
+
+### Easy memory trick
+
+**At Rest → SSE-KMS**
+**In Transit → TLS**
+**Key Control → KMS**
+**Access Control → IAM**
+**Audit → CloudTrail**
+
+### Key distinction
+
+**S3 encrypts the object.**
+**KMS manages the encryption key.**
+**IAM/KMS policies control who can use the key.**
+`,code:``},{id:`130-s3-sse-s3-vs-sse-kms`,category:`S3`,title:`S3 SSE-S3 vs SSE-KMS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# S3 SSE-S3 vs SSE-KMS
+
+Both encrypt S3 data **at rest**, but the main difference is **who manages the encryption keys and how much control you need**.
+
+|                      | **SSE-S3**                 | **SSE-KMS**               |
+| -------------------- | -------------------------- | ------------------------- |
+| Encryption           | AES-256                    | AWS KMS-managed keys      |
+| Key management       | AWS manages                | KMS manages               |
+| Key control          | Less                       | More                      |
+| IAM/KMS permissions  | S3 permissions mainly      | S3 + KMS permissions      |
+| Key policies         | No separate KMS key policy | Yes                       |
+| Audit key usage      | Limited compared with KMS  | CloudTrail KMS events     |
+| Key rotation/control | AWS-managed                | More control              |
+| Complexity           | Lower                      | Higher                    |
+| Cost                 | Lower                      | Additional KMS costs      |
+| Good for             | General S3 data            | Sensitive enterprise data |
+
+### Simple architecture
+
+**SSE-S3:**
+
+\`\`\`text
+CWD
+ ↓
+S3
+ ↓
+SSE-S3
+ ↓
+Encrypted object
+\`\`\`
+
+AWS manages the encryption keys for you.
+
+**SSE-KMS:**
+
+\`\`\`text
+CWD
+ ↓
+S3
+ ↓
+SSE-KMS
+ ↓
+AWS KMS Key
+ ↓
+Encrypted object
+\`\`\`
+
+You get more control over who can use the KMS key.
+
+---
+
+## For CWD, which would I use?
+
+For **sensitive enterprise documents**, I would generally choose **SSE-KMS** when the organization requires stronger key-control, auditing, or separation-of-duties requirements.
+
+For less sensitive/general objects, **SSE-S3** can be sufficient.
+
+The important point is:
+
+> **Don't choose KMS just because it sounds more secure. Choose it when the additional key-management and auditing controls are actually required.**
+
+### 🎯 Strong interview answer
+
+> **“Both SSE-S3 and SSE-KMS provide encryption at rest. SSE-S3 is simpler because AWS manages the encryption keys. SSE-KMS uses AWS KMS and gives us more control over key policies, permissions, auditing, and key management, but adds some operational and cost considerations. For sensitive CWD enterprise documents, I would typically use SSE-KMS when the security requirements call for customer-controlled key access and auditing; otherwise SSE-S3 provides strong encryption with less complexity.”**
+
+### Easy memory trick
+
+**SSE-S3 = Simple encryption**
+**SSE-KMS = Controlled encryption**
+
+### Key distinction
+
+**SSE-S3:** *AWS manages the encryption-key layer.*
+
+**SSE-KMS:** *You get a controllable KMS key-management and authorization layer.*
 `,code:``},{id:`131-how-would-you-trigger-processing-when-a-document-arrives-in-s3`,category:`S3`,title:`How would you trigger processing when a document arrives in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you trigger processing when a document arrives in S3?
 
-## Short answer
-Trigger processing with S3 event notifications, preferably through EventBridge or SQS.
+For CWD, I would use an **event-driven architecture**:
 
-## Key points
-- EventBridge gives richer filtering, multiple targets and replay; SQS adds buffering.
-- Filter by prefix and suffix; expect duplicates and out-of-order events.
-- Add a DLQ.
+\`\`\`text
+Document Upload
+      ↓
+     S3
+      ↓
+ S3 Event
+      ↓
+ EventBridge
+      ↓
+     SQS
+      ↓
+Ingestion Worker
+      ↓
+Extract → Chunk → Embed → OpenSearch
+\`\`\`
 
-## CWD context
-Idempotent handlers make event duplication harmless.
-`,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you control access to documents?
+## 1. Document arrives in S3
 
-## Short answer
-Control access to documents at several layers.
+For example:
 
-## Key points
-- IAM roles per component with prefix-scoped policies, or S3 Access Points.
-- Short-lived presigned URLs issued only after an entitlement check.
-- Document-level entitlements enforced in retrieval through ACL metadata, not by S3 alone.
-- CloudTrail data events for audit.
+\`\`\`text
+s3://cwd-documents/raw/customer_policy.pdf
+\`\`\`
 
-## CWD context
-Users never get direct bucket access.
+S3 generates an **Object Created** event.
+
+---
+
+## 2. Send the event to EventBridge
+
+I would use **Amazon EventBridge** to receive the S3 event and route it based on rules.
+
+For example:
+
+\`\`\`text
+S3 Object Created
+       ↓
+EventBridge Rule
+       ↓
+Is it under /raw/?
+       ↓
+YES → Continue
+\`\`\`
+
+I can filter by:
+
+* Bucket
+* Object key/prefix
+* Event type
+* File type where appropriate
+
+---
+
+## 3. Put the event into SQS
+
+\`\`\`text
+EventBridge
+     ↓
+    SQS
+\`\`\`
+
+I prefer putting SQS between the event and processing Worker because it provides:
+
+* Buffering
+* Retry
+* Backpressure
+* DLQ
+* Controlled concurrency
+
+So if 10,000 documents arrive together, I don't need to immediately start 10,000 processing tasks.
+
+---
+
+## 4. Ingestion Worker processes the document
+
+The Worker receives the S3 object information:
+
+\`\`\`text
+bucket
+object_key
+version_id
+event_id
+\`\`\`
+
+Then:
+
+\`\`\`text
+S3
+ ↓
+Download document
+ ↓
+Extract/OCR
+ ↓
+Clean
+ ↓
+Chunk
+ ↓
+Generate embeddings
+ ↓
+OpenSearch
+\`\`\`
+
+---
+
+## 5. Make processing idempotent
+
+S3 events can potentially be delivered more than once, so I don't want duplicate processing.
+
+I can create an idempotency key such as:
+
+\`\`\`text
+document_id + version_id
+\`\`\`
+
+and store processing status in DynamoDB:
+
+\`\`\`text
+QUEUED
+   ↓
+PROCESSING
+   ↓
+COMPLETED
+\`\`\`
+
+If the same event arrives again:
+
+\`\`\`text
+Already COMPLETED?
+      ↓
+    Skip
+\`\`\`
+
+---
+
+## 6. Handle failures
+
+\`\`\`text
+Ingestion Worker
+      ↓
+   Failure
+      ↓
+ SQS Retry
+      ↓
+Backoff + Retry
+      ↓
+Repeated failure
+      ↓
+     DLQ
+\`\`\`
+
+After fixing the problem, I can replay the failed message.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD, I would trigger document processing using an event-driven pipeline. When a document is uploaded to S3, an Object Created event is generated. I would route that event through EventBridge and then place it into SQS for buffering, retries, backpressure, and DLQ handling. An ingestion Worker consumes the message, retrieves the document from S3, performs extraction or OCR, chunking and embedding, and indexes the result into OpenSearch. I would also use the document ID and S3 version ID for idempotency so duplicate events don't cause duplicate processing.”**
+
+### Easy memory trick
+
+**S3 → EventBridge → SQS → Worker → OpenSearch**
+
+### Key distinction
+
+**EventBridge = routes the event**
+**SQS = buffers the work**
+**Worker = processes the document**
+**OpenSearch = makes it searchable for RAG**
+`,code:``},{id:`132-how-would-you-control-access-to-documents`,category:`S3`,title:`How would you control access to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you control access to documents in CWD?
+
+I would use **defense in depth** and enforce authorization **before retrieval**.
+
+\`\`\`text
+User
+ ↓
+Authentication
+ ↓
+User Identity + Roles
+ ↓
+Authorization / Entitlement Check
+ ↓
+OpenSearch ACL Filter
+ ↓
+Authorized Documents
+ ↓
+LLM
+\`\`\`
+
+## 1. Authenticate the user
+
+First, identify who the user is.
+
+For example:
+
+\`\`\`text
+User
+ ↓
+Microsoft Entra ID / enterprise IdP
+ ↓
+User ID + Groups + Roles
+\`\`\`
+
+Authentication answers:
+
+> **Who is the user?**
+
+---
+
+## 2. Store document ACL metadata
+
+During document ingestion, I would capture access information.
+
+Example:
+
+\`\`\`text
+document_id: DOC123
+department: Finance
+classification: Confidential
+allowed_groups:
+  - Finance
+  - Finance-Managers
+\`\`\`
+
+Then propagate that metadata to the RAG index.
+
+\`\`\`text
+S3
+ ↓
+Ingestion Worker
+ ↓
+Document + ACL metadata
+ ↓
+OpenSearch
+\`\`\`
+
+---
+
+## 3. Apply authorization before retrieval
+
+Suppose:
+
+\`\`\`text
+User = Pooja
+Groups = Finance
+\`\`\`
+
+The retrieval request becomes conceptually:
+
+\`\`\`text
+Search:
+    "customer contract"
+
+Filter:
+    user/group has access
+\`\`\`
+
+Only authorized chunks are returned.
+
+\`\`\`text
+OpenSearch
+ ├── Public document       ✅
+ ├── Finance document      ✅
+ └── HR confidential doc   ❌
+\`\`\`
+
+---
+
+## 4. Don't let the LLM decide authorization
+
+This is extremely important.
+
+I would **not** do:
+
+\`\`\`text
+LLM → "Should this user see the document?"
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Identity
+   ↓
+Authorization service/policy
+   ↓
+Retrieval filter
+   ↓
+Authorized context
+   ↓
+LLM
+\`\`\`
+
+The LLM only receives content that the user is already authorized to access.
+
+---
+
+## 5. Enforce access at multiple layers
+
+### Storage layer
+
+S3:
+
+* IAM
+* Bucket policies
+* Block Public Access
+* KMS encryption
+
+### Application layer
+
+CWD:
+
+* User identity
+* Roles/groups
+* Entitlement checks
+
+### Retrieval layer
+
+OpenSearch:
+
+* Metadata/ACL filters
+* Tenant filtering
+* Document classification filtering
+
+---
+
+## 6. Multi-tenant example
+
+If CWD supports multiple tenants:
+
+\`\`\`text
+document_id
+tenant_id
+classification
+allowed_groups
+\`\`\`
+
+Query:
+
+\`\`\`text
+tenant_id = current_user.tenant_id
+AND
+user/group has access
+\`\`\`
+
+This prevents one tenant from retrieving another tenant's documents.
+
+---
+
+## 7. Handle access changes
+
+Suppose a user moves from Finance to Sales.
+
+Their authorization should change immediately or within the organization's defined propagation SLA.
+
+I would avoid relying only on a stale cached permission.
+
+For highly sensitive content:
+
+\`\`\`text
+Current identity
+       ↓
+Current entitlement
+       ↓
+Retrieve
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would control document access using identity-based authorization combined with document-level ACL metadata. First, I authenticate the user and obtain their roles, groups, tenant and other entitlements. During ingestion, I attach the document's ACL and classification metadata to the OpenSearch chunks. At query time, authorization is evaluated before retrieval, and OpenSearch applies filters so only authorized chunks are returned. The LLM never makes the authorization decision; it only receives content that has already passed the access-control checks. I would also enforce S3 IAM, bucket policies, KMS, and tenant isolation as additional security layers.”**
+
+### Easy memory trick
+
+**Identify → Authorize → Filter → Retrieve → Generate**
+
+### Key distinction
+
+**Authentication:** *Who are you?*
+**Authorization:** *What are you allowed to access?*
+**ACL metadata:** *Which documents can you access?*
+**LLM:** *Generates an answer from already-authorized content.*
 `,code:``}];function Mm(){return(0,M.jsx)($,{data:jm,title:`Amazon S3 Cookbook`,subtitle:`Ingestion, security, versioning, encryption and event triggers`,icon:`🪣`,patternLabel:`Questions`})}var Nm=[{id:`133-why-opensearch-serverless-for-cwd`,category:`OpenSearch`,title:`Why OpenSearch Serverless for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why OpenSearch Serverless for CWD?
 
-## Short answer
-OpenSearch Serverless gives managed vector, keyword and hybrid search with no cluster to operate.
+For CWD, I would use **Amazon OpenSearch Serverless as the RAG retrieval layer** because it supports **vector search, keyword search, metadata filtering, and scalable search without managing OpenSearch clusters manually**.
 
-## Key points
-- Capacity scales automatically in OCUs; collections of type vector search.
-- IAM data access policies, VPC endpoints and encryption; works with Bedrock Knowledge Bases.
-- Trade-offs: a baseline OCU cost, fewer tuning options and no document-level security.
+### CWD flow
 
-## CWD context
-Good for variable RAG workloads where operations should be minimal.
-`,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement vector search?
+\`\`\`text
+Enterprise Documents
+        ↓
+       S3
+        ↓
+Extract → Chunk → Embed
+        ↓
+OpenSearch Serverless
+        ↓
+ Hybrid Search
+ ┌──────┴──────┐
+ ▼             ▼
+BM25        Vector Search
+ └──────┬──────┘
+        ↓
+   Reranking
+        ↓
+Authorized Chunks
+        ↓
+      Bedrock
+        ↓
+     Response
+\`\`\`
 
-## Short answer
-Implement vector search with a knn_vector field, HNSW and embeddings from Bedrock.
+## 1. Vector search
 
-## Key points
-- Vector search collection; index mapping with dimension matching the embedding model and a similarity space such as cosine.
-- Embed chunks at ingestion, embed the query with the same model, and run a k-NN query.
-- Tune k, ef_search and use filters; consider quantisation to cut memory.
+CWD needs semantic search.
 
-## CWD context
-Record the embedding model version in each document.
-`,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement hybrid search?
+Example:
 
-## Short answer
-Hybrid search combines a BM25 query and a vector query and merges their scores.
+\`\`\`text
+User:
+"Why was the customer's shipment delayed?"
 
-## Key points
-- Use a hybrid query with a search pipeline that normalises and combines scores with weights (or fuse ranks with RRF in the application).
-- Filters apply to both parts.
-- Verify feature support for your OpenSearch version and Serverless.
+Document:
+"Order fulfillment was impacted by a manufacturing
+capacity constraint."
+\`\`\`
 
-## CWD context
-Hybrid is the default mode because enterprise questions mix codes and natural language.
-`,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement BM25 search?
+The wording is different, but vector search can identify the semantic relationship.
 
-## Short answer
-BM25 is the default lexical relevance scoring in OpenSearch for text fields.
+---
 
-## Key points
-- Combines term frequency, inverse document frequency and length normalisation.
-- Use match and multi_match queries; tune analyzers, synonyms and field boosts.
+## 2. Hybrid search
 
-## CWD context
-BM25 finds exact terms such as ticket IDs that embeddings can blur.
-`,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you store embeddings?
+I wouldn't rely only on vector search.
 
-## Short answer
-Store embeddings as a knn_vector field in the same document as the chunk text and metadata.
+I can combine:
 
-## Key points
-- Dimension must match the model; keep the model name and version in metadata.
-- Keep a source copy in S3 so the index is rebuildable.
-- Lower dimensions or quantisation reduce memory cost.
+\`\`\`text
+BM25 keyword search
+        +
+Vector semantic search
+        ↓
+     Candidates
+        ↓
+     Reranking
+\`\`\`
 
-## CWD context
-The index is derived; S3 is the source of truth.
+### BM25 is useful for:
+
+* Customer IDs
+* Ticket IDs
+* Product numbers
+* Exact names
+* Technical codes
+
+### Vector search is useful for:
+
+* Similar meaning
+* Natural-language questions
+* Different wording
+
+---
+
+## 3. Metadata and ACL filtering
+
+For CWD, chunks can contain:
+
+\`\`\`text
+document_id
+tenant_id
+department
+classification
+allowed_groups
+version
+created_at
+\`\`\`
+
+Then retrieval can apply filters:
+
+\`\`\`text
+tenant_id = current_user.tenant_id
+AND
+user has required entitlement
+AND
+active = true
+\`\`\`
+
+This prevents unauthorized documents from reaching the LLM.
+
+---
+
+## 4. Serverless scalability
+
+With OpenSearch Serverless, AWS manages much of the underlying search infrastructure.
+
+That means I don't have to manually manage:
+
+\`\`\`text
+Cluster sizing
+Node provisioning
+Node replacement
+Shard capacity planning
+\`\`\`
+
+This is useful when CWD traffic changes significantly.
+
+---
+
+## 5. Good fit for enterprise RAG
+
+CWD has potentially large document collections:
+
+\`\`\`text
+PDF
+Word
+Excel
+PowerPoint
+Images/OCR
+Policies
+Technical documents
+\`\`\`
+
+The architecture becomes:
+
+\`\`\`text
+S3 = Source of truth
+       ↓
+OpenSearch = Searchable/vector representation
+       ↓
+Bedrock = Generation
+\`\`\`
+
+---
+
+## 6. Separate storage from search
+
+I wouldn't store the original large documents in OpenSearch.
+
+Instead:
+
+\`\`\`text
+S3
+ └── Original PDF
+
+OpenSearch
+ ├── chunk text
+ ├── embedding
+ ├── document_id
+ ├── metadata
+ └── ACL
+\`\`\`
+
+This keeps responsibilities clear.
+
+---
+
+## 7. AWS-native integration
+
+For an AWS-based CWD architecture:
+
+\`\`\`text
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+Ingestion Worker
+ ↓
+OpenSearch Serverless
+ ↓
+Bedrock
+\`\`\`
+
+It integrates naturally with the AWS ecosystem and security model.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I chose OpenSearch Serverless for CWD because it provides the capabilities we need for enterprise RAG: vector search, BM25 keyword search, metadata and ACL filtering, and scalable search without manually managing OpenSearch clusters. We store original documents in S3, generate embeddings during ingestion, and store searchable chunks and metadata in OpenSearch. At query time, we use hybrid keyword and vector retrieval, apply authorization filters, rerank the results, and pass only the relevant authorized context to Bedrock. Serverless also helps us handle variable workloads without managing the underlying search infrastructure ourselves.”**
+
+### Easy memory trick
+
+**OpenSearch = Search + Vector + Filter + Scale**
+
+### Key distinction
+
+**S3 → stores the original documents**
+**OpenSearch → retrieves relevant documents/chunks**
+**Bedrock → generates the final answer**
+`,code:``},{id:`134-how-would-you-implement-vector-search`,category:`OpenSearch`,title:`How would you implement vector search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement vector search in CWD?
+
+I would implement vector search as part of the **RAG pipeline** using embeddings and OpenSearch Serverless.
+
+\`\`\`text id="vec01"
+Document
+   ↓
+S3
+   ↓
+Extract Text
+   ↓
+Chunk
+   ↓
+Embedding Model
+   ↓
+Vector Embeddings
+   ↓
+OpenSearch Serverless
+   ↓
+Vector Index
+\`\`\`
+
+At query time:
+
+\`\`\`text id="vec02"
+User Query
+    ↓
+Query Embedding
+    ↓
+OpenSearch Vector Search
+    ↓
+Top-K Chunks
+    ↓
+Reranking
+    ↓
+Bedrock
+    ↓
+Answer
+\`\`\`
+
+## 1. Chunk the documents
+
+Suppose the document contains:
+
+\`\`\`text id="vec03"
+Customer shipment policy...
+Warranty policy...
+Return policy...
+\`\`\`
+
+I split it into meaningful chunks.
+
+Example starting point:
+
+\`\`\`text id="vec04"
+500–700 tokens
+10–15% overlap
+\`\`\`
+
+I would tune these values based on retrieval evaluation.
+
+---
+
+## 2. Generate embeddings
+
+For every chunk, generate an embedding.
+
+\`\`\`text id="vec05"
+"Warranty period is two years..."
+              ↓
+        Embedding Model
+              ↓
+[0.12, -0.43, 0.87, ...]
+\`\`\`
+
+The embedding represents the **semantic meaning** of the text.
+
+---
+
+## 3. Store vectors in OpenSearch
+
+I would store something like:
+
+\`\`\`text id="vec06"
+{
+  "chunk_id": "C123",
+  "document_id": "DOC45",
+  "text": "Warranty period is two years...",
+  "embedding": [0.12, -0.43, 0.87, ...],
+  "tenant_id": "ON",
+  "department": "Sales",
+  "active": true
+}
+\`\`\`
+
+The vector is indexed for efficient similarity search.
+
+---
+
+## 4. Convert the user's query to a vector
+
+User asks:
+
+\`\`\`text id="vec07"
+"What is the warranty duration?"
+\`\`\`
+
+Generate an embedding for the query using the **same embedding model used for the documents**.
+
+\`\`\`text id="vec08"
+User Query
+    ↓
+Embedding Model
+    ↓
+Query Vector
+\`\`\`
+
+---
+
+## 5. Perform similarity search
+
+OpenSearch compares the query vector against document vectors.
+
+Conceptually:
+
+\`\`\`text id="vec09"
+Query Vector
+     ↓
+Compare against document vectors
+     ↓
+Similarity score
+     ↓
+Top-K results
+\`\`\`
+
+For example:
+
+\`\`\`text id="vec10"
+Chunk A → 0.94
+Chunk B → 0.89
+Chunk C → 0.82
+Chunk D → 0.61
+\`\`\`
+
+Return the highest-scoring relevant chunks.
+
+---
+
+## 6. Apply metadata/ACL filters
+
+Before giving results to the LLM, apply authorization filters.
+
+\`\`\`text id="vec11"
+Vector Search
+      ↓
+ACL Filter
+      ↓
+Tenant Filter
+      ↓
+Active Version Filter
+      ↓
+Authorized Results
+\`\`\`
+
+This is important for CWD because **semantic similarity does not mean the user is authorized to see the document**.
+
+---
+
+## 7. Use hybrid search
+
+I would usually combine vector search with keyword search.
+
+\`\`\`text id="vec12"
+                 Query
+                   ↓
+          ┌────────┴────────┐
+          ↓                 ↓
+    Vector Search       BM25 Search
+          ↓                 ↓
+     Semantic            Exact terms
+          └────────┬────────┘
+                   ↓
+              Rank Fusion
+                   ↓
+               Reranker
+                   ↓
+                Top-K
+\`\`\`
+
+For example:
+
+* \`"What caused shipment delays?"\` → vector search is useful.
+* \`"Ticket INC12345"\` → BM25/exact matching is useful.
+
+---
+
+## 8. Send context to Bedrock
+
+Finally:
+
+\`\`\`text id="vec13"
+Top relevant chunks
+        ↓
+Context + User Question
+        ↓
+      Bedrock
+        ↓
+Grounded Answer
+\`\`\`
+
+I would also include source/document metadata so the answer can provide citations.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would implement vector search as part of the CWD RAG pipeline. During ingestion, I extract documents from S3, split them into meaningful chunks, generate embeddings using an embedding model, and store the vectors along with document metadata and ACL information in OpenSearch Serverless. At query time, I generate an embedding for the user query and perform similarity search to retrieve the top relevant chunks. I then apply tenant and authorization filters, combine vector search with BM25 for hybrid retrieval, rerank the candidates, and send the authorized context to Bedrock for generation.”**
+
+### Easy memory trick
+
+**Chunk → Embed → Index → Query → Similarity → Filter → Rerank → Generate**
+
+### Key distinction
+
+**Embedding model:** converts text → vectors
+**OpenSearch:** searches vectors
+**Reranker:** improves ordering of retrieved candidates
+**Bedrock:** generates the final answer
+`,code:``},{id:`135-how-would-you-implement-hybrid-search`,category:`OpenSearch`,title:`How would you implement hybrid search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement hybrid search in CWD?
+
+I would combine **keyword search (BM25)** and **vector search** so CWD can handle both **exact matches** and **semantic matches**.
+
+\`\`\`text
+                    User Query
+                        ↓
+              ┌─────────┴─────────┐
+              ↓                   ↓
+        BM25 Keyword         Vector Search
+        (exact terms)       (semantic meaning)
+              ↓                   ↓
+              └─────────┬─────────┘
+                        ↓
+                  Rank Fusion
+                        ↓
+                    Reranker
+                        ↓
+                   Top-K Chunks
+                        ↓
+                     Bedrock
+\`\`\`
+
+## 1. Run BM25 search
+
+BM25 is good when the user provides exact terms.
+
+Example:
+
+\`\`\`text
+User:
+"Find ticket INC12345"
+\`\`\`
+
+BM25 can match:
+
+\`\`\`text
+INC12345
+\`\`\`
+
+very effectively.
+
+---
+
+## 2. Run vector search
+
+Convert the query into an embedding:
+
+\`\`\`text
+User Query
+    ↓
+Embedding Model
+    ↓
+Query Vector
+    ↓
+OpenSearch Vector Search
+\`\`\`
+
+This is useful when the wording is different but the meaning is similar.
+
+Example:
+
+\`\`\`text
+Query:
+"Why was the customer's shipment late?"
+
+Document:
+"Order fulfillment was delayed because of
+manufacturing capacity constraints."
+\`\`\`
+
+Keyword matching may be weak, but vector search can identify the semantic relationship.
+
+---
+
+## 3. Combine the results
+
+Suppose we get:
+
+\`\`\`text
+BM25:
+A → rank 1
+B → rank 2
+C → rank 3
+
+Vector:
+C → rank 1
+A → rank 2
+D → rank 3
+\`\`\`
+
+We combine the rankings using a **rank-fusion approach**, such as **Reciprocal Rank Fusion (RRF)**.
+
+Conceptually:
+
+\`\`\`text
+BM25 results
+      +
+Vector results
+      ↓
+    RRF
+      ↓
+Combined candidates
+\`\`\`
+
+RRF combines rankings rather than directly assuming that the BM25 and vector scores are on the same scale.
+
+---
+
+## 4. Rerank the candidates
+
+After fusion, I would take a manageable candidate set and apply a semantic reranker.
+
+\`\`\`text
+BM25 + Vector
+      ↓
+RRF
+      ↓
+Top 20–50 candidates
+      ↓
+Reranker
+      ↓
+Top 5–10 chunks
+\`\`\`
+
+The exact numbers should be tuned through evaluation rather than hardcoded universally.
+
+---
+
+## 5. Apply authorization filters
+
+For CWD, security filtering is critical.
+
+\`\`\`text
+Hybrid Search
+     ↓
+Tenant Filter
+     ↓
+ACL / Entitlement Filter
+     ↓
+Active Version Filter
+     ↓
+Authorized Results
+\`\`\`
+
+The LLM should only receive content the user is authorized to access.
+
+---
+
+## 6. Send the final context to Bedrock
+
+\`\`\`text
+Top authorized chunks
+        ↓
+Prompt + Context
+        ↓
+      Bedrock
+        ↓
+Grounded response
+\`\`\`
+
+---
+
+# Example
+
+User asks:
+
+> **"What is the status of ticket INC12345?"**
+
+### BM25 finds:
+
+\`\`\`text
+INC12345
+ServiceNow incident INC12345
+\`\`\`
+
+### Vector search finds:
+
+\`\`\`text
+Documents discussing the same incident
+and related troubleshooting information
+\`\`\`
+
+### Hybrid:
+
+\`\`\`text
+BM25
+  +
+Vector
+  ↓
+RRF
+  ↓
+Reranker
+  ↓
+Authorized Top-K
+  ↓
+Bedrock
+\`\`\`
+
+For **current ticket status**, however, I would use **MCP → ServiceNow** rather than relying only on the indexed document, because ServiceNow is the live system of record.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would implement hybrid search by combining BM25 keyword search with vector similarity search. BM25 handles exact terms such as ticket IDs, customer IDs, and product codes, while vector search handles semantic variations in natural language. I would combine the two result sets using a rank-fusion method such as RRF, then rerank the candidate set and apply tenant and ACL filters before sending the final chunks to Bedrock. For live transactional information such as current ServiceNow ticket status, I would use MCP to query the system of record rather than depending on potentially stale indexed content.”**
+
+### Easy memory trick
+
+**BM25 + Vector → RRF → Rerank → ACL → Bedrock**
+
+### Key distinction
+
+**BM25 = exact/keyword matching**
+**Vector = semantic matching**
+**RRF = combines rankings**
+**Reranker = improves final ordering**
+**MCP = gets live enterprise data**
+`,code:``},{id:`136-how-would-you-implement-bm25-search`,category:`OpenSearch`,title:`How would you implement BM25 search?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement BM25 search in CWD?
+
+I would use **BM25 in OpenSearch** for keyword-based retrieval. It is especially useful for **exact names, customer IDs, ticket numbers, product codes, and technical terms**.
+
+\`\`\`text id="bm2501"
+User Query
+    ↓
+OpenSearch
+    ↓
+BM25 keyword search
+    ↓
+Matching documents/chunks
+    ↓
+Score + Rank
+    ↓
+Top-K results
+\`\`\`
+
+## 1. Store text in an OpenSearch text field
+
+During ingestion:
+
+\`\`\`json id="bm2502"
+{
+  "chunk_id": "C123",
+  "document_id": "DOC45",
+  "text": "ServiceNow incident INC12345 was resolved...",
+  "tenant_id": "ON",
+  "active": true
+}
+\`\`\`
+
+The \`text\` field is indexed for full-text search.
+
+---
+
+## 2. Send the user's query to OpenSearch
+
+Example:
+
+\`\`\`text id="bm2503"
+User:
+"INC12345 resolution"
+\`\`\`
+
+OpenSearch analyzes the query and searches the indexed text.
+
+A simplified query looks like:
+
+\`\`\`json id="bm2504"
+{
+  "query": {
+    "match": {
+      "text": "INC12345 resolution"
+    }
+  }
+}
+\`\`\`
+
+The \`match\` query uses the field's text analysis and BM25-based scoring.
+
+---
+
+## 3. BM25 calculates relevance
+
+BM25 considers factors such as:
+
+* **Term Frequency (TF)** — how often the term appears
+* **Inverse Document Frequency (IDF)** — how rare the term is across documents
+* **Document length** — prevents long documents from automatically winning
+
+Conceptually:
+
+\`\`\`text id="bm2505"
+More relevant term
+       +
+Rare term
+       +
+Good document length
+       ↓
+Higher BM25 score
+\`\`\`
+
+You don't normally calculate the BM25 formula yourself; OpenSearch handles the scoring.
+
+---
+
+## 4. Apply CWD security filters
+
+I would combine BM25 with authorization filters:
+
+\`\`\`text id="bm2506"
+BM25 Search
+     ↓
+tenant_id filter
+     ↓
+ACL / entitlement filter
+     ↓
+active = true
+     ↓
+Authorized results
+\`\`\`
+
+This is important because **relevance doesn't equal authorization**.
+
+---
+
+## 5. Return Top-K candidates
+
+For example:
+
+\`\`\`text id="bm2507"
+C123 → 12.8
+C875 → 9.4
+C456 → 7.2
+...
+\`\`\`
+
+I might retrieve 20–50 candidates and then pass them to a reranker.
+
+\`\`\`text id="bm2508"
+BM25
+ ↓
+Top 20–50
+ ↓
+Reranker
+ ↓
+Top 5–10
+ ↓
+Bedrock
+\`\`\`
+
+The actual K values should be determined through retrieval evaluation.
+
+---
+
+# Why BM25 is useful in CWD
+
+Suppose the user asks:
+
+> **"Find incident INC12345."**
+
+Vector search might find semantically related incidents.
+
+BM25 is very good at finding the exact:
+
+\`\`\`text id="bm2509"
+INC12345
+\`\`\`
+
+Similarly:
+
+\`\`\`text
+Customer ID: CUST-84721
+Product: XYZ-9000
+Ticket: INC12345
+Part Number: ABC-456
+\`\`\`
+
+These exact identifiers are often where keyword search is especially valuable.
+
+---
+
+# BM25 vs Vector Search
+
+| BM25                 | Vector                           |
+| -------------------- | -------------------------------- |
+| Keyword-based        | Semantic                         |
+| Exact terms          | Meaning                          |
+| IDs/codes/names      | Natural-language concepts        |
+| Lexical matching     | Similarity matching              |
+| Great for \`INC12345\` | Great for "shipment was delayed" |
+
+That's why CWD uses **hybrid search**:
+
+\`\`\`text id="bm2510"
+          Query
+            ↓
+     ┌──────┴──────┐
+     ↓             ↓
+   BM25          Vector
+     ↓             ↓
+     └──────┬──────┘
+            ↓
+           RRF
+            ↓
+         Reranker
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I would implement BM25 search using OpenSearch's full-text indexing. During ingestion, I store the document chunks in a text field and index them. At query time, the user's query is analyzed and matched against the text using BM25 scoring. OpenSearch ranks the chunks based on term frequency, inverse document frequency, and document length. I would apply tenant and ACL filters as part of the query, retrieve a candidate set, and then optionally rerank those candidates. BM25 is especially valuable in CWD for exact identifiers such as customer IDs, incident numbers, product codes, and technical terms.”**
+
+### Easy memory trick
+
+**Index → Query → BM25 Score → Filter → Top-K → Rerank**
+
+### Key distinction
+
+**BM25 asks:** *“Which documents contain the important words?”*
+
+**Vector search asks:** *“Which documents have similar meaning?”*
+`,code:``},{id:`137-how-would-you-store-embeddings`,category:`OpenSearch`,title:`How would you store embeddings?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you store embeddings in CWD?
+
+For CWD, I would generate embeddings during document ingestion and store them in **OpenSearch Serverless** along with the chunk text and metadata.
+
+\`\`\`text id="emb01"
+Document
+   ↓
+S3
+   ↓
+Extract + Chunk
+   ↓
+Embedding Model
+   ↓
+Vector
+   ↓
+OpenSearch Serverless
+\`\`\`
+
+## 1. Generate an embedding
+
+Example chunk:
+
+\`\`\`text id="emb02"
+"Customer warranty period is two years."
+\`\`\`
+
+Embedding model converts it into a numerical vector:
+
+\`\`\`text id="emb03"
+[0.021, -0.145, 0.873, 0.421, ...]
+\`\`\`
+
+The vector dimension depends on the **embedding model** being used.
+
+---
+
+## 2. Store the vector with the chunk
+
+Conceptually, an OpenSearch document looks like:
+
+\`\`\`json id="emb04"
+{
+  "chunk_id": "CHUNK123",
+  "document_id": "DOC456",
+  "text": "Customer warranty period is two years.",
+  "embedding": [0.021, -0.145, 0.873, 0.421],
+  "tenant_id": "ON",
+  "department": "Sales",
+  "classification": "Internal",
+  "version_id": "v3",
+  "active": true
+}
+\`\`\`
+
+The important parts are:
+
+\`\`\`text id="emb05"
+text       → original chunk
+embedding  → vector representation
+metadata   → filtering/security
+\`\`\`
+
+---
+
+## 3. Create a vector field
+
+In OpenSearch, I would define a vector-capable field such as a \`knn_vector\` field, with the dimension matching the embedding model.
+
+Conceptually:
+
+\`\`\`json id="emb06"
+{
+  "properties": {
+    "text": {
+      "type": "text"
+    },
+    "embedding": {
+      "type": "knn_vector",
+      "dimension": 1536
+    }
+  }
+}
+\`\`\`
+
+**Important:** \`1536\` is only an example. The dimension must match the actual embedding model.
+
+---
+
+## 4. Store metadata with the vector
+
+I would not store only the vector.
+
+I also need:
+
+\`\`\`text id="emb07"
+chunk_id
+document_id
+tenant_id
+ACL
+source
+page_number
+version_id
+created_at
+active
+\`\`\`
+
+Why?
+
+Because after vector search I need to know:
+
+> **Where did this chunk come from, and is the current user allowed to see it?**
+
+---
+
+## 5. Query-time process
+
+When the user asks:
+
+> "What is the warranty period?"
+
+I generate a query embedding:
+
+\`\`\`text id="emb08"
+User Query
+    ↓
+Embedding Model
+    ↓
+Query Vector
+    ↓
+OpenSearch
+    ↓
+Similarity Search
+    ↓
+Top-K chunks
+\`\`\`
+
+Then apply ACL/tenant filters and send the authorized context to Bedrock.
+
+---
+
+## 6. Handle embedding model changes
+
+This is important in production.
+
+If I change the embedding model:
+
+\`\`\`text id="emb09"
+Old Model
+   ↓
+1536-dimensional vectors
+
+New Model
+   ↓
+3072-dimensional vectors
+\`\`\`
+
+I should **not blindly mix incompatible embeddings**.
+
+I would create a new index/version:
+
+\`\`\`text id="emb10"
+OpenSearch Index V1
+      ↓
+Old embeddings
+
+OpenSearch Index V2
+      ↓
+New embeddings
+\`\`\`
+
+Then re-embed and validate V2 before switching production retrieval to it.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD, I would generate embeddings during document ingestion and store them in OpenSearch Serverless using a vector field such as \`knn_vector\`. Each vector would be stored together with the original chunk text and metadata such as document ID, tenant, ACL, source, page, and version. At query time, I generate an embedding for the user query and perform vector similarity search, while applying authorization and metadata filters. If we change the embedding model, I would create a new index version and re-embed the documents rather than mixing vectors generated by incompatible models.”**
+
+### Easy memory trick
+
+**Chunk → Embed → Store Vector + Metadata → Search**
+
+### Key distinction
+
+**Embedding = numerical representation of meaning**
+
+**Vector database/index = stores and searches those embeddings**
+
+**Metadata = tells us where the vector came from and whether the user can access it.**
 `,code:``},{id:`138-how-would-you-create-embeddings-using-aws`,category:`OpenSearch`,title:`How would you create embeddings using AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create embeddings using AWS?
 
-## Short answer
-Create embeddings with Bedrock embedding models, at ingestion and at query time.
+For CWD, I would use **Amazon Bedrock's embedding model** to convert each document chunk into a vector, then store that vector in **OpenSearch Serverless**.
 
-## Key points
-- Titan Text Embeddings (configurable dimensions) or Cohere Embed; call through the Bedrock runtime API.
-- Batch calls and handle throttling with backoff; Knowledge Bases can do this automatically.
-- A custom embedding model can be hosted on SageMaker.
+\`\`\`text id="awsemb01"
+S3 Document
+     ↓
+Ingestion Worker
+     ↓
+Extract + Chunk
+     ↓
+Amazon Bedrock
+Embedding Model
+     ↓
+Embedding Vector
+     ↓
+OpenSearch Serverless
+\`\`\`
 
-## CWD context
-Use the same model and version for documents and queries.
+## 1. Get the document from S3
+
+Example:
+
+\`\`\`text id="awsemb02"
+s3://cwd-documents/raw/customer_policy.pdf
+\`\`\`
+
+The ingestion Worker reads the document from S3.
+
+---
+
+## 2. Extract and chunk the document
+
+\`\`\`text id="awsemb03"
+PDF
+ ↓
+Text Extraction / OCR
+ ↓
+Clean Text
+ ↓
+Chunks
+\`\`\`
+
+Example:
+
+\`\`\`text id="awsemb04"
+Chunk 1 → "Warranty period is two years..."
+Chunk 2 → "Returns are accepted within..."
+Chunk 3 → "Customer support is available..."
+\`\`\`
+
+---
+
+## 3. Call a Bedrock embedding model
+
+The Worker sends each chunk to a Bedrock embedding model.
+
+Conceptually:
+
+\`\`\`text id="awsemb05"
+Chunk
+ ↓
+Bedrock Embedding Model
+ ↓
+[0.12, -0.43, 0.87, ...]
+\`\`\`
+
+The exact model and vector dimension should be selected based on the current AWS/Bedrock model catalog and CWD retrieval requirements.
+
+---
+
+## 4. Store the embedding in OpenSearch
+
+\`\`\`text id="awsemb06"
+{
+    "chunk_id": "C123",
+    "document_id": "DOC456",
+    "text": "Warranty period is two years...",
+    "embedding": [0.12, -0.43, 0.87, ...],
+    "tenant_id": "ON",
+    "active": true
+}
+\`\`\`
+
+OpenSearch then supports vector similarity search.
+
+---
+
+## 5. Query-time embedding
+
+The same embedding model should be used for the user's query.
+
+\`\`\`text id="awsemb07"
+User Query
+   ↓
+Bedrock Embedding Model
+   ↓
+Query Vector
+   ↓
+OpenSearch Vector Search
+   ↓
+Top-K Chunks
+\`\`\`
+
+Then:
+
+\`\`\`text id="awsemb08"
+Retrieved Context
+      ↓
+    Bedrock
+      ↓
+Final Answer
+\`\`\`
+
+---
+
+## 6. Important: use the same embedding model
+
+For example:
+
+\`\`\`text id="awsemb09"
+Documents
+   ↓
+Embedding Model A
+   ↓
+Vectors
+
+User Query
+   ↓
+Embedding Model A
+   ↓
+Query Vector
+\`\`\`
+
+Don't generate document embeddings with one incompatible embedding model and query embeddings with another.
+
+If I change the embedding model, I would generally create a **new index/version and re-embed the documents**.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“In CWD, I would create embeddings using Amazon Bedrock's embedding model. During ingestion, the document is read from S3, extracted and split into chunks. Each chunk is sent to the Bedrock embedding model, which returns a numerical vector. I store that vector along with the chunk text, document ID, ACL, tenant and version metadata in OpenSearch Serverless. At query time, I generate an embedding for the user's query using the same embedding model and perform vector similarity search. I would also version the embedding index if we change the embedding model.”**
+
+### Easy memory trick
+
+**S3 → Chunk → Bedrock Embedding → OpenSearch**
+
+### Key distinction
+
+**Bedrock embedding model = creates vectors**
+
+**OpenSearch = stores and searches vectors**
+
+**Bedrock foundation model = generates the final answer**
 `,code:``},{id:`139-how-would-you-implement-metadata-filtering`,category:`OpenSearch`,title:`How would you implement metadata filtering?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement metadata filtering?
 
-## Short answer
-Metadata filtering narrows retrieval to the right slice before ranking.
+In CWD, I would store **metadata along with every document chunk** and apply filters **during retrieval**, before sending the results to the LLM.
 
-## Key points
-- Keyword fields such as tenant_id, source, doc_type, department, dates and ACL principals.
-- Apply filters inside the k-NN query so filtering happens during the search, not after.
-- Decide filterable fields at design time.
+\`\`\`text
+User Query
+    ↓
+Authenticate User
+    ↓
+Get User Entitlements
+    ↓
+Create Query Embedding
+    ↓
+OpenSearch
+ ┌─────────────────────────────┐
+ │ Vector / BM25 Search        │
+ │ + Metadata Filters          │
+ │ + ACL Filters               │
+ └─────────────────────────────┘
+    ↓
+Authorized Relevant Chunks
+    ↓
+Bedrock
+    ↓
+Answer
+\`\`\`
 
-## CWD context
-Filters give both relevance and tenant isolation.
+### 1. Store metadata with each chunk
+
+For example:
+
+\`\`\`json
+{
+  "chunk_id": "C123",
+  "document_id": "DOC456",
+  "text": "Customer warranty policy...",
+  "embedding": [0.12, -0.43, 0.87],
+  "tenant_id": "ONSEMI",
+  "department": "SALES",
+  "classification": "INTERNAL",
+  "region": "US",
+  "active": true,
+  "allowed_groups": ["sales-team"]
+}
+\`\`\`
+
+### 2. Build filters from the authenticated user
+
+Suppose the user belongs to:
+
+\`\`\`text
+tenant = ONSEMI
+department = SALES
+region = US
+groups = sales-team
+\`\`\`
+
+The retrieval query would conceptually apply:
+
+\`\`\`text
+tenant_id = ONSEMI
+AND department = SALES
+AND region = US
+AND active = true
+AND user/group has access
+\`\`\`
+
+### 3. Combine filtering with vector search
+
+\`\`\`text
+Query
+ ↓
+Embedding
+ ↓
+OpenSearch
+ ├── Vector similarity
+ ├── tenant_id filter
+ ├── department filter
+ ├── region filter
+ ├── active filter
+ └── ACL filter
+ ↓
+Top-K authorized chunks
+\`\`\`
+
+This is important because I **don't want to retrieve sensitive documents first and then ask the LLM to decide whether the user can see them**.
+
+### 4. Example
+
+Suppose OpenSearch contains:
+
+| Document | Department | Classification | Access |
+| -------- | ---------- | -------------- | ------ |
+| DOC1     | Sales      | Internal       | Sales  |
+| DOC2     | HR         | Confidential   | HR     |
+| DOC3     | IT         | Internal       | IT     |
+
+User is a Sales employee.
+
+A query about company policies might semantically match all three, but the retrieval filter allows only:
+
+\`\`\`text
+DOC1
+\`\`\`
+
+The HR document should never enter the LLM context.
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I store metadata such as tenant, department, region, classification, document version, active status, and ACL information with every chunk. After authenticating the user, I obtain their entitlements and construct metadata and authorization filters. I apply those filters directly in OpenSearch along with vector or hybrid search, so only authorized and relevant chunks are returned. Authorization happens outside the LLM—the LLM is responsible for generation, not access control.”**
+
+### Easy memory trick
+
+**Authenticate → Authorize → Filter → Retrieve → Generate**
+
+**Key distinction:**
+**Metadata filtering** narrows results based on attributes like department, region, and document status.
+**ACL filtering** determines whether the specific user/group is allowed to access the document.
 `,code:``},{id:`140-how-would-you-implement-document-level-security`,category:`OpenSearch`,title:`How would you implement document-level security?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement document-level security?
 
-## Short answer
-OpenSearch Serverless access policies work at collection or index level, so document-level security is implemented as query filters.
+In CWD, I would implement **document-level security (DLS)** by storing the **user/group access information as metadata on every document chunk** and enforcing the authorization **before the chunk reaches the LLM**.
 
-## Key points
-- Store allowed users or groups on each chunk and filter with a terms query built from the validated identity.
-- Managed OpenSearch Service offers engine-enforced document-level security through fine-grained access control if required.
-- Test negative cases.
+\`\`\`text
+User
+ ↓
+Entra ID / Enterprise IdP
+ ↓
+Authenticate
+ ↓
+Get User Groups / Roles
+ ↓
+CWD Authorization Layer
+ ↓
+OpenSearch
+ ├── Tenant Filter
+ ├── ACL / Group Filter
+ ├── Classification Filter
+ └── Vector / BM25 Search
+ ↓
+Only Authorized Documents
+ ↓
+Bedrock
+ ↓
+Answer
+\`\`\`
 
-## CWD context
-Trusted server code builds the filter; the LLM never does.
+## 1. Store ACL metadata during ingestion
+
+When a document enters S3, I extract its security information.
+
+\`\`\`json
+{
+  "document_id": "DOC123",
+  "chunk_id": "CH456",
+  "text": "Customer contract information...",
+  "tenant_id": "ONSEMI",
+  "classification": "CONFIDENTIAL",
+  "allowed_groups": [
+    "sales-team",
+    "account-managers"
+  ],
+  "allowed_users": [],
+  "active": true
+}
+\`\`\`
+
+Every chunk from that document carries the same security metadata.
+
+---
+
+## 2. Identify the user's permissions
+
+For example, the user authenticates through the enterprise identity provider.
+
+\`\`\`text
+User
+ ↓
+Entra ID
+ ↓
+User ID + Groups + Roles
+\`\`\`
+
+Suppose the user belongs to:
+
+\`\`\`text
+sales-team
+account-managers
+\`\`\`
+
+CWD obtains these entitlements.
+
+---
+
+## 3. Apply authorization during retrieval
+
+The query becomes conceptually:
+
+\`\`\`text
+tenant_id = "ONSEMI"
+AND active = true
+AND (
+     allowed_groups contains "sales-team"
+     OR
+     allowed_groups contains "account-managers"
+     OR
+     allowed_users contains current_user
+)
+\`\`\`
+
+Then vector/BM25 retrieval happens within that authorized set.
+
+\`\`\`text
+Query
+ ↓
+Authorization Filter
+ ↓
+Vector/BM25 Search
+ ↓
+Authorized Top-K
+\`\`\`
+
+---
+
+## 4. Never let the LLM decide access
+
+This is a **very important interview point**.
+
+❌ Don't do:
+
+\`\`\`text
+Retrieve everything
+      ↓
+LLM decides what user can see
+\`\`\`
+
+✅ Do:
+
+\`\`\`text
+User Identity
+      ↓
+Authorization
+      ↓
+Filtered Retrieval
+      ↓
+LLM
+\`\`\`
+
+The LLM should **never be the security boundary**.
+
+---
+
+## 5. Protect the original documents too
+
+DLS should exist at multiple layers:
+
+\`\`\`text
+S3
+ ↓
+IAM + Bucket Policy + KMS
+ ↓
+CWD Authorization
+ ↓
+OpenSearch ACL Filtering
+ ↓
+Bedrock
+\`\`\`
+
+So even if someone bypasses the application, they shouldn't automatically have access to the underlying S3 documents.
+
+---
+
+## 6. Handle permission changes
+
+Suppose:
+
+\`\`\`text
+User was in → sales-team
+User removed → sales-team
+\`\`\`
+
+I would ensure the authorization source is refreshed and avoid relying on stale ACL information indefinitely.
+
+For highly sensitive data:
+
+\`\`\`text
+Identity Provider
+       ↓
+Current Entitlements
+       ↓
+OpenSearch ACL Filter
+\`\`\`
+
+I would also monitor ACL synchronization and permission-change propagation.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For document-level security in CWD, I would associate ACL metadata with every document and its chunks during ingestion, including tenant, allowed users, groups, classification and document status. At query time, I authenticate the user through the enterprise identity provider and obtain their current groups and entitlements. The CWD authorization layer converts those entitlements into OpenSearch filters, and retrieval performs vector or hybrid search only within the authorized document set. The LLM never makes authorization decisions. I would also secure the original S3 documents using IAM, bucket policies and KMS. This gives us defense in depth from identity through storage and retrieval.”**
+
+### Easy memory trick
+
+**Identity → Entitlement → ACL Filter → Retrieve → LLM**
+
+### Key distinction
+
+**Metadata filtering:**
+“Give me documents from the Sales department.”
+
+**Document-level security:**
+“Give me only documents that **this particular user is authorized to access**.”
 `,code:``},{id:`141-how-does-opensearch-scale`,category:`OpenSearch`,title:`How does OpenSearch scale?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does OpenSearch scale?
 
-## Short answer
-OpenSearch scales by adding capacity for indexing and search separately.
+For CWD, **OpenSearch scales horizontally** by distributing indexes and search workload across multiple nodes/compute resources. With **OpenSearch Serverless**, AWS manages much of the underlying capacity and scaling for you.
 
-## Key points
-- Serverless: automatic OCU scaling with configurable limits.
-- Managed: more data nodes, shards and replicas; shard sizing matters.
-- Vector memory footprint often drives sizing.
+\`\`\`text
+                 CWD Applications
+                       ↓
+              OpenSearch Serverless
+                 ↙          ↘
+          Search/Vector    Indexing
+              ↓              ↓
+        Distributed      Distributed
+        Capacity         Capacity
+              ↓              ↓
+          More data / more traffic
+                  ↓
+             Scale out
+\`\`\`
 
-## CWD context
-Set OCU limits to cap cost as well as protect capacity.
-`,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch Serverless vs traditional OpenSearch?
+### 1. Data scales horizontally
 
-## Short answer
-Serverless removes cluster operations; managed OpenSearch Service gives more control.
+Documents are divided into **shards**.
 
-## Key points
-- Serverless: auto-scaling, pay per OCU with a baseline, limited tuning, no document-level security.
-- Managed: instance control, tuning, fine-grained access control, possibly cheaper at steady large scale.
+\`\`\`text
+Index
+ ├── Shard 1
+ ├── Shard 2
+ ├── Shard 3
+ └── Shard 4
+\`\`\`
 
-## CWD context
-Choose serverless for variable or simple needs; managed for control or engine-enforced document security.
-`,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs DynamoDB?
+The data can be distributed across the underlying infrastructure.
 
-## Short answer
-OpenSearch is a search and retrieval engine; DynamoDB is a primary key-value store.
+As the dataset grows, OpenSearch can distribute the workload rather than keeping everything on one machine.
 
-## Key points
-- OpenSearch: relevance ranking, vectors, aggregations; near-real-time and not the source of truth.
-- DynamoDB: transactions, conditional writes, key-based access.
+---
 
-## CWD context
-DynamoDB for state, OpenSearch for retrieval.
-`,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs Bedrock Knowledge Bases?
+### 2. Search traffic scales
 
-## Short answer
-Knowledge Bases is a managed RAG pipeline; direct OpenSearch gives full control.
+Suppose CWD receives:
 
-## Key points
-- Knowledge Bases: managed ingestion, chunking, embedding, vector store and retrieval APIs; fast to build, less control.
-- Direct OpenSearch: custom chunking, ACL filters, ranking and evaluation; more to build and operate.
+\`\`\`text
+100 queries/sec
+        ↓
+OpenSearch
+\`\`\`
 
-## CWD context
-Choose direct OpenSearch when entitlement-first control matters; Knowledge Bases for simpler cases or prototypes.
+and later:
+
+\`\`\`text
+5,000 queries/sec
+        ↓
+OpenSearch
+\`\`\`
+
+The search workload can be distributed across the underlying compute capacity.
+
+For CWD, this is especially important because we may have:
+
+* Vector searches
+* BM25 searches
+* Hybrid searches
+* Metadata filtering
+* Reranking
+
+---
+
+### 3. Indexing also scales
+
+When many documents arrive:
+
+\`\`\`text
+S3
+ ↓
+SQS
+ ↓
+Ingestion Workers
+ ↓
+OpenSearch
+\`\`\`
+
+Multiple ingestion Workers can process documents concurrently.
+
+SQS provides buffering so a large document-ingestion spike doesn't overwhelm the search layer.
+
+---
+
+### 4. OpenSearch Serverless reduces infrastructure management
+
+With traditional OpenSearch, I may need to think about:
+
+\`\`\`text
+Cluster
+Nodes
+Instance sizes
+Shard allocation
+Scaling policies
+Capacity planning
+\`\`\`
+
+With **OpenSearch Serverless**, AWS manages much of the underlying infrastructure and automatically adjusts capacity based on workload.
+
+That is useful for CWD because traffic and document ingestion can be unpredictable.
+
+---
+
+### 5. I still need to design for scale
+
+Serverless does **not** mean unlimited capacity.
+
+I would monitor:
+
+\`\`\`text
+Query latency
+Indexing latency
+Search throughput
+4xx / 5xx
+Capacity utilization
+Throttling
+Vector search performance
+\`\`\`
+
+And optimize:
+
+* Number of retrieved documents
+* Vector \`k\`
+* Metadata filtering
+* Chunk size
+* Embedding dimension/model
+* Query concurrency
+* Index design
+* Reranking candidate count
+
+---
+
+# 🎯 Strong interview answer
+
+> **“OpenSearch scales horizontally by distributing data and search workloads across the underlying infrastructure. In CWD, documents are indexed into OpenSearch and vector, BM25, hybrid and metadata-filtered searches are distributed across the search capacity. For OpenSearch Serverless, AWS manages the underlying capacity and automatically scales resources based on workload, reducing the amount of cluster management we need to perform. I would still monitor search latency, indexing throughput, throttling and capacity, and optimize query concurrency, vector K, filtering and index design.”**
+
+### Easy memory trick
+
+**More Data → More Shards → More Capacity → More Throughput**
+
+**Key distinction:**
+**OpenSearch = distributes search/indexing workload**
+**SQS = buffers ingestion workload**
+**ECS = scales application/Worker compute**
+`,code:``},{id:`142-opensearch-serverless-vs-traditional-opensearch`,category:`OpenSearch`,title:`OpenSearch Serverless vs traditional OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch Serverless vs Traditional OpenSearch
+
+The main difference is **who manages the infrastructure and how you control capacity**.
+
+| Area              | OpenSearch Serverless                             | Traditional OpenSearch                     |
+| ----------------- | ------------------------------------------------- | ------------------------------------------ |
+| Infrastructure    | AWS managed                                       | You manage/configure cluster               |
+| Scaling           | More automatic                                    | You plan/configure scaling                 |
+| Nodes             | No direct node management                         | Choose instance types/count                |
+| Capacity planning | Less operational work                             | More responsibility                        |
+| Shards            | Still relevant logically                          | Directly manage shard/index strategy       |
+| Control           | Lower infrastructure control                      | More infrastructure control                |
+| Operations        | Simpler                                           | More operational responsibility            |
+| Cost model        | Capacity-based serverless model                   | Instance/storage/data-transfer based       |
+| Best for          | Variable workloads, less ops                      | Predictable/highly customized workloads    |
+| CWD fit           | **Good fit for RAG/search with variable traffic** | Good when we need detailed cluster control |
+
+### Traditional OpenSearch
+
+You typically manage a cluster:
+
+\`\`\`text
+OpenSearch Cluster
+ ├── Data Nodes
+ ├── Dedicated Master Nodes
+ ├── Shards
+ ├── Replicas
+ └── Storage
+\`\`\`
+
+You need to think about:
+
+* Instance sizing
+* Node count
+* Scaling
+* Shard allocation
+* Replicas
+* Cluster health
+* Capacity planning
+* Upgrades/operations
+
+### OpenSearch Serverless
+
+Conceptually:
+
+\`\`\`text
+CWD
+ ↓
+OpenSearch Serverless Collection
+ ↓
+AWS-managed search capacity
+ ↓
+Vector / BM25 / Hybrid Search
+\`\`\`
+
+AWS handles much of the underlying infrastructure management and capacity scaling.
+
+### Why I would choose Serverless for CWD
+
+CWD has potentially variable:
+
+\`\`\`text
+User traffic
++
+Document ingestion
++
+Vector searches
++
+Hybrid searches
+\`\`\`
+
+So I don't want the team spending significant operational effort managing search clusters.
+
+I'd choose **OpenSearch Serverless when operational simplicity and elastic capacity are more important than deep cluster-level control**.
+
+### When traditional OpenSearch makes sense
+
+I would consider traditional OpenSearch when I need:
+
+* Detailed cluster configuration
+* Specific instance/storage choices
+* Fine-grained shard/node management
+* Predictable sustained workloads where capacity can be carefully planned
+* Specialized operational requirements
+
+### 🎯 Strong interview answer
+
+> **“The key difference is infrastructure control versus operational simplicity. With traditional OpenSearch, we manage the cluster, nodes, instance sizing, shard allocation and scaling strategy. With OpenSearch Serverless, AWS manages much of the underlying search infrastructure and automatically adjusts capacity based on workload. For CWD, I would choose Serverless when we have variable RAG traffic and want to minimize cluster operations. If we had strong requirements for cluster-level control or specialized capacity planning, I would evaluate traditional OpenSearch.”**
+
+**Memory trick:**
+**Serverless = Less Infrastructure Management**
+**Traditional = More Control**
+`,code:``},{id:`143-opensearch-vs-dynamodb`,category:`OpenSearch`,title:`OpenSearch vs DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs DynamoDB
+
+The simple difference is:
+
+> **OpenSearch = Search**
+> **DynamoDB = Application State**
+
+For CWD, they solve different problems.
+
+| Area                         | OpenSearch         | DynamoDB                   |
+| ---------------------------- | ------------------ | -------------------------- |
+| Primary purpose              | Search & retrieval | Application state/data     |
+| Full-text search             | ✅                  | ❌                          |
+| Vector search                | ✅                  | Limited/not primary choice |
+| BM25                         | ✅                  | ❌                          |
+| Hybrid search                | ✅                  | ❌                          |
+| RAG                          | ✅                  | ❌                          |
+| Key-value access             | Not primary        | ✅                          |
+| Workflow state               | Not primary        | ✅                          |
+| Session/task/run data        | Not primary        | ✅                          |
+| High-scale application state | Not primary        | ✅                          |
+| Document/chunk retrieval     | ✅                  | ❌                          |
+
+### In CWD
+
+I would use **OpenSearch** for:
+
+\`\`\`text
+Documents
+   ↓
+Chunks
+   ↓
+Embeddings + Metadata
+   ↓
+OpenSearch
+   ↓
+Vector / BM25 / Hybrid Search
+   ↓
+Relevant chunks
+\`\`\`
+
+And **DynamoDB** for:
+
+\`\`\`text
+Session
+Task
+Run
+Worker status
+Checkpoint
+Idempotency
+Workflow metadata
+\`\`\`
+
+Example:
+
+\`\`\`text
+DynamoDB
+
+RUN#R123
+ ├── STATUS = RUNNING
+ ├── WORKER#CUSTOMER = COMPLETED
+ ├── WORKER#SALES = COMPLETED
+ └── WORKER#INCIDENT = FAILED
+\`\`\`
+
+While OpenSearch contains:
+
+\`\`\`text
+DOC123 / CHUNK001
+DOC123 / CHUNK002
+DOC456 / CHUNK001
+...
+\`\`\`
+
+with their embeddings and searchable text.
+
+### Important distinction
+
+If the user asks:
+
+**"Find documents related to warranty policy."**
+
+→ **OpenSearch**
+
+If the application asks:
+
+**"What is the current status of Run R123?"**
+
+→ **DynamoDB**
+
+### 🎯 Strong interview answer
+
+> **“I would not use OpenSearch and DynamoDB interchangeably. In CWD, OpenSearch is the retrieval layer for RAG—it stores searchable document chunks, embeddings and metadata and supports vector, BM25 and hybrid search. DynamoDB is the durable application-state layer for sessions, tasks, runs, Worker status, checkpoints and idempotency records. So OpenSearch answers ‘which information is relevant?’ while DynamoDB answers ‘what is the current application state?’”**
+
+**Memory trick:**
+**OpenSearch → Find information**
+**DynamoDB → Store application state**
+`,code:``},{id:`144-opensearch-vs-bedrock-knowledge-bases`,category:`OpenSearch`,title:`OpenSearch vs Bedrock Knowledge Bases?`,difficulty:`Advanced`,time:`~15 min`,concept:`# OpenSearch vs Amazon Bedrock Knowledge Bases
+
+The simplest difference:
+
+> **OpenSearch = Search engine / vector store**
+> **Bedrock Knowledge Bases = Managed RAG solution**
+
+| Area                   | OpenSearch                              | Bedrock Knowledge Bases                               |
+| ---------------------- | --------------------------------------- | ----------------------------------------------------- |
+| Main purpose           | Search & vector retrieval               | End-to-end managed RAG                                |
+| Vector search          | ✅                                       | ✅                                                     |
+| BM25 / keyword search  | ✅                                       | Supported through configured data source/vector store |
+| Hybrid search          | ✅                                       | Supported depending on configuration                  |
+| Embedding generation   | You typically build/manage the pipeline | Managed as part of KB ingestion                       |
+| Chunking               | You control it                          | Managed/configurable                                  |
+| Ingestion pipeline     | You build it                            | Managed                                               |
+| Metadata filtering     | ✅                                       | ✅                                                     |
+| ACL/security logic     | You design                              | You still need to design application authorization    |
+| Custom retrieval logic | High control                            | More managed                                          |
+| Operational effort     | Higher                                  | Lower                                                 |
+| CWD flexibility        | **High**                                | **Higher-level abstraction**                          |
+
+## 1. With OpenSearch directly
+
+You build the RAG pipeline yourself:
+
+\`\`\`text
+S3
+ ↓
+Ingestion Worker
+ ↓
+Extract
+ ↓
+Chunk
+ ↓
+Bedrock Embedding Model
+ ↓
+OpenSearch
+ ↓
+Vector / BM25 / Hybrid Search
+ ↓
+Retrieved Chunks
+ ↓
+Bedrock
+ ↓
+Answer
+\`\`\`
+
+This gives you **fine-grained control**.
+
+For example, you can customize:
+
+* Chunking
+* Metadata
+* ACL filtering
+* Hybrid retrieval
+* Reranking
+* Index structure
+* Versioning
+* Incremental updates
+* Deletion handling
+* Retrieval logic
+
+---
+
+## 2. With Bedrock Knowledge Bases
+
+AWS manages much of the RAG plumbing:
+
+\`\`\`text
+S3 / Data Source
+       ↓
+Bedrock Knowledge Bases
+       ↓
+Chunking
+       ↓
+Embedding
+       ↓
+Vector Store
+       ↓
+Retrieve
+       ↓
+Bedrock
+       ↓
+Answer
+\`\`\`
+
+So you don't have to build as much ingestion and retrieval infrastructure yourself.
+
+---
+
+# Which would I use for CWD?
+
+For **CWD**, if the architecture requires **high control over enterprise authorization, custom retrieval, multiple Workers, custom MCP integration, complex metadata/ACL filtering, and detailed RAG evaluation**, I would consider using **OpenSearch directly**.
+
+If the requirement is:
+
+> "We need a managed RAG capability quickly with less infrastructure and pipeline code."
+
+Then **Bedrock Knowledge Bases** is a strong option to evaluate.
+
+### 🎯 Strong interview answer
+
+> **“OpenSearch is primarily the search and vector retrieval layer, while Bedrock Knowledge Bases is a managed RAG service that abstracts much of the ingestion, chunking, embedding and retrieval pipeline. In CWD, I would choose direct OpenSearch when I need fine-grained control over enterprise ACLs, metadata filtering, hybrid retrieval, custom ingestion and evaluation. I would choose Bedrock Knowledge Bases when the priority is a managed RAG implementation with less operational overhead. The decision depends on the required level of customization and control.”**
+
+### Easy memory trick
+
+**OpenSearch → Build and control the RAG retrieval layer**
+
+**Knowledge Bases → AWS manages more of the RAG pipeline**
 `,code:``},{id:`145-how-would-you-monitor-opensearch`,category:`OpenSearch`,title:`How would you monitor OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor OpenSearch?
 
-## Short answer
-Monitor OpenSearch with CloudWatch metrics and alarms, plus retrieval-quality measurement.
+For CWD, I would monitor **availability, latency, throughput, errors, indexing, capacity, and search quality**.
 
-## Key points
-- Search and indexing OCU usage, request latency, success and error counts, throttling.
-- Alarms on latency, OCU near the limit and errors.
-- Recall and precision from evaluation runs.
+\`\`\`text
+CWD
+ ↓
+OpenSearch
+ ↓
+CloudWatch + OpenSearch Monitoring
+ ↓
+Metrics + Logs + Alerts
+ ↓
+Dashboard / SNS / Incident Response
+\`\`\`
 
-## CWD context
-Healthy infrastructure does not prove good retrieval.
+## 1. Monitor search performance
+
+Key metrics:
+
+* **P50 / P95 / P99 search latency**
+* Queries per second
+* Search throughput
+* Slow queries
+* Vector search latency
+* Hybrid search latency
+
+Example:
+
+\`\`\`text
+P95 search latency > 500 ms
+        ↓
+CloudWatch Alarm
+        ↓
+Investigate
+\`\`\`
+
+## 2. Monitor indexing
+
+For CWD RAG ingestion:
+
+\`\`\`text
+S3
+ ↓
+SQS
+ ↓
+Ingestion Worker
+ ↓
+OpenSearch
+\`\`\`
+
+Monitor:
+
+* Documents indexed
+* Indexing latency
+* Indexing failures
+* Bulk request failures
+* Rejected/throttled indexing requests
+* Queue depth
+
+This helps identify whether document ingestion is falling behind.
+
+## 3. Monitor errors
+
+Track:
+
+\`\`\`text
+4xx
+5xx
+Timeouts
+Throttling
+Rejected requests
+Failed indexing operations
+\`\`\`
+
+For example:
+
+\`\`\`text
+OpenSearch throttling
+       ↓
+Reduce ingestion concurrency
+       ↓
+Backoff + retry
+       ↓
+Process remaining SQS messages
+\`\`\`
+
+## 4. Monitor capacity
+
+For OpenSearch Serverless, monitor the service's capacity/resource utilization and workload behavior rather than treating it like a manually managed cluster.
+
+Look for:
+
+* Capacity consumption
+* Sudden traffic increases
+* Indexing spikes
+* Search spikes
+* Throttling
+* Sustained high resource usage
+
+## 5. Monitor RAG quality
+
+Infrastructure monitoring alone isn't enough for CWD.
+
+I would also monitor:
+
+\`\`\`text
+Query
+ ↓
+Retrieved Documents
+ ↓
+Answer
+\`\`\`
+
+Metrics include:
+
+* Recall@K
+* Precision@K
+* MRR / NDCG
+* Retrieval relevance
+* RAGAS context precision/recall
+* Faithfulness
+* Answer relevance
+* Empty/insufficient retrieval rate
+
+For example, if OpenSearch is healthy but retrieves irrelevant chunks, that's a **RAG quality problem**, not an infrastructure problem.
+
+## 6. Monitor security
+
+I would monitor:
+
+* Unauthorized access attempts
+* ACL-filter failures
+* Tenant-isolation violations
+* Authentication/authorization failures
+* Configuration/policy changes
+* Audit logs
+
+A particularly important CWD check is:
+
+\`\`\`text
+User entitlement
+      ↓
+ACL filter
+      ↓
+Retrieved documents
+\`\`\`
+
+Make sure unauthorized documents never reach the LLM.
+
+## 7. Monitoring stack
+
+For AWS CWD:
+
+\`\`\`text
+OpenSearch
+    ↓
+CloudWatch Metrics / Logs
+    ↓
+Dashboards + Alarms
+    ↓
+SNS / Incident Management
+\`\`\`
+
+And for AI-specific tracing:
+
+\`\`\`text
+User Request
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+OpenSearch
+ ↓
+Bedrock
+\`\`\`
+
+Use **correlation IDs** so I can trace one request across the entire flow.
+
+### 🎯 Strong interview answer
+
+> **“I would monitor OpenSearch at three levels: infrastructure, application, and RAG quality. At the infrastructure level, I monitor search and indexing latency, throughput, errors, throttling and capacity. At the application level, I monitor query failures, ingestion failures and queue backlog. For the RAG layer, I monitor retrieval metrics such as Recall@K, relevance, RAGAS context precision and faithfulness. I would use CloudWatch for AWS monitoring and correlation IDs with distributed tracing or Langfuse for end-to-end CWD observability.”**
+
+### Easy memory trick
+
+**Latency → Throughput → Errors → Capacity → Security → RAG Quality**
 `,code:``},{id:`146-how-would-you-troubleshoot-slow-retrieval`,category:`OpenSearch`,title:`How would you troubleshoot slow retrieval?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot slow retrieval?
 
-## Short answer
-Troubleshoot slow retrieval by splitting the time into stages.
+I would **first measure where the latency is coming from**, instead of immediately changing OpenSearch settings.
 
-## Key points
-- Query embedding (Bedrock), search execution, reranking and network.
-- Check OCU saturation or throttling, index size, k and ef_search, filter selectivity and returned fields.
-- Compare with and without filters and hybrid; use slow logs or the profile API.
+\`\`\`text
+User Query
+   ↓
+Embedding Generation
+   ↓
+OpenSearch Retrieval
+   ↓
+Reranking
+   ↓
+Context Preparation
+   ↓
+LLM
+\`\`\`
 
-## CWD context
-Use the trace ID to see the retrieval span inside the full request.
+I would measure each step separately.
+
+### 1. Check P50/P95/P99 latency
+
+Example:
+
+\`\`\`text
+Embedding      → 150 ms
+OpenSearch     → 900 ms  ← Problem
+Reranker       → 200 ms
+LLM            → 2 sec
+\`\`\`
+
+Now I know OpenSearch retrieval is the bottleneck.
+
+---
+
+### 2. Check OpenSearch itself
+
+I would investigate:
+
+* Search latency
+* Query throughput
+* Throttling/rejected requests
+* Capacity utilization
+* Slow queries
+* Index/shard design
+* Vector search performance
+* Concurrent search requests
+
+---
+
+### 3. Reduce the search workload
+
+For example, if I'm retrieving too many candidates:
+
+\`\`\`text
+Before:
+Vector search → Top 1000
+              ↓
+          Reranker
+
+After:
+Vector search → Top 50
+              ↓
+          Reranker → Top 5-10
+\`\`\`
+
+This reduces downstream processing.
+
+---
+
+### 4. Apply metadata filters early
+
+Instead of searching the entire enterprise index:
+
+\`\`\`text
+All Documents
+      ↓
+Vector Search
+      ↓
+ACL Filter
+\`\`\`
+
+I prefer:
+
+\`\`\`text
+Tenant / ACL / Department / Active
+              ↓
+        Vector Search
+              ↓
+          Top-K
+\`\`\`
+
+This reduces the candidate search space where supported by the query/index design.
+
+---
+
+### 5. Check embedding latency
+
+Sometimes OpenSearch isn't actually the problem.
+
+\`\`\`text
+User Query
+   ↓
+Bedrock Embedding
+   ↓
+OpenSearch
+\`\`\`
+
+If embedding generation takes 1 second, optimizing OpenSearch won't solve the overall problem.
+
+For repeated queries, a semantic cache can also avoid generating a new embedding/search when a valid cached result exists.
+
+---
+
+### 6. Check reranking
+
+A common pattern is:
+
+\`\`\`text
+OpenSearch → 100 candidates
+                  ↓
+              Reranker
+                  ↓
+                Top 5
+\`\`\`
+
+If reranking is slow, reduce the candidate count or optimize the reranking strategy.
+
+---
+
+### 7. Check network latency
+
+I would verify:
+
+\`\`\`text
+ECS/Fargate
+     ↓
+VPC / Network
+     ↓
+OpenSearch
+\`\`\`
+
+Keep services in the appropriate AWS region/network path and avoid unnecessary network hops.
+
+---
+
+### 8. Compare before and after
+
+I would establish a baseline:
+
+\`\`\`text
+P50 = 200 ms
+P95 = 800 ms
+P99 = 1.5 sec
+\`\`\`
+
+After optimization:
+
+\`\`\`text
+P50 = 120 ms
+P95 = 400 ms
+P99 = 800 ms
+\`\`\`
+
+Then validate that **retrieval quality did not decrease**.
+
+### 🎯 Strong interview answer
+
+> **“I would troubleshoot slow retrieval by tracing the complete retrieval path and measuring embedding, OpenSearch, reranking and network latency separately. If OpenSearch is the bottleneck, I would check P95/P99 latency, throttling, capacity, query complexity and index design. Then I would optimize candidate count, apply tenant and ACL filters efficiently, and reduce unnecessary reranking. I would also check whether embedding generation or network latency is actually the bottleneck. Finally, I would compare P50/P95/P99 before and after and verify that retrieval quality such as Recall@K has not degraded.”**
+
+### Easy memory trick
+
+**Measure → Identify bottleneck → Optimize → Validate quality**
 `,code:``},{id:`147-how-would-you-optimize-opensearch-cost`,category:`OpenSearch`,title:`How would you optimize OpenSearch cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize OpenSearch cost?
 
-## Short answer
-Reduce OpenSearch cost by capping capacity and shrinking what is stored.
+For CWD, I would optimize cost by **reducing unnecessary data, queries, indexing work, and capacity usage** while maintaining retrieval quality.
 
-## Key points
-- Set OCU limits; reduced redundancy for dev and test.
-- Lower embedding dimensions, quantisation or disk-based vectors; store only needed fields.
-- Share collections sensibly; delete stale documents; cache frequent queries.
-- Consider a managed cluster with reserved instances for steady load.
+\`\`\`text
+Reduce Data
+    ↓
+Reduce Queries
+    ↓
+Reduce Indexing
+    ↓
+Optimize Retrieval
+    ↓
+Control Capacity
+    ↓
+Monitor Cost
+\`\`\`
 
-## CWD context
-The OCU baseline makes small workloads relatively expensive.
-`,code:``}];function Pm(){return(0,M.jsx)($,{data:Nm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Fm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain IAM architecture for CWD.
+### 1. Reduce unnecessary data
 
-## Short answer
-IAM architecture is multi-account, role-based and least-privilege, with guardrails at the organisation level.
+Don't put everything into OpenSearch.
 
-## Key points
-- AWS Organizations with separate dev, test, prod, security and log-archive accounts; SCPs as guardrails.
-- Humans through IAM Identity Center federated to the corporate IdP; workloads through IAM roles.
-- Separate roles per component: Lambda execution, ECS task and execution, Glue, SageMaker.
-- Resource policies, permission boundaries, tags for ABAC, Access Analyzer, CloudTrail.
+\`\`\`text
+S3 → Original documents
+OpenSearch → Searchable chunks + embeddings + metadata
+\`\`\`
 
-## CWD context
-End-user login to CWD (Cognito or OIDC) is separate from IAM.
-`,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:`# IAM user vs IAM role?
+Keep large original files in **S3**, not OpenSearch.
 
-## Short answer
-An IAM user has long-term credentials; an IAM role provides temporary credentials to whoever assumes it.
+---
 
-## Key points
-- Users: avoid for workloads and people.
-- Roles: assumed by services, federated users or other accounts through STS; trust policy controls who can assume.
+### 2. Reduce unnecessary queries
 
-## CWD context
-Use roles everywhere.
-`,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use IAM roles instead of access keys?
+Use caching for repeated queries.
 
-## Short answer
-Use roles because they provide short-lived, automatically rotated credentials with nothing to leak.
+\`\`\`text
+Query
+ ↓
+Semantic Cache
+ ├── Hit → Return cached result
+ └── Miss → OpenSearch
+\`\`\`
 
-## Key points
-- No access keys in code, logs or repositories.
-- Scoped by trust and permission policies; every assumption is logged in CloudTrail.
-- Native for Lambda, ECS, EC2 and other compute.
+This reduces repeated vector/BM25 searches.
 
-## CWD context
-Any long-lived access key is a finding.
-`,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Lambda access S3 securely?
+---
 
-## Short answer
-Give the Lambda execution role read access only to the specific bucket and prefix.
+### 3. Optimize chunking
 
-## Key points
-- s3:GetObject on the exact ARN; kms:Decrypt on the bucket's key.
-- Bucket policy also restricts access; use a gateway VPC endpoint when the function is in a VPC.
-- No keys or broad wildcards.
+Don't create extremely small chunks.
 
-## CWD context
-Both sides (role and bucket policy) express the same least privilege.
-`,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would ECS access Bedrock securely?
+For example:
 
-## Short answer
-Give the ECS task role permission to invoke only approved Bedrock models, over a VPC endpoint.
+\`\`\`text
+Bad:
+Document → thousands of tiny chunks
 
-## Key points
-- bedrock:InvokeModel and streaming actions scoped to approved model or inference-profile ARNs; permission to apply the specific guardrail.
-- Interface VPC endpoint for the Bedrock runtime with an endpoint policy.
-- Security groups; no internet path.
+Better:
+Document → meaningful chunks
+\`\`\`
 
-## CWD context
-This makes "only approved models" a technical control.
-`,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Workers access AWS services?
+Fewer unnecessary chunks means less:
 
-## Short answer
-Each Worker type gets its own task role with only the permissions it needs.
+* Embedding generation
+* Indexing
+* Storage
+* Search workload
 
-## Key points
-- Receive from its own queue, write to its own table items, read its own secrets.
-- IAM condition keys (for example leading keys on DynamoDB) support tenant isolation.
-- Enterprise-system credentials stay with the MCP servers, not the Workers.
+Chunk size should be tuned using retrieval-quality evaluation rather than choosing the smallest possible chunk.
 
-## CWD context
-Blast radius equals one Worker type.
-`,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement least privilege?
+---
 
-## Short answer
-Implement least privilege by starting minimal and tightening with evidence.
+### 4. Use incremental indexing
 
-## Key points
-- Specific actions and resource ARNs, not wildcards; conditions for VPC, tags or MFA.
-- Separate roles per function; permission boundaries and SCPs.
-- Access Analyzer policy generation from CloudTrail activity and unused-access findings; regular reviews.
+Don't re-index the entire document collection every time a document changes.
 
-## CWD context
-Applies to agents and tools as much as to people.
-`,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you secure cross-service communication?
+\`\`\`text
+New document
+    ↓
+Detect changed version
+    ↓
+Re-index only affected chunks
+\`\`\`
 
-## Short answer
-Secure cross-service communication with identity, resource policies and private paths.
+Use:
 
-## Key points
-- SigV4 IAM authentication between services; resource policies on queues, buckets and keys.
-- VPC endpoints with endpoint policies; TLS.
-- aws:SourceArn and SourceAccount conditions prevent confused-deputy problems.
+\`\`\`text
+document_id + version_id
+\`\`\`
 
-## CWD context
-Do not rely on network position alone.
-`,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement resource-based policies?
+for idempotency/version tracking.
 
-## Short answer
-Resource-based policies attach to the resource and name who may access it.
+---
 
-## Key points
-- Examples: S3 buckets, SQS queues, KMS keys, Lambda functions, secrets, ECR.
-- Enable cross-account access without role switching.
-- Evaluated together with identity-based policies.
+### 5. Reduce retrieval candidates
 
-## CWD context
-Use them to add a second lock on sensitive resources.
-`,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Identity-based vs resource-based policies?
+For example:
 
-## Short answer
-Identity-based policies say what a principal can do; resource-based policies say who can use a resource.
+\`\`\`text
+Before:
+Vector Search → 500 candidates
+                    ↓
+                 Reranker
 
-## Key points
-- Identity-based: attached to users, roles and groups.
-- Resource-based: include a Principal; cross-account access needs both sides to allow.
-- Permission boundaries and SCPs cap identity-based permissions.
+After:
+Vector Search → 50 candidates
+                    ↓
+                 Reranker
+                    ↓
+                  Top 5-10
+\`\`\`
 
-## CWD context
-Know how they combine when debugging access denied errors.
-`,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you prevent privilege escalation?
+This reduces downstream processing and overall latency/cost.
 
-## Short answer
-Prevent privilege escalation by restricting who can create or change permissions.
+---
 
-## Key points
-- Restrict iam:PassRole to specific roles and services; deny policy-editing actions to non-admins.
-- Permission boundaries required for role creation; SCP guardrails.
-- Review trust policies; admin roles with MFA.
+### 6. Filter before expensive retrieval
 
-## CWD context
-A workload that can edit its own permissions can grant itself anything.
-`,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you audit IAM activity?
+Use:
 
-## Short answer
-Audit IAM with CloudTrail, Access Analyzer and alerting on sensitive changes.
+\`\`\`text
+tenant_id
+department
+region
+ACL
+active
+document_type
+\`\`\`
 
-## Key points
-- Organisation trail to an immutable S3 bucket with log file validation.
-- Access Analyzer for external and unused access; credential reports and last-used data.
-- EventBridge alerts on CreateAccessKey, AttachRolePolicy and similar; GuardDuty findings.
+to narrow the search population where appropriate.
 
-## CWD context
-Review findings on a schedule, not only after incidents.
-`,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does AWS CloudTrail help?
+For CWD:
 
-## Short answer
-CloudTrail records AWS API activity: who did what, when and from where.
+\`\`\`text
+User
+ ↓
+Tenant + ACL filters
+ ↓
+Vector/BM25 search
+ ↓
+Top-K
+\`\`\`
 
-## Key points
-- Management events by default; optional data events for S3, Lambda and DynamoDB.
-- Supports forensics, compliance and detection through EventBridge and GuardDuty.
-- Log file integrity validation; organisation-wide trails.
+This can reduce unnecessary search work.
 
-## CWD context
-It is an audit trail of AWS actions, not application logging.
-`,code:``}];function Im(){return(0,M.jsx)($,{data:Fm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Lm=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use AWS KMS?
+---
 
-## Short answer
-Use KMS wherever data at rest or secrets need controlled, auditable encryption.
+### 7. Choose OpenSearch Serverless vs managed cluster based on workload
 
-## Key points
-- S3, DynamoDB, SQS, OpenSearch, CloudWatch Logs, Secrets Manager, ECR, SageMaker volumes and artifacts.
-- Envelope encryption for application-level fields; asymmetric keys for signing.
+For variable CWD workloads, **OpenSearch Serverless** can reduce operational overhead and avoid manually maintaining cluster capacity.
 
-## CWD context
-One key per data classification keeps access decisions clear.
-`,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data would you encrypt?
+For a predictable, sustained workload, I would also evaluate whether a traditional OpenSearch deployment provides a more economical capacity model.
 
-## Short answer
-Encrypt everything at rest, and prioritise the data that is sensitive or hard to replace.
+I would make this decision using **actual workload measurements**, not assume one is always cheaper.
 
-## Key points
-- Documents in S3, tenant data in DynamoDB, queues and backups.
-- Logs (they can contain sensitive text), secrets, model artifacts and evaluation datasets.
-- Embeddings and the vector index can reveal source text, so treat them as sensitive.
-- TLS in transit.
+---
 
-## CWD context
-Encryption complements access control; it does not replace it.
-`,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:`# AWS-managed key vs customer-managed key?
+### 8. Monitor cost drivers
 
-## Short answer
-Customer-managed keys give you control and audit; AWS-managed keys are convenient but limited.
+I would track:
 
-## Key points
-- AWS-owned: invisible and free. AWS-managed: created per service, automatic rotation, fixed policy.
-- Customer-managed: your key policy, rotation setting, grants, cross-account use, disable and deletion, with per-key and per-request cost.
+\`\`\`text
+Search requests
+Indexing volume
+Data size
+Vector count
+Capacity consumption
+Query latency
+Throttling
+Unused indexes
+\`\`\`
 
-## CWD context
-Use customer-managed keys for sensitive data.
-`,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt S3?
+Then identify the biggest cost contributors.
 
-## Short answer
-Encrypt S3 with SSE-KMS using a customer-managed key as the bucket default.
+---
 
-## Key points
-- Bucket Keys reduce KMS cost.
-- Bucket policy denies unencrypted or wrongly encrypted uploads.
-- Key policy allows only the ingestion and reader roles.
+# 🎯 Strong interview answer
 
-## CWD context
-Enforce it in policy so a mistake cannot bypass it.
-`,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt DynamoDB?
+> **“I would optimize OpenSearch cost at four levels: data, queries, indexing and capacity. I would keep original documents in S3 and only store searchable chunks, embeddings and required metadata in OpenSearch. I would use semantic caching for repeated queries, incremental indexing instead of full re-indexing, efficient chunking, metadata filtering and smaller retrieval candidate sets. For CWD, I would also evaluate Serverless versus traditional OpenSearch based on actual traffic and utilization. Finally, I would monitor capacity consumption, indexing volume, query volume and latency to continuously identify cost hotspots.”**
 
-## Short answer
-DynamoDB always encrypts at rest; you choose who owns the key.
+### Easy memory trick
 
-## Key points
-- AWS-owned (default), AWS-managed or customer-managed.
-- Customer-managed gives audit and control; backups and exports follow.
+**Less Data → Less Indexing → Less Searching → Less Capacity → Lower Cost**
+`,code:``}];function Pm(){return(0,M.jsx)($,{data:Nm,title:`OpenSearch Cookbook`,subtitle:`Vector and hybrid search, filtering, scaling and troubleshooting`,icon:`🔎`,patternLabel:`Questions`})}var Fm=[{id:`148-explain-iam-architecture-for-cwd`,category:`IAM & Security`,title:`Explain IAM architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`## IAM architecture for CWD
 
-## CWD context
-Choose customer-managed for tables holding tenant or personal data.
+In CWD, I would use **IAM for AWS resource access** and keep **business/user authorization** separate.
+
+\`\`\`text
+User
+ ↓
+Enterprise IdP / Entra ID
+ ↓
+API Gateway
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+AWS Services
+ ├── S3
+ ├── Bedrock
+ ├── OpenSearch
+ ├── DynamoDB
+ └── Secrets Manager
+\`\`\`
+
+### 1. ECS Task Roles
+
+Each CWD service gets its own **IAM task role**.
+
+\`\`\`text
+Coordinator Role
+ ├── DynamoDB
+ ├── Bedrock
+ └── CloudWatch
+
+Sales Worker Role
+ ├── Salesforce-related resources
+ ├── S3
+ └── Bedrock
+
+RAG Worker Role
+ ├── S3
+ ├── OpenSearch
+ └── Bedrock
+\`\`\`
+
+This follows **least privilege**.
+
+A Sales Worker should not automatically have permission to access everything the Coordinator can access.
+
+---
+
+### 2. Task Role vs Execution Role
+
+This is an important interview distinction.
+
+**ECS Task Execution Role**
+
+Used by ECS itself:
+
+\`\`\`text
+ECS → ECR
+   → CloudWatch Logs
+\`\`\`
+
+**ECS Task Role**
+
+Used by the application:
+
+\`\`\`text
+Coordinator → DynamoDB
+Coordinator → Bedrock
+Worker → S3/OpenSearch
+\`\`\`
+
+---
+
+### 3. Example policy
+
+A RAG Worker might have permission only for the required S3 prefix:
+
+\`\`\`text
+s3:GetObject
+arn:aws:s3:::cwd-documents/approved/*
+\`\`\`
+
+rather than:
+
+\`\`\`text
+s3:* on *
+\`\`\`
+
+That's least privilege.
+
+---
+
+### 4. Secrets
+
+I would **not put credentials in Docker images or environment files committed to Git**.
+
+\`\`\`text
+Worker
+ ↓
+Secrets Manager
+ ↓
+Secret
+\`\`\`
+
+KMS can protect the secret encryption keys.
+
+---
+
+### 5. User authorization is separate
+
+IAM answers:
+
+> **“Can this AWS workload access this AWS resource?”**
+
+But CWD also needs to answer:
+
+> **“Can this particular user access this customer/document/action?”**
+
+That comes from the enterprise identity and authorization layer.
+
+\`\`\`text
+User
+ ↓
+Entra ID / IdP
+ ↓
+Groups / Roles / Entitlements
+ ↓
+CWD Authorization
+ ↓
+Document ACL / Tool permissions
+\`\`\`
+
+For example, IAM might allow the RAG Worker to query OpenSearch, but **CWD ACL filtering** determines which documents the user is allowed to retrieve.
+
+---
+
+### 6. Cross-service security
+
+I would also use:
+
+* IAM policies
+* Resource-based policies where applicable
+* KMS
+* Security Groups
+* VPC/private networking
+* CloudTrail
+* IAM Access Analyzer
+
+to create defense in depth.
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I use IAM for workload-to-AWS resource authorization and follow least privilege. Each Coordinator, Delegator and Worker gets an appropriate IAM task role rather than sharing one broad role. The ECS execution role is used by ECS for things like pulling images and writing logs, while the task role is used by the application to access services such as S3, Bedrock, DynamoDB and OpenSearch. Secrets are stored in Secrets Manager and protected with KMS. Separately, user-level authorization is handled through the enterprise identity and CWD authorization layer, including document ACLs and tool permissions. This gives us workload security plus user-level authorization.”**
+
+**Memory trick:**
+
+**IAM = Workload → AWS resources**
+
+**CWD Authorization = User → Business resources**
+`,code:``},{id:`149-iam-user-vs-iam-role`,category:`IAM & Security`,title:`IAM user vs IAM role?`,difficulty:`Advanced`,time:`~15 min`,concept:`## IAM User vs IAM Role
+
+The simplest difference:
+
+> **IAM User = a specific AWS identity, usually for a person or long-term credential use.**
+> **IAM Role = a temporary identity that a user or AWS service assumes.**
+
+|                     | IAM User                                | IAM Role                               |
+| ------------------- | --------------------------------------- | -------------------------------------- |
+| Represents          | Person/application identity             | Permission identity                    |
+| Credentials         | Can have long-term credentials          | Temporary credentials                  |
+| Best for            | Specific human identities, legacy cases | AWS services/workloads                 |
+| ECS/Fargate         | ❌ Not preferred                         | ✅                                      |
+| Credential rotation | You manage it                           | AWS STS provides temporary credentials |
+| CWD usage           | Minimal                                 | **Primary approach**                   |
+
+### In CWD
+
+I would **not create an IAM user for every Coordinator/Worker**.
+
+Instead:
+
+\`\`\`text
+ECS/Fargate
+    ↓
+Assume IAM Role
+    ↓
+Temporary Credentials
+    ↓
+S3 / Bedrock / DynamoDB / OpenSearch
+\`\`\`
+
+Example:
+
+\`\`\`text
+Coordinator Task
+      ↓
+CoordinatorTaskRole
+      ↓
+DynamoDB + Bedrock
+
+RAG Worker Task
+      ↓
+RAGWorkerTaskRole
+      ↓
+S3 + OpenSearch
+\`\`\`
+
+Each role gets only the permissions it needs.
+
+### Why roles are preferred
+
+If you put AWS access keys inside the Coordinator:
+
+\`\`\`text
+❌ AWS Access Key
+❌ Secret Access Key
+❌ Store in application
+\`\`\`
+
+there is a credential-management risk.
+
+With a role:
+
+\`\`\`text
+ECS Task
+   ↓
+IAM Role
+   ↓
+Temporary credentials
+   ↓
+AWS API
+\`\`\`
+
+AWS manages the temporary credentials through the task's role.
+
+### 🎯 Strong interview answer
+
+> **“An IAM user represents a specific identity and can have long-term credentials, while an IAM role provides temporary credentials that a user or AWS service can assume. For CWD, I would prefer IAM roles rather than IAM users for workloads. For example, the Coordinator gets a dedicated ECS task role with only the permissions it needs for DynamoDB and Bedrock, while the RAG Worker gets a separate role for S3 and OpenSearch. This follows least privilege and avoids embedding long-term AWS credentials in the application.”**
+
+**Memory trick:**
+**User = Identity**
+**Role = Temporary permissions for a workload**
+`,code:``},{id:`150-why-use-iam-roles-instead-of-access-keys`,category:`IAM & Security`,title:`Why use IAM roles instead of access keys?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why use IAM roles instead of access keys?
+
+Because **IAM roles provide temporary credentials and avoid storing long-term AWS secrets in the application**.
+
+### Access keys
+
+\`\`\`text
+Application
+   ↓
+Access Key + Secret Key
+   ↓
+AWS
+\`\`\`
+
+Problems:
+
+* Long-lived credentials
+* Need rotation
+* Risk of leaking through code, Docker images, logs, or configuration
+* Harder to manage at scale
+
+### IAM Role
+
+\`\`\`text
+ECS/Fargate
+     ↓
+IAM Task Role
+     ↓
+Temporary Credentials
+     ↓
+AWS Services
+\`\`\`
+
+Benefits:
+
+1. **Temporary credentials** — automatically obtained and rotated.
+2. **No hard-coded secrets** in application code.
+3. **Least privilege** — each CWD service can have its own role.
+4. **Better auditing** — CloudTrail can track role-based activity.
+5. **Easier operations** — no manual access-key rotation for workloads.
+
+### CWD example
+
+\`\`\`text
+Coordinator → CoordinatorRole → Bedrock + DynamoDB
+
+RAG Worker → RAGWorkerRole → S3 + OpenSearch
+
+Sales Worker → SalesWorkerRole → Required AWS resources
+\`\`\`
+
+Each service gets only what it needs.
+
+### 🎯 Strong interview answer
+
+> **“I prefer IAM roles over access keys for CWD workloads because roles provide temporary credentials and eliminate the need to store long-lived AWS secrets in the application. Each ECS task can assume a dedicated least-privilege role, such as a Coordinator role or RAG Worker role. This reduces credential leakage and rotation risk and provides better auditability through CloudTrail.”**
+
+**Memory trick:**
+**Access Key = Long-lived secret**
+**IAM Role = Temporary + Least Privilege**
+`,code:``},{id:`151-how-would-lambda-access-s3-securely`,category:`IAM & Security`,title:`How would Lambda access S3 securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Lambda access S3 securely?
+
+I would use a **Lambda execution role with least-privilege S3 permissions**—not hard-coded access keys.
+
+\`\`\`text
+S3
+ ↑
+ │
+Lambda
+ ↓
+Lambda Execution Role
+ ↓
+IAM Policy
+ ↓
+Specific S3 Bucket / Prefix
+\`\`\`
+
+### 1. Create Lambda execution role
+
+Example:
+
+\`\`\`text
+Lambda
+  ↓
+CWDDocumentProcessorRole
+\`\`\`
+
+The role might allow only:
+
+\`\`\`text
+s3:GetObject
+arn:aws:s3:::cwd-documents/raw/*
+\`\`\`
+
+If Lambda needs to write processed files:
+
+\`\`\`text
+s3:PutObject
+arn:aws:s3:::cwd-documents/processed/*
+\`\`\`
+
+Avoid:
+
+\`\`\`text
+s3:*
+Resource: *
+\`\`\`
+
+---
+
+### 2. S3 bucket policy
+
+I would also use the S3 bucket policy as an additional security layer.
+
+\`\`\`text
+Lambda Role
+     ↓
+IAM Policy
+     ↓
+S3 Bucket Policy
+     ↓
+S3 Object
+\`\`\`
+
+The bucket policy can restrict access to the specific Lambda role and enforce security requirements such as TLS.
+
+---
+
+### 3. Encrypt the data
+
+Use:
+
+\`\`\`text
+S3
+ ↓
+SSE-KMS
+ ↓
+KMS Key
+\`\`\`
+
+The Lambda role needs the required KMS permissions to read/write encrypted objects.
+
+---
+
+### 4. Private networking
+
+If the Lambda runs inside a VPC and the architecture requires private AWS connectivity, I can use an **S3 VPC Gateway Endpoint** so traffic to S3 doesn't need to traverse the public internet.
+
+---
+
+### 5. Audit access
+
+Use **CloudTrail** to audit S3 API activity:
+
+\`\`\`text
+Lambda
+ ↓
+S3 GetObject
+ ↓
+CloudTrail
+ ↓
+Audit
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I would give the Lambda function a dedicated execution role with least-privilege S3 permissions instead of using access keys. For example, the role could have GetObject only on the CWD raw-document prefix and PutObject only on the processed prefix. I would also use an S3 bucket policy as a second authorization layer, encrypt sensitive data with SSE-KMS, use an S3 VPC endpoint where private connectivity is required, and audit access through CloudTrail.”**
+
+**Memory trick:**
+**Role → Least Privilege → Bucket Policy → KMS → Private Access → Audit**
+`,code:``},{id:`152-how-would-ecs-access-bedrock-securely`,category:`IAM & Security`,title:`How would ECS access Bedrock securely?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would ECS access Bedrock securely?
+
+For CWD, I would use an **ECS task IAM role** with least-privilege permissions to invoke the required Bedrock models.
+
+\`\`\`text id="v2k5p0"
+ECS/Fargate
+  Coordinator / Worker
+       ↓
+   IAM Task Role
+       ↓
+   AWS STS
+       ↓
+Bedrock API
+       ↓
+Foundation Model
+\`\`\`
+
+### 1. ECS Task Role
+
+Attach a dedicated role to the ECS task:
+
+\`\`\`text id="3h8qk4"
+CWDCoordinatorTaskRole
+        ↓
+bedrock:InvokeModel
+\`\`\`
+
+I would restrict it to the required Bedrock resources/models where supported rather than giving broad Bedrock permissions.
+
+### 2. No access keys
+
+❌ Don't put:
+
+\`\`\`text
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+\`\`\`
+
+inside the container.
+
+The ECS task automatically receives **temporary credentials** through its IAM role.
+
+### 3. Private connectivity
+
+For a security-sensitive CWD deployment, I would use an **Amazon Bedrock interface VPC endpoint (AWS PrivateLink)** where supported/configured, so ECS can reach Bedrock privately without requiring public internet routing.
+
+\`\`\`text id="j4yq1m"
+Private ECS Subnet
+      ↓
+VPC Endpoint
+      ↓
+Amazon Bedrock
+\`\`\`
+
+### 4. Encryption and secrets
+
+AWS API communication uses **TLS**.
+
+If the application has other credentials/configuration, store them in:
+
+\`\`\`text id="o2jzv8"
+Secrets Manager
+       +
+      KMS
+\`\`\`
+
+rather than in the Docker image.
+
+### 5. Audit and monitoring
+
+I would use:
+
+* CloudTrail for AWS API activity
+* CloudWatch for operational metrics/logs
+* IAM Access Analyzer for permission analysis
+* Correlation IDs/Langfuse for end-to-end CWD tracing
+
+### 🎯 Strong interview answer
+
+> **“In CWD, ECS would access Bedrock using a dedicated ECS task IAM role with least-privilege permissions to invoke the required models. I would not store AWS access keys in the container; ECS provides temporary credentials through the task role. For a private enterprise deployment, I would use a Bedrock VPC endpoint where appropriate, along with TLS, KMS/Secrets Manager for other secrets, and CloudTrail and CloudWatch for auditing and monitoring.”**
+
+**Memory trick:**
+**ECS → Task Role → Private Endpoint → Bedrock → CloudTrail**
+`,code:``},{id:`153-how-would-workers-access-aws-services`,category:`IAM & Security`,title:`How would Workers access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Workers access AWS services?
+
+Each Worker gets a **dedicated ECS task IAM role** with only the permissions it needs.
+
+\`\`\`text
+Worker
+  ↓
+ECS Task Role
+  ↓
+IAM Policy
+  ↓
+AWS Service
+\`\`\`
+
+### Example
+
+\`\`\`text
+Customer Worker
+   ↓
+CustomerWorkerRole
+   ├── DynamoDB → GetItem
+   ├── S3 → GetObject
+   └── Bedrock → InvokeModel
+\`\`\`
+
+A RAG Worker might have:
+
+\`\`\`text
+RAGWorkerRole
+   ├── S3 → GetObject
+   ├── OpenSearch → Search
+   └── Bedrock → InvokeModel
+\`\`\`
+
+### Security
+
+* **No hard-coded AWS access keys**
+* Use temporary credentials through the **ECS task role**
+* Apply **least privilege**
+* Separate roles for different Workers
+* Use **KMS** for encryption
+* Use **VPC endpoints/private networking** where appropriate
+* Monitor with **CloudTrail + CloudWatch**
+
+### 🎯 Strong interview answer
+
+> **“Each CWD Worker would use a dedicated ECS task IAM role. The role would contain only the permissions required by that Worker—for example, a RAG Worker could access S3, OpenSearch, and Bedrock, while a Customer Worker might access DynamoDB and Bedrock. ECS provides temporary credentials automatically, so we don't store access keys in the container. This gives us least privilege, isolation, and auditability.”**
+
+**Memory:**
+**Worker → Task Role → Least Privilege → AWS Service**
+`,code:``},{id:`154-how-do-you-implement-least-privilege`,category:`IAM & Security`,title:`How do you implement least privilege?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How do you implement least privilege?
+
+I give **each service/Worker only the minimum permissions required to perform its job**.
+
+\`\`\`text
+Worker
+  ↓
+Dedicated IAM Role
+  ↓
+Only required actions
+  ↓
+Only required resources
+\`\`\`
+
+### Example in CWD
+
+\`\`\`text
+RAG Worker Role
+ ├── S3: GetObject → cwd-documents/raw/*
+ ├── OpenSearch: Search → CWD index
+ └── Bedrock: InvokeModel → required model
+\`\`\`
+
+It should **not** have:
+
+\`\`\`text
+❌ s3:*
+❌ dynamodb:*
+❌ iam:*
+❌ Access to unrelated buckets
+\`\`\`
+
+### I apply least privilege at multiple levels
+
+1. **Identity** — separate IAM role for each Worker.
+2. **Action** — allow only required API actions.
+3. **Resource** — restrict to specific bucket, table, index, model, etc.
+4. **Network** — private subnets/security groups/VPC endpoints.
+5. **Data** — user-level authorization and document ACLs.
+6. **Credentials** — temporary IAM role credentials, not access keys.
+7. **Review** — CloudTrail/IAM Access Analyzer to identify unnecessary permissions.
+
+### 🎯 Strong interview answer
+
+> **“I implement least privilege by giving every CWD component a dedicated IAM role and allowing only the minimum actions on the specific resources it needs. For example, a RAG Worker may only read a specific S3 prefix, search a specific OpenSearch index, and invoke an approved Bedrock model. I also restrict network access, use temporary credentials, and continuously review permissions using CloudTrail and IAM Access Analyzer.”**
+
+**Memory:**
+**Who → What → Where → Network → Review**
+`,code:``},{id:`155-how-do-you-secure-cross-service-communication`,category:`IAM & Security`,title:`How do you secure cross-service communication?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How do you secure cross-service communication?
+
+In CWD, I secure **Coordinator → Delegator → Worker** communication using **authentication, authorization, encryption, network isolation, and auditing**.
+
+\`\`\`text
+Coordinator
+    ↓ TLS
+Authentication
+    ↓
+Authorization
+    ↓
+Delegator
+    ↓ TLS
+Worker
+\`\`\`
+
+### 1. Authentication
+
+Use workload identity such as **IAM roles / temporary credentials** for AWS services and enterprise identity mechanisms for service-to-service APIs.
+
+### 2. Authorization
+
+Each service gets only the permissions it needs.
+
+\`\`\`text
+Coordinator → allowed → Sales Delegator
+Sales Delegator → allowed → Sales Workers
+\`\`\`
+
+A Worker cannot automatically call another unrelated service.
+
+### 3. Encryption
+
+Use **TLS/HTTPS** for communication.
+
+For private CWD services:
+
+\`\`\`text
+Private VPC
+   ↓
+Security Groups
+   ↓
+Internal Load Balancer / Service Discovery
+   ↓
+Worker
+\`\`\`
+
+### 4. Network isolation
+
+* ECS tasks in private subnets
+* Security groups restrict source/destination and ports
+* VPC endpoints/private connectivity where appropriate
+* No unnecessary public endpoints
+
+### 5. Validate requests
+
+Each service validates:
+
+* Caller identity
+* Authorization
+* Request schema
+* Tenant/context
+* Correlation ID
+* Tool/action permissions
+
+### 6. Audit
+
+Log:
+
+\`\`\`text
+user → service → target service → action → result → latency
+\`\`\`
+
+Use **CloudTrail, CloudWatch, OpenTelemetry/Langfuse** as appropriate.
+
+### 🎯 Strong interview answer
+
+> **“For CWD, I secure Coordinator-to-Delegator-to-Worker communication using TLS, workload authentication, least-privilege authorization, and private network connectivity. Each service has its own identity and permissions, and requests are validated before execution. I also use correlation IDs and centralized logging for auditing and troubleshooting.”**
+
+**Memory:**
+**Authenticate → Authorize → Encrypt → Isolate → Validate → Audit**
+`,code:``},{id:`156-how-do-you-implement-resource-based-policies`,category:`IAM & Security`,title:`How do you implement resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How do you implement resource-based policies?
+
+A **resource-based policy is attached to the AWS resource itself** and defines **who can access that resource and what they can do**.
+
+\`\`\`text
+Worker
+  ↓
+IAM Role
+  ↓
+Resource-based Policy
+  ↓
+S3 / SQS / KMS / etc.
+\`\`\`
+
+### Example: S3 in CWD
+
+Suppose the RAG Worker should read only CWD documents.
+
+\`\`\`text
+RAGWorkerRole
+      ↓
+S3 Bucket Policy
+      ↓
+cwd-documents/raw/*
+\`\`\`
+
+The S3 bucket policy can say:
+
+\`\`\`text
+Principal: RAGWorkerRole
+Action: s3:GetObject
+Resource: arn:aws:s3:::cwd-documents/raw/*
+\`\`\`
+
+So the Worker can read the required objects but not unrelated buckets.
+
+### Why use it?
+
+It gives another security layer:
+
+\`\`\`text
+Identity Policy
+       +
+Resource Policy
+       ↓
+Access decision
+\`\`\`
+
+For example:
+
+* **IAM policy** → what the Worker role is allowed to do
+* **S3 bucket policy** → what the bucket allows that role to do
+
+### 🎯 Strong interview answer
+
+> **“I use resource-based policies to control access directly at the resource level. For example, in CWD, an S3 bucket policy can allow only the RAG Worker IAM role to read objects from a specific prefix. Combined with the Worker's IAM identity policy, this provides defense in depth and prevents unauthorized access to other resources.”**
+
+**Memory:**
+**IAM policy = Who can do what**
+**Resource policy = Who can access this resource**
+`,code:``},{id:`157-identity-based-vs-resource-based-policies`,category:`IAM & Security`,title:`Identity-based vs resource-based policies?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Identity-based vs Resource-based policies
+
+The easiest way to remember:
+
+**Identity-based = attached to the identity**
+**Resource-based = attached to the resource**
+
+|             | Identity-based                   | Resource-based                      |
+| ----------- | -------------------------------- | ----------------------------------- |
+| Attached to | IAM User/Role                    | AWS Resource                        |
+| Answers     | “What can this identity do?”     | “Who can access this resource?”     |
+| Example     | ECS Worker IAM Role              | S3 Bucket Policy                    |
+| Common use  | Worker → AWS service permissions | Control access to specific resource |
+
+### CWD example
+
+**Identity-based policy:**
+
+\`\`\`text
+RAGWorkerRole
+     ↓
+Allow s3:GetObject
+     ↓
+cwd-documents/raw/*
+\`\`\`
+
+**Resource-based policy:**
+
+\`\`\`text
+S3 Bucket
+     ↓
+Bucket Policy
+     ↓
+Allow RAGWorkerRole → GetObject
+\`\`\`
+
+So:
+
+\`\`\`text
+          RAG Worker
+              ↓
+        IAM Role Policy
+              ↓
+       What can I access?
+              ↓
+        S3 Bucket
+              ↑
+       Bucket Policy
+              ↑
+       Who can access me?
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“Identity-based policies are attached to IAM identities such as roles and define what that identity can do. Resource-based policies are attached to resources such as S3 buckets or SQS queues and define which principals can access the resource. In CWD, I would use both where appropriate for defense in depth.”**
+
+**Memory:**
+**Identity policy → What can I do?**
+**Resource policy → Who can access me?**
+`,code:``},{id:`158-how-do-you-prevent-privilege-escalation`,category:`IAM & Security`,title:`How do you prevent privilege escalation?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How do you prevent privilege escalation?
+
+I prevent a service or user from **gaining permissions beyond what they were originally granted**.
+
+### In CWD, I use:
+
+1. **Least-privilege IAM roles**
+
+   * Each Worker gets only required permissions.
+   * Don't give Workers \`iam:*\`.
+
+2. **Restrict IAM management permissions**
+
+   * Application roles should not be able to create/modify IAM roles or policies.
+   * Separate deployment/admin roles from runtime roles.
+
+3. **Permission boundaries / SCPs**
+
+   * Permission boundaries limit the maximum permissions a role can receive.
+   * AWS Organizations SCPs can enforce organization-wide restrictions.
+
+4. **No privilege-changing APIs**
+
+   * Prevent application roles from actions such as:
+
+   \`\`\`text
+   iam:CreateRole
+   iam:AttachRolePolicy
+   iam:PutRolePolicy
+   iam:PassRole
+   \`\`\`
+
+   unless explicitly required.
+
+5. **Separate runtime and deployment identities**
+
+\`\`\`text
+Developer/CI-CD
+      ↓
+Deployment Role
+      ↓
+ECS Task Role
+      ↓
+Worker
+\`\`\`
+
+The Worker should **not** be able to modify its own IAM permissions.
+
+6. **Audit and detection**
+
+   * CloudTrail for IAM activity
+   * IAM Access Analyzer
+   * Alerts for unusual role/policy changes
+
+### 🎯 Strong interview answer
+
+> **“I prevent privilege escalation through least-privilege roles, strict separation between runtime and deployment identities, permission boundaries and SCPs where appropriate, and by explicitly restricting IAM management and PassRole permissions. I also monitor IAM changes through CloudTrail and IAM Access Analyzer.”**
+
+**Memory:**
+**Least Privilege → Separate Roles → Boundaries → Restrict IAM → Audit**
+`,code:``},{id:`159-how-do-you-audit-iam-activity`,category:`IAM & Security`,title:`How do you audit IAM activity?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How do you audit IAM activity?
+
+I use **AWS CloudTrail** as the primary audit mechanism for IAM activity.
+
+\`\`\`text
+IAM User / Role
+      ↓
+AWS API Call
+      ↓
+CloudTrail
+      ↓
+CloudWatch / S3
+      ↓
+Alerts + Investigation
+\`\`\`
+
+### What I monitor
+
+* Role creation/deletion
+* Policy changes
+* Permission changes
+* \`AssumeRole\`
+* \`PassRole\`
+* Access-key activity
+* Changes to trust policies
+* Changes to permission boundaries
+
+### CWD example
+
+If someone changes the \`RAGWorkerRole\`:
+
+\`\`\`text
+RAGWorkerRole
+     ↓
+Policy changed
+     ↓
+CloudTrail records:
+Who → What → When → From where
+     ↓
+Alert / Investigation
+\`\`\`
+
+I would also use **IAM Access Analyzer** to identify overly broad or unintended permissions.
+
+### 🎯 Strong interview answer
+
+> **“I use CloudTrail to audit IAM API activity, including role assumptions, policy changes, role creation, and PassRole activity. I send relevant logs to CloudWatch or S3 for monitoring and retention, create alerts for sensitive IAM changes, and use IAM Access Analyzer to identify unintended or excessive access.”**
+
+**Memory:**
+**CloudTrail = Record → CloudWatch = Monitor → Access Analyzer = Review**
+`,code:``},{id:`160-how-does-aws-cloudtrail-help`,category:`IAM & Security`,title:`How does AWS CloudTrail help?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How does AWS CloudTrail help?
+
+**CloudTrail records AWS API activity** so we can answer:
+
+> **Who did what, when, from where, and against which AWS resource?**
+
+\`\`\`text id="2k2v1c"
+User / IAM Role / Service
+          ↓
+      AWS API Call
+          ↓
+       CloudTrail
+          ↓
+   Logs / Investigation
+\`\`\`
+
+### CWD example
+
+If someone changes the \`RAGWorkerRole\` permissions:
+
+\`\`\`text id="8qzj7n"
+IAM Policy Changed
+       ↓
+CloudTrail
+       ↓
+Who? → Which role/user?
+What? → Policy modification
+When? → Timestamp
+Where? → Source IP / context
+       ↓
+Security Investigation
+\`\`\`
+
+### What I use it for
+
+* **IAM activity** — role/policy changes, \`AssumeRole\`, \`PassRole\`
+* **S3 activity** — object access and bucket changes
+* **KMS activity** — key usage
+* **ECS activity** — service/task changes
+* **Security investigation** — identify who made a change
+* **Compliance/audit** — maintain an activity history
+
+### Important distinction
+
+**CloudTrail ≠ CloudWatch**
+
+* **CloudTrail** → *Who performed which AWS API action?*
+* **CloudWatch** → *How is the application/service behaving?*
+
+### 🎯 Strong interview answer
+
+> **“CloudTrail provides an audit trail of AWS API activity. In CWD, I use it to track IAM changes, role assumptions, S3 access, KMS usage, and infrastructure changes. It helps with security investigations, compliance, and detecting unauthorized or suspicious activity.”**
+
+**Memory:**
+**CloudTrail = Who did what?**
+**CloudWatch = How is it behaving?**
+`,code:``}];function Im(){return(0,M.jsx)($,{data:Fm,title:`IAM & Security Cookbook`,subtitle:`Roles, least privilege, policies, auditing and CloudTrail`,icon:`🔐`,patternLabel:`Questions`})}var Lm=[{id:`161-where-would-you-use-aws-kms`,category:`KMS & Secrets Manager`,title:`Where would you use AWS KMS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Where would you use AWS KMS?
+
+I use **AWS KMS to manage encryption keys** and protect sensitive CWD data.
+
+\`\`\`text
+CWD
+ ↓
+KMS Key
+ ↓
+Encrypt / Decrypt
+\`\`\`
+
+### In CWD, I would use KMS for:
+
+1. **S3**
+
+   * Encrypt enterprise documents using **SSE-KMS**.
+   * Example: customer documents, reports, PDFs.
+
+2. **Secrets Manager**
+
+   * Protect application secrets and credentials with KMS encryption.
+
+3. **DynamoDB**
+
+   * Encrypt sensitive application state using a customer-managed KMS key when required.
+
+4. **CloudWatch Logs**
+
+   * Encrypt sensitive logs where required.
+
+5. **SQS**
+
+   * Encrypt queued messages, especially if they contain sensitive customer/workflow data.
+
+6. **Other AWS services**
+
+   * Use KMS where the service supports KMS encryption and the security requirements call for customer-controlled keys.
+
+### Example
+
+\`\`\`text
+RAG Worker
+    ↓
+S3
+    ↓
+SSE-KMS
+    ↓
+CWD KMS Key
+\`\`\`
+
+The Worker needs appropriate **KMS permissions** such as \`kms:Decrypt\` to read encrypted data.
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I would use AWS KMS as the centralized key-management layer for encrypting sensitive data. For example, S3 documents can use SSE-KMS, and KMS can also protect secrets and other supported AWS resources. I would control key usage through IAM and KMS key policies and audit key activity through CloudTrail.”**
+
+**Memory:**
+**KMS = Key Management + Encryption + Access Control + Audit**
+`,code:``},{id:`162-what-data-would-you-encrypt`,category:`KMS & Secrets Manager`,title:`What data would you encrypt?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What data would you encrypt?
+
+In CWD, I would encrypt **sensitive data both at rest and in transit**.
+
+### Data at rest
+
+\`\`\`text id="4qv8tx"
+S3
+ ├── Customer documents
+ ├── PDFs / reports
+ └── RAG source files
+
+DynamoDB
+ ├── Session/task/run state
+ └── Workflow metadata
+
+SQS
+ └── Messages containing sensitive data
+
+Secrets Manager
+ └── API credentials / secrets
+
+CloudWatch
+ └── Sensitive application logs
+\`\`\`
+
+Use **KMS** for encryption where customer-managed key control is required.
+
+### Data in transit
+
+Encrypt communication using **TLS/HTTPS**:
+
+\`\`\`text id="3f0u4h"
+User
+ ↓ TLS
+API Gateway
+ ↓ TLS
+Coordinator
+ ↓ TLS
+Delegator
+ ↓ TLS
+Worker
+ ↓ TLS
+AWS / Enterprise Systems
+\`\`\`
+
+### Especially sensitive data
+
+I would pay particular attention to:
+
+* Customer/employee PII
+* Confidential enterprise documents
+* Customer IDs and business data
+* API credentials and secrets
+* Authentication tokens
+* Proprietary source data
+* Agent/workflow data containing sensitive information
+
+### Important interview point
+
+**Don't encrypt blindly.** Apply encryption based on **data classification, compliance requirements, and business sensitivity**.
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I would encrypt sensitive customer and enterprise data such as documents, PII, workflow state, credentials, and confidential business information. Data at rest would use service-side encryption, with KMS where customer-controlled key management is required, and all service-to-service and external communication would use TLS. I would also avoid storing secrets or tokens in application logs.”**
+
+**Memory:**
+**Sensitive data → Encrypt at rest + Encrypt in transit + Protect secrets**
+`,code:``},{id:`163-aws-managed-key-vs-customer-managed-key`,category:`KMS & Secrets Manager`,title:`AWS-managed key vs customer-managed key?`,difficulty:`Advanced`,time:`~15 min`,concept:`## AWS-managed key vs Customer-managed key
+
+Both are **KMS keys used for encryption**, but the amount of control you have is different.
+
+|                    | AWS-managed key     | Customer-managed key     |
+| ------------------ | ------------------- | ------------------------ |
+| Key management     | AWS manages         | You manage               |
+| Control            | Less                | More                     |
+| Custom key policy  | Limited             | Full control             |
+| Key rotation       | AWS-managed         | You configure/manage     |
+| Audit/control      | Less customization  | More control             |
+| Operational effort | Low                 | Higher                   |
+| Best for           | Standard encryption | Sensitive/regulated data |
+
+### CWD example
+
+**AWS-managed key:**
+
+\`\`\`text
+S3
+ ↓
+AWS-managed KMS key
+ ↓
+Encrypted document
+\`\`\`
+
+Simple and low operational overhead.
+
+**Customer-managed key:**
+
+\`\`\`text
+S3
+ ↓
+Customer-managed KMS key
+ ↓
+Encrypted document
+\`\`\`
+
+I can control **who can use the key, key policy, access boundaries, rotation settings, and auditing**.
+
+### When would I choose each?
+
+* **AWS-managed key** → when standard AWS encryption is sufficient and I don't need detailed key-management control.
+* **Customer-managed key** → when CWD has stronger security, compliance, separation-of-duties, or customer-controlled key requirements.
+
+### 🎯 Strong interview answer
+
+> **“AWS-managed KMS keys are simpler because AWS manages most of the key lifecycle. Customer-managed keys give us more control over key policies, permissions, rotation, and auditing, but require more operational management. In CWD, I would use customer-managed keys for highly sensitive or compliance-driven data when we need that additional control; otherwise AWS-managed encryption may be sufficient.”**
+
+**Memory:**
+**AWS-managed = Simple**
+**Customer-managed = Control**
+`,code:``},{id:`164-how-would-you-encrypt-s3`,category:`KMS & Secrets Manager`,title:`How would you encrypt S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you encrypt S3?
+
+For CWD, I would use **SSE-KMS** for sensitive enterprise documents.
+
+\`\`\`text
+CWD Worker
+    ↓ TLS
+S3 Bucket
+    ↓
+SSE-KMS
+    ↓
+KMS Key
+    ↓
+Encrypted Object
+\`\`\`
+
+### Implementation
+
+1. **Enable default encryption**
+
+   * Configure the S3 bucket to use SSE-KMS.
+
+2. **Use a KMS key**
+
+   * Customer-managed KMS key when stronger control is required.
+   * Control key usage through IAM + KMS key policy.
+
+3. **Enforce encryption**
+
+   * Bucket policy can deny uploads that don't use the required encryption.
+
+4. **Encrypt in transit**
+
+   * Require HTTPS/TLS using a bucket policy.
+
+5. **Protect the bucket**
+
+   * Block Public Access
+   * Least-privilege IAM
+   * Private VPC endpoint where appropriate
+   * Enable CloudTrail auditing
+
+### 🎯 Strong interview answer
+
+> **“For CWD, I would enable S3 default encryption using SSE-KMS for sensitive enterprise documents. I would control KMS key access through IAM and the KMS key policy, enforce encryption and TLS through the bucket policy, and enable S3 Block Public Access and CloudTrail auditing. This gives encryption at rest, encryption in transit, access control, and auditability.”**
+
+**Memory:**
+**SSE-KMS → IAM → Bucket Policy → TLS → Block Public Access → Audit**
+`,code:``},{id:`165-how-would-you-encrypt-dynamodb`,category:`KMS & Secrets Manager`,title:`How would you encrypt DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you encrypt DynamoDB?
+
+For CWD, DynamoDB provides **encryption at rest by default**. For stronger key control, I can use a **customer-managed KMS key**.
+
+\`\`\`text id="9e4x1p"
+CWD Worker
+    ↓ TLS
+DynamoDB
+    ↓
+KMS Encryption
+    ↓
+Encrypted data
+\`\`\`
+
+### Implementation
+
+1. **Encryption at rest**
+
+   * DynamoDB automatically encrypts stored data.
+
+2. **KMS**
+
+   * Use AWS-owned/AWS-managed encryption for standard requirements.
+   * Use **customer-managed KMS key** when we need more control over key policies and auditing.
+
+3. **Encryption in transit**
+
+   * DynamoDB API communication uses **TLS/HTTPS**.
+
+4. **Access control**
+
+   * Use IAM roles with least privilege.
+
+\`\`\`text id="2xqv7r"
+Worker
+  ↓
+IAM Task Role
+  ↓
+DynamoDB
+  ↓
+KMS
+\`\`\`
+
+5. **Audit**
+
+   * Use CloudTrail for API activity and KMS key usage auditing.
+
+### 🎯 Strong interview answer
+
+> **“DynamoDB encrypts data at rest by default. In CWD, I would use a customer-managed KMS key when stronger key control or compliance requirements exist. Access would be through least-privilege IAM roles, communication would use TLS, and CloudTrail would provide auditing.”**
+
+**Memory:**
+**DynamoDB = Default Encryption → KMS Control → IAM → TLS → Audit**
 `,code:``},{id:`166-how-would-you-encrypt-application-secrets`,category:`KMS & Secrets Manager`,title:`How would you encrypt application secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you encrypt application secrets?
 
 ## Short answer
@@ -191681,454 +208399,1892 @@ Encrypt application secrets with Secrets Manager backed by KMS, and use envelope
 
 ## CWD context
 Separate keys per environment prevent cross-environment access.
-`,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Secrets Manager?
+## How would you encrypt application secrets?
+
+For CWD, I would use **AWS Secrets Manager**, not store secrets in code, Docker images, or environment files.
+
+\`\`\`text id="3x8f4m"
+Application
+    ↓
+IAM Task Role
+    ↓
+Secrets Manager
+    ↓
+KMS
+    ↓
+Encrypted Secret
+\`\`\`
+
+### Example secrets
+
+* Database credentials
+* API keys
+* OAuth client secrets
+* Enterprise system credentials
+* Third-party service tokens
+
+### Implementation
+
+1. Store secrets in **Secrets Manager**.
+2. Encrypt them at rest using **KMS**.
+3. Give the ECS Worker only \`secretsmanager:GetSecretValue\` for the required secret.
+4. Retrieve the secret at runtime.
+5. Never log the secret.
+6. Rotate secrets periodically/automatically where supported.
+7. Audit access using CloudTrail.
+
+### 🎯 Strong interview answer
+
+> **“I would store application secrets in AWS Secrets Manager and encrypt them using KMS. ECS Workers would access only the specific secrets they need through their IAM task role. Secrets are retrieved at runtime rather than stored in code or Docker images, and I would enable rotation and CloudTrail auditing.”**
+
+**Memory:**
+**Secrets Manager → KMS → IAM → Runtime → Rotate → Audit**
+`,code:``},{id:`167-why-use-secrets-manager`,category:`KMS & Secrets Manager`,title:`Why use Secrets Manager?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why use Secrets Manager?
+
+Because it provides a **centralized and secure way to store, retrieve, rotate, and audit application secrets**.
+
+### Without Secrets Manager ❌
+
+\`\`\`text
+API Key
+ ↓
+Code / Docker Image / Config
+ ↓
+Security Risk
+\`\`\`
+
+### With Secrets Manager ✅
+
+\`\`\`text
+ECS Worker
+    ↓
+IAM Task Role
+    ↓
+Secrets Manager
+    ↓
+Encrypted Secret
+\`\`\`
+
+### Key benefits
+
+1. **No hard-coded secrets** in source code or Docker images.
+2. **Encryption at rest** using KMS.
+3. **IAM-based access control** — only authorized Workers can retrieve secrets.
+4. **Secret rotation** — supports changing credentials without manually updating code.
+5. **Centralized management** — one place to manage application secrets.
+6. **Auditing** — access can be tracked through CloudTrail.
+
+### 🎯 Strong interview answer
+
+> **“I use Secrets Manager to avoid storing credentials and API keys in application code, Docker images, or configuration files. Secrets are encrypted with KMS, accessed at runtime using least-privilege IAM roles, and can be rotated and audited. This improves both security and operational management.”**
+
+**Memory:**
+**Store → Encrypt → Access → Rotate → Audit**
+`,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Secrets Manager vs Parameter Store
+
+Both can store application configuration, but **Secrets Manager is designed specifically for secrets**.
+
+|                   | Secrets Manager             | Parameter Store                    |
+| ----------------- | --------------------------- | ---------------------------------- |
+| Primary use       | Secrets/credentials         | Configuration + parameters         |
+| Password/API keys | ✅ Best fit                  | ✅ Can store SecureString           |
+| Secret rotation   | ✅ Built-in rotation support | More manual                        |
+| KMS encryption    | ✅                           | ✅ SecureString                     |
+| Versioning        | ✅                           | ✅                                  |
+| Cost              | Higher                      | Lower / simpler                    |
+| CWD example       | DB password, API secret     | Model name, endpoint, feature flag |
+
+### CWD example
+
+**Secrets Manager:**
+
+\`\`\`text
+Salesforce OAuth Secret
+ServiceNow Credential
+Database Password
+API Key
+\`\`\`
+
+**Parameter Store:**
+
+\`\`\`text
+BEDROCK_MODEL_ID = ...
+OPENSEARCH_ENDPOINT = ...
+MAX_RETRIES = 3
+ENVIRONMENT = prod
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“I use Secrets Manager for sensitive credentials because it provides dedicated secret management and rotation capabilities. I use Parameter Store mainly for application configuration such as model IDs, endpoints, feature flags, and retry settings. Parameter Store can also store SecureString values, but for production secrets I generally prefer Secrets Manager.”**
+
+**Memory:**
+**Secrets Manager = Secrets** 🔐
+**Parameter Store = Configuration** ⚙️
+`,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Lambda retrieve secrets?
+
+I would give the **Lambda function an execution role** that has permission to read only the required secret from **AWS Secrets Manager**.
+
+\`\`\`text
+Lambda
+  ↓
+Lambda Execution Role
+  ↓
+Secrets Manager
+  ↓
+KMS
+  ↓
+Secret
+\`\`\`
+
+### Example
+
+\`\`\`text
+CWD Document Lambda
+        ↓
+CWDDocumentLambdaRole
+        ↓
+secretsmanager:GetSecretValue
+        ↓
+CWD/Salesforce/API
+\`\`\`
 
-## Short answer
-Secrets Manager is the central store with rotation, versioning and audit for credentials.
+### Security
 
-## Key points
-- Fine-grained IAM, KMS encryption, cross-region replication.
-- Managed rotation for supported databases and custom rotation through Lambda.
-- Native integration with ECS and Lambda; CloudTrail audit.
-
-## CWD context
-Use it for enterprise-system credentials that need rotation.
-`,code:``},{id:`168-secrets-manager-vs-parameter-store`,category:`KMS & Secrets Manager`,title:`Secrets Manager vs Parameter Store?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Secrets Manager vs Parameter Store?
+* No secret in source code or deployment package.
+* IAM role uses **least privilege**.
+* Secret encrypted with **KMS**.
+* Don't log the secret.
+* Enable rotation where applicable.
+* CloudTrail can audit secret access.
 
-## Short answer
-Secrets Manager adds rotation and replication at higher cost; Parameter Store is cheaper and simpler.
+### 🎯 Strong interview answer
 
-## Key points
-- Secrets Manager: built-in rotation, replication, per-secret charge.
-- Parameter Store: free standard tier, SecureString, hierarchy; no built-in rotation.
+> **“Lambda retrieves secrets from Secrets Manager using its execution IAM role. I grant only \`GetSecretValue\` access to the specific secret required by that function. The secret is KMS-encrypted, retrieved at runtime, never hard-coded or logged, and access is audited through CloudTrail.”**
 
-## CWD context
-Secrets Manager for rotating credentials; Parameter Store or AppConfig for configuration.
-`,code:``},{id:`169-how-would-lambda-retrieve-secrets`,category:`KMS & Secrets Manager`,title:`How would Lambda retrieve secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Lambda retrieve secrets?
+**Memory:**
+**Lambda → IAM Role → Secrets Manager → KMS → Secret**
+`,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you rotate secrets?
 
-## Short answer
-Lambda retrieves secrets at initialisation with a scoped role and caching.
+I would use **AWS Secrets Manager rotation** so credentials are changed without hard-coding or manually updating applications.
 
-## Key points
-- GetSecretValue via the SDK or the Parameters and Secrets extension.
-- Refresh the cache on authentication failure to pick up rotation.
-- VPC endpoint if in a VPC; never log values.
+\`\`\`text id="6q8x2m"
+Secrets Manager
+      ↓
+Rotation Lambda
+      ↓
+Create new credential
+      ↓
+Update target system
+      ↓
+Test new credential
+      ↓
+Mark new version as current
+\`\`\`
 
-## CWD context
-The role should allow only that function's secrets.
-`,code:``},{id:`170-how-would-you-rotate-secrets`,category:`KMS & Secrets Manager`,title:`How would you rotate secrets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you rotate secrets?
+### Example: Salesforce/API credential
 
-## Short answer
-Rotate with Secrets Manager rotation and a zero-downtime strategy.
+1. Secrets Manager stores the credential.
+2. Rotation is triggered on a schedule.
+3. Rotation process creates a new credential in the target system.
+4. Updates the secret in Secrets Manager.
+5. Application retrieves the **current version** at runtime.
+6. Validate the new credential.
+7. Retire/revoke the old credential.
 
-## Key points
-- Rotation Lambda steps: create, set, test, finish, using AWSPENDING and AWSCURRENT labels.
-- Alternating-users strategy avoids downtime for databases.
-- KMS key rotation is separate; alarm on rotation failure and test regularly.
+### Important for ECS/Lambda
 
-## CWD context
-Rehearse rotation before it becomes an emergency.
-`,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent secrets from appearing in logs?
+Applications should **not permanently cache the secret**.
 
-## Short answer
-Prevent secrets in logs by design and by detection.
+For long-running ECS Workers, after rotation, refresh/reload the secret so the Worker doesn't continue using the old credential indefinitely.
 
-## Key points
-- Never log environment variables, headers or bodies containing credentials; redaction in logging code.
-- CloudWatch Logs data protection policies to mask and audit sensitive patterns.
-- Secret scanning in CI; reference secrets rather than embedding them in task definitions.
-- Never put secrets in prompts.
+### 🎯 Strong interview answer
 
-## CWD context
-Prompts and tool arguments are commonly logged, so treat them as a leak path.
-`,code:``}];function Rm(){return(0,M.jsx)($,{data:Lm,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var zm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the AWS network architecture for CWD.
+> **“I would use Secrets Manager rotation, typically with a scheduled rotation workflow. The rotation process creates a new credential in the target system, stores the new version in Secrets Manager, validates it, makes it current, and then retires the old credential. Applications retrieve the current secret at runtime, and I ensure long-running services refresh the credential after rotation.”**
+
+**Memory:**
+**Create → Update → Validate → Switch → Revoke old**
+`,code:``},{id:`171-how-would-you-prevent-secrets-from-appearing-in-logs`,category:`KMS & Secrets Manager`,title:`How would you prevent secrets from appearing in logs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you prevent secrets from appearing in logs?
+
+I use **secret-safe logging** and make sure sensitive values never enter application logs.
+
+### 1. Don't log secret values
+
+\`\`\`python
+logger.info("Calling Salesforce")
+\`\`\`
+
+Not:
+
+\`\`\`python
+logger.info(f"Token: {token}")  # ❌
+logger.info(f"Password: {password}")  # ❌
+\`\`\`
+
+### 2. Mask sensitive fields
+
+If a request contains:
+
+\`\`\`text
+Authorization
+password
+api_key
+access_token
+client_secret
+\`\`\`
+
+sanitize or mask them before logging:
+
+\`\`\`text
+Authorization: ******
+api_key: ******
+\`\`\`
 
-## Short answer
-CWD runs in a multi-AZ VPC with public, private and isolated tiers, and private endpoints for AWS services.
+### 3. Secrets Manager
 
-## Key points
-- Public subnets hold only the load balancer (if internet-facing) and NAT gateways, one per AZ.
-- Private subnets hold ECS services, Lambda in VPC and MCP servers; isolated subnets hold data stores such as ElastiCache.
-- Gateway endpoints (S3, DynamoDB) and interface endpoints (Bedrock runtime, Secrets Manager, KMS, SQS, ECR, CloudWatch Logs, STS).
-- Security groups per tier, VPC Flow Logs, Direct Connect or VPN to on-premises sources, separate VPCs or accounts per environment.
+Retrieve secrets from **Secrets Manager** at runtime instead of putting them in configuration or environment logs.
 
-## CWD context
-API Gateway reaches ECS through a VPC Link, so the backend has no public address.
-`,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Public subnet vs private subnet?
+### 4. Prevent accidental logging
 
-## Short answer
-A public subnet has a route to an internet gateway; a private subnet does not.
+Configure application/framework logging filters to automatically redact known sensitive fields.
 
-## Key points
-- Public: resources can have public IPs and be reached from the internet.
-- Private: outbound traffic goes through a NAT gateway or VPC endpoints; inbound only from inside the VPC or through a load balancer.
+### 5. Secure error handling
+
+Don't expose secrets through exception messages or stack traces.
+
+\`\`\`text
+❌ Connection failed: password=ABC123
 
-## CWD context
-Only edge components belong in public subnets.
-`,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which CWD components belong in private subnets?
+✅ Connection to Salesforce failed
+\`\`\`
 
-## Short answer
-Almost everything belongs in private subnets.
+### 6. Protect the logs themselves
 
-## Key points
-- ECS Coordinator, Delegators, Workers and MCP servers; Lambda in VPC.
-- ElastiCache, databases and SageMaker endpoints.
-- Public: only the internet-facing edge and NAT gateways.
+Use:
 
-## CWD context
-If a component does not need to be reached from the internet, it must not be reachable.
-`,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why deploy Workers in private subnets?
+* CloudWatch Logs encryption
+* Restricted IAM access
+* Appropriate retention
+* CloudTrail for audit activity
+
+### 🎯 Strong interview answer
+
+> **“I prevent secrets from appearing in logs by never logging credentials directly, using structured logging with automatic redaction of sensitive fields, and sanitizing errors and request headers. Secrets are retrieved from Secrets Manager at runtime. I also restrict and encrypt log access so even the logs themselves are protected.”**
 
-## Short answer
-Deploy Workers in private subnets to remove inbound exposure and control outbound access.
+**Memory:**
+**Don't Log → Mask → Sanitize → Encrypt → Restrict**
+`,code:``}];function Rm(){return(0,M.jsx)($,{data:Lm,title:`KMS & Secrets Manager Cookbook`,subtitle:`Encryption keys, secrets retrieval, rotation and log hygiene`,icon:`🗝️`,patternLabel:`Questions`})}var zm=[{id:`172-explain-the-aws-network-architecture-for-cwd`,category:`VPC & Networking`,title:`Explain the AWS network architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`## AWS Network Architecture for CWD
 
-## Key points
-- No public IPs; smaller attack surface.
-- Outbound to enterprise systems through NAT with fixed IPs for allow-listing, or private links.
-- Egress filtering to limit data exfiltration.
+For CWD, I would use a **VPC with public subnets for the entry layer and private subnets for all application services**.
 
-## CWD context
-Workers hold access to sensitive systems, so their network path should be tightly controlled.
-`,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a NAT Gateway?
+\`\`\`text
+                         Internet / Users
+                               │
+                               ▼
+                         API Gateway
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   Public Subnets    │
+                    │   ALB / NAT GW      │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │   Private Subnets   │
+                    │                     │
+                    │  Coordinator       │
+                    │       ↓             │
+                    │  Delegators        │
+                    │       ↓             │
+                    │  Workers           │
+                    └───────┬─────────────┘
+                            │
+             ┌──────────────┼─────────────────┐
+             ▼              ▼                 ▼
+          DynamoDB        S3              OpenSearch
+             │
+             ▼
+          Bedrock
+\`\`\`
 
-## Short answer
-A NAT gateway lets private resources make outbound connections without allowing inbound ones.
+### 1. VPC and Availability Zones
 
-## Key points
-- Lives in a public subnet with an Elastic IP; one per AZ for availability.
-- Charged per hour and per GB processed.
+I would deploy the CWD application across **multiple Availability Zones** for high availability.
 
-## CWD context
-NAT cost grows with traffic, so keep AWS-service traffic on VPC endpoints.
-`,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use NAT Gateway?
+\`\`\`text
+VPC
+ ├── AZ-1
+ │    ├── Public subnet
+ │    └── Private subnet
+ │
+ └── AZ-2
+      ├── Public subnet
+      └── Private subnet
+\`\`\`
 
-## Short answer
-Use NAT for outbound internet access that endpoints cannot provide.
+### 2. Public vs private subnets
 
-## Key points
-- Calls from Workers and MCP servers to Salesforce, ServiceNow and other SaaS APIs.
-- Fixed Elastic IPs for vendor allow-lists.
-- One NAT per AZ; optionally Network Firewall for egress control.
+**Public subnet:**
 
-## CWD context
-Use VPC endpoints for S3, ECR, Bedrock and similar to cut NAT cost.
-`,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would private workloads access AWS services?
+* ALB, if internet-facing
+* NAT Gateway
 
-## Short answer
-Private workloads reach AWS services through VPC endpoints, keeping traffic on the AWS network.
+**Private subnet:**
 
-## Key points
-- Gateway endpoints for S3 and DynamoDB; interface endpoints (PrivateLink) for most other services.
-- Private DNS makes the normal service hostname resolve to the endpoint.
-- Endpoint policies restrict actions and resources.
+* ECS/Fargate Coordinator
+* Delegators
+* Workers
+* Internal services
 
-## CWD context
-Fall back to NAT only for services without an endpoint.
-`,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are VPC endpoints?
+The application containers should **not have public IP addresses**.
 
-## Short answer
-VPC endpoints provide private connectivity to AWS services and PrivateLink services without an internet gateway or NAT.
+### 3. Security Groups
 
-## Key points
-- Types: gateway and interface (plus Gateway Load Balancer endpoints).
-- Endpoint policies control what can be reached.
+Use least-privilege network rules.
+
+\`\`\`text
+ALB SG
+ ↓ port 443
+Coordinator SG
+ ↓ required port
+Delegator SG
+ ↓ required port
+Worker SG
+\`\`\`
+
+For example, a Worker Security Group should allow traffic only from the appropriate Delegator/service, not from the entire internet.
+
+### 4. Service-to-service communication
+
+For internal CWD communication:
+
+\`\`\`text
+Coordinator
+    ↓
+Internal service discovery / Load Balancer
+    ↓
+Delegator
+    ↓
+Worker
+\`\`\`
+
+Use **private DNS/service discovery**, TLS, authentication and authorization.
+
+### 5. AWS service connectivity
+
+For services such as S3 and other supported AWS services, use **VPC endpoints** where appropriate.
+
+\`\`\`text
+Private ECS
+    ↓
+VPC Endpoint
+    ↓
+AWS Service
+\`\`\`
+
+This reduces the need for internet-based paths.
+
+### 6. NAT Gateway
+
+If private ECS tasks need outbound internet access—for example, to reach an external API—traffic can go:
+
+\`\`\`text
+Private ECS
+    ↓
+NAT Gateway
+    ↓
+Internet
+\`\`\`
+
+NAT is for **outbound** connectivity; it does not make the ECS task publicly reachable.
+
+### 7. Network security layers
+
+I would use:
+
+* VPC
+* Private subnets
+* Security Groups
+* Network ACLs where appropriate
+* VPC endpoints
+* TLS
+* IAM roles
+* AWS WAF at the public API boundary where applicable
+* CloudTrail/CloudWatch monitoring
+
+### 🎯 Strong interview answer
+
+> **“For CWD, I would use a multi-AZ VPC with public subnets for the controlled ingress layer and private subnets for the Coordinator, Delegators, and Workers. API Gateway and the ALB provide the entry boundary, while ECS tasks remain private without public IPs. Security Groups restrict service-to-service traffic, and private service discovery handles internal communication. I would use VPC endpoints for supported AWS services, NAT only when private workloads need outbound internet access, and TLS, IAM, and CloudTrail/CloudWatch for additional security and observability.”**
+
+**Memory:**
+**VPC → Public Entry → Private ECS → SG → VPC Endpoints → NAT → Monitor**
+`,code:``},{id:`173-public-subnet-vs-private-subnet`,category:`VPC & Networking`,title:`Public subnet vs private subnet?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Public subnet vs Private subnet
+
+The main difference is **whether resources have a route to the Internet Gateway**.
+
+|                        | Public Subnet                 | Private Subnet                     |
+| ---------------------- | ----------------------------- | ---------------------------------- |
+| Internet Gateway route | ✅ Yes                         | ❌ No direct route                  |
+| Public IP              | Can have one                  | Typically no public IP             |
+| Internet inbound       | Possible with proper controls | Not directly                       |
+| Typical CWD use        | ALB, NAT Gateway              | ECS Coordinator/Delegators/Workers |
+| Security               | More exposed                  | More isolated                      |
+
+### CWD example
+
+\`\`\`text
+Internet
+   ↓
+Internet Gateway
+   ↓
+Public Subnet
+   ↓
+ALB
+   ↓
+Private Subnet
+   ↓
+ECS/Fargate
+ ┌──────┼──────┐
+Coordinator
+Delegators
+Workers
+\`\`\`
+
+### Private ECS needs internet?
+
+It can use:
+
+\`\`\`text
+Private ECS
+    ↓
+NAT Gateway
+    ↓
+Internet
+\`\`\`
+
+The ECS task can make **outbound** connections, but the internet cannot directly initiate connections to the ECS task.
+
+### 🎯 Strong interview answer
+
+> **“A public subnet has a route to an Internet Gateway, so resources such as an internet-facing ALB can be placed there. A private subnet does not have direct Internet Gateway access, so I would place CWD ECS services there for isolation. If those services need outbound internet access, they can use a NAT Gateway.”**
+
+**Memory:**
+**Public = Internet Gateway route**
+**Private = No direct Internet Gateway route**
+`,code:``},{id:`174-which-cwd-components-belong-in-private-subnets`,category:`VPC & Networking`,title:`Which CWD components belong in private subnets?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Which CWD components belong in private subnets?
+
+**Almost all CWD application workloads should be in private subnets.**
+
+\`\`\`text
+Public Subnet
+   ↓
+ALB
+   ↓
+Private Subnets
+   ├── Coordinator
+   ├── Sales Delegator
+   ├── IT Delegator
+   ├── Customer Worker
+   ├── Incident Worker
+   └── RAG Worker
+\`\`\`
+
+### Private subnet components
+
+1. **Coordinator** — main orchestration service.
+2. **Delegators** — Sales, IT/Service, Manufacturing, etc.
+3. **Workers** — Customer, Incident, RAG, CRM workers.
+4. **Internal MCP services/servers** — when hosted in AWS.
+5. **Internal APIs/services** used by CWD.
+6. **ECS/Fargate tasks** running these components.
+
+### What should NOT be directly public?
+
+\`\`\`text
+❌ Coordinator
+❌ Delegators
+❌ Workers
+❌ MCP servers
+❌ Internal APIs
+\`\`\`
+
+Users should reach them through the controlled entry layer:
+
+\`\`\`text
+User
+ ↓
+API Gateway / ALB
+ ↓
+Private ECS
+ ↓
+Coordinator → Delegator → Worker
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“In CWD, I would place the Coordinator, all Delegators, Workers, internal MCP services, and other application services in private subnets. They should not have public IPs. External traffic enters through API Gateway or an appropriate load-balancing layer, while internal services communicate privately using security groups, service discovery, and TLS.”**
+
+**Memory:**
+**Application workloads = Private** 🔒
+`,code:``},{id:`175-why-deploy-workers-in-private-subnets`,category:`VPC & Networking`,title:`Why deploy Workers in private subnets?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Why deploy Workers in private subnets?
+
+Because Workers often handle **sensitive enterprise data and powerful downstream tools**, so they should not be directly reachable from the internet.
+
+\`\`\`text
+Internet
+   ↓
+API Gateway / ALB
+   ↓
+Private Subnet
+   ↓
+Coordinator
+   ↓
+Delegator
+   ↓
+Worker
+   ↓
+MCP / AWS / Enterprise Systems
+\`\`\`
+
+### Main reasons
+
+1. **Reduce attack surface**
+   Workers don't need public IPs.
+
+2. **Control inbound access**
+   Security Groups can allow traffic only from authorized CWD services.
+
+3. **Protect sensitive data**
+   Workers may process customer data, documents, tickets, etc.
+
+4. **Protect powerful tools**
+   Workers may invoke Salesforce, ServiceNow, S3, Bedrock, etc.
 
-## CWD context
-They improve security and reduce NAT cost.
-`,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Gateway endpoint vs interface endpoint?
+5. **Private service-to-service communication**
+   Coordinator → Delegator → Worker stays inside the private network.
 
-## Short answer
-Gateway endpoints are route-table based and free; interface endpoints are ENI-based and charged.
+6. **Outbound access is controlled**
+   If a Worker needs internet access, use NAT Gateway or appropriate VPC endpoints.
 
-## Key points
-- Gateway: S3 and DynamoDB only; not reachable from on-premises or other VPCs.
-- Interface: private IPs in your subnets, security-group controlled, many services, reachable over Direct Connect or VPN; hourly and per-GB charges.
+### 🎯 Strong interview answer
 
-## CWD context
-Use gateway endpoints for S3 and DynamoDB where possible.
-`,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you privately access S3?
+> **“I deploy Workers in private subnets because they process sensitive enterprise data and can invoke powerful downstream tools. They don't need direct internet exposure. Security Groups restrict inbound traffic to authorized CWD services, while VPC endpoints or NAT provide controlled outbound connectivity when required. This reduces the attack surface and provides network isolation.”**
 
-## Short answer
-Access S3 privately through a gateway endpoint plus policies that require it.
+**Memory:**
+**Sensitive + Powerful + No Public Access = Private Subnet**
+`,code:``},{id:`176-what-is-a-nat-gateway`,category:`VPC & Networking`,title:`What is a NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## What is a NAT Gateway?
+
+**NAT Gateway allows resources in private subnets to make outbound connections to the internet without allowing inbound internet connections to those resources.**
 
-## Key points
-- Route-table entry to the S3 endpoint; endpoint policy limiting buckets.
-- Bucket policy denying requests not coming through the endpoint (aws:SourceVpce).
-- Use an S3 interface endpoint for on-premises or cross-VPC access.
+\`\`\`text id="n6v8r2"
+Private ECS Worker
+       ↓
+Private Subnet
+       ↓
+NAT Gateway
+       ↓
+Internet Gateway
+       ↓
+Internet
+\`\`\`
 
-## CWD context
-The bucket policy makes private access enforced, not optional.
-`,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you privately access Bedrock?
+### CWD example
 
-## Short answer
-Access Bedrock privately through interface endpoints for the runtime API.
+Suppose a Worker needs to call an external API:
 
-## Key points
-- Endpoint for bedrock-runtime (and the control plane or agent runtime endpoints if used) in private subnets.
-- Security group allowing 443 from workloads; private DNS enabled; endpoint policy limiting models.
-- No NAT needed for Bedrock traffic.
+\`\`\`text id="0d5c3w"
+Worker
+ ↓
+NAT Gateway
+ ↓
+External API
+\`\`\`
 
-## CWD context
-Combine with IAM restrictions on approved model ARNs.
-`,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure traffic between services?
+The Worker does **not** need a public IP.
 
-## Short answer
-Secure service-to-service traffic with layered controls.
+### Important distinction
 
-## Key points
-- Security groups referencing security groups; private subnets.
-- TLS everywhere, including internal hops; IAM or JWT authentication between services.
-- Endpoint policies, NACLs for coarse denies, Flow Logs, Network Firewall for egress.
-- PrivateLink to expose MCP servers across accounts.
+\`\`\`text id="3z8q5p"
+NAT Gateway
+= Outbound Internet Access
 
-## CWD context
-Authenticate every call; do not trust the network.
-`,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Security Group vs NACL?
+Internet Gateway
+= VPC ↔ Internet connectivity
+\`\`\`
 
-## Short answer
-Security groups are stateful and allow-only at the resource level; NACLs are stateless and rule-ordered at the subnet level.
+NAT Gateway does **not** make the private Worker publicly reachable.
 
-## Key points
-- Security group: return traffic automatic; evaluates all rules.
-- NACL: allow and deny rules in order; must permit return traffic and ephemeral ports.
+### 🎯 Strong interview answer
 
-## CWD context
-Security groups are the main control; NACLs add coarse subnet-level blocks.
-`,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a networking failure?
+> **“A NAT Gateway provides outbound internet connectivity for resources in private subnets while preventing direct inbound internet connections. In CWD, if a private ECS Worker needs to call an external API, its traffic can go through the NAT Gateway. The Worker doesn't need a public IP.”**
 
-## Short answer
-Troubleshoot networking by tracing the path in a fixed order.
+**Memory:**
+**Private Subnet → NAT → Internet = Outbound only**
+`,code:``},{id:`177-where-would-you-use-nat-gateway`,category:`VPC & Networking`,title:`Where would you use NAT Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Where would you use NAT Gateway?
 
-## Key points
-- DNS resolution (private DNS and endpoint names), route tables, security groups on both ends, NACLs in both directions.
-- Endpoint policies, NAT gateway health and port allocation, target group health.
-- An AccessDenied error is IAM; a timeout is usually network.
-- Tools: VPC Reachability Analyzer, Flow Logs, Network Access Analyzer, NAT metrics.
+In CWD, I would use a **NAT Gateway when a private-subnet workload needs outbound internet access**.
 
-## CWD context
-Test from the same subnet as the failing workload.
-`,code:``}];function Bm(){return(0,M.jsx)($,{data:zm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Vm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement CWD monitoring using CloudWatch?
+\`\`\`text
+Private ECS Worker
+       ↓
+NAT Gateway
+       ↓
+Internet Gateway
+       ↓
+External API
+\`\`\`
 
-## Short answer
-Implement monitoring with structured logs, metrics, alarms, traces and dashboards in CloudWatch and X-Ray.
+### CWD examples
 
-## Key points
-- JSON logs in per-service log groups with retention; custom metrics through Embedded Metric Format.
-- Alarms to SNS, Chatbot or on-call tools; dashboards per layer; Logs Insights queries.
-- X-Ray or OpenTelemetry tracing with Application Signals; Container Insights and Lambda Insights.
-- SLO-based alerting with composite alarms.
+Use NAT when a Worker needs to call:
 
-## CWD context
-Monitor quality and cost as well as uptime.
-`,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What CloudWatch metrics would you monitor?
+* External third-party APIs
+* External SaaS services
+* Public package/repository endpoints during controlled operations
+* External services that don't have private connectivity
 
-## Short answer
-Track health, capacity, quality and cost at each layer.
+### When I would NOT use NAT
 
-## Key points
-- API Gateway and ALB latency and errors; ECS CPU, memory and running tasks; Lambda errors, throttles and duration.
-- SQS oldest-message age and DLQ; DynamoDB throttling; OpenSearch OCU and latency; Step Functions failures.
-- Bedrock invocations, latency, tokens and throttles.
-- Custom: agent success rate, loop-guard hits, groundedness, cost per request.
-
-## CWD context
-Pick a few SLO metrics and keep the rest for diagnosis.
-`,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What logs would you collect?
+If the destination is an AWS service that supports a suitable **VPC endpoint**, I would prefer the VPC endpoint.
 
-## Short answer
-Collect structured application logs plus service and security logs, without sensitive content.
+\`\`\`text
+ECS → VPC Endpoint → S3
+\`\`\`
 
-## Key points
-- Application logs with correlation ID, tenant, agent, tool, status, duration, model and prompt version, token counts.
-- API Gateway access logs, ALB logs, Step Functions and WAF logs, VPC Flow Logs, CloudTrail.
-- Bedrock invocation logs with care for sensitive content.
-
-## CWD context
-Log document IDs and scores, not document content.
-`,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you trace one request across AWS services?
-
-## Short answer
-Trace a request with the X-Ray trace header propagated across every hop.
+instead of:
 
-## Key points
-- API Gateway active tracing; ADOT or the X-Ray SDK in ECS; Lambda active tracing.
-- SQS carries the trace header as a system attribute; Step Functions integrates with X-Ray.
-- Custom spans around Bedrock, MCP and OpenSearch calls; service map in CloudWatch.
-
-## CWD context
-Test asynchronous hops; they are where traces usually break.
-`,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create correlation IDs?
-
-## Short answer
-A correlation ID is one identifier carried through every log and message for a request.
+\`\`\`text
+ECS → NAT → Internet → S3
+\`\`\`
 
-## Key points
-- Generated or accepted at the edge, from the API Gateway request ID or a header.
-- Propagated in headers, SQS message attributes, Step Functions input and LangGraph state.
-- Included in every log line; returned to the client; stored on the run record.
-
-## CWD context
-Support should be able to start from a user-supplied request ID.
-`,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Lambda errors?
-
-## Short answer
-Monitor Lambda errors with metrics, metric math and log filters.
+### 🎯 Strong interview answer
 
-## Key points
-- Errors, Throttles, Duration relative to the timeout, ConcurrentExecutions.
-- Error rate as Errors divided by Invocations; metric filters for exceptions.
-- Alarms to SNS; watch DLQ depth for async and SQS triggers.
-
-## CWD context
-Alarm on rate, not just count.
-`,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor ECS?
-
-## Short answer
-Monitor ECS with Container Insights, service metrics and task events.
+> **“I use NAT Gateway only when private CWD workloads need outbound internet access, such as calling an external API. I would not use NAT unnecessarily; for supported AWS services like S3, I prefer VPC endpoints for private connectivity. NAT provides outbound access but does not allow unsolicited inbound connections to the private workload.”**
 
-## Key points
-- CPU, memory, network, running versus desired task count.
-- Stopped-task reasons through EventBridge task state change events.
-- ALB target health, deployment events and logs.
-
-## CWD context
-Alert when running tasks fall below desired for more than a few minutes.
-`,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor API Gateway?
-
-## Short answer
-Monitor API Gateway with metrics, access logs and WAF metrics.
+**Memory:**
+**NAT = Private workload → External Internet**
+`,code:``},{id:`178-how-would-private-workloads-access-aws-services`,category:`VPC & Networking`,title:`How would private workloads access AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would private workloads access AWS services?
 
-## Key points
-- Count, 4XX, 5XX, Latency and IntegrationLatency; throttle counts.
-- Access logs for per-route analysis; WAF blocked and allowed requests.
-- Alarms on 5XX rate and p95 latency.
-
-## CWD context
-A gap between Latency and IntegrationLatency shows gateway overhead.
-`,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor SQS?
-
-## Short answer
-Monitor SQS for backlog, age and dead letters.
+I would use **VPC endpoints where supported**, instead of sending AWS service traffic through the public internet.
 
-## Key points
-- Visible and in-flight messages, oldest-message age, messages sent, received and deleted.
-- Alarm when the DLQ has any visible message.
-- Consumer lag drives auto scaling.
-
-## CWD context
-Oldest-message age is the best SLO signal.
-`,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Bedrock?
-
-## Short answer
-Monitor Bedrock with its CloudWatch metrics and invocation logging.
-
-## Key points
-- Invocations, latency, client and server errors, throttles, input and output tokens, per model.
-- Guardrail intervention counts; application inference profile metrics for per-tenant attribution.
-- Alarms on throttles, latency and token spikes.
-
-## CWD context
-Rising throttles mean capacity planning is due.
-`,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you create CloudWatch alarms?
-
-## Short answer
-Create alarms that page on symptoms and explain causes, with noise control.
-
-## Key points
-- Static and anomaly-detection thresholds; metric math for rates; percentile statistics.
-- Composite alarms to reduce noise; correct handling of missing data.
-- Actions to SNS, Chatbot, on-call tools or auto-remediation Lambdas; defined in IaC.
-- Symptoms: latency, error rate, SLO burn. Causes: DLQ, throttling, capacity.
-
-## CWD context
-Every alarm links to a runbook and an owner.
-`,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect latency degradation?
-
-## Short answer
-Detect latency degradation with percentile alarms, anomaly detection and synthetic probes.
-
-## Key points
-- p95 and p99 on API Gateway Latency and ALB TargetResponseTime.
-- Anomaly-detection bands; Bedrock InvocationLatency; SQS age.
-- CloudWatch Synthetics canaries for end-to-end probing; release markers.
-
-## CWD context
-Averages hide the tail.
-`,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect a cost spike?
-
-## Short answer
-Detect cost spikes with budgets, anomaly detection and usage-level metrics.
-
-## Key points
-- AWS Budgets on actual and forecast; Cost Anomaly Detection.
-- Cost Explorer by service, usage type and tag; custom token-per-hour metrics and alarms.
-- Cost and usage reports with Athena; check NAT data processed and log ingestion.
-
-## CWD context
-Runaway agent loops and retry storms show up as token spikes first.
-`,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a production request using CloudWatch?
-
-## Short answer
-Troubleshoot a production request from the correlation ID outward.
-
-## Key points
-- Find the trace or service map segment that is slow or failing.
-- Query logs across log groups by correlation ID in Logs Insights.
-- Check metrics in the same window: throttles, 5XX, queue age; then recent deployments and prompt, model or config changes.
-- Check quotas, mitigate (roll back, fall back, scale), verify, then do root-cause analysis.
-
-## CWD context
-Mitigate first, investigate second.
-`,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:`# CloudWatch vs CloudTrail vs X-Ray?
-
-## Short answer
-CloudWatch shows performance, CloudTrail shows who did what, and X-Ray shows the request path.
-
-## Key points
-- CloudWatch: metrics, logs and alarms.
-- CloudTrail: API audit trail of account activity.
-- X-Ray: distributed tracing and latency breakdown.
-
-## CWD context
-Example: X-Ray finds a slow Bedrock call, CloudWatch shows throttles, CloudTrail shows who changed the quota or policy.
-`,code:``}];function Hm(){return(0,M.jsx)($,{data:Vm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Um=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale CWD horizontally?
-
-## Short answer
-Scale horizontally by keeping compute stateless and pushing state and load into managed, scalable services.
-
-## Key points
-- ECS behind an ALB with target-tracking scaling; Lambda scales itself.
-- State in DynamoDB and ElastiCache; async work through SQS.
-- Scale data stores (DynamoDB on-demand, OpenSearch OCUs, ElastiCache cluster mode).
-- Remove the real bottleneck, usually Bedrock quota; load test.
-
-## CWD context
-Partition by tenant to keep one tenant from affecting others.
-`,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design CWD for 10,000 concurrent users?
-
-## Short answer
-Size from request rate and tokens, not user count.
-
-## Key points
-- Example: 10,000 users each sending one request every 30 seconds is roughly 330 requests per second.
-- Multiply by tokens per request for required tokens per minute; compare with Bedrock quota and provisioned throughput.
-- Size ECS tasks by requests per task; check API Gateway quotas, DynamoDB capacity, OpenSearch OCUs and Redis.
-- Plan for streaming connections; add per-tenant quotas, backpressure and load testing.
-
-## CWD context
-Present the arithmetic and name the bottleneck first.
-`,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle sudden traffic spikes?
-
-## Short answer
-Handle sudden spikes by absorbing, scaling quickly and degrading gracefully.
-
-## Key points
-- WAF and API throttling; SQS as a buffer for async work.
-- Fast target-tracking, scheduled or predictive scaling; provisioned concurrency; pre-warmed capacity.
-- Protect Bedrock with token budgets, cross-region inference and cache or smaller-model fallback.
-
-## CWD context
-Rehearse the spike in a load test.
+\`\`\`text
+Private ECS Worker
+       ↓
+   VPC Endpoint
+       ↓
+   AWS Service
+\`\`\`
+
+### CWD examples
+
+\`\`\`text
+ECS Worker → S3 VPC Endpoint → S3
+ECS Worker → Bedrock VPC Endpoint → Bedrock
+ECS Worker → Secrets Manager Endpoint → Secrets Manager
+\`\`\`
+
+For services where a VPC endpoint isn't applicable, use the appropriate AWS networking path, such as NAT Gateway when outbound internet connectivity is required.
+
+### Security layers
+
+* **Private subnet** — no public IP
+* **VPC endpoint** — private AWS connectivity
+* **Security Groups** — restrict traffic
+* **IAM Task Role** — control AWS API permissions
+* **KMS** — encryption
+* **CloudTrail** — auditing
+
+### 🎯 Strong interview answer
+
+> **“Private CWD workloads access AWS services primarily through VPC endpoints where supported. For example, ECS Workers can access S3, Secrets Manager, and other supported services privately without requiring internet access. IAM task roles provide authorization, security groups control network traffic, and KMS and CloudTrail provide encryption and auditing. NAT is used only when outbound internet access is actually required.”**
+
+**Memory:**
+**Private ECS → VPC Endpoint → AWS Service**
+`,code:``},{id:`179-what-are-vpc-endpoints`,category:`VPC & Networking`,title:`What are VPC endpoints?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## What are VPC Endpoints?
+
+**VPC endpoints allow resources inside a VPC to access supported AWS services privately, without going through the public internet.**
+
+\`\`\`text id="x5k7pd"
+Private ECS Worker
+       ↓
+   VPC Endpoint
+       ↓
+    AWS Service
+\`\`\`
+
+### Two main types
+
+**1. Gateway Endpoint**
+
+* Mainly for **S3 and DynamoDB**
+* No hourly endpoint charge
+* Example:
+
+\`\`\`text id="q6c9au"
+Private ECS → S3 Gateway Endpoint → S3
+\`\`\`
+
+**2. Interface Endpoint**
+
+* Uses **AWS PrivateLink**
+* Creates private network interfaces in your subnet
+* Used for many AWS services such as Secrets Manager and supported Bedrock APIs.
+
+\`\`\`text id="h0u3nv"
+Private ECS
+     ↓
+Interface Endpoint
+     ↓
+AWS Service
+\`\`\`
+
+### Why use them in CWD?
+
+They help keep AWS service traffic **private** and reduce the need for NAT/internet routing.
+
+### 🎯 Strong interview answer
+
+> **“VPC endpoints provide private connectivity from resources inside a VPC to supported AWS services. In CWD, I can use gateway endpoints for S3 and DynamoDB, and interface endpoints using PrivateLink for supported services such as Secrets Manager and Bedrock. This allows private workloads to access AWS services without requiring public internet connectivity.”**
+
+**Memory:**
+**VPC Endpoint = Private path to AWS services**
+`,code:``},{id:`180-gateway-endpoint-vs-interface-endpoint`,category:`VPC & Networking`,title:`Gateway endpoint vs interface endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Gateway Endpoint vs Interface Endpoint
+
+The simple difference:
+
+**Gateway endpoint = route-based**
+**Interface endpoint = private network interface**
+
+|                 | Gateway Endpoint          | Interface Endpoint             |
+| --------------- | ------------------------- | ------------------------------ |
+| Technology      | Route table               | AWS PrivateLink                |
+| Uses ENI        | ❌ No                      | ✅ Yes                          |
+| Cost            | No hourly endpoint charge | Hourly/data processing charges |
+| Main examples   | **S3, DynamoDB**          | Many AWS services              |
+| Security Groups | Not attached to endpoint  | Can use Security Groups        |
+| DNS             | Not required in same way  | Private DNS commonly used      |
+
+### CWD example
+
+**S3:**
+
+\`\`\`text id="5s7h1v"
+Private ECS
+    ↓
+Route Table
+    ↓
+Gateway Endpoint
+    ↓
+S3
+\`\`\`
+
+**Secrets Manager:**
+
+\`\`\`text id="f2y8qa"
+Private ECS
+    ↓
+Interface Endpoint
+    ↓
+Private ENI
+    ↓
+Secrets Manager
+\`\`\`
+
+### Easy memory
+
+> **Gateway = Route**
+> **Interface = ENI + PrivateLink**
+
+### 🎯 Strong interview answer
+
+> **“Gateway endpoints are route-table based and are primarily used for S3 and DynamoDB. Interface endpoints use AWS PrivateLink and create private network interfaces inside the VPC, allowing private connectivity to many AWS services. In CWD, I would typically use a gateway endpoint for S3 and interface endpoints for services such as Secrets Manager and other supported APIs.”**
+`,code:``},{id:`181-how-would-you-privately-access-s3`,category:`VPC & Networking`,title:`How would you privately access S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you privately access S3?
+
+For CWD, I would use an **S3 Gateway VPC Endpoint**.
+
+\`\`\`text
+Private ECS Worker
+       ↓
+Private Subnet
+       ↓
+Route Table
+       ↓
+S3 Gateway Endpoint
+       ↓
+Amazon S3
+\`\`\`
+
+### Why?
+
+* No public IP required.
+* Traffic stays on the AWS network.
+* No NAT Gateway required for S3 access.
+* Can restrict which VPC/subnets/roles can access the bucket.
+* Combine with **IAM + S3 bucket policy + KMS**.
+
+### CWD example
+
+\`\`\`text
+RAG Worker
+   ↓
+S3 Gateway Endpoint
+   ↓
+CWD Documents Bucket
+   ↓
+SSE-KMS encrypted documents
+\`\`\`
+
+### 🎯 Strong interview answer
+
+> **“For private S3 access, I would use an S3 Gateway VPC Endpoint. The private ECS Worker routes S3 traffic through the endpoint instead of going through NAT or the public internet. I would additionally restrict access using IAM roles and S3 bucket policies and use SSE-KMS for sensitive documents.”**
+
+**Memory:**
+**Private ECS → Route Table → S3 Gateway Endpoint → S3**
+`,code:``},{id:`182-how-would-you-privately-access-bedrock`,category:`VPC & Networking`,title:`How would you privately access Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you privately access Bedrock?
+
+For CWD, I would use an **Interface VPC Endpoint powered by AWS PrivateLink** for the supported Amazon Bedrock APIs.
+
+\`\`\`text
+Private ECS Worker
+       ↓
+Private Subnet
+       ↓
+Interface VPC Endpoint
+       ↓
+AWS PrivateLink
+       ↓
+Amazon Bedrock
+\`\`\`
+
+### Security
+
+* **No public IP** on ECS Worker
+* Private connectivity through the VPC endpoint
+* **Security Group** controls access to the endpoint
+* **IAM Task Role** controls which Bedrock APIs/models the Worker can invoke
+* **TLS** encrypts communication
+* **CloudTrail/CloudWatch** for auditing and monitoring
+
+### 🎯 Strong interview answer
+
+> **“For private Bedrock access, I would use an interface VPC endpoint through AWS PrivateLink, where the required Bedrock API is supported. The ECS Worker remains in a private subnet and communicates through the endpoint. I would secure the endpoint with security groups and IAM task roles, use TLS for encryption, and monitor access through CloudTrail and CloudWatch.”**
+
+**Memory:**
+**Private ECS → Interface Endpoint → PrivateLink → Bedrock**
+`,code:``},{id:`183-how-would-you-secure-traffic-between-services`,category:`VPC & Networking`,title:`How would you secure traffic between services?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you secure traffic between services?
+
+For CWD, I use **TLS + authentication + authorization + network isolation**.
+
+\`\`\`text id="j4q5t8"
+Coordinator
+    │
+    │ HTTPS/TLS
+    ▼
+Delegator
+    │
+    │ HTTPS/TLS
+    ▼
+Worker
+\`\`\`
+
+### 1. TLS encryption
+
+Use **HTTPS/TLS** for Coordinator → Delegator → Worker communication so data is encrypted in transit.
+
+### 2. Service authentication
+
+Each service has its own identity.
+
+\`\`\`text id="h6v1re"
+Coordinator Identity
+       ↓
+Authentication
+       ↓
+Delegator
+\`\`\`
+
+Use IAM/workload identity or enterprise identity mechanisms depending on the communication path.
+
+### 3. Authorization
+
+Don't assume that an authenticated service can call everything.
+
+\`\`\`text id="6x3q2m"
+Coordinator → allowed → Sales Delegator
+Sales Delegator → allowed → Sales Worker
+\`\`\`
+
+Use least-privilege permissions and service-level authorization.
+
+### 4. Network isolation
+
+Keep CWD services in **private subnets** and use Security Groups:
+
+\`\`\`text id="3n7q8k"
+Coordinator SG
+     ↓ allowed
+Delegator SG
+     ↓ allowed
+Worker SG
+\`\`\`
+
+### 5. Validate requests
+
+Each service validates:
+
+* Caller identity
+* Authorization
+* Request schema
+* Tenant/context
+* Correlation ID
+* Allowed operation
+
+### 6. Audit
+
+Track service-to-service calls using **CloudWatch/CloudTrail and distributed tracing**, with correlation IDs.
+
+### 🎯 Strong interview answer
+
+> **“I secure CWD service-to-service traffic using TLS for encryption in transit, service identities for authentication, least-privilege authorization, and private networking with Security Groups. Each service validates the caller and request before execution, and I use correlation IDs and centralized logging for auditing and troubleshooting.”**
+
+**Memory:**
+**TLS → Authenticate → Authorize → Isolate → Validate → Audit**
+`,code:``},{id:`184-security-group-vs-nacl`,category:`VPC & Networking`,title:`Security Group vs NACL?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Security Group vs NACL
+
+The easiest way to remember:
+
+**Security Group = resource-level firewall**
+**NACL = subnet-level firewall**
+
+|                 | Security Group         | NACL                       |
+| --------------- | ---------------------- | -------------------------- |
+| Applied to      | ENI/resource           | Subnet                     |
+| State           | **Stateful**           | **Stateless**              |
+| Rules           | Allow only             | Allow + Deny               |
+| Return traffic  | Automatically allowed  | Must explicitly allow      |
+| Typical CWD use | ECS service protection | Additional subnet boundary |
+
+### CWD example
+
+\`\`\`text id="7t3q9k"
+Internet
+   ↓
+ALB
+   ↓
+[ NACL ]
+   ↓
+Private Subnet
+   ↓
+[ Security Group ]
+   ↓
+ECS Worker
+\`\`\`
+
+### Security Group
+
+Example:
+
+\`\`\`text id="x8c2vp"
+Worker SG
+  Allow HTTPS
+  Source = Delegator SG
+\`\`\`
+
+So only the authorized Delegator can reach the Worker on the required port.
+
+### NACL
+
+At the subnet level, you could have rules such as:
+
+\`\`\`text id="k4m9ws"
+Allow required traffic
+Deny known unwanted traffic
+\`\`\`
+
+Because NACLs are **stateless**, inbound and outbound traffic must be handled separately.
+
+### 🎯 Strong interview answer
+
+> **“Security Groups are stateful, resource-level firewalls attached to ENIs, and they primarily control which sources can reach a service. NACLs are stateless, subnet-level controls that support both allow and deny rules. In CWD, I would use Security Groups as the primary service-to-service network control and NACLs as an additional subnet-level defense layer.”**
+
+**Memory:**
+**SG = Stateful + Resource**
+**NACL = Stateless + Subnet**
+`,code:``},{id:`185-how-would-you-troubleshoot-a-networking-failure`,category:`VPC & Networking`,title:`How would you troubleshoot a networking failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you troubleshoot a networking failure?
+
+I troubleshoot **from the application layer down to the network layer**.
+
+\`\`\`text
+Request
+  ↓
+DNS
+  ↓
+Route
+  ↓
+Security Group
+  ↓
+NACL
+  ↓
+VPC Endpoint / NAT
+  ↓
+Target Service
+\`\`\`
+
+### Step-by-step
+
+**1. Identify the failure**
+
+* Which service? Coordinator → Delegator → Worker?
+* Check error: timeout, connection refused, DNS failure, 403, etc.
+* Check P50/P95/P99 latency.
+
+**2. Check DNS**
+
+\`\`\`text
+Can Worker resolve the service name?
+\`\`\`
+
+Check Route 53/private DNS/service discovery.
+
+**3. Check routing**
+Verify route tables:
+
+\`\`\`text
+Private subnet → VPC endpoint
+Private subnet → NAT Gateway
+\`\`\`
+
+depending on the destination.
+
+**4. Check Security Groups**
+Verify:
+
+\`\`\`text
+Source SG → Destination SG → Port
+\`\`\`
+
+**5. Check NACLs**
+Because NACLs are stateless, check **both inbound and outbound rules**.
+
+**6. Check VPC endpoints/NAT**
+
+* Endpoint exists?
+* Endpoint SG allows traffic?
+* NAT Gateway healthy?
+* Route to NAT exists?
+
+**7. Check target service**
+Check ECS task health, ALB target health, Bedrock/S3 availability, downstream API errors, etc.
+
+**8. Trace the request**
+
+Use:
+
+* CloudWatch logs/metrics
+* VPC Flow Logs
+* CloudTrail where relevant
+* X-Ray/OpenTelemetry
+* Correlation ID
+
+### 🎯 Strong interview answer
+
+> **“I troubleshoot networking failures layer by layer. First I identify the failing service and error type, then verify DNS and service discovery, route tables, Security Groups, NACLs, and VPC endpoints or NAT depending on the destination. Then I check the target service and task health. I use CloudWatch, VPC Flow Logs, distributed tracing, and correlation IDs to locate exactly where the request is failing.”**
+
+**Memory:**
+**DNS → Route → SG → NACL → Endpoint/NAT → Target → Logs/Trace**
+`,code:``}];function Bm(){return(0,M.jsx)($,{data:zm,title:`VPC & Networking Cookbook`,subtitle:`Subnets, NAT, VPC endpoints, security groups and troubleshooting`,icon:`🌐`,patternLabel:`Questions`})}var Vm=[{id:`186-how-would-you-implement-cwd-monitoring-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you implement CWD monitoring using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement CWD monitoring using CloudWatch?
+
+I would use **CloudWatch for infrastructure, application, and operational monitoring**, with correlation IDs to trace a CWD request.
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+Coordinator → Delegator → Worker
+ ↓
+AWS Services
+ ↓
+CloudWatch
+ ├── Metrics
+ ├── Logs
+ ├── Alarms
+ └── Dashboards
+\`\`\`
+
+### 1. Metrics
+
+Monitor:
+
+* **API** — request count, 4xx/5xx, latency
+* **ECS** — CPU, memory, task count, restarts
+* **SQS** — queue depth, message age, DLQ messages
+* **Lambda** — errors, duration, throttles
+* **DynamoDB** — throttling, latency, consumed capacity
+* **OpenSearch** — search latency, indexing failures, throttling
+* **Bedrock** — invocation errors, throttling, latency
+
+### 2. Application logs
+
+Each CWD service writes structured logs:
+
+\`\`\`text id="v6j8tr"
+correlation_id
+run_id
+worker_id
+status
+latency
+error
+\`\`\`
+
+Example:
+
+\`\`\`text id="1xk5ms"
+run_id=R123
+worker=CustomerWorker
+status=FAILED
+error=ServiceNow timeout
+\`\`\`
+
+### 3. Alarms
+
+Create CloudWatch alarms for important conditions:
+
+\`\`\`text id="z4s8q1"
+P95 latency > threshold
+5xx errors > threshold
+ECS CPU > threshold
+SQS backlog > threshold
+DLQ messages > 0
+Worker failures > threshold
+\`\`\`
+
+Then notify through SNS/on-call systems.
+
+### 4. Dashboards
+
+Create a CWD dashboard showing:
+
+\`\`\`text id="3jv5cp"
+Request Rate
+Error Rate
+P50/P95/P99
+ECS Health
+Queue Depth
+Worker Failures
+Bedrock Latency
+OpenSearch Latency
+\`\`\`
+
+### 5. End-to-end tracing
+
+For a request:
+
+\`\`\`text id="h2c8mz"
+Correlation ID: C123
+
+API Gateway
+   ↓
+Coordinator
+   ↓
+Sales Delegator
+   ↓
+Customer Worker
+   ↓
+Salesforce
+\`\`\`
+
+Use **CloudWatch + X-Ray/OpenTelemetry** to understand where latency or failure occurred.
+
+### 🎯 Strong interview answer
+
+> **“I would use CloudWatch to monitor CWD at infrastructure and application levels. I would collect ECS, Lambda, SQS, DynamoDB, OpenSearch, and Bedrock metrics, centralize structured application logs with correlation IDs, create alarms for latency, errors, throttling, queue backlog and unhealthy tasks, and build dashboards for P50/P95/P99 latency, throughput and failures. For end-to-end troubleshooting, I would combine CloudWatch with distributed tracing.”**
+
+**Memory:**
+**Metrics → Logs → Alarms → Dashboard → Trace**
+`,code:``},{id:`187-what-cloudwatch-metrics-would-you-monitor`,category:`CloudWatch & Observability`,title:`What CloudWatch metrics would you monitor?`,difficulty:`Advanced`,time:`~15 min`,concept:`### CloudWatch Metrics for CWD
+
+I would monitor metrics at **API, ECS, queues, AWS services, and AI layer**.
+
+| Area                  | Key metrics                                                   |
+| --------------------- | ------------------------------------------------------------- |
+| **API Gateway / ALB** | Request count, 4xx/5xx, P50/P95/P99 latency                   |
+| **ECS/Fargate**       | CPU, memory, running tasks, task restarts                     |
+| **SQS**               | Queue depth, message age, DLQ messages                        |
+| **Lambda**            | Errors, duration, throttles, invocations                      |
+| **DynamoDB**          | Throttled requests, latency, consumed capacity                |
+| **OpenSearch**        | Search latency, indexing errors, throttling                   |
+| **Bedrock**           | Invocation errors, throttling/429s, latency, token usage/cost |
+| **CWD application**   | Worker failures, workflow duration, tool-call failures        |
+
+**Interview answer:**
+
+> “I would monitor CWD using CloudWatch across infrastructure and application layers. The key metrics are request rate, 4xx/5xx errors, P95/P99 latency, ECS CPU and memory, SQS backlog and DLQ messages, DynamoDB throttling, OpenSearch search latency, and Bedrock errors, throttling and latency. I would create alarms and dashboards around these metrics and correlate them using \`correlation_id\` for end-to-end troubleshooting.”
+
+**Memory:**
+**Traffic → Errors → Latency → Resources → Queue → AI → Business workflow**
+`,code:``},{id:`188-what-logs-would-you-collect`,category:`CloudWatch & Observability`,title:`What logs would you collect?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Logs I would collect for CWD
+
+I would use **structured JSON logs** so every request can be traced end-to-end.
+
+| Area                   | What to log                                                       |
+| ---------------------- | ----------------------------------------------------------------- |
+| **API**                | Request ID, endpoint, status code, latency                        |
+| **Coordinator**        | Intent, plan, selected Delegator, workflow status                 |
+| **Delegator**          | Selected Workers, fan-out/fan-in, success/failure                 |
+| **Worker**             | Worker ID, operation, status, latency, errors                     |
+| **MCP**                | Tool called, tool status, latency, authorization result           |
+| **RAG**                | Query, retrieval count, search latency, document/chunk IDs        |
+| **Bedrock/LLM**        | Model, latency, token usage, errors/throttling                    |
+| **AWS infrastructure** | ECS task failures, Lambda errors, SQS/DLQ events                  |
+| **Security**           | Authentication, authorization, denied access, suspicious activity |
+
+Every log should contain common fields:
+
+\`\`\`text
+correlation_id
+request_id
+session_id
+run_id
+worker_id
+service
+timestamp
+status
+latency
+error_code
+\`\`\`
+
+**Important:** Never log passwords, API keys, access tokens, or sensitive customer data.
+
+### Interview answer
+
+> “I would collect structured JSON logs from API Gateway, Coordinator, Delegators, Workers, MCP services, RAG, and AWS components. Every log would contain a correlation ID, run ID, service, status, latency, and error information so I can trace one request across the entire CWD workflow. I would also apply log redaction to prevent secrets or sensitive data from being exposed.”
+`,code:``},{id:`189-how-would-you-trace-one-request-across-aws-services`,category:`CloudWatch & Observability`,title:`How would you trace one request across AWS services?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Trace one request across AWS services
+
+Use a **correlation ID + distributed tracing**.
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓ correlation_id
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Bedrock / S3 / DynamoDB / OpenSearch
+\`\`\`
+
+At the entry point, generate a \`correlation_id\` and propagate it through every service.
+
+Example:
+
+\`\`\`text
+correlation_id = CWD-12345
+\`\`\`
+
+Each service logs:
+
+\`\`\`text
+correlation_id
+service_name
+timestamp
+status
+latency
+error
+\`\`\`
+
+For technical tracing, use **AWS X-Ray / OpenTelemetry** to create trace segments and spans across services.
+
+### Interview answer
+
+> “I would generate a correlation ID at the API entry point and propagate it through the Coordinator, Delegators, Workers, MCP services, and AWS services. I would use structured CloudWatch logs combined with X-Ray or OpenTelemetry distributed tracing. This allows me to follow one request end-to-end and quickly identify where latency or failures occurred.”
+
+**Memory:**
+**Correlation ID → Propagate → Log → Trace → Troubleshoot**
+`,code:``},{id:`190-how-would-you-create-correlation-ids`,category:`CloudWatch & Observability`,title:`How would you create correlation IDs?`,difficulty:`Advanced`,time:`~15 min`,concept:`### How to create a correlation ID
+
+Generate it **once at the API entry point** and pass the same ID through the entire CWD request.
+
+\`\`\`text
+User Request
+     ↓
+API Gateway
+     ↓
+Generate correlation_id
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+MCP / AWS Services
+\`\`\`
+
+For example:
+
+\`\`\`text
+correlation_id = UUID
+\`\`\`
+
+A typical value:
+
+\`\`\`text
+550e8400-e29b-41d4-a716-446655440000
+\`\`\`
+
+In FastAPI, you can generate it with Python's \`uuid\`:
+
+\`\`\`python
+import uuid
+
+correlation_id = str(uuid.uuid4())
+\`\`\`
+
+Then propagate it in the request context/header:
+
+\`\`\`text
+X-Correlation-ID: 550e8400-e29b-41d4-a716-446655440000
+\`\`\`
+
+Every service logs the same ID.
+
+### Interview answer
+
+> “I generate a unique UUID correlation ID at the API entry point, usually in the FastAPI middleware. I propagate it through HTTP headers and the execution context to the Coordinator, Delegators, Workers, MCP calls, and downstream services. Every structured log and trace span contains that ID, so I can trace one request end-to-end.”
+
+**Important:** Don't generate a new correlation ID at every service. Generate **one per request** and propagate it.
+`,code:``},{id:`191-how-would-you-monitor-lambda-errors`,category:`CloudWatch & Observability`,title:`How would you monitor Lambda errors?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Monitor Lambda Errors
+
+Use **CloudWatch**.
+
+\`\`\`text
+Lambda
+  ↓
+CloudWatch Metrics + Logs
+  ↓
+Alarm
+  ↓
+SNS / Notification
+\`\`\`
+
+Monitor these key metrics:
+
+* **Errors** → function failures
+* **Throttles** → Lambda concurrency limit reached
+* **Duration** → slow execution
+* **Invocations** → request volume
+* **ConcurrentExecutions** → concurrency usage
+
+For detailed troubleshooting, check **CloudWatch Logs** for the exception, stack trace, \`request_id\`, and \`correlation_id\`.
+
+### Interview answer
+
+> “I monitor Lambda using CloudWatch metrics and logs. I create alarms for errors, throttles, and high duration. When an error occurs, I use the Lambda request ID and CWD correlation ID to trace the failure through CloudWatch Logs and X-Ray/OpenTelemetry.”
+
+**Memory:**
+**Errors → Throttles → Duration → Logs → Trace → Alarm**
+`,code:``},{id:`192-how-would-you-monitor-ecs`,category:`CloudWatch & Observability`,title:`How would you monitor ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Monitor ECS
+
+Use **CloudWatch + ECS service metrics + ALB metrics**.
+
+\`\`\`text id="e8c4n1"
+ECS/Fargate
+   ↓
+CloudWatch
+   ├── CPU / Memory
+   ├── Task Count
+   ├── Restarts
+   ├── Errors
+   └── Logs
+        ↓
+     Alarms
+\`\`\`
+
+Monitor:
+
+* **CPUUtilization** → CPU pressure
+* **MemoryUtilization** → memory pressure
+* **RunningTaskCount** → capacity/availability
+* **Task failures/restarts** → unhealthy containers
+* **ALB 4xx/5xx** → application errors
+* **ALB P95/P99 latency** → response performance
+* **Container logs** → exceptions and failures
+
+For CWD, I would also track **Coordinator/Delegator/Worker latency and failure rates** using custom CloudWatch metrics.
+
+### Interview answer
+
+> “I monitor ECS using CloudWatch for CPU, memory, task count, and container failures. I also monitor ALB 4xx/5xx and P95/P99 latency. Application logs include correlation IDs, so I can trace a failed ECS request end-to-end. I configure CloudWatch alarms and autoscaling based on these metrics.”
+
+**Memory:**
+**CPU → Memory → Tasks → Errors → Latency → Logs → Scale**
+`,code:``},{id:`193-how-would-you-monitor-api-gateway`,category:`CloudWatch & Observability`,title:`How would you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Monitor API Gateway
+
+Use **CloudWatch metrics + access logs**.
+
+\`\`\`text id="bq6m2v"
+Client
+  ↓
+API Gateway
+  ↓
+CloudWatch
+ ├── Requests
+ ├── 4xx / 5xx
+ ├── Latency
+ ├── Integration Latency
+ └── Throttling
+\`\`\`
+
+Monitor:
+
+* **Count** → request volume
+* **4XXError** → client/auth/validation problems
+* **5XXError** → API/backend failures
+* **Latency** → total API response time
+* **IntegrationLatency** → time spent communicating with backend
+* **Count of throttled requests / throttling** → traffic exceeding limits
+
+Also enable **access logs** with:
+
+\`\`\`text
+requestId
+correlation_id
+status
+latency
+route
+error
+\`\`\`
+
+### Interview answer
+
+> “I monitor API Gateway using CloudWatch metrics for request count, 4xx, 5xx, latency, integration latency, and throttling. I enable structured access logs with request and correlation IDs. I configure alarms for high 5xx, latency, and throttling, and use the correlation ID to trace the request into the CWD Coordinator and downstream services.”
+
+**Memory:**
+**Traffic → Errors → Latency → Throttling → Logs → Trace**
+`,code:``},{id:`194-how-would-you-monitor-sqs`,category:`CloudWatch & Observability`,title:`How would you monitor SQS?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Monitor SQS
+
+Use **CloudWatch metrics + DLQ monitoring**.
+
+\`\`\`text id="x2m7qa"
+Producer
+   ↓
+ SQS Queue
+   ↓
+ Worker
+   ↓
+CloudWatch
+ ├── Queue Depth
+ ├── Message Age
+ ├── DLQ Messages
+ └── Processing/Failure
+\`\`\`
+
+Monitor:
+
+* **ApproximateNumberOfMessagesVisible** → queue backlog
+* **ApproximateAgeOfOldestMessage** → processing delay
+* **ApproximateNumberOfMessagesNotVisible** → messages currently being processed
+* **DLQ message count** → repeatedly failed messages
+* **NumberOfMessagesSent/Received/Deleted** → traffic and processing behavior
+
+### Interview answer
+
+> “I monitor SQS using CloudWatch for queue depth, oldest message age, in-flight messages, and DLQ messages. If the backlog or message age increases, I check whether consumers are slow or failing and scale the Workers. If messages move to the DLQ, I investigate the failure before controlled replay.”
+
+**Memory:**
+**Backlog → Age → In-flight → DLQ → Scale**
+`,code:``},{id:`195-how-would-you-monitor-bedrock`,category:`CloudWatch & Observability`,title:`How would you monitor Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Monitor Bedrock
+
+Use **CloudWatch + application logs/traces**.
+
+\`\`\`text id="xj7p3k"
+CWD Worker
+    ↓
+  Bedrock
+    ↓
+CloudWatch
+ ├── Invocations
+ ├── Errors
+ ├── Throttling
+ ├── Latency
+ └── Token/Cost
+\`\`\`
+
+Monitor:
+
+* **Invocation count** → model usage
+* **Invocation errors** → failed model calls
+* **Throttling / 429s** → capacity or rate-limit problems
+* **Latency** → model response time
+* **Input/output tokens** → token consumption and cost
+* **Model-specific usage** → which models are consuming traffic
+
+Also log:
+
+\`\`\`text id="f7q2nc"
+correlation_id
+model_id
+worker_id
+latency
+input_tokens
+output_tokens
+status
+error
+\`\`\`
+
+### Interview answer
+
+> “I monitor Bedrock for invocation volume, errors, throttling, latency, and token consumption. I combine CloudWatch metrics with application logs and distributed tracing using the correlation ID. If I see throttling, I can reduce concurrency, queue requests, retry with backoff, or route to another model where appropriate.”
+
+**Memory:**
+**Usage → Errors → Throttling → Latency → Tokens → Cost**
+`,code:``},{id:`196-how-would-you-create-cloudwatch-alarms`,category:`CloudWatch & Observability`,title:`How would you create CloudWatch alarms?`,difficulty:`Advanced`,time:`~15 min`,concept:`### How would you create CloudWatch alarms?
+
+Define a **metric + threshold + evaluation period + action**.
+
+\`\`\`text id="k4v8ps"
+CloudWatch Metric
+      ↓
+Set Threshold
+      ↓
+Evaluation Period
+      ↓
+Alarm: OK / ALARM
+      ↓
+SNS / Auto Scaling / Incident
+\`\`\`
+
+For CWD, examples:
+
+* **API 5xx > 5%** → alarm
+* **P95 latency > 5 sec** → alarm
+* **ECS CPU > 80%** → scaling/alarm
+* **SQS oldest message > 5 min** → alarm
+* **SQS DLQ messages > 0** → alarm
+* **Bedrock throttling > threshold** → alarm
+
+### Interview answer
+
+> “I create CloudWatch alarms by selecting a metric, defining a threshold and evaluation period, and configuring an action such as SNS notification or autoscaling. For CWD, I would create alarms for high 5xx errors, P95 latency, ECS resource utilization, SQS backlog or DLQ messages, and Bedrock throttling.”
+
+**Memory:**
+**Metric → Threshold → Evaluation → Alarm → Action**
+`,code:``},{id:`197-how-would-you-detect-latency-degradation`,category:`CloudWatch & Observability`,title:`How would you detect latency degradation?`,difficulty:`Advanced`,time:`~15 min`,concept:`### How would you detect latency degradation?
+
+Monitor **P50, P95, and P99 latency** over time and compare them against the normal baseline/SLA.
+
+\`\`\`text id="q7m2kx"
+Request
+   ↓
+CloudWatch / X-Ray
+   ↓
+P50 / P95 / P99
+   ↓
+Compare with baseline
+   ↓
+Threshold exceeded?
+   ↓
+Alarm
+\`\`\`
+
+For CWD, break latency down by component:
+
+* API Gateway
+* Coordinator
+* Delegator
+* Worker
+* MCP/tool calls
+* OpenSearch retrieval
+* Bedrock inference
+
+Example:
+
+\`\`\`text id="n6v4ta"
+Normal P95 = 3 sec
+Current P95 = 6 sec
+        ↓
+CloudWatch Alarm
+        ↓
+X-Ray trace
+        ↓
+Find slow component
+\`\`\`
+
+### Interview answer
+
+> “I detect latency degradation by monitoring P50, P95 and P99 latency and comparing them with historical baselines and SLA thresholds. When P95 or P99 increases significantly, CloudWatch triggers an alarm. I then use X-Ray or OpenTelemetry traces and correlation IDs to identify whether the latency is coming from the API, Coordinator, Worker, MCP, OpenSearch, or Bedrock.”
+
+**Memory:**
+**Measure → Compare → Alarm → Trace → Find bottleneck**
+`,code:``},{id:`198-how-would-you-detect-a-cost-spike`,category:`CloudWatch & Observability`,title:`How would you detect a cost spike?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Detect a cost spike
+
+Use **AWS Cost Explorer + AWS Budgets + CloudWatch/application metrics**.
+
+\`\`\`text id="p5n8rx"
+AWS Usage
+   ↓
+Cost / Usage Metrics
+   ↓
+Compare with baseline
+   ↓
+Unexpected increase?
+   ↓
+Budget Alarm
+   ↓
+Investigate
+\`\`\`
+
+For CWD, monitor:
+
+* **Bedrock token usage** → input/output tokens, model usage
+* **ECS/Fargate** → task count and runtime
+* **OpenSearch** → compute/search usage
+* **S3** → storage and request volume
+* **NAT Gateway** → data processing charges
+* **DynamoDB** → read/write consumption
+* **SQS/Lambda** → invocation and message volume
+
+Example:
+
+> Normal Bedrock usage = 1M tokens/day
+> Suddenly = 5M tokens/day → cost anomaly → investigate which Worker/workflow increased LLM calls.
+
+### Interview answer
+
+> “I detect cost spikes by setting AWS Budgets and cost anomaly alerts, then correlate cost with usage metrics. For CWD, I especially monitor Bedrock token usage, ECS task count, OpenSearch, S3, DynamoDB, and NAT Gateway usage. If cost suddenly increases, I trace it back to the responsible service, Worker, workflow, or increased traffic.”
+
+**Memory:**
+**Cost → Usage → Baseline → Alert → Find source → Optimize**
+`,code:``},{id:`199-how-would-you-troubleshoot-a-production-request-using-cloudwatch`,category:`CloudWatch & Observability`,title:`How would you troubleshoot a production request using CloudWatch?`,difficulty:`Advanced`,time:`~15 min`,concept:`### Troubleshoot a production request using CloudWatch
+
+I would start with the **correlation ID** and trace the request end-to-end.
+
+\`\`\`text id="v2k7pa"
+Correlation ID
+      ↓
+CloudWatch Logs
+      ↓
+Find ERROR / latency
+      ↓
+CloudWatch Metrics
+      ↓
+X-Ray / OpenTelemetry Trace
+      ↓
+Identify failing service
+      ↓
+Fix / Rollback / Retry
+\`\`\`
+
+### Step-by-step
+
+1. **Get the \`correlation_id\`** from the failed request.
+2. Search **CloudWatch Logs** for that ID.
+3. Check the request path:
+
+   \`\`\`text
+   API Gateway
+      → Coordinator
+      → Delegator
+      → Worker
+      → MCP
+      → Bedrock / OpenSearch / DynamoDB
+   \`\`\`
+4. Check **P95/P99 latency, 4xx/5xx, throttling, CPU/memory, queue depth**.
+5. Use **X-Ray/OpenTelemetry** to find which service or downstream call is slow/failing.
+6. Check the specific service logs and error stack trace.
+7. Apply the appropriate action: **retry, scale, fix configuration, or rollback**.
+
+### Interview answer
+
+> “For a production issue, I first get the correlation ID and search CloudWatch Logs to reconstruct the request path. Then I check CloudWatch metrics for errors, latency, throttling, and resource utilization. I use X-Ray or OpenTelemetry to identify the slow or failing component. Finally, I inspect that service's logs and take the appropriate action such as retry, scaling, configuration correction, or rollback.”
+
+**Memory:**
+**Correlation ID → Logs → Metrics → Trace → Root Cause → Action**
+`,code:``},{id:`200-cloudwatch-vs-cloudtrail-vs-x-ray`,category:`CloudWatch & Observability`,title:`CloudWatch vs CloudTrail vs X-Ray?`,difficulty:`Advanced`,time:`~15 min`,concept:`### CloudWatch vs CloudTrail vs X-Ray
+
+| Tool           | Main purpose                      | Simple question                 |
+| -------------- | --------------------------------- | ------------------------------- |
+| **CloudWatch** | Metrics, logs, alarms, dashboards | **“Is something wrong?”**       |
+| **CloudTrail** | AWS API activity/audit            | **“Who did what?”**             |
+| **X-Ray**      | Distributed request tracing       | **“Where is it slow/failing?”** |
+
+### CWD example
+
+\`\`\`text
+User Request
+     ↓
+API Gateway
+     ↓
+Coordinator → Delegator → Worker
+     ↓
+CloudWatch → metrics + logs + alarms
+     ↓
+X-Ray → end-to-end request trace
+
+CloudTrail → records AWS API actions
+              ↓
+        Who / What / When
+\`\`\`
+
+**Example:**
+
+* ECS CPU suddenly goes to 95% → **CloudWatch**
+* Someone changes an IAM policy → **CloudTrail**
+* Customer request takes 10 seconds → **X-Ray** to identify whether Coordinator, MCP, OpenSearch, or Bedrock caused the delay.
+
+### Interview answer
+
+> “CloudWatch is for monitoring metrics, logs, and alarms. CloudTrail is for auditing AWS API activity and identifying who performed an action. X-Ray is for distributed tracing and finding where a request is slow or failing. In CWD, I would use all three together.”
+
+**Memory:**
+**CloudWatch = Monitor | CloudTrail = Audit | X-Ray = Trace**
+`,code:``}];function Hm(){return(0,M.jsx)($,{data:Vm,title:`CloudWatch & Observability Cookbook`,subtitle:`Metrics, logs, alarms, tracing and production troubleshooting`,icon:`📡`,patternLabel:`Questions`})}var Um=[{id:`201-how-would-you-scale-cwd-horizontally`,category:`Scalability & High Availability`,title:`How would you scale CWD horizontally?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Horizontal scaling of CWD
+
+**Horizontal scaling = add more instances/tasks instead of making one server bigger.**
+
+\`\`\`text
+                    API Gateway
+                         ↓
+                       ALB
+                         ↓
+          ┌──────────────┼──────────────┐
+          ↓              ↓              ↓
+     Coordinator     Coordinator     Coordinator
+          ↓              ↓              ↓
+      Delegators      Delegators      Delegators
+          ↓              ↓              ↓
+       Workers         Workers         Workers
+          ↓
+   SQS / Redis / DynamoDB
+\`\`\`
+
+### How I would do it
+
+1. **Containerize** Coordinator, Delegators, and Workers.
+2. Deploy them as **ECS/Fargate services** across multiple AZs.
+3. Keep services **stateless**; store state in **DynamoDB/Redis**, not local memory.
+4. Use **ALB** to distribute requests across tasks.
+5. Configure **ECS Auto Scaling** based on CPU, memory, request count, P95 latency, or queue depth.
+6. Use **SQS** to buffer workloads and prevent downstream overload.
+7. Scale **Coordinator, each Delegator, and Workers independently** based on their workload.
+8. Use **idempotency** so retries/duplicate messages don't create duplicate business actions.
+
+### Interview answer
+
+> “I would scale CWD horizontally by running multiple Coordinator, Delegator, and Worker instances on ECS/Fargate across multiple AZs. I would keep them stateless and externalize state to DynamoDB and Redis. ALB distributes traffic, ECS Auto Scaling adds or removes tasks, and SQS provides buffering for asynchronous workloads. I would scale each layer independently based on its own traffic, latency, and queue depth.”
+
+**Memory:**
+**Stateless → Multiple Tasks → Load Balance → Auto Scale → Queue → Independent Scaling**
+`,code:``},{id:`202-how-would-you-design-cwd-for-10-000-concurrent-users`,category:`Scalability & High Availability`,title:`How would you design CWD for 10,000 concurrent users?`,difficulty:`Advanced`,time:`~15 min`,concept:`## CWD for 10,000 concurrent users
+
+The key is **horizontal scaling + asynchronous processing + controlled concurrency**.
+
+\`\`\`text id="m3x7qa"
+             10,000 Users
+                  ↓
+            API Gateway
+                  ↓
+                ALB
+                  ↓
+       ┌──────────┼──────────┐
+       ↓          ↓          ↓
+  Coordinator  Coordinator  Coordinator
+       ↓
+   Delegators
+       ↓
+      SQS
+       ↓
+   ┌───┼────┐
+   ↓   ↓    ↓
+ Workers Workers Workers
+   ↓
+MCP / RAG / Bedrock
+   ↓
+DynamoDB / Redis / S3
+\`\`\`
+
+### Key design decisions
+
+1. **Multiple ECS/Fargate tasks** for Coordinator, Delegators, and Workers.
+2. **Auto Scaling** based on CPU, request rate, P95 latency, and SQS queue depth.
+3. **SQS** to absorb traffic spikes and provide backpressure.
+4. **DynamoDB** for scalable session/task/run state.
+5. **Redis** for caching and reducing repeated LLM/RAG calls.
+6. **OpenSearch** scales the RAG retrieval layer.
+7. **Bedrock throttling protection** using concurrency limits, queues, retries with exponential backoff, and model routing.
+8. **Independent Worker scaling** — Customer Workers may need different capacity from Incident Workers.
+9. **Multi-AZ deployment** for availability.
+10. **CloudWatch + X-Ray/OpenTelemetry** for P95/P99 latency, errors, queue backlog, and bottleneck detection.
+
+### Important point
+
+**10,000 concurrent users does NOT mean 10,000 LLM calls at the same instant.**
+
+We control downstream concurrency:
+
+\`\`\`text
+10,000 users
+     ↓
+API accepts requests
+     ↓
+SQS buffers work
+     ↓
+Controlled Worker concurrency
+     ↓
+Bedrock / MCP / RAG
+\`\`\`
+
+This protects Bedrock and enterprise systems such as Salesforce and ServiceNow from sudden overload.
+
+### Interview answer
+
+> “For 10,000 concurrent users, I would design CWD as a horizontally scalable, stateless architecture. I would run multiple Coordinator, Delegator, and Worker tasks across multiple AZs, use API Gateway and ALB for traffic distribution, DynamoDB and Redis for externalized state and caching, and SQS for asynchronous workloads and backpressure. I would autoscale each layer independently and control downstream concurrency so 10,000 users don't translate into 10,000 simultaneous calls to Bedrock or enterprise systems.”
+
+**Memory:**
+**10K Users → Horizontal Scale → Queue → Backpressure → Independent Workers → Protect Downstream**
+`,code:``},{id:`203-how-would-you-handle-sudden-traffic-spikes`,category:`Scalability & High Availability`,title:`How would you handle sudden traffic spikes?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Handle sudden traffic spikes
+
+Use **buffering + autoscaling + backpressure**.
+
+\`\`\`text id="s8v3kd"
+Traffic Spike
+     ↓
+API Gateway
+     ↓
+Rate Limit / Throttle
+     ↓
+ECS Auto Scaling
+     ↓
+SQS Buffer
+     ↓
+Controlled Workers
+     ↓
+Bedrock / MCP / Enterprise Systems
+\`\`\`
+
+### What I would do
+
+1. **API Gateway throttling** — prevent uncontrolled traffic.
+2. **ECS Auto Scaling** — add Coordinator/Delegator/Worker tasks.
+3. **SQS** — buffer asynchronous requests instead of overwhelming Workers.
+4. **Concurrency limits** — protect Bedrock, Salesforce, ServiceNow, etc.
+5. **Retry with exponential backoff + jitter** for transient failures.
+6. **Circuit breaker** — temporarily stop calls to an unhealthy downstream service.
+7. **Redis caching** — serve repeated requests without unnecessary LLM/RAG calls.
+8. **CloudWatch alarms** — monitor queue depth, P95/P99 latency, 429s, errors, and CPU/memory.
+
+### Interview answer
+
+> “For sudden traffic spikes, I would use API throttling, ECS horizontal autoscaling, and SQS buffering. I would control Worker concurrency so downstream systems aren't overwhelmed. For transient failures I would use exponential backoff with jitter, and circuit breakers for unhealthy dependencies. CloudWatch would monitor queue depth, latency, errors, throttling, and resource utilization.”
+
+**Memory:**
+**Throttle → Scale → Buffer → Control → Retry → Protect**
 `,code:``},{id:`204-how-would-you-scale-lambda`,category:`Scalability & High Availability`,title:`How would you scale Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale Lambda?
 
 ## Short answer
@@ -192141,6 +210297,46 @@ Lambda scales by adding concurrent execution environments, within account and fu
 
 ## CWD context
 Cap Lambda so it cannot overwhelm MCP servers or Bedrock.
+## How would you scale Lambda?
+
+Lambda scales **automatically by increasing concurrent executions** as requests/events increase.
+
+\`\`\`text id="q9m4tx"
+More Requests
+     ↓
+Lambda
+     ↓
+More Concurrent Executions
+     ↓
+Automatic Scaling
+\`\`\`
+
+### In CWD
+
+For example:
+
+\`\`\`text id="v6k2pa"
+S3 / SQS / EventBridge
+        ↓
+      Lambda
+        ↓
+  Concurrent executions
+\`\`\`
+
+Key controls:
+
+* **Reserved Concurrency** → limits Lambda concurrency and protects downstream systems.
+* **Provisioned Concurrency** → keeps execution environments warm and reduces cold-start latency.
+* **SQS event-source scaling** → Lambda increases consumers as queue backlog grows.
+* **Dead Letter Queue / SQS DLQ** → handles repeatedly failed events.
+* **CloudWatch alarms** → monitor errors, throttles, duration, and concurrency.
+
+### Interview answer
+
+> “Lambda scales automatically by increasing concurrent executions. I use Reserved Concurrency to protect downstream systems and Provisioned Concurrency when low latency is important. For SQS-triggered Lambda, I scale consumers based on queue backlog while controlling concurrency. I monitor errors, throttles, duration, and concurrency through CloudWatch.”
+
+**Memory:**
+**Lambda = Automatic Concurrency → Limit → Warm → Monitor**
 `,code:``},{id:`205-how-would-you-scale-ecs`,category:`Scalability & High Availability`,title:`How would you scale ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale ECS?
 
 ## Short answer
@@ -192153,740 +210349,3134 @@ Scale ECS with Service Auto Scaling and fast, right-sized tasks.
 
 ## CWD context
 Scale Workers on backlog, the API on request count.
-`,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale OpenSearch?
-
-## Short answer
-Scale OpenSearch by adding capacity and by lowering the cost of each query.
-
-## Key points
-- Serverless: automatic OCUs with a maximum; managed: nodes, shards and replicas.
-- Filters, lower dimensions and caching reduce per-query work.
-- Separate collections isolate workloads.
-
-## CWD context
-Monitor OCU utilisation against your limit.
-`,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale DynamoDB?
-
-## Short answer
-Scale DynamoDB with on-demand or auto-scaled provisioned capacity and good key design.
-
-## Key points
-- Adaptive capacity and even key distribution; GSI capacity.
-- Cache hot reads (DAX or Redis); avoid scans; batch operations.
-- Global tables for multi-region; TTL to limit growth.
-
-## CWD context
-Throttling usually means a design issue, not a capacity issue.
-`,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle Bedrock rate limits?
-
-## Short answer
-Handle Bedrock rate limits with capacity planning, distribution and graceful degradation.
-
-## Key points
-- Request quota increases early, backed by usage data.
-- Cross-region inference profiles and Provisioned Throughput for baseline.
-- Per-tenant token budgets, queued and rate-limited consumers, backoff with jitter.
-- Smaller-model fallback, caching, and batch inference for offline work.
-
-## CWD context
-Quotas are per account and region, so plan them like any other capacity.
-`,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you introduce SQS?
-
-## Short answer
-Introduce SQS wherever work is slow, bursty or side-effecting.
-
-## Key points
-- In front of long-running and write Workers; ingestion and re-index jobs.
-- Audit and telemetry; buffering before Bedrock-limited stages.
-- In front of Lambda to control concurrency.
-- Always with a DLQ.
-
-## CWD context
-Not for short read-only calls.
-`,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement backpressure?
-
-## Short answer
-Backpressure stops a fast producer from overwhelming a slower consumer.
-
-## Key points
-- Queue-depth-based admission control and 429 or "accepted, please wait" responses.
-- Consumer concurrency limits; per-tenant limits; rate limits toward Bedrock and MCP.
-- Priority-based load shedding.
-
-## CWD context
-A buffer without backpressure only delays the overload.
-`,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you eliminate AWS single points of failure?
-
-## Short answer
-Eliminate single points of failure with redundancy at every tier and tested failover.
-
-## Key points
-- ALB across AZs; ECS tasks in at least two AZs; one NAT gateway per AZ.
-- ElastiCache Multi-AZ with automatic failover; DynamoDB, S3 and SQS are multi-AZ by design; OpenSearch Serverless with standby replicas in production.
-- Bedrock fallback models and cross-region inference; everything in IaC.
-- Route 53 health checks for regional failover; runbooks and no single-person dependencies.
-
-## CWD context
-A failover you have never tested is not a failover.
-`,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design multi-AZ CWD?
-
-## Short answer
-Design multi-AZ by spreading every tier across at least two, preferably three, AZs with headroom.
-
-## Key points
-- Subnets in each AZ; ALB cross-zone; ECS desired count across AZs with spread placement.
-- NAT per AZ with per-AZ routes; ElastiCache replication group with Multi-AZ.
-- Capacity headroom (N+1) so losing an AZ does not overload the rest.
-- Test with AWS Fault Injection Service.
-
-## CWD context
-Cost of headroom is the price of surviving an AZ loss.
-`,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you design multi-region CWD?
-
-## Short answer
-Design multi-region with a routing layer and per-region stacks built from the same IaC.
-
-## Key points
-- Route 53 or Global Accelerator with health checks and latency or failover routing.
-- DynamoDB global tables; S3 cross-region replication; ECR replication; secret replication; KMS multi-Region keys.
-- Rebuild or replicate the OpenSearch index per region; confirm Bedrock model availability in each region.
-- SQS is regional, so state design must tolerate a region switch; watch data residency.
-
-## CWD context
-Start active-passive; go active-active only if justified.
-`,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is your disaster-recovery strategy?
-
-## Short answer
-Choose the DR pattern from RTO and RPO: backup and restore, pilot light, warm standby or active-active.
-
-## Key points
-- For CWD: warm standby in a second region is a sensible target.
-- State through global tables, documents through cross-region replication, index rebuilt from S3 or kept warm.
-- IaC to recreate; Route 53 failover; AWS Backup; regular DR drills and restore tests.
-
-## CWD context
-Untested DR plans usually fail on first use.
-`,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What RTO/RPO would you design for CWD?
-
-## Short answer
-RTO is how long recovery may take; RPO is how much data loss is acceptable; set them from business impact.
-
-## Key points
-- Example targets: RTO one hour or less for user-facing service; RPO of seconds to minutes for workflow state.
-- Documents and the index: RPO minutes to an hour; the index can be rebuilt from S3.
-- Audit logs: near-zero RPO.
-- Tighter targets cost more, so justify each one.
-
-## CWD context
-Different data classes can have different targets.
-`,code:``}];function Wm(){return(0,M.jsx)($,{data:Um,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Gm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is the biggest cost driver in CWD?
-
-## Short answer
-The biggest cost driver is usually Bedrock token usage, followed by fixed-capacity services.
-
-## Key points
-- Bedrock: model choice × tokens per request × volume.
-- Then OpenSearch OCU baseline, running Fargate tasks, NAT gateway data processing, CloudWatch Logs ingestion and data transfer.
-- Confirm with Cost Explorer grouped by service and usage type.
-
-## CWD context
-Measure before optimising; do not assume.
-`,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Bedrock costs?
-
-## Short answer
-Reduce Bedrock cost by sending fewer, smaller and cheaper calls.
-
-## Key points
-- Model tiering and routing; prompt caching; response and semantic caching.
-- Batch inference for offline work; Provisioned Throughput only for steady heavy load.
-- Shorter prompts, fewer and better chunks, capped output tokens; distillation for narrow tasks.
-- Application inference profiles for cost attribution.
-
-## CWD context
-Model routing is usually the biggest single lever.
-`,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Lambda costs?
-
-## Short answer
-Reduce Lambda cost by right-sizing, speeding up and invoking less.
-
-## Key points
-- Right-size memory with power tuning; use arm64 (Graviton).
-- Reuse connections and shorten duration; filter events and batch SQS messages.
-- Drop unneeded provisioned concurrency; Compute Savings Plans; reduce log volume.
-
-## CWD context
-Memory affects CPU, so more memory can be cheaper if it shortens duration.
-`,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce ECS costs?
-
-## Short answer
-Reduce ECS cost by right-sizing and using cheaper capacity where safe.
-
-## Key points
-- Right-size CPU and memory from real metrics; Graviton (ARM) tasks.
-- Fargate Spot for interruptible Workers; Compute Savings Plans.
-- Scale-in policies and schedules for non-production; consolidate tiny services.
-
-## CWD context
-Do not put latency-critical services on Spot.
-`,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce OpenSearch costs?
-
-## Short answer
-Reduce OpenSearch cost by capping capacity and storing less.
-
-## Key points
-- OCU limits and reduced redundancy in dev and test.
-- Lower embedding dimensions, quantisation or disk-based vectors; store only needed fields.
-- Share collections sensibly; delete stale documents; cache frequent queries.
-
-## CWD context
-The OCU baseline dominates small workloads.
-`,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize S3 costs?
-
-## Short answer
-Optimise S3 with lifecycle rules, storage classes and hygiene.
-
-## Key points
-- Transition to infrequent-access or archive classes; Intelligent-Tiering for unknown patterns.
-- Expire non-current versions and incomplete multipart uploads.
-- Parquet and compression; avoid huge numbers of tiny objects.
-- Gateway endpoint to avoid NAT charges; Storage Lens for visibility.
-
-## CWD context
-Versioning without lifecycle rules quietly grows cost.
-`,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use caching to reduce cost?
-
-## Short answer
-Caching reduces cost by avoiding repeated expensive work.
-
-## Key points
-- ElastiCache for embeddings, responses and semantic cache; Bedrock prompt caching.
-- API Gateway caching for idempotent GETs; CloudFront.
-- Savings ≈ hit rate × cost avoided; guard against stale answers with TTL and versioning.
-
-## CWD context
-Report cache savings as a KPI.
-`,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use smaller Bedrock models?
-
-## Short answer
-Use smaller Bedrock models for tasks that do not need a large one.
-
-## Key points
-- Routing, classification, extraction, short summaries and guardrail checks.
-- Route by complexity with Intelligent Prompt Routing or your own classifier.
-- Fall back to a larger model on low confidence.
-
-## CWD context
-Prove the downshift with evaluation before switching.
-`,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor AWS cost per request?
-
-## Short answer
-Monitor cost per request by tagging everything and combining token and compute costs.
-
-## Key points
-- Cost allocation tags per tenant, agent and environment.
-- Application inference profiles for Bedrock cost by tenant or agent.
-- Custom metric: tokens × price per model plus a share of compute; log cost per request.
-- Cost and usage reports with Athena; budgets per tenant.
-
-## CWD context
-Unit economics should be visible on a dashboard.
-`,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you investigate a sudden AWS bill increase?
-
-## Short answer
-Investigate a bill increase from broad to narrow, then link it to a change.
-
-## Key points
-- Cost Explorer by service, usage type, account and tag; day-over-day comparison; Cost Anomaly Detection.
-- Usual suspects: Bedrock tokens (loops, retry storms, prompt growth after a release), NAT data, log ingestion, cross-AZ or cross-region transfer, OpenSearch OCUs, runaway scaling, forgotten resources.
-- Correlate with deployments and changes; mitigate with rate limits, disabling a feature or rollback; add guardrails.
-
-## CWD context
-Set budgets and anomaly alerts before the next spike.
-`,code:``}];function Km(){return(0,M.jsx)($,{data:Gm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var qm=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy CWD on AWS?
-
-## Short answer
-Deploy CWD through infrastructure as code and a pipeline that promotes one artifact through accounts.
-
-## Key points
-- IaC provisions VPC, ECS, API Gateway, DynamoDB, SQS, Step Functions, IAM and alarms.
-- CodePipeline builds with CodeBuild, pushes to ECR and deploys to ECS through CodeDeploy; Lambda through versions and aliases.
-- Runtime configuration through AppConfig and SSM; approvals; smoke tests.
-
-## CWD context
-The same image and templates go to every environment; only configuration differs.
-`,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain your AWS CI/CD pipeline.
-
-## Short answer
-The pipeline moves a change from commit to production through automated gates.
-
-## Key points
-- Source → CodeBuild: lint, unit tests, dependency and secret scans, container build and image scan.
-- Evaluation stage: golden-dataset checks for prompts and agents; fail on regression.
-- Deploy to dev → integration and end-to-end tests → staging with canary, load and security tests → manual approval → production with blue-green or canary and alarm-based rollback.
-- Artifacts encrypted with KMS; cross-account deploy roles.
-
-## CWD context
-Evaluation is a quality gate alongside tests.
-`,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use CodePipeline?
-
-## Short answer
-CodePipeline orchestrates the release stages and connects the build and deploy services.
-
-## Key points
-- Triggers on source changes; integrates CodeBuild, CodeDeploy, CloudFormation, ECS and Lambda.
-- Manual approvals, cross-account and cross-region actions.
-- Artifact store in S3 encrypted with KMS; EventBridge notifications.
-
-## CWD context
-The pipeline definition itself is code.
-`,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use CodeBuild?
-
-## Short answer
-CodeBuild runs build, test and evaluation steps in managed containers.
-
-## Key points
-- buildspec: install, lint, unit tests, build and scan the image, push to ECR.
-- Also runs evaluation suites and IaC checks (for example cdk-nag or checkov).
-- VPC access for private resources; caching; test reports; least-privilege service role.
-
-## CWD context
-Keep build roles separate from deploy roles.
-`,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you use ECR?
-
-## Short answer
-ECR is the private registry that stores and secures CWD's container images.
-
-## Key points
-- One repository per component; scanning (basic or enhanced with Inspector).
-- Immutable tags such as commit SHA; lifecycle policies to expire old images.
-- Cross-region and cross-account replication; pulls through IAM and VPC endpoints.
-
-## CWD context
-Never deploy a mutable tag such as latest.
-`,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy Lambda versions?
-
-## Short answer
-Deploy Lambda through immutable versions and aliases, with traffic shifting.
-
-## Key points
-- Publish a version per release; aliases such as dev and prod point at versions.
-- CodeDeploy canary or linear shifting with pre- and post-traffic test hooks.
-- Automatic rollback on CloudWatch alarms; event sources reference the alias.
-
-## CWD context
-Rollback is moving the alias back.
-`,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement blue-green deployment?
-
-## Short answer
-Blue-green runs old and new side by side and switches traffic once the new one is proven.
-
-## Key points
-- ECS with CodeDeploy: green task set behind a test listener, run tests, then shift traffic all at once, in a canary or linearly.
-- Keep blue for the rollback window; alarms trigger automatic rollback.
-- Keep database changes backward compatible; use AppConfig flags for prompts and models.
-
-## CWD context
-Prove the green stack before any user reaches it.
-`,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement canary deployment?
-
-## Short answer
-Canary exposes a small share of traffic to the new version and expands as evidence accumulates.
-
-## Key points
-- CodeDeploy canary configurations, ALB weighted target groups, Lambda alias weights, API Gateway canary stages.
-- AppConfig gradual rollout for prompts, model IDs and configuration, with automatic rollback.
-- Watch quality metrics as well as errors.
-
-## CWD context
-Start with internal or low-risk tenants.
-`,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you roll back a failed deployment?
-
-## Short answer
-Roll back by returning traffic or configuration to the last known good version.
-
-## Key points
-- CodeDeploy automatic rollback on alarms or failed hooks.
-- Manual: previous ECS task set or task definition, Lambda alias to the prior version, AppConfig rollback, IaC revert.
-- Expand-and-contract database changes keep old versions working.
-
-## CWD context
-Rehearse rollback so it is quick and calm.
-`,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage dev/test/prod environments?
-
-## Short answer
-Manage environments with separate accounts, parameterised IaC and controlled promotion.
-
-## Key points
-- Separate accounts under Organizations; SCPs per OU.
-- Same IaC with per-environment parameters; AppConfig and SSM per environment.
-- Separate KMS keys, secrets and network; masked data; budgets and auto-stop for non-production.
-
-## CWD context
-Promote the same artifact; never rebuild for production.
-`,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement Infrastructure as Code?
-
-## Short answer
-Infrastructure as code defines all infrastructure in reviewed, versioned templates deployed only through the pipeline.
-
-## Key points
-- Git, pull-request review, static checks (cfn-lint, cdk-nag, checkov).
-- Drift detection; modular constructs or modules; no console changes in production.
-- Terraform needs remote state with locking.
-
-## CWD context
-Manual console changes are the main source of environment drift.
-`,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:`# CloudFormation vs CDK vs Terraform?
-
-## Short answer
-CloudFormation is AWS-native; CDK generates CloudFormation from real code; Terraform is multi-cloud.
-
-## Key points
-- CloudFormation: declarative YAML or JSON, managed state, rollback on failure.
-- CDK: TypeScript, Python and others; reusable constructs; synthesises to CloudFormation.
-- Terraform: HCL, plan and apply, state file, providers for many platforms.
-
-## CWD context
-Choose CDK for AWS-only developer-led teams; Terraform for multi-cloud or existing skills.
-`,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage AWS configuration across environments?
-
-## Short answer
-Manage configuration per environment through IaC parameters, AppConfig and Parameter Store.
-
-## Key points
-- AppConfig for runtime configuration and feature flags with validators, gradual rollout and rollback, including prompt and model versions.
-- Parameter Store paths such as /cwd/{env}/...; Secrets Manager per environment.
-- Schema validation; no environment-specific code branches.
-
-## CWD context
-Runtime config changes need the same discipline as code changes.
-`,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure the CI/CD pipeline?
-
-## Short answer
-Secure the pipeline like production, because it can deploy anything.
-
-## Key points
-- Separate least-privilege roles for build and deploy; cross-account deploy roles with conditions.
-- No long-lived keys: OIDC federation for external CI; KMS-encrypted artifacts.
-- Image scanning and signing; dependency and secret scanning; branch protection and required reviews; approval for production.
-- Isolated build networks; audit through CloudTrail.
-
-## CWD context
-A compromised pipeline is a compromised production.
-`,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent production deployment of an untested AI model?
-
-## Short answer
-Prevent untested models from reaching production with technical gates.
-
-## Key points
-- The evaluation stage must pass for the exact model, prompt and configuration version.
-- Approved-model allow-list in AppConfig, validated by the pipeline.
-- IAM on the task role limits bedrock:InvokeModel to approved ARNs; SCPs restrict model access by account.
-- Manual approval, IaC-only changes, canary with automatic rollback, and an audit trail.
-
-## CWD context
-Make the safe path the only path.
-`,code:``}];function Jm(){return(0,M.jsx)($,{data:qm,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Ym=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you use AWS Glue in CWD?
-
-## Short answer
-Glue provides serverless ETL and a data catalogue, so CWD can ingest and prepare enterprise data at scale without managing clusters.
-
-## Key points
-- Spark-based jobs for large batch work; integration with S3, Athena and Lake Formation.
-- Job bookmarks for incremental processing; connectors for databases and SaaS sources.
-- Prepares document chunks for RAG and datasets for SageMaker training.
-
-## CWD context
-Glue moves and shapes data; retrieval and reasoning happen elsewhere.
-`,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data sources would CWD ingest using Glue?
-
-## Short answer
-CWD ingests enterprise knowledge and operational data from several systems.
-
-## Key points
-- Salesforce and ServiceNow records; Oracle and Snowflake tables.
-- SharePoint and other file content exported to S3; documents already in S3.
-- Logs, telemetry and evaluation datasets.
-
-## CWD context
-Live lookups go through MCP; ingestion is for searchable knowledge and analytics.
-`,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from Salesforce?
-
-## Short answer
-Ingest Salesforce through a Glue Salesforce connection or Amazon AppFlow into S3.
-
-## Key points
-- OAuth credentials in Secrets Manager; query objects with filters.
-- Incremental on LastModifiedDate or SystemModstamp; respect API limits.
-- Write Parquet to S3; capture deletions through IsDeleted or reconciliation.
-
-## CWD context
-Keep raw and curated layers separate.
-`,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from ServiceNow?
-
-## Short answer
-Ingest ServiceNow through the Glue connector or Amazon AppFlow using the Table API.
-
-## Key points
-- Filter on sys_updated_on for incremental loads; paginate.
-- OAuth credentials in Secrets Manager; watch API rate limits.
-- Handle deletions through the audit-delete table or reconciliation; keep assignment groups as ACL metadata.
-
-## CWD context
-Land as Parquet in S3 for reprocessing.
-`,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue ingest data from S3?
-
-## Short answer
-Read S3 data in Glue through the catalog or direct paths, processing only what is new.
-
-## Key points
-- DynamicFrames or Spark DataFrames; job bookmarks to skip processed files.
-- Push-down predicates and partition pruning; IAM role for access.
-- Triggered by schedule or S3 events.
-
-## CWD context
-Keep the same layout for raw, curated and consumption zones.
-`,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue integrate data from Oracle/Snowflake?
-
-## Short answer
-Read Oracle through JDBC and Snowflake through the native connector, using private connections.
-
-## Key points
-- Glue connection in a private subnet with security groups; credentials in Secrets Manager.
-- Partitioned reads for parallelism; incremental by watermark.
-- DMS for change data capture from Oracle where lower latency is needed.
-
-## CWD context
-Avoid heavy scans on production databases during business hours.
-`,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is a Glue Data Catalog?
-
-## Short answer
-The Glue Data Catalog is a central, Hive-compatible metadata store for datasets.
-
-## Key points
-- Databases, tables, schemas, partitions and locations.
-- Shared by Glue, Athena, EMR, Redshift Spectrum and Lake Formation.
-- Schema versioning.
-
-## CWD context
-It makes S3 data discoverable and governable.
-`,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What metadata would you maintain in Glue Data Catalog?
-
-## Short answer
-Maintain technical, business and governance metadata in the catalogue.
-
-## Key points
-- Schema, format, location, partitions, owner, source system.
-- Classification and sensitivity tags (Lake Formation tags), retention, freshness.
-- Table properties such as ingestion run ID and data-quality status.
-
-## CWD context
-Metadata is what lets you trace a citation back to its source.
-`,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue Crawler vs Glue ETL job?
-
-## Short answer
-A crawler discovers schemas and updates the catalogue; an ETL job transforms and moves data.
-
-## Key points
-- Crawler: samples data, infers schema and partitions; metadata only.
-- ETL job: produces new datasets.
-- Crawlers can be slow and drift-prone on huge paths; define known tables in IaC and use partition projection.
-
-## CWD context
-Do not put crawlers on the critical path of ingestion.
-`,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does a Glue Crawler discover schemas?
-
-## Short answer
-A crawler connects to the data store, samples files with classifiers and writes tables to the catalogue.
-
-## Key points
-- Built-in classifiers for CSV, JSON, Parquet and others.
-- Detects partitions from folder structure.
-- Schema change policy decides whether to update, log or ignore changes.
-
-## CWD context
-Sampling means the inferred schema can be wrong for irregular data.
-`,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle schema changes?
-
-## Short answer
-Handle schema changes by landing raw data untouched and evolving curated schemas deliberately.
-
-## Key points
-- Crawler schema-change policy; Iceberg, Hudi or Delta tables for additive column evolution.
-- ResolveChoice for ambiguous types; Schema Registry for streaming.
-- Alerts and review for breaking changes.
-
-## CWD context
-Additive changes flow through; breaking changes need a human decision.
-`,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement incremental data ingestion?
-
-## Short answer
-Implement incremental ingestion with bookmarks, watermarks or change data capture.
-
-## Key points
-- Glue job bookmarks for S3 files and JDBC keys; a watermark table in DynamoDB.
-- DMS CDC and AppFlow incremental transfer; upserts into Iceberg or Hudi.
-- Idempotent writes so reruns are safe.
-
-## CWD context
-Update the watermark only after a successful run.
-`,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Full load vs incremental load?
-
-## Short answer
-A full load re-reads everything; an incremental load reads only changes.
-
-## Key points
-- Full: simple, handles deletes easily, slow and costly.
-- Incremental: cheap and fast but needs a reliable change signal and delete handling.
-- Common pattern: initial full, then incremental, with periodic reconciliation.
-
-## CWD context
-Choose per source based on volume and change signals.
-`,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you identify new or changed records?
-
-## Short answer
-Identify changes through timestamps, versions, CDC logs or hashes.
-
-## Key points
-- Modified-date columns, row versions, DMS change records.
-- S3 LastModified, ETag or version ID; content hash compared with a manifest.
-- Iceberg snapshots for incremental reads.
-
-## CWD context
-Prefer a real change signal over comparing full copies.
-`,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle deleted records?
-
-## Short answer
-Handle deletions with source signals plus a reconciliation safety net.
-
-## Key points
-- Soft-delete flags and audit tables; CDC delete operations.
-- Key comparison between source and target with an anti-join; tombstones.
-- Propagate to curated tables (Iceberg MERGE DELETE) and to the OpenSearch index.
-
-## CWD context
-Fast deletion from the index matters most for confidentiality.
-`,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle duplicate records?
-
-## Short answer
-Handle duplicates by deduplicating on a business key and making writes idempotent.
-
-## Key points
-- Window functions to keep the latest record; dropDuplicates.
-- MERGE upserts in Iceberg or Hudi; deterministic IDs.
-- Partition-level overwrite for repeatable reruns.
-
-## CWD context
-Idempotency is what makes retries safe.
-`,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you partition data in S3?
-
-## Short answer
-Partition S3 data by low-cardinality columns that queries filter on, and keep files a sensible size.
-
-## Key points
-- Hive-style prefixes such as source_system and date; avoid over-partitioning.
-- Target roughly 128 MB to 1 GB files; partition projection for many partitions.
-- Separate raw and curated zones; partition indexes in the catalogue.
-
-## CWD context
-Match partitioning to how data is read.
-`,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Parquet instead of CSV?
-
-## Short answer
-Parquet is columnar, compressed and typed, so it reads less data than CSV.
-
-## Key points
-- Column and predicate pruning make Athena and Glue faster and cheaper.
-- Schema is embedded and supports evolution.
-- CSV is row-based, untyped and larger; use it only for exchange.
-
-## CWD context
-Consider Iceberg on Parquet for table features.
-`,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize Glue ETL performance?
-
-## Short answer
-Optimise Glue by reducing data read, shuffles and small files, and by sizing workers well.
-
-## Key points
-- Worker type (G.1X, G.2X and larger) and auto scaling.
-- Push-down predicates, partition pruning, file grouping, compacted output.
-- Avoid unnecessary shuffles and UDFs; broadcast small joins; use Parquet and bookmarks.
-- Check the Spark UI and job metrics.
-
-## CWD context
-Measure first; most gains come from a few stages.
-`,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle very large datasets?
-
-## Short answer
-Handle very large datasets with distributed processing, incremental loads and good partitioning.
-
-## Key points
-- Scale workers with auto scaling; process by partition or time window.
-- Columnar formats; skew handling; table compaction in Iceberg.
-- Consider EMR when you need deeper Spark control.
-
-## CWD context
-Avoid full reloads of large tables.
-`,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain S3 → Glue → OpenSearch architecture.
-
-## Short answer
-The flow is S3 raw documents → Glue processing → embeddings → OpenSearch, orchestrated by Step Functions.
-
-## Key points
-- Glue parses and cleans documents (Textract for scans), chunks them and adds metadata and ACLs.
-- Embeddings are generated with Bedrock in throttled batches.
-- Chunks are bulk-written to OpenSearch Serverless; a manifest in DynamoDB records status.
-- Curated chunks are also saved back to S3.
-
-## CWD context
-Every step is idempotent so reruns are safe.
-`,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue prepare enterprise documents for RAG?
-
-## Short answer
-Glue prepares documents by extracting, cleaning and structuring them for retrieval.
-
-## Key points
-- Text extraction, normalisation, language detection, deduplication.
-- PII detection and redaction; chunking; metadata enrichment; ACL attachment.
-- Quality checks; output as JSON or Parquet chunks.
-
-## CWD context
-Preparation quality largely determines retrieval quality.
-`,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would document preprocessing happen?
-
-## Short answer
-Preprocess in Glue for bulk corpora and in Lambda for small, per-document events.
-
-## Key points
-- Glue: large batches and heavy transformations.
-- Lambda: near-real-time single-document processing.
-- Share code as a library so both paths behave the same.
-
-## CWD context
-Divergent code paths produce inconsistent chunks.
-`,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would chunking happen?
-
-## Short answer
-Chunk in the curated processing job, not at query time.
-
-## Key points
-- Recursive, structure-aware or semantic chunking with versioned parameters (size, overlap).
-- Deterministic chunk IDs; store the chunking strategy version in metadata.
-- Changing the strategy triggers a controlled re-chunk.
-
-## CWD context
-Chunk size and overlap should be tuned with retrieval evaluation.
-`,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Where would metadata extraction happen?
-
-## Short answer
-Extract metadata in the same job that prepares the chunks.
-
-## Key points
-- Source system, document ID, title, author, dates, type, department, language.
-- Sensitivity, ACL principals, path or URL, version, ingest run ID, content hash.
-- From source APIs, document properties and classification.
-
-## CWD context
-Good metadata powers both filtering and citations.
+## How would you scale ECS?
+
+ECS scales by **adding or removing tasks** based on workload.
+
+\`\`\`text id="r6k2wp"
+Traffic
+   ↓
+ALB
+   ↓
+ECS Service
+ ┌─────┬─────┬─────┐
+ ↓     ↓     ↓
+Task  Task  Task
+ └─────┴─────┴─────┘
+       ↑
+   Auto Scaling
+\`\`\`
+
+### How I would do it
+
+* **ECS Service Auto Scaling** → adjusts desired task count.
+* **CPU/Memory scaling** → add tasks when resource utilization is high.
+* **ALB RequestCountPerTarget** → scale based on incoming traffic.
+* **P95/P99 latency** → scale when response time increases.
+* **SQS queue depth** → scale Workers based on backlog.
+* **Min/Max task count** → prevent over/under-scaling.
+* Deploy tasks across **multiple AZs** for availability.
+* Use **Fargate** so AWS manages the underlying servers.
+
+### CWD example
+
+\`\`\`text id="y4n8tc"
+Coordinator → scale on request rate / latency
+Delegator   → scale on workload
+Worker      → scale on SQS queue depth
+\`\`\`
+
+This is important: **don't scale every CWD component using the same metric.**
+
+### Interview answer
+
+> “I would use ECS Service Auto Scaling to increase or decrease Fargate task count. For Coordinators I would use request rate, CPU, and P95 latency. For Workers, I would primarily use SQS queue depth and message age. I would define minimum and maximum task counts and deploy across multiple AZs.”
+
+**Memory:**
+**Measure → Add Tasks → Load Balance → Monitor → Remove Tasks**
+`,code:``},{id:`206-how-would-you-scale-opensearch`,category:`Scalability & High Availability`,title:`How would you scale OpenSearch?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you scale OpenSearch?
+
+Scale **data nodes / capacity** based on search and indexing workload.
+
+\`\`\`text id="t7m3qa"
+More RAG Traffic
+      ↓
+OpenSearch
+ ┌────┬────┬────┐
+ ↓    ↓    ↓
+Node Node Node
+      ↓
+Scale Capacity
+\`\`\`
+
+### What I would monitor
+
+* Search **P95/P99 latency**
+* Search/indexing throughput
+* CPU utilization
+* Memory / JVM pressure
+* Storage utilization
+* Indexing errors
+* Request throttling
+* Queue/rejected requests
+
+### CWD approach
+
+1. **Horizontal scaling** → add capacity/nodes rather than only increasing one node.
+2. **Shard data** appropriately so search/indexing work is distributed.
+3. **Replica shards** → improve read scalability and availability.
+4. **Separate indexing and search workload** where the deployment architecture supports it.
+5. **Scale based on actual workload**, not simply number of users.
+6. For **OpenSearch Serverless**, adjust capacity based on workload and let the service handle underlying infrastructure scaling.
+
+### Interview answer
+
+> “I would scale OpenSearch based on search and indexing workload. I would monitor P95/P99 search latency, CPU, JVM pressure, storage, throughput, and rejected requests. For a managed cluster, I can add capacity and distribute data using shards and replicas. For OpenSearch Serverless, I would use its managed capacity scaling and tune the workload, while monitoring retrieval latency and cost.”
+
+**Memory:**
+**Traffic → Monitor → Shards → Replicas → Capacity → Optimize**
+`,code:``},{id:`207-how-would-you-scale-dynamodb`,category:`Scalability & High Availability`,title:`How would you scale DynamoDB?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you scale DynamoDB?
+
+DynamoDB scales **horizontally by partitioning data and capacity across partitions**.
+
+\`\`\`text id="p3n8vk"
+More CWD Traffic
+      ↓
+   DynamoDB
+      ↓
+┌─────┬─────┬─────┐
+↓     ↓     ↓
+P1    P2    P3
+      ↓
+Auto Scaling
+\`\`\`
+
+### How I would do it
+
+* **On-demand capacity** → good for unpredictable/spiky CWD traffic.
+* **Provisioned + Auto Scaling** → good for predictable workloads.
+* Design a **high-cardinality partition key** to distribute traffic.
+* Avoid **hot partitions** caused by too many requests hitting one partition key.
+* Use **adaptive capacity** to help with uneven access patterns.
+* Monitor **ThrottledRequests**, consumed capacity, latency, and read/write utilization.
+* Use **DAX/Redis** for frequently accessed data when caching is appropriate.
+
+### CWD example
+
+\`\`\`text id="v1c6zs"
+PK = TENANT#ON#SESSION#S123
+SK = TASK#T456#RUN#R789
+\`\`\`
+
+Using session/run IDs helps distribute workload rather than putting every request under one common key.
+
+### Interview answer
+
+> “For CWD, I would use DynamoDB on-demand initially when traffic is unpredictable, or provisioned capacity with Auto Scaling for predictable workloads. I would design high-cardinality partition keys to avoid hot partitions and monitor throttling, latency, and consumed capacity. For frequently read data, I can use Redis as a cache to reduce DynamoDB traffic.”
+
+**Memory:**
+**Partition well → Avoid Hot Keys → Auto Scale → Monitor → Cache**
+`,code:``},{id:`208-how-would-you-handle-bedrock-rate-limits`,category:`Scalability & High Availability`,title:`How would you handle Bedrock rate limits?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Handle Bedrock rate limits
+
+When Bedrock returns **429 / throttling**, don't immediately retry aggressively. Use **queueing + controlled concurrency + backoff**.
+
+\`\`\`text id="c7m2qx"
+CWD Worker
+    ↓
+Concurrency Limit
+    ↓
+SQS Queue
+    ↓
+Bedrock
+    ↓
+429?
+ ┌──┴─────────────┐
+ ↓                ↓
+Retry + Jitter   Model Fallback
+\`\`\`
+
+### Approach
+
+1. **Detect 429/throttling** from Bedrock.
+2. **Limit concurrency** so Workers don't send too many requests simultaneously.
+3. **Buffer requests in SQS** during traffic spikes.
+4. **Retry with exponential backoff + jitter**.
+5. **Use maximum retry limits** to avoid retry storms.
+6. **DLQ failed messages** after retries are exhausted.
+7. **Model routing** — route suitable workloads to another available model where appropriate.
+8. Monitor **throttling, latency, queue depth, and invocation errors** in CloudWatch.
+9. If sustained, review/request **higher Bedrock quotas**.
+
+### Interview answer
+
+> “For Bedrock rate limits, I first detect 429 throttling and control concurrency at the Worker layer. I use SQS to buffer traffic and exponential backoff with jitter for transient throttling. I limit retries to avoid a retry storm and send exhausted requests to a DLQ. For sustained demand, I can use model routing and request higher service quotas.”
+
+**Memory:**
+**Detect 429 → Limit → Queue → Backoff → Retry → Fallback → Monitor**
+`,code:``},{id:`209-where-would-you-introduce-sqs`,category:`Scalability & High Availability`,title:`Where would you introduce SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Where would I introduce SQS in CWD?
+
+I would introduce SQS **between components where work can be asynchronous** and where I need **buffering, decoupling, retries, and backpressure**.
+
+\`\`\`text id="r2n6vk"
+User
+ ↓
+API Gateway
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+SQS
+ ↓
+Worker
+ ↓
+MCP / Bedrock / Enterprise Systems
+\`\`\`
+
+### Good places in CWD
+
+**1. Delegator → Worker**
+
+\`\`\`text id="z7k3qa"
+Delegator → SQS → Workers
+\`\`\`
+
+Useful when many requests arrive and Workers need controlled concurrency.
+
+**2. Document ingestion**
+
+\`\`\`text id="q8m4tp"
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+RAG Worker
+ ↓
+OpenSearch
+\`\`\`
+
+Useful for buffering large document-ingestion workloads.
+
+**3. Failed processing**
+
+\`\`\`text id="w5c9dn"
+SQS → Worker → failure
+              ↓
+             DLQ
+\`\`\`
+
+### Important
+
+I would **not put SQS in the middle of every synchronous request**.
+
+For example, if the user expects an immediate Customer Briefing response, I can keep the initial orchestration synchronous and use SQS for long-running or asynchronous work.
+
+### Interview answer
+
+> “I would introduce SQS mainly between the Delegator and Workers, and for asynchronous workloads such as document ingestion. It gives CWD buffering, backpressure, retries, and decoupling. I would avoid putting SQS into latency-sensitive synchronous paths unless the business flow supports asynchronous processing.”
+
+**Memory:**
+**SQS = Buffer → Decouple → Retry → Backpressure**
+`,code:``},{id:`210-how-would-you-implement-backpressure`,category:`Scalability & High Availability`,title:`How would you implement backpressure?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement backpressure?
+
+**Backpressure means controlling incoming work when downstream systems cannot process it fast enough.**
+
+\`\`\`text id="v4m8qa"
+Traffic Spike
+     ↓
+API Gateway
+     ↓
+SQS Queue  ← Buffer
+     ↓
+Worker Pool
+     ↓
+Bedrock / Salesforce / ServiceNow
+     ↑
+Concurrency Limit
+\`\`\`
+
+### In CWD
+
+1. **SQS** buffers incoming work.
+2. **Limit Worker concurrency** so downstream systems aren't overwhelmed.
+3. **ECS Auto Scaling** adds Workers when queue depth increases.
+4. **Rate limiting** controls requests entering the system.
+5. **Retry + exponential backoff + jitter** for transient failures.
+6. **Circuit breaker** stops calls to an unhealthy downstream service.
+7. **DLQ** captures messages that repeatedly fail.
+8. **CloudWatch alarms** monitor queue depth and oldest message age.
+
+### Example
+
+If Bedrock can currently handle only a certain request rate:
+
+\`\`\`text id="s2k6wp"
+10,000 requests
+      ↓
+     SQS
+      ↓
+Controlled Workers
+      ↓
+Bedrock
+\`\`\`
+
+Instead of sending all 10,000 requests to Bedrock immediately, SQS absorbs the spike and Workers process them at a controlled rate.
+
+### Interview answer
+
+> “I would implement backpressure using SQS as a buffer, controlled Worker concurrency, API throttling, and autoscaling based on queue depth. If downstream services start throttling, I would reduce concurrency and use exponential backoff with jitter. Circuit breakers and DLQs would protect the system from sustained downstream failures.”
+
+**Memory:**
+**Buffer → Limit → Queue → Scale → Backoff → Protect**
+`,code:``},{id:`211-how-would-you-eliminate-aws-single-points-of-failure`,category:`Scalability & High Availability`,title:`How would you eliminate AWS single points of failure?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Eliminate AWS single points of failure
+
+Design CWD with **redundancy across Availability Zones** and avoid single-instance dependencies.
+
+\`\`\`text id="k3m7qa"
+                 API Gateway
+                     ↓
+                    ALB
+              ┌──────┴──────┐
+              ↓             ↓
+           AZ-1            AZ-2
+        Coordinator      Coordinator
+        Delegators       Delegators
+        Workers          Workers
+              ↓             ↓
+           Shared Managed Services
+      DynamoDB / SQS / S3 / OpenSearch
+\`\`\`
+
+### Key actions
+
+* **ECS/Fargate:** Run multiple tasks across **2+ AZs**.
+* **ALB:** Distribute traffic across healthy targets in multiple AZs.
+* **ECS Auto Scaling:** Replace failed tasks automatically.
+* **SQS:** Use durable queues and **DLQs**.
+* **DynamoDB:** Use its multi-AZ managed architecture; avoid relying on one instance.
+* **S3:** Use durable managed storage rather than local container storage.
+* **OpenSearch:** Use multiple nodes/AZs and replicas where using a provisioned domain.
+* **ElastiCache/Redis:** Use replication/failover configuration rather than a single node.
+* **NAT Gateway:** If required for production, use NAT Gateway per AZ to avoid one NAT becoming a regional dependency.
+* **ECS state:** Keep state outside containers in DynamoDB/Redis/S3.
+* **Health checks:** ALB/ECS detect unhealthy tasks and route around them.
+* **Multi-region:** Add only if the business requires regional disaster recovery; AZ redundancy is the first layer.
+
+### Interview answer
+
+> “I eliminate single points of failure by running CWD workloads across multiple Availability Zones, with multiple ECS tasks behind an ALB and automatic replacement and scaling. I use managed highly available services such as DynamoDB, S3, and SQS, and configure replication/failover for services like OpenSearch and Redis where applicable. I also avoid storing state locally in containers. For stronger disaster recovery requirements, I would add a multi-region strategy.”
+
+**Memory:**
+**Multi-AZ → Multiple Tasks → Managed HA → Replication → Failover → Multi-Region**
+`,code:``},{id:`212-how-would-you-design-multi-az-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-AZ CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Multi-AZ CWD design
+
+Deploy the **Coordinator, Delegators, and Workers across multiple Availability Zones** so failure of one AZ doesn't stop CWD.
+
+\`\`\`text id="n8k4wp"
+                    API Gateway
+                         ↓
+                        ALB
+                 ┌───────┴───────┐
+                 ↓               ↓
+               AZ-1             AZ-2
+          ┌────────────┐   ┌────────────┐
+          │ Coordinator│   │ Coordinator│
+          │ Delegators │   │ Delegators │
+          │ Workers    │   │ Workers    │
+          └─────┬──────┘   └─────┬──────┘
+                │                │
+                └───────┬────────┘
+                        ↓
+             ┌─────────────────────┐
+             │ Shared AWS Services │
+             │ SQS / DynamoDB / S3 │
+             │ OpenSearch / Redis  │
+             └─────────────────────┘
+\`\`\`
+
+### Key design
+
+* **VPC:** At least 2–3 AZs.
+* **Private subnets:** Coordinator, Delegators, Workers.
+* **ALB:** Routes traffic only to healthy ECS tasks.
+* **ECS/Fargate:** Multiple tasks distributed across AZs.
+* **Auto Scaling:** Replaces failed tasks and handles traffic increases.
+* **SQS:** Buffers asynchronous work if one AZ has capacity issues.
+* **DynamoDB/S3:** Keep durable state/data outside containers.
+* **OpenSearch:** Use multi-AZ deployment and replicas where applicable.
+* **Redis:** Use replication/failover rather than a single cache node.
+* **NAT:** For production private-subnet internet access, use NAT per AZ so one NAT failure doesn't become a dependency.
+* **Health checks:** ECS/ALB detect unhealthy tasks and route around them.
+
+### Example failure
+
+If **AZ-1 goes down**:
+
+\`\`\`text id="c6t2mz"
+AZ-1 ❌
+   ↓
+ALB stops routing there
+   ↓
+AZ-2 continues serving
+   ↓
+ECS replaces capacity
+   ↓
+CWD remains available
+\`\`\`
+
+### Interview answer
+
+> “I would deploy CWD across at least two Availability Zones, with private subnets containing multiple Coordinator, Delegator, and Worker tasks. An ALB distributes traffic only to healthy tasks, while ECS Auto Scaling replaces failed capacity. Durable state would be externalized to DynamoDB, S3, and other managed services, and stateful services such as OpenSearch and Redis would use appropriate replication and failover. This ensures an AZ failure doesn't become a CWD single point of failure.”
+
+**Memory:**
+**Multi-AZ → Private Tasks → Load Balance → Externalize State → Replicate → Failover**
+`,code:``},{id:`213-how-would-you-design-multi-region-cwd`,category:`Scalability & High Availability`,title:`How would you design multi-region CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Multi-region CWD design
+
+For multi-region CWD, I would run **independent CWD stacks in two regions** and use a global routing layer to direct users to a healthy region.
+
+\`\`\`text id="h6p3qa"
+                    Users
+                      ↓
+              Route 53 / Global
+                 Accelerator
+                 ↙       ↘
+             Region A   Region B
+                ↓          ↓
+              ALB        ALB
+                ↓          ↓
+          ECS/Fargate  ECS/Fargate
+          Coordinator  Coordinator
+          Delegators   Delegators
+          Workers      Workers
+                ↓          ↓
+             SQS        SQS
+                ↓          ↓
+        Regional AWS Services
+\`\`\`
+
+### Key design
+
+* **Each region has its own complete CWD stack.**
+* **Route 53 / Global Accelerator** routes users to a healthy region.
+* ECS/Fargate services run across **multiple AZs in each region**.
+* **DynamoDB Global Tables** for state that must be available across regions.
+* **S3 Cross-Region Replication** for required documents/artifacts.
+* OpenSearch data is replicated using an appropriate cross-region strategy.
+* Redis is treated carefully—**don't assume cache replication is enough for durable state**.
+* **SQS is regional**, so asynchronous work needs a regional/failover strategy.
+* Keep **configuration, prompts, agent registry, and model configuration versioned** so regions remain consistent.
+* Use **CloudWatch/X-Ray/OpenTelemetry** per region and centralized observability where required.
+
+### Active-active vs active-passive
+
+**Active-active:**
+
+\`\`\`text
+Users → Region A
+     ↘ Region B
+\`\`\`
+
+Both regions serve production traffic.
+
+**Active-passive:**
+
+\`\`\`text
+Users → Region A
+           ↓ failure
+        Region B
+\`\`\`
+
+Region B is primarily for disaster recovery.
+
+For CWD, the choice depends on **RTO/RPO, cost, data residency, downstream-system availability, and operational complexity**.
+
+### Important CWD consideration
+
+The biggest challenge is not just duplicating ECS.
+
+You also need to consider:
+
+\`\`\`text
+State
+↓
+DynamoDB
+↓
+Cross-region consistency
+
+Enterprise systems
+↓
+Salesforce / ServiceNow
+↓
+Are they region-independent?
+
+LLM
+↓
+Bedrock model availability/quota
+↓
+Available in both regions?
+\`\`\`
+
+### Interview answer
+
+> “I would design multi-region CWD as two independently deployable regional stacks, each already multi-AZ. Route 53 or Global Accelerator would route users to a healthy region. I would use DynamoDB Global Tables for required application state, S3 cross-region replication for documents and artifacts, and an appropriate replication strategy for OpenSearch. I would also ensure Bedrock model availability, quotas, enterprise-system connectivity, configuration, and observability are consistent across regions. The final choice between active-active and active-passive would depend on RTO, RPO, data residency, cost, and downstream dependencies.”
+
+**Memory:**
+**Two Regions → Each Multi-AZ → Global Routing → Replicate State → Validate Dependencies → Failover**
+`,code:``},{id:`214-what-is-your-disaster-recovery-strategy`,category:`Scalability & High Availability`,title:`What is your disaster-recovery strategy?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Disaster Recovery strategy for CWD
+
+I would use **Multi-AZ for high availability + Multi-Region for disaster recovery**, with clearly defined **RTO/RPO**.
+
+\`\`\`text id="v8m2qa"
+             Region A
+          CWD Production
+               ↓
+        Replication / Backup
+               ↓
+             Region B
+           DR CWD Stack
+               ↓
+          Failover
+\`\`\`
+
+### Strategy
+
+1. **Multi-AZ** → protects against AZ failure.
+2. **Multi-Region** → protects against regional failure.
+3. **DynamoDB** → backups / Global Tables depending on RPO requirements.
+4. **S3** → versioning + cross-region replication for critical data.
+5. **OpenSearch** → snapshots/replication for RAG indexes.
+6. **ECR** → keep container images available in the DR region.
+7. **Infrastructure as Code** → recreate infrastructure consistently.
+8. **Configuration/Prompt/Agent Registry** → version and replicate required configurations.
+9. **Route 53 / Global Accelerator** → redirect traffic to healthy region.
+10. **Regular DR testing** → perform failover and recovery drills.
+
+### Example
+
+If Region A fails:
+
+\`\`\`text id="q1n7cv"
+Region A ❌
+    ↓
+Health Check
+    ↓
+Global Routing
+    ↓
+Region B
+    ↓
+CWD continues
+\`\`\`
+
+### RTO vs RPO
+
+* **RTO** = How quickly we need CWD back.
+* **RPO** = How much data loss is acceptable.
+
+For example:
+
+> **RTO = 30 minutes** → recover service within 30 minutes.
+> **RPO = 5 minutes** → maximum acceptable data loss is approximately 5 minutes.
+
+The actual values should be agreed with the business rather than assumed.
+
+### Interview answer
+
+> “My DR strategy is Multi-AZ for availability and Multi-Region for regional disaster recovery. I replicate or back up critical state and documents, keep container images and infrastructure definitions available in the DR region, and use health-based global routing for failover. I define RTO and RPO with the business and regularly test the failover process rather than assuming the DR design works.”
+
+**Memory:**
+**Multi-AZ → Backup/Replicate → DR Region → Failover → RTO/RPO → Test**
+`,code:``},{id:`215-what-rto-rpo-would-you-design-for-cwd`,category:`Scalability & High Availability`,title:`What RTO/RPO would you design for CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`## RTO/RPO for CWD
+
+I would **not choose the numbers purely from the architecture**. They should come from business impact and SLA requirements.
+
+For an enterprise CWD platform, a reasonable **illustrative starting target** could be:
+
+* **RTO: 30 minutes** → restore service within 30 minutes after a regional disaster.
+* **RPO: 5 minutes** → lose no more than about 5 minutes of recoverable workflow/state data.
+
+\`\`\`text id="m7q3ka"
+Disaster
+   ↓
+Failover
+   ↓
+≤ 30 min → CWD available      = RTO
+
+Last replicated state
+   ↓
+≤ 5 min data gap              = RPO
+\`\`\`
+
+### How I would achieve it
+
+**RTO 30 min**
+
+* Pre-deployed DR region
+* ECS/Fargate capacity ready or quickly scalable
+* ECR images available in DR
+* Route 53 / Global Accelerator failover
+* IaC for rapid infrastructure recovery
+
+**RPO 5 min**
+
+* DynamoDB replication/backups
+* S3 versioning + cross-region replication
+* OpenSearch snapshots/replication
+* Durable workflow checkpoints
+
+### Interview answer
+
+> “For CWD, I would initially propose an RTO of around 30 minutes and RPO of around 5 minutes, but I would validate those targets with the business. To achieve them, I would maintain a DR region, replicate critical state and documents, keep deployment artifacts ready, and use health-based traffic failover. I would regularly test the DR process to verify the actual RTO and RPO.”
+
+**Memory:**
+**RTO = How fast? | RPO = How much data can we lose?**
+`,code:``}];function Wm(){return(0,M.jsx)($,{data:Um,title:`Scalability & High Availability Cookbook`,subtitle:`Horizontal scaling, multi-AZ, multi-region and disaster recovery`,icon:`📈`,patternLabel:`Questions`})}var Gm=[{id:`216-what-is-the-biggest-cost-driver-in-cwd`,category:`AWS Cost Optimization`,title:`What is the biggest cost driver in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Biggest cost driver in CWD
+
+The **biggest cost driver is usually LLM/Bedrock usage**, especially **input and output token consumption**.
+
+\`\`\`text
+User Request
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+LLM / Bedrock  ← 💰 Major cost
+     ↓
+Response
+\`\`\`
+
+### Why?
+
+Cost increases when:
+
+* Too many LLM calls per request
+* Large prompts/context
+* Large RAG results sent to the model
+* Long conversation history
+* Using expensive models for simple tasks
+* Repeated/redundant queries
+
+### How I reduce it
+
+1. **Model routing** → small model for simple tasks, large model for complex tasks.
+2. **Semantic/exact caching** → avoid repeated LLM calls.
+3. **Reduce context** → retrieve only relevant chunks.
+4. **Summarize conversation history**.
+5. **Reduce unnecessary agent calls**.
+6. **Set token/output limits**.
+7. **Track tokens by Worker/workflow** using observability.
+
+### Interview answer
+
+> “The biggest variable cost driver in CWD is typically LLM usage, particularly input and output tokens. I control it through model routing, semantic caching, context reduction, token limits, and eliminating unnecessary LLM calls. I also track token consumption and cost per workflow and worker so we can identify expensive paths.”
+
+**Memory:**
+**LLM calls → Tokens → Context → Model → Cost**
+`,code:``},{id:`217-how-would-you-reduce-bedrock-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Bedrock costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you reduce Bedrock costs?
+
+I would focus on **reducing unnecessary tokens and unnecessary LLM calls**.
+
+\`\`\`text
+User Request
+     ↓
+Cache / Rules
+     ↓
+Task Classifier
+   ↙       ↘
+Simple    Complex
+   ↓         ↓
+Small      Large
+Model      Model
+   ↓         ↓
+     Response
+\`\`\`
+
+### Practical techniques
+
+1. **Model routing** → small/cheaper model for simple tasks.
+2. **Semantic caching** → reuse answers for similar questions.
+3. **Reduce prompt size** → send only required context.
+4. **Reduce RAG top-K** → don't send unnecessary documents to Bedrock.
+5. **Summarize conversation history** → avoid sending full history.
+6. **Set max output tokens** → prevent unnecessarily long responses.
+7. **Remove redundant LLM calls** → use rules/code for deterministic tasks.
+8. **Track token usage** → identify expensive Workers/workflows.
+
+### Interview answer
+
+> “I reduce Bedrock cost mainly by reducing LLM calls and token consumption. I use model routing, semantic caching, smaller RAG context, conversation summarization, output-token limits, and deterministic logic where possible. I also monitor token usage and cost per workflow and Worker to identify optimization opportunities.”
+
+**Memory:**
+**Fewer Calls → Smaller Context → Smaller Model → Fewer Tokens → Lower Cost**
+`,code:``},{id:`218-how-would-you-reduce-lambda-costs`,category:`AWS Cost Optimization`,title:`How would you reduce Lambda costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you reduce Lambda costs?
+
+Main idea: **reduce execution time, memory, and unnecessary invocations.**
+
+\`\`\`text
+Events
+  ↓
+Filter / Batch
+  ↓
+Lambda
+  ↓
+Fast execution
+\`\`\`
+
+### Practical techniques
+
+1. **Reduce unnecessary invocations** → filter events before triggering Lambda.
+2. **Batch messages** → process multiple SQS messages per invocation.
+3. **Optimize execution time** → remove unnecessary processing/API calls.
+4. **Right-size memory** → choose the lowest memory that meets latency requirements.
+5. **Reuse connections** → initialize clients outside the handler.
+6. **Avoid Lambda for long-running workloads** → use ECS/Fargate when appropriate.
+7. **Monitor duration and invocations** → identify expensive functions.
+
+### Interview answer
+
+> “I reduce Lambda cost by minimizing unnecessary invocations, batching events, optimizing execution time, right-sizing memory, and reusing connections. For long-running or continuously running workloads, I would move the workload to ECS/Fargate instead of Lambda.”
+
+**Memory:**
+**Fewer Invocations → Batch → Faster Execution → Right-size → Use Fargate when appropriate**
+`,code:``},{id:`219-how-would-you-reduce-ecs-costs`,category:`AWS Cost Optimization`,title:`How would you reduce ECS costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you reduce ECS costs?
+
+Main idea: **don't run more compute than the workload needs.**
+
+\`\`\`text
+Traffic
+   ↓
+ECS Auto Scaling
+   ↓
+Right-size CPU/Memory
+   ↓
+Scale down when demand drops
+\`\`\`
+
+### Practical techniques
+
+1. **Right-size CPU and memory** → don't over-provision Fargate tasks.
+2. **Auto Scaling** → increase tasks during traffic and scale down during low traffic.
+3. **Use Fargate Spot** → for interruptible/non-critical workloads.
+4. **Optimize container startup and runtime** → reduce wasted compute.
+5. **Separate workloads** → scale Coordinator, Delegator, and Workers independently.
+6. **Use SQS for asynchronous Workers** → scale Workers based on queue depth.
+7. **Monitor utilization** → CPU, memory, task count, and request latency.
+8. **Avoid always-on services where unnecessary** → use Lambda for suitable short/event-driven workloads.
+
+### Interview answer
+
+> “I reduce ECS costs through right-sizing, autoscaling, workload separation, and using Spot capacity where appropriate. In CWD, I would independently scale Coordinators, Delegators, and Workers based on their workload, and use SQS queue depth for asynchronous Worker scaling. I would continuously monitor CPU, memory, task count, and latency to avoid over-provisioning.”
+
+**Memory:**
+**Right-size → Auto-scale → Separate → Spot → Monitor**
+`,code:``},{id:`220-how-would-you-reduce-opensearch-costs`,category:`AWS Cost Optimization`,title:`How would you reduce OpenSearch costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you reduce OpenSearch costs?
+
+Main idea: **store less data, retrieve efficiently, and use only the capacity you need.**
+
+\`\`\`text
+Documents
+   ↓
+Clean + Deduplicate
+   ↓
+Chunk efficiently
+   ↓
+OpenSearch
+   ↓
+Efficient Retrieval
+\`\`\`
+
+### Practical techniques
+
+1. **Remove duplicate/obsolete documents** → don't index unnecessary data.
+2. **Optimize chunking** → avoid creating excessive chunks.
+3. **Use metadata filters first** → reduce unnecessary search work.
+4. **Use hybrid search efficiently** → BM25 + vector only where needed.
+5. **Right-size capacity** → avoid over-provisioning.
+6. **Use lifecycle policies** → move/delete old data when business rules allow.
+7. **Monitor storage and search workload** → scale capacity based on actual usage.
+8. **Avoid storing large source documents** → keep originals in **S3** and store searchable chunks/metadata in OpenSearch.
+
+### Interview answer
+
+> “I reduce OpenSearch cost by controlling the amount of data indexed, optimizing chunking, removing duplicates, using metadata filtering, and right-sizing search capacity. I would keep large source documents in S3 and use OpenSearch primarily for chunks, embeddings, and metadata. I would also monitor search traffic, storage, and capacity utilization to avoid over-provisioning.”
+
+**Memory:**
+**Less Data → Better Chunks → Filter → Right-size → S3 for Originals**
+`,code:``},{id:`221-how-would-you-optimize-s3-costs`,category:`AWS Cost Optimization`,title:`How would you optimize S3 costs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you optimize S3 costs?
+
+Main idea: **store the right data in the right storage class and delete unnecessary data.**
+
+\`\`\`text
+S3 Data
+   ↓
+Classify by Access Frequency
+   ↓
+Hot → Standard
+Warm → Intelligent-Tiering
+Old → Glacier
+Expired → Delete
+\`\`\`
+
+### Practical techniques
+
+1. **Lifecycle policies** → automatically transition old objects to cheaper storage classes.
+2. **Intelligent-Tiering** → useful when access patterns are unpredictable.
+3. **Delete obsolete data** → remove temporary files, old artifacts, and unnecessary versions.
+4. **Manage versioning** → clean up old versions with lifecycle rules.
+5. **Compress large files** → reduce storage and transfer costs where appropriate.
+6. **Avoid unnecessary data transfer** → use VPC endpoints for appropriate AWS-service access.
+7. **Monitor storage usage** → identify large or unused objects.
+
+### In CWD
+
+Keep **original documents, images, and RAG source files in S3**, while storing searchable chunks/embeddings in OpenSearch.
+
+### Interview answer
+
+> “I optimize S3 costs using lifecycle policies, Intelligent-Tiering for unpredictable access, compression where appropriate, and automatic cleanup of obsolete objects and old versions. In CWD, I keep durable source documents in S3 and avoid duplicating large data unnecessarily. I also monitor storage and data-transfer costs.”
+
+**Memory:**
+**Right Class → Lifecycle → Delete → Compress → Reduce Transfer**
+`,code:``},{id:`222-how-would-you-use-caching-to-reduce-cost`,category:`AWS Cost Optimization`,title:`How would you use caching to reduce cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you use caching to reduce cost?
+
+Main idea: **if we already have a valid result, don't call Bedrock or downstream systems again.**
+
+\`\`\`text
+User Request
+     ↓
+  Cache Check
+   ↙       ↘
+ HIT       MISS
+  ↓          ↓
+Return    Bedrock / RAG / MCP
+             ↓
+          Cache Result
+\`\`\`
+
+### In CWD, I would use Redis for:
+
+1. **Exact-match cache** → same request, return previous result.
+2. **Semantic cache** → similar/rephrased questions can reuse a valid result.
+3. **RAG result cache** → reuse frequently requested retrieval results.
+4. **Reference/config cache** → Agent Registry, Prompt Registry, etc.
+5. **Short-lived downstream data cache** → when freshness requirements allow.
+
+### Important
+
+Cache key should consider things like:
+
+\`\`\`text
+tenant + user/entitlement + query + model_version + prompt_version + RAG_version
+\`\`\`
+
+Use **TTL** so stale information isn't returned.
+
+### Interview answer
+
+> “I use Redis caching to avoid repeated Bedrock, RAG, and downstream calls. Exact-match caching handles identical requests, while semantic caching can handle rephrased requests. I use TTL and include tenant, authorization context, model, prompt, and RAG versions in the cache key to prevent incorrect or stale results.”
+
+**Memory:**
+**Check Cache → HIT = Return → MISS = Process → Store → TTL**
+`,code:``},{id:`223-how-would-you-use-smaller-bedrock-models`,category:`AWS Cost Optimization`,title:`How would you use smaller Bedrock models?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you use smaller Bedrock models?
+
+Main idea: **don't use an expensive model for a simple task.**
+
+\`\`\`text
+Request
+   ↓
+Task Classifier
+   ↓
+ ┌──────────────┬───────────────┐
+Simple         Complex
+ ↓               ↓
+Small model    Large model
+ ↓               ↓
+Fast/Cheap     Better reasoning
+\`\`\`
+
+### In CWD
+
+Use smaller models for:
+
+* Intent classification
+* Entity extraction
+* Simple summarization
+* Query rewriting
+* Routing decisions
+* Simple structured responses
+
+Use larger models for:
+
+* Complex reasoning
+* Multi-step planning
+* Difficult customer briefings
+* Complex synthesis across multiple sources
+
+### Interview answer
+
+> “I use model routing in CWD. A lightweight classifier first determines the task complexity. Simple tasks such as intent classification and extraction go to smaller, lower-cost Bedrock models, while complex reasoning and synthesis go to larger models. This reduces both token cost and latency without sacrificing quality where it matters.”
+
+**Memory:**
+**Classify → Simple = Small Model → Complex = Large Model**
+`,code:``},{id:`224-how-would-you-monitor-aws-cost-per-request`,category:`AWS Cost Optimization`,title:`How would you monitor AWS cost per request?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you monitor AWS cost per request?
+
+Main idea: **assign every request a correlation ID and track the cost-producing operations under that request.**
+
+\`\`\`text
+User Request
+    ↓
+Correlation ID
+    ↓
+Coordinator
+    ↓
+Delegator → Worker
+    ↓
+Bedrock / Lambda / ECS / OpenSearch
+    ↓
+Cost Calculation
+\`\`\`
+
+### What I track
+
+For each request:
+
+* \`correlation_id\`
+* Bedrock model + input/output tokens
+* Lambda invocations/duration
+* ECS compute usage
+* OpenSearch operations
+* S3 usage where relevant
+* Total estimated cost
+
+Store/aggregate this by:
+
+\`\`\`text
+Tenant → Workflow → Worker → Request
+\`\`\`
+
+### Practical implementation
+
+Use **CloudWatch + AWS Cost Explorer/Cost and Usage Report + application telemetry**.
+
+For Bedrock, calculate:
+
+> \`input tokens × input price + output tokens × output price\`
+
+Then associate that with the \`correlation_id\`.
+
+### Interview answer
+
+> “I would propagate a correlation ID through the entire CWD request and record cost-related metrics for each service. For Bedrock, I would capture input and output tokens and calculate model cost. I would combine application telemetry with AWS cost data and aggregate cost by tenant, workflow, Worker, and request to identify expensive workflows.”
+
+**Memory:**
+**Correlation ID → Track Usage → Calculate Cost → Aggregate → Optimize**
+`,code:``},{id:`225-how-would-you-investigate-a-sudden-aws-bill-increase`,category:`AWS Cost Optimization`,title:`How would you investigate a sudden AWS bill increase?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you investigate a sudden AWS bill increase?
+
+Main idea: **find which service and workload caused the increase, then correlate it with traffic and deployments.**
+
+\`\`\`text
+AWS Bill Spike
+     ↓
+Cost Explorer
+     ↓
+Which Service?
+     ↓
+Which Resource / Region?
+     ↓
+Compare Usage vs Baseline
+     ↓
+Check CWD Metrics + Recent Changes
+     ↓
+Root Cause
+     ↓
+Fix / Alert
+\`\`\`
+
+### Practical steps
+
+1. **Check Cost Explorer** → identify the service with the biggest increase.
+2. **Check region/account/resource** → find where the cost occurred.
+3. **Compare usage** → requests, tokens, ECS tasks, S3 storage, OpenSearch capacity, etc.
+4. **Check CloudWatch** → traffic, CPU, task count, Lambda invocations, Bedrock usage.
+5. **Check recent deployments/config changes** → new model, prompt, autoscaling, retry loop, etc.
+6. **Check CWD workflow cost** → identify expensive Worker or workflow using correlation IDs.
+7. **Check AWS Cost Anomaly Detection/Budgets** → determine when the spike started.
+8. **Fix the root cause** → reduce calls, scale correctly, fix retry loops, change model routing, or remove unused resources.
+
+### Example
+
+If **Bedrock cost suddenly increases**:
+
+\`\`\`text
+Bedrock Cost ↑
+    ↓
+Token Usage ↑ ?
+    ↓
+LLM Calls ↑ ?
+    ↓
+Retry Loop / Traffic Spike / New Workflow
+    ↓
+Fix
+\`\`\`
+
+### Interview answer
+
+> “I would start with Cost Explorer to identify which AWS service and region caused the increase. Then I would compare usage against the normal baseline and correlate it with CloudWatch metrics and recent deployments. In CWD, I would trace the cost back to the workflow or Worker using correlation IDs. For example, if Bedrock cost increased, I would check token usage, invocation volume, model selection, and retry behavior before applying the fix.”
+
+**Memory:**
+**Cost → Service → Usage → Change → Workflow → Root Cause → Fix**
+`,code:``}];function Km(){return(0,M.jsx)($,{data:Gm,title:`AWS Cost Optimization Cookbook`,subtitle:`Cost drivers, caching, smaller models and bill investigation`,icon:`💰`,patternLabel:`Questions`})}var qm=[{id:`226-how-would-you-deploy-cwd-on-aws`,category:`AWS DevOps / Deployment`,title:`How would you deploy CWD on AWS?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you deploy CWD on AWS?
+
+I would use **containerized services on ECS/Fargate**, with CI/CD through **AWS CodePipeline/CodeBuild or GitHub Actions**.
+
+\`\`\`text
+Developer
+   ↓
+Git
+   ↓
+CI/CD
+   ↓
+Build + Test + Security Scan
+   ↓
+Docker Image
+   ↓
+ECR
+   ↓
+ECS/Fargate
+   │
+   ├── Coordinator
+   ├── Sales Delegator
+   ├── IT Delegator
+   └── Workers
+        ↓
+   MCP / Bedrock / RAG
+\`\`\`
+
+### Deployment flow
+
+**1. Build**
+
+* Develop FastAPI + LangGraph services.
+* Create Docker images.
+* Run unit, integration, security, and LLM evaluation tests.
+
+**2. Push**
+
+* Push versioned images to **Amazon ECR**.
+
+**3. Deploy**
+
+* ECS/Fargate runs Coordinator, Delegators, and Workers.
+* Deploy across multiple AZs.
+* ALB distributes traffic.
+* API Gateway is the external API entry point.
+
+**4. Configuration & security**
+
+* IAM task roles for AWS permissions.
+* Secrets Manager for secrets.
+* KMS for encryption.
+* Private subnets/VPC endpoints for AWS services.
+
+**5. Supporting services**
+
+\`\`\`text
+API Gateway
+     ↓
+ALB
+     ↓
+ECS/Fargate
+     ↓
+Coordinator
+     ↓
+Delegators
+     ↓
+Workers
+  ↓    ↓    ↓
+Bedrock OpenSearch MCP
+\`\`\`
+
+State/data:
+
+* **DynamoDB** → workflow/session state
+* **Redis** → cache
+* **S3** → documents/artifacts
+* **OpenSearch** → RAG retrieval
+* **SQS** → asynchronous workloads/DLQ
+
+**6. Production rollout**
+
+Use **blue-green or canary deployment**:
+
+\`\`\`text
+Current Version
+      ↓
+Deploy New Version
+      ↓
+Health + Functional + LLM Evaluation
+      ↓
+Small Traffic %
+      ↓
+Monitor
+      ↓
+100% Traffic
+\`\`\`
+
+If errors, latency, or AI-quality metrics degrade → **rollback to the previous version**.
+
+### Interview answer
+
+> “I would containerize the CWD Coordinator, Delegators, and Workers and push the images to ECR. ECS/Fargate would run these services across multiple AZs behind ALB, with API Gateway as the external entry point. DynamoDB stores workflow state, S3 stores documents, OpenSearch handles RAG, Redis provides caching, SQS handles asynchronous workloads, and Bedrock provides the foundation models. IAM, Secrets Manager, KMS and private networking provide security. CI/CD would run automated tests and LLM evaluation before deploying through blue-green or canary rollout, with CloudWatch and tracing for monitoring and rollback.”
+`,code:``},{id:`227-explain-your-aws-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`Explain your AWS CI/CD pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`## AWS CI/CD pipeline for CWD
+
+I would use **GitHub → CodeBuild → ECR → ECS**, with automated quality gates before production.
+
+\`\`\`text
+Developer
+   ↓
+GitHub
+   ↓
+CodePipeline
+   ↓
+CodeBuild
+   ├── Unit Tests
+   ├── Integration Tests
+   ├── Security Scan
+   └── LLM Evaluation
+   ↓
+Build Docker Image
+   ↓
+ECR
+   ↓
+Deploy to Dev
+   ↓
+QA / Evaluation
+   ↓
+Deploy to Staging
+   ↓
+Approval
+   ↓
+Blue-Green / Canary
+   ↓
+ECS Production
+   ↓
+CloudWatch
+\`\`\`
+
+### Step-by-step
+
+**1. Developer pushes code**
+
+* GitHub triggers the pipeline.
+
+**2. Build & test**
+
+* CodeBuild installs dependencies.
+* Run unit/integration tests.
+* Run linting and security/dependency scans.
+
+**3. AI quality gates**
+For CWD, also evaluate:
+
+* RAG relevance/groundedness
+* hallucination rate
+* tool-call accuracy
+* agent workflow success
+* latency/token usage
+
+**4. Build & push**
+
+* Build Docker image.
+* Tag with commit/version.
+* Push to **ECR**.
+
+**5. Deploy Dev → Staging**
+
+* Update ECS task definition with the new image.
+* Deploy automatically.
+* Run smoke/integration tests.
+
+**6. Production deployment**
+Use **blue-green or canary deployment**.
+
+\`\`\`text
+Blue = Current
+Green = New
+       ↓
+  Small traffic
+       ↓
+Monitor
+       ↓
+Healthy → 100%
+Unhealthy → Rollback
+\`\`\`
+
+**7. Monitoring**
+CloudWatch + X-Ray/OpenTelemetry + Langfuse monitor:
+
+* errors
+* P95/P99 latency
+* CPU/memory
+* Bedrock throttling
+* token/cost
+* agent/tool failures
+* LLM quality
+
+### Interview answer
+
+> “My CWD CI/CD pipeline starts with a GitHub commit and triggers CodePipeline. CodeBuild runs unit, integration, security, and AI-quality tests. If the quality gates pass, we build and version the Docker image and push it to ECR. We deploy progressively through Dev and Staging, then use blue-green or canary deployment to ECS/Fargate in production. CloudWatch and distributed tracing monitor the deployment, and if technical or AI-quality metrics degrade, we automatically roll back to the previous version.”
+
+**Memory:**
+**Commit → Test → AI Evaluate → Build → ECR → Dev → Staging → Canary → Monitor → Rollback**
+`,code:``},{id:`228-how-would-you-use-codepipeline`,category:`AWS DevOps / Deployment`,title:`How would you use CodePipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you use CodePipeline?
+
+**CodePipeline is the orchestrator of the CI/CD workflow.** It connects source, build, test, and deployment stages.
+
+\`\`\`text
+GitHub
+  ↓
+CodePipeline
+  ↓
+CodeBuild
+  ↓
+Tests + Security + LLM Evaluation
+  ↓
+ECR
+  ↓
+ECS/Fargate
+  ↓
+CloudWatch
+\`\`\`
+
+### CWD pipeline
+
+1. **Source** → developer pushes code to GitHub.
+2. **Build** → CodeBuild builds the Docker image.
+3. **Test** → unit + integration + security tests.
+4. **AI Quality Gate** → RAG/LLM evaluation.
+5. **ECR** → push versioned container image.
+6. **Deploy Dev/Staging** → ECS/Fargate.
+7. **Approval** → manual approval if required.
+8. **Production** → blue-green/canary deployment.
+9. **Monitor** → CloudWatch/Langfuse.
+10. **Rollback** → return to previous ECS task definition/image if quality or infrastructure metrics fail.
+
+### Interview answer
+
+> “I use CodePipeline as the CI/CD orchestrator. It takes code from GitHub, triggers CodeBuild for testing and Docker image creation, pushes the image to ECR, and deploys it to ECS/Fargate across Dev, Staging, and Production. For CWD, I also include LLM evaluation as a quality gate and use blue-green or canary deployment with monitoring and rollback.”
+
+**Memory:**
+**Source → Build → Test → ECR → Deploy → Monitor → Rollback**
+`,code:``},{id:`229-how-would-you-use-codebuild`,category:`AWS DevOps / Deployment`,title:`How would you use CodeBuild?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you use CodeBuild?
+
+**CodeBuild performs the actual build and test work inside the CI/CD pipeline.**
+
+\`\`\`text
+CodePipeline
+     ↓
+CodeBuild
+     ├── Install dependencies
+     ├── Unit tests
+     ├── Integration tests
+     ├── Security scan
+     ├── LLM evaluation
+     ├── Docker build
+     └── Push image → ECR
+\`\`\`
+
+### In CWD
+
+1. **Install** → Python dependencies.
+2. **Test** → unit and integration tests.
+3. **Security** → dependency/container vulnerability scanning.
+4. **LLM evaluation** → RAG relevance, groundedness, tool-call accuracy.
+5. **Docker build** → create Coordinator/Delegator/Worker images.
+6. **ECR push** → tag image with Git commit/version.
+7. **Return result** → CodePipeline continues only if all gates pass.
+
+### Interview answer
+
+> “I use CodeBuild as the execution engine inside CodePipeline. It installs dependencies, runs unit and integration tests, performs security checks and LLM evaluations, builds the Docker image, and pushes the versioned image to ECR. If any quality gate fails, the pipeline stops and the image is not promoted.”
+
+**Memory:**
+**Install → Test → Scan → Evaluate → Build → ECR**
+`,code:``},{id:`230-how-would-you-use-ecr`,category:`AWS DevOps / Deployment`,title:`How would you use ECR?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you use ECR?
+
+**Amazon ECR (Elastic Container Registry) stores and manages the Docker images used by CWD.**
+
+\`\`\`text
+CodeBuild
+   ↓
+Docker Build
+   ↓
+ECR
+   ↓
+ECS/Fargate
+   ↓
+Coordinator / Delegator / Worker
+\`\`\`
+
+### In CWD
+
+1. **Build image** → CodeBuild creates Docker images.
+2. **Security scan** → scan images for vulnerabilities.
+3. **Tag image** → use immutable version/commit tags.
+4. **Push to ECR** → store Coordinator, Delegator, and Worker images.
+5. **ECS pulls image** → ECS task definition references the required image version.
+6. **Lifecycle policy** → remove old/unused images to control storage cost.
+7. **DR** → replicate critical images to the DR region.
+
+### Important
+
+I prefer **immutable image tags**:
+
+\`\`\`text
+cwd-coordinator:git-a81f92
+cwd-sales-worker:git-a81f92
+\`\`\`
+
+instead of repeatedly deploying:
+
+\`\`\`text
+cwd-coordinator:latest
+\`\`\`
+
+This makes deployments and rollbacks predictable.
+
+### Interview answer
+
+> “I use ECR as the private container registry for CWD. CodeBuild builds and scans the Docker images, tags them with an immutable version or Git commit, and pushes them to ECR. ECS/Fargate pulls those exact images during deployment. I also use lifecycle policies to clean up old images and replicate critical images to the DR region.”
+
+**Memory:**
+**Build → Scan → Tag → Push → ECS Pull → Lifecycle → DR**
+`,code:``},{id:`231-how-would-you-deploy-lambda-versions`,category:`AWS DevOps / Deployment`,title:`How would you deploy Lambda versions?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you deploy Lambda versions?
+
+Use **immutable versions + aliases**.
+
+\`\`\`text
+Code
+ ↓
+CodeBuild
+ ↓
+Deploy Lambda
+ ↓
+Publish Version
+ ↓
+prod alias
+ ↓
+Canary → Monitor → 100%
+             ↓
+          Rollback
+\`\`\`
+
+### Example
+
+Current production:
+
+\`\`\`text
+prod → Lambda v10
+\`\`\`
+
+Deploy new code:
+
+\`\`\`text
+new code → Lambda v11
+prod → v10
+\`\`\`
+
+Test/canary:
+
+\`\`\`text
+90% → v10
+10% → v11
+\`\`\`
+
+If healthy:
+
+\`\`\`text
+prod → v11
+\`\`\`
+
+If unhealthy:
+
+\`\`\`text
+prod → v10
+\`\`\`
+
+### Interview answer
+
+> “I publish every Lambda deployment as a new immutable version and use an alias such as \`prod\` to control which version receives traffic. I can gradually shift traffic using canary deployment, monitor errors, duration and throttling, and roll back simply by moving the alias to the previous version.”
+
+**Memory:** **Version → Alias → Canary → Monitor → Rollback**
+`,code:``},{id:`232-how-would-you-implement-blue-green-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement blue-green deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Blue-Green deployment for CWD
+
+**Blue = current production version**
+**Green = new version**
+
+\`\`\`text id="p7z2cw"
+                Load Balancer
+                     ↓
+              ┌──────┴──────┐
+              ↓             ↓
+        Blue - v1       Green - v2
+        Production       New version
+              │             │
+              └──────┬──────┘
+                     ↓
+                 Monitoring
+\`\`\`
+
+### Steps
+
+1. **Blue is serving 100% traffic.**
+2. Deploy the new CWD version to **Green**.
+3. Run health checks, integration tests, and LLM evaluation.
+4. Send a small amount of traffic to Green if using a controlled transition.
+5. Monitor:
+
+   * 5xx errors
+   * P95/P99 latency
+   * CPU/memory
+   * Bedrock errors/throttling
+   * agent/tool failures
+   * LLM quality metrics
+6. If healthy → shift **100% traffic to Green**.
+7. If unhealthy → route traffic back to **Blue**.
+8. Keep Blue available for a rollback window, then terminate it.
+
+### AWS implementation
+
+For CWD, I would use **ECS/Fargate + ALB**, typically with **CodeDeploy blue-green deployment**.
+
+\`\`\`text id="m0r8fd"
+CodePipeline
+    ↓
+CodeBuild
+    ↓
+ECR
+    ↓
+CodeDeploy
+   ↙     ↘
+Blue     Green
+   ↓       ↓
+ ALB Target Groups
+       ↓
+   Traffic Shift
+\`\`\`
+
+### Interview answer
+
+> “For CWD, I would use ECS/Fargate with ALB and CodeDeploy blue-green deployment. The existing version remains Blue while the new version is deployed to Green. I run health, integration, and LLM quality checks, then gradually shift traffic to Green while monitoring errors, latency, infrastructure and AI-quality metrics. If anything degrades, I immediately shift traffic back to Blue.”
+`,code:``},{id:`233-how-would-you-implement-canary-deployment`,category:`AWS DevOps / Deployment`,title:`How would you implement canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Canary deployment for CWD
+
+**Canary = send a small percentage of traffic to the new version first, validate it, then gradually increase traffic.**
+
+\`\`\`text
+Users
+  ↓
+ALB
+  ↓
+90% ──→ CWD v1  (Stable)
+10% ──→ CWD v2  (Canary)
+             ↓
+          Monitor
+             ↓
+      Healthy? → Increase
+             ↓
+      25% → 50% → 100%
+\`\`\`
+
+### Steps
+
+1. Deploy **v2** alongside the current v1.
+2. Route a small percentage, e.g. **5–10%**, to v2.
+3. Monitor:
+
+   * 5xx/error rate
+   * P95/P99 latency
+   * CPU/memory
+   * Bedrock throttling
+   * MCP/tool failures
+   * LLM quality/groundedness
+4. If healthy → increase traffic gradually.
+5. If unhealthy → route 100% back to v1.
+6. After validation → v2 becomes the production version.
+
+### AWS implementation
+
+For CWD:
+
+\`\`\`text
+CodePipeline
+     ↓
+CodeDeploy
+     ↓
+ECS/Fargate
+     ↓
+ALB
+ ↓          ↓
+v1         v2
+90%        10%
+            ↓
+       Monitor
+            ↓
+     25% → 50% → 100%
+\`\`\`
+
+I would use **ECS/Fargate + ALB + CodeDeploy** for controlled traffic shifting.
+
+### Interview answer
+
+> “I implement canary deployment by running the new CWD version alongside the current version and initially sending a small percentage of traffic to it. I monitor infrastructure, latency, errors, Bedrock throttling, tool failures, and AI-quality metrics. If the metrics remain healthy, I gradually increase traffic until the new version reaches 100%. If there is degradation, I immediately route traffic back to the stable version.”
+
+**Memory:**
+**Small Traffic → Monitor → Increase → 100% | Problem → Rollback**
+`,code:``},{id:`234-how-would-you-roll-back-a-failed-deployment`,category:`AWS DevOps / Deployment`,title:`How would you roll back a failed deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you roll back a failed deployment?
+
+Main idea: **quickly route traffic back to the last known-good version.**
+
+\`\`\`text id="k6m4pz"
+New Version
+     ↓
+Deployment
+     ↓
+Monitor
+     ↓
+Failure
+     ↓
+Rollback
+     ↓
+Previous Version
+\`\`\`
+
+### For CWD on ECS/Fargate
+
+If we use **blue-green**:
+
+\`\`\`text id="3q8r1x"
+ALB
+ ↓
+Green v2 ❌
+ ↓
+Rollback
+ ↓
+Blue v1 ✅
+\`\`\`
+
+* Stop routing traffic to the failed version.
+* Shift traffic back to the previous ECS task set.
+* Keep the previous Docker image in **ECR**.
+* Check CloudWatch/X-Ray/Langfuse to identify the failure.
+* Fix the issue and redeploy.
+
+### For Lambda
+
+If using **versions + aliases**:
+
+\`\`\`text
+prod → v12 ❌
+        ↓
+prod → v11 ✅
+\`\`\`
+
+Simply move the \`prod\` alias back to the previous version.
+
+### Automatic rollback
+
+Configure deployment alarms for:
+
+* 5xx/error rate
+* P95/P99 latency
+* ECS task health
+* Bedrock errors/throttling
+* MCP/tool failures
+* Important CWD/LLM quality metrics
+
+If an alarm breaches the threshold, **automatically stop the deployment and restore the previous version**.
+
+### Interview answer
+
+> “I implement rollback using immutable versions and keep the previous known-good version available. For ECS blue-green deployment, I shift ALB traffic back to the previous task set. For Lambda, I move the production alias back to the previous version. I also configure CloudWatch deployment alarms so failed deployments can automatically trigger rollback.”
+
+**Memory:**
+**Detect → Stop → Route Back → Verify → Fix → Redeploy**
+`,code:``},{id:`235-how-would-you-manage-dev-test-prod-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage dev/test/prod environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you manage Dev / Test / Prod?
+
+I would keep environments **isolated**, but use the **same deployment process and infrastructure pattern**.
+
+\`\`\`text
+Developer
+   ↓
+   Git
+   ↓
+ DEV
+   ↓
+ Tests
+   ↓
+ TEST / STAGING
+   ↓
+ Approval
+   ↓
+ PROD
+\`\`\`
+
+### Environment separation
+
+| Environment      | Purpose                                               |
+| ---------------- | ----------------------------------------------------- |
+| **Dev**          | Development and quick testing                         |
+| **Test/Staging** | Integration, performance, security and LLM evaluation |
+| **Prod**         | Real users and production workloads                   |
+
+### For CWD
+
+Each environment gets separate:
+
+* ECS/Fargate services
+* DynamoDB tables
+* S3 buckets
+* OpenSearch indexes
+* Redis
+* SQS queues
+* Secrets
+* IAM roles
+* Bedrock configuration where needed
+
+\`\`\`text
+DEV
+cwd-dev-* 
+
+TEST
+cwd-test-*
+
+PROD
+cwd-prod-*
+\`\`\`
+
+### Important practices
+
+1. **Infrastructure as Code** → Terraform/CloudFormation/CDK.
+2. **Same Docker image** → promote the tested image from Test → Prod rather than rebuilding.
+3. **Environment-specific configuration** → use Parameter Store/Secrets Manager.
+4. **Separate AWS accounts** → ideally Dev, Test, and Prod accounts for stronger isolation.
+5. **CI/CD promotion** → Dev → Test → Prod.
+6. **Production approval** → require approval before Prod deployment.
+7. **No production data in Dev/Test** → use synthetic or properly sanitized data.
+
+### Interview answer
+
+> “I manage Dev, Test, and Prod as isolated environments, ideally using separate AWS accounts. Each environment has its own compute, data stores, queues, secrets, and IAM roles. I use Infrastructure as Code to keep the environments consistent and CI/CD to promote the same tested container image from Dev to Test and then Production. Production requires stronger approval, monitoring, and access controls.”
+
+**Memory:**
+**Isolate → Same Architecture → Same Image → Test → Approve → Promote**
+`,code:``},{id:`236-how-would-you-implement-infrastructure-as-code`,category:`AWS DevOps / Deployment`,title:`How would you implement Infrastructure as Code?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Infrastructure as Code for CWD
+
+I would use **Terraform** to define and manage the AWS infrastructure instead of creating resources manually.
+
+\`\`\`text id="r2c8hf"
+Git
+ ↓
+Terraform Code
+ ↓
+Plan
+ ↓
+Review / Approval
+ ↓
+terraform apply
+ ↓
+AWS Infrastructure
+\`\`\`
+
+### What I would define
+
+\`\`\`text id="3n8yqk"
+Terraform
+ ├── VPC / Subnets / Security Groups
+ ├── API Gateway / ALB
+ ├── ECS / Fargate
+ ├── ECR
+ ├── Lambda
+ ├── SQS / DLQ
+ ├── DynamoDB
+ ├── S3
+ ├── OpenSearch
+ ├── IAM
+ ├── KMS / Secrets Manager
+ └── CloudWatch
+\`\`\`
+
+### Environment structure
+
+\`\`\`text id="c4v7pn"
+Terraform Modules
+       ↓
+ ┌─────┼─────┐
+Dev   Test   Prod
+\`\`\`
+
+Use reusable modules and environment-specific variables.
+
+### CI/CD
+
+\`\`\`text id="8d4x2m"
+Git Push
+   ↓
+Terraform Validate
+   ↓
+Terraform Plan
+   ↓
+Security / Policy Check
+   ↓
+Approval
+   ↓
+Terraform Apply
+\`\`\`
+
+For production, I would require **plan review and approval** before \`apply\`.
+
+### Important practices
+
+* Store Terraform state in a **remote backend**, commonly S3 with appropriate locking/state-management controls.
+* Use modules for reusable components.
+* Keep secrets out of Terraform code.
+* Use IAM least privilege.
+* Version-control all infrastructure changes.
+* Run \`plan\` before \`apply\`.
+* Detect and prevent configuration drift.
+
+### Interview answer
+
+> “I would implement CWD infrastructure using Terraform. I would define the VPC, ECS, API Gateway, ALB, ECR, SQS, DynamoDB, S3, OpenSearch, IAM, KMS, and monitoring as code. I would create reusable modules and separate Dev, Test, and Prod configurations. Terraform changes would go through Git, validation, plan, security checks, approval, and apply through CI/CD, giving us repeatable and auditable infrastructure.”
+`,code:``},{id:`237-cloudformation-vs-cdk-vs-terraform`,category:`AWS DevOps / Deployment`,title:`CloudFormation vs CDK vs Terraform?`,difficulty:`Advanced`,time:`~15 min`,concept:`## CloudFormation vs CDK vs Terraform
+
+The simplest way to remember:
+
+| Tool               | What it is                                                                 | Best fit                                 |
+| ------------------ | -------------------------------------------------------------------------- | ---------------------------------------- |
+| **CloudFormation** | AWS-native IaC using YAML/JSON                                             | AWS-only environments                    |
+| **CDK**            | Write infrastructure using programming languages; generates CloudFormation | Developers who prefer code               |
+| **Terraform**      | Multi-cloud IaC using HCL                                                  | Multi-cloud / cloud-neutral environments |
+
+### 1. CloudFormation
+
+\`\`\`text
+YAML/JSON
+   ↓
+CloudFormation
+   ↓
+AWS Resources
+\`\`\`
+
+**Pros:** AWS-native, strong AWS integration, no separate state-management model like Terraform.
+**Cons:** More verbose; AWS-focused.
+
+### 2. CDK
+
+\`\`\`text
+Python / TypeScript
+        ↓
+       CDK
+        ↓
+CloudFormation
+        ↓
+      AWS
+\`\`\`
+
+You can define reusable constructs using programming languages.
+
+**Pros:** Less verbose, reusable components, familiar programming constructs.
+**Cons:** Still fundamentally AWS/CloudFormation-oriented.
+
+### 3. Terraform
+
+\`\`\`text
+HCL
+ ↓
+Terraform
+ ↓
+AWS / Azure / GCP
+\`\`\`
+
+**Pros:** Multi-cloud, reusable modules, mature ecosystem.
+**Cons:** Requires managing Terraform state and introduces another tool layer.
+
+### For CWD
+
+Since our CWD architecture is primarily **AWS**, I could use **CDK or CloudFormation**.
+
+If the organization wants **cloud portability across AWS + Azure + GCP**, I would consider **Terraform**.
+
+### Interview answer
+
+> “CloudFormation is AWS-native and works well when the organization is fully invested in AWS. CDK gives developers a programming-language approach while synthesizing to CloudFormation. Terraform is more cloud-neutral and is useful when managing AWS, Azure and GCP together. For an AWS-only CWD deployment, I would consider CDK or CloudFormation; for a multi-cloud strategy, I would consider Terraform.”
+
+**Memory:**
+**CloudFormation = AWS templates**
+**CDK = Code → CloudFormation**
+**Terraform = Multi-cloud IaC**
+`,code:``},{id:`238-how-would-you-manage-aws-configuration-across-environments`,category:`AWS DevOps / Deployment`,title:`How would you manage AWS configuration across environments?`,difficulty:`Advanced`,time:`~15 min`,concept:`For an interview, keep it simple:
+
+> **“I manage AWS configuration separately for each environment—Dev, QA, and Prod—using Infrastructure as Code such as Terraform or CloudFormation. Environment-specific values are stored in AWS Systems Manager Parameter Store or Secrets Manager, while sensitive values are never hardcoded. CI/CD pipelines deploy the same infrastructure code with different environment parameters. I also use IAM roles, tagging, and CloudTrail to control and audit changes.”**
+
+### Simple flow
+
+\`\`\`text
+Terraform / CloudFormation
+          ↓
+   Environment Config
+   ┌──────┼──────┐
+  DEV     QA    PROD
+   ↓       ↓      ↓
+Parameter Store / Secrets Manager
+          ↓
+      AWS Services
+\`\`\`
+
+**Key point:** Same infrastructure code, different environment-specific configuration.
+`,code:``},{id:`239-how-would-you-secure-the-ci-cd-pipeline`,category:`AWS DevOps / Deployment`,title:`How would you secure the CI/CD pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`For an interview, keep it simple:
+
+> **“I secure the CI/CD pipeline using least-privilege IAM roles, Secrets Manager or Parameter Store for secrets, encryption with KMS, and protected Git branches. I also enable code scanning, dependency and container-image scanning, and require approval before production deployment. CloudTrail and pipeline logs provide auditability.”**
+
+### Simple flow
+
+\`\`\`text
+Developer
+   ↓
+Git Repository
+   ↓
+Code Scan / Security Scan
+   ↓
+Build + Test
+   ↓
+Container/Image Scan
+   ↓
+Approval Gate
+   ↓
+Deploy to AWS
+   ↓
+CloudTrail + CloudWatch
+\`\`\`
+
+**Key point:** No hardcoded credentials + least privilege + security scanning + production approval + audit logging.
+`,code:``},{id:`240-how-would-you-prevent-production-deployment-of-an-untested-ai-model`,category:`AWS DevOps / Deployment`,title:`How would you prevent production deployment of an untested AI model?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Prevent untested AI model deployment
+
+I would make **AI evaluation a mandatory CI/CD quality gate** before production.
+
+\`\`\`text
+New Model / Prompt
+       ↓
+CodeBuild
+       ↓
+Unit + Integration Tests
+       ↓
+LLM Evaluation
+ ├─ Accuracy
+ ├─ Groundedness
+ ├─ Hallucination
+ ├─ Safety
+ └─ Latency / Cost
+       ↓
+   Quality Gate
+    ↙       ↘
+ FAIL       PASS
+  ↓           ↓
+STOP       Staging
+              ↓
+          Approval
+              ↓
+           Canary
+              ↓
+           PROD
+\`\`\`
+
+### Key controls
+
+1. **Golden evaluation dataset** → test the model against known examples.
+2. **Automated thresholds** → deployment fails if quality drops below the approved baseline.
+3. **Security/safety tests** → prompt injection, unsafe outputs, data leakage.
+4. **Regression testing** → compare new model against the current production model.
+5. **Human approval** → required before production for high-risk changes.
+6. **Canary deployment** → expose the new model to limited traffic first.
+7. **Automatic rollback** → rollback if quality, latency, errors, or cost degrade.
+
+### Example
+
+\`\`\`text
+Current model: groundedness = 92%
+New model:     groundedness = 84%
+
+Required:      >= 90%
+
+             ↓
+          ❌ BLOCK
+\`\`\`
+
+### Interview answer
+
+> “I would treat the AI model like a production software artifact and make evaluation a mandatory CI/CD gate. Before deployment, I would run a golden dataset, regression, groundedness, hallucination, safety, latency, and cost evaluations against the current production baseline. If the model fails the required thresholds, the pipeline stops. Only a passing model moves to staging, approval, and finally canary production deployment.”
+
+**Memory:**
+**Evaluate → Compare → Gate → Approve → Canary → Monitor → Rollback**
+`,code:``}];function Jm(){return(0,M.jsx)($,{data:qm,title:`AWS DevOps / Deployment Cookbook`,subtitle:`CI/CD, IaC, blue-green, canary, rollback and pipeline security`,icon:`🚀`,patternLabel:`Questions`})}var Ym=[{id:`01-why-did-you-use-aws-glue-in-cwd`,category:`Data Integration & ETL`,title:`Why did you use AWS Glue in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why did you use AWS Glue in CWD?
+
+**AWS Glue is used for data preparation and ETL**, not for the real-time agent orchestration.
+
+\`\`\`text
+Enterprise Data
+(S3 / DB / APIs)
+       ↓
+     Glue
+       ↓
+Clean / Transform / Catalog
+       ↓
+   S3 Data Lake
+       ↓
+RAG / Analytics / ML
+\`\`\`
+
+### In CWD, I would use Glue for:
+
+1. **ETL** → extract and transform enterprise data.
+2. **Data cleansing** → normalize inconsistent data.
+3. **Data cataloging** → Glue Data Catalog tracks datasets/schema.
+4. **Batch ingestion** → prepare large datasets for downstream processing.
+5. **RAG preparation** → create clean document/data datasets before chunking and indexing into OpenSearch.
+6. **Scheduled pipelines** → refresh data periodically rather than making expensive real-time calls.
+
+### Important distinction
+
+**Glue ≠ real-time agent orchestration**
+
+\`\`\`text
+Real-time request:
+User → Coordinator → Delegator → Worker → MCP
+
+Batch data preparation:
+Enterprise Data → Glue → S3 → RAG/OpenSearch
+\`\`\`
+
+### Interview answer
+
+> “We use AWS Glue for batch data integration and preparation in CWD. It extracts data from enterprise sources, cleans and transforms it, and catalogs the datasets before storing them in S3 or feeding downstream RAG and analytics pipelines. The real-time Coordinator, Delegator, and Worker orchestration is handled separately; Glue is mainly for data engineering and batch processing.”
+
+**Memory:**
+**Glue = Extract → Clean → Transform → Catalog → Prepare**
+`,code:``},{id:`02-what-data-sources-would-cwd-ingest-using-glue`,category:`Data Integration & ETL`,title:`What data sources would CWD ingest using Glue?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What data sources would CWD ingest using Glue?
+
+In CWD, I would use Glue mainly for **batch-oriented enterprise data**, not real-time transactional requests.
+
+\`\`\`text
+Enterprise Sources
+      ↓
+     Glue
+      ↓
+Clean / Transform
+      ↓
+      S3
+      ↓
+RAG / OpenSearch / Analytics
+\`\`\`
+
+### Typical sources
+
+* **S3** → documents, CSV, JSON, historical files
+* **Relational databases** → Oracle, PostgreSQL, SQL Server
+* **Data warehouses** → Snowflake or other analytical stores
+* **Enterprise data lakes**
+* **CRM/IT exports** → Salesforce or ServiceNow historical/batch data
+* **ERP/manufacturing data** → batch extracts
+* **Application logs / historical datasets**
+
+### Important distinction
+
+For **current transactional information**, I would use **MCP/API integration**:
+
+\`\`\`text
+Current customer ticket
+       ↓
+Worker → MCP → ServiceNow
+\`\`\`
+
+For **large historical/batch datasets**:
+
+\`\`\`text
+Historical ServiceNow data
+       ↓
+Glue → S3 → OpenSearch
+\`\`\`
+
+### Interview answer
+
+> “I would use Glue for batch-oriented enterprise sources such as S3 files, relational databases, historical CRM and ServiceNow exports, data warehouses, and manufacturing datasets. Glue would clean, transform, and catalog this data before storing it in S3 and preparing it for RAG or analytics. For real-time customer or ticket information, I would use MCP or APIs instead of Glue.”
+
+**Memory:**
+**Glue = Batch/Historical | MCP = Real-time**
+`,code:``},{id:`03-how-would-glue-ingest-data-from-salesforce`,category:`Data Integration & ETL`,title:`How would Glue ingest data from Salesforce?`,difficulty:`Advanced`,time:`~15 min`,concept:`For an interview, keep it simple:
+
+> **“I would use AWS Glue with the Salesforce connector. Glue connects to Salesforce through the API, extracts objects such as Accounts, Contacts, or Cases, and writes the data into Amazon S3. I can run the Glue job incrementally using a timestamp or Salesforce change tracking, then catalog the data with Glue Data Catalog for downstream processing.”**
+
+### Simple flow
+
+\`\`\`text
+Salesforce
+    ↓
+Salesforce API
+    ↓
+AWS Glue Connector
+    ↓
+Glue ETL Job
+    ↓
+Amazon S3
+    ↓
+Glue Data Catalog
+    ↓
+Athena / Redshift / ML
+\`\`\`
+
+**Security:** Store Salesforce credentials/API secrets in **AWS Secrets Manager**, not in the Glue script.
+`,code:``},{id:`04-how-would-glue-ingest-data-from-servicenow`,category:`Data Integration & ETL`,title:`How would Glue ingest data from ServiceNow?`,difficulty:`Advanced`,time:`~15 min`,concept:`For an interview, keep it simple:
+
+> **“I would use AWS Glue to call the ServiceNow REST API and extract data such as incidents, requests, and changes. Glue processes the response and stores the data in Amazon S3. For incremental ingestion, I would use a field such as \`sys_updated_on\` to pull only records changed since the last successful run.”**
+
+### Simple flow
+
+\`\`\`text
+ServiceNow
+    ↓
+ServiceNow REST API
+    ↓
+AWS Glue
+    ↓
+Transform / Validate
+    ↓
+Amazon S3
+    ↓
+Glue Data Catalog
+    ↓
+Athena / Redshift / ML
+\`\`\`
+
+**Security:** Store the ServiceNow API credentials in **AWS Secrets Manager**, not inside the Glue code.
+`,code:``},{id:`05-how-would-glue-ingest-data-from-s3`,category:`Data Integration & ETL`,title:`How would Glue ingest data from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`For an interview, keep it simple:
+
+> **“For Oracle, I would use the AWS Glue JDBC connection to connect to Oracle, extract the required tables, transform the data, and write it to S3. For Snowflake, I would use the Glue Snowflake connector to read or write data. Credentials would be stored in AWS Secrets Manager.”**
+
+### Simple flow
+
+\`\`\`text
+Oracle ──JDBC──→ Glue ──→ S3
+                         ↓
+Snowflake ──Connector──→ Glue
+                         ↓
+                    Transform
+                         ↓
+                    S3 / Target
+\`\`\`
+
+**Key point:** Oracle → **JDBC**, Snowflake → **Snowflake connector**, credentials → **Secrets Manager**.
+`,code:``},{id:`06-how-would-glue-integrate-data-from-oracle-snowflake`,category:`Data Integration & ETL`,title:`How would Glue integrate data from Oracle/Snowflake?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Glue ingest data from Salesforce?
+
+For **batch Salesforce data**, I would use an AWS Glue job with a Salesforce connector to extract records, transform them, and land them in S3.
+
+\`\`\`text
+Salesforce
+    ↓
+Glue Connector
+    ↓
+Glue ETL Job
+    ↓
+Clean / Transform
+    ↓
+S3
+    ↓
+OpenSearch / Analytics
+\`\`\`
+
+### Practical flow
+
+1. **Authenticate** Glue to Salesforce using the appropriate Salesforce credentials/connection configuration.
+2. **Extract** objects such as:
+
+   * Account
+   * Contact
+   * Opportunity
+   * Case
+3. **Transform** → clean, normalize, deduplicate.
+4. **Write to S3** in formats such as Parquet.
+5. **Catalog** the data using Glue Data Catalog.
+6. **Index selected data into OpenSearch** if it is needed for RAG/search.
+7. Schedule the job for periodic refresh.
+
+### Important
+
+For **real-time Salesforce data**, I would not wait for a Glue batch job.
+
+\`\`\`text
+Customer request
+      ↓
+Worker → MCP → Salesforce
+\`\`\`
+
+That gives CWD the current Salesforce information.
+
+### Interview answer
+
+> “For batch ingestion, I would configure an AWS Glue Salesforce connection, extract required objects such as Accounts, Opportunities and Cases, transform and normalize the data, and land it in S3. I would catalog it with Glue Data Catalog and optionally index the required data into OpenSearch. For real-time customer information, I would use MCP or Salesforce APIs instead of Glue.”
+`,code:``},{id:`07-what-is-a-glue-data-catalog`,category:`Data Integration & ETL`,title:`What is a Glue Data Catalog?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## What is Glue Data Catalog?
+
+**Glue Data Catalog is a central metadata repository** that tells AWS **what data exists, where it is, and what its structure looks like**.
+
+\`\`\`text
+Salesforce / DB / S3
+        ↓
+   Glue Crawler
+        ↓
+ Glue Data Catalog
+        ↓
+ Tables + Schema + Location
+        ↓
+ Athena / Glue / EMR / Analytics
+\`\`\`
+
+### What does it store?
+
+For example, for Salesforce data:
+
+\`\`\`text
+Table: customer_accounts
+
+Columns:
+customer_id
+customer_name
+industry
+region
+
+Location:
+s3://cwd-data/salesforce/accounts/
+Format:
+Parquet
+\`\`\`
+
+It stores **metadata**, not the actual business data.
+
+### In CWD
+
+\`\`\`text
+Salesforce
+    ↓
+Glue ETL
+    ↓
+S3  ← actual data
+    ↓
+Data Catalog ← metadata/schema
+\`\`\`
+
+### Interview answer
+
+> “Glue Data Catalog is a centralized metadata repository. It stores table definitions, schemas, columns, data types, and S3 locations. In CWD, after Glue processes Salesforce or other enterprise data into S3, the Data Catalog allows downstream services like Glue and Athena to understand and query that data.”
+
+**Memory:**
+**S3 = Data | Glue Catalog = Information about the Data**
+`,code:``},{id:`08-what-metadata-would-you-maintain-in-glue-data-catalog`,category:`Data Integration & ETL`,title:`What metadata would you maintain in Glue Data Catalog?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What metadata would you maintain in Glue Data Catalog?
+
+I would maintain metadata that helps AWS understand **what the data is, where it is, and how it is structured**.
+
+\`\`\`text
+Glue Data Catalog
+│
+├── Database
+├── Table
+├── Columns + Data Types
+├── S3 Location
+├── File Format
+├── Partition Information
+└── Schema Version
+\`\`\`
+
+### Example — Salesforce Customer data
+
+\`\`\`text
+Database: cwd_salesforce
+Table: customer_accounts
+
+Columns:
+  customer_id → string
+  customer_name → string
+  industry → string
+  region → string
+
+Location:
+  s3://cwd-data/salesforce/accounts/
+
+Format:
+  Parquet
+
+Partitions:
+  year / month
+\`\`\`
+
+### For CWD, I would also track
+
+* **Source system** → Salesforce
+* **Last ingestion/update time**
+* **Schema version**
+* **Partition information**
+* **Data classification** where appropriate
+* **Table/column descriptions**
+
+### Interview answer
+
+> “I would maintain database and table definitions, column names and data types, S3 location, file format, partitions, schema version, source system, and ingestion metadata. This allows downstream Glue jobs and analytics services to discover and correctly interpret the data.”
+
+**Memory:**
+**What + Where + Structure + Format + Partition + Source**
+`,code:``},{id:`09-glue-crawler-vs-glue-etl-job`,category:`Data Integration & ETL`,title:`Glue Crawler vs Glue ETL job?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Glue Crawler vs Glue ETL Job
+
+Simple difference:
+
+\`\`\`text
+Crawler = DISCOVER
+ETL Job  = PROCESS
+\`\`\`
+
+### Glue Crawler
+
+A **Crawler discovers the structure of data** and creates/updates tables in the Glue Data Catalog.
+
+\`\`\`text
+S3 / Salesforce / DB
+        ↓
+   Glue Crawler
+        ↓
+ Glue Data Catalog
+   (schema/metadata)
+\`\`\`
+
+It identifies:
+
+* Tables
+* Columns
+* Data types
+* Partitions
+* S3 locations
+
+### Glue ETL Job
+
+An **ETL job actually processes the data**.
+
+\`\`\`text
+Source
+  ↓
+Glue ETL Job
+  ↓
+Clean → Transform → Join → Filter
+  ↓
+S3 / OpenSearch
+\`\`\`
+
+It performs:
+
+* Data extraction
+* Transformation
+* Cleansing
+* Deduplication
+* Format conversion
+* Loading
+
+### CWD example
+
+\`\`\`text
+Salesforce
+    ↓
+Crawler → discovers schema
+    ↓
+Data Catalog
+    ↓
+ETL Job → clean/transform
+    ↓
+S3
+    ↓
+OpenSearch / RAG
+\`\`\`
+
+### Interview answer
+
+> “A Glue Crawler is mainly for discovering data structure and populating the Glue Data Catalog, whereas a Glue ETL job performs the actual data processing and transformation. In CWD, I could use the crawler to discover Salesforce or S3 data schemas, then use an ETL job to clean and transform that data before storing it in S3 or preparing it for RAG.”
+
+**Memory:** **Crawler = Discover | ETL = Transform**
+`,code:``},{id:`10-how-does-a-glue-crawler-discover-schemas`,category:`Data Integration & ETL`,title:`How does a Glue Crawler discover schemas?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How does a Glue Crawler discover schemas?
+
+The crawler **samples/reads the source data**, analyzes its structure, and infers the schema.
+
+\`\`\`text
+S3 / Salesforce / Database
+          ↓
+    Glue Crawler
+          ↓
+ Read / Sample Data
+          ↓
+ Infer Schema
+          ↓
+ Glue Data Catalog
+\`\`\`
+
+### Example
+
+Suppose S3 contains:
+
+\`\`\`text
+customer_id,name,region
+101,ABC Corp,US
+102,XYZ Inc,India
+\`\`\`
+
+The crawler can infer:
+
+\`\`\`text
+customer_id → integer
+name        → string
+region      → string
+\`\`\`
+
+Then it creates/updates the table in **Glue Data Catalog**.
+
+### What does it look at?
+
+* Column names
+* Data types
+* File formats
+* Partitions
+* Data locations
+* Table structure
+
+### Interview answer
+
+> “A Glue Crawler connects to the configured data source, samples or reads the data, infers its structure such as columns, data types and partitions, and then creates or updates the corresponding metadata in the Glue Data Catalog.”
+
+**Memory:**
+**Read → Infer → Catalog**
+`,code:``},{id:`11-how-would-you-handle-schema-changes`,category:`Data Integration & ETL`,title:`How would you handle schema changes?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle schema changes?
+
+I would use **schema versioning + validation + backward-compatible changes**.
+
+\`\`\`text
+Source Schema Change
+        ↓
+   Glue Crawler
+        ↓
+Detect New Schema
+        ↓
+Validate / Compare
+        ↓
+Update Data Catalog
+        ↓
+ETL Transformation
+        ↓
+S3 / OpenSearch
+\`\`\`
+
+### Example
+
+Suppose Salesforce adds:
+
+\`\`\`text
+customer_id
+name
+region
+industry   ← new column
+\`\`\`
+
+I would:
+
+1. Detect the new column.
+2. Compare with the existing schema.
+3. Update the Glue Catalog.
+4. Update ETL mappings if required.
+5. Test downstream RAG/OpenSearch pipelines.
+6. Version the schema.
+
+### For breaking changes
+
+If Salesforce **renames or removes** a column:
+
+\`\`\`text
+Schema v1 → Schema v2
+\`\`\`
+
+I would **not immediately overwrite production**. I would validate the change, update the ETL pipeline, test it in lower environments, and then promote it.
+
+### Interview answer
+
+> “I handle schema changes through schema detection, validation, versioning, and backward-compatible transformations. Glue Crawler can detect changes, but I would validate the change before updating production pipelines. For breaking changes, I would version the schema and update downstream ETL and RAG pipelines through CI/CD.”
+
+**Memory:**
+**Detect → Compare → Validate → Version → Test → Deploy**
+`,code:``},{id:`12-how-would-you-implement-incremental-data-ingestion`,category:`Data Integration & ETL`,title:`How would you implement incremental data ingestion?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement incremental data ingestion?
+
+Instead of processing **all Salesforce data every time**, I would ingest only **new or changed records**.
+
+\`\`\`text
+Salesforce
+    ↓
+Last Successful Timestamp
+    ↓
+Glue Job
+    ↓
+Only New/Updated Records
+    ↓
+S3
+    ↓
+OpenSearch
+\`\`\`
+
+### Example
+
+First run:
+
+\`\`\`text
+Last Run = 2026-09-20
+\`\`\`
+
+Glue queries Salesforce for:
+
+\`\`\`text
+LastModifiedDate > 2026-09-20
+\`\`\`
+
+It processes only those records.
+
+After successful completion:
+
+\`\`\`text
+New Last Run = 2026-09-25
+\`\`\`
+
+### Where do I store the checkpoint?
+
+For example:
+
+\`\`\`text
+DynamoDB
+-------------------------
+source: Salesforce
+object: Account
+last_successful_time: ...
+\`\`\`
+
+Or use a Glue job bookmark where it fits the ingestion pattern.
+
+### Important
+
+Only update the checkpoint **after successful processing**.
+
+\`\`\`text
+Read → Process → Write successfully
+                  ↓
+            Update checkpoint
+\`\`\`
+
+If the job fails, don't advance the checkpoint, so the data can be retried.
+
+### Interview answer
+
+> “I would implement incremental ingestion using a watermark such as Salesforce LastModifiedDate. The Glue job reads the last successful checkpoint, extracts only records changed after that timestamp, processes them, and updates the checkpoint only after successful completion. For suitable Glue sources, I can also use Glue job bookmarks.”
+
+**Memory:**
+**Checkpoint → Extract Changes → Process → Success → Update Checkpoint**
+`,code:``},{id:`13-full-load-vs-incremental-load`,category:`Data Integration & ETL`,title:`Full load vs incremental load?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Full Load vs Incremental Load
+
+|                 | **Full Load**           | **Incremental Load**            |
+| --------------- | ----------------------- | ------------------------------- |
+| What?           | Load all data           | Load only new/changed data      |
+| First ingestion | ✅ Common                | Usually not                     |
+| Runtime         | Higher                  | Lower                           |
+| Cost            | Higher                  | Lower                           |
+| Data volume     | Large                   | Small                           |
+| Example         | All Salesforce Accounts | Accounts changed since last run |
+
+### CWD example
+
+**Full load:**
+
+\`\`\`text
+Salesforce
+    ↓
+ALL Accounts/Cases
+    ↓
+Glue → S3 → OpenSearch
+\`\`\`
+
+**Incremental:**
+
+\`\`\`text
+Salesforce
+    ↓
+LastModifiedDate > LastCheckpoint
+    ↓
+Changed Records
+    ↓
+Glue → S3 → OpenSearch
+\`\`\`
+
+### When would I use each?
+
+**Full load:**
+
+* Initial ingestion
+* Major schema changes
+* Data recovery/rebuild
+* Periodic complete reconciliation
+
+**Incremental load:**
+
+* Daily/hourly ingestion
+* Large datasets
+* Production pipelines
+* Reduce processing time and cost
+
+### Interview answer
+
+> “I use full load for initial ingestion or when I need a complete rebuild. For regular production ingestion, I prefer incremental loading using a watermark such as LastModifiedDate or Glue job bookmarks, because it processes only new or changed records and reduces cost and processing time.”
+
+**Memory:**
+**Full = Everything | Incremental = Changes only**
+`,code:``},{id:`14-how-would-you-identify-new-or-changed-records`,category:`Data Integration & ETL`,title:`How would you identify new or changed records?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you identify new or changed records?
+
+I would use a **watermark/change-tracking field**, typically a timestamp such as \`LastModifiedDate\`.
+
+\`\`\`text
+Salesforce
+    ↓
+Last checkpoint = 2026-09-24 10:00
+    ↓
+WHERE LastModifiedDate > checkpoint
+    ↓
+New / Changed records
+\`\`\`
+
+### Common methods
+
+1. **Timestamp**
+
+   \`\`\`text
+   LastModifiedDate > last_checkpoint
+   \`\`\`
+
+   Most common for Salesforce-style ingestion.
+
+2. **Incrementing ID / sequence**
+
+   \`\`\`text
+   ID > last_processed_ID
+   \`\`\`
+
+   Useful when records are strictly sequential.
+
+3. **CDC (Change Data Capture)**
+   Capture inserts, updates, and deletes as events.
+
+4. **Glue Job Bookmarks**
+   Glue can track previously processed data for supported sources.
+
+### Important: Deletes
+
+A simple \`LastModifiedDate\` query may **not detect deleted records**. For deletes, use **CDC**, deletion flags, or periodic reconciliation/full load depending on the source.
+
+### Interview answer
+
+> “I normally identify new and changed records using a watermark such as Salesforce LastModifiedDate. I store the last successful checkpoint and extract records after that timestamp. For deletes or more precise change tracking, I would use CDC when supported, or perform periodic reconciliation.”
+
+**Memory:**
+**Timestamp → Checkpoint → Changed Records | CDC → Inserts + Updates + Deletes**
+`,code:``},{id:`15-how-would-you-handle-deleted-records`,category:`Data Integration & ETL`,title:`How would you handle deleted records?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle deleted records?
+
+I would use **CDC/change tracking** when available, because a normal \`LastModifiedDate\` query may not see records that were deleted.
+
+\`\`\`text
+Salesforce
+    ↓
+CDC / Delete Detection
+    ↓
+Delete Event
+    ↓
+Glue Processing
+    ↓
+S3 / OpenSearch
+    ↓
+Remove or mark record inactive
+\`\`\`
+
+### Example
+
+If Salesforce deletes:
+
+\`\`\`text
+customer_id = 123
+\`\`\`
+
+I would capture:
+
+\`\`\`text
+customer_id = 123
+operation = DELETE
+\`\`\`
+
+Then remove the corresponding document from OpenSearch or mark it as deleted in the curated data.
+
+### If CDC is not available
+
+Use:
+
+* **Soft-delete flag** such as \`IsDeleted\`
+* Periodic **full reconciliation**
+* Compare source records against the target
+
+### Important
+
+For RAG, I would **not allow deleted documents to remain searchable**, because the LLM could retrieve stale information.
+
+### Interview answer
+
+> “For deleted records, I prefer CDC when the source supports it, because it captures delete events. The ingestion pipeline propagates the delete to S3 or OpenSearch, either by removing the record or marking it inactive. If CDC isn't available, I would use a soft-delete field or periodic reconciliation to detect deletions.”
+
+**Memory:**
+**CDC → Detect Delete → Propagate Delete → Remove from Search**
+`,code:``},{id:`16-how-would-you-handle-duplicate-records`,category:`Data Integration & ETL`,title:`How would you handle duplicate records?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle duplicate records?
+
+I would use a **unique business key + deduplication logic** before loading the data.
+
+\`\`\`text id="h0zqko"
+Source
+  ↓
+Glue ETL
+  ↓
+Identify Duplicate
+  ↓
+Keep Latest Record
+  ↓
+S3 / OpenSearch
+\`\`\`
+
+### Example
+
+Salesforce:
+
+\`\`\`text
+customer_id = 123
+\`\`\`
+
+If the same customer appears multiple times, use \`customer_id\` as the **deduplication key**.
+
+For records with multiple versions:
+
+\`\`\`text
+customer_id | LastModifiedDate
+123         | 10:00
+123         | 11:30  ← keep this
+\`\`\`
+
+Glue can use Spark/DataFrame logic such as:
+
+\`\`\`text
+partition by customer_id
+→ order by LastModifiedDate DESC
+→ keep latest
+\`\`\`
+
+### Also important
+
+For the ingestion pipeline itself, use **idempotency** so retrying the same batch doesn't create duplicates.
+
+### Interview answer
+
+> “I would identify duplicates using a stable business key such as customer_id. In the Glue ETL job, I would partition by that key, keep the latest record based on LastModifiedDate, and then write the deduplicated data to S3 or OpenSearch. I would also make the ingestion process idempotent so retries don't create duplicate records.”
+
+**Memory:**
+**Business Key → Detect → Keep Latest → Idempotent Write**
+`,code:``},{id:`17-how-would-you-partition-data-in-s3`,category:`Data Integration & ETL`,title:`How would you partition data in S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you partition data in S3?
+
+I would partition data based on **common query/filter fields**, usually date and sometimes business dimensions.
+
+\`\`\`text
+s3://cwd-data/salesforce/
+    ├── year=2026/
+    │   ├── month=09/
+    │   │   ├── day=25/
+    │   │   └── day=24/
+\`\`\`
+
+### Example for CWD
+
+For Salesforce data:
+
+\`\`\`text
+s3://cwd-data/salesforce/accounts/
+    year=2026/month=09/day=25/
+\`\`\`
+
+For multi-tenant CWD data, we could also consider:
+
+\`\`\`text
+s3://cwd-data/
+    tenant=onsemi/
+    source=salesforce/
+    year=2026/
+    month=09/
+\`\`\`
+
+### Why partition?
+
+Instead of scanning the entire dataset:
+
+\`\`\`text
+10 TB
+ ↓
+Query September
+ ↓
+Scan only September partition
+\`\`\`
+
+This reduces **data scanned, processing time, and cost**.
+
+### Important
+
+Don't create too many tiny partitions. Choose partition columns based on actual access patterns and data volume.
+
+### Interview answer
+
+> “I would partition S3 data based on common query patterns, typically by date such as year, month, and day. For CWD, I could partition Salesforce data by ingestion date and optionally tenant or source when those are useful filters. This allows Glue or Athena to perform partition pruning and reduces the amount of data scanned.”
+
+**Memory:**
+**Query Pattern → Partition → Prune → Less Scan → Lower Cost**
+`,code:``},{id:`18-why-use-parquet-instead-of-csv`,category:`Data Integration & ETL`,title:`Why use Parquet instead of CSV?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why use Parquet instead of CSV?
+
+**Parquet is better for analytical workloads** because it is **columnar, compressed, and stores schema information**.
+
+\`\`\`text id="bfx5ue"
+CSV
+ └── Row-based + larger files
+
+Parquet
+ └── Column-based + compressed + typed
+\`\`\`
+
+### Main advantages
+
+* **Smaller storage size** → compression reduces S3 storage.
+* **Faster queries** → reads only required columns.
+* **Lower query cost** → less data scanned by Athena/Glue.
+* **Schema included** → column names and data types are preserved.
+* **Better for Glue/Spark** → efficient processing of large datasets.
+
+### Example
+
+If CWD needs only:
+
+\`\`\`text
+customer_id, region
+\`\`\`
+
+from a table containing 50 columns, Parquet can read primarily those required columns instead of scanning every column.
+
+### Interview answer
+
+> “I prefer Parquet for CWD's curated data because it is columnar, compressed, schema-aware, and efficient for Glue, Spark, Athena, and analytics workloads. It reduces storage and data scanned compared with CSV, which improves both performance and cost.”
+
+**Memory:**
+**Parquet = Columnar + Compressed + Schema + Faster + Cheaper**
+`,code:``},{id:`19-how-would-you-optimize-glue-etl-performance`,category:`Data Integration & ETL`,title:`How would you optimize Glue ETL performance?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you optimize Glue ETL performance?
+
+I would optimize **data volume, partitioning, Spark processing, and infrastructure**.
+
+\`\`\`text
+Source
+  ↓
+Filter early
+  ↓
+Partitioned Parquet
+  ↓
+Parallel Glue Workers
+  ↓
+S3 / OpenSearch
+\`\`\`
+
+### Key techniques
+
+1. **Incremental ingestion** → process only new/changed records.
+2. **Filter early** → don't load unnecessary data.
+3. **Use Parquet** → columnar + compressed.
+4. **Partition data** → enable partition pruning.
+5. **Avoid small files** → compact files where appropriate.
+6. **Optimize joins** → broadcast small lookup datasets when appropriate.
+7. **Right-size Glue workers** → don't over-provision.
+8. **Parallelize independent transformations** where possible.
+9. **Use Glue job bookmarks** for supported incremental workloads.
+10. **Monitor Spark stages** to identify slow transformations or data skew.
+
+### Interview answer
+
+> “I would optimize Glue ETL by using incremental ingestion, filtering early, partitioning the data, and using compressed Parquet instead of CSV. I would optimize joins, avoid small files, right-size Glue workers, and monitor Spark stages for data skew or expensive transformations.”
+
+**Memory:**
+**Less Data → Partition → Parquet → Optimize Spark → Right-size → Monitor**
+`,code:``},{id:`20-how-would-you-handle-very-large-datasets`,category:`Data Integration & ETL`,title:`How would you handle very large datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle very large datasets?
+
+I would **avoid loading the entire dataset into memory** and process it in a distributed, incremental way.
+
+\`\`\`text
+Very Large Data
+      ↓
+Incremental Extraction
+      ↓
+S3 Partitioned Data
+      ↓
+Parquet
+      ↓
+Glue Spark Distributed Processing
+      ↓
+S3 / OpenSearch
+\`\`\`
+
+### Key techniques
+
+* **Incremental ingestion** → process only new/changed records.
+* **Partition S3 data** → year/month/day or appropriate business partition.
+* **Parquet** → compressed, columnar format.
+* **Distributed Spark processing** → use multiple Glue workers.
+* **Filter early** → reduce data before expensive transformations.
+* **Avoid collecting data to the driver** → keep processing distributed.
+* **Handle data skew** → optimize problematic partitions/joins.
+* **Control file sizes** → avoid millions of tiny files.
+* **Scale Glue workers** based on workload.
+
+### Interview answer
+
+> “For very large datasets, I would use incremental ingestion, partition the data in S3, store it as Parquet, and use Glue Spark's distributed processing across multiple workers. I would filter early, optimize joins and data skew, avoid driver-side processing, and tune worker capacity based on the workload.”
+
+**Memory:**
+**Incremental → Partition → Parquet → Distributed → Filter → Scale**
+`,code:``},{id:`21-explain-s3-glue-opensearch-architecture`,category:`Glue + CWD RAG`,title:`Explain S3 → Glue → OpenSearch architecture.`,difficulty:`Advanced`,time:`~20 min`,concept:`## S3 → Glue → OpenSearch architecture
+
+This is the **batch RAG ingestion pipeline** in CWD.
+
+\`\`\`text
+Enterprise Data
+      ↓
+     S3
+      ↓
+ Glue Crawler
+      ↓
+ Data Catalog
+      ↓
+ Glue ETL
+(clean / transform / chunk)
+      ↓
+ Embedding Model
+      ↓
+ OpenSearch
+(vector + keyword index)
+      ↓
+ CWD RAG Worker
+\`\`\`
+
+### Step-by-step
+
+**1. S3 — Raw data**
+
+* Store PDFs, CSV, JSON, historical Salesforce/ServiceNow data, etc.
+* S3 is the durable source/landing layer.
+
+**2. Glue Crawler — Discover**
+
+* Detects schema/structure.
+* Updates Glue Data Catalog.
+
+**3. Glue Data Catalog**
+
+* Stores metadata: tables, columns, types, S3 locations, partitions.
+
+**4. Glue ETL — Prepare**
+
+* Clean and normalize data.
+* Remove duplicates.
+* Handle schema changes.
+* Chunk documents/text.
+* Add metadata such as \`customer_id\`, source, timestamp, ACL information.
+
+**5. Embedding**
+
+* Convert chunks into vectors using an embedding model.
+
+**6. OpenSearch — Index**
+Store:
+
+\`\`\`text
+chunk text
++ embedding vector
++ metadata
++ ACL/security attributes
+\`\`\`
+
+OpenSearch supports **vector + keyword/hybrid search**.
+
+**7. Runtime RAG**
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+RAG Worker
+ ↓
+OpenSearch
+ ↓
+Relevant chunks
+ ↓
+Bedrock
+ ↓
+Grounded response
+\`\`\`
+
+### Important distinction
+
+**Glue is batch/offline ingestion.**
+**OpenSearch is the runtime retrieval layer.**
+
+### Interview answer
+
+> “In CWD, S3 acts as the durable data landing layer. Glue Crawler discovers the schema and updates the Data Catalog, while Glue ETL cleans, transforms, deduplicates, and prepares the data. We then generate embeddings and index the chunks, vectors, and security metadata into OpenSearch. At runtime, the RAG Worker queries OpenSearch using hybrid or vector search and sends the retrieved context to Bedrock for response generation.”
+
+**Memory:**
+**S3 = Store → Glue = Prepare → Embedding = Vectorize → OpenSearch = Retrieve → Bedrock = Generate**
+`,code:``},{id:`22-how-would-glue-prepare-enterprise-documents-for-rag`,category:`Glue + CWD RAG`,title:`How would Glue prepare enterprise documents for RAG?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Glue prepare enterprise documents for RAG?
+
+Glue would perform the **batch preprocessing** before documents are indexed into OpenSearch.
+
+\`\`\`text id="0ql4af"
+Enterprise Documents
+        ↓
+       S3
+        ↓
+    Glue ETL
+        ↓
+Extract / Clean
+        ↓
+Chunk Documents
+        ↓
+Add Metadata + ACL
+        ↓
+Generate Embeddings
+        ↓
+   OpenSearch
+\`\`\`
+
+### Main steps
+
+1. **Extract** text from PDFs, CSV, JSON, etc.
+2. **Clean** unwanted text, formatting, duplicates.
+3. **Chunk** documents into meaningful sections.
+4. **Add metadata**, for example:
+
+   \`\`\`text
+   document_id
+   source
+   customer_id
+   department
+   document_type
+   created_date
+   ACL / entitlement
+   \`\`\`
+5. **Generate embeddings** for each chunk.
+6. **Store/index** chunks + embeddings + metadata in OpenSearch.
+7. Keep the **original document in S3**.
+
+### Important security point
+
+ACL metadata must travel with the chunk:
+
+\`\`\`text id="1f4z6h"
+Document
+   ↓
+Chunk
+   ↓
+ACL metadata
+   ↓
+OpenSearch
+\`\`\`
+
+At query time, CWD applies the user's entitlements **before returning chunks**.
+
+### Interview answer
+
+> “I would use Glue as the batch preprocessing layer. It would extract and clean enterprise documents, remove duplicates, chunk the content, attach metadata and ACL information, generate embeddings, and prepare the chunks for OpenSearch. The original documents remain in S3, while OpenSearch stores the searchable chunks, vectors, and metadata.”
+
+**Memory:**
+**Extract → Clean → Chunk → Metadata/ACL → Embed → OpenSearch**
+`,code:``},{id:`23-where-would-document-preprocessing-happen`,category:`Glue + CWD RAG`,title:`Where would document preprocessing happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Where would document preprocessing happen?
+
+For CWD, I would do **batch document preprocessing in the Glue ETL pipeline**.
+
+\`\`\`text
+Documents
+   ↓
+S3
+   ↓
+Glue ETL
+   ├── Extract
+   ├── Clean
+   ├── Chunk
+   ├── Metadata / ACL
+   └── Deduplicate
+   ↓
+Embedding
+   ↓
+OpenSearch
+\`\`\`
+
+### Important distinction
+
+* **S3** → stores original documents.
+* **Glue** → batch preprocessing and transformation.
+* **Embedding service/model** → converts chunks into vectors.
+* **OpenSearch** → stores chunks + vectors + metadata.
+* **RAG Worker** → performs runtime retrieval.
+
+### Interview answer
+
+> “I would perform batch document preprocessing in AWS Glue. Glue would extract, clean, chunk, deduplicate, and enrich documents with metadata and ACL information. After preprocessing, I would generate embeddings and index the chunks into OpenSearch. The original documents remain in S3.”
+
+**Memory:**
+**S3 = Store → Glue = Preprocess → Embedding = Vectorize → OpenSearch = Index**
+`,code:``},{id:`24-where-would-chunking-happen`,category:`Glue + CWD RAG`,title:`Where would chunking happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Where would chunking happen?
+
+In the **batch ingestion pipeline**, I would perform chunking in the **Glue ETL layer** after extracting and cleaning the document.
+
+\`\`\`text
+Document
+   ↓
+S3
+   ↓
+Glue ETL
+   ↓
+Extract → Clean → Chunk
+             ↓
+        Metadata + ACL
+             ↓
+         Embeddings
+             ↓
+         OpenSearch
+\`\`\`
+
+### Example
+
+A 100-page document:
+
+\`\`\`text
+Document
+   ↓
+Clean text
+   ↓
+Chunk 1
+Chunk 2
+Chunk 3
+...
+Chunk 100
+\`\`\`
+
+Each chunk gets metadata:
+
+\`\`\`text
+chunk_id
+document_id
+page_number
+source
+ACL
+\`\`\`
+
+### Important practical point
+
+For **simple text documents**, Glue/Spark can perform chunking.
+
+For **complex PDFs, tables, images, scanned documents**, I would use a specialized document extraction service/process first, then perform semantic chunking before embedding.
+
+### Interview answer
+
+> “For CWD, chunking happens during the offline document-ingestion pipeline, after extraction and cleaning. For simple documents, Glue can perform the chunking as part of ETL. For complex PDFs or scanned documents, I would use a document extraction service first, then apply semantic chunking before generating embeddings and indexing into OpenSearch.”
+
+**Memory:**
+**Extract → Clean → Chunk → Metadata → Embed → Index**
+`,code:``},{id:`25-where-would-metadata-extraction-happen`,category:`Glue + CWD RAG`,title:`Where would metadata extraction happen?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Where would metadata extraction happen?
+
+It depends on the type of metadata, but in CWD I would mainly handle it during the **document ingestion/preprocessing pipeline**.
+
+\`\`\`text id="8bpm5a"
+Document
+   ↓
+S3
+   ↓
+Document Extraction
+   ↓
+Glue ETL
+   ├── Content metadata
+   ├── Business metadata
+   └── ACL metadata
+   ↓
+OpenSearch
+\`\`\`
+
+### Examples
+
+**Document metadata**
+
+* filename
+* document ID
+* page number
+* created/modified date
+* document type
+
+**Business metadata**
+
+* customer ID
+* department
+* product
+* region
+
+**Security metadata**
+
+* owner
+* allowed groups
+* ACL/entitlements
+
+### Important distinction
+
+\`\`\`text
+PDF / Image
+   ↓
+Textract / document parser
+   ↓
+Extract text + structural information
+   ↓
+Glue ETL
+   ↓
+Normalize + enrich metadata
+   ↓
+OpenSearch
+\`\`\`
+
+So, **document content/structure extraction** can happen with a document parser/Textract, while **metadata normalization, enrichment, and mapping** can happen in Glue.
+
+### Interview answer
+
+> “I would extract document-level and structural metadata during document ingestion, using a parser or Textract for complex documents, and then use Glue to normalize and enrich the metadata. The final metadata, including business and ACL attributes, would be stored with each chunk in OpenSearch.”
+
+**Memory:**
+**Extract → Normalize → Enrich → Attach to Chunk → Index**
 `,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you maintain document lineage?
 
 ## Short answer
@@ -192899,744 +213489,3018 @@ Maintain lineage with catalogue metadata, chunk-level fields and run identifiers
 
 ## CWD context
 A citation should trace chunk → document → source system.
-`,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you identify the source system for each document?
+`,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you identify the source system for each document?
+
+I would assign a **source_system metadata field during ingestion** based on the ingestion connection/path.
+
+\`\`\`text id="o5m9fp"
+Salesforce ──┐
+SharePoint ──┤
+ServiceNow ──┼→ Ingestion → Glue → OpenSearch
+S3 ──────────┘
+                  ↓
+             source_system
+\`\`\`
+
+### Example
+
+\`\`\`text id="e3hm3m"
+document_id = DOC-123
+source_system = SharePoint
+source_path = /policies/security.pdf
+\`\`\`
+
+Another document:
+
+\`\`\`text id="m5fb1r"
+document_id = DOC-456
+source_system = ServiceNow
+source_path = /knowledge/article/456
+\`\`\`
+
+### Where is it added?
+
+During the **Glue preprocessing step**:
+
+\`\`\`text id="v8y7gk"
+Source
+  ↓
+Identify source
+  ↓
+Add source_system metadata
+  ↓
+Chunk
+  ↓
+OpenSearch
+\`\`\`
+
+For S3, the bucket/prefix can identify the source. For connectors such as Salesforce or SharePoint, the ingestion job/connection configuration can assign the source system explicitly.
+
+### Interview answer
+
+> “I would maintain a \`source_system\` metadata field for every document. The ingestion pipeline knows which connector or S3 prefix produced the document, so Glue adds that source information during preprocessing. I would store it along with the document ID, source path, version, and chunk ID in OpenSearch.”
+
+**Memory:**
+**Connector/Path → Identify Source → Add Metadata → Preserve Through RAG**
+`,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you attach ACL metadata to documents?
+
+I would extract the document's **access-control information from the source system** and attach it to every chunk during ingestion.
+
+\`\`\`text id="f0qk3m"
+SharePoint / Salesforce / ServiceNow
+            ↓
+      Extract ACLs
+            ↓
+        Glue ETL
+            ↓
+   Document → Chunks
+            ↓
+      ACL Metadata
+            ↓
+       OpenSearch
+\`\`\`
+
+### Example
+
+\`\`\`text id="l6d7px"
+document_id = DOC-123
+chunk_id    = DOC-123-C05
+
+allowed_groups:
+  - Sales
+  - Account-Managers
+
+allowed_users:
+  - user123
+\`\`\`
+
+For enterprise systems, I might also store:
+
+\`\`\`text
+tenant_id
+department
+security_level
+source_system
+acl_group_ids
+\`\`\`
+
+### At query time
+
+The user's identity/entitlements are checked **before returning chunks**:
+
+\`\`\`text id="3f9v3j"
+User Identity
+     ↓
+User Entitlements
+     ↓
+OpenSearch ACL Filter
+     ↓
+Authorized Chunks Only
+     ↓
+LLM
+\`\`\`
+
+**Important:** The LLM should **not decide whether a user is authorized**. Authorization must happen in the retrieval/application layer.
+
+### Interview answer
+
+> “During ingestion, I would extract ACL information from the source system and attach it as metadata to every document chunk. At query time, I would obtain the user's entitlements and apply ACL filters during retrieval, so only authorized chunks reach the LLM.”
+
+**Memory:**
+**Source ACL → Chunk Metadata → User Entitlement → Filter → LLM**
+`,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you prevent unauthorized documents from entering the RAG index?
+
+I would enforce **authorization during ingestion**, before the document is indexed.
+
+\`\`\`text id="f0qk3m"
+Source System
+    ↓
+Extract Document + ACL
+    ↓
+Validate ACL
+    ↓
+Authorized? ── No → Reject / Quarantine
+    │
+   Yes
+    ↓
+Chunk + Metadata
+    ↓
+Embedding
+    ↓
+OpenSearch
+\`\`\`
+
+### Practical controls
+
+1. **Extract source ACLs** from SharePoint/Salesforce/ServiceNow.
+2. **Validate the ACL** before indexing.
+3. Attach \`tenant_id\`, \`group_ids\`, \`user_ids\`, etc. to every chunk.
+4. **Reject/quarantine** documents with missing or invalid security metadata.
+5. Encrypt and restrict access to the ingestion pipeline.
+6. Periodically **reconcile ACL changes** and remove/restrict stale documents.
+
+### Important
+
+I would use **two security layers**:
+
+\`\`\`text
+Ingestion-time authorization
+          +
+Query-time authorization
+\`\`\`
+
+Even if a document was correctly indexed, a user's permissions may change later, so query-time ACL filtering is still required.
+
+### Interview answer
+
+> “I would prevent unauthorized documents from entering the RAG index by extracting and validating source ACLs before indexing. Documents with missing or invalid permissions would be quarantined rather than indexed. I would attach ACL metadata to every chunk and also enforce entitlement filtering at query time, because permissions can change after ingestion.”
+
+**Memory:**
+**Extract ACL → Validate → Reject/Quarantine → Index with ACL → Filter at Query**
+
+
+## How would you prevent unauthorized documents from entering the RAG index?
+
+I would enforce **authorization during ingestion**, before the document is indexed.
+
+\`\`\`text id="f0qk3m"
+Source System
+    ↓
+Extract Document + ACL
+    ↓
+Validate ACL
+    ↓
+Authorized? ── No → Reject / Quarantine
+    │
+   Yes
+    ↓
+Chunk + Metadata
+    ↓
+Embedding
+    ↓
+OpenSearch
+\`\`\`
+
+### Practical controls
+
+1. **Extract source ACLs** from SharePoint/Salesforce/ServiceNow.
+2. **Validate the ACL** before indexing.
+3. Attach \`tenant_id\`, \`group_ids\`, \`user_ids\`, etc. to every chunk.
+4. **Reject/quarantine** documents with missing or invalid security metadata.
+5. Encrypt and restrict access to the ingestion pipeline.
+6. Periodically **reconcile ACL changes** and remove/restrict stale documents.
+
+### Important
+
+I would use **two security layers**:
+
+\`\`\`text
+Ingestion-time authorization
+          +
+Query-time authorization
+\`\`\`
+
+Even if a document was correctly indexed, a user's permissions may change later, so query-time ACL filtering is still required.
+
+### Interview answer
+
+> “I would prevent unauthorized documents from entering the RAG index by extracting and validating source ACLs before indexing. Documents with missing or invalid permissions would be quarantined rather than indexed. I would attach ACL metadata to every chunk and also enforce entitlement filtering at query time, because permissions can change after ingestion.”
+
+**Memory:**
+**Extract ACL → Validate → Reject/Quarantine → Index with ACL → Filter at Query**
+`,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle document updates?
+
+I would use **incremental ingestion + document versioning**.
+
+\`\`\`text
+Document Updated
+      ↓
+Detect change
+      ↓
+Glue incremental job
+      ↓
+Re-process document
+      ↓
+Re-chunk + Re-embed
+      ↓
+Update OpenSearch
+      ↓
+Keep new version active
+\`\`\`
+
+### Example
+
+\`\`\`text
+DOC-123
+Version 1 → old
+Version 2 → updated
+\`\`\`
+
+When the source document changes:
+
+1. Detect using \`LastModifiedDate\`, version ID, or CDC.
+2. Retrieve the updated document.
+3. Re-extract and re-chunk it.
+4. Generate new embeddings.
+5. Update/replace its OpenSearch chunks.
+6. Keep the old version inactive or remove it.
+7. Preserve lineage: \`document_id + version + ingestion_timestamp\`.
+
+### Important
+
+I would **not append the updated chunks blindly**, because the RAG index could contain both old and new content.
+
+\`\`\`text
+❌ Old chunks + New chunks
+
+✅ Only current active version
+\`\`\`
+
+### Interview answer
+
+> “I would detect document changes using a timestamp or version ID, then incrementally reprocess only the changed document. I would re-extract, re-chunk, and re-embed it, update the corresponding OpenSearch records, and mark the previous version inactive or remove it. I would maintain document version and lineage metadata for traceability.”
+
+**Memory:**
+**Detect → Reprocess → Re-chunk → Re-embed → Replace → Version**
+`,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle document deletion?
+
+I would detect the deletion from the **source system** and propagate it to the RAG index.
+
+\`\`\`text id="h6v4ry"
+Source System
+     ↓
+Delete Detected
+     ↓
+Glue / Delete Processing
+     ↓
+Find document_id
+     ↓
+Remove / Deactivate chunks
+     ↓
+OpenSearch
+\`\`\`
+
+### Example
+
+If:
+
+\`\`\`text id="7y6m0d"
+document_id = DOC-123
+\`\`\`
+
+is deleted from SharePoint, I would find all chunks:
+
+\`\`\`text id="l5h7pc"
+DOC-123-C01
+DOC-123-C02
+DOC-123-C03
+\`\`\`
+
+and **delete or mark them inactive** in OpenSearch.
+
+### Important
+
+I would also remove the document from the **retrievable RAG dataset**, not just S3.
+
+\`\`\`text id="d7ghg8"
+Source deleted
+      ↓
+S3 copy → delete/archive
+      ↓
+OpenSearch chunks → delete/deactivate
+      ↓
+Cache → invalidate
+\`\`\`
+
+Otherwise, the RAG system could still retrieve deleted information from OpenSearch or cache.
+
+### Interview answer
+
+> “When a document is deleted from the source, I would detect the deletion through CDC, a delete flag, or periodic reconciliation. Using the document ID, I would remove or deactivate all associated chunks in OpenSearch and invalidate related caches. I would also handle the S3 copy according to the organization's retention policy.”
+
+**Memory:**
+**Detect Delete → Find Document ID → Remove Chunks → Invalidate Cache → Verify**
+`,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Glue trigger downstream processing?
+
+After Glue successfully completes the ETL job, I would use **EventBridge** or a Glue workflow to trigger the next step.
+
+\`\`\`text
+S3
+ ↓
+Glue ETL
+ ↓
+Job Succeeded
+ ↓
+EventBridge
+ ↓
+Lambda / Step Functions
+ ↓
+Embedding
+ ↓
+OpenSearch
+\`\`\`
+
+### Example in CWD
+
+\`\`\`text
+Glue ETL
+   ↓
+Clean + Chunk documents
+   ↓
+Write to S3
+   ↓
+EventBridge
+   ↓
+Embedding Worker
+   ↓
+OpenSearch
+\`\`\`
+
+### Why EventBridge?
+
+Glue can emit job state events such as **SUCCEEDED** or **FAILED**. EventBridge can react to the successful completion and start downstream processing.
+
+For more complex workflows:
+
+\`\`\`text
+Glue → Step Functions → Embedding → OpenSearch → Validation
+\`\`\`
+
+### Interview answer
+
+> “After Glue completes successfully, I would trigger downstream processing using EventBridge for event-driven processing or Step Functions for a multi-step workflow. For CWD, a successful Glue job could trigger the embedding process, followed by OpenSearch indexing. If Glue fails, downstream processing would not start.”
+
+**Memory:**
+**Glue Success → EventBridge/Step Functions → Embedding → OpenSearch**
+`,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Glue vs Lambda for data transformation
+
+The simple rule is:
+
+**Glue = large/batch data transformation**
+**Lambda = small/event-driven transformation**
+
+\`\`\`text id="qf3h9w"
+Large Dataset
+    ↓
+   Glue
+    ↓
+Spark / Distributed ETL
+\`\`\`
+
+\`\`\`text id="1z3b4c"
+Small Event
+    ↓
+  Lambda
+    ↓
+Quick Transformation
+\`\`\`
+
+### Glue
+
+Use Glue when:
+
+* Large datasets
+* Batch processing
+* ETL pipelines
+* Complex transformations/joins
+* Distributed Spark processing
+* S3/Data Lake processing
+
+**CWD example:**
+Process millions of historical Salesforce records → clean → deduplicate → Parquet → S3.
+
+### Lambda
+
+Use Lambda when:
+
+* Small payload
+* Short-running task
+* Event-driven processing
+* Simple transformation
+* S3/SQS/EventBridge trigger
+
+**CWD example:**
+A new document arrives in S3 → Lambda validates metadata → sends an event to the next processing step.
+
+### Interview answer
+
+> “I would use Glue for large-scale batch transformations because it provides distributed Spark-based processing. I would use Lambda for lightweight, short-running, event-driven transformations. In CWD, historical enterprise data processing would use Glue, while small S3 or EventBridge-triggered tasks could use Lambda.”
+
+**Memory:**
+**Glue = Big + Batch + Distributed**
+**Lambda = Small + Event + Short**
+`,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Glue vs EMR
+
+Simple rule:
+
+**Glue = Managed serverless ETL**
+**EMR = More control over big-data clusters**
+
+\`\`\`text
+Glue
+Data → Glue/Spark → Transform → S3
+        ↓
+   AWS manages infrastructure
+\`\`\`
+
+\`\`\`text
+EMR
+Data → EMR Cluster → Spark/Hadoop → S3
+             ↓
+      More infrastructure control
+\`\`\`
+
+### Glue
+
+Use when:
+
+* Standard ETL/data integration
+* Serverless Spark
+* Batch processing
+* S3/data lake pipelines
+* Less infrastructure management
+
+**CWD:** Salesforce/ServiceNow historical data → Glue → S3 → RAG preparation.
+
+### EMR
+
+Use when:
+
+* Very large/complex big-data workloads
+* Need deeper Spark/Hadoop configuration
+* Custom libraries/frameworks
+* Existing Spark/Hadoop workloads
+* More control over cluster configuration
+
+### Interview answer
+
+> “I would choose Glue for CWD because our requirement is primarily managed batch ETL and data preparation, and I don't want to manage Spark clusters. I would consider EMR when we need more control over Spark/Hadoop configuration, custom big-data workloads, or existing EMR-based processing.”
+
+**Memory:**
+**Glue = Serverless ETL | EMR = Cluster Control**
+`,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you monitor Glue jobs?
+
+I would use **CloudWatch + Glue job metrics/logs**.
+
+\`\`\`text id="n9v0wq"
+Glue Job
+   ↓
+CloudWatch
+   ├── Job status
+   ├── Duration
+   ├── Errors
+   ├── Spark metrics
+   └── Logs
+        ↓
+     Alarms
+        ↓
+   SNS / Incident
+\`\`\`
 
-## Short answer
-Set the source system at ingestion and validate it at write time.
+### What I monitor
 
-## Key points
-- Derived from the connector or S3 prefix (for example raw/{source}/).
-- Recorded in catalogue tags and the manifest.
-- Used for filtering, governance and citations.
+* **Job success/failure**
+* **Job duration** — detect performance degradation
+* **Errors/exceptions**
+* **Records processed**
+* **Data quality failures**
+* **Spark executor/worker performance**
+* **Data skew / slow stages**
+* **Input/output data volume**
+* **S3 read/write failures**
+
+### Example alarm
+
+\`\`\`text
+Glue Job FAILED
+      ↓
+CloudWatch Alarm
+      ↓
+SNS / Alert
+      ↓
+Investigate logs
+\`\`\`
+
+For CWD, I would also track:
+
+\`\`\`text
+Glue → S3 → Embedding → OpenSearch
+\`\`\`
+
+and ensure downstream processing starts **only after successful Glue completion**.
+
+### Interview answer
+
+> “I would monitor Glue jobs using CloudWatch metrics and Glue/Spark logs. I would track job status, duration, failures, records processed, data volume, and Spark performance. I would configure alarms for job failures or abnormal duration and use structured logs to troubleshoot ETL issues.”
+
+**Memory:**
+**Status → Duration → Errors → Data Volume → Spark → Alarm**
+`,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you troubleshoot a failed Glue job?
 
-## CWD context
-Reject records with no source identity.
-`,code:``},{id:`28-how-would-you-attach-acl-metadata-to-documents`,category:`Glue + CWD RAG`,title:`How would you attach ACL metadata to documents?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you attach ACL metadata to documents?
+I would troubleshoot it **from the Glue job run → logs → root cause → fix → rerun**.
 
-## Short answer
-Capture source permissions and store them as normalised principals on every chunk.
+\`\`\`text
+Glue Job Failed
+      ↓
+Check Job Run / Error
+      ↓
+CloudWatch Logs
+      ↓
+Identify Root Cause
+      ↓
+Fix
+      ↓
+Rerun / Validate
+\`\`\`
 
-## Key points
-- Read permissions from SharePoint, Salesforce sharing and ServiceNow roles; map to identity-provider user and group IDs.
-- Store as allowed principals on each chunk; refresh on a schedule and on events, since permissions change independently of content.
-- Fail closed: no valid ACL means no indexing.
+### Main things I check
 
-## CWD context
-Query-time filtering then trusts this metadata.
-`,code:``},{id:`29-how-would-you-prevent-unauthorized-documents-from-entering-the-rag-index`,category:`Glue + CWD RAG`,title:`How would you prevent unauthorized documents from entering the RAG index?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent unauthorized documents from entering the RAG index?
+1. **Glue job status & error message**
 
-## Short answer
-Prevent unauthorised documents from entering the index with allow-lists, classification and fail-closed checks.
+   * Check failed stage and exact exception.
 
-## Key points
-- Approved source and path allow-list; approval workflow for new sources.
-- Classification and PII scans (Macie or Comprehend) with quarantine.
-- Reject chunks with missing or invalid ACL metadata; separate indexes for restricted data.
-- Data-quality rules; least-privilege write access; query-time ACL filtering as a second layer.
+2. **CloudWatch logs**
 
-## CWD context
-Two layers: control what goes in, and filter what comes out.
-`,code:``},{id:`30-how-would-you-handle-document-updates`,category:`Glue + CWD RAG`,title:`How would you handle document updates?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document updates?
+   * Look for Python/Spark errors, connection failures, memory issues, timeouts.
 
-## Short answer
-Handle updates with change detection and upserts that replace old chunks.
+3. **Source connectivity**
 
-## Key points
-- Detect by hash, ETag or version ID; deterministic chunk IDs.
-- Re-embed only changed chunks; delete obsolete ones.
-- Separate path for ACL-only changes; avoid partial states by writing new before removing old.
+   * Salesforce/Oracle/S3 connection
+   * IAM permissions
+   * Network/VPC configuration
 
-## CWD context
-Store version and ingest time on each chunk.
-`,code:``},{id:`31-how-would-you-handle-document-deletion`,category:`Glue + CWD RAG`,title:`How would you handle document deletion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle document deletion?
+4. **Data/schema issues**
 
-## Short answer
-Handle deletions with delete signals and reconciliation.
+   * Missing columns
+   * Data type mismatch
+   * Schema changes
+   * Corrupt records
 
-## Key points
-- S3 events, source tombstones and a periodic reconciliation job.
-- Delete chunks by document ID in OpenSearch; update manifests; purge caches.
-- Verify and record for compliance.
+5. **Performance issues**
 
-## CWD context
-Erasure requests must reach the index and any caches.
-`,code:``},{id:`32-how-would-glue-trigger-downstream-processing`,category:`Glue + CWD RAG`,title:`How would Glue trigger downstream processing?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue trigger downstream processing?
+   * Out-of-memory
+   * Data skew
+   * Too many small files
+   * Insufficient Glue workers
 
-## Short answer
-Trigger downstream steps from Glue job state-change events.
+6. **Downstream failure**
 
-## Key points
-- EventBridge events for succeeded and failed job runs → Step Functions, Lambda or SNS.
-- Step Functions can start and wait for a Glue job directly; Glue triggers and workflows for simple chains.
+   * Check whether S3/OpenSearch write failed.
 
-## CWD context
-Completion starts indexing, evaluation or notification.
-`,code:``},{id:`33-glue-vs-lambda-for-data-transformation`,category:`Glue + CWD RAG`,title:`Glue vs Lambda for data transformation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue vs Lambda for data transformation?
+### Interview answer
 
-## Short answer
-Use Glue for large batch transformation and Lambda for small, event-driven work.
+> “First, I check the Glue job run and CloudWatch logs to identify the exact failed stage and exception. Then I check source connectivity, IAM permissions, schema or data-quality issues, and Spark performance such as memory or data skew. After fixing the root cause, I rerun the job and validate the output before triggering downstream processing.”
 
-## Key points
-- Glue: distributed Spark for GBs to TBs; slower start; pay per DPU time.
-- Lambda: up to 15 minutes and limited memory; fast start; per event.
-- Hybrid designs are common.
+**Memory:**
+**Run → Logs → Source → Schema → Spark → Fix → Rerun**
+`,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you optimize Glue cost?
 
-## CWD context
-Per-document events suit Lambda; bulk re-indexing suits Glue.
-`,code:``},{id:`34-glue-vs-emr`,category:`Glue + CWD RAG`,title:`Glue vs EMR?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Glue vs EMR?
+Main idea: **process less data and use fewer compute resources.**
 
-## Short answer
-Glue is serverless ETL; EMR gives deeper control over the big-data stack.
+\`\`\`text
+Reduce Data
+    ↓
+Incremental Processing
+    ↓
+Filter Early
+    ↓
+Parquet + Partitioning
+    ↓
+Right-size Workers
+    ↓
+Schedule Efficiently
+\`\`\`
 
-## Key points
-- Glue: less operations, catalogue integration, limited tuning.
-- EMR: custom Spark and library versions, persistent clusters, other frameworks such as Flink.
+### Key techniques
 
-## CWD context
-Choose Glue unless you need EMR-level control.
-`,code:``},{id:`35-how-would-you-monitor-glue-jobs`,category:`Glue + CWD RAG`,title:`How would you monitor Glue jobs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor Glue jobs?
+1. **Incremental ingestion** – process only new/changed records instead of full loads.
+2. **Filter early** – don't move/process unnecessary records.
+3. **Use Parquet** – compressed columnar format reduces data scanned.
+4. **Partition S3 data** – enables partition pruning.
+5. **Right-size Glue workers** – don't over-provision workers.
+6. **Avoid small files** – compact files to reduce processing overhead.
+7. **Use job bookmarks** – avoid reprocessing already processed data where applicable.
+8. **Optimize Spark joins** – broadcast small lookup datasets when appropriate.
+9. **Schedule only when needed** – avoid unnecessary frequent Glue runs.
+10. **Monitor cost and runtime** – identify expensive jobs and optimize them.
 
-## Short answer
-Monitor Glue with CloudWatch, the Spark UI and event-based alerts.
+### Interview answer
 
-## Key points
-- Job status, duration, worker and memory metrics; continuous logs; job run insights.
-- Data-quality results; EventBridge failure events to SNS.
-- Alarms on duration and missing runs; cost by tags.
+> “I optimize Glue cost mainly by processing less data and using the right amount of compute. I use incremental ingestion, early filtering, partitioned Parquet data, job bookmarks, optimized joins, and right-sized workers. I also monitor job duration and resource utilization to identify over-provisioned or unnecessarily frequent jobs.”
 
-## CWD context
-Alert when a scheduled job does not run, not only when it fails.
-`,code:``},{id:`36-how-would-you-troubleshoot-a-failed-glue-job`,category:`Glue + CWD RAG`,title:`How would you troubleshoot a failed Glue job?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you troubleshoot a failed Glue job?
+**Memory:**
+**Less Data → Parquet → Partition → Optimize Spark → Right-size → Monitor**
+
+
+
 
-## Short answer
-Troubleshoot a failed job from the logs, then the Spark UI, then the likely causes.
+
 
-## Key points
-- Permissions or KMS access; network and connection settings (VPC, security groups, endpoints).
-- Out-of-memory from skew or large partitions; schema mismatches and bad records.
-- Source API limits; bookmark issues; small-file explosions; timeouts.
 
-## CWD context
-Fix the cause, then rerun idempotently.
-`,code:``},{id:`37-how-would-you-optimize-glue-cost`,category:`Glue + CWD RAG`,title:`How would you optimize Glue cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize Glue cost?
 
-## Short answer
-Reduce Glue cost with right-sizing, incremental work and cheaper execution options.
+`,code:``}];function Xm(){return(0,M.jsx)($,{data:Ym,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Zm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Why would you use SageMaker in CWD?
 
-## Key points
-- Auto scaling and right-sized workers; Flex execution class for non-urgent jobs.
-- Bookmarks and incremental loads; efficient formats; compact small files.
-- Fewer or no crawlers; Lambda or Athena for small tasks; tags and budgets.
+I would use **Amazon SageMaker** when CWD needs to **build, train, evaluate, deploy, or monitor custom ML models**.
 
-## CWD context
-Idle workers and full reloads are the usual waste.
-`,code:``}];function Xm(){return(0,M.jsx)($,{data:Ym,title:`AWS Glue Cookbook`,subtitle:`ETL, Data Catalog, incremental ingestion and RAG data preparation`,icon:`🧪`,patternLabel:`Questions`})}var Zm=[{id:`38-why-would-you-use-sagemaker-in-cwd`,category:`SageMaker in CWD`,title:`Why would you use SageMaker in CWD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you use SageMaker in CWD?
+\`\`\`text
+Enterprise Data
+      ↓
+     Glue
+      ↓
+   S3 / Feature Data
+      ↓
+   SageMaker
+   ├── Train
+   ├── Evaluate
+   └── Deploy
+      ↓
+ CWD Worker / API
+\`\`\`
+
+### In CWD, examples
+
+* **Custom intent classifier** → identify user intent before Coordinator routing.
+* **Risk/fraud/anomaly models** → if the business requires custom ML.
+* **Custom ranking model** → improve retrieval/ranking.
+* **Model training & experimentation** → SageMaker training jobs.
+* **Model endpoint** → real-time predictions from Workers.
+* **Model monitoring** → detect model/data drift.
+
+### SageMaker vs Bedrock
+
+| Service       | CWD use                                                           |
+| ------------- | ----------------------------------------------------------------- |
+| **Bedrock**   | Foundation/LLM capabilities without managing model infrastructure |
+| **SageMaker** | Custom ML model training, deployment, tuning, and monitoring      |
 
-## Short answer
-SageMaker provides the build, train, deploy and monitor lifecycle for custom ML models that Bedrock does not cover.
+### Interview answer
 
-## Key points
-- Classifiers, rerankers, anomaly detection, forecasting and fine-tuned or open-source models.
-- Managed training, pipelines, registry, endpoints and monitoring.
-- VPC, KMS and IAM controls.
+> “In CWD, I would use SageMaker when we need custom ML models rather than only foundation models. For example, we could train an intent classifier or custom ranking model using enterprise data, deploy it through SageMaker, and call it from the Coordinator or Worker. Bedrock would handle foundation-model and GenAI workloads, while SageMaker would handle custom ML lifecycle requirements.”
 
-## CWD context
-Workers call SageMaker endpoints for scoring while Bedrock handles language tasks.
-`,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What role does SageMaker play alongside Bedrock?
+**Memory:**
+**Bedrock = Foundation Models | SageMaker = Custom ML Lifecycle**
+`,code:``},{id:`39-what-role-does-sagemaker-play-alongside-bedrock`,category:`SageMaker in CWD`,title:`What role does SageMaker play alongside Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What role does SageMaker play alongside Bedrock?
+
+Think of it simply:
+
+\`\`\`text
+                    CWD
+                     │
+          ┌──────────┴──────────┐
+          ↓                     ↓
+       Bedrock               SageMaker
+          │                     │
+   Foundation Models       Custom ML Models
+          │                     │
+   GenAI / LLM calls       Train / Fine-tune
+   Embeddings              Deploy / Monitor
+   Generation              Custom prediction
+\`\`\`
+
+### Bedrock
+
+Use when you need **foundation models / GenAI**:
+
+* LLM generation
+* embeddings
+* summarization
+* reasoning
+* RAG responses
+
+### SageMaker
+
+Use when you need **custom ML**:
+
+* train your own model
+* fine-tune/customize models
+* deploy ML endpoints
+* model evaluation and monitoring
+* custom classifiers/ranking models
 
-## Short answer
-Bedrock and SageMaker are complementary: Bedrock serves foundation models, SageMaker serves your own models.
+### CWD example
+
+\`\`\`text
+User Request
+     ↓
+Coordinator
+     ↓
+SageMaker → Intent Classification
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+Bedrock → LLM Response
+\`\`\`
+
+### Interview answer
+
+> “Bedrock and SageMaker complement each other. I would use Bedrock for foundation-model and GenAI workloads, while SageMaker would be used when CWD requires custom ML models, training, deployment, or monitoring. For example, SageMaker could classify the user intent, and Bedrock could generate the final customer briefing.”
+
+**Memory:**
+**Bedrock = Use Foundation Models | SageMaker = Build/Manage Custom ML**
+`,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`## SageMaker vs Bedrock
+
+|                | **Amazon Bedrock**                   | **Amazon SageMaker**                    |
+| -------------- | ------------------------------------ | --------------------------------------- |
+| Main purpose   | GenAI / Foundation Models            | Custom ML                               |
+| Training       | Usually not your main focus          | Train custom models                     |
+| Models         | Managed foundation models            | Bring/train/customize ML models         |
+| Fine-tuning    | Supported for some foundation models | Extensive customization                 |
+| Deployment     | Managed model inference              | Custom model endpoints                  |
+| CWD example    | Customer briefing, RAG, LLM response | Intent classifier, custom ranking model |
+| Infrastructure | More managed                         | More control                            |
 
-## Key points
-- Bedrock: general language and generative tasks through an API, no training.
-- SageMaker: custom-trained models with full lifecycle control.
+### Simple CWD example
 
-## CWD context
-A single workflow may call both, for example a classifier then an LLM.
-`,code:``},{id:`40-sagemaker-vs-bedrock`,category:`SageMaker in CWD`,title:`SageMaker vs Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# SageMaker vs Bedrock?
+\`\`\`text
+User
+ ↓
+Coordinator
+ ├── SageMaker → Custom Intent Classifier
+ │
+ └── Bedrock → LLM / RAG Response
+\`\`\`
 
-## Short answer
-Bedrock is a managed foundation-model API; SageMaker is a platform to build and host any ML model.
+### Interview answer
 
-## Key points
-- Bedrock: per-token pricing, no infrastructure, fastest for general language tasks.
-- SageMaker: your data and code, pay for instances, more control and more responsibility.
+> “Bedrock is primarily for consuming foundation models and building GenAI applications, while SageMaker is for developing and managing custom ML models. In CWD, I would use Bedrock for LLM-based generation and RAG, and SageMaker when we need custom model training, deployment, or specialized ML inference.”
 
-## CWD context
-Choose by the task, not by preference.
-`,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker instead of Bedrock?
+**Memory:**
+**Bedrock = GenAI | SageMaker = Custom ML**
+`,code:``},{id:`41-when-would-you-use-sagemaker-instead-of-bedrock`,category:`SageMaker in CWD`,title:`When would you use SageMaker instead of Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`## When would you use SageMaker instead of Bedrock?
 
-## Short answer
-Use SageMaker when you need a custom, cheap, fast or self-controlled model.
-
-## Key points
-- Custom-trained or fine-tuned models; open-source models not offered on Bedrock.
-- Strict latency or cost for a narrow task; deterministic outputs.
-- Batch scoring at scale; control of the container and hardware.
-- Bedrock Custom Model Import is a middle path for some models.
-
-## CWD context
-A small classifier is often better than an LLM for routing.
-`,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What models would you deploy using SageMaker?
-
-## Short answer
-Deploy narrow, task-specific models on SageMaker.
-
-## Key points
-- Intent or routing classifier; document and sensitivity classifier.
-- Reranker, domain-tuned embeddings, anomaly detection on telemetry.
-- Forecasting, propensity scoring, ticket triage, small fine-tuned language models.
-
-## CWD context
-Add each only when evaluation shows a clear win over a prompt.
-`,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Would you use SageMaker for foundation models or traditional ML?
-
-## Short answer
-SageMaker is mainly for traditional and task-specific ML plus small fine-tuned models; foundation models mostly come from Bedrock.
-
-## Key points
-- JumpStart can host open foundation models where control or steady high-volume cost justifies it.
-
-## CWD context
-Default to Bedrock for foundation models.
-`,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would SageMaker support the CWD ML pipeline?
-
-## Short answer
-SageMaker supports the ML pipeline from prepared data to a monitored endpoint.
-
-## Key points
-- Glue prepares data in S3; Processing and Training jobs build the model.
-- Evaluation, Model Registry, endpoint deployment, Model Monitor and retraining triggers.
-- SageMaker Pipelines orchestrates the steps.
-
-## CWD context
-The same governance applies to models as to prompts.
-`,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you deploy a custom model to SageMaker?
-
-## Short answer
-Deploy a custom model by packaging the artifact and container, then creating a model, endpoint configuration and endpoint.
-
-## Key points
-- Model artifact in S3 and an inference container (prebuilt or custom in ECR).
-- Configure instance type, count and variants; deploy from the Model Registry through a pipeline.
-- VPC configuration, KMS, autoscaling and testing.
-
-## CWD context
-Deploy a specific registered version, never "latest".
-`,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Workers consume a SageMaker endpoint?
-
-## Short answer
-Workers invoke the endpoint through the SageMaker runtime over a private endpoint with their task role.
-
-## Key points
-- sagemaker:InvokeEndpoint scoped to that endpoint's ARN; interface VPC endpoint for the runtime.
-- Typed payload, timeout, backoff retries and a circuit breaker; validate the response.
-- Optionally wrap it in an MCP tool.
-
-## CWD context
-Pass the correlation ID so calls appear in traces.
-`,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:`# API Gateway → Worker → SageMaker architecture?
-
-## Short answer
-The Worker sits between CWD and the endpoint: API Gateway → ALB → Coordinator → Delegator → Worker → SageMaker.
-
-## Key points
-- The endpoint is private and never exposed to clients or API Gateway directly.
-- The Worker adds validation, identity context, retries and logging.
-- For slow or large jobs: Worker → SQS → asynchronous endpoint, with results in S3.
-
-## CWD context
-The Worker is the policy enforcement point.
-`,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you secure SageMaker endpoints?
-
-## Short answer
-Secure endpoints with network isolation, least-privilege identity and encryption.
-
-## Key points
-- VPC-only deployment, interface endpoint with policy, no public access.
-- IAM limited to InvokeEndpoint on specific endpoints; KMS for volumes, artifacts and outputs.
-- Private ECR images; input validation; CloudTrail; no sensitive payloads in logs.
-
-## CWD context
-Only Worker roles may invoke.
-`,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor SageMaker endpoints?
-
-## Short answer
-Monitor endpoints with CloudWatch metrics, logs and Model Monitor.
-
-## Key points
-- Invocations, model and overhead latency, 4XX and 5XX errors, CPU, memory and GPU.
-- Alarms on p95 latency, errors and saturation; backlog metrics for asynchronous endpoints.
-- Model Monitor for data and model quality.
-
-## CWD context
-Track quality as well as availability.
-`,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle SageMaker endpoint failures?
-
-## Short answer
-Handle endpoint failures with redundancy, retries, circuit breakers and fallbacks.
-
-## Key points
-- At least two instances across AZs with automatic replacement.
-- Backoff retries on 5xx and throttling; circuit breaker.
-- Fallback to the previous version, a simpler model, a rule or a cached result; queue for asynchronous retries.
-- Deployment guardrails with automatic rollback.
-
-## CWD context
-Log every fallback so silent quality loss is visible.
-`,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you train a model using SageMaker?
-
-## Short answer
-Train a model with a training job that reads data from S3 and writes an artifact to S3.
-
-## Key points
-- Choose a container or algorithm, script, instance type and count, hyperparameters.
-- Input channels for training and validation data; IAM role, VPC and KMS.
-- Optional spot instances; metrics logged; register the resulting model.
-
-## CWD context
-Keep the job definition in code so it can be repeated.
-`,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`# What data would come from S3?
-
-## Short answer
-Training data comes from curated, versioned S3 datasets.
-
-## Key points
-- Cleaned and labelled data in Parquet or CSV under immutable, versioned prefixes; feature tables.
-- Training, validation and test splits; access through the job's role; encryption with KMS.
-- Use fast-file or pipe modes for very large data.
-
-## CWD context
-Record the dataset version with each model.
-`,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would Glue prepare training data for SageMaker?
-
-## Short answer
-Glue prepares training data by cleaning, joining, engineering features and splitting.
-
-## Key points
-- Deduplicate and join sources; create features; split train, validation and test without leakage.
-- Write versioned Parquet to S3; catalogue tables; data-quality rules; anonymise PII.
-- EventBridge starts the training pipeline when data is ready.
-
-## CWD context
-Data leakage between splits is the most common silent error.
-`,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:`# Explain S3 → Glue → SageMaker Training.
-
-## Short answer
-The flow is raw S3 → Glue curation → versioned curated dataset → SageMaker training → model artifact → evaluation → registry.
-
-## Key points
-- Glue outputs a versioned dataset; the training job reads it as a channel.
-- The artifact lands in S3 and is evaluated before registration.
-- SageMaker Pipelines or Step Functions orchestrates.
-
-## CWD context
-Each stage's output is immutable and traceable.
-`,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform distributed training?
-
-## Short answer
-Distribute training across instances when data or models are too large for one.
-
-## Key points
-- Data parallelism (SageMaker distributed data parallel, PyTorch DDP, Horovod).
-- Model or sharded parallelism (FSDP, DeepSpeed) for large models; HyperPod for very large training.
-- Managed spot with checkpoints; tune batch size and network.
-
-## CWD context
-Most CWD models are small; scale out only when needed.
-`,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you select SageMaker instance types?
-
-## Short answer
-Choose instance types from the workload, and benchmark before committing.
-
-## Key points
-- CPU families for tabular and classic ML; GPU families for deep learning; memory-optimised for large feature sets.
-- Spot training with checkpointing to cut cost; profile utilisation.
-- Start small and scale.
-
-## CWD context
-Idle GPUs are the expensive mistake.
-`,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you manage training datasets?
-
-## Short answer
-Manage datasets as versioned, catalogued and access-controlled assets.
-
-## Key points
-- Immutable S3 snapshots with a recorded dataset version; catalogue tables.
-- SageMaker Feature Store for consistent online and offline features.
-- Lineage tracking, quality checks, retention and data cards.
-
-## CWD context
-You must be able to say exactly which data trained which model.
-`,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you track experiments?
-
-## Short answer
-Track experiments with SageMaker Experiments or managed MLflow.
-
-## Key points
-- Log parameters, metrics, artifacts, dataset versions and code commit.
-- Compare runs; tag; autologging from training jobs.
-
-## CWD context
-Every registered model links back to its run.
-`,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you version models?
-
-## Short answer
-Version models in the SageMaker Model Registry.
-
-## Key points
-- Model package groups with versions, metrics, container image and approval status.
-- Lineage and cross-account sharing.
-- Endpoints reference a specific version.
-
-## CWD context
-Never deploy an unregistered model.
-`,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reproduce a previous training run?
-
-## Short answer
-Reproduce a run by pinning everything that influenced it.
-
-## Key points
-- Code commit and container image digest; dataset version; hyperparameters and seeds; library versions.
-- Rerun from the recorded configuration through the pipeline.
-- Verify metrics within a tolerance and check lineage records.
-
-## CWD context
-Reproducibility is required for audits.
-`,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain a SageMaker MLOps pipeline.
-
-## Short answer
-A SageMaker MLOps pipeline is an automated DAG from data processing to a registered, deployable model.
-
-## Key points
-- Processing → training → evaluation → condition on metrics → register as pending approval → deploy after approval → monitor.
-- Triggered by schedule, EventBridge or CodePipeline; parameterised with caching.
-
-## CWD context
-The pipeline definition lives in Git.
-`,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you automate model training?
-
-## Short answer
-Automate training with events and schedules that start the pipeline.
-
-## Key points
-- EventBridge rules for new data, schedules or drift alarms.
-- Step Functions or CodePipeline for orchestration; notifications and retries.
-- Parameterise the dataset version.
-
-## CWD context
-Automated training still goes through the approval gate.
-`,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model validation?
-
-## Short answer
-Validate data before training and the model before registration.
-
-## Key points
-- Data: schema, ranges and data-quality rules.
-- Model: metric sanity checks, holdout inference test, container smoke test, latency test.
-- Bias and explainability checks with Clarify.
-
-## CWD context
-Fail early on bad data.
-`,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model evaluation?
-
-## Short answer
-Evaluate the candidate against the current champion on a held-out test set.
-
-## Key points
-- A Processing step computes metrics, including per-slice results.
-- A Condition step enforces thresholds; the report is stored in S3.
-- Clarify for bias and explainability; business-metric checks.
-
-## CWD context
-Do not promote a model that is better overall but worse on a critical slice.
-`,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model approval?
-
-## Short answer
-Model approval is a status on the model package, set by people or automated checks.
-
-## Key points
-- PendingManualApproval → Approved or Rejected.
-- An EventBridge event on approval triggers deployment.
-- IAM controls who can approve; CloudTrail records it.
-
-## CWD context
-Approval and deployment are separate steps by design.
-`,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is SageMaker Model Registry?
-
-## Short answer
-The SageMaker Model Registry catalogues model versions and their approval state.
-
-## Key points
-- Model package groups with versions, metadata, metrics and lineage.
-- The promotion boundary between training and deployment.
-- Supports cross-account deployment.
-
-## CWD context
-The registry is the model inventory for governance.
-`,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you promote a model from dev → test → production?
-
-## Short answer
-Promote by deploying the same registered version through each stage with tests and approvals.
-
-## Key points
-- Separate accounts; registry shared or artifacts copied.
-- CI/CD (CodePipeline or SageMaker Projects) deploys the version to each stage.
-- Endpoint configuration per environment; approval between stages.
-
-## CWD context
-Promote by version, never by retraining or copying by hand.
-`,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model rollback?
-
-## Short answer
-Roll back by returning the endpoint to the previous configuration or version.
-
-## Key points
-- Deployment guardrails can roll back automatically on CloudWatch alarms.
-- Manual: update the endpoint to the previous endpoint configuration.
-- Old versions stay in the registry; verify metrics afterwards.
-
-## CWD context
-Keep the previous configuration available until the new one is proven.
-`,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect model drift?
-
-## Short answer
-Detect model quality drift by comparing predictions with ground truth.
-
-## Key points
-- Model Monitor model-quality jobs compare predictions with labels against baseline metrics.
-- Scheduled runs with alarms; proxy metrics such as prediction distribution when labels are delayed.
-
-## CWD context
-Build a label feedback loop from Worker outcomes.
-`,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you detect data drift?
-
-## Short answer
-Detect data drift by comparing inference inputs with training baselines.
-
-## Key points
-- Enable data capture to S3; baseline statistics and constraints from training data.
-- Scheduled Model Monitor jobs report violations; CloudWatch alarms.
-- Clarify tracks feature attribution drift.
-
-## CWD context
-Data drift is a warning; quality drift is the proof.
-`,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor model quality?
-
-## Short answer
-Monitor model quality with technical and business metrics over time.
-
-## Key points
-- Accuracy-type metrics per slice, latency and errors.
-- Label pipeline, dashboards, thresholds and periodic comparison with the champion.
-- Feedback from Worker outcomes.
-
-## CWD context
-Tie model metrics to the business outcome they support.
-`,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform continuous training?
-
-## Short answer
-Continuous training retrains and redeploys automatically, safely.
-
-## Key points
-- Triggers: drift alarms, new labelled data, schedule.
-- Pipeline retrains, evaluates against the current model and registers only if better.
-- Approval, then canary deployment; guard against feedback loops and bad data; control cost.
-
-## CWD context
-Automation must not bypass the approval gate for production.
-`,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate SageMaker with CI/CD?
-
-## Short answer
-Integrate SageMaker with CI/CD through SageMaker Projects and standard pipelines.
-
-## Key points
-- Code changes trigger pipeline runs; registry approval triggers deployment.
-- Infrastructure as code for endpoints; tests and approvals; cross-account deployment.
-- Same CodePipeline patterns as the rest of CWD.
-
-## CWD context
-One delivery approach for services and models keeps operations consistent.
-`,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Bedrock for LLM inference but SageMaker for another ML model?
-
-## Short answer
-Use Bedrock for general language work and SageMaker for custom models with different lifecycles and economics.
-
-## Key points
-- Bedrock: prompts, evaluation, per-token cost, no training.
-- SageMaker: data, training, registry, endpoints, instance cost.
-- A narrow prediction task with labelled data is usually cheaper and more predictable on SageMaker.
-
-## CWD context
-Two lifecycles, two governance paths, one Worker interface.
-`,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you decide whether a model belongs in Bedrock or SageMaker?
-
-## Short answer
-Decide by task type, data, cost and control needs, and confirm with a comparison.
-
-## Key points
-- General language or generative task an existing model handles well → Bedrock.
-- Narrow prediction with labelled data, strict latency or cost, model ownership, or a model not on Bedrock → SageMaker.
-- Compare cost at expected volume and evaluate both on the golden dataset.
-
-## CWD context
-Revisit the decision when volume or model options change.
-`,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would a Worker call a SageMaker endpoint?
-
-## Short answer
-A Worker calls the endpoint through a private runtime endpoint, or through an MCP tool that wraps it.
-
-## Key points
-- Task role with InvokeEndpoint on the specific endpoint; interface VPC endpoint.
-- Typed schema, backoff retries, circuit breaker and correlation ID via custom attributes.
-- Validate the response before using it.
-
-## CWD context
-An MCP wrapper gives a uniform, governed interface across tools.
-`,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle SageMaker inference latency?
-
-## Short answer
-Handle inference latency by measuring where it goes and fixing the biggest part.
-
-## Key points
-- Separate model latency from overhead latency; right-size the instance.
-- Model optimisation (compilation, quantisation), batching, smaller payloads.
-- Keep endpoints warm; co-locate in the same region; cache predictions; use asynchronous inference for slow work.
-
-## CWD context
-Set timeouts and fallbacks based on a latency budget.
-`,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you scale SageMaker endpoints?
-
-## Short answer
-Scale endpoints with autoscaling on invocations per instance, with headroom.
-
-## Key points
-- Target-tracking on invocations per instance with a value from load tests; minimum of two instances.
-- Scheduled scaling for known peaks; multi-model endpoints or inference components for many models.
-- Asynchronous endpoints scale on backlog and can scale to zero.
-
-## CWD context
-Load test to find real per-instance capacity.
-`,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Real-time vs asynchronous SageMaker inference?
-
-## Short answer
-Real-time endpoints serve low-latency requests; asynchronous endpoints queue large or slow requests.
-
-## Key points
-- Real-time: always-on, small payloads, short timeout.
-- Asynchronous: payloads up to about 1 GB, processing up to an hour, results in S3, scale to zero.
-- Batch transform for offline datasets.
-
-## CWD context
-Choose by latency need and payload size.
-`,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker Serverless Inference?
-
-## Short answer
-Serverless Inference suits intermittent traffic that can tolerate cold starts.
-
-## Key points
-- Pay per request; no instance management.
-- Memory and concurrency limits; typically no GPU.
-- Poor fit for steady, latency-critical traffic.
-
-## CWD context
-Good for small models used occasionally.
-`,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`# When would you use SageMaker Asynchronous Inference?
-
-## Short answer
-Asynchronous inference suits large payloads, long processing and bursty traffic.
-
-## Key points
-- Workers submit an input in S3 and receive results by notification or polling.
-- Can scale to zero when idle.
-- Good for document processing and heavy scoring.
-
-## CWD context
-Not suitable when the user waits for an immediate answer.
-`,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement autoscaling?
-
-## Short answer
-Implement autoscaling with a scalable target, a tracking policy and sensible limits.
-
-## Key points
-- Minimum and maximum instances; target value from load testing; cooldowns.
-- Backlog-based metrics for asynchronous endpoints; scheduled scaling for known peaks.
-- Alarms; instance quota checks.
-
-## CWD context
-Keep some headroom; scale-out is not instant.
-`,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you handle endpoint throttling?
-
-## Short answer
-Handle endpoint throttling with retries, queuing, capacity and fallback.
-
-## Key points
-- Backoff with jitter and a circuit breaker.
-- Autoscale headroom or more instances; per-tenant rate limits.
-- Queue work through SQS to an asynchronous endpoint; fall back to another model.
-
-## CWD context
-Throttling under load means capacity planning is due.
-`,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you implement model fallback?
-
-## Short answer
-Implement model fallback as an ordered chain, monitored and evaluated.
-
-## Key points
-- Primary model → previous stable version or smaller model → rule, default or cached result → human escalation.
-- A circuit breaker switches paths; multi-variant or separate endpoints.
-- Evaluate the fallback quality and log every use.
-
-## CWD context
-Silent quality drops are worse than visible failures.
-`,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform A/B testing between models?
-
-## Short answer
-A/B test with production variants that split traffic by weight.
-
-## Key points
-- Variants under one endpoint, for example 90/10; optionally target a variant explicitly.
-- Compare invocation metrics and model quality per variant; use statistics.
-- Adjust weights with UpdateEndpointWeightsAndCapacities and promote the winner.
-
-## CWD context
-Define success metrics before starting.
-`,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you perform canary deployment?
-
-## Short answer
-Canary with deployment guardrails or shadow testing.
-
-## Key points
-- Blue-green deployment with canary or linear traffic shifting and automatic rollback on alarms.
-- Shadow variants receive copies of traffic without affecting users.
-- Watch latency, errors and quality.
-
-## CWD context
-Shadow testing is safest for high-risk models.
-`,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you monitor inference cost?
-
-## Short answer
-Monitor inference cost by usage type, utilisation and cost per prediction.
-
-## Key points
-- Cost Explorer by SageMaker usage type and tags; endpoint hours usually dominate.
-- Idle endpoints show as low invocations or utilisation; cost per prediction = endpoint cost ÷ invocations.
-- Savings Plans, budgets and anomaly alerts.
-
-## CWD context
-Delete or scale down unused endpoints quickly.
-`,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you optimize inference latency?
-
-## Short answer
-Optimise inference latency by optimising the model, the hardware and the path.
-
-## Key points
-- Quantisation, compilation, distillation; GPU or purpose-built inference hardware where it pays off.
-- Batching, warm containers, small payloads, fast feature lookup or caching.
-- Same-region private endpoints and keep-alive connections; asynchronous handling for slow parts.
-
-## CWD context
-Measure model latency versus overhead before optimising.
+Use **SageMaker** when the requirement is primarily **custom ML/model lifecycle**, rather than simply consuming a managed foundation model.
+
+### Examples
+
+\`\`\`text
+Need custom ML?
+      ↓
+   SageMaker
+   ├── Train custom model
+   ├── Fine-tune/customize
+   ├── Custom inference endpoint
+   ├── Custom algorithms
+   └── Model monitoring
+\`\`\`
+
+### CWD example
+
+If CWD needs a **custom intent-classification model** trained on Onsemi historical requests, I would use SageMaker.
+
+\`\`\`text
+User Request
+     ↓
+SageMaker Custom Classifier
+     ↓
+Intent
+     ↓
+Coordinator
+     ↓
+Delegator → Worker
+\`\`\`
+
+For generating a customer briefing using an LLM, I would use **Bedrock**.
+
+### Interview answer
+
+> “I would choose SageMaker when I need significant control over training, customization, deployment, or monitoring of a custom ML model. I would choose Bedrock when I primarily need managed foundation models for GenAI capabilities such as generation, embeddings, or RAG.”
+
+**Memory:**
+**Custom ML → SageMaker | Foundation-model GenAI → Bedrock**
+`,code:``},{id:`42-what-models-would-you-deploy-using-sagemaker`,category:`SageMaker in CWD`,title:`What models would you deploy using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What models would you deploy using SageMaker?
+
+In CWD, I would deploy **specialized custom ML models** where a foundation model from Bedrock is not the best fit.
+
+### Examples
+
+\`\`\`text
+SageMaker
+   ├── Intent Classification
+   ├── Custom Ranking
+   ├── Anomaly Detection
+   ├── Forecasting
+   ├── Recommendation
+   └── Custom/Fine-tuned NLP Models
+\`\`\`
+
+### CWD examples
+
+* **Intent classifier** → Customer Briefing vs IT Support vs other intents
+* **Custom ranking model** → rank retrieved enterprise documents
+* **Anomaly detection** → detect unusual manufacturing/operational patterns
+* **Forecasting model** → predict business/operational metrics
+* **Custom NLP model** → specialized enterprise classification/extraction
+
+### Interview answer
+
+> “In CWD, I would use SageMaker for specialized models such as a custom intent classifier, ranking model, anomaly detection model, or forecasting model. These models would be trained on enterprise-specific data and exposed through SageMaker endpoints for real-time inference. Bedrock would remain the primary service for foundation-model-based GenAI tasks.”
+
+**Memory:**
+**SageMaker → Specialized Custom ML | Bedrock → Foundation-model GenAI**
+`,code:``},{id:`43-would-you-use-sagemaker-for-foundation-models-or-traditional-ml`,category:`SageMaker in CWD`,title:`Would you use SageMaker for foundation models or traditional ML?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Would you use SageMaker for foundation models or traditional ML?
+
+**Both**, but the use cases differ.
+
+* **Traditional ML:** classification, regression, forecasting, anomaly detection, recommendation.
+* **Foundation models:** SageMaker can also train, fine-tune, deploy, and customize foundation models when you need more control over the model lifecycle.
+
+For **CWD**, I would typically use:
+
+\`\`\`text
+Traditional / Custom ML → SageMaker
+Foundation-model GenAI → Bedrock
+\`\`\`
+
+### Interview answer
+
+> “SageMaker supports both traditional ML and foundation-model workflows. In CWD, I would primarily use SageMaker for custom or specialized ML models where I need training and lifecycle control, while using Bedrock for managed foundation-model capabilities such as LLM generation and embeddings.”
+`,code:``},{id:`44-how-would-sagemaker-support-the-cwd-ml-pipeline`,category:`SageMaker in CWD`,title:`How would SageMaker support the CWD ML pipeline?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would SageMaker support the CWD ML pipeline?
+
+SageMaker would manage the **custom ML lifecycle** from training to deployment and monitoring.
+
+\`\`\`text
+Enterprise Data
+      ↓
+     Glue
+      ↓
+      S3
+      ↓
+ SageMaker
+ ├── Prepare / Feature Engineering
+ ├── Train
+ ├── Evaluate
+ ├── Model Registry
+ └── Deploy Endpoint
+      ↓
+ CWD Coordinator / Worker
+      ↓
+ Prediction
+\`\`\`
+
+### CWD example
+
+For a **custom intent classifier**:
+
+1. **Glue** prepares historical user requests.
+2. Data is stored in **S3**.
+3. **SageMaker** trains the classifier.
+4. Evaluate accuracy/F1 and validate against a test dataset.
+5. Register the approved model.
+6. Deploy it to a SageMaker endpoint.
+7. CWD Coordinator calls the endpoint for intent classification.
+8. Monitor model performance and data drift.
+
+### Interview answer
+
+> “SageMaker would support the CWD custom ML pipeline by taking prepared data from S3, training and evaluating the model, registering the approved version, deploying it for inference, and monitoring it in production. For example, a custom intent classifier could run on a SageMaker endpoint and provide the intent to the CWD Coordinator.”
+`,code:``},{id:`45-how-would-you-deploy-a-custom-model-to-sagemaker`,category:`SageMaker in CWD`,title:`How would you deploy a custom model to SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you deploy a custom model to SageMaker?
+
+The simple flow is:
+
+\`\`\`text
+Train Model
+    ↓
+Save Model Artifact
+    ↓
+S3
+    ↓
+SageMaker Model
+    ↓
+Endpoint Configuration
+    ↓
+SageMaker Endpoint
+    ↓
+CWD Coordinator / Worker
+\`\`\`
+
+### Practical steps
+
+1. **Train** the model using SageMaker training or your own environment.
+2. **Package the model artifact** and store it in **S3**.
+3. Create a **SageMaker Model** with the model artifact + inference container.
+4. Create an **endpoint configuration** with instance type/count.
+5. Deploy a **SageMaker real-time endpoint**.
+6. CWD calls the endpoint using the **SageMaker Runtime API**.
+7. Monitor latency, errors, throughput, and model quality.
+
+### Interview answer
+
+> “I would package the trained model and store the artifact in S3, create a SageMaker model with the appropriate inference container, configure the endpoint, and deploy it as a real-time endpoint. The CWD Coordinator or Worker can then invoke the endpoint for predictions. I would also enable monitoring and use versioned models so we can roll back safely.”
+`,code:``},{id:`46-how-would-workers-consume-a-sagemaker-endpoint`,category:`SageMaker in CWD`,title:`How would Workers consume a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Glue trigger downstream processing?
+
+I would trigger downstream processing **only after the Glue job succeeds**.
+
+\`\`\`text
+Glue ETL Job
+     ↓
+  SUCCESS
+     ↓
+EventBridge
+     ↓
+Step Functions / Lambda
+     ↓
+Embedding
+     ↓
+OpenSearch
+\`\`\`
+
+### Two common approaches
+
+**1. EventBridge**
+
+* Glue job completes successfully.
+* EventBridge detects the Glue \`SUCCEEDED\` event.
+* Triggers Lambda or another workflow.
+
+**2. Step Functions**
+
+* Better when multiple steps are required.
+* Example:
+  \`Glue → Embedding → OpenSearch → Validation\`
+
+### CWD example
+
+\`\`\`text
+S3
+ ↓
+Glue ETL
+ ↓
+SUCCESS
+ ↓
+Step Functions
+ ↓
+Chunk/Embed
+ ↓
+OpenSearch
+ ↓
+RAG Worker
+\`\`\`
+
+If Glue **fails**, downstream processing should **not start**.
+
+### Interview answer
+
+> “After a successful Glue ETL job, I would use EventBridge for event-driven triggering or Step Functions for a multi-step workflow. For CWD, a typical flow would be Glue → Step Functions → embedding → OpenSearch. If Glue fails, I would stop the downstream workflow and alert through CloudWatch.”
+`,code:``},{id:`47-api-gateway-worker-sagemaker-architecture`,category:`SageMaker in CWD`,title:`API Gateway → Worker → SageMaker architecture?`,difficulty:`Advanced`,time:`~15 min`,concept:`## API Gateway → Worker → SageMaker architecture
+
+For CWD, I would use this when a **Worker needs a custom ML prediction**.
+
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+Coordinator
+  ↓
+Delegator
+  ↓
+ML Worker
+  ↓
+SageMaker Endpoint
+  ↓
+Prediction
+  ↓
+ML Worker
+  ↓
+Delegator
+  ↓
+Coordinator
+  ↓
+Response
+\`\`\`
+
+### Example: Intent Classification
+
+\`\`\`text
+User: "Show me customer 123 incidents"
+              ↓
+          API Gateway
+              ↓
+          Coordinator
+              ↓
+        ML Delegator
+              ↓
+         ML Worker
+              ↓
+     SageMaker Classifier
+              ↓
+       "IT_SUPPORT"
+              ↓
+        Coordinator
+\`\`\`
+
+### What each component does
+
+* **API Gateway** → authentication, throttling, API boundary
+* **Coordinator** → understands request and orchestrates workflow
+* **Delegator** → routes to the appropriate Worker
+* **ML Worker** → prepares input, calls SageMaker, validates prediction
+* **SageMaker** → hosts the custom ML model and returns prediction
+
+### Important
+
+The **Worker should not directly trust the model output**. It should validate the prediction/confidence before using it for routing.
+
+### Interview answer
+
+> “In CWD, API Gateway receives the request and the Coordinator orchestrates it through the appropriate Delegator. The Delegator invokes an ML Worker, which calls the SageMaker endpoint for custom model inference. The Worker validates the prediction and returns it to the orchestration flow. I would use this pattern for custom ML models such as intent classification or ranking, while using Bedrock for foundation-model-based generation.”
+`,code:``},{id:`48-how-would-you-secure-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you secure SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you secure SageMaker endpoints?
+
+I would secure them at **network, identity, and application levels**.
+
+\`\`\`text id="j2p8k4"
+CWD Worker
+    ↓
+IAM Role
+    ↓
+Private VPC
+    ↓
+SageMaker Endpoint
+    ↓
+Custom Model
+\`\`\`
+
+### Key controls
+
+1. **Private networking**
+
+   * Deploy SageMaker endpoint inside a **VPC**.
+   * Avoid public exposure where possible.
+
+2. **IAM**
+
+   * Give the CWD Worker an IAM role with **least-privilege \`sagemaker:InvokeEndpoint\`** permission.
+   * No hardcoded AWS credentials.
+
+3. **Encryption**
+
+   * Encrypt model artifacts in S3 using **KMS**.
+   * Encrypt data in transit using TLS.
+
+4. **Access control**
+
+   * Allow only authorized CWD services to invoke the endpoint.
+   * Use VPC endpoint/private connectivity where applicable.
+
+5. **Monitoring & auditing**
+
+   * Use **CloudTrail** for API activity.
+   * Use **CloudWatch** for endpoint metrics and logs.
+   * Avoid logging sensitive customer data.
+
+### Interview answer
+
+> “I would secure SageMaker endpoints using private VPC networking, IAM least-privilege roles, KMS encryption, TLS, and restricted endpoint access. The CWD Worker would use its IAM task role to invoke only the required SageMaker endpoint. I would also use CloudTrail and CloudWatch for auditing and monitoring.”
+
+**Memory:**
+**Private → IAM → Encrypt → Restrict → Monitor**
+`,code:``},{id:`49-how-would-you-monitor-sagemaker-endpoints`,category:`SageMaker in CWD`,title:`How would you monitor SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you monitor SageMaker endpoints?
+
+I would monitor **infrastructure + inference performance + model quality**.
+
+\`\`\`text
+SageMaker Endpoint
+       ↓
+CloudWatch
+ ├── Latency
+ ├── Invocations
+ ├── Errors
+ ├── CPU / Memory
+ └── Throttling
+       ↓
+Alarms → SNS / Incident
+\`\`\`
+
+### What I monitor
+
+1. **Latency** – P50/P95/P99 inference latency.
+2. **Errors** – 4xx/5xx and failed invocations.
+3. **Traffic** – invocation count and request rate.
+4. **Resource utilization** – CPU, memory, instance utilization.
+5. **Model quality** – accuracy, precision/recall, F1 where labels are available.
+6. **Data/model drift** – detect changes in production input data or model behavior.
+7. **Cost** – endpoint instance usage and utilization.
+
+### CWD example
+
+\`\`\`text
+ML Worker
+   ↓
+SageMaker Endpoint
+   ↓
+CloudWatch
+   ↓
+High P95 / Error Rate
+   ↓
+Alarm
+   ↓
+Investigate / Scale / Rollback
+\`\`\`
+
+### Interview answer
+
+> “I would use CloudWatch to monitor SageMaker endpoint latency, invocation rate, errors, resource utilization, and throttling. At the ML level, I would monitor model quality and data drift. I would configure alarms for abnormal latency or error rates and use CloudTrail for API auditing.”
+
+**Memory:**
+**Traffic → Latency → Errors → Resources → Model Quality → Drift**
+`,code:``},{id:`50-how-would-you-handle-sagemaker-endpoint-failures`,category:`SageMaker in CWD`,title:`How would you handle SageMaker endpoint failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle SageMaker endpoint failures?
+
+I would handle them with **retry, fallback, health checks, and rollback**.
+
+\`\`\`text
+ML Worker
+   ↓
+SageMaker Endpoint
+   ↓
+Failure?
+ ┌──────────────┐
+ │              │
+Retry        Persistent
+ │              ↓
+Backoff      Fallback
+ │              ↓
+Success?    Error/DLQ
+                ↓
+             Alert
+\`\`\`
+
+### Practical approach
+
+1. **Detect** – CloudWatch alarms on errors, latency, throttling.
+2. **Retry** – transient failures with exponential backoff + jitter.
+3. **Timeout** – don't let the Worker wait indefinitely.
+4. **Fallback** – use another model/endpoint or rule-based classification if appropriate.
+5. **Circuit breaker** – temporarily stop calling an unhealthy endpoint.
+6. **Scale** – increase endpoint capacity if the problem is traffic-related.
+7. **Rollback** – if a new model version caused failures, route traffic back to the previous version.
+8. **Alert** – CloudWatch → SNS/incident system.
+
+### CWD example
+
+\`\`\`text
+Worker
+  ↓
+SageMaker v2
+  ↓ failure
+Retry → Retry
+  ↓
+Still failing
+  ↓
+SageMaker v1 / fallback
+  ↓
+Continue CWD workflow
+\`\`\`
+
+### Interview answer
+
+> “I would first detect the failure through CloudWatch, then distinguish transient failures from persistent failures. For transient errors, I use bounded retries with exponential backoff and jitter. For persistent failures, I use a circuit breaker and fallback model or endpoint where appropriate. If the issue is caused by a new model version, I roll back to the previous version and alert the operations team.”
+`,code:``},{id:`51-how-would-you-train-a-model-using-sagemaker`,category:`SageMaker Training`,title:`How would you train a model using SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you train a model using SageMaker?
+
+Simple flow:
+
+\`\`\`text
+Enterprise Data
+      ↓
+     Glue
+      ↓
+      S3
+      ↓
+SageMaker Training Job
+      ↓
+Model Artifact
+      ↓
+      S3
+      ↓
+Model Registry
+      ↓
+SageMaker Endpoint
+\`\`\`
+
+### Practical steps
+
+1. **Prepare data** using Glue and store it in S3.
+2. **Split data** into training/validation/test datasets.
+3. Create a **SageMaker training job** with the algorithm/framework and compute instance.
+4. SageMaker reads training data from **S3**.
+5. **Train the model** and tune hyperparameters if required.
+6. Evaluate against the validation/test dataset.
+7. Store the **model artifact in S3**.
+8. Register the approved model in **SageMaker Model Registry**.
+9. Deploy it to a SageMaker endpoint for inference.
+
+### CWD example
+
+For an **intent classifier**:
+
+\`\`\`text
+Historical CWD Requests
+        ↓
+       Glue
+        ↓
+        S3
+        ↓
+SageMaker Training
+        ↓
+Intent Classifier
+        ↓
+Evaluation
+        ↓
+Model Registry
+        ↓
+Endpoint
+        ↓
+CWD ML Worker
+\`\`\`
+
+### Interview answer
+
+> “I would prepare and clean the training data using Glue and store it in S3. Then I would run a SageMaker training job, evaluate the model against validation and test data, register the approved model, and deploy it to a SageMaker endpoint. The CWD ML Worker would invoke that endpoint for real-time predictions.”
+
+**Memory:**
+**Prepare → S3 → Train → Evaluate → Register → Deploy**
+`,code:``},{id:`52-what-data-would-come-from-s3`,category:`SageMaker Training`,title:`What data would come from S3?`,difficulty:`Advanced`,time:`~15 min`,concept:`## What data would come from S3?
+
+For SageMaker training in CWD, **S3 would store the training datasets and model artifacts**.
+
+\`\`\`text id="g3tq0k"
+Enterprise Sources
+      ↓
+     Glue
+      ↓
+      S3
+   ┌──────────────┐
+   │ Training Data│
+   │ Validation   │
+   │ Test Data    │
+   └──────────────┘
+        ↓
+    SageMaker
+\`\`\`
+
+### CWD example — Intent Classifier
+
+S3 could contain:
+
+\`\`\`text
+s3://cwd-ml-data/
+ ├── train/
+ │    └── intent_train.parquet
+ ├── validation/
+ │    └── intent_validation.parquet
+ └── test/
+      └── intent_test.parquet
+\`\`\`
+
+The data could contain:
+
+| Input                            | Label             |
+| -------------------------------- | ----------------- |
+| "Show customer incidents"        | IT_SUPPORT        |
+| "Give me customer sales history" | SALES             |
+| "Create customer briefing"       | CUSTOMER_BRIEFING |
+
+### Where does this data originate?
+
+\`\`\`text
+Salesforce / ServiceNow / S3 / Oracle
+             ↓
+            Glue
+             ↓
+      Clean + Transform
+             ↓
+             S3
+             ↓
+         SageMaker
+\`\`\`
+
+### Interview answer
+
+> “S3 would contain the prepared training, validation, and test datasets. In CWD, Glue could extract and transform historical enterprise data from sources like Salesforce or ServiceNow and store the curated datasets in S3. SageMaker would then read those datasets for model training.”
+`,code:``},{id:`53-how-would-glue-prepare-training-data-for-sagemaker`,category:`SageMaker Training`,title:`How would Glue prepare training data for SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would Glue prepare training data for SageMaker?
+
+Glue would handle the **data engineering**, while SageMaker handles the **model training**.
+
+\`\`\`text
+Salesforce / ServiceNow / S3
+            ↓
+           Glue
+            ↓
+   Clean + Transform
+   Deduplicate
+   Join data
+   Create features
+   Validate quality
+            ↓
+      S3 — Parquet
+            ↓
+        SageMaker
+            ↓
+      Train Model
+\`\`\`
+
+### Glue steps
+
+1. **Extract** historical enterprise data.
+2. **Clean** missing/invalid records.
+3. **Deduplicate** records.
+4. **Transform** fields into model-ready format.
+5. **Create features/labels** where required.
+6. **Validate data quality**.
+7. **Split** into train/validation/test datasets.
+8. Store curated data in **S3 as Parquet**.
+
+### CWD example
+
+For an intent classifier:
+
+\`\`\`text
+Historical User Requests
+        ↓
+       Glue
+        ↓
+Clean + Deduplicate
+        ↓
+Create:
+request_text + intent_label
+        ↓
+Train / Validation / Test
+        ↓
+       S3
+        ↓
+    SageMaker
+\`\`\`
+
+### Interview answer
+
+> “I would use Glue to extract historical enterprise data, clean and deduplicate it, transform it into model-ready features and labels, validate data quality, and split it into training, validation, and test datasets. I would store the curated datasets in S3, typically as Parquet, and SageMaker would consume them for training.”
+
+**Memory:**
+**Extract → Clean → Deduplicate → Transform → Validate → Split → S3 → SageMaker**
+`,code:``},{id:`54-explain-s3-glue-sagemaker-training`,category:`SageMaker Training`,title:`Explain S3 → Glue → SageMaker Training.`,difficulty:`Advanced`,time:`~15 min`,concept:`## S3 → Glue → SageMaker Training
+
+This is a **data preparation → model training** pipeline.
+
+\`\`\`text
+Raw Data
+   ↓
+  S3
+   ↓
+  Glue
+   ├── Clean
+   ├── Transform
+   ├── Deduplicate
+   ├── Feature Engineering
+   └── Data Validation
+   ↓
+Curated Data
+   ↓
+  S3
+   ↓
+SageMaker Training Job
+   ↓
+Trained Model
+   ↓
+Model Artifact → S3
+\`\`\`
+
+### Step-by-step
+
+**1. S3 – Raw data**
+
+* Stores historical Salesforce, ServiceNow, application, or other enterprise data.
+* Example: customer requests and their intent labels.
+
+**2. Glue – Data preparation**
+
+* Reads data from S3.
+* Cleans missing/invalid data.
+* Removes duplicates.
+* Transforms fields.
+* Creates features/labels.
+* Validates data quality.
+* Writes curated training data back to S3.
+
+**3. SageMaker – Training**
+
+* Reads curated data from S3.
+* Runs the training job on selected compute.
+* Evaluates the model.
+* Produces a model artifact and stores it in S3.
+
+### CWD example
+
+\`\`\`text
+Historical CWD Requests
+        ↓
+       S3
+        ↓
+      Glue
+        ↓
+request_text + intent_label
+        ↓
+       S3
+        ↓
+SageMaker Training
+        ↓
+Intent Classifier
+\`\`\`
+
+### Interview answer
+
+> “S3 stores the raw enterprise data. Glue performs the data engineering—cleaning, transformation, deduplication, feature and label preparation, and validation—and writes the curated dataset back to S3. SageMaker then reads that curated data and runs the training job, producing a versioned model artifact in S3.”
+
+**Memory:**
+**S3 = Store → Glue = Prepare → SageMaker = Train**
+`,code:``},{id:`55-how-would-you-perform-distributed-training`,category:`SageMaker Training`,title:`How would you perform distributed training?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you perform distributed training?
+
+With SageMaker, I would use **multiple training instances** so the model training workload is distributed across them.
+
+\`\`\`text id="jv0b8k"
+             S3 Training Data
+                    ↓
+          SageMaker Training Job
+                    ↓
+        ┌───────────┼───────────┐
+        ↓           ↓           ↓
+    Instance 1  Instance 2  Instance 3
+        └───────────┼───────────┘
+                    ↓
+            Distributed Model
+                    ↓
+              S3 Artifact
+\`\`\`
+
+### Practical approach
+
+1. Store training data in **S3**.
+2. Configure a SageMaker training job with **multiple instances**.
+3. Use a distributed framework such as **PyTorch Distributed / TensorFlow distributed** when appropriate.
+4. Split training work across GPUs/instances.
+5. Synchronize model parameters/gradients between workers.
+6. Save the final model artifact to S3.
+7. Evaluate and register the model.
+
+### CWD example
+
+For a large custom model:
+
+\`\`\`text
+S3
+ ↓
+SageMaker
+ ↓
+4 GPU Instances
+ ↓
+Distributed Training
+ ↓
+Model Artifact
+ ↓
+S3 / Model Registry
+\`\`\`
+
+### Interview answer
+
+> “For large models or datasets, I would configure a SageMaker training job with multiple compute instances and use a distributed training framework such as PyTorch Distributed. The workers process the training workload in parallel and synchronize model updates. After training, the final model artifact is stored in S3 and can be registered and deployed.”
+
+**Memory:**
+**S3 → Multiple Instances → Parallel Training → Synchronize → Model Artifact**
+`,code:``},{id:`56-how-would-you-select-sagemaker-instance-types`,category:`SageMaker Training`,title:`How would you select SageMaker instance types?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you select SageMaker instance types?
+
+I select the instance based on **model size, workload, GPU/CPU requirement, memory, latency, and cost**.
+
+\`\`\`text
+Model + Workload
+      ↓
+CPU or GPU?
+      ↓
+Memory / Compute requirement
+      ↓
+Training vs Inference
+      ↓
+Performance + Cost Testing
+      ↓
+Choose Instance
+\`\`\`
+
+### Simple decision
+
+| Requirement                     | Typical choice                   |
+| ------------------------------- | -------------------------------- |
+| Small traditional ML            | CPU instance                     |
+| Large ML training               | GPU instance                     |
+| Deep learning                   | GPU instance                     |
+| Large model / high memory       | GPU with higher memory           |
+| Lightweight real-time inference | Smaller CPU/GPU                  |
+| High-throughput inference       | Multiple instances + autoscaling |
+
+### CWD example
+
+For a **custom intent classifier**, I would start with a CPU instance if the model is lightweight.
+
+For a **large deep-learning model**, I would benchmark GPU instances and select based on training time, memory utilization, throughput, and cost.
+
+### Interview answer
+
+> “I would select SageMaker instances based on the model and workload. First I determine whether CPU or GPU is required, then evaluate memory and compute requirements. I benchmark candidate instances for training time or inference latency and throughput, and choose the smallest instance that meets the performance requirements at an acceptable cost.”
+
+**Memory:**
+**Model → CPU/GPU → Memory → Performance → Cost**
+`,code:``},{id:`57-how-would-you-manage-training-datasets`,category:`SageMaker Training`,title:`How would you manage training datasets?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you manage training datasets?
+
+I would manage datasets using **S3 + Glue + versioning + data validation**.
+
+\`\`\`text id="p1x7la"
+Enterprise Data
+      ↓
+     Glue
+      ↓
+Clean / Validate / Transform
+      ↓
+      S3
+ ┌────┼─────────┐
+ ↓    ↓         ↓
+v1   v2        v3
+      ↓
+SageMaker Training
+\`\`\`
+
+### Key practices
+
+1. **S3** – central storage for training, validation, and test data.
+2. **Version datasets** – keep track of which dataset trained each model.
+3. **Glue** – clean, transform, deduplicate, and prepare data.
+4. **Data quality checks** – missing values, duplicates, schema, invalid labels.
+5. **Partition data** – organize large datasets by date/source/domain.
+6. **Encryption & IAM** – restrict access and encrypt sensitive enterprise data.
+7. **Lineage** – record \`dataset_version → model_version → deployment\`.
+8. **Retention/lifecycle** – archive or delete obsolete datasets according to policy.
+
+### CWD example
+
+\`\`\`text
+dataset-v3
+    ↓
+SageMaker Model v7
+    ↓
+Production Endpoint
+\`\`\`
+
+If Model v7 performs poorly, I can identify **exactly which dataset version trained it** and reproduce or roll back the model.
+
+### Interview answer
+
+> “I would store training datasets in S3, use Glue for preparation and quality validation, and maintain dataset versions and lineage. I would track the relationship between dataset version, model version, and deployment. I would also use IAM and KMS to protect sensitive enterprise training data.”
+
+**Memory:**
+**Store → Validate → Version → Secure → Track Lineage**
+`,code:``},{id:`58-how-would-you-track-experiments`,category:`SageMaker Training`,title:`How would you track experiments?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you track experiments?
+
+For SageMaker, I would use **SageMaker Experiments / MLflow** to track each training run.
+
+\`\`\`text id="q4q4m8"
+Dataset Version
+      ↓
+Training Run
+      ↓
+ ┌─────────────────────┐
+ │ Parameters          │
+ │ Model Version       │
+ │ Metrics             │
+ │ Code Version        │
+ │ Dataset Version     │
+ └─────────────────────┘
+      ↓
+ Compare Experiments
+      ↓
+ Select Best Model
+\`\`\`
+
+### What I track
+
+* **Dataset version**
+* **Model/algorithm version**
+* **Hyperparameters** — learning rate, batch size, epochs
+* **Evaluation metrics** — accuracy, precision, recall, F1
+* **Training duration**
+* **Code/Git version**
+* **Model artifact location**
+* **Experiment/run ID**
+
+### CWD example
+
+\`\`\`text id="44x5o6"
+Experiment-102
+   ↓
+Dataset v3
+Model v7
+F1 = 0.94
+Learning Rate = 0.001
+   ↓
+Compare with Experiment-103
+   ↓
+Select approved model
+\`\`\`
+
+### Interview answer
+
+> “I would use SageMaker Experiments or MLflow to track every training run, including dataset version, code version, hyperparameters, model version, and evaluation metrics. This allows us to reproduce experiments, compare models, and identify exactly which dataset and configuration produced the production model.”
+
+**Memory:**
+**Data → Code → Parameters → Metrics → Model → Compare → Reproduce**
+`,code:``},{id:`59-how-would-you-version-models`,category:`SageMaker Training`,title:`How would you version models?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you version models?
+
+I would use **SageMaker Model Registry** and maintain immutable model versions.
+
+\`\`\`text
+Training
+   ↓
+Model v1
+   ↓
+Evaluation
+   ↓
+Model Registry
+   ↓
+Model v2
+   ↓
+Evaluation
+   ↓
+Approved Version
+   ↓
+Production Endpoint
+\`\`\`
+
+### What I would track
+
+* Model version: \`intent-classifier-v1\`, \`v2\`
+* Dataset version
+* Code/Git commit
+* Training parameters
+* Evaluation metrics
+* Model artifact in S3
+* Approval status
+* Deployment environment
+
+### CWD example
+
+\`\`\`text
+Intent Classifier
+   ├── v1 → F1 0.89
+   ├── v2 → F1 0.93
+   └── v3 → F1 0.95  ← Production
+\`\`\`
+
+If **v3** has a production issue, I can route traffic back to **v2**.
+
+### Interview answer
+
+> “I would version models through SageMaker Model Registry, with each version linked to its dataset, code, parameters, metrics, and S3 model artifact. Only an evaluated and approved version would be promoted to production. This also gives us a clean rollback path to the previous model version.”
+
+**Memory:**
+**Train → Version → Evaluate → Approve → Deploy → Rollback**
+`,code:``},{id:`60-how-would-you-reproduce-a-previous-training-run`,category:`SageMaker Training`,title:`How would you reproduce a previous training run?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you reproduce a previous training run?
+
+The key is to **version everything needed for training**.
+
+\`\`\`text
+Previous Run
+   ↓
+Dataset Version
++ Code Version
++ Model Version
++ Hyperparameters
++ Environment
+   ↓
+Re-run Training
+   ↓
+Compare Metrics
+\`\`\`
+
+### What I would preserve
+
+* **Dataset version** → exact S3 dataset
+* **Code version** → Git commit
+* **Hyperparameters** → learning rate, batch size, epochs
+* **Model/algorithm version**
+* **Container/dependencies** → exact image/version
+* **Training configuration** → instance type, distributed settings
+* **Experiment metadata** → MLflow/SageMaker Experiments
+
+### CWD example
+
+\`\`\`text
+Experiment-102
+ ├── Dataset: v3
+ ├── Code: Git abc123
+ ├── Parameters: lr=0.001, epochs=10
+ ├── Container: v5
+ └── Model: v7
+        ↓
+   Re-run exactly
+\`\`\`
+
+### Interview answer
+
+> “To reproduce a previous training run, I would retrieve the exact dataset version, Git commit, hyperparameters, container or dependency version, and training configuration recorded in SageMaker Experiments or MLflow. I would run the same configuration and compare the resulting metrics with the original experiment.”
+
+**Memory:**
+**Data + Code + Parameters + Environment = Reproducible Run**
+`,code:``},{id:`61-explain-a-sagemaker-mlops-pipeline`,category:`SageMaker Pipelines / MLOps`,title:`Explain a SageMaker MLOps pipeline.`,difficulty:`Advanced`,time:`~20 min`,concept:`## SageMaker MLOps Pipeline
+
+A SageMaker MLOps pipeline automates **data → training → evaluation → approval → deployment → monitoring**.
+
+\`\`\`text
+Code / Data Change
+       ↓
+   CI/CD Pipeline
+       ↓
+     Glue
+       ↓
+      S3
+       ↓
+SageMaker Training
+       ↓
+   Evaluation
+       ↓
+ Model Registry
+       ↓
+ Approval Gate
+       ↓
+ Deploy Endpoint
+       ↓
+   Monitoring
+       ↓
+ Retrain if needed
+\`\`\`
+
+### CWD example
+
+For the **custom intent classifier**:
+
+1. **Glue** prepares historical CWD requests.
+2. **S3** stores versioned train/validation/test datasets.
+3. **SageMaker Training** trains the classifier.
+4. **Evaluation** checks accuracy/F1 and regression.
+5. **Model Registry** stores the model version.
+6. **Approval gate** checks whether quality meets the threshold.
+7. **SageMaker Endpoint** deploys the approved model.
+8. **CloudWatch/Model Monitor** tracks latency, errors, and drift.
+9. If performance degrades, trigger **retraining**.
+
+### Interview answer
+
+> “I would build the SageMaker MLOps pipeline to automate the complete ML lifecycle. Glue prepares the data and stores versioned datasets in S3. SageMaker trains and evaluates the model, then registers the approved version in Model Registry. CI/CD promotes the approved model through environments to a SageMaker endpoint. CloudWatch and model monitoring track production performance and drift, and significant degradation can trigger retraining.”
+
+**Memory:**
+**Prepare → Train → Evaluate → Register → Approve → Deploy → Monitor → Retrain**
+`,code:``},{id:`62-how-would-you-automate-model-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you automate model training?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you automate model training?
+
+I would trigger training through an **MLOps pipeline** instead of manually starting SageMaker jobs.
+
+\`\`\`text
+Code / Data Change
+       ↓
+Event / Schedule
+       ↓
+CI/CD / SageMaker Pipeline
+       ↓
+Glue → S3
+       ↓
+SageMaker Training
+       ↓
+Evaluate
+       ↓
+Model Registry
+       ↓
+Approval
+       ↓
+Deploy
+\`\`\`
+
+### Practical approach
+
+1. **Trigger** on a schedule or significant new data arrival.
+2. **Glue** prepares the latest training dataset.
+3. **SageMaker Pipeline** starts the training job.
+4. **Evaluate** the new model against quality thresholds.
+5. If it passes → **Model Registry** → approval → deployment.
+6. If it fails → stop the pipeline and alert.
+7. Track every run in **SageMaker Experiments/MLflow**.
+
+### CWD example
+
+\`\`\`text
+New training data
+      ↓
+EventBridge / Schedule
+      ↓
+SageMaker Pipeline
+      ↓
+Glue → S3 → Training
+      ↓
+Evaluation
+   ↙       ↘
+Pass       Fail
+ ↓           ↓
+Registry    Alert
+ ↓
+Deploy
+\`\`\`
+
+### Interview answer
+
+> “I would automate training using SageMaker Pipelines triggered by a schedule or new data event. The pipeline would prepare data with Glue, run SageMaker training, evaluate the model against predefined thresholds, register the approved model, and deploy it through CI/CD. Failed evaluations would stop deployment and trigger an alert.”
+
+**Memory:**
+**Trigger → Prepare → Train → Evaluate → Register → Deploy**
+`,code:``},{id:`63-how-would-you-implement-model-validation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model validation?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement model validation?
+
+I would validate the model **before allowing it into production**.
+
+\`\`\`text id="7bqv4h"
+Trained Model
+     ↓
+Validation Dataset
+     ↓
+Metrics
+     ↓
+Quality Threshold?
+   ↙          ↘
+ PASS         FAIL
+  ↓             ↓
+Registry      Stop + Alert
+  ↓
+Deploy
+\`\`\`
+
+### What I validate
+
+* **Accuracy / Precision / Recall / F1** for classification
+* **False positives / false negatives**
+* **Data quality**
+* **Regression against previous model**
+* **Inference latency**
+* **Model size/resource usage**
+* **Bias/fairness**, when applicable
+
+### CWD example
+
+For an intent classifier:
+
+\`\`\`text
+New Model
+   ↓
+Test Dataset
+   ↓
+F1 = 0.94
+Previous F1 = 0.91
+Required F1 ≥ 0.90
+   ↓
+PASS
+   ↓
+Model Registry → Deploy
+\`\`\`
+
+If F1 is below the threshold, **the pipeline stops**.
+
+### Interview answer
+
+> “I would implement model validation as a quality gate in the SageMaker pipeline. The new model would be evaluated against a fixed validation or test dataset, and I would check task-specific metrics, regression against the current model, data quality, latency, and other required controls. Only if the model meets predefined thresholds would I register and deploy it.”
+
+**Memory:**
+**Test → Metrics → Compare → Threshold → Approve/Reject**
+`,code:``},{id:`64-how-would-you-implement-model-evaluation`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model evaluation?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement model evaluation?
+
+I would evaluate the model using a **separate test dataset** and compare it against predefined quality thresholds and the current production model.
+
+\`\`\`text id="8y2k7a"
+Trained Model
+     ↓
+Test Dataset
+     ↓
+Generate Predictions
+     ↓
+Calculate Metrics
+     ↓
+Compare with Threshold / Baseline
+     ↓
+ ┌──────────┴──────────┐
+ PASS                  FAIL
+  ↓                      ↓
+Register              Reject
+  ↓
+Deploy
+\`\`\`
+
+### What I evaluate
+
+For a **CWD intent classifier**:
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* Confusion matrix
+* False-positive / false-negative rate
+* Performance by important intent classes
+
+Also:
+
+* inference latency
+* resource usage
+* regression against previous model
+* bias/fairness where applicable
+
+### Example
+
+\`\`\`text
+New Model F1       = 0.94
+Production F1      = 0.91
+Minimum threshold  = 0.90
+
+        ↓
+      PASS
+        ↓
+Model Registry
+\`\`\`
+
+### Interview answer
+
+> “I would evaluate the trained model on a held-out test dataset and calculate task-specific metrics such as precision, recall, and F1. I would compare the results against predefined thresholds and the current production model to detect regressions. Only models that pass the evaluation gate would move to the Model Registry and deployment.”
+
+**Memory:**
+**Test → Predict → Metrics → Compare → Threshold → Approve/Reject**
+`,code:``},{id:`65-how-would-you-implement-model-approval`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement model approval?
+
+I would make **model approval a controlled gate between evaluation and production deployment**.
+
+\`\`\`text id="s7nq5x"
+Train
+  ↓
+Evaluate
+  ↓
+Quality Gate
+  ↓
+Model Registry
+  ↓
+Approval?
+ ┌──────┴──────┐
+ ↓             ↓
+Approved     Rejected
+ ↓             ↓
+Deploy       Stop + Alert
+\`\`\`
+
+### Practical approach
+
+1. **Evaluate model** against predefined metrics.
+2. **Compare with production model** for regression.
+3. If metrics pass → mark model **Approved** in SageMaker Model Registry.
+4. If manual governance is required → request **human approval**.
+5. CI/CD checks approval status before deployment.
+6. Deploy only approved models using **canary/blue-green** deployment.
+7. Keep the previous approved model for rollback.
+
+### CWD example
+
+\`\`\`text
+New Intent Model v8
+       ↓
+F1 = 0.94
+Threshold = 0.90
+       ↓
+Evaluation PASS
+       ↓
+Model Registry
+       ↓
+Approved
+       ↓
+Production
+\`\`\`
+
+If F1 = 0.85 → **Rejected → no production deployment**.
+
+### Interview answer
+
+> “I would implement model approval through SageMaker Model Registry. After automated evaluation, the pipeline checks predefined quality thresholds and regression criteria. A passing model can be marked approved, or routed for manual approval when required. CI/CD only deploys models with an approved status, while the previous production version remains available for rollback.”
+
+**Memory:**
+**Evaluate → Gate → Approve → Deploy → Rollback**
+`,code:``},{id:`66-what-is-sagemaker-model-registry`,category:`SageMaker Pipelines / MLOps`,title:`What is SageMaker Model Registry?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## What is SageMaker Model Registry?
+
+**SageMaker Model Registry** is a central place to **store, version, approve, and manage ML models** throughout their lifecycle.
+
+\`\`\`text id="lq7l1r"
+Training
+   ↓
+Model v1
+   ↓
+Evaluation
+   ↓
+Model Registry
+   ├── Version
+   ├── Metrics
+   ├── Metadata
+   └── Approval Status
+          ↓
+       Deploy
+\`\`\`
+
+### What it tracks
+
+* Model versions
+* Model artifacts
+* Evaluation metrics
+* Training metadata
+* Dataset/model lineage
+* Approval status
+* Deployment information
+
+### CWD example
+
+\`\`\`text id="n4f8ab"
+Intent Classifier
+ ├── v1 → F1 0.89 → Rejected
+ ├── v2 → F1 0.93 → Approved
+ └── v3 → F1 0.95 → Approved → Production
+\`\`\`
+
+If **v3 fails in production**, we can roll back to **v2**.
+
+### Interview answer
+
+> “SageMaker Model Registry provides centralized model versioning and lifecycle management. I use it to register trained models, track their metrics and metadata, manage approval status, and control which model versions can be deployed to production.”
+
+**Memory:**
+**Register → Version → Evaluate → Approve → Deploy → Rollback**
+`,code:``},{id:`67-how-would-you-promote-a-model-from-dev-test-production`,category:`SageMaker Pipelines / MLOps`,title:`How would you promote a model from dev → test → production?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you promote a model from Dev → Test → Production?
+
+I would promote the **same approved model artifact** through environments rather than retraining it separately in each environment.
+
+\`\`\`text
+SageMaker Training
+       ↓
+ Model Registry
+       ↓
+      DEV
+       ↓
+ Automated Evaluation
+       ↓
+      TEST
+       ↓
+ Integration + Performance Tests
+       ↓
+ Approval Gate
+       ↓
+   PRODUCTION
+       ↓
+ Canary / Blue-Green
+\`\`\`
+
+### Practical flow
+
+1. **Dev**
+
+   * Train and register model.
+   * Run unit and basic model evaluation.
+
+2. **Test**
+
+   * Promote the **same model version**.
+   * Run integration, accuracy, regression, security, and performance tests.
+
+3. **Production**
+
+   * Require approval.
+   * Deploy using **canary or blue-green**.
+   * Monitor latency, errors, and model quality.
+   * Roll back if problems occur.
+
+### CWD example
+
+\`\`\`text
+Intent Model v8
+     ↓
+DEV → TEST → PROD
+          ↓
+      Canary 10%
+          ↓
+       Monitor
+          ↓
+      100% Traffic
+\`\`\`
+
+### Interview answer
+
+> “I would register the model in SageMaker Model Registry and promote the same immutable model version from Dev to Test and then Production. Each environment would have its own validation gates. After Test passes, production approval is required, followed by a canary or blue-green deployment. I would monitor the production metrics and roll back to the previous approved version if necessary.”
+
+**Memory:**
+**Same Artifact → Dev → Test → Approve → Canary → Production → Monitor → Rollback**
+`,code:``},{id:`68-how-would-you-implement-model-rollback`,category:`SageMaker Pipelines / MLOps`,title:`How would you implement model rollback?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement model rollback?
+
+I would keep **every approved model version immutable** in the SageMaker Model Registry.
+
+\`\`\`text
+Model v1 ──→ Production
+              ↓
+        Deploy Model v2
+              ↓
+       Monitor metrics
+              ↓
+        Problem detected
+              ↓
+       Roll back to v1
+\`\`\`
+
+### Practical steps
+
+1. Register each model version in **SageMaker Model Registry**.
+2. Deploy the new model using **blue-green or canary deployment**.
+3. Monitor:
+
+   * Error rate
+   * P95/P99 latency
+   * Accuracy/F1
+   * Data/model drift
+4. If the new model fails the threshold, **stop traffic to v2**.
+5. Route traffic back to the **previous approved model v1**.
+6. Investigate v2 and fix the issue before redeployment.
+
+### Interview answer
+
+> “I implement rollback by keeping immutable model versions in SageMaker Model Registry. I deploy the new model using canary or blue-green deployment and monitor latency, errors, and model-quality metrics. If the new version violates our thresholds, I immediately shift traffic back to the previous approved model version. This gives us a fast and safe production rollback without retraining the model.”
+
+**Memory:** \`Immutable Version → Deploy → Monitor → Detect → Shift Back → Investigate\`
+`,code:``},{id:`69-how-would-you-detect-model-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect model drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you detect model drift?
+
+I would monitor **two types of drift**:
+
+\`\`\`text
+Production Data
+      ↓
+Compare with baseline
+      ↓
+┌──────────────────────┐
+│ Data Drift            │ → Input distribution changed
+│ Model/Prediction Drift│ → Prediction behavior changed
+└──────────────────────┘
+      ↓
+Quality degradation?
+      ↓
+Alert → Investigate → Retrain
+\`\`\`
+
+### 1. Data drift
+
+Compare production inputs with the training/baseline data.
+
+Examples:
+
+* Feature distribution changed
+* Missing values increased
+* New categories appeared
+* Statistical distribution changed
+
+Metrics/techniques: **PSI, KS test, distribution comparison**.
+
+### 2. Model performance drift
+
+When actual labels become available, monitor:
+
+* Accuracy
+* Precision
+* Recall
+* F1
+* False-positive/false-negative rate
+
+For example:
+
+\`\`\`text
+Training F1 = 0.93
+Production F1 = 0.78
+              ↓
+        Possible drift
+\`\`\`
+
+### AWS implementation
+
+**SageMaker Model Monitor + CloudWatch** can monitor production data/predictions, generate violations/metrics, and trigger alerts or retraining workflows.
+
+### Interview answer
+
+> “I detect drift by comparing production input distributions against the training baseline and, when labels are available, comparing production model performance against the baseline. I monitor these metrics through SageMaker Model Monitor and CloudWatch. If drift crosses a predefined threshold, I alert the team and trigger investigation or retraining.”
+
+**Memory:** \`Input Changed → Prediction Changed → Performance Dropped → Alert → Retrain\`
+`,code:``},{id:`70-how-would-you-detect-data-drift`,category:`SageMaker Pipelines / MLOps`,title:`How would you detect data drift?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you detect data drift?
+
+I compare **production input data** with the **training/baseline data**.
+
+\`\`\`text
+Training Data
+     ↓
+Create baseline statistics
+     ↓
+Production Data
+     ↓
+Compare distributions
+     ↓
+Drift detected?
+   ↓ Yes
+Alert → Investigate → Retrain
+\`\`\`
+
+### What I monitor
+
+* **Numerical features:** mean, median, variance, distribution
+* **Categorical features:** category frequency changes
+* **Missing values:** sudden increase
+* **New/unexpected values**
+* **Statistical tests:** PSI, KS test, distribution comparison
+
+Example:
+
+\`\`\`text
+Training age distribution: 20–50
+Production age distribution: 40–80
+                    ↓
+             Data drift detected
+\`\`\`
+
+### AWS approach
+
+Use **SageMaker Model Monitor** to establish a baseline and continuously compare production data against it. Send violations/metrics to **CloudWatch** and trigger an alert or retraining workflow when thresholds are exceeded.
+
+### Interview answer
+
+> “I detect data drift by comparing production feature distributions against the training baseline. I monitor statistics such as distribution, missing values, categorical frequencies, and use metrics like PSI or KS test. With SageMaker Model Monitor and CloudWatch, I can automatically detect threshold violations and trigger an investigation or retraining pipeline.”
+
+**Memory:** \`Baseline → Production → Compare → Threshold → Alert → Retrain\`
+`,code:``},{id:`71-how-would-you-monitor-model-quality`,category:`SageMaker Pipelines / MLOps`,title:`How would you monitor model quality?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you monitor model quality?
+
+I monitor **actual model performance in production**, not just infrastructure metrics.
+
+\`\`\`text
+Production Requests
+        ↓
+Model Predictions
+        ↓
+Collect Actual Labels
+        ↓
+Calculate Quality Metrics
+        ↓
+Compare with Threshold
+        ↓
+Alert / Retrain / Rollback
+\`\`\`
+
+### What I monitor
+
+For a classification model:
+
+* **Accuracy**
+* **Precision**
+* **Recall**
+* **F1 score**
+* **False positives / false negatives**
+* **Confusion matrix**
+
+Also monitor:
+
+* Prediction distribution
+* Data drift
+* Model latency
+* Error rate
+* Performance by important segments
+
+Example:
+
+\`\`\`text
+Baseline F1       = 0.93
+Production F1     = 0.91  → OK
+Production F1     = 0.78  → Alert
+\`\`\`
+
+### AWS implementation
+
+**SageMaker Model Monitor + CloudWatch** can track production model metrics and trigger alerts. When ground-truth labels arrive later, calculate the actual quality metrics and compare them with the approved baseline.
+
+### Interview answer
+
+> “I monitor model quality by collecting production predictions and, when ground truth becomes available, calculating metrics such as precision, recall, F1, and false-positive rate. I compare them against predefined thresholds and the previous production model. If quality degrades significantly, I trigger an investigation, retraining, or rollback.”
+
+**Memory:** \`Predict → Get Labels → Measure → Compare → Alert → Retrain/Rollback\`
+`,code:``},{id:`72-how-would-you-perform-continuous-training`,category:`SageMaker Pipelines / MLOps`,title:`How would you perform continuous training?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you perform continuous training?
+
+I would automatically retrain the model when **new data arrives, drift is detected, or a scheduled retraining window occurs**.
+
+\`\`\`text
+New Data / Drift
+       ↓
+     Glue
+       ↓
+      S3
+       ↓
+SageMaker Pipeline
+       ↓
+   Train Model
+       ↓
+    Evaluate
+       ↓
+Quality Gate
+   ↓       ↓
+Fail     Pass
+ ↓         ↓
+Stop   Model Registry
+             ↓
+          Approval
+             ↓
+          Deploy
+             ↓
+          Monitor
+             ↓
+        Drift detected
+             ↓
+          Retrain
+\`\`\`
+
+### Practical implementation
+
+* **EventBridge** → triggers training on schedule or new-data event.
+* **Glue** → cleans and prepares new training data.
+* **S3** → stores versioned datasets.
+* **SageMaker Pipeline** → trains and evaluates.
+* **Model Registry** → versions the new model.
+* **Quality gate** → deploy only if metrics meet thresholds.
+* **CloudWatch/Model Monitor** → detects drift and can trigger retraining.
+
+### Interview answer
+
+> “I implement continuous training using a SageMaker Pipeline. New data or drift detection triggers the pipeline, Glue prepares the data, SageMaker trains and evaluates a new model, and the model is registered with its metrics and dataset version. If it passes the quality gate, it is deployed; otherwise, the existing production model remains unchanged.”
+
+**Memory:** \`New Data → Prepare → Train → Evaluate → Approve → Deploy → Monitor → Retrain\`
+`,code:``},{id:`73-how-would-you-integrate-sagemaker-with-ci-cd`,category:`SageMaker Pipelines / MLOps`,title:`How would you integrate SageMaker with CI/CD?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you integrate SageMaker with CI/CD?
+
+I would automate the **train → evaluate → approve → deploy** lifecycle.
+
+\`\`\`text
+Git Push
+   ↓
+CI/CD Pipeline
+   ↓
+Test + Build
+   ↓
+Glue → S3
+   ↓
+SageMaker Training
+   ↓
+Evaluate Model
+   ↓
+Model Registry
+   ↓
+Approval Gate
+   ↓
+Deploy to SageMaker Endpoint
+   ↓
+Monitor → Rollback if needed
+\`\`\`
+
+### Practical implementation
+
+* **CodePipeline/GitHub Actions** → trigger pipeline
+* **CodeBuild** → unit tests, validation, Docker build
+* **Glue** → prepare training data
+* **SageMaker Training** → train model
+* **SageMaker Model Registry** → version and approve model
+* **SageMaker Endpoint** → deploy approved model
+* **CloudWatch** → monitor quality and infrastructure
+* **Rollback** → previous approved model if deployment fails
+
+### Interview answer
+
+> “I integrate SageMaker into CI/CD by triggering a SageMaker Pipeline from source-code or data changes. The pipeline prepares data, trains and evaluates the model, registers the model, and applies an approval gate. Only an approved model is deployed to the SageMaker endpoint. After deployment, CloudWatch monitors the endpoint and model quality, and we can automatically roll back to the previous approved version if thresholds are violated.”
+
+**Memory:** \`Code → Data → Train → Evaluate → Register → Approve → Deploy → Monitor → Rollback\`
+`,code:``},{id:`74-why-use-bedrock-for-llm-inference-but-sagemaker-for-another-ml-model`,category:`SageMaker + CWD Agentic AI`,title:`Why use Bedrock for LLM inference but SageMaker for another ML model?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why use Bedrock for LLM inference but SageMaker for another ML model?
+
+Because they solve **different ML needs**.
+
+|                | Bedrock                    | SageMaker              |
+| -------------- | -------------------------- | ---------------------- |
+| Main purpose   | Foundation/LLM inference   | Custom ML models       |
+| Example        | GPT/Claude/Llama           | Intent classifier      |
+| Training       | Usually not needed         | Train/customize models |
+| Infrastructure | Managed by AWS             | More control           |
+| CWD example    | Generate Customer Briefing | Classify user intent   |
+
+### CWD example
+
+\`\`\`text
+User Request
+     ↓
+Coordinator
+     ↓
+Intent Classifier ──→ SageMaker
+     ↓
+Customer Briefing
+     ↓
+LLM ──→ Bedrock
+     ↓
+Final Response
+\`\`\`
+
+### Interview answer
+
+> “I use Bedrock when I need managed foundation-model capabilities for tasks like generation, summarization, or embeddings. I use SageMaker when I have a specialized ML model that we need to train, customize, evaluate, and manage through the ML lifecycle. For example, in CWD, SageMaker could host an intent-classification model, while Bedrock handles the LLM-based customer briefing generation.”
+
+**Memory:** **Bedrock = Foundation Models | SageMaker = Custom ML**
+`,code:``},{id:`75-how-would-you-decide-whether-a-model-belongs-in-bedrock-or-sagemaker`,category:`SageMaker + CWD Agentic AI`,title:`How would you decide whether a model belongs in Bedrock or SageMaker?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you decide: Bedrock or SageMaker?
+
+I look at the **model requirement and level of control**.
+
+\`\`\`text
+              Model Requirement
+                     ↓
+        ┌────────────┴────────────┐
+   Foundation LLM            Custom ML Model
+        ↓                          ↓
+     Bedrock                  SageMaker
+\`\`\`
+
+### Choose **Bedrock** when:
+
+* Need a **foundation model/LLM**
+* Generation, summarization, RAG, chat
+* Want managed inference
+* Don't want to manage model infrastructure
+
+### Choose **SageMaker** when:
+
+* Need a **custom/specialized ML model**
+* Need custom training or deeper control
+* Need custom ML algorithms/frameworks
+* Need a dedicated model endpoint and ML lifecycle management
+
+### Interview answer
+
+> “I decide based on the model and the level of control required. If I need a managed foundation model for GenAI tasks, I use Bedrock. If I need to train, customize, or deploy a specialized ML model with more control over the lifecycle and infrastructure, I use SageMaker.”
+
+**Memory:**
+**Bedrock → Use Foundation Models**
+**SageMaker → Build/Train/Control Custom Models**
+`,code:``},{id:`76-how-would-a-worker-call-a-sagemaker-endpoint`,category:`SageMaker + CWD Agentic AI`,title:`How would a Worker call a SageMaker endpoint?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would a Worker call a SageMaker endpoint?
+
+The Worker uses the **AWS SageMaker Runtime API** to invoke the deployed model endpoint.
+
+\`\`\`text
+CWD Worker
+    ↓
+AWS SDK / Boto3
+    ↓
+SageMaker Runtime
+    ↓
+SageMaker Endpoint
+    ↓
+ML Model
+    ↓
+Prediction
+    ↓
+Worker
+\`\`\`
+
+### Practical flow
+
+1. Worker receives the request from the **Delegator**.
+2. Worker prepares the model input.
+3. Worker calls \`InvokeEndpoint\`.
+4. SageMaker runs the model.
+5. Prediction is returned to the Worker.
+6. Worker validates the result and sends it back to the Delegator.
+
+### Security
+
+The Worker runs with an **IAM task role** containing only the required permission:
+
+\`\`\`text
+sagemaker:InvokeEndpoint
+\`\`\`
+
+No AWS access keys are stored in the application.
+
+### Interview answer
+
+> “The Worker calls the SageMaker Runtime API using the AWS SDK and invokes the specific SageMaker endpoint. The Worker’s IAM task role has least-privilege permission to invoke that endpoint. SageMaker performs the prediction and returns the result, which the Worker validates before passing it back to the Delegator.”
+
+**Memory:** \`Worker → Boto3 → InvokeEndpoint → SageMaker → Prediction → Worker\`
+`,code:``},{id:`77-how-would-you-handle-sagemaker-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle SageMaker inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle SageMaker inference latency?
+
+I would first **measure P50/P95/P99 latency**, then optimize based on the bottleneck.
+
+\`\`\`text
+Worker
+  ↓
+SageMaker Endpoint
+  ↓
+Monitor P50/P95/P99
+  ↓
+High latency?
+  ↓
+Optimize
+\`\`\`
+
+### Practical techniques
+
+* **Right-size the instance** based on benchmarking.
+* Use **GPU instances** when the model benefits from GPU acceleration.
+* Enable **autoscaling** for traffic spikes.
+* Use **Provisioned Concurrency / warm capacity** where applicable to reduce cold-start effects.
+* Keep the Worker and SageMaker endpoint in the **same AWS Region/VPC** to reduce network latency.
+* Optimize the model: quantization, smaller model, batching where appropriate.
+* Set **timeouts** and use bounded retries for transient failures.
+* Monitor with **CloudWatch**.
+
+### Interview answer
+
+> “I first measure P50, P95 and P99 inference latency. If latency is high, I check whether the bottleneck is model execution, instance capacity, cold starts, or network overhead. Then I right-size or scale the endpoint, optimize the model, keep the Worker and endpoint close geographically, and use appropriate warm capacity. I continuously monitor P95/P99 and set latency-based alarms.”
+
+**Memory:** \`Measure → Find Bottleneck → Optimize Model → Right-size → Scale → Monitor\`
+`,code:``},{id:`78-how-would-you-scale-sagemaker-endpoints`,category:`SageMaker + CWD Agentic AI`,title:`How would you scale SageMaker endpoints?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you scale SageMaker endpoints?
+
+I would use **horizontal scaling + autoscaling** based on traffic and latency.
+
+\`\`\`text
+Workers
+   ↓
+SageMaker Endpoint
+   ↓
+Multiple Instances
+ ┌─────┬─────┬─────┐
+ │  1  │  2  │  3  │
+ └─────┴─────┴─────┘
+        ↓
+   Auto Scaling
+\`\`\`
+
+### Practical approach
+
+* Set **min/max instance count**.
+* Configure **target tracking** based on invocation rate or utilization.
+* During traffic increase → SageMaker adds instances.
+* During low traffic → removes instances.
+* Monitor **P95/P99 latency, invocation count, CPU/GPU utilization, errors and throttling**.
+* For sudden spikes, use appropriate capacity/warm instances to avoid scaling delay.
+* For expensive models, use **multiple model variants/endpoints** when different models have different traffic patterns.
+
+### Interview answer
+
+> “I scale SageMaker endpoints horizontally using multiple instances behind the endpoint and configure autoscaling with minimum and maximum capacity. I use metrics such as invocation rate, instance utilization and P95 latency to trigger scaling. During high traffic, additional instances are added; during low traffic, capacity is reduced. I continuously monitor latency, errors and throttling to make sure scaling meets the SLA.”
+
+**Memory:** \`Traffic ↑ → Instances ↑ → Latency Controlled → Traffic ↓ → Instances ↓\`
+`,code:``},{id:`79-real-time-vs-asynchronous-sagemaker-inference`,category:`SageMaker + CWD Agentic AI`,title:`Real-time vs asynchronous SageMaker inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`## Real-time vs asynchronous SageMaker inference
+
+The main difference is **how quickly the caller needs the prediction**.
+
+|          | Real-time inference       | Asynchronous inference          |
+| -------- | ------------------------- | ------------------------------- |
+| Response | Immediate                 | Later                           |
+| Use case | Low-latency prediction    | Large/long-running requests     |
+| Caller   | Waits for response        | Doesn't wait                    |
+| Example  | CWD intent classification | Large document/image processing |
+
+### Real-time
+
+\`\`\`text
+Worker → SageMaker Endpoint → Prediction → Worker
+          (synchronous)
+\`\`\`
+
+Use when CWD needs an immediate result, such as **intent classification**.
+
+### Asynchronous
+
+\`\`\`text
+Worker → S3 → Async SageMaker
+                  ↓
+              Processing
+                  ↓
+              S3 Output
+                  ↓
+              Notification
+\`\`\`
+
+Use when requests are **large or take longer to process** and the caller doesn't need to wait.
+
+### Interview answer
+
+> “For low-latency use cases such as CWD intent classification, I would use real-time SageMaker inference because the Worker needs the prediction immediately. For large payloads or long-running inference where an immediate response isn't required, I would use asynchronous inference with S3 for input/output and notification when processing completes.”
+
+**Memory:**
+**Real-time = Wait for result**
+**Async = Submit and continue**
+`,code:``},{id:`80-when-would-you-use-sagemaker-serverless-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Serverless Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`## When would you use SageMaker Serverless Inference?
+
+I would use it when **traffic is intermittent or unpredictable** and I don't want to keep dedicated endpoint instances running continuously.
+
+\`\`\`text
+Request
+   ↓
+SageMaker Serverless
+   ↓
+Model
+   ↓
+Response
+\`\`\`
+
+### Good use cases
+
+* Low or irregular traffic
+* Development/testing environments
+* Infrequent ML predictions
+* Cost-sensitive workloads
+* Models that don't require consistently low latency
+
+### Avoid it when
+
+* High, steady traffic
+* Strict low-latency SLA
+* Frequent requests where cold-start latency matters
+
+### CWD example
+
+For an **infrequently used specialized ML Worker**, Serverless Inference could be appropriate. For a heavily used **real-time intent classifier**, I would generally use a provisioned/autoscaled endpoint instead.
+
+### Interview answer
+
+> “I use SageMaker Serverless Inference when traffic is intermittent and I want to avoid paying for continuously running endpoint instances. It is suitable for low-volume or unpredictable workloads, but I would avoid it for high-throughput or strict low-latency workloads because cold-start latency can be a concern.”
+
+**Memory:** \`Low/Irregular Traffic → Serverless | High/Consistent Traffic → Provisioned + Auto Scaling\`
+`,code:``},{id:`81-when-would-you-use-sagemaker-asynchronous-inference`,category:`SageMaker + CWD Agentic AI`,title:`When would you use SageMaker Asynchronous Inference?`,difficulty:`Advanced`,time:`~15 min`,concept:`## When would you use SageMaker Asynchronous Inference?
+
+Use it when the **request is large or inference takes longer**, and the caller does **not need an immediate response**.
+
+\`\`\`text
+Worker
+  ↓
+S3 / Async Endpoint
+  ↓
+SageMaker Model
+  ↓
+Long Processing
+  ↓
+S3 Output
+  ↓
+Notification
+\`\`\`
+
+### Good use cases
+
+* Large payloads
+* Long-running inference
+* Large image/video/document processing
+* Spiky or intermittent workloads
+* Batch-like requests that still need near-real-time processing
+
+### CWD example
+
+If a Worker needs to process a **large set of manufacturing images** using a custom SageMaker model, I could use asynchronous inference instead of making the Worker wait synchronously.
+
+### Interview answer
+
+> “I use SageMaker Asynchronous Inference when requests are large or inference takes longer and the caller doesn't require an immediate response. The input can be stored in S3, SageMaker processes it asynchronously, and the output is written to S3 with a notification when processing completes.”
+
+**Memory:** **Large/Long request → Async → Process → S3 output → Notify**
+`,code:``},{id:`82-how-would-you-implement-autoscaling`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement autoscaling?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement SageMaker autoscaling?
+
+I would use **SageMaker Endpoint Auto Scaling** to automatically increase or decrease the number of inference instances based on traffic and performance.
+
+\`\`\`text
+              Traffic
+                 ↓
+        SageMaker Endpoint
+          ↙           ↘
+    Instance 1     Instance 2
+          ↘           ↙
+          Auto Scaling
+               ↓
+      Add / Remove instances
+\`\`\`
+
+### Practical steps
+
+1. Set **minimum and maximum instance count**.
+2. Choose a scaling metric, such as:
+
+   * \`InvocationsPerInstance\`
+   * CPU/GPU utilization
+   * Latency, where appropriate
+3. Configure a **target value**.
+4. High traffic → **scale out**.
+5. Low traffic → **scale in**.
+6. Monitor **P95/P99 latency, errors and throttling**.
+
+### Example
+
+\`\`\`text
+Min instances = 2
+Max instances = 10
+Target = 70% utilization
+
+Traffic ↑
+2 → 4 → 6 → 8 instances
+
+Traffic ↓
+8 → 6 → 4 → 2 instances
+\`\`\`
+
+### Interview answer
+
+> “I implement SageMaker autoscaling by configuring Application Auto Scaling with minimum and maximum capacity and a target metric such as invocations per instance. When traffic increases, SageMaker adds instances; when traffic decreases, it removes instances. I also monitor P95/P99 latency and errors to make sure scaling maintains the required SLA.”
+
+**Memory:** \`Set Min/Max → Choose Metric → Scale Out → Scale In → Monitor\`
+`,code:``},{id:`83-how-would-you-handle-endpoint-throttling`,category:`SageMaker + CWD Agentic AI`,title:`How would you handle endpoint throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you handle SageMaker endpoint throttling?
+
+Throttling means the endpoint **cannot accept/process requests at the current rate**.
+
+\`\`\`text
+Worker
+  ↓
+SageMaker Endpoint
+  ↓
+Throttling
+  ↓
+Rate Limit / Queue
+  ↓
+Retry with Backoff
+  ↓
+Scale Endpoint
+\`\`\`
+
+### Practical approach
+
+1. **Detect throttling** using CloudWatch metrics/errors.
+2. **Limit concurrency** from Workers so we don't overload the endpoint.
+3. Use **exponential backoff + jitter** for transient failures.
+4. **Autoscale** the endpoint when sustained traffic increases.
+5. Put requests into **SQS** when asynchronous processing is acceptable.
+6. Use **timeouts + bounded retries**.
+7. Send persistent failures to a **DLQ**.
+8. If sustained capacity is insufficient, review **endpoint instance capacity/service quotas**.
+
+### Interview answer
+
+> “I handle SageMaker throttling by first detecting it through CloudWatch. I control Worker concurrency, use bounded retries with exponential backoff and jitter, and autoscale the endpoint based on traffic. For workloads that don't require synchronous responses, I use SQS to buffer requests. Persistent failures go to a DLQ rather than continuously retrying.”
+
+**Memory:** \`Detect → Limit → Backoff → Scale → Queue → DLQ\`
+`,code:``},{id:`84-how-would-you-implement-model-fallback`,category:`SageMaker + CWD Agentic AI`,title:`How would you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you implement model fallback?
+
+I would keep a **secondary approved model** ready and route traffic to it when the primary model fails or violates thresholds.
+
+\`\`\`text id="1upj38"
+Worker
+  ↓
+Primary Model
+  ↓
+Failure / Timeout / High Error Rate
+  ↓
+Fallback Model
+  ↓
+Prediction
+\`\`\`
+
+### Practical approach
+
+1. Deploy **Primary Model v2**.
+2. Keep **Fallback Model v1** available.
+3. Monitor errors, latency, and model availability.
+4. If v2 fails → switch traffic to v1.
+5. Use **circuit breaker** to prevent repeated calls to the failing model.
+6. Log the fallback event for investigation.
+
+### Example
+
+\`\`\`text
+v2 → timeout
+     ↓
+Circuit Breaker
+     ↓
+v1 → prediction
+\`\`\`
+
+### Interview answer
+
+> “I implement model fallback by keeping a previously approved model available alongside the primary model. If the primary model has repeated timeouts, errors, or availability issues, the Worker or routing layer switches traffic to the fallback model. I use bounded retries and a circuit breaker to avoid repeatedly calling the unhealthy model, and I monitor fallback events for further investigation.”
+
+**Memory:** \`Primary → Failure → Circuit Breaker → Fallback → Monitor\`
+`,code:``},{id:`85-how-would-you-perform-a-b-testing-between-models`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform A/B testing between models?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you perform A/B testing between models?
+
+I would send **different user/request traffic to two model versions** and compare their results using the same evaluation metrics.
+
+\`\`\`text
+                    Requests
+                       ↓
+                 Model Router
+                  ↙       ↘
+             Model A      Model B
+               50%          50%
+                  ↘       ↙
+                 Metrics
+                    ↓
+              Compare Results
+\`\`\`
+
+### Practical approach
+
+1. Deploy **Model A** and **Model B** separately.
+2. Route traffic, for example **50% → A, 50% → B**.
+3. Keep the same input population and evaluation period.
+4. Collect:
+
+   * Accuracy / F1
+   * Error rate
+   * P95/P99 latency
+   * Cost
+   * Business-specific quality metrics
+5. Compare the results.
+6. If B meets the required quality and operational thresholds, gradually increase its traffic.
+
+### CWD example
+
+\`\`\`text
+Customer requests
+      ↓
+   Router
+   ↙    ↘
+ v1      v2
+50%     50%
+\`\`\`
+
+For an intent-classification model, compare **F1, false positives, latency, and cost**.
+
+### Interview answer
+
+> “I would deploy both model versions and use a routing layer to split traffic between them. I would keep the experiment population and evaluation period consistent, then compare model quality, latency, error rate, and cost. If the new model meets the predefined acceptance criteria, I would gradually increase its traffic and eventually promote it.”
+
+**Memory:** \`Deploy A/B → Split Traffic → Measure → Compare → Gradually Promote\`
+`,code:``},{id:`86-how-would-you-perform-canary-deployment`,category:`SageMaker + CWD Agentic AI`,title:`How would you perform canary deployment?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you perform canary deployment?
+
+Canary deployment means sending a **small percentage of production traffic to the new model first**, validating it, and then gradually increasing traffic.
+
+\`\`\`text
+Production Traffic
+       ↓
+    Router
+    ↙    ↘
+ Old v1  New v2
+  90%      10%
+            ↓
+        Monitor
+            ↓
+       Healthy?
+       ↙       ↘
+     Yes        No
+      ↓          ↓
+25% → 50%     Rollback
+      ↓
+     100%
+\`\`\`
+
+### Practical steps
+
+1. Keep **v1** as the current production model.
+2. Deploy **v2** alongside it.
+3. Send, for example, **10% traffic → v2**.
+4. Monitor:
+
+   * Error rate
+   * P95/P99 latency
+   * Model quality
+   * Throttling
+5. If healthy → increase **10% → 25% → 50% → 100%**.
+6. If problems occur → immediately route traffic back to **v1**.
+
+### Interview answer
+
+> “I use canary deployment by deploying the new model alongside the current production model and initially sending a small percentage of traffic to it. I monitor both infrastructure and model-quality metrics. If the new model remains within the predefined thresholds, I gradually increase traffic. If it fails, I immediately shift traffic back to the previous model.”
+
+**Memory:** \`10% → Monitor → 25% → 50% → 100% | Failure → Rollback\`
+`,code:``},{id:`87-how-would-you-monitor-inference-cost`,category:`SageMaker + CWD Agentic AI`,title:`How would you monitor inference cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you monitor inference cost?
+
+I would track **cost per model, endpoint, request, and environment** and correlate cost with traffic.
+
+\`\`\`text
+Requests
+   ↓
+SageMaker Endpoint
+   ↓
+Usage Metrics ──→ CloudWatch
+   ↓
+Cost Data ──────→ AWS Cost Explorer
+   ↓
+Cost / Request
+Cost / Model
+Cost / Environment
+\`\`\`
+
+### What I monitor
+
+* Total SageMaker endpoint cost
+* Instance hours
+* Number of inference requests
+* Cost per 1,000 requests
+* CPU/GPU utilization
+* Idle capacity
+* Cost by model/version/environment
+
+### Optimization
+
+If cost is high:
+
+* Right-size instances
+* Enable autoscaling
+* Scale down during low traffic
+* Use Serverless for suitable low-volume workloads
+* Use asynchronous inference for suitable workloads
+* Optimize the model
+* Remove unused endpoints
+
+### Interview answer
+
+> “I monitor SageMaker inference cost using AWS Cost Explorer and CloudWatch usage metrics. I correlate instance hours and request volume to calculate cost per request and identify idle or underutilized endpoints. If costs increase, I right-size instances, configure autoscaling, use serverless or asynchronous inference where appropriate, and optimize the model.”
+
+**Memory:** \`Usage → Cost → Cost/Request → Find Waste → Optimize\`
+`,code:``},{id:`88-how-would-you-optimize-inference-latency`,category:`SageMaker + CWD Agentic AI`,title:`How would you optimize inference latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you optimize inference latency?
+
+I would first identify **where the latency is coming from**, then optimize that layer.
+
+\`\`\`text id="8m48q4"
+Worker
+  ↓
+Network
+  ↓
+SageMaker Endpoint
+  ↓
+Model Inference
+  ↓
+Response
+\`\`\`
+
+### Practical techniques
+
+* Measure **P50/P95/P99 latency**.
+* Use the right **instance type** and GPU when beneficial.
+* **Optimize the model** — smaller model, quantization, optimized inference.
+* Keep Worker and SageMaker endpoint in the **same AWS Region/VPC**.
+* Use **warm/provisioned capacity** to reduce cold starts where applicable.
+* Enable **autoscaling** for traffic spikes.
+* Use **connection reuse/keep-alive** from the Worker.
+* Avoid unnecessary preprocessing/postprocessing.
+* Set appropriate **timeouts**.
+
+### Interview answer
+
+> “I first break down P50, P95, and P99 latency into network, preprocessing, model inference, and postprocessing. Then I optimize the bottleneck by right-sizing the instance, using GPU or model optimization where appropriate, keeping services close to each other, maintaining warm capacity, and using autoscaling. I continuously monitor P95 and P99 to verify the improvement.”
+
+**Memory:** \`Measure → Find Bottleneck → Optimize Model → Right-size → Warm → Scale → Monitor\`
 `,code:``}];function Qm(){return(0,M.jsx)($,{data:Zm,title:`Amazon SageMaker Cookbook`,subtitle:`Training, pipelines, MLOps, endpoints and inference strategy`,icon:`🤖`,patternLabel:`Questions`})}var $m=[{id:`001-explain-the-complete-azure-architecture-for-cwd`,category:`Azure Architecture`,title:`Explain the complete Azure architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`For your **CWD (Coordinator → Delegators → Workers)** project, I would explain the Azure architecture as an **enterprise-grade multi-agent platform** where Azure provides the secure runtime, identity, AI, data, integration, observability, and deployment layers.
 
 ## 1. Azure CWD architecture — big picture
