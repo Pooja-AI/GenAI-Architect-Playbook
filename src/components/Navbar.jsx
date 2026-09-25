@@ -296,6 +296,205 @@ const AzureTopics = [
     },
   ];
 
+  // =====================================================
+  // DATA STRUCTURES INTERVIEW QUESTION COOKBOOKS
+  // One "Concept" and one "Code" entry per topic
+  // =====================================================
+
+  const dsTopics = [
+    {
+      name: "01. Arrays / Lists — Concept",
+      path: "/ds-arrays-lists-concept",
+    },
+    {
+      name: "01. Arrays / Lists — Code",
+      path: "/ds-arrays-lists-code",
+    },
+    {
+      name: "02. Strings — Concept",
+      path: "/ds-strings-concept",
+    },
+    {
+      name: "02. Strings — Code",
+      path: "/ds-strings-code",
+    },
+    {
+      name: "03. Hash Table / Dictionary — Concept",
+      path: "/ds-hash-table-dictionary-concept",
+    },
+    {
+      name: "03. Hash Table / Dictionary — Code",
+      path: "/ds-hash-table-dictionary-code",
+    },
+    {
+      name: "04. Set — Concept",
+      path: "/ds-set-concept",
+    },
+    {
+      name: "04. Set — Code",
+      path: "/ds-set-code",
+    },
+    {
+      name: "05. Linked List — Concept",
+      path: "/ds-linked-list-concept",
+    },
+    {
+      name: "05. Linked List — Code",
+      path: "/ds-linked-list-code",
+    },
+    {
+      name: "06. Stack — Concept",
+      path: "/ds-stack-concept",
+    },
+    {
+      name: "06. Stack — Code",
+      path: "/ds-stack-code",
+    },
+    {
+      name: "07. Queue — Concept",
+      path: "/ds-queue-concept",
+    },
+    {
+      name: "07. Queue — Code",
+      path: "/ds-queue-code",
+    },
+    {
+      name: "08. Heap / Priority Queue — Concept",
+      path: "/ds-heap-priority-queue-concept",
+    },
+    {
+      name: "08. Heap / Priority Queue — Code",
+      path: "/ds-heap-priority-queue-code",
+    },
+    {
+      name: "09. Trees — Concept",
+      path: "/ds-trees-concept",
+    },
+    {
+      name: "09. Trees — Code",
+      path: "/ds-trees-code",
+    },
+    {
+      name: "10. Binary Search Tree (BST) — Concept",
+      path: "/ds-binary-search-tree-bst-concept",
+    },
+    {
+      name: "10. Binary Search Tree (BST) — Code",
+      path: "/ds-binary-search-tree-bst-code",
+    },
+    {
+      name: "11. Trie — Concept",
+      path: "/ds-trie-concept",
+    },
+    {
+      name: "11. Trie — Code",
+      path: "/ds-trie-code",
+    },
+    {
+      name: "12. Graphs — Concept",
+      path: "/ds-graphs-concept",
+    },
+    {
+      name: "12. Graphs — Code",
+      path: "/ds-graphs-code",
+    },
+    {
+      name: "13. Graph Algorithms — Concept",
+      path: "/ds-graph-algorithms-concept",
+    },
+    {
+      name: "14. Union-Find / Disjoint Set — Concept",
+      path: "/ds-union-find-disjoint-set-concept",
+    },
+    {
+      name: "14. Union-Find / Disjoint Set — Code",
+      path: "/ds-union-find-disjoint-set-code",
+    },
+    {
+      name: "15. Recursion — Concept",
+      path: "/ds-recursion-concept",
+    },
+    {
+      name: "15. Recursion — Code",
+      path: "/ds-recursion-code",
+    },
+    {
+      name: "16. Backtracking — Concept",
+      path: "/ds-backtracking-concept",
+    },
+    {
+      name: "16. Backtracking — Code",
+      path: "/ds-backtracking-code",
+    },
+    {
+      name: "17. Sorting — Concept",
+      path: "/ds-sorting-concept",
+    },
+    {
+      name: "17. Sorting — Code",
+      path: "/ds-sorting-code",
+    },
+    {
+      name: "18. Searching — Concept",
+      path: "/ds-searching-concept",
+    },
+    {
+      name: "18. Searching — Code",
+      path: "/ds-searching-code",
+    },
+    {
+      name: "19. Prefix Sum — Concept",
+      path: "/ds-prefix-sum-concept",
+    },
+    {
+      name: "19. Prefix Sum — Code",
+      path: "/ds-prefix-sum-code",
+    },
+    {
+      name: "20. Sliding Window — Concept",
+      path: "/ds-sliding-window-concept",
+    },
+    {
+      name: "20. Sliding Window — Code",
+      path: "/ds-sliding-window-code",
+    },
+    {
+      name: "21. Two Pointers — Concept",
+      path: "/ds-two-pointers-concept",
+    },
+    {
+      name: "21. Two Pointers — Code",
+      path: "/ds-two-pointers-code",
+    },
+    {
+      name: "22. Monotonic Stack / Queue — Concept",
+      path: "/ds-monotonic-stack-queue-concept",
+    },
+    {
+      name: "22. Monotonic Stack / Queue — Code",
+      path: "/ds-monotonic-stack-queue-code",
+    },
+    {
+      name: "23. Intervals — Concept",
+      path: "/ds-intervals-concept",
+    },
+    {
+      name: "23. Intervals — Code",
+      path: "/ds-intervals-code",
+    },
+    {
+      name: "24. Bit Manipulation — Concept",
+      path: "/ds-bit-manipulation-concept",
+    },
+    {
+      name: "24. Bit Manipulation — Code",
+      path: "/ds-bit-manipulation-code",
+    },
+    {
+      name: "25. Complexity & Analysis — Concept",
+      path: "/ds-complexity-analysis-concept",
+    },
+  ];
 
   // =====================================================
   // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
@@ -496,6 +695,15 @@ const AzureTopics = [
       <Dropdown
           name="Azure"
           topics={AzureTopics}
+        />
+
+        {/* =================================================
+            DATA STRUCTURES
+        ================================================= */}
+
+      <Dropdown
+          name="Data Structures"
+          topics={dsTopics}
         />
 
       </div>

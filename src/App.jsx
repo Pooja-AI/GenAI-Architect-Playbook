@@ -105,6 +105,60 @@ import AzureMonitorQuestion from "./pages/Azure/AzureMonitorQuestion";
 import AzureDevOpsQuestion from "./pages/Azure/AzureDevOpsQuestion";
 
 // =====================================================
+// DATA STRUCTURES INTERVIEW QUESTION COOKBOOKS
+// (one page per topic per section: concept + code)
+// =====================================================
+
+import DSArraysListsConceptQuestion from "./pages/data-structures-interview-questions/01-arrays-lists/concept";
+import DSArraysListsCodeQuestion from "./pages/data-structures-interview-questions/01-arrays-lists/code";
+import DSStringsConceptQuestion from "./pages/data-structures-interview-questions/02-strings/concept";
+import DSStringsCodeQuestion from "./pages/data-structures-interview-questions/02-strings/code";
+import DSHashTableDictionaryConceptQuestion from "./pages/data-structures-interview-questions/03-hash-table-dictionary/concept";
+import DSHashTableDictionaryCodeQuestion from "./pages/data-structures-interview-questions/03-hash-table-dictionary/code";
+import DSSetConceptQuestion from "./pages/data-structures-interview-questions/04-set/concept";
+import DSSetCodeQuestion from "./pages/data-structures-interview-questions/04-set/code";
+import DSLinkedListConceptQuestion from "./pages/data-structures-interview-questions/05-linked-list/concept";
+import DSLinkedListCodeQuestion from "./pages/data-structures-interview-questions/05-linked-list/code";
+import DSStackConceptQuestion from "./pages/data-structures-interview-questions/06-stack/concept";
+import DSStackCodeQuestion from "./pages/data-structures-interview-questions/06-stack/code";
+import DSQueueConceptQuestion from "./pages/data-structures-interview-questions/07-queue/concept";
+import DSQueueCodeQuestion from "./pages/data-structures-interview-questions/07-queue/code";
+import DSHeapPriorityQueueConceptQuestion from "./pages/data-structures-interview-questions/08-heap-priority-queue/concept";
+import DSHeapPriorityQueueCodeQuestion from "./pages/data-structures-interview-questions/08-heap-priority-queue/code";
+import DSTreesConceptQuestion from "./pages/data-structures-interview-questions/09-trees/concept";
+import DSTreesCodeQuestion from "./pages/data-structures-interview-questions/09-trees/code";
+import DSBinarySearchTreeBstConceptQuestion from "./pages/data-structures-interview-questions/10-binary-search-tree-bst/concept";
+import DSBinarySearchTreeBstCodeQuestion from "./pages/data-structures-interview-questions/10-binary-search-tree-bst/code";
+import DSTrieConceptQuestion from "./pages/data-structures-interview-questions/11-trie/concept";
+import DSTrieCodeQuestion from "./pages/data-structures-interview-questions/11-trie/code";
+import DSGraphsConceptQuestion from "./pages/data-structures-interview-questions/12-graphs/concept";
+import DSGraphsCodeQuestion from "./pages/data-structures-interview-questions/12-graphs/code";
+import DSGraphAlgorithmsConceptQuestion from "./pages/data-structures-interview-questions/13-graph-algorithms/concept";
+import DSUnionFindDisjointSetConceptQuestion from "./pages/data-structures-interview-questions/14-union-find-disjoint-set/concept";
+import DSUnionFindDisjointSetCodeQuestion from "./pages/data-structures-interview-questions/14-union-find-disjoint-set/code";
+import DSRecursionConceptQuestion from "./pages/data-structures-interview-questions/15-recursion/concept";
+import DSRecursionCodeQuestion from "./pages/data-structures-interview-questions/15-recursion/code";
+import DSBacktrackingConceptQuestion from "./pages/data-structures-interview-questions/16-backtracking/concept";
+import DSBacktrackingCodeQuestion from "./pages/data-structures-interview-questions/16-backtracking/code";
+import DSSortingConceptQuestion from "./pages/data-structures-interview-questions/17-sorting/concept";
+import DSSortingCodeQuestion from "./pages/data-structures-interview-questions/17-sorting/code";
+import DSSearchingConceptQuestion from "./pages/data-structures-interview-questions/18-searching/concept";
+import DSSearchingCodeQuestion from "./pages/data-structures-interview-questions/18-searching/code";
+import DSPrefixSumConceptQuestion from "./pages/data-structures-interview-questions/19-prefix-sum/concept";
+import DSPrefixSumCodeQuestion from "./pages/data-structures-interview-questions/19-prefix-sum/code";
+import DSSlidingWindowConceptQuestion from "./pages/data-structures-interview-questions/20-sliding-window/concept";
+import DSSlidingWindowCodeQuestion from "./pages/data-structures-interview-questions/20-sliding-window/code";
+import DSTwoPointersConceptQuestion from "./pages/data-structures-interview-questions/21-two-pointers/concept";
+import DSTwoPointersCodeQuestion from "./pages/data-structures-interview-questions/21-two-pointers/code";
+import DSMonotonicStackQueueConceptQuestion from "./pages/data-structures-interview-questions/22-monotonic-stack-queue/concept";
+import DSMonotonicStackQueueCodeQuestion from "./pages/data-structures-interview-questions/22-monotonic-stack-queue/code";
+import DSIntervalsConceptQuestion from "./pages/data-structures-interview-questions/23-intervals/concept";
+import DSIntervalsCodeQuestion from "./pages/data-structures-interview-questions/23-intervals/code";
+import DSBitManipulationConceptQuestion from "./pages/data-structures-interview-questions/24-bit-manipulation/concept";
+import DSBitManipulationCodeQuestion from "./pages/data-structures-interview-questions/24-bit-manipulation/code";
+import DSComplexityAnalysisConceptQuestion from "./pages/data-structures-interview-questions/25-complexity-analysis/concept";
+
+// =====================================================
 // COMPONENTS
 // =====================================================
 
@@ -573,6 +627,298 @@ function App() {
         <Route
           path="/azure-devops"
           element={<AzureDevOpsQuestion />}
+        />
+
+        {/* =================================================
+            DATA STRUCTURES INTERVIEW QUESTION COOKBOOKS
+        ================================================= */}
+
+        {/* 01. Arrays / Lists — Concept */}
+        <Route
+          path="/ds-arrays-lists-concept"
+          element={<DSArraysListsConceptQuestion />}
+        />
+
+        {/* 01. Arrays / Lists — Code */}
+        <Route
+          path="/ds-arrays-lists-code"
+          element={<DSArraysListsCodeQuestion />}
+        />
+
+        {/* 02. Strings — Concept */}
+        <Route
+          path="/ds-strings-concept"
+          element={<DSStringsConceptQuestion />}
+        />
+
+        {/* 02. Strings — Code */}
+        <Route
+          path="/ds-strings-code"
+          element={<DSStringsCodeQuestion />}
+        />
+
+        {/* 03. Hash Table / Dictionary — Concept */}
+        <Route
+          path="/ds-hash-table-dictionary-concept"
+          element={<DSHashTableDictionaryConceptQuestion />}
+        />
+
+        {/* 03. Hash Table / Dictionary — Code */}
+        <Route
+          path="/ds-hash-table-dictionary-code"
+          element={<DSHashTableDictionaryCodeQuestion />}
+        />
+
+        {/* 04. Set — Concept */}
+        <Route
+          path="/ds-set-concept"
+          element={<DSSetConceptQuestion />}
+        />
+
+        {/* 04. Set — Code */}
+        <Route
+          path="/ds-set-code"
+          element={<DSSetCodeQuestion />}
+        />
+
+        {/* 05. Linked List — Concept */}
+        <Route
+          path="/ds-linked-list-concept"
+          element={<DSLinkedListConceptQuestion />}
+        />
+
+        {/* 05. Linked List — Code */}
+        <Route
+          path="/ds-linked-list-code"
+          element={<DSLinkedListCodeQuestion />}
+        />
+
+        {/* 06. Stack — Concept */}
+        <Route
+          path="/ds-stack-concept"
+          element={<DSStackConceptQuestion />}
+        />
+
+        {/* 06. Stack — Code */}
+        <Route
+          path="/ds-stack-code"
+          element={<DSStackCodeQuestion />}
+        />
+
+        {/* 07. Queue — Concept */}
+        <Route
+          path="/ds-queue-concept"
+          element={<DSQueueConceptQuestion />}
+        />
+
+        {/* 07. Queue — Code */}
+        <Route
+          path="/ds-queue-code"
+          element={<DSQueueCodeQuestion />}
+        />
+
+        {/* 08. Heap / Priority Queue — Concept */}
+        <Route
+          path="/ds-heap-priority-queue-concept"
+          element={<DSHeapPriorityQueueConceptQuestion />}
+        />
+
+        {/* 08. Heap / Priority Queue — Code */}
+        <Route
+          path="/ds-heap-priority-queue-code"
+          element={<DSHeapPriorityQueueCodeQuestion />}
+        />
+
+        {/* 09. Trees — Concept */}
+        <Route
+          path="/ds-trees-concept"
+          element={<DSTreesConceptQuestion />}
+        />
+
+        {/* 09. Trees — Code */}
+        <Route
+          path="/ds-trees-code"
+          element={<DSTreesCodeQuestion />}
+        />
+
+        {/* 10. Binary Search Tree (BST) — Concept */}
+        <Route
+          path="/ds-binary-search-tree-bst-concept"
+          element={<DSBinarySearchTreeBstConceptQuestion />}
+        />
+
+        {/* 10. Binary Search Tree (BST) — Code */}
+        <Route
+          path="/ds-binary-search-tree-bst-code"
+          element={<DSBinarySearchTreeBstCodeQuestion />}
+        />
+
+        {/* 11. Trie — Concept */}
+        <Route
+          path="/ds-trie-concept"
+          element={<DSTrieConceptQuestion />}
+        />
+
+        {/* 11. Trie — Code */}
+        <Route
+          path="/ds-trie-code"
+          element={<DSTrieCodeQuestion />}
+        />
+
+        {/* 12. Graphs — Concept */}
+        <Route
+          path="/ds-graphs-concept"
+          element={<DSGraphsConceptQuestion />}
+        />
+
+        {/* 12. Graphs — Code */}
+        <Route
+          path="/ds-graphs-code"
+          element={<DSGraphsCodeQuestion />}
+        />
+
+        {/* 13. Graph Algorithms — Concept (no dedicated coding section in source) */}
+        <Route
+          path="/ds-graph-algorithms-concept"
+          element={<DSGraphAlgorithmsConceptQuestion />}
+        />
+
+        {/* 14. Union-Find / Disjoint Set — Concept */}
+        <Route
+          path="/ds-union-find-disjoint-set-concept"
+          element={<DSUnionFindDisjointSetConceptQuestion />}
+        />
+
+        {/* 14. Union-Find / Disjoint Set — Code */}
+        <Route
+          path="/ds-union-find-disjoint-set-code"
+          element={<DSUnionFindDisjointSetCodeQuestion />}
+        />
+
+        {/* 15. Recursion — Concept */}
+        <Route
+          path="/ds-recursion-concept"
+          element={<DSRecursionConceptQuestion />}
+        />
+
+        {/* 15. Recursion — Code */}
+        <Route
+          path="/ds-recursion-code"
+          element={<DSRecursionCodeQuestion />}
+        />
+
+        {/* 16. Backtracking — Concept */}
+        <Route
+          path="/ds-backtracking-concept"
+          element={<DSBacktrackingConceptQuestion />}
+        />
+
+        {/* 16. Backtracking — Code */}
+        <Route
+          path="/ds-backtracking-code"
+          element={<DSBacktrackingCodeQuestion />}
+        />
+
+        {/* 17. Sorting — Concept */}
+        <Route
+          path="/ds-sorting-concept"
+          element={<DSSortingConceptQuestion />}
+        />
+
+        {/* 17. Sorting — Code */}
+        <Route
+          path="/ds-sorting-code"
+          element={<DSSortingCodeQuestion />}
+        />
+
+        {/* 18. Searching — Concept */}
+        <Route
+          path="/ds-searching-concept"
+          element={<DSSearchingConceptQuestion />}
+        />
+
+        {/* 18. Searching — Code */}
+        <Route
+          path="/ds-searching-code"
+          element={<DSSearchingCodeQuestion />}
+        />
+
+        {/* 19. Prefix Sum — Concept */}
+        <Route
+          path="/ds-prefix-sum-concept"
+          element={<DSPrefixSumConceptQuestion />}
+        />
+
+        {/* 19. Prefix Sum — Code */}
+        <Route
+          path="/ds-prefix-sum-code"
+          element={<DSPrefixSumCodeQuestion />}
+        />
+
+        {/* 20. Sliding Window — Concept */}
+        <Route
+          path="/ds-sliding-window-concept"
+          element={<DSSlidingWindowConceptQuestion />}
+        />
+
+        {/* 20. Sliding Window — Code */}
+        <Route
+          path="/ds-sliding-window-code"
+          element={<DSSlidingWindowCodeQuestion />}
+        />
+
+        {/* 21. Two Pointers — Concept */}
+        <Route
+          path="/ds-two-pointers-concept"
+          element={<DSTwoPointersConceptQuestion />}
+        />
+
+        {/* 21. Two Pointers — Code */}
+        <Route
+          path="/ds-two-pointers-code"
+          element={<DSTwoPointersCodeQuestion />}
+        />
+
+        {/* 22. Monotonic Stack / Queue — Concept */}
+        <Route
+          path="/ds-monotonic-stack-queue-concept"
+          element={<DSMonotonicStackQueueConceptQuestion />}
+        />
+
+        {/* 22. Monotonic Stack / Queue — Code */}
+        <Route
+          path="/ds-monotonic-stack-queue-code"
+          element={<DSMonotonicStackQueueCodeQuestion />}
+        />
+
+        {/* 23. Intervals — Concept */}
+        <Route
+          path="/ds-intervals-concept"
+          element={<DSIntervalsConceptQuestion />}
+        />
+
+        {/* 23. Intervals — Code */}
+        <Route
+          path="/ds-intervals-code"
+          element={<DSIntervalsCodeQuestion />}
+        />
+
+        {/* 24. Bit Manipulation — Concept */}
+        <Route
+          path="/ds-bit-manipulation-concept"
+          element={<DSBitManipulationConceptQuestion />}
+        />
+
+        {/* 24. Bit Manipulation — Code */}
+        <Route
+          path="/ds-bit-manipulation-code"
+          element={<DSBitManipulationCodeQuestion />}
+        />
+
+        {/* 25. Complexity & Analysis — Concept (no dedicated coding section in source) */}
+        <Route
+          path="/ds-complexity-analysis-concept"
+          element={<DSComplexityAnalysisConceptQuestion />}
         />
 
       </Routes>
