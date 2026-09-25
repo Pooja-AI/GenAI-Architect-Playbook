@@ -174421,19 +174421,98 @@ CloudWatch + CloudTrail
 \`\`\`
 
 This is the cleanest way to explain the AWS stack without sounding like you're simply listing AWS services.
-`,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose Amazon Bedrock?
+`,code:``},{id:`003-why-did-you-choose-amazon-bedrock`,category:`AWS Architecture`,title:`Why did you choose Amazon Bedrock?`,difficulty:`Intermediate`,time:`~10 min`,concept:`## Why did you choose Amazon Bedrock?
 
-## Short answer
-Bedrock provides managed access to foundation models from several providers through one API, secured with IAM and PrivateLink.
+For an **AWS version of CWD**, I would choose Amazon Web Services **Amazon Bedrock** because it provides a managed way to access multiple foundation models while integrating with AWS security, networking, monitoring, and application services.
 
-## Key points
-- No model infrastructure to run; pay per token, with optional Provisioned Throughput.
-- Guardrails, Knowledge Bases, prompt management, batch inference and model evaluation are built in.
-- IAM authentication, CloudTrail audit, invocation logging; AWS states customer prompts are not used to train the models.
-- Model choice can change without a platform change.
+### Main reasons
 
-## CWD context
-It keeps LLM access inside the same identity, network and audit model as the rest of CWD.
+1. **Multiple foundation models**
+
+   * Access models from different providers through one AWS service.
+   * Makes model evaluation and model switching easier.
+
+2. **Enterprise security**
+
+   * Integrates with AWS IAM, KMS, VPC/private networking patterns, and CloudTrail.
+   * Supports enterprise governance requirements.
+
+3. **Model flexibility**
+
+   * We can evaluate models based on:
+
+     * Reasoning quality
+     * Tool calling
+     * Context requirements
+     * Latency
+     * Cost
+     * Multimodal capability
+
+4. **AWS ecosystem integration**
+
+For CWD:
+
+\`\`\`text
+CWD
+ ↓
+Model Router
+ ↓
+Amazon Bedrock
+ ↓
+Foundation Model
+ ↓
+Coordinator / Worker
+\`\`\`
+
+And it integrates naturally with services such as:
+
+\`\`\`text
+S3          → documents
+OpenSearch  → RAG/vector search
+Lambda      → tools/functions
+DynamoDB    → state
+CloudWatch  → monitoring
+IAM         → authorization
+KMS         → encryption
+\`\`\`
+
+5. **Managed service**
+
+I don't have to build and operate the underlying foundation-model infrastructure myself. Bedrock provides managed access to foundation models, allowing the team to focus more on the CWD agent architecture and business workflows.
+
+### Example in CWD
+
+For a **Customer Briefing** request:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Sales / Service Delegator
+ ↓
+Workers
+ ↓
+RAG + MCP tools
+ ↓
+Bedrock
+ ↓
+Final synthesis
+ ↓
+Customer briefing
+\`\`\`
+
+The Workers retrieve Salesforce/ServiceNow information, and Bedrock can perform the reasoning and synthesis.
+
+### 🎯 Strong interview answer
+
+> **“For the AWS implementation of CWD, we chose Amazon Bedrock because it provides managed access to multiple foundation models while fitting naturally into the AWS enterprise ecosystem. It integrates with IAM, KMS, CloudWatch and other AWS services for security and governance. It also gives us model flexibility, so we can evaluate different models based on reasoning quality, tool calling, latency, cost and context requirements. This allowed us to focus on the multi-agent architecture while using Bedrock as the managed foundation-model layer.”**
+
+### Easy memory trick
+
+**Models → Security → Flexibility → AWS Integration → Managed**
+
+One important interview point: **Bedrock is not itself the agent orchestration framework.** In CWD, LangGraph or another orchestration layer coordinates the agents, while Bedrock provides the foundation-model capabilities.
 `,code:``},{id:`004-why-did-you-choose-api-gateway`,category:`AWS Architecture`,title:`Why did you choose API Gateway?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose API Gateway?
 
 ## Short answer
@@ -174445,45 +174524,807 @@ API Gateway is the managed front door that offloads authentication, throttling, 
 - Custom domains, stages, access logs and metrics.
 - Private integrations to ECS through VPC Link.
 
-## CWD context
-The backend receives only authenticated, validated, rate-limited traffic.
+## Why did you choose API Gateway?
+
+For the **AWS version of CWD**, I chose Amazon Web Services **API Gateway** as the **secure API entry point** between external clients and our CWD backend.
+
+### CWD flow
+
+\`\`\`text
+User / Application
+       ↓
+   API Gateway
+       ↓
+ Authentication / Authorization
+       ↓
+     CWD API
+       ↓
+   Coordinator
+       ↓
+    Delegator
+       ↓
+     Workers
+       ↓
+ MCP / RAG / Enterprise Systems
+\`\`\`
+
+### Why API Gateway?
+
+**1. Secure entry point**
+
+It provides a controlled front door for CWD APIs instead of exposing backend services directly.
+
+**2. Authentication & authorization**
+
+We can integrate with AWS identity mechanisms and enforce who can call which APIs.
+
+**3. Throttling**
+
+API Gateway can control request rates.
+
+\`\`\`text
+Too many requests
+       ↓
+ API Gateway
+       ↓
+ Throttle
+       ↓
+ Protect CWD backend
+\`\`\`
+
+This is particularly useful when many users are calling CWD simultaneously.
+
+**4. Request validation**
+
+We can validate API requests before they reach the Coordinator—for example, required fields and request structure.
+
+**5. Monitoring**
+
+We can capture API-level metrics such as:
+
+* Request count
+* Error rate
+* Latency
+* 4xx/5xx responses
+* Throttling
+
+These can be integrated with CloudWatch.
+
+**6. Decoupling**
+
+The client doesn't need to know whether CWD is running on Lambda, ECS, EKS, or another backend.
+
+\`\`\`text
+Client
+  ↓
+API Gateway
+  ↓
+CWD backend
+\`\`\`
+
+The backend can evolve without changing the public API contract.
+
+**7. Protection of backend services**
+
+API Gateway acts as a controlled boundary before requests reach the Coordinator and downstream services.
+
+---
+
+### Example
+
+A user requests:
+
+> "Create a customer briefing for customer C123."
+
+The request might enter through:
+
+\`\`\`text
+POST /customer-briefing
+
+{
+  "customer_id": "C123"
+}
+\`\`\`
+
+Then:
+
+\`\`\`text
+API Gateway
+   ↓
+Validate + Authenticate
+   ↓
+CWD API
+   ↓
+Coordinator
+   ↓
+Sales Delegator + IT Delegator
+   ↓
+Workers
+\`\`\`
+
+---
+
+### 🎯 Strong interview answer
+
+> **“We chose Amazon API Gateway as the secure API entry point for CWD. It provides authentication and authorization integration, throttling, request validation, monitoring, and a controlled boundary between clients and our backend services. It also decouples the public API from the underlying implementation, so the CWD backend can evolve independently. From an operational perspective, API Gateway metrics integrate with CloudWatch, allowing us to monitor traffic, errors, latency, and throttling.”**
+
+### Easy memory trick
+
+**Secure → Validate → Throttle → Monitor → Decouple**
+
+### Key distinction
+
+Don't say **“API Gateway manages my agents.”**
+
+Instead:
+
+> **“API Gateway manages the API boundary; LangGraph manages the agent workflow.”**
+
 `,code:``},{id:`005-why-did-you-choose-lambda`,category:`AWS Architecture`,title:`Why did you choose Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why did you choose Lambda?
 
 ## Short answer
-Lambda suits short, stateless, event-driven work with automatic scaling and pay-per-use pricing.
+
+AWS Lambda is a serverless compute service that we use for **short-running, event-driven, lightweight CWD tasks** without managing servers.
 
 ## Key points
-- API authorisers, S3 event handlers, SQS consumers for light Workers, small tool endpoints, glue between services.
-- Scales automatically from zero; minimal operations.
-- Limited by a 15-minute maximum duration and statelessness.
 
-## CWD context
-Lambda is glue and small tasks; the long-running agent runtime is not on Lambda.
+* Serverless — no server management.
+* Automatically scales based on incoming requests/events.
+* Good for short-lived functions.
+* Pay based on execution/usage.
+* Integrates with API Gateway, S3, EventBridge, SQS, Step Functions, etc.
+* Useful for preprocessing, validation, lightweight tool functions and event processing.
+* Supports retries and asynchronous processing through AWS event services.
+* Not ideal for long-running or highly stateful workloads.
+
+### CWD flow
+
+\`\`\`text
+User / Application
+       ↓
+   API Gateway
+       ↓
+     CWD API
+       ↓
+   Coordinator
+       ↓
+    Delegator
+       ↓
+     Worker
+       ↓
+ ┌───────────────┐
+ │ Lambda        │
+ │               │
+ │ Validation    │
+ │ Preprocessing │
+ │ Tool Function │
+ │ Event Handler │
+ └───────────────┘
+       ↓
+Enterprise Systems
+\`\`\`
+
+## Why Lambda?
+
+**1. Serverless execution**
+
+We don't need to provision or maintain servers for lightweight functions.
+
+\`\`\`text
+Request
+   ↓
+Lambda
+   ↓
+Execute function
+   ↓
+Return result
+\`\`\`
+
+**2. Automatic scaling**
+
+If multiple requests arrive, Lambda can create additional execution environments according to configured limits.
+
+\`\`\`text
+10 requests
+     ↓
+Lambda
+     ↓
+Multiple executions
+\`\`\`
+
+We still configure concurrency limits to protect downstream systems.
+
+**3. Good for event-driven workloads**
+
+For example:
+
+\`\`\`text
+S3 document uploaded
+        ↓
+      Lambda
+        ↓
+Extract / preprocess
+        ↓
+S3 / OpenSearch
+\`\`\`
+
+Or:
+
+\`\`\`text
+Queue message
+      ↓
+Lambda
+      ↓
+Process event
+\`\`\`
+
+**4. Cost efficiency**
+
+For intermittent workloads, serverless execution can avoid paying for continuously running compute capacity.
+
+**5. AWS integration**
+
+Lambda integrates naturally with:
+
+* API Gateway
+* S3
+* SQS
+* EventBridge
+* Step Functions
+* DynamoDB
+* CloudWatch
+
+## Example
+
+Suppose a document is uploaded to S3:
+
+\`\`\`text
+User uploads document
+        ↓
+       S3
+        ↓
+     Lambda
+        ↓
+Extract / preprocess
+        ↓
+Chunk / metadata processing
+        ↓
+OpenSearch / downstream pipeline
+\`\`\`
+
+Another example is a lightweight CWD tool:
+
+\`\`\`text
+Worker
+   ↓
+MCP Server
+   ↓
+Lambda
+   ↓
+Enterprise API
+   ↓
+Result
+\`\`\`
+
+Lambda can implement a small, stateless function behind the MCP integration when that pattern fits the workload.
+
+---
+
+## When I would NOT use Lambda
+
+This is an important interview point.
+
+I wouldn't automatically put the entire CWD application into Lambda.
+
+For example, **long-running, stateful, complex orchestration or workloads requiring persistent processes** may be better suited to ECS/EKS or another compute platform.
+
+\`\`\`text
+Short + event-driven
+        ↓
+     Lambda
+
+Long-running / persistent
+        ↓
+    ECS / EKS
+\`\`\`
+
+The exact choice depends on execution duration, state, concurrency, networking, startup requirements, and operational needs.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“We chose Lambda for short-running, stateless, event-driven components of CWD where we didn't need to manage servers. It provides automatic scaling, pay-per-use execution, and integrates well with services such as API Gateway, S3, SQS, EventBridge, Step Functions, and CloudWatch. For example, we can use Lambda for request validation, lightweight preprocessing, event processing, or implementing a small tool function behind an MCP integration. We would not use Lambda for every component; long-running or persistent workloads would be better suited to ECS or EKS.”**
+
+## Easy memory trick
+
+**Serverless → Event-driven → Short-lived → Auto-scale → Pay-per-use**
+
+## Key distinction
+
+> **“Lambda is for lightweight serverless compute; it does not replace LangGraph for orchestration or Bedrock for LLM capabilities.”**
 `,code:``},{id:`006-why-would-you-choose-ecs-fargate-instead-of-lambda`,category:`AWS Architecture`,title:`Why would you choose ECS/Fargate instead of Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you choose ECS/Fargate instead of Lambda?
 
 ## Short answer
-Choose ECS Fargate over Lambda for long-running, connection-heavy or steady workloads.
+
+I choose **ECS/Fargate** when the CWD component needs a **long-running containerized application, more control over runtime resources, predictable networking, or workloads that aren't a good fit for Lambda's execution model**.
 
 ## Key points
-- Runs longer than 15 minutes, streaming and persistent connections.
-- Larger images and dependencies; predictable latency without cold starts.
-- Cost is often lower at sustained load; consistent runtime for the LangGraph service.
-- Fargate has no GPU; use EC2-backed ECS or SageMaker for GPU needs.
 
-## CWD context
-Coordinator, Delegators, Workers and MCP servers run on Fargate; event glue stays on Lambda.
+* Long-running services.
+* Containerized applications.
+* More control over CPU and memory.
+* No server management with Fargate.
+* Better fit for persistent API services.
+* Good for FastAPI/CWD backend services.
+* Supports custom Docker environments and dependencies.
+* Easier to run processes that need more control than Lambda provides.
+* Integrates with VPC, ALB, CloudWatch, IAM, Secrets Manager, etc.
+
+### CWD flow
+
+\`\`\`text id="e5k7q2"
+User / Application
+       ↓
+   API Gateway
+       ↓
+      ALB
+       ↓
+   ECS / Fargate
+       ↓
+     CWD API
+       ↓
+   Coordinator
+       ↓
+    Delegator
+       ↓
+     Workers
+       ↓
+   MCP / RAG / LLM
+\`\`\`
+
+## Why ECS/Fargate?
+
+**1. Long-running services**
+
+Lambda is designed around function invocations.
+
+For a continuously running CWD API:
+
+\`\`\`text id="j8p4wq"
+FastAPI / CWD API
+       ↓
+ECS/Fargate
+       ↓
+Long-running container
+\`\`\`
+
+This is a natural fit.
+
+---
+
+**2. More control over CPU and memory**
+
+With Fargate, we define the compute resources for the container.
+
+For example:
+
+\`\`\`text id="x6r2mn"
+CWD API Container
+
+CPU    → configured
+Memory → configured
+\`\`\`
+
+This gives us more predictable resource allocation for heavier application workloads.
+
+---
+
+**3. Containerized architecture**
+
+If the CWD application already has:
+
+\`\`\`text id="a3c8vk"
+Python
+FastAPI
+LangGraph
+MCP SDKs
+Custom libraries
+System dependencies
+\`\`\`
+
+we can package everything into a Docker container.
+
+\`\`\`text id="n7y4ps"
+Application
+   ↓
+Docker Image
+   ↓
+ECS Task
+   ↓
+Fargate
+\`\`\`
+
+We don't need to redesign the application as individual Lambda functions.
+
+---
+
+**4. Better fit for complex backend services**
+
+For example, the CWD API could contain:
+
+\`\`\`text id="q9m2zt"
+FastAPI
+   ↓
+LangGraph
+   ↓
+Coordinator
+   ↓
+Delegators
+   ↓
+Workers
+\`\`\`
+
+Running this as a containerized service can be simpler than breaking every component into Lambda functions.
+
+---
+
+**5. Networking control**
+
+Fargate tasks can run inside a VPC with controlled networking.
+
+\`\`\`text id="w4k8hs"
+Internet
+   ↓
+API Gateway / ALB
+   ↓
+Private VPC
+   ↓
+ECS/Fargate
+   ↓
+Private services
+\`\`\`
+
+This is useful when CWD needs controlled access to private enterprise resources.
+
+---
+
+**6. Persistent service model**
+
+For APIs that receive continuous traffic, keeping application containers running can provide a more predictable service model.
+
+Lambda can still be excellent for event-driven functions, but ECS/Fargate is often a better architectural fit for a continuously running application service.
+
+---
+
+## Lambda vs ECS/Fargate
+
+| Requirement                    | Lambda                       | ECS/Fargate        |
+| ------------------------------ | ---------------------------- | ------------------ |
+| Server management              | None                         | None with Fargate  |
+| Execution model                | Function                     | Container/service  |
+| Long-running service           | Less suitable                | Suitable           |
+| Custom runtime                 | Possible, with constraints   | Strong flexibility |
+| Docker application             | Possible but different model | Natural fit        |
+| CPU/memory control             | More constrained             | More control       |
+| Event-driven processing        | Excellent                    | Good               |
+| FastAPI service                | Possible                     | Natural fit        |
+| Complex dependencies           | Can be challenging           | Good fit           |
+| Persistent application service | Less natural                 | Good fit           |
+
+---
+
+## Example in CWD
+
+I could use **both** rather than choosing only one.
+
+\`\`\`text id="d2v6ra"
+                    CWD
+                     │
+          ┌──────────┴──────────┐
+          ↓                     ↓
+    ECS/Fargate              Lambda
+          │                     │
+   FastAPI + LangGraph      Event processing
+   Coordinator             Lightweight tools
+   Delegators              S3 processing
+   Workers                 Validation
+          │
+          ↓
+     Bedrock / MCP
+\`\`\`
+
+So the architecture can be:
+
+**ECS/Fargate → core CWD application**
+
+**Lambda → lightweight/event-driven functions**
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would choose ECS/Fargate instead of Lambda when the CWD component is a long-running, containerized service or requires more control over runtime resources and networking. For example, I could package our FastAPI and LangGraph-based CWD backend into a Docker container and run it on ECS/Fargate. Fargate removes server-management overhead while giving us control over CPU, memory, containers, and VPC networking. I would still use Lambda for lightweight, short-running, event-driven functions. So the decision is based on the workload rather than using one compute service for everything.”**
+
+## Easy memory trick
+
+**Lambda = Function**
+
+**Fargate = Container**
+
+Think:
+
+\`\`\`text id="p8k3zy"
+Short + Event-driven
+        ↓
+     Lambda
+
+Long-running + Containerized
+        ↓
+   ECS/Fargate
+\`\`\`
+
+## Key distinction
+
+> **“Lambda is function-oriented; ECS/Fargate is container/service-oriented. For CWD, I would typically use Fargate for the core FastAPI/LangGraph service and Lambda for lightweight event-driven tasks.”**
 `,code:``},{id:`007-when-would-you-choose-eks`,category:`AWS Architecture`,title:`When would you choose EKS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# When would you choose EKS?
 
 ## Short answer
-Choose EKS when you genuinely need the Kubernetes ecosystem and can afford its operational load.
+
+I would choose **Amazon EKS** when CWD requires **Kubernetes-level orchestration, advanced container management, high scalability, complex microservices, or Kubernetes-native capabilities** that go beyond what ECS/Fargate provides.
 
 ## Key points
-- Kubernetes APIs, operators, CRDs and service mesh.
-- Portability or multi-cloud standardisation; advanced scheduling and GPU pools.
-- An existing platform team with Kubernetes skills.
 
-## CWD context
-Otherwise ECS Fargate is simpler and sufficient.
+* Kubernetes orchestration.
+* Large-scale containerized workloads.
+* Complex microservice architecture.
+* Advanced autoscaling.
+* Kubernetes-native deployment patterns.
+* Service mesh and advanced networking.
+* GPU workloads when required.
+* Fine-grained workload scheduling.
+* Helm/operators/custom Kubernetes controllers.
+* Multi-team platform standardization.
+
+### CWD flow
+
+\`\`\`text id="r5k8dn"
+User / Application
+       ↓
+   API Gateway
+       ↓
+      ALB
+       ↓
+      EKS
+       ↓
+ ┌───────────────────────────┐
+ │ CWD Kubernetes Cluster    │
+ │                           │
+ │ Coordinator               │
+ │ Delegators                │
+ │ Workers                   │
+ │ MCP Services              │
+ │ RAG Services              │
+ │ Evaluation Services       │
+ └───────────────────────────┘
+       ↓
+Bedrock / OpenSearch / AWS Services
+\`\`\`
+
+## Why EKS?
+
+**1. Complex microservices**
+
+If CWD grows into many independently deployed services:
+
+\`\`\`text id="w2f6mc"
+Coordinator Service
+       ↓
+Sales Delegator
+       ↓
+Service Delegator
+       ↓
+Multiple Workers
+       ↓
+MCP Services
+       ↓
+Evaluation Services
+\`\`\`
+
+EKS provides Kubernetes orchestration for these workloads.
+
+---
+
+**2. Advanced autoscaling**
+
+We can scale workloads based on different signals:
+
+\`\`\`text id="g8v3qp"
+CPU
+Memory
+Request rate
+Queue depth
+Custom metrics
+        ↓
+Kubernetes Autoscaling
+        ↓
+More / fewer Pods
+\`\`\`
+
+For example, if Worker demand increases significantly, Kubernetes can scale Worker pods independently.
+
+---
+
+**3. Kubernetes-native deployment**
+
+EKS supports standard Kubernetes mechanisms such as:
+
+* Deployments
+* Services
+* ConfigMaps
+* Secrets
+* Ingress
+* Helm
+* Horizontal Pod Autoscaler
+* Cluster Autoscaler/Karpenter
+
+This is useful when an organization already has a strong Kubernetes platform.
+
+---
+
+**4. Advanced networking**
+
+For complex enterprise environments, we may need:
+
+* Private subnets
+* Network policies
+* Ingress control
+* Service-to-service communication
+* Service mesh
+* Fine-grained traffic routing
+
+EKS gives us Kubernetes-native options for these patterns.
+
+---
+
+**5. GPU workloads**
+
+If CWD eventually hosts specialized models or AI workloads requiring GPUs:
+
+\`\`\`text id="c0r7vy"
+AI Worker
+   ↓
+GPU Pod
+   ↓
+EKS GPU Node
+\`\`\`
+
+EKS can provide Kubernetes-based scheduling and management of those workloads.
+
+For managed foundation models such as Bedrock, we wouldn't need GPUs in CWD simply to call the model.
+
+---
+
+**6. Platform standardization**
+
+If the company already runs hundreds of applications on Kubernetes, using EKS can provide a common platform for:
+
+\`\`\`text id="n4q9ws"
+CWD
+Other AI services
+ML services
+Microservices
+Internal platforms
+\`\`\`
+
+This can simplify organizational standards around deployment, observability, security, and operations.
+
+---
+
+## When I would NOT choose EKS
+
+I wouldn't choose EKS just because it is powerful.
+
+For a relatively simple CWD deployment:
+
+\`\`\`text
+Simple API
+   ↓
+ECS/Fargate
+\`\`\`
+
+may be sufficient.
+
+EKS introduces additional Kubernetes operational complexity:
+
+* Cluster management
+* Kubernetes upgrades
+* Networking
+* RBAC
+* Pod scheduling
+* Ingress
+* Observability
+* Security policies
+
+So there should be a real architectural reason to use it.
+
+---
+
+## ECS/Fargate vs EKS
+
+| Requirement                  | ECS/Fargate                       | EKS                               |
+| ---------------------------- | --------------------------------- | --------------------------------- |
+| Simple container service     | ✅                                 | Possible                          |
+| Long-running API             | ✅                                 | ✅                                 |
+| Server management            | Low                               | Low, but more platform complexity |
+| Kubernetes required          | ❌                                 | ✅                                 |
+| Complex microservices        | ✅                                 | ✅                                 |
+| Advanced Kubernetes features | Limited                           | ✅                                 |
+| Helm/operators               | ❌                                 | ✅                                 |
+| Service mesh                 | Possible through other mechanisms | Strong Kubernetes ecosystem       |
+| GPU scheduling               | Possible                          | Strong fit                        |
+| Operational complexity       | Lower                             | Higher                            |
+| Existing Kubernetes platform | Less natural                      | Strong fit                        |
+
+---
+
+## Example in CWD
+
+Suppose CWD grows from:
+
+\`\`\`text id="s7m3ka"
+1 Coordinator
+2 Delegators
+10 Workers
+\`\`\`
+
+to:
+
+\`\`\`text id="d1x8rp"
+Multiple Coordinators
+     ↓
+Many Delegators
+     ↓
+Hundreds of Workers
+     ↓
+Many MCP services
+     ↓
+Evaluation / Guardrail services
+     ↓
+Multiple AI workloads
+\`\`\`
+
+At that point, if the organization already operates Kubernetes, EKS can provide a standardized platform for deploying and scaling these services.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would choose EKS when the CWD platform requires Kubernetes-level orchestration and advanced container capabilities. For example, if we have many independently deployed Coordinators, Delegators, Workers, MCP services, and AI workloads that need independent scaling, advanced scheduling, service-to-service networking, or GPU workloads, EKS becomes a strong option. I would also consider it when the organization already has a mature Kubernetes platform and operational expertise. I wouldn't choose EKS just because it is more powerful; for a simpler containerized CWD backend, ECS/Fargate can provide the required capability with less operational complexity.”**
+
+## Easy memory trick
+
+**EKS = Kubernetes + Scale + Control + Complex workloads**
+
+Think:
+
+\`\`\`text id="q5n9bt"
+Lambda
+  ↓
+Function
+
+ECS/Fargate
+  ↓
+Container
+
+EKS
+  ↓
+Kubernetes platform
+\`\`\`
+
+## Key distinction
+
+> **“I choose ECS/Fargate when I mainly need managed containers. I choose EKS when I need the Kubernetes platform and its advanced orchestration capabilities.”**
 `,code:``},{id:`008-where-would-you-use-step-functions`,category:`AWS Architecture`,title:`Where would you use Step Functions?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use Step Functions?
 
 ## Short answer
@@ -174496,328 +175337,7788 @@ Use Step Functions for durable, visible orchestration of multi-step workflows ac
 
 ## CWD context
 Step Functions orchestrates infrastructure workflows; LangGraph orchestrates agent reasoning.
+# Where would you use Step Functions?
+
+## Short answer
+
+I would use **AWS Step Functions** for **durable, explicit business workflows** where I need retries, timeouts, branching, parallel execution, error handling, and workflow state without implementing all of that orchestration logic myself.
+
+For CWD, I would use Step Functions mainly for **AWS service/workflow orchestration**, while **LangGraph handles the agent reasoning and dynamic multi-agent workflow**.
+
+## Key points
+
+* Durable workflow execution.
+* Sequential and parallel steps.
+* Conditional branching.
+* Retry and catch handling.
+* Timeout handling.
+* Workflow state tracking.
+* Human approval workflows.
+* Integration with Lambda, ECS, Bedrock and other AWS services.
+* Visual workflow monitoring.
+* Good for predictable, predefined workflows.
+
+### CWD flow
+
+\`\`\`text id="n7p3kx"
+User
+  ↓
+API Gateway
+  ↓
+CWD API
+  ↓
+Coordinator
+  ↓
+Delegator
+  ↓
+Step Functions
+  ↓
+ ┌──────────────┬──────────────┐
+ ↓              ↓              ↓
+Sales Worker  Service Worker  Document Worker
+ ↓              ↓              ↓
+Salesforce    ServiceNow      S3 / Search
+ └──────────────┬──────────────┘
+                ↓
+            Aggregation
+                ↓
+          Coordinator
+\`\`\`
+
+## Where would I use it?
+
+### 1. Multi-step AWS workflow
+
+Suppose we have a document processing workflow:
+
+\`\`\`text id="b5r9wt"
+S3 Upload
+   ↓
+Extract document
+   ↓
+Validate
+   ↓
+Chunk
+   ↓
+Generate embeddings
+   ↓
+Index in OpenSearch
+   ↓
+Run evaluation
+\`\`\`
+
+Step Functions can orchestrate these steps.
+
+---
+
+### 2. Parallel processing
+
+Suppose a Customer Briefing needs independent processing:
+
+\`\`\`text id="x2m8cq"
+Customer Briefing
+       ↓
+   Step Functions
+       ↓
+ ┌─────┼─────┐
+ ↓     ↓     ↓
+Sales Service Product
+ ↓     ↓     ↓
+CRM   Tickets Docs
+ └─────┼─────┘
+       ↓
+   Aggregation
+\`\`\`
+
+Independent tasks can execute in parallel.
+
+---
+
+### 3. Retry and error handling
+
+For example:
+
+\`\`\`text id="k4v6ps"
+Call Service
+     ↓
+   Failed?
+   /    \\
+ No      Yes
+ ↓        ↓
+Next    Retry
+          ↓
+       Still fail?
+        /      \\
+       No       Yes
+       ↓         ↓
+     Next     Catch/Error
+\`\`\`
+
+We can define bounded retry policies and catch specific failures.
+
+---
+
+### 4. Human approval
+
+For sensitive operations:
+
+\`\`\`text id="r8t3mz"
+Agent requests action
+        ↓
+Step Functions
+        ↓
+Human approval
+      /   \\
+   Approve Reject
+      ↓      ↓
+ Execute    Stop
+\`\`\`
+
+For example, a destructive enterprise operation could require human approval before execution.
+
+---
+
+### 5. Long-running workflows
+
+If a business workflow can take minutes, hours, or longer, Step Functions can maintain workflow state rather than requiring one application process to remain active.
+
+---
+
+## Step Functions vs LangGraph
+
+This is a **very important interview distinction**.
+
+| LangGraph                  | Step Functions                |
+| -------------------------- | ----------------------------- |
+| Agent orchestration        | Cloud workflow orchestration  |
+| LLM-driven decisions       | Explicit workflow states      |
+| Dynamic agent routing      | Predefined workflow           |
+| Agent state                | Durable workflow state        |
+| Tool/agent reasoning       | AWS service orchestration     |
+| Conditional agent behavior | Conditional workflow branches |
+
+### In CWD
+
+\`\`\`text id="c1v7qa"
+             CWD
+              ↓
+         Coordinator
+              ↓
+          LangGraph
+              ↓
+     Agent reasoning /
+     dynamic routing
+              ↓
+       Step Functions
+              ↓
+ AWS service/business workflow
+\`\`\`
+
+I wouldn't use Step Functions to replace the LLM's reasoning.
+
+---
+
+## Example
+
+Imagine the user asks:
+
+> "Process this customer document and update the knowledge base."
+
+The workflow could be:
+
+\`\`\`text id="m8x2vf"
+Coordinator
+    ↓
+Validate request
+    ↓
+Step Functions
+    ↓
+S3
+    ↓
+Lambda → Extract
+    ↓
+Lambda → Chunk
+    ↓
+Bedrock → Embeddings
+    ↓
+OpenSearch → Index
+    ↓
+Evaluation
+    ↓
+Success / Failure
+\`\`\`
+
+Step Functions manages the **execution workflow**, while Bedrock provides the AI capability.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use AWS Step Functions for durable, predictable business workflows where I need explicit sequencing, parallel execution, retries, timeouts, branching, and error handling. In CWD, I could use it for workflows such as document ingestion, multi-step AWS processing, or sensitive operations requiring human approval. I would not use Step Functions as a replacement for LangGraph. LangGraph handles dynamic agent reasoning and multi-agent orchestration, while Step Functions handles durable AWS workflow orchestration.”**
+
+## Easy memory trick
+
+**Step Functions = Workflow**
+
+**LangGraph = Agent reasoning**
+
+Think:
+
+\`\`\`text id="u4k9dn"
+LangGraph
+   ↓
+"What should the agents do?"
+
+Step Functions
+   ↓
+"How should this predefined workflow execute reliably?"
+\`\`\`
+
+## Key distinction
+
+> **“LangGraph decides dynamically; Step Functions executes a defined workflow reliably.”**
 `,code:``},{id:`009-where-would-you-use-sqs`,category:`AWS Architecture`,title:`Where would you use SQS?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use SQS?
 
 ## Short answer
-Use SQS wherever work is slow, bursty, needs retries or must survive a crash.
+
+I would use **Amazon SQS** as a **durable message queue** between CWD components when I need to decouple producers and consumers, absorb traffic spikes, support asynchronous processing, and handle retries without blocking the main request.
 
 ## Key points
-- Between Delegators and long-running or write Workers.
-- Ingestion tasks and re-index jobs; audit events.
-- Buffering and backpressure per tenant; every queue gets a DLQ.
 
-## CWD context
-Do not queue short read-only calls; it only adds latency.
+* Decouples services.
+* Buffers traffic spikes.
+* Supports asynchronous processing.
+* Provides durable message storage.
+* Supports retries.
+* Dead-letter queues (DLQ).
+* Controls consumer concurrency.
+* Helps protect downstream systems.
+* Supports horizontal scaling.
+* Useful for long-running/background work.
+
+### CWD flow
+
+\`\`\`text id="k4p8zs"
+CWD
+ ↓
+Producer
+ ↓
+SQS Queue
+ ↓
+Consumer
+ ↓
+Worker / Lambda / ECS
+ ↓
+MCP / Enterprise System
+\`\`\`
+
+## Where would I use it?
+
+### 1. Asynchronous Worker processing
+
+Suppose CWD receives many document-processing requests:
+
+\`\`\`text id="x7m2qd"
+User Requests
+     ↓
+CWD API
+     ↓
+SQS
+     ↓
+Worker
+     ↓
+Process document
+\`\`\`
+
+The API doesn't need to wait for every document to finish.
+
+---
+
+### 2. Absorb traffic spikes
+
+Suppose 1,000 requests arrive suddenly:
+
+\`\`\`text id="r9v5nc"
+1,000 requests
+      ↓
+     SQS
+      ↓
+  Queue builds
+      ↓
+Consumers process
+at controlled rate
+\`\`\`
+
+This prevents the downstream Worker or enterprise API from being overwhelmed.
+
+---
+
+### 3. Control concurrency
+
+This is particularly useful for CWD.
+
+For example, Salesforce may only tolerate a certain level of concurrent traffic.
+
+\`\`\`text id="w3k8pb"
+SQS
+ ↓
+Consumer concurrency = 5
+ ↓
+5 Worker executions
+ ↓
+Salesforce
+\`\`\`
+
+Instead of allowing hundreds of requests to hit Salesforce simultaneously.
+
+---
+
+### 4. Retry failed processing
+
+Suppose a Worker temporarily fails:
+
+\`\`\`text id="q6n4yt"
+SQS
+ ↓
+Worker
+ ↓
+Failure
+ ↓
+Message becomes available again
+ ↓
+Retry
+\`\`\`
+
+For transient failures, the message can be retried.
+
+---
+
+### 5. Dead-letter queue
+
+If a message repeatedly fails:
+
+\`\`\`text id="z8c2mv"
+SQS
+ ↓
+Worker
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Retry
+ ↓
+Retry
+ ↓
+DLQ
+\`\`\`
+
+The DLQ allows us to investigate the problematic message instead of retrying forever.
+
+---
+
+### 6. Decouple CWD services
+
+Without SQS:
+
+\`\`\`text id="j4v7px"
+Coordinator → Worker
+             ↓
+          Worker down
+             ↓
+        Request blocked
+\`\`\`
+
+With SQS:
+
+\`\`\`text id="t5r9ka"
+Coordinator
+     ↓
+    SQS
+     ↓
+ Worker
+\`\`\`
+
+The producer and consumer don't need to be available at exactly the same time.
+
+---
+
+## Example: CWD document ingestion
+
+\`\`\`text id="n2x6wc"
+SharePoint / S3
+      ↓
+Event
+      ↓
+SQS
+      ↓
+Ingestion Worker
+      ↓
+Extract
+      ↓
+Chunk
+      ↓
+Embed
+      ↓
+OpenSearch
+\`\`\`
+
+If OpenSearch temporarily fails, the processing can be retried instead of losing the request.
+
+---
+
+## SQS vs Step Functions
+
+This is an important interview distinction.
+
+| SQS                              | Step Functions               |
+| -------------------------------- | ---------------------------- |
+| Message queue                    | Workflow orchestrator        |
+| Decouples producers/consumers    | Coordinates workflow steps   |
+| Buffers traffic                  | Tracks workflow state        |
+| Async processing                 | Sequential/parallel workflow |
+| Retry messages                   | Retry workflow states        |
+| DLQ                              | Catch/error handling         |
+| Great for event-driven workloads | Great for defined workflows  |
+
+Think:
+
+\`\`\`text
+SQS
+ ↓
+"Hold this work until a consumer can process it."
+
+Step Functions
+ ↓
+"Execute these workflow steps in this order."
+\`\`\`
+
+---
+
+## SQS vs SNS
+
+Another common interview question:
+
+\`\`\`text
+SQS → Queue / one workload consumer pattern
+
+SNS → Publish / fan-out notifications
+\`\`\`
+
+For example:
+
+\`\`\`text
+SNS
+ ↓
+ ├── SQS → Worker
+ ├── SQS → Audit
+ └── Lambda → Notification
+\`\`\`
+
+SNS can distribute an event to multiple subscribers, while SQS provides durable queued processing for consumers.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use SQS in CWD when I need asynchronous, decoupled processing. For example, document ingestion or background Worker tasks can publish messages to SQS, and Lambda or ECS consumers process them independently. SQS absorbs traffic spikes, controls the rate at which downstream systems are called, supports retries, and provides a DLQ for messages that repeatedly fail. This is especially useful for protecting enterprise systems such as Salesforce or ServiceNow from sudden bursts of concurrent requests. Step Functions would be used when I need to orchestrate a defined multi-step workflow, whereas SQS is primarily for durable asynchronous messaging.”**
+
+## Easy memory trick
+
+**SQS = Queue → Buffer → Process → Retry → DLQ**
+
+## Key distinction
+
+> **“SQS doesn't orchestrate my agents; it decouples and buffers work between components.”**
 `,code:``},{id:`010-where-would-you-use-eventbridge`,category:`AWS Architecture`,title:`Where would you use EventBridge?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use EventBridge?
 
 ## Short answer
-Use EventBridge as the event bus that routes events between services without tight coupling.
+
+I would use **Amazon EventBridge** as the **event-driven integration layer** in CWD when different services need to react to business events without being tightly coupled to each other.
+
+**SQS = queue work.**
+**EventBridge = route events.**
 
 ## Key points
-- S3 object events, Glue job state changes and Step Functions state changes.
-- EventBridge Scheduler for timed jobs; SaaS and cross-account events.
-- Rules, archive and replay.
 
-## CWD context
-EventBridge says "something happened"; SQS says "please do this".
+* Event-driven architecture.
+* Decouples producers and consumers.
+* Routes events based on event patterns.
+* Supports fan-out to multiple targets.
+* Integrates with Lambda, SQS, Step Functions, ECS and many AWS services.
+* Supports scheduled events.
+* Useful for business/domain events.
+* Central event bus for multiple CWD services.
+* Helps avoid point-to-point integrations.
+
+### CWD flow
+
+\`\`\`text id="v8q3mw"
+Enterprise System / CWD Service
+              ↓
+         EventBridge
+              ↓
+       Event Bus / Rules
+        ↙      ↓      ↘
+       SQS   Lambda   Step Functions
+        ↓      ↓          ↓
+     Worker  Processor   Workflow
+\`\`\`
+
+## Where would I use it?
+
+### 1. Business events
+
+Suppose a customer incident is created in ServiceNow:
+
+\`\`\`text id="k6m2rx"
+ServiceNow
+    ↓
+"IncidentCreated"
+    ↓
+EventBridge
+    ↓
+ ┌─────────────┬──────────────┐
+ ↓             ↓              ↓
+SQS          Lambda       Step Functions
+ ↓             ↓              ↓
+IT Worker    Notification   Workflow
+\`\`\`
+
+Multiple CWD components can react to the same event without ServiceNow knowing about each consumer.
+
+---
+
+### 2. Decouple CWD services
+
+Without EventBridge:
+
+\`\`\`text id="p4z7ns"
+Service A → Service B
+Service A → Service C
+Service A → Service D
+\`\`\`
+
+This creates many direct dependencies.
+
+With EventBridge:
+
+\`\`\`text id="q9x3bc"
+             EventBridge
+             /    |    \\
+            ↓     ↓     ↓
+          SQS   Lambda  Step Functions
+\`\`\`
+
+The producer only publishes an event.
+
+---
+
+### 3. Event routing
+
+We can define rules based on the event.
+
+For example:
+
+\`\`\`json id="d5r8kw"
+{
+  "source": "servicenow",
+  "detail-type": "IncidentCreated"
+}
+\`\`\`
+
+EventBridge can route that event to the appropriate target.
+
+Another event:
+
+\`\`\`json id="m3v7qp"
+{
+  "source": "salesforce",
+  "detail-type": "OpportunityUpdated"
+}
+\`\`\`
+
+can trigger a different CWD workflow.
+
+---
+
+### 4. Fan-out
+
+One event can trigger multiple consumers.
+
+\`\`\`text id="x2k8fv"
+CustomerUpdated
+      ↓
+ EventBridge
+   ↙   ↓    ↘
+ SQS Lambda Step Functions
+\`\`\`
+
+For example:
+
+* SQS → update a Worker
+* Lambda → update a cache
+* Step Functions → start a business workflow
+
+---
+
+### 5. Scheduled jobs
+
+EventBridge can also trigger scheduled operations.
+
+For example:
+
+\`\`\`text id="w6n4yt"
+Every night at 2 AM
+       ↓
+ EventBridge
+       ↓
+ Lambda / Step Functions
+       ↓
+Run evaluation / cleanup / reconciliation
+\`\`\`
+
+This could be used for periodic CWD evaluation, stale-document checks, or reconciliation workflows.
+
+---
+
+### 6. CWD observability/event processing
+
+We can publish application events such as:
+
+\`\`\`text id="c8v2jp"
+AgentRunCompleted
+WorkerFailed
+DocumentIndexed
+EvaluationCompleted
+\`\`\`
+
+Then EventBridge can route those events to appropriate downstream processing.
+
+---
+
+## EventBridge vs SQS
+
+This is a **very common interview question**.
+
+| EventBridge              | SQS                       |
+| ------------------------ | ------------------------- |
+| Event router             | Message queue             |
+| Routes events            | Stores work/messages      |
+| Event-driven integration | Asynchronous processing   |
+| Pattern-based routing    | Consumer-based processing |
+| Fan-out                  | Buffering                 |
+| Multiple targets         | Typically queue consumers |
+| Business events          | Work items                |
+
+### Simple example
+
+\`\`\`text id="h7p5sq"
+"CustomerUpdated"
+       ↓
+ EventBridge
+    ↙    ↘
+   SQS   Lambda
+\`\`\`
+
+EventBridge says:
+
+> **“Who should receive this event?”**
+
+SQS says:
+
+> **“Hold this work until a consumer processes it.”**
+
+---
+
+## EventBridge vs Step Functions
+
+\`\`\`text id="b4m9zx"
+EventBridge
+    ↓
+"Something happened."
+
+Step Functions
+    ↓
+"Execute these steps."
+\`\`\`
+
+Example:
+
+\`\`\`text id="u3k8wd"
+IncidentCreated
+      ↓
+ EventBridge
+      ↓
+Step Functions
+      ↓
+Validate
+  ↓
+Get customer
+  ↓
+Get incidents
+  ↓
+Generate briefing
+\`\`\`
+
+---
+
+## Example in CWD
+
+Suppose Salesforce updates a customer opportunity:
+
+\`\`\`text id="r6v2kn"
+Salesforce
+    ↓
+OpportunityUpdated
+    ↓
+EventBridge
+    ↓
+Rule
+    ↓
+Step Functions
+    ↓
+Sales Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+The event-driven workflow can run independently without the Salesforce system directly calling every CWD component.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use Amazon EventBridge as the event-driven integration layer for CWD. When an important business event occurs, such as a Salesforce opportunity update, ServiceNow incident creation, or document indexing completion, the producer publishes an event to EventBridge. EventBridge applies rules and routes that event to the appropriate targets such as SQS, Lambda, or Step Functions. This decouples CWD services and supports fan-out and event-based workflows. I would use SQS when I need durable queued work, whereas EventBridge is primarily responsible for routing business events.”**
+
+## Easy memory trick
+
+**EventBridge = Detect & Route**
+
+**SQS = Queue & Process**
+
+**Step Functions = Orchestrate**
+
+\`\`\`text id="s9k4mx"
+Event happens
+     ↓
+EventBridge
+     ↓
+Where should it go?
+     ↓
+SQS / Lambda / Step Functions
+\`\`\`
+
+## Key distinction
+
+> **“EventBridge is the event router, SQS is the work queue, and Step Functions is the workflow orchestrator.”**
 `,code:``},{id:`011-where-would-you-use-dynamodb`,category:`AWS Architecture`,title:`Where would you use DynamoDB?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use DynamoDB?
 
 ## Short answer
-Use DynamoDB for durable, key-based operational state.
+
+I would use **Amazon DynamoDB** in CWD for **fast, scalable, key-value/document data** such as workflow state, session metadata, agent/task information, idempotency records, and application configuration.
+
+I would **not use DynamoDB as the primary RAG/vector database**. For that, I would use OpenSearch or another dedicated search/vector solution.
 
 ## Key points
-- Sessions, workflow state and checkpoints, run and step records.
-- Agent and prompt registries, idempotency keys, quotas and counters, audit metadata.
-- Not for large documents, vectors or ad-hoc analytics.
 
-## CWD context
-Access patterns decide the table design, so define them first.
+* Fully managed NoSQL database.
+* Very low-latency reads/writes.
+* Horizontally scalable.
+* Serverless capacity options.
+* Good for key-value/document data.
+* Supports TTL for automatic expiration.
+* Conditional writes for concurrency control.
+* Useful for idempotency.
+* Supports DynamoDB Streams for change events.
+* Integrates with Lambda and other AWS services.
+
+### CWD flow
+
+\`\`\`text id="m8q3vx"
+User
+ ↓
+API Gateway
+ ↓
+CWD API
+ ↓
+Coordinator
+ ↓
+DynamoDB
+ ├── Session State
+ ├── Task State
+ ├── Run Metadata
+ ├── Idempotency
+ └── Agent/Workflow Metadata
+ ↓
+Delegator
+ ↓
+Workers
+\`\`\`
+
+## Where would I use it?
+
+### 1. Session state
+
+For example:
+
+\`\`\`json id="f4n8pw"
+{
+  "session_id": "S123",
+  "user_id": "U456",
+  "last_customer_id": "C123",
+  "status": "active"
+}
+\`\`\`
+
+The Coordinator can quickly retrieve the user's current session state.
+
+---
+
+### 2. Workflow state
+
+CWD has a workflow hierarchy:
+
+\`\`\`text id="q7v2kc"
+Session
+  ↓
+Task
+  ↓
+Run
+  ↓
+Turn
+  ↓
+Step
+\`\`\`
+
+DynamoDB can store metadata about these workflow objects.
+
+For example:
+
+\`\`\`text id="z5r9mn"
+Run ID: R123
+Status: RUNNING
+Current Step: Service Worker
+Started: 10:30
+\`\`\`
+
+For complex LangGraph checkpointing requirements, I would select the persistence mechanism based on the framework and workload; DynamoDB can be an application-level state store.
+
+---
+
+### 3. Idempotency
+
+This is very useful for CWD.
+
+Suppose an MCP operation is accidentally submitted twice:
+
+\`\`\`text id="c6x2vt"
+Request
+  ↓
+request_id = R123
+  ↓
+DynamoDB
+  ↓
+Already processed?
+  ↓
+YES → Don't execute again
+\`\`\`
+
+This helps prevent duplicate operations.
+
+---
+
+### 4. Agent/task metadata
+
+We can store information such as:
+
+\`\`\`text id="n9p4qw"
+agent_id
+agent_type
+delegator_id
+version
+status
+capabilities
+\`\`\`
+
+For example:
+
+\`\`\`json id="b3m7ys"
+{
+  "agent_id": "sales-worker",
+  "version": "v2",
+  "status": "ACTIVE",
+  "capabilities": [
+    "customer_lookup",
+    "opportunity_lookup"
+  ]
+}
+\`\`\`
+
+---
+
+### 5. TTL for temporary data
+
+For temporary state:
+
+\`\`\`text id="r8k5dx"
+Session metadata
+Temporary cache
+Idempotency record
+Temporary workflow data
+       ↓
+TTL
+       ↓
+Automatic expiration
+\`\`\`
+
+This prevents temporary records from growing indefinitely.
+
+---
+
+### 6. Conditional writes
+
+Suppose two Workers try to update the same task:
+
+\`\`\`text id="p2v6hm"
+Worker A ─┐
+          ├──→ DynamoDB
+Worker B ─┘
+\`\`\`
+
+Conditional writes can help enforce rules such as:
+
+> Update this record only if the current status is \`PENDING\`.
+
+This helps with concurrency control.
+
+---
+
+### 7. DynamoDB Streams
+
+If a DynamoDB record changes:
+
+\`\`\`text id="w5k3qn"
+DynamoDB
+   ↓
+DynamoDB Streams
+   ↓
+Lambda
+   ↓
+EventBridge / downstream processing
+\`\`\`
+
+This can support event-driven processing.
+
+---
+
+## Example: CWD workflow
+
+Suppose the user asks:
+
+> "Create a customer briefing for C123."
+
+\`\`\`text id="t9m4zc"
+User
+ ↓
+API Gateway
+ ↓
+Coordinator
+ ↓
+Create Run ID
+ ↓
+DynamoDB
+ └── Run = R123, Status = RUNNING
+ ↓
+Sales Delegator
+ ↓
+Sales Worker
+ ↓
+Service Worker
+ ↓
+DynamoDB
+ └── Worker results / status metadata
+ ↓
+Coordinator
+ ↓
+Final response
+ ↓
+DynamoDB
+ └── Run = COMPLETED
+\`\`\`
+
+---
+
+## DynamoDB vs S3 vs OpenSearch
+
+This distinction is useful in interviews.
+
+| Service               | CWD usage                      |
+| --------------------- | ------------------------------ |
+| **DynamoDB**          | Application/workflow state     |
+| **S3**                | Documents/files/object storage |
+| **OpenSearch**        | Search/vector/RAG data         |
+| **ElastiCache/Redis** | Fast temporary cache           |
+| **Bedrock**           | Foundation models              |
+
+Think:
+
+\`\`\`text id="y4p8ks"
+DynamoDB → State
+S3       → Files
+OpenSearch → Search
+Redis    → Cache
+Bedrock  → LLM
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use DynamoDB in CWD for low-latency, highly scalable application state rather than as the primary RAG database. For example, I can store session metadata, task and run status, agent metadata, idempotency records, and temporary workflow information. DynamoDB's conditional writes help with concurrency and duplicate-request prevention, and TTL can automatically expire temporary records. For documents and RAG, I would use S3 for object storage and OpenSearch for search and vector retrieval.”**
+
+## Easy memory trick
+
+**DynamoDB = Fast Application State**
+
+**S3 = Files**
+
+**OpenSearch = RAG/Search**
+
+**Redis = Cache**
+
+**Bedrock = LLM**
+
+## Key distinction
+
+> **“DynamoDB stores the application's state; it is not the primary vector database for my CWD RAG pipeline.”**
 `,code:``},{id:`012-where-would-you-use-elasticache-redis`,category:`AWS Architecture`,title:`Where would you use ElastiCache/Redis?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use ElastiCache/Redis?
 
 ## Short answer
-Use ElastiCache (Redis or Valkey) as a low-latency cache and counter store, never as the source of truth.
+
+I would use **Amazon ElastiCache for Redis** in CWD for **low-latency temporary data**, such as caching repeated LLM/RAG results, session context, frequently accessed metadata, distributed locks, and rate-limiting counters.
+
+The main goal is to **reduce latency, unnecessary LLM calls, and database/downstream load**.
 
 ## Key points
-- Embeddings, retrieval results, tool schemas and the session window.
-- Rate-limit counters, locks and optional semantic cache.
-- MemoryDB if a durable in-memory store is needed.
 
-## CWD context
-If the cache fails, CWD slows down but keeps working.
+* Very low-latency in-memory access.
+* Cache frequently used data.
+* Reduce repeated LLM calls.
+* Reduce repeated RAG searches.
+* Store short-lived session/context data.
+* Distributed rate limiting.
+* Distributed locks.
+* TTL-based expiration.
+* Reduce load on DynamoDB/OpenSearch/enterprise APIs.
+* Useful for high-throughput CWD workloads.
+
+### CWD flow
+
+\`\`\`text id="q6v2mx"
+User Request
+     ↓
+Coordinator
+     ↓
+Redis Cache
+     ↓
+Cache hit?
+   ↙     ↘
+ YES      NO
+  ↓        ↓
+Return   Worker
+result     ↓
+        RAG / MCP / LLM
+           ↓
+        Result
+           ↓
+       Redis Cache
+           ↓
+        Response
+\`\`\`
+
+## Where would I use it?
+
+### 1. Cache repeated LLM responses
+
+Suppose users repeatedly ask:
+
+> "What is the status of customer C123?"
+
+Instead of calling the LLM every time:
+
+\`\`\`text id="k8r3wp"
+Request
+  ↓
+Redis
+  ↓
+Cache HIT
+  ↓
+Return cached result
+\`\`\`
+
+This can reduce:
+
+* LLM calls
+* Token consumption
+* Latency
+* Cost
+
+---
+
+### 2. Semantic cache for similar questions
+
+This is particularly useful for your earlier question about **different wording of the same query**.
+
+For example:
+
+\`\`\`text id="m4x7qn"
+"What is the status of C123?"
+              ↓
+         Embedding
+              ↓
+           Redis
+              ↓
+"What is C123's current status?"
+              ↓
+      Similarity check
+              ↓
+       Cache HIT
+\`\`\`
+
+Instead of matching only the exact text, we can use **embeddings + similarity search** to identify semantically similar queries.
+
+Important: for frequently changing information such as current Salesforce/ServiceNow status, the cache must have an appropriate **TTL/freshness policy** or we should bypass the cache.
+
+---
+
+### 3. Cache RAG results
+
+Suppose the same question repeatedly searches the same knowledge base.
+
+\`\`\`text id="w7p2kc"
+Query
+ ↓
+Redis
+ ↓
+Cache HIT → return retrieved context
+\`\`\`
+
+Otherwise:
+
+\`\`\`text id="v5n8rm"
+Query
+ ↓
+Azure AI Search / OpenSearch
+ ↓
+Retrieve + Rerank
+ ↓
+Redis
+ ↓
+Cache result
+\`\`\`
+
+This reduces repeated search operations.
+
+---
+
+### 4. Session/context data
+
+Redis can store short-lived session information:
+
+\`\`\`text id="x3q9bt"
+Session ID
+   ↓
+Redis
+   ├── customer_id
+   ├── recent messages
+   ├── conversation summary
+   └── temporary workflow state
+\`\`\`
+
+Because Redis is memory-based, it is useful when the application needs very fast access.
+
+For durable long-term state, I would use DynamoDB or another persistent store.
+
+---
+
+### 5. Rate limiting
+
+Redis can maintain distributed counters:
+
+\`\`\`text id="n6r4zp"
+User U123
+   ↓
+Redis counter
+   ↓
+Requests = 95 / 100
+   ↓
+Allow
+\`\`\`
+
+When the limit is exceeded:
+
+\`\`\`text
+Requests > limit
+      ↓
+Throttle
+\`\`\`
+
+This works across multiple CWD instances because they can share the same Redis state.
+
+---
+
+### 6. Distributed locks
+
+Suppose two Workers try to process the same customer operation:
+
+\`\`\`text id="b2v7ks"
+Worker A ─┐
+          ↓
+        Redis Lock
+          ↑
+Worker B ─┘
+\`\`\`
+
+Only one Worker obtains the lock.
+
+This can help prevent duplicate processing for operations that require serialization.
+
+---
+
+### 7. Cache frequently accessed metadata
+
+For example:
+
+\`\`\`text id="p8m3yc"
+Agent Registry
+Prompt configuration
+Tool metadata
+Model routing configuration
+Feature flags
+\`\`\`
+
+Instead of repeatedly querying the primary database, frequently accessed data can be cached in Redis.
+
+---
+
+## Redis vs DynamoDB
+
+This is an important interview distinction.
+
+| Redis                              | DynamoDB                  |
+| ---------------------------------- | ------------------------- |
+| In-memory cache                    | Persistent NoSQL database |
+| Very low latency                   | Low latency               |
+| Temporary/frequently accessed data | Durable application data  |
+| TTL                                | TTL available             |
+| Cache                              | System of record          |
+| Rate limiting                      | Durable state             |
+| Distributed locks                  | Persistent records        |
+| Semantic/cache use cases           | Application metadata      |
+
+Think:
+
+\`\`\`text id="r7k4mx"
+Redis
+  ↓
+"Give me this FAST."
+
+DynamoDB
+  ↓
+"Store this DURABLY."
+\`\`\`
+
+---
+
+## Redis vs OpenSearch
+
+Another important distinction:
+
+\`\`\`text id="c5n8vq"
+Redis
+ ↓
+Cache / fast temporary state
+
+OpenSearch
+ ↓
+Search / vector retrieval / RAG
+\`\`\`
+
+I wouldn't replace the primary CWD RAG search layer with Redis just because Redis is fast.
+
+---
+
+## Example: reducing repeated LLM calls
+
+Suppose we receive:
+
+\`\`\`text
+Request 1:
+"What is the status of customer C123?"
+
+Request 2:
+"Can you tell me the current status for C123?"
+\`\`\`
+
+Flow:
+
+\`\`\`text id="u4m9qs"
+Request
+   ↓
+Normalize / classify
+   ↓
+Generate query embedding
+   ↓
+Redis semantic cache
+   ↓
+Similarity > threshold?
+      ↓
+     YES
+      ↓
+Return cached response
+\`\`\`
+
+If the information is time-sensitive, we also check:
+
+\`\`\`text
+TTL / freshness
++
+data source
++
+customer permissions
+\`\`\`
+
+before returning the cached result.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use ElastiCache for Redis in CWD primarily as a low-latency cache and coordination layer. For example, we can cache repeated LLM responses, RAG retrieval results, session context, agent metadata, and frequently accessed configuration. We can also use Redis for distributed rate limiting and locks. For semantically similar user queries, we can use an embedding-based semantic cache to avoid unnecessary LLM calls, while applying TTL and freshness checks for dynamic data. I would use DynamoDB for durable application state and OpenSearch for the primary RAG/search layer.”**
+
+## Easy memory trick
+
+**Redis = FAST**
+
+* **F** → Frequently accessed data
+* **A** → Avoid repeated calls
+* **S** → Session/cache state
+* **T** → Throttling/temporary data
+
+## Key distinction
+
+> **“Redis is my fast-access layer, DynamoDB is my durable state layer, and OpenSearch is my search/RAG layer.”**
 `,code:``},{id:`013-where-would-you-use-opensearch-serverless`,category:`AWS Architecture`,title:`Where would you use OpenSearch Serverless?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use OpenSearch Serverless?
 
 ## Short answer
-Use OpenSearch Serverless as the retrieval index for RAG.
+
+I would use **Amazon OpenSearch Serverless** in the AWS version of CWD as the **search and vector retrieval layer for RAG**.
+
+It allows CWD to perform **keyword search, vector search, and hybrid search** over enterprise documents without managing OpenSearch clusters manually.
 
 ## Key points
-- Vector, keyword (BM25) and hybrid search with metadata filters.
-- Serverless collections scale in OCUs without cluster management.
-- Not for transactional state.
 
-## CWD context
-The index is derived from S3 and can be rebuilt.
+* Primary search layer for CWD RAG.
+* Vector/semantic search.
+* Keyword search using BM25.
+* Hybrid search.
+* Metadata filtering.
+* Scales without managing clusters.
+* Good fit for enterprise document retrieval.
+* Integrates with S3 and AWS data pipelines.
+* Useful for RAG applications.
+* Supports high-volume search workloads.
+
+### CWD flow
+
+\`\`\`text id="w7m3kp"
+Enterprise Documents
+       ↓
+      S3
+       ↓
+Ingestion Pipeline
+       ↓
+Extract → Clean → Chunk
+       ↓
+Generate Embeddings
+       ↓
+OpenSearch Serverless
+       ↓
+ ┌─────────────────────────┐
+ │ Keyword / BM25 Search   │
+ │ Vector Search           │
+ │ Metadata Filtering      │
+ │ Hybrid Search           │
+ └─────────────────────────┘
+       ↓
+    Reranking
+       ↓
+ Top relevant chunks
+       ↓
+     Worker
+       ↓
+   Bedrock LLM
+       ↓
+ Grounded Response
+\`\`\`
+
+## Where would I use it?
+
+### 1. Vector search for RAG
+
+Documents are converted into embeddings:
+
+\`\`\`text id="k2r8vq"
+Document
+   ↓
+Chunk
+   ↓
+Embedding
+   ↓
+OpenSearch Vector Index
+\`\`\`
+
+When the user asks a question:
+
+\`\`\`text id="s4n7mc"
+User Query
+    ↓
+Query Embedding
+    ↓
+Vector Search
+    ↓
+Similar chunks
+\`\`\`
+
+This finds information based on **meaning**, not just exact words.
+
+---
+
+### 2. BM25 keyword search
+
+Vector search isn't always enough.
+
+Suppose the user asks:
+
+> "What happened to incident INC12345?"
+
+The exact incident number is important.
+
+BM25 can perform keyword-based matching:
+
+\`\`\`text id="r6p2xz"
+INC12345
+   ↓
+BM25
+   ↓
+Documents containing INC12345
+\`\`\`
+
+So OpenSearch can support both:
+
+**Vector = semantic meaning**
+
+**BM25 = exact keyword relevance**
+
+---
+
+### 3. Hybrid search
+
+For CWD, I would commonly combine both:
+
+\`\`\`text id="f8m3yn"
+             Query
+               ↓
+        ┌──────┴──────┐
+        ↓             ↓
+     BM25          Vector
+        ↓             ↓
+   Keyword       Semantic
+   results        results
+        └──────┬──────┘
+               ↓
+         Combine / Rank
+               ↓
+          Top results
+\`\`\`
+
+This is useful because enterprise queries often contain both natural language and exact identifiers.
+
+---
+
+### 4. Metadata filtering
+
+Each chunk can have metadata:
+
+\`\`\`json id="n5x8qc"
+{
+  "document_id": "DOC123",
+  "department": "Engineering",
+  "product": "A100",
+  "year": 2026,
+  "allowed_groups": ["Engineering"]
+}
+\`\`\`
+
+The Worker can apply filters before constructing the LLM context.
+
+\`\`\`text id="p7k4mv"
+User Identity
+     ↓
+ACL / Metadata Filter
+     ↓
+OpenSearch
+     ↓
+Authorized results
+\`\`\`
+
+---
+
+### 5. RAG retrieval
+
+A typical CWD retrieval pipeline:
+
+\`\`\`text id="y3q9ws"
+User Question
+      ↓
+Query Understanding
+      ↓
+ACL / Metadata Filtering
+      ↓
+BM25 + Vector Search
+      ↓
+Top 30–50 candidates
+      ↓
+Reranking
+      ↓
+Top 5–10
+      ↓
+Context Builder
+      ↓
+Bedrock
+\`\`\`
+
+This keeps irrelevant information out of the LLM prompt.
+
+---
+
+### 6. Serverless operations
+
+The **Serverless** part is important.
+
+Instead of managing:
+
+\`\`\`text id="m8v2rx"
+Clusters
+Nodes
+Capacity
+Scaling
+Patching
+\`\`\`
+
+OpenSearch Serverless provides a managed/serverless experience where AWS handles much of the underlying infrastructure management.
+
+That lets the team focus more on the CWD search and RAG application.
+
+---
+
+## Example: Customer Briefing
+
+Suppose the user asks:
+
+> "Give me a summary of the customer's previous product issues."
+
+\`\`\`text id="q6n3kp"
+User
+ ↓
+Coordinator
+ ↓
+IT / Service Delegator
+ ↓
+Service Worker
+ ↓
+OpenSearch Serverless
+ ↓
+Hybrid Search
+ ↓
+Incident / Knowledge Documents
+ ↓
+Reranking
+ ↓
+Relevant context
+ ↓
+Bedrock
+ ↓
+Customer briefing
+\`\`\`
+
+For **current open incidents**, however, I would query ServiceNow directly through **MCP/API**, rather than depending on potentially stale indexed data.
+
+---
+
+## OpenSearch vs DynamoDB vs Redis
+
+| Service                   | CWD responsibility                 |
+| ------------------------- | ---------------------------------- |
+| **OpenSearch Serverless** | Search + vector/RAG                |
+| **DynamoDB**              | Durable application/workflow state |
+| **Redis**                 | Cache + fast temporary state       |
+| **S3**                    | Documents/object storage           |
+| **Bedrock**               | Foundation models                  |
+
+Think:
+
+\`\`\`text id="v9r4mc"
+S3        → Store
+OpenSearch → Search
+Redis     → Cache
+DynamoDB  → State
+Bedrock   → Generate
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I would use Amazon OpenSearch Serverless as the primary search and vector retrieval layer for the AWS version of CWD. During ingestion, we extract documents from sources such as S3, chunk them, generate embeddings, and index the chunks and metadata in OpenSearch. At query time, Workers can perform vector search, BM25 keyword search, or hybrid search, apply metadata and ACL filters, and then rerank the results before sending the most relevant context to Bedrock. We chose the serverless option to reduce infrastructure-management overhead while still supporting the search requirements of our RAG architecture.”**
+
+## Easy memory trick
+
+**OpenSearch = Search + Vector + Hybrid + RAG**
+
+\`\`\`text id="d3k7vp"
+BM25      → Exact words
+Vector    → Meaning
+Hybrid    → Both
+Metadata  → Filter
+Reranking → Best results first
+\`\`\`
+
+## Key distinction
+
+> **“OpenSearch Serverless retrieves the evidence; Bedrock generates the answer.”**
+
+And for CWD:
+
+> **“OpenSearch is for searchable knowledge; MCP is for current transactional data such as live Salesforce or ServiceNow information.”**
 `,code:``},{id:`014-where-would-you-use-s3`,category:`AWS Architecture`,title:`Where would you use S3?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Where would you use S3?
 
 ## Short answer
-Use S3 as the document lake and general object store.
+
+I would use **Amazon S3 as the durable object-storage layer** in the AWS version of CWD.
+
+I would store **enterprise documents, raw files, processed documents, evaluation datasets, prompts/configuration artifacts, and generated reports** in S3. It also acts as the source for the RAG ingestion pipeline.
 
 ## Key points
-- Raw and curated documents, extracted text and chunks.
-- Model artifacts, evaluation datasets, Bedrock batch input and output, log archives.
-- Event source that triggers ingestion.
 
-## CWD context
-S3 is the source of truth for documents; OpenSearch is a derived index.
-`,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete AWS request flow from API Gateway to final response.
+* Store PDFs, Word files, Excel files, images, CSVs, etc.
+* Store raw and processed documents.
+* Source for the **RAG ingestion pipeline**.
+* Store evaluation/golden datasets.
+* Store large artifacts that shouldn't go into DynamoDB.
+* Versioning for document history.
+* Encryption using KMS.
+* Fine-grained access using IAM/bucket policies.
+* Lifecycle policies for archival/deletion.
+* Event notifications can trigger Lambda/EventBridge.
+
+### CWD flow
+
+\`\`\`text
+                 Enterprise Documents
+                         ↓
+                        S3
+                         ↓
+                 Ingestion Pipeline
+                         ↓
+            Extract → Clean → Chunk
+                         ↓
+                    Embeddings
+                         ↓
+              OpenSearch Serverless
+                         ↓
+                  RAG Retrieval
+                         ↓
+                    Worker
+                         ↓
+                     Bedrock
+                         ↓
+                     Answer
+\`\`\`
+
+# Where would I use S3 in CWD?
+
+### 1. Enterprise document storage
+
+For example:
+
+\`\`\`text
+S3
+ ├── product-documents/
+ ├── engineering-documents/
+ ├── service-knowledge/
+ ├── customer-documents/
+ └── policies/
+\`\`\`
+
+Documents can come from SharePoint, file uploads, enterprise systems, or other ingestion sources.
+
+---
+
+### 2. RAG ingestion
+
+S3 can be the landing zone:
+
+\`\`\`text
+Document
+   ↓
+S3
+   ↓
+Lambda / ECS ingestion
+   ↓
+Text extraction
+   ↓
+Chunking
+   ↓
+Embedding
+   ↓
+OpenSearch Serverless
+\`\`\`
+
+The important point is:
+
+**S3 stores the original document; OpenSearch stores the searchable representation.**
+
+---
+
+### 3. Store processed artifacts
+
+For example:
+
+\`\`\`text
+raw.pdf
+   ↓
+extracted.json
+   ↓
+chunks.json
+   ↓
+metadata.json
+\`\`\`
+
+These can be stored in different S3 prefixes.
+
+---
+
+### 4. Evaluation datasets
+
+For LLM evaluation, I could store:
+
+\`\`\`text
+S3
+ └── evaluation/
+      ├── golden_questions.json
+      ├── expected_answers.json
+      ├── retrieval_tests.json
+      └── regression_results/
+\`\`\`
+
+This is useful for testing prompts, models, RAG retrieval, and agent behavior before production.
+
+---
+
+### 5. Large files and reports
+
+If CWD generates large artifacts such as:
+
+* Customer briefing reports
+* Generated PDFs
+* Batch processing results
+* Evaluation reports
+* Data exports
+
+I would store them in S3 rather than DynamoDB.
+
+---
+
+### 6. Event-driven processing
+
+S3 can trigger downstream processing.
+
+Example:
+
+\`\`\`text
+User uploads document
+        ↓
+       S3
+        ↓
+   EventBridge
+        ↓
+       SQS
+        ↓
+ Ingestion Worker
+        ↓
+OpenSearch Serverless
+\`\`\`
+
+This gives us an asynchronous ingestion architecture.
+
+---
+
+## S3 vs OpenSearch vs DynamoDB
+
+| Service                   | Purpose                    |
+| ------------------------- | -------------------------- |
+| **S3**                    | Store files/objects        |
+| **OpenSearch Serverless** | Search + vector/RAG        |
+| **DynamoDB**              | Application/workflow state |
+| **Redis**                 | Cache                      |
+| **Bedrock**               | LLM/foundation models      |
+
+Simple way to remember:
+
+\`\`\`text
+S3         → STORE
+OpenSearch → SEARCH
+DynamoDB   → STATE
+Redis      → CACHE
+Bedrock    → GENERATE
+\`\`\`
+
+## Security
+
+For enterprise CWD, I would use:
+
+* **S3 Block Public Access**
+* IAM/bucket policies
+* **SSE-KMS** encryption
+* Versioning
+* CloudTrail auditing
+* VPC endpoints where appropriate
+* Lifecycle policies
+* Least-privilege access
+
+I would also keep **ACL/security metadata with the document** so the RAG pipeline can enforce authorization during retrieval.
+
+## 🎯 Strong interview answer
+
+> **“I would use S3 as the durable object-storage layer in CWD. We would store raw enterprise documents such as PDFs, Excel files and images, along with processed artifacts and evaluation datasets. S3 can act as the landing zone for our RAG pipeline, where documents are extracted, chunked and embedded before being indexed into OpenSearch Serverless. I would use KMS encryption, IAM policies, versioning and lifecycle policies for security and governance. So, in simple terms, S3 stores the source artifacts, OpenSearch searches them, and Bedrock generates responses from the retrieved context.”**
+
+## Easy memory trick
+
+**S3 = STORE**
+
+> **Store → Secure → Source for RAG → Scale**
+
+### Key distinction
+
+**S3 does not perform the RAG search.**
+
+\`\`\`text
+S3
+ ↓
+Stores document
+ ↓
+Ingestion
+ ↓
+OpenSearch
+ ↓
+Retrieves relevant chunks
+ ↓
+Bedrock
+ ↓
+Generates answer
+\`\`\`
+`,code:``},{id:`015-explain-the-complete-aws-request-flow-from-api-gateway-to-final-response`,category:`AWS Architecture`,title:`Explain the complete AWS request flow from API Gateway to final response.`,difficulty:`Advanced`,time:`~20 min`,concept:`# Explain the complete AWS request flow from API Gateway to final response
 
 ## Short answer
-A request flows from the client through API Gateway to the Coordinator, out to Workers and tools, and back through validation.
 
-## Key points
-- Client → CloudFront/WAF → API Gateway (authoriser, throttling, validation, request ID) → VPC Link → ALB → ECS Coordinator.
-- The Coordinator loads state (DynamoDB / Redis), classifies intent with a small Bedrock model and builds a plan.
-- Delegators call Workers: short reads synchronously; long or write jobs through SQS or Step Functions.
-- Workers query OpenSearch with ACL filters or call MCP tools; results are validated and aggregated.
-- Bedrock (with Guardrails) generates the grounded answer; state is saved; traces go to X-Ray and CloudWatch; long work returns 202 and a status endpoint.
+In the AWS version of CWD, **API Gateway is the entry point**, then the request goes through the **CWD API → Coordinator → Delegator → Workers**. Workers use **MCP for enterprise tools**, **OpenSearch Serverless for RAG**, and **Amazon Bedrock for LLM reasoning**. The Coordinator aggregates the results and API Gateway returns the final response.
 
-## CWD context
-The synchronous path is the user-facing critical path; everything slow goes async.
+## Complete flow
+
+\`\`\`text
+User / Client
+      ↓
+API Gateway
+      ↓
+Authentication / Authorization
+      ↓
+CWD API (FastAPI on ECS/Fargate)
+      ↓
+Coordinator
+      ↓
+Intent + Entity Detection
+      ↓
+Agent Registry / Planning
+      ↓
+Delegator(s)
+      ↓
+┌───────────────┬────────────────┐
+↓               ↓                ↓
+Sales Worker   IT Worker     Knowledge Worker
+↓               ↓                ↓
+MCP             MCP              RAG
+↓               ↓                ↓
+Salesforce    ServiceNow    OpenSearch Serverless
+                                  ↓
+                           Relevant Documents
+                                  ↓
+                         Bedrock / LLM
+                                  ↓
+                         Worker Results
+          └───────────────┬───────────────┘
+                          ↓
+                    Delegator
+                          ↓
+                    Coordinator
+                          ↓
+                 Final Response
+                          ↓
+                     CWD API
+                          ↓
+                   API Gateway
+                          ↓
+                       User
+\`\`\`
+
+# Step-by-step
+
+### 1. User sends request
+
+Example:
+
+> "Give me a briefing for customer ABC, including recent incidents."
+
+The request comes to:
+
+\`\`\`text
+Client → API Gateway
+\`\`\`
+
+---
+
+### 2. API Gateway handles the API boundary
+
+API Gateway performs things like:
+
+* Authentication
+* Authorization
+* Request validation
+* Throttling
+* Rate limiting
+* API logging
+* Request routing
+
+Then it forwards the request to the CWD backend.
+
+\`\`\`text
+API Gateway
+     ↓
+Authenticated request
+     ↓
+CWD API
+\`\`\`
+
+---
+
+### 3. CWD API receives the request
+
+The CWD API can be a **FastAPI application running on ECS/Fargate**.
+
+It creates or propagates:
+
+\`\`\`text
+request_id
+correlation_id
+user_id
+session_id
+\`\`\`
+
+Then it invokes the Coordinator.
+
+---
+
+# 4. Coordinator understands the request
+
+The Coordinator determines:
+
+\`\`\`text
+Intent:
+Customer Briefing
+
+Entity:
+customer_id = ABC
+
+Required capabilities:
+Customer information
+Incident information
+Knowledge/document information
+\`\`\`
+
+It checks the **Agent Registry** and creates the execution plan.
+
+\`\`\`text
+Customer Briefing
+       ↓
+ ┌─────┴─────┐
+ ↓           ↓
+Sales      IT/Service
+Delegator  Delegator
+\`\`\`
+
+---
+
+# 5. Delegators select Workers
+
+This is important in CWD.
+
+The **Coordinator does not directly call every Worker**.
+
+Instead:
+
+\`\`\`text
+Coordinator
+     ↓
+Delegator
+     ↓
+Workers
+\`\`\`
+
+For example:
+
+\`\`\`text
+Sales Delegator
+   ├── Salesforce Worker
+   └── Customer Data Worker
+
+IT Delegator
+   ├── ServiceNow Worker
+   └── Knowledge Worker
+\`\`\`
+
+The Delegator determines which Workers are required and can execute independent Workers in parallel.
+
+---
+
+# 6. Worker retrieves enterprise data
+
+There are two major paths.
+
+### Path A — Live enterprise data
+
+For current information:
+
+\`\`\`text
+Worker
+   ↓
+MCP Client
+   ↓
+MCP Server
+   ↓
+Salesforce / ServiceNow
+\`\`\`
+
+For example:
+
+\`\`\`text
+ServiceNow Worker
+       ↓
+    MCP Client
+       ↓
+    MCP Server
+       ↓
+ServiceNow API
+       ↓
+Open incidents
+\`\`\`
+
+This is useful when the information must be current.
+
+---
+
+### Path B — RAG knowledge
+
+For enterprise documents:
+
+\`\`\`text
+Knowledge Worker
+       ↓
+OpenSearch Serverless
+       ↓
+Hybrid Search
+(BM25 + Vector)
+       ↓
+Reranking
+       ↓
+Relevant chunks
+\`\`\`
+
+S3 is typically the source of the documents:
+
+\`\`\`text
+S3
+ ↓
+Extract
+ ↓
+Chunk
+ ↓
+Embedding
+ ↓
+OpenSearch
+\`\`\`
+
+---
+
+# 7. Workers can use Bedrock
+
+When reasoning or summarization is required:
+
+\`\`\`text
+Worker
+   ↓
+Model Router
+   ↓
+Amazon Bedrock
+   ↓
+Foundation Model
+   ↓
+Structured result
+\`\`\`
+
+For example, the Worker might provide:
+
+\`\`\`text
+Customer information
++
+Recent incidents
++
+Relevant knowledge articles
+\`\`\`
+
+to the model.
+
+The model produces a structured summary.
+
+---
+
+# 8. Results return to Delegator
+
+Each Worker returns its result:
+
+\`\`\`text
+Sales Worker
+     ↓
+Customer information
+
+ServiceNow Worker
+     ↓
+Recent incidents
+
+Knowledge Worker
+     ↓
+Relevant knowledge
+\`\`\`
+
+The Delegator aggregates these results.
+
+\`\`\`text
+Workers
+   ↓
+Delegator
+   ↓
+Aggregated result
+\`\`\`
+
+If one Worker fails, the Delegator can apply the configured failure policy:
+
+* Retry
+* Timeout
+* Continue with partial result
+* Fallback
+* Mark optional Worker as failed
+
+---
+
+# 9. Coordinator creates final response
+
+The Coordinator receives the Delegator results:
+
+\`\`\`text
+Sales result
++
+Service result
++
+Knowledge result
+        ↓
+Coordinator
+        ↓
+Final synthesis
+\`\`\`
+
+It can use Bedrock again for final synthesis if required.
+
+For example:
+
+> Customer ABC has three recent incidents. Two are resolved and one remains open. The open incident is related to...
+
+The response should include citations/evidence where appropriate.
+
+---
+
+# 10. Response goes back through API Gateway
+
+Finally:
+
+\`\`\`text
+Coordinator
+     ↓
+CWD API
+     ↓
+API Gateway
+     ↓
+User
+\`\`\`
+
+API Gateway returns the HTTP response.
+
+Example:
+
+\`\`\`json
+{
+  "request_id": "REQ123",
+  "customer_id": "ABC",
+  "status": "completed",
+  "response": "Customer ABC has..."
+}
+\`\`\`
+
+---
+
+# Observability throughout the flow
+
+We don't wait until the end to monitor the system.
+
+A correlation ID follows the entire request:
+
+\`\`\`text
+API Gateway
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+MCP / OpenSearch / Bedrock
+\`\`\`
+
+We capture:
+
+* Latency
+* Token usage
+* Model cost
+* Worker success/failure
+* MCP latency
+* Retrieval quality
+* LLM latency
+* Errors
+* Retries
+* 429 responses
+* Trace IDs
+
+Typical AWS tools:
+
+**CloudWatch + X-Ray/OpenTelemetry + application/LLM tracing such as Langfuse**
+
+---
+
+# Failure handling
+
+Suppose ServiceNow is temporarily unavailable:
+
+\`\`\`text
+ServiceNow Worker
+       ↓
+MCP Server
+       ↓
+ServiceNow
+       X
+    Timeout
+       ↓
+Retry + Backoff
+       ↓
+Still failing?
+       ↓
+Delegator
+\`\`\`
+
+The Delegator can return:
+
+\`\`\`text
+Sales information → Available
+Knowledge → Available
+ServiceNow → Temporarily unavailable
+\`\`\`
+
+The Coordinator can then produce a **partial response** rather than failing the entire customer briefing, if that Worker is configured as optional.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“In our AWS CWD architecture, API Gateway is the secure entry point. It handles authentication, authorization, throttling and request validation, then routes the request to our FastAPI CWD service running on ECS or Fargate. The Coordinator interprets the intent and entities, checks the Agent Registry, and creates the execution plan. It then routes work to the appropriate Delegators, and each Delegator selects and orchestrates its Workers. Workers retrieve live enterprise data through MCP from systems such as Salesforce and ServiceNow, while knowledge-oriented Workers use OpenSearch Serverless for hybrid RAG retrieval. When reasoning or summarization is required, Workers call Amazon Bedrock. Worker results are aggregated by the Delegators and returned to the Coordinator, which performs the final synthesis and sends the response through the CWD API and API Gateway back to the user. Throughout the flow, we use correlation IDs, CloudWatch and tracing for observability, and retries, timeouts, DLQs and checkpointing for reliability.”**
+
+## Easy memory trick
+
+Remember:
+
+**A → C → D → W → M/R → B → W → D → C → A**
+
+\`\`\`text
+API Gateway
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+MCP / RAG
+     ↓
+Bedrock
+     ↓
+Worker
+     ↓
+Delegator
+     ↓
+Coordinator
+     ↓
+API Gateway
+\`\`\`
+
+### Key distinction
+
+**API Gateway = API entry point**
+
+**Coordinator = overall agent orchestration**
+
+**Delegator = domain-level orchestration**
+
+**Worker = performs specific capability**
+
+**MCP = connects Workers to enterprise tools**
+
+**OpenSearch = retrieves knowledge**
+
+**Bedrock = model/reasoning**
+
+**S3 = stores documents**
+
+**DynamoDB = application/workflow state**
+
+**Redis = fast cache**
 `,code:``}];function gm(){return(0,M.jsx)($,{data:hm,title:`AWS Architecture Cookbook`,subtitle:`End-to-end AWS architecture, service choices and request flow`,icon:`🏗️`,patternLabel:`Questions`})}var _m=[{id:`016-why-amazon-bedrock-instead-of-directly-calling-an-llm-api`,category:`Amazon Bedrock`,title:`Why Amazon Bedrock instead of directly calling an LLM API?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why Amazon Bedrock instead of directly calling an LLM API?
 
 ## Short answer
-Bedrock gives multiple models behind IAM, PrivateLink and CloudTrail, rather than a separate vendor API with keys and a separate trust boundary.
+
+I would choose **Amazon Bedrock** because CWD is an **AWS enterprise application**, and Bedrock gives us managed access to multiple foundation models with AWS-native **IAM, security, governance, monitoring, and billing controls**.
+
+Instead of integrating every model provider separately, CWD can use Bedrock as a common model layer.
 
 ## Key points
-- IAM authentication instead of API keys; private connectivity through VPC endpoints.
-- One Converse API across providers, so models are swappable.
-- Guardrails, logging, quotas, Provisioned Throughput and cross-region inference.
-- Trade-off: new model versions can appear later than at the model provider, and quotas are per region.
 
-## CWD context
-The security and audit story is the main reason, not convenience.
+1. **Multiple foundation models**
+
+   * Different models can be used for different workloads.
+   * We are not tightly coupled to one model provider.
+
+2. **AWS security**
+
+   * IAM-based access control
+   * KMS integration
+   * VPC/private connectivity options
+   * AWS governance and audit controls
+
+3. **Enterprise governance**
+
+   * Centralized access policies
+   * CloudWatch monitoring
+   * Usage/cost tracking
+   * Model access controls
+
+4. **Model flexibility**
+
+For example:
+
+\`\`\`text
+                    CWD
+                     ↓
+                Model Router
+                     ↓
+              Amazon Bedrock
+              ↙     ↓      ↘
+          Model A  Model B  Model C
+\`\`\`
+
+The router can select a model based on:
+
+* Task complexity
+* Latency requirement
+* Cost
+* Context size
+* Required capabilities
+
+5. **Less infrastructure management**
+
+We don't need to deploy and operate the underlying foundation-model infrastructure ourselves.
+
+---
+
+# CWD flow
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+Model Router
+ ↓
+Amazon Bedrock
+ ↓
+Foundation Model
+ ↓
+Worker
+ ↓
+Delegator
+ ↓
+Coordinator
+ ↓
+Final Response
+\`\`\`
+
+---
+
+# What if I directly call an LLM API?
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+OpenAI API
+  ↓
+GPT model
+\`\`\`
+
+This can work, and direct API access may be appropriate in some architectures.
+
+But in an AWS enterprise architecture, Bedrock gives us a more AWS-integrated control plane for model access.
+
+### Direct API
+
+\`\`\`text
+Application
+    ↓
+Provider API
+    ↓
+LLM
+\`\`\`
+
+### Bedrock
+
+\`\`\`text
+Application
+    ↓
+IAM / AWS controls
+    ↓
+Bedrock
+    ↓
+Selected Foundation Model
+\`\`\`
+
+---
+
+# Important interview point
+
+Don't say:
+
+> **"Bedrock is better than directly calling an LLM API."**
+
+Instead say:
+
+> **"We chose Bedrock because it fit our AWS enterprise architecture and gave us centralized model access, security, governance, and model flexibility."**
+
+That's a much stronger architectural answer.
+
+---
+
+# Example
+
+Suppose CWD receives two requests.
+
+### Simple request
+
+\`\`\`text
+"Summarize this incident."
+\`\`\`
+
+The Model Router could select a lower-cost/faster model.
+
+### Complex request
+
+\`\`\`text
+"Analyze the customer's sales history, incidents,
+and knowledge documents and prepare a detailed briefing."
+\`\`\`
+
+The router could select a more capable model.
+
+\`\`\`text
+                 Worker
+                   ↓
+              Model Router
+              ↙         ↘
+        Simple task   Complex task
+             ↓             ↓
+        Fast/low-cost   Capable model
+             ↘             ↙
+               Bedrock
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“We chose Amazon Bedrock because CWD was deployed on AWS and we wanted a managed enterprise model layer rather than tightly coupling the application to a single LLM provider. Bedrock gives us access to multiple foundation models through a common AWS service, while integrating with AWS security, IAM, governance, monitoring, and cost controls. It also allows us to implement model routing based on task complexity, latency, capability, and cost. So the main reason was not simply accessing an LLM; it was having a governed and flexible model layer within our AWS architecture.”**
+
+## Easy memory trick
+
+**Bedrock = Models + Security + Governance + Flexibility**
+
+### Key distinction
+
+**Bedrock** → managed model access layer
+**LLM API** → direct provider/model integration
+**LangGraph** → agent workflow/orchestration
+**API Gateway** → API entry point
 `,code:``},{id:`017-which-bedrock-models-would-you-use-for-cwd-and-why`,category:`Amazon Bedrock`,title:`Which Bedrock models would you use for CWD and why?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which Bedrock models would you use for CWD and why?
 
 ## Short answer
-Use a tier of models by task rather than one model for everything; verify current availability in your region.
 
-## Key points
-- Flagship model (for example Claude Sonnet class or Amazon Nova Pro) for planning and final synthesis.
-- Small, fast model (Claude Haiku class or Nova Lite/Micro) for intent, routing, extraction and summarisation.
-- Embedding model (Titan Text Embeddings or Cohere Embed) for RAG.
+I would **not use one model for every CWD task**. I would use **model routing** based on task complexity, latency, cost, and required reasoning capability.
 
-## CWD context
-The task-to-model mapping is configuration, not code.
+For example, I could use **Amazon Nova Micro/Lite** for simple tasks and **Claude Sonnet** for complex agent reasoning and final synthesis, subject to the models available and approved in the target AWS region.
+
+## CWD model routing
+
+\`\`\`text
+                    Worker
+                      ↓
+                Task Classifier
+                      ↓
+             Model Router
+              ↙           ↘
+       Simple task       Complex task
+           ↓                  ↓
+    Nova Micro/Lite      Claude Sonnet
+           ↓                  ↓
+      Bedrock Model        Bedrock Model
+                      ↓
+                   Result
+\`\`\`
+
+## 1. Amazon Nova Micro
+
+I would consider **Nova Micro** for lightweight tasks such as:
+
+* Intent classification
+* Simple routing decisions
+* Query classification
+* Simple extraction
+* Short summarization
+
+Why?
+
+* Lower latency
+* Lower cost
+* Suitable for simpler workloads
+
+Example:
+
+\`\`\`text
+"Is this request about Sales or IT?"
+             ↓
+        Nova Micro
+             ↓
+          IT
+\`\`\`
+
+---
+
+## 2. Amazon Nova Lite
+
+I would consider **Nova Lite** for tasks that are still relatively lightweight but need more capability, including some multimodal workloads.
+
+Example:
+
+\`\`\`text
+Document/Image
+      ↓
+Nova Lite
+      ↓
+Extract relevant information
+\`\`\`
+
+It can be useful where we want a balance between capability, latency, and cost.
+
+---
+
+## 3. Claude Sonnet
+
+I would use a **Claude Sonnet-class model** for more complex CWD reasoning tasks, depending on the approved Bedrock model/version.
+
+For example:
+
+* Complex customer briefing
+* Multi-source synthesis
+* Tool-use reasoning
+* Long-context analysis
+* Complex summarization
+* Final response generation
+
+Example:
+
+\`\`\`text
+Salesforce data
+       +
+ServiceNow incidents
+       +
+Knowledge documents
+       ↓
+   Claude Sonnet
+       ↓
+Customer briefing
+\`\`\`
+
+This is where the model needs to reason over multiple pieces of evidence rather than simply classify a request.
+
+---
+
+# Example CWD routing
+
+Suppose the user asks:
+
+> "Give me a customer briefing for ABC."
+
+The flow could be:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Task Classifier
+ ↓
+Is this simple or complex?
+       ↓
+ ┌─────┴─────┐
+ ↓           ↓
+Simple      Complex
+ ↓           ↓
+Nova       Claude
+ ↓           ↓
+Coordinator / Workers
+\`\`\`
+
+The Workers then retrieve the actual information:
+
+\`\`\`text
+Sales Worker
+     ↓
+Salesforce via MCP
+
+Service Worker
+     ↓
+ServiceNow via MCP
+
+Knowledge Worker
+     ↓
+OpenSearch Serverless
+\`\`\`
+
+Then the complex model can synthesize the authorized results.
+
+---
+
+# Why not use the largest model everywhere?
+
+Because it increases:
+
+* Cost
+* Latency
+* Token consumption
+* Capacity pressure
+
+For example:
+
+\`\`\`text
+Simple classification
+       ↓
+Small model
+       ↓
+Fast + inexpensive
+
+Complex reasoning
+       ↓
+Larger model
+       ↓
+Higher capability
+\`\`\`
+
+So I would optimize for **quality + latency + cost**, rather than automatically selecting the biggest model.
+
+---
+
+# Important: don't let the LLM choose blindly
+
+I would have a **model-routing policy**.
+
+\`\`\`text
+Request
+  ↓
+Task Classifier
+  ↓
+Task complexity
+  ↓
+Policy
+ ├── Simple → Small model
+ ├── Medium → Mid-tier model
+ └── Complex → High-capability model
+\`\`\`
+
+The policy can consider:
+
+* Task type
+* Number of tools
+* Context size
+* Reasoning requirement
+* Latency SLA
+* Cost budget
+* Model availability
+* Historical evaluation results
+
+And I would validate routing decisions using an evaluation dataset rather than assuming the larger model is always better.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I wouldn't use a single Bedrock model for all CWD workloads. I would use model routing. For lightweight tasks such as intent classification, routing, and simple extraction, I could use a lower-cost model such as Amazon Nova Micro or Nova Lite. For complex multi-source reasoning, customer briefing, tool-use reasoning, and final synthesis, I would consider a Claude Sonnet-class model available through Bedrock. The routing decision would be based on task complexity, latency, cost, context size, and evaluation results. This gives us a balance between quality, performance, and cost.”**
+
+## Easy memory trick
+
+**Simple → Small model**
+
+**Complex → Capable model**
+
+**Router → Decides**
+
+**Bedrock → Provides the models**
+
+### Key distinction
+
+> **Model Router decides *which model to use*. Bedrock provides the managed access to those models. LangGraph decides *which agent/workflow step should execute*.**
 `,code:``},{id:`018-how-do-you-select-a-bedrock-model`,category:`Amazon Bedrock`,title:`How do you select a Bedrock model?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you select a Bedrock model?
 
 ## Short answer
-Select the smallest model that meets the quality bar for each task, proven on your own data.
+
+I select a Bedrock model based on the **task requirements**, not simply by choosing the largest model.
+
+I evaluate:
+
+**Task complexity → Quality → Latency → Cost → Context → Tool/Reasoning capability → Evaluation results**
+
+Then I use a **model router/policy** to select the appropriate model.
 
 ## Key points
-- Criteria: quality, latency, cost per token, context window, tool use and structured output, region and quota, Guardrails support.
-- Run the golden dataset per candidate; compare quality, latency and cost.
-- Use the Converse API to keep the choice swappable.
 
-## CWD context
-Start larger, then downshift tasks that stay above threshold.
+### 1. First identify the task
+
+For CWD, classify the request:
+
+\`\`\`text
+Request
+   ↓
+Task Classifier
+   ↓
+┌──────────────┬───────────────┐
+Simple         Medium          Complex
+ ↓              ↓                ↓
+Classification  Summarization    Multi-source reasoning
+Routing         Extraction       Customer briefing
+\`\`\`
+
+---
+
+### 2. Match model capability
+
+For example:
+
+| CWD task                      | Model approach          |
+| ----------------------------- | ----------------------- |
+| Intent classification         | Smaller/faster model    |
+| Entity extraction             | Smaller/faster model    |
+| Simple summarization          | Small/mid model         |
+| RAG question answering        | Mid/high capability     |
+| Complex multi-agent reasoning | Higher-capability model |
+| Final customer briefing       | Higher-capability model |
+| Vision/multimodal task        | Vision-capable model    |
+
+The exact model should be selected from the **currently available Bedrock models in the target AWS region**.
+
+---
+
+### 3. Evaluate quality
+
+Before production, I create a golden dataset:
+
+\`\`\`text
+Question
+Expected answer
+Retrieved context
+Actual answer
+\`\`\`
+
+Then evaluate:
+
+* Accuracy
+* Groundedness
+* Relevance
+* Tool-call correctness
+* Hallucination rate
+* Structured-output correctness
+
+For example:
+
+\`\`\`text
+Model A → 91% quality
+Model B → 94% quality
+\`\`\`
+
+If Model B costs significantly more but gives only a small quality improvement, I may use Model A for that workload.
+
+---
+
+### 4. Check latency
+
+Suppose the SLA is:
+
+\`\`\`text
+P95 < 5 seconds
+\`\`\`
+
+If a model consistently exceeds the latency target, I would consider another model or change the routing strategy.
+
+So model selection isn't only about quality.
+
+\`\`\`text
+Quality
+   +
+Latency
+   +
+Cost
+\`\`\`
+
+---
+
+### 5. Check cost
+
+I monitor:
+
+\`\`\`text
+Input tokens
+Output tokens
+Requests
+Cost/request
+Cost/workflow
+\`\`\`
+
+A simple routing strategy might be:
+
+\`\`\`text
+Simple task
+   ↓
+Lower-cost model
+
+Complex task
+   ↓
+Higher-capability model
+\`\`\`
+
+This prevents using an expensive model for every request.
+
+---
+
+### 6. Check context requirements
+
+Some CWD requests may contain:
+
+* Customer information
+* Multiple incidents
+* Retrieved documents
+* Tool results
+* Conversation history
+
+If the context is large, I need a model that supports the required context window.
+
+But I would still **reduce unnecessary context** through:
+
+* Reranking
+* Top-K control
+* Summarization
+* Deduplication
+* Context compression
+
+---
+
+### 7. Check tool/function calling
+
+For agentic CWD, the model may need to decide:
+
+\`\`\`text
+Should I call Salesforce?
+Should I call ServiceNow?
+Should I retrieve documents?
+Which tool should I call?
+\`\`\`
+
+Therefore I evaluate the model's **tool-calling reliability**, not just its text-generation quality.
+
+---
+
+# CWD model-selection flow
+
+\`\`\`text
+                  CWD Request
+                       ↓
+                Task Classifier
+                       ↓
+             ┌─────────┴─────────┐
+             ↓                   ↓
+       Simple task          Complex task
+             ↓                   ↓
+      Model Policy          Model Policy
+             ↓                   ↓
+       Lower-cost model     High-capability model
+             └─────────┬─────────┘
+                       ↓
+                  Amazon Bedrock
+                       ↓
+                  Foundation Model
+                       ↓
+                     Result
+\`\`\`
+
+## Example
+
+User asks:
+
+> "Is customer ABC currently associated with an open incident?"
+
+This is relatively straightforward:
+
+\`\`\`text
+Intent detection
+      ↓
+ServiceNow Worker
+      ↓
+MCP
+      ↓
+ServiceNow
+\`\`\`
+
+A smaller model may be sufficient for classification or extraction.
+
+But:
+
+> "Analyze ABC's sales history, open incidents, previous issues, and knowledge documents and create a customer briefing."
+
+That's a more complex reasoning and synthesis task:
+
+\`\`\`text
+Salesforce
+     +
+ServiceNow
+     +
+OpenSearch
+     ↓
+Complex context
+     ↓
+High-capability model
+     ↓
+Customer briefing
+\`\`\`
+
+---
+
+# How I implement the router
+
+The router can initially be **rule/policy based**, and later become more sophisticated.
+
+Example:
+
+\`\`\`python
+if task == "classification":
+    model = "small_model"
+
+elif task == "simple_summary":
+    model = "small_model"
+
+elif task == "customer_briefing":
+    model = "high_capability_model"
+
+elif context_tokens > threshold:
+    model = "long_context_model"
+
+else:
+    model = "default_model"
+\`\`\`
+
+In production, I would combine these rules with **evaluation data and telemetry** rather than relying only on an LLM to make the decision.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I select a Bedrock model based on the workload rather than automatically using the largest model. First, I classify the task by complexity and requirements such as reasoning, tool calling, context size, latency, and multimodal capability. Then I compare candidate models using a golden evaluation dataset for quality, groundedness, tool-call accuracy, latency, and cost. For simple CWD tasks such as classification and extraction, I use a smaller lower-cost model where it meets the quality bar. For complex multi-source reasoning and customer briefing, I use a higher-capability model. I then continuously monitor quality, P95 latency, token usage, and cost and adjust the routing policy based on production results.”**
+
+## Easy memory trick
+
+**T → Q → L → C → E**
+
+* **T** = Task
+* **Q** = Quality
+* **L** = Latency
+* **C** = Cost
+* **E** = Evaluation
+
+> **“Choose the smallest model that reliably meets the required quality and SLA.”**
+
+### Key distinction
+
+**Task Classifier** → determines what kind of task it is.
+
+**Model Router** → maps that task to a model.
+
+**Bedrock** → provides access to the selected foundation model.
+
+**Evaluation** → proves that the selected model actually meets the quality requirement.
 `,code:``},{id:`019-how-do-you-handle-bedrock-throttling`,category:`Amazon Bedrock`,title:`How do you handle Bedrock throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Bedrock throttling?
 
 ## Short answer
-Bedrock returns ThrottlingException when you exceed the model's request or token quota.
+
+**Bedrock throttling means our application is sending requests faster than the allowed Bedrock request/token capacity.** In CWD, I handle it using:
+
+**Detect → Limit → Queue → Retry → Backoff → Reduce → Fallback → Monitor**
+
+---
 
 ## Key points
-- Retry with exponential backoff and jitter (SDK adaptive retry mode).
-- Cross-region inference profiles for more throughput; quota increases; Provisioned Throughput for steady baseline.
-- Queue non-interactive work in SQS; enforce per-tenant limits; reduce tokens.
 
-## CWD context
-Throttling is a capacity-planning signal, not just an error to retry.
+### 1. Detect throttling
+
+A throttled request can return a **429 / throttling-related error**.
+
+I monitor:
+
+* 429/throttling count
+* Requests per minute
+* Token usage
+* Concurrent model calls
+* Queue depth
+* Retry count
+* P95/P99 latency
+
+---
+
+### 2. Control concurrency
+
+This is especially important in CWD because multiple Workers can execute in parallel.
+
+Example:
+
+\`\`\`text id="x7n4kp"
+Coordinator
+     ↓
+Delegator
+     ↓
+10 Workers
+     ↓
+10 Bedrock calls ❌
+\`\`\`
+
+Instead, control concurrency:
+
+\`\`\`text id="q4r8mz"
+10 Workers
+     ↓
+Concurrency Controller
+     ↓
+3 active Bedrock calls
+     ↓
+Remaining requests queued
+\`\`\`
+
+This prevents a sudden burst from overwhelming the model capacity.
+
+---
+
+### 3. Use exponential backoff + jitter
+
+When Bedrock throttles:
+
+\`\`\`text id="b8k2vz"
+Request
+  ↓
+429
+  ↓
+Wait
+  ↓
+Retry
+  ↓
+429
+  ↓
+Longer wait
+  ↓
+Retry
+\`\`\`
+
+Use **bounded exponential backoff with jitter**.
+
+For example:
+
+\`\`\`text id="t9m3cx"
+Retry 1 → ~0.5 sec
+Retry 2 → ~1 sec
+Retry 3 → ~2 sec
+Retry 4 → ~4 sec
+\`\`\`
+
+The actual values should be configurable.
+
+**Jitter** prevents many Workers from retrying at exactly the same time.
+
+---
+
+### 4. Respect \`Retry-After\` when provided
+
+If the service tells us when to retry, I use that information rather than immediately retrying.
+
+\`\`\`text id="r5v8qn"
+Bedrock
+   ↓
+Throttled
+   ↓
+Retry-After
+   ↓
+Wait
+   ↓
+Retry
+\`\`\`
+
+---
+
+### 5. Queue requests
+
+For asynchronous workloads, I can use **SQS**:
+
+\`\`\`text id="k3d9wx"
+Workers
+   ↓
+SQS
+   ↓
+Controlled consumers
+   ↓
+Bedrock
+\`\`\`
+
+This absorbs traffic spikes.
+
+For example, if 100 requests arrive at once, I don't necessarily send 100 Bedrock calls simultaneously.
+
+---
+
+### 6. Reduce token consumption
+
+Throttling can also be related to token capacity.
+
+So I reduce unnecessary tokens:
+
+* Limit conversation history
+* Summarize old history
+* Reduce RAG Top-K
+* Remove duplicate context
+* Rerank before sending context
+* Limit output tokens
+* Use structured Worker results
+* Avoid unnecessary LLM calls
+* Use semantic caching where appropriate
+
+Example:
+
+\`\`\`text id="h8q2yd"
+10,000 tokens/request ❌
+        ↓
+Remove unnecessary context
+        ↓
+3,000 tokens/request ✅
+\`\`\`
+
+---
+
+### 7. Use model routing
+
+If the workload allows it, use different models based on complexity.
+
+\`\`\`text id="v4r7js"
+Request
+   ↓
+Model Router
+   ├── Simple → lower-cost/faster model
+   └── Complex → higher-capability model
+\`\`\`
+
+This prevents sending every task to the most expensive/high-demand model.
+
+Any fallback model should be **pre-approved and validated** to meet the task's quality requirements.
+
+---
+
+### 8. Use circuit breaker for persistent failures
+
+If throttling becomes severe:
+
+\`\`\`text id="p2m6rx"
+Bedrock
+   ↓
+Repeated throttling
+   ↓
+Circuit Breaker
+   ↓
+Stop sending requests temporarily
+   ↓
+Recover gradually
+\`\`\`
+
+This prevents the application from continuously hammering an already-throttled dependency.
+
+---
+
+### 9. Monitor and tune capacity
+
+I monitor:
+
+\`\`\`text id="j5q8vn"
+429 rate
+Token/minute
+Request/minute
+Concurrency
+Queue depth
+Retry rate
+Latency
+Cost
+\`\`\`
+
+If throttling is consistently high, I investigate whether we need to **adjust capacity/quotas, reduce concurrency, optimize token usage, or change the workload/model strategy**.
+
+---
+
+# CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Briefing
+       ↓
+Coordinator
+       ↓
+2 Delegators
+       ↓
+10 Workers
+       ↓
+10 Bedrock requests
+\`\`\`
+
+If all 10 Workers call Bedrock simultaneously:
+
+\`\`\`text
+Bedrock capacity
+       ↑
+       │
+10 concurrent requests
+       ↓
+   Throttling
+\`\`\`
+
+I would implement:
+
+\`\`\`text id="z6k4pt"
+10 Workers
+    ↓
+Concurrency Limit = 3
+    ↓
+┌───────────────┐
+│ 3 active      │ → Bedrock
+│ 7 queued      │
+└───────────────┘
+\`\`\`
+
+If one receives 429:
+
+\`\`\`text id="s8n3qv"
+429
+ ↓
+Retry-After / Backoff
+ ↓
+Retry with jitter
+ ↓
+Success
+\`\`\`
+
+If repeated retries fail:
+
+\`\`\`text id="a2m7kc"
+Retry exhausted
+      ↓
+Fallback / partial result
+      ↓
+Delegator
+      ↓
+Coordinator
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“In CWD, multiple Workers can call Bedrock concurrently, so I handle throttling at both the request and token level. First, I control concurrency so we don't send an uncontrolled burst of requests. For throttled calls, I respect Retry-After when available and use bounded exponential backoff with jitter. For asynchronous workloads, I use SQS to buffer requests. I also reduce token consumption through prompt optimization, RAG Top-K control, context compression and avoiding unnecessary LLM calls. If appropriate, I use model routing or an approved fallback model. Finally, I monitor 429 rate, token usage, concurrency, queue depth, retry rate and P95/P99 latency, and adjust the capacity and routing strategy based on production behavior.”**
+
+## Easy memory trick
+
+**D → L → Q → R → B → R → M**
+
+**Detect → Limit → Queue → Retry → Backoff → Reduce → Monitor**
+
+### Key distinction
+
+**API rate limiting** controls **how many requests** enter the system.
+
+**Bedrock throttling** can involve exceeding the model's **request or token capacity**.
+
+So in CWD, I control **both request concurrency and token consumption**.
 `,code:``},{id:`020-how-do-you-handle-bedrock-timeout`,category:`Amazon Bedrock`,title:`How do you handle Bedrock timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Bedrock timeout?
 
 ## Short answer
-Handle Bedrock timeouts with explicit client timeouts, streaming and a fallback.
+
+A **Bedrock timeout** means our request did not complete within the configured time limit.
+
+In CWD, I handle it using:
+
+**Timeout → Retry → Backoff → Reduce → Fallback → Partial Response → Monitor**
+
+The key is **not to blindly retry**, because a slow dependency can become even more overloaded.
+
+---
 
 ## Key points
-- Raise the SDK read timeout above the default for long generations.
-- Stream responses so users see progress; measure time to first token.
-- Retry transient failures once, then use another region or a smaller model.
-- Remember API Gateway's 29-second limit; long work goes async.
 
-## CWD context
-Return a partial or degraded answer with a clear message rather than hanging.
+### 1. Set a timeout
+
+I configure a maximum time for each Bedrock call.
+
+For example:
+
+\`\`\`text
+Worker
+  ↓
+Bedrock
+  ↓
+Timeout = 10 seconds
+\`\`\`
+
+If Bedrock doesn't respond within the allowed time:
+
+\`\`\`text
+Bedrock
+   ↓
+Timeout
+   ↓
+Worker handles failure
+\`\`\`
+
+The actual timeout depends on the CWD SLA and model/workload.
+
+---
+
+### 2. Retry transient failures
+
+If the timeout appears transient, retry with:
+
+**Exponential backoff + jitter**
+
+\`\`\`text
+Attempt 1
+   ↓
+Timeout
+   ↓
+Wait
+   ↓
+Attempt 2
+   ↓
+Timeout
+   ↓
+Longer wait
+   ↓
+Attempt 3
+\`\`\`
+
+Don't retry indefinitely.
+
+For example:
+
+\`\`\`text
+max_retries = 2 or 3
+\`\`\`
+
+The exact number should be based on the latency SLA and workload.
+
+---
+
+### 3. Don't retry everything
+
+I distinguish between:
+
+\`\`\`text
+Transient timeout
+      ↓
+Retry
+\`\`\`
+
+and
+
+\`\`\`text
+Persistent timeout
+      ↓
+Don't keep retrying
+      ↓
+Fallback / failure handling
+\`\`\`
+
+Otherwise:
+
+\`\`\`text
+Timeout
+ ↓
+Retry
+ ↓
+Timeout
+ ↓
+Retry
+ ↓
+Timeout
+ ↓
+System becomes slower
+\`\`\`
+
+---
+
+### 4. Reduce the request size
+
+Sometimes the model is slow because we're sending too much context.
+
+For CWD I can reduce:
+
+* Conversation history
+* RAG Top-K
+* Duplicate documents
+* Prompt size
+* Output token limit
+* Unnecessary tool results
+
+Example:
+
+\`\`\`text
+50 retrieved chunks
+       ↓
+Reranking
+       ↓
+Top 5–10 chunks
+       ↓
+Bedrock
+\`\`\`
+
+This can reduce both **latency and cost**.
+
+---
+
+### 5. Use model routing
+
+If a task doesn't require a high-capability model:
+
+\`\`\`text
+Complex model
+      ↓
+Timeout / high latency
+\`\`\`
+
+I can route appropriate workloads to a faster approved model.
+
+\`\`\`text
+Simple task → faster/smaller model
+Complex task → higher-capability model
+\`\`\`
+
+The fallback should only be used if it still meets the required quality.
+
+---
+
+### 6. Handle Worker timeout separately
+
+Suppose CWD has:
+
+\`\`\`text
+Sales Worker       → Success
+ServiceNow Worker  → Success
+Knowledge Worker   → Bedrock timeout
+\`\`\`
+
+The Delegator shouldn't necessarily fail everything.
+
+If the Knowledge Worker is optional:
+
+\`\`\`text
+Worker timeout
+     ↓
+Delegator
+     ↓
+Partial result
+     ↓
+Coordinator
+     ↓
+Final response
+\`\`\`
+
+The response can say that knowledge retrieval was temporarily unavailable rather than inventing information.
+
+---
+
+### 7. Use circuit breaker
+
+If Bedrock repeatedly times out:
+
+\`\`\`text
+Bedrock
+  ↓
+Timeout
+  ↓
+Timeout
+  ↓
+Timeout
+  ↓
+Circuit breaker OPEN
+\`\`\`
+
+Temporarily stop sending requests and allow the dependency to recover.
+
+Then gradually allow requests again.
+
+---
+
+### 8. Monitor timeout patterns
+
+I monitor:
+
+* Bedrock timeout rate
+* P50/P95/P99 latency
+* Model latency
+* Input/output tokens
+* Concurrent requests
+* Retry count
+* Queue depth
+* Worker latency
+* End-to-end CWD latency
+
+For example:
+
+\`\`\`text
+Bedrock P95 = 4 sec
+CWD P95      = 6 sec
+\`\`\`
+
+If Bedrock P95 suddenly becomes:
+
+\`\`\`text
+15 sec
+\`\`\`
+
+I investigate model load, prompt size, token generation, concurrency, and downstream architecture.
+
+---
+
+# CWD timeout flow
+
+\`\`\`text
+Worker
+   ↓
+Bedrock
+   ↓
+Response?
+ ┌───────┴────────┐
+Yes               No
+ ↓                 ↓
+Success          Timeout
+                   ↓
+             Retry allowed?
+              ┌────┴────┐
+             Yes         No
+              ↓           ↓
+        Backoff +      Fallback /
+          Retry        Partial result
+              ↓           ↓
+          Bedrock      Delegator
+                          ↓
+                     Coordinator
+\`\`\`
+
+---
+
+# Example
+
+Suppose the Customer Briefing Worker calls Bedrock:
+
+\`\`\`text
+Worker
+  ↓
+Bedrock
+  ↓
+10-second timeout
+\`\`\`
+
+It times out.
+
+I would do:
+
+\`\`\`text
+1. Record timeout + correlation ID
+2. Check whether retry is appropriate
+3. Retry with exponential backoff + jitter
+4. Limit retries
+5. If still failing, use approved fallback or return partial result
+6. Do not fabricate missing information
+7. Record metrics for investigation
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For Bedrock timeouts, I first configure a timeout based on our end-to-end SLA. If the timeout is transient, I use a bounded retry policy with exponential backoff and jitter rather than retrying indefinitely. I also reduce latency by controlling prompt size, RAG Top-K, output tokens and unnecessary model calls. If appropriate, I can route the workload to an approved faster model. In our multi-agent CWD architecture, I handle the failure at the Worker and Delegator level, so an optional Worker timeout doesn't necessarily fail the entire request. I can return a partial response or controlled fallback while clearly indicating unavailable information. I also monitor P95/P99 latency, timeout rate, retries and token usage to identify the root cause.”**
+
+## Easy memory trick
+
+**T → R → B → R → F → M**
+
+* **T** = Timeout
+* **R** = Retry decision
+* **B** = Backoff
+* **R** = Reduce workload
+* **F** = Fallback / partial result
+* **M** = Monitor
+
+### Key distinction
+
+**429 / throttling:**
+
+> “We're sending too much capacity.”
+
+**Timeout:**
+
+> “The request didn't complete within the allowed time.”
+
+Both need controlled retries, but the root-cause investigation is different.
 `,code:``},{id:`021-how-do-you-implement-retries-for-bedrock`,category:`Amazon Bedrock`,title:`How do you implement retries for Bedrock?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement retries for Bedrock?
 
 ## Short answer
-Retry only transient failures, with backoff, jitter and an overall deadline.
+
+I implement **bounded retries with exponential backoff and jitter** around the Bedrock call.
+
+I retry only **transient failures** such as throttling or temporary service errors. I don't retry every error.
+
+\`\`\`text
+Worker
+  ↓
+Bedrock
+  ↓
+Success? ── Yes → Return result
+  │
+  No
+  ↓
+Is error retryable?
+  ↓
+Yes
+  ↓
+Exponential backoff + jitter
+  ↓
+Retry
+  ↓
+Max retries reached?
+  ↓
+Fallback / partial response / failure
+\`\`\`
 
 ## Key points
-- Retry throttling, service-unavailable, internal-server and timeout errors.
-- Do not retry validation, access-denied or guardrail-blocked calls.
-- SDK standard or adaptive retry modes with a capped attempt count.
-- Retry at one layer only; inference calls are read-only and safe to repeat.
 
-## CWD context
-Tool calls with side effects need idempotency keys before retrying.
+### 1. Define retryable errors
+
+Typical candidates include:
+
+* Throttling / \`429\`
+* Temporary service-unavailable errors
+* Transient network failures
+* Certain gateway/service errors
+
+I would **not automatically retry**:
+
+* Invalid request
+* Invalid parameters
+* Authentication/authorization failure
+* Malformed prompt/request
+* Validation errors
+
+Those need correction rather than repeated calls.
+
+---
+
+### 2. Use exponential backoff
+
+Instead of:
+
+\`\`\`text
+Retry immediately
+Retry immediately
+Retry immediately
+\`\`\`
+
+use:
+
+\`\`\`text
+Attempt 1 → wait ~0.5 sec
+Attempt 2 → wait ~1 sec
+Attempt 3 → wait ~2 sec
+\`\`\`
+
+The actual delays should be configurable based on the workload and SLA.
+
+---
+
+### 3. Add jitter
+
+Without jitter, multiple CWD Workers may retry simultaneously:
+
+\`\`\`text
+Worker 1 ─┐
+Worker 2 ─┤
+Worker 3 ─┼── Retry at exactly 2 sec ❌
+Worker 4 ─┤
+Worker 5 ─┘
+\`\`\`
+
+With jitter:
+
+\`\`\`text
+Worker 1 → 1.8 sec
+Worker 2 → 2.2 sec
+Worker 3 → 2.6 sec
+Worker 4 → 1.9 sec
+\`\`\`
+
+This reduces a **retry storm**.
+
+---
+
+### 4. Limit the number of retries
+
+I don't retry forever.
+
+For example:
+
+\`\`\`text
+max_retries = 2 or 3
+\`\`\`
+
+After the limit:
+
+\`\`\`text
+Bedrock
+   ↓
+Retry 1
+   ↓
+Retry 2
+   ↓
+Retry 3
+   ↓
+Failed
+\`\`\`
+
+Then the Worker reports failure to the Delegator.
+
+---
+
+# Example code
+
+A simple Python implementation could look like:
+
+\`\`\`python
+import random
+import time
+
+MAX_RETRIES = 3
+BASE_DELAY = 0.5
+
+def call_bedrock_with_retry(client, request):
+
+    for attempt in range(MAX_RETRIES + 1):
+
+        try:
+            return client.invoke_model(**request)
+
+        except ThrottlingException:
+            if attempt == MAX_RETRIES:
+                raise
+
+            delay = BASE_DELAY * (2 ** attempt)
+            jitter = random.uniform(0, 0.5)
+
+            time.sleep(delay + jitter)
+
+        except ServiceUnavailableException:
+            if attempt == MAX_RETRIES:
+                raise
+
+            delay = BASE_DELAY * (2 ** attempt)
+            jitter = random.uniform(0, 0.5)
+
+            time.sleep(delay + jitter)
+\`\`\`
+
+In production, I would generally prefer the **AWS SDK's built-in retry configuration** where appropriate, and add application-level policies only when CWD needs additional control.
+
+---
+
+# 5. Respect service retry guidance
+
+For throttling, if the service provides a retry timing signal such as \`Retry-After\`, I would respect it.
+
+Conceptually:
+
+\`\`\`text
+Bedrock
+   ↓
+429
+   ↓
+Retry-After
+   ↓
+Wait
+   ↓
+Retry
+\`\`\`
+
+Don't immediately retry.
+
+---
+
+# 6. Add timeout + retry together
+
+Retry without timeout can be dangerous.
+
+\`\`\`text
+Bedrock call
+   ↓
+Timeout
+   ↓
+Retry?
+   ↓
+Backoff
+   ↓
+Retry
+\`\`\`
+
+So I normally define both:
+
+\`\`\`text
+Request timeout
++
+Maximum retry attempts
++
+Maximum retry duration
+\`\`\`
+
+This protects the overall CWD SLA.
+
+---
+
+# 7. Handle retries at Worker level
+
+In CWD:
+
+\`\`\`text
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+Bedrock
+\`\`\`
+
+The **Worker** should generally own the Bedrock retry logic because it knows the model call details.
+
+Example:
+
+\`\`\`text
+Service Worker
+      ↓
+Bedrock
+      ↓
+429
+      ↓
+Retry
+      ↓
+Success
+\`\`\`
+
+If all retries fail:
+
+\`\`\`text
+Worker
+   ↓
+Failure status
+   ↓
+Delegator
+\`\`\`
+
+The Delegator decides whether the Worker is:
+
+* Mandatory → fail/replan
+* Optional → continue with partial result
+
+---
+
+# 8. Prevent duplicate side effects
+
+For a normal Bedrock generation call, retrying generally doesn't create the same kind of external transaction as retrying a destructive enterprise tool.
+
+But if the model response causes:
+
+\`\`\`text
+Bedrock
+ ↓
+Tool decision
+ ↓
+Salesforce update
+\`\`\`
+
+I would **not blindly retry the entire workflow**.
+
+Instead:
+
+\`\`\`text
+LLM generation
+      ↓
+Validate tool call
+      ↓
+Idempotency check
+      ↓
+MCP tool execution
+\`\`\`
+
+This prevents duplicate enterprise transactions.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement bounded retries around Bedrock using exponential backoff with jitter. First, I classify errors and retry only transient failures such as throttling or temporary service errors. I respect any service retry guidance, add jitter to prevent retry storms, and limit both retry count and total retry duration so we don't violate the CWD SLA. The Worker owns the Bedrock retry logic, and after retries are exhausted it reports the failure to the Delegator, which decides whether to retry, use an approved fallback, or continue with a partial result. I also combine retries with timeouts, concurrency control and monitoring so retries don't make an overloaded system worse.”**
+
+## Easy memory trick
+
+**C → R → B → J → L → F**
+
+* **C** = Classify error
+* **R** = Retry transient errors
+* **B** = Backoff
+* **J** = Jitter
+* **L** = Limit retries
+* **F** = Fallback / failure handling
+
+### Key distinction
+
+**Retry policy:** *Should I try again?*
+
+**Backoff:** *When should I try again?*
+
+**Circuit breaker:** *Should I temporarily stop calling Bedrock altogether?*
 `,code:``},{id:`022-how-do-you-control-bedrock-token-usage`,category:`Amazon Bedrock`,title:`How do you control Bedrock token usage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you control Bedrock token usage?
 
 ## Short answer
-Control token usage before the call, and measure it after.
+
+I control Bedrock token usage at **four levels**:
+
+**Measure → Limit → Reduce → Route**
+
+I track input/output tokens, set token budgets, reduce unnecessary context, and route simple tasks to smaller models.
+
+---
 
 ## Key points
-- Set maxTokens and stop sequences; count or estimate input tokens.
-- Trim history with a rolling summary; limit retrieved chunks by rerank score.
-- Read the usage field in each response and record it; per-tenant budgets in DynamoDB or Redis.
-- Prompt caching for stable prefixes.
 
-## CWD context
-Track prompt tokens per stage to see where they go.
+### 1. Measure token usage
+
+For every Bedrock call, I track:
+
+\`\`\`text
+Input tokens
+Output tokens
+Total tokens
+Model
+Worker
+Workflow / Run
+Latency
+Cost
+\`\`\`
+
+In CWD:
+
+\`\`\`text
+Session
+  ↓
+Task
+  ↓
+Run
+  ↓
+Worker
+  ↓
+Bedrock call
+\`\`\`
+
+I attach a \`correlation_id\` so I can determine which Worker or workflow consumed the tokens.
+
+---
+
+### 2. Set input token limits
+
+Don't send the entire conversation or every retrieved document.
+
+Instead:
+
+\`\`\`text
+100 documents
+     ↓
+Hybrid search
+     ↓
+Reranking
+     ↓
+Top 5–10 documents
+     ↓
+Bedrock
+\`\`\`
+
+This reduces unnecessary input tokens.
+
+---
+
+### 3. Control conversation history
+
+Instead of sending:
+
+\`\`\`text
+Entire conversation history
+\`\`\`
+
+use:
+
+\`\`\`text
+Recent messages
++
+Conversation summary
++
+Current request
+\`\`\`
+
+Example:
+
+\`\`\`text
+Old conversation
+      ↓
+Summarization
+      ↓
+Compact context
+      ↓
+Bedrock
+\`\`\`
+
+---
+
+### 4. Control RAG Top-K
+
+If OpenSearch returns 50 chunks, don't automatically send all 50 to Bedrock.
+
+\`\`\`text
+OpenSearch
+    ↓
+Top 50
+    ↓
+Reranker
+    ↓
+Top 5–10
+    ↓
+Bedrock
+\`\`\`
+
+This is one of the important ways to reduce token consumption in CWD.
+
+---
+
+### 5. Remove duplicate context
+
+Suppose three Workers return similar information:
+
+\`\`\`text
+Worker 1 → Customer information
+Worker 2 → Same customer information
+Worker 3 → Similar customer information
+\`\`\`
+
+Before sending everything to the final model:
+
+\`\`\`text
+Worker results
+     ↓
+Deduplication
+     ↓
+Structured aggregation
+     ↓
+Bedrock
+\`\`\`
+
+---
+
+### 6. Limit output tokens
+
+I also set an appropriate **maximum output-token budget**.
+
+For example:
+
+\`\`\`text
+Classification → small output budget
+Extraction     → small output budget
+Summary        → medium budget
+Customer brief → larger budget
+\`\`\`
+
+I don't give every request a huge output allowance.
+
+---
+
+### 7. Use model routing
+
+Not every task requires the most capable model.
+
+\`\`\`text
+             Request
+                ↓
+          Task Classifier
+                ↓
+       ┌────────┴────────┐
+       ↓                 ↓
+   Simple              Complex
+       ↓                 ↓
+ Smaller model      Larger model
+\`\`\`
+
+This can reduce both **token cost and latency**, while maintaining the required quality.
+
+---
+
+### 8. Avoid unnecessary LLM calls
+
+This is very important.
+
+Suppose the Worker can determine something using a deterministic rule:
+
+\`\`\`text
+customer_id exists?
+\`\`\`
+
+Don't call an LLM just to answer that.
+
+Use:
+
+\`\`\`text
+Rules / code → deterministic task
+LLM → reasoning task
+\`\`\`
+
+Also use caching where appropriate.
+
+\`\`\`text
+Request
+   ↓
+Semantic cache
+   ↓
+Cache hit → return result
+   ↓
+Cache miss
+   ↓
+Bedrock
+\`\`\`
+
+For dynamic Salesforce/ServiceNow data, I would use appropriate TTL/freshness controls rather than blindly caching the result.
+
+---
+
+# CWD token-control architecture
+
+\`\`\`text
+                    CWD Request
+                         ↓
+                   Coordinator
+                         ↓
+                    Delegator
+                         ↓
+                      Worker
+                         ↓
+               Context Controller
+                ↙       ↓       ↘
+           History    RAG      Tool results
+           summary    Top-K    Deduplication
+                ↘       ↓       ↙
+                  Token Budget
+                       ↓
+                  Model Router
+                       ↓
+                  Amazon Bedrock
+                       ↓
+                  Output Limit
+                       ↓
+                     Result
+\`\`\`
+
+---
+
+# Example
+
+Suppose initially we send:
+
+\`\`\`text
+Conversation      = 4,000 tokens
+RAG context      = 8,000 tokens
+Tool results     = 3,000 tokens
+Prompt           = 1,000 tokens
+--------------------------------
+Total input      = 16,000 tokens
+\`\`\`
+
+We can optimize:
+
+\`\`\`text
+Conversation summary = 1,000
+RAG Top-K            = 3,000
+Structured tools     = 1,500
+Prompt               =   500
+--------------------------------
+Total                = 6,000
+\`\`\`
+
+So the model receives **much less unnecessary context**.
+
+The important point is to verify that quality and grounding remain acceptable after compression.
+
+---
+
+# Token budget per Worker
+
+For CWD, I can also establish budgets:
+
+\`\`\`text
+Worker                    Token Budget
+------------------------------------------------
+Intent Classifier         Low
+Entity Extractor          Low
+Salesforce Worker         Low/Medium
+ServiceNow Worker         Low/Medium
+RAG Worker                Medium
+Customer Briefing         High
+Final Synthesis           High
+\`\`\`
+
+If a Worker exceeds its budget:
+
+\`\`\`text
+Worker
+  ↓
+Token budget exceeded
+  ↓
+Stop / summarize / reduce context
+  ↓
+Continue safely
+\`\`\`
+
+---
+
+# Monitor token efficiency
+
+I monitor:
+
+* Tokens/request
+* Input tokens/request
+* Output tokens/request
+* Tokens/Worker
+* Tokens/workflow
+* Cost/request
+* Cost/successful task
+* Cache hit rate
+* RAG Top-K
+* Model usage
+* Quality/groundedness
+
+A useful metric is:
+
+**Cost per successful business task**
+
+because reducing tokens too aggressively can hurt answer quality.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I control Bedrock token usage using a combination of measurement, budgets, context optimization and model routing. First, I track input and output tokens for every model call and attribute them to the Worker and CWD workflow using correlation IDs. Then I control input tokens by summarizing conversation history, limiting RAG Top-K, reranking and deduplicating context, and returning structured tool results instead of unnecessary raw data. I also set appropriate output-token limits for each task and avoid LLM calls when deterministic logic is sufficient. Finally, I use model routing and caching where appropriate. I monitor tokens per request, cost per workflow, latency and quality so that optimization doesn't reduce answer quality or grounding.”**
+
+## Easy memory trick
+
+**M → L → R → R**
+
+* **M = Measure** tokens
+* **L = Limit** input/output
+* **R = Reduce** unnecessary context
+* **R = Route** to the right model
+
+### Key distinction
+
+> **Token optimization is not simply “use fewer tokens.”**
+
+The goal is:
+
+> **Use the minimum context and output required to meet the required quality, grounding, latency and cost.**
 `,code:``},{id:`023-how-do-you-reduce-bedrock-cost`,category:`Amazon Bedrock`,title:`How do you reduce Bedrock cost?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you reduce Bedrock cost?
 
 ## Short answer
-Reduce cost with fewer, smaller and cheaper calls and the right pricing model.
+
+I reduce Bedrock cost using:
+
+**Measure → Avoid → Reduce → Route → Cache → Control → Monitor**
+
+The main idea is to **avoid unnecessary LLM calls and unnecessary tokens while maintaining the required quality**.
+
+---
 
 ## Key points
-- Model tiering; Intelligent Prompt Routing where suitable.
-- Prompt caching, response caching, batch inference for offline work.
-- Provisioned Throughput only for steady high load; distillation for narrow tasks.
-- Application inference profiles and tags for cost attribution.
 
-## CWD context
-Measure cost per request first; model routing is usually the biggest lever.
+### 1. Measure cost per request
+
+First, I track:
+
+\`\`\`text
+Model
+Input tokens
+Output tokens
+Total tokens
+Number of LLM calls
+Worker
+Workflow
+Cost/request
+Cost/successful task
+\`\`\`
+
+In CWD:
+
+\`\`\`text
+Session
+  ↓
+Task
+  ↓
+Run
+  ↓
+Worker
+  ↓
+Bedrock
+\`\`\`
+
+Using correlation IDs lets me identify which Worker or workflow is consuming the most money.
+
+---
+
+### 2. Avoid unnecessary LLM calls
+
+This is usually the first optimization.
+
+Don't use an LLM for deterministic tasks.
+
+For example:
+
+\`\`\`text
+"Is customer_id present?"
+\`\`\`
+
+can be handled by normal code.
+
+\`\`\`text
+if customer_id:
+    continue
+else:
+    return validation_error
+\`\`\`
+
+No Bedrock call is needed.
+
+Use the LLM when reasoning or language understanding is actually required.
+
+---
+
+### 3. Reduce prompt tokens
+
+Large prompts increase cost.
+
+I reduce:
+
+* Conversation history
+* RAG context
+* Duplicate information
+* Unnecessary tool results
+* Large system prompts
+
+Instead of:
+
+\`\`\`text
+50 retrieved chunks
+        ↓
+      Bedrock
+\`\`\`
+
+use:
+
+\`\`\`text
+50 chunks
+   ↓
+Reranking
+   ↓
+Top 5–10
+   ↓
+Bedrock
+\`\`\`
+
+---
+
+### 4. Use model routing
+
+This is a major CWD optimization.
+
+\`\`\`text
+                 Request
+                    ↓
+              Task Classifier
+                    ↓
+           ┌────────┴────────┐
+           ↓                 ↓
+       Simple              Complex
+           ↓                 ↓
+   Lower-cost model    Higher-capability
+                              model
+\`\`\`
+
+For example:
+
+* Intent classification → smaller model
+* Entity extraction → smaller model
+* Simple summarization → smaller/mid model
+* Complex customer briefing → higher-capability model
+
+The exact model choice should be validated using quality evaluations.
+
+---
+
+### 5. Control output tokens
+
+Don't allow every request to generate a huge response.
+
+For example:
+
+\`\`\`text
+Classification → small output limit
+Extraction     → small output limit
+Summary        → medium limit
+Customer brief → larger limit
+\`\`\`
+
+This controls unnecessary generated tokens.
+
+---
+
+### 6. Cache repeated requests
+
+Use Redis/ElastiCache where appropriate.
+
+\`\`\`text
+User Request
+     ↓
+Semantic Cache
+     ↓
+Cache hit? ── Yes → Return cached result
+     │
+     No
+     ↓
+Bedrock
+     ↓
+Store result in cache
+\`\`\`
+
+For semantically similar queries, I can use embeddings to identify sufficiently similar cached requests.
+
+For dynamic Salesforce/ServiceNow information, I would apply **TTL/freshness rules or bypass the cache** because stale information can be dangerous.
+
+---
+
+### 7. Reduce unnecessary RAG context
+
+RAG can become expensive if we send too much content.
+
+Use:
+
+\`\`\`text
+Hybrid Search
+     ↓
+Top 50 candidates
+     ↓
+Reranker
+     ↓
+Top 5–10
+     ↓
+Context validation
+     ↓
+Bedrock
+\`\`\`
+
+This reduces input tokens while improving relevance.
+
+---
+
+### 8. Reduce duplicate Worker calls
+
+In CWD, multiple Workers may retrieve overlapping information.
+
+For example:
+
+\`\`\`text
+Worker A → Customer information
+Worker B → Same customer information
+Worker C → Similar information
+\`\`\`
+
+I can aggregate and deduplicate results before the final LLM call.
+
+\`\`\`text
+Workers
+   ↓
+Aggregation
+   ↓
+Deduplication
+   ↓
+Compact context
+   ↓
+Final Bedrock call
+\`\`\`
+
+---
+
+### 9. Reduce the number of LLM calls
+
+Instead of:
+
+\`\`\`text
+Worker 1 → Bedrock
+Worker 2 → Bedrock
+Worker 3 → Bedrock
+Worker 4 → Bedrock
+Worker 5 → Bedrock
+\`\`\`
+
+where possible, use deterministic processing or combine compatible operations.
+
+But I would **not blindly combine everything into one huge prompt**, because that can increase context size, latency, and reduce reliability.
+
+The architecture should balance number of calls against token volume and quality.
+
+---
+
+# Example
+
+Suppose the original CWD workflow costs:
+
+\`\`\`text
+5 LLM calls
+×
+8,000 input tokens
+=
+40,000 input tokens
+\`\`\`
+
+After optimization:
+
+\`\`\`text
+3 necessary LLM calls
+×
+3,000 input tokens
+=
+9,000 input tokens
+\`\`\`
+
+Potentially much cheaper.
+
+But I would validate:
+
+\`\`\`text
+Cost ↓
+Latency ↓
+Quality ↔
+Groundedness ↔
+\`\`\`
+
+before deploying the optimization.
+
+---
+
+# Cost optimization architecture
+
+\`\`\`text
+                         CWD Request
+                              ↓
+                        Coordinator
+                              ↓
+                     Avoid unnecessary calls
+                              ↓
+                          Delegator
+                              ↓
+                           Worker
+                              ↓
+                    ┌──────────────────┐
+                    │ Context Control  │
+                    │                  │
+                    │ RAG Top-K        │
+                    │ Deduplication    │
+                    │ History summary  │
+                    │ Token limits     │
+                    └────────┬─────────┘
+                             ↓
+                       Model Router
+                       ↙          ↘
+                Lower-cost       Higher-capability
+                   model              model
+                       ↘          ↙
+                         Bedrock
+                            ↓
+                     Cache if suitable
+                            ↓
+                         Response
+\`\`\`
+
+---
+
+# What I monitor
+
+I create dashboards for:
+
+\`\`\`text
+Cost/request
+Cost/workflow
+Cost/Worker
+Input tokens
+Output tokens
+LLM calls/request
+Cache hit rate
+Model distribution
+P95 latency
+Quality score
+Groundedness
+\`\`\`
+
+Then I identify expensive Workers.
+
+For example:
+
+\`\`\`text
+Customer Briefing Worker
+        ↓
+High token consumption
+        ↓
+Analyze prompt + RAG context
+        ↓
+Reduce context / change model
+        ↓
+Re-evaluate quality
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I reduce Bedrock cost primarily by avoiding unnecessary model calls and reducing unnecessary tokens. First, I measure token usage and cost per request, Worker and workflow using correlation IDs. Then I use deterministic code for tasks that don't require an LLM, control RAG Top-K and conversation history, deduplicate tool results, and set input and output token budgets. I also use model routing so simple tasks go to lower-cost models while complex reasoning uses higher-capability models. Where appropriate, I use Redis semantic caching to avoid repeated calls, with freshness controls for dynamic enterprise data. Finally, I continuously monitor cost, latency and quality because the objective isn't the lowest possible token count; it's the lowest cost that still meets our quality and SLA requirements.”**
+
+## Easy memory trick
+
+**A → R → R → R → C → M**
+
+* **A = Avoid** unnecessary calls
+* **R = Reduce** tokens
+* **R = Route** to right model
+* **R = Reuse** cached results
+* **C = Control** budgets
+* **M = Monitor** cost + quality
+
+### Key distinction
+
+**Token optimization** → reduce tokens per call.
+
+**Call optimization** → reduce unnecessary LLM calls.
+
+**Model routing** → use a cheaper model when appropriate.
+
+**Caching** → avoid repeating an expensive call.
+
+Together, these are how I would control **Bedrock cost at CWD scale**.
 `,code:``},{id:`024-how-do-you-monitor-bedrock-usage`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock usage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Bedrock usage?
 
 ## Short answer
-Monitor Bedrock with CloudWatch metrics, invocation logging and cost attribution.
+
+I monitor Bedrock usage at **request, Worker, model, and CWD workflow levels**.
+
+I capture:
+
+**Requests + tokens + latency + errors + throttling + cost + model usage**
+
+Then I send the metrics/logs to **CloudWatch** and use application tracing/observability to correlate them with the CWD workflow.
+
+---
 
 ## Key points
-- Metrics: invocations, input and output tokens, latency, throttles, errors.
-- Model invocation logging to S3 or CloudWatch Logs, with care for sensitive content.
-- Application inference profiles and tags for per-tenant or per-agent cost; custom metrics from response usage.
-- AWS Budgets and Cost Explorer alerts.
 
-## CWD context
-Tag every call so cost and quality can be sliced later.
+### 1. Track every Bedrock call
+
+For each call, capture:
+
+\`\`\`text
+request_id
+correlation_id
+session_id
+run_id
+Worker
+model
+input tokens
+output tokens
+total tokens
+latency
+status
+error
+retry count
+\`\`\`
+
+Example:
+
+\`\`\`text id="6p4gqa"
+Run: RUN123
+Worker: CustomerBriefingWorker
+Model: Claude Sonnet
+Input tokens: 4,200
+Output tokens: 800
+Latency: 2.8 sec
+Status: Success
+\`\`\`
+
+---
+
+## 2. Monitor token usage
+
+I track:
+
+\`\`\`text id="nq7l0m"
+Input tokens
+Output tokens
+Total tokens
+Tokens/request
+Tokens/Worker
+Tokens/workflow
+Tokens/minute
+\`\`\`
+
+This helps identify expensive or inefficient Workers.
+
+For example:
+
+\`\`\`text id="1t4jvn"
+Customer Worker     → 2K tokens
+ServiceNow Worker   → 3K tokens
+RAG Worker          → 5K tokens
+Final Synthesis     → 8K tokens  ← investigate
+\`\`\`
+
+---
+
+## 3. Monitor latency
+
+I monitor:
+
+* P50
+* P95
+* P99
+* Average latency
+* Time to first response where applicable
+
+Example:
+
+\`\`\`text id="t5r9xx"
+Bedrock P50 → 1.5 sec
+Bedrock P95 → 4 sec
+Bedrock P99 → 8 sec
+\`\`\`
+
+P95/P99 are especially useful because average latency can hide slow requests.
+
+---
+
+## 4. Monitor throttling
+
+I track:
+
+\`\`\`text id="3q8yhw"
+429 / throttling errors
+Requests per minute
+Token consumption
+Concurrency
+Retry count
+\`\`\`
+
+If throttling increases:
+
+\`\`\`text id="y7f3pu"
+Throttling ↑
+     ↓
+Check concurrency
+     ↓
+Check token usage
+     ↓
+Check request volume
+     ↓
+Adjust limits / routing / capacity
+\`\`\`
+
+---
+
+## 5. Monitor model distribution
+
+Because CWD can use model routing, I want to know which models are being used.
+
+\`\`\`text id="2w8l0n"
+Model A → 60%
+Model B → 30%
+Model C → 10%
+\`\`\`
+
+This helps answer:
+
+> Are we unnecessarily using the expensive model?
+
+---
+
+## 6. Monitor cost
+
+I calculate/track:
+
+\`\`\`text id="t2o4hz"
+Cost/request
+Cost/Worker
+Cost/run
+Cost/successful task
+Daily cost
+Monthly cost
+\`\`\`
+
+Conceptually:
+
+\`\`\`text
+Cost =
+Input tokens × input price
++
+Output tokens × output price
+\`\`\`
+
+Actual pricing depends on the selected Bedrock model and pricing structure.
+
+---
+
+# 7. Correlate Bedrock with CWD
+
+This is very important for an **agentic architecture**.
+
+I don't want a dashboard that only says:
+
+> Bedrock used 1 million tokens.
+
+I want to know:
+
+> Which CWD workflow and Worker consumed those tokens?
+
+So I propagate:
+
+\`\`\`text id="w5j6ks"
+Correlation ID
+      ↓
+API Gateway
+      ↓
+Coordinator
+      ↓
+Delegator
+      ↓
+Worker
+      ↓
+Bedrock
+\`\`\`
+
+Example:
+
+\`\`\`text id="f0i9ac"
+RUN123
+ ├── Intent Worker       → 500 tokens
+ ├── Sales Worker        → 2K tokens
+ ├── Service Worker      → 3K tokens
+ └── Final Synthesis     → 6K tokens
+\`\`\`
+
+Now I can identify the expensive step.
+
+---
+
+# 8. CloudWatch monitoring
+
+For AWS CWD, I would use **Amazon CloudWatch** for operational monitoring.
+
+Typical dashboard:
+
+\`\`\`text id="k0xq8m"
+CWD Bedrock Dashboard
+────────────────────────────
+Requests/min       1,200
+Success rate       99.2%
+429 rate             0.4%
+P95 latency         3.8 sec
+Input tokens       2.4M
+Output tokens      0.5M
+Retries              120
+Estimated cost       $XX
+\`\`\`
+
+I can configure alarms for thresholds such as:
+
+\`\`\`text
+429 rate > threshold
+P95 latency > SLA
+Token usage > budget
+Error rate > threshold
+Daily cost > budget
+\`\`\`
+
+---
+
+# 9. Distributed tracing
+
+For deeper troubleshooting, I use **OpenTelemetry/X-Ray and application tracing**, and tools such as **Langfuse** where appropriate.
+
+Example:
+
+\`\`\`text id="7j0jfi"
+Request
+ ↓
+Coordinator
+ ↓
+Sales Delegator
+ ↓
+Sales Worker
+ ↓
+MCP → Salesforce
+ ↓
+Bedrock
+\`\`\`
+
+The trace shows where the time and model usage occurred.
+
+---
+
+# 10. Quality + usage together
+
+I don't monitor cost in isolation.
+
+For example:
+
+\`\`\`text id="8e3pnd"
+Model A
+Cost      ↓
+Latency   ↓
+Quality   91%
+
+Model B
+Cost      ↑
+Latency   ↑
+Quality   94%
+\`\`\`
+
+The architecture decision should consider the required quality and SLA, not just whichever model is cheapest.
+
+---
+
+# CWD monitoring architecture
+
+\`\`\`text id="0w7z1x"
+                 CWD
+                  ↓
+             Bedrock Calls
+                  ↓
+        ┌────────────────────┐
+        │ Usage Metadata     │
+        │                    │
+        │ Tokens             │
+        │ Latency            │
+        │ Model              │
+        │ Errors             │
+        │ Retries            │
+        │ Correlation ID     │
+        └─────────┬──────────┘
+                  ↓
+       CloudWatch / Tracing
+                  ↓
+             Dashboards
+                  ↓
+              Alarms
+                  ↓
+       Optimize / Troubleshoot
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I monitor Bedrock at multiple levels: request, model, Worker and complete CWD workflow. For every call, I capture the model, input and output tokens, latency, status, errors, retries and correlation ID. I use CloudWatch for operational metrics, dashboards and alarms, and distributed tracing such as OpenTelemetry/X-Ray or Langfuse to correlate model calls back to the Coordinator, Delegator and Worker. I also monitor throttling, P95/P99 latency, token consumption, model distribution and cost per successful workflow. This lets me identify expensive Workers, troubleshoot latency or throttling, and optimize the model-routing and token strategy without sacrificing quality.”**
+
+## Easy memory trick
+
+**T → L → E → C → T**
+
+* **T** = Tokens
+* **L** = Latency
+* **E** = Errors
+* **C** = Cost
+* **T** = Trace
+
+> **“Measure the Bedrock call, then trace it back to the CWD workflow.”**
 `,code:``},{id:`025-how-do-you-monitor-bedrock-latency`,category:`Amazon Bedrock`,title:`How do you monitor Bedrock latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Bedrock latency?
 
 ## Short answer
-Monitor latency per stage, and separate time to first token from total time.
+
+I monitor the **latency of every Bedrock invocation** and track **P50, P95, and P99**. I use **CloudWatch** for metrics and alarms, and **distributed tracing** to identify whether the delay is from Bedrock, RAG, MCP, or another CWD component.
 
 ## Key points
-- InvocationLatency metric plus application-side timing around streaming.
-- X-Ray spans for each model call; percentiles rather than averages.
-- Compare models and regions; consider latency-optimised inference where offered.
-- Alarms on p95 and on changes after a release.
 
-## CWD context
-A latency jump after a deployment usually points to a prompt or model change.
+### 1. Measure each Bedrock call
+
+\`\`\`text
+Start time
+    ↓
+Bedrock API call
+    ↓
+Response
+    ↓
+End time
+\`\`\`
+
+\`\`\`text
+Latency = End time - Start time
+\`\`\`
+
+Example:
+
+\`\`\`text
+Model call = 2.4 seconds
+\`\`\`
+
+### 2. Monitor P50, P95, P99
+
+\`\`\`text
+P50 → normal/typical latency
+P95 → slower requests
+P99 → tail/worst-case latency
+\`\`\`
+
+Example:
+
+\`\`\`text
+P50 = 1.5 sec
+P95 = 3.8 sec
+P99 = 6.5 sec
+\`\`\`
+
+For production, **P95/P99 are important** because a good average can hide slow requests.
+
+### 3. Correlate with CWD
+
+I attach a \`correlation_id\`, \`run_id\`, and \`Worker\` to every model call.
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+Bedrock
+\`\`\`
+
+Example:
+
+\`\`\`text
+CustomerBriefingWorker
+    Model: Claude
+    Input tokens: 4,000
+    Latency: 3.2 sec
+    Status: Success
+\`\`\`
+
+### 4. Find the actual bottleneck
+
+Suppose the complete request takes 8 seconds:
+
+\`\`\`text
+Coordinator       0.5 sec
+RAG               1.0 sec
+MCP/ServiceNow    1.5 sec
+Bedrock           4.2 sec
+Other              0.8 sec
+                  ───────
+Total              8.0 sec
+\`\`\`
+
+Now I know Bedrock is contributing most of the latency.
+
+If Bedrock is only 1 second, I investigate **RAG, MCP, network, or orchestration** instead.
+
+### 5. Check factors that increase latency
+
+I correlate latency with:
+
+* Input/output tokens
+* Model
+* Concurrent requests
+* 429/throttling
+* Retries
+* Prompt/context size
+* Number of parallel Workers
+
+For example:
+
+\`\`\`text
+Large context
+     ↓
+More tokens
+     ↓
+Higher latency
+\`\`\`
+
+### 6. If latency increases
+
+I follow:
+
+**Detect → Trace → Identify → Optimize → Monitor**
+
+Possible optimizations:
+
+* Reduce unnecessary context
+* Reduce RAG Top-K
+* Summarize conversation history
+* Reduce unnecessary LLM calls
+* Use an appropriate faster model for simple tasks
+* Control Worker concurrency
+* Avoid excessive retries
+* Cache repeated results where appropriate
+
+# 🎯 Strong interview answer
+
+> **“I monitor Bedrock latency for every model invocation and track P50, P95, and P99. I use CloudWatch for metrics, dashboards and alarms, and distributed tracing with correlation IDs to trace the call back to the CWD Worker and workflow. I also correlate latency with token count, model, concurrency, throttling and retries. If P95 latency increases, I use the trace to determine whether the bottleneck is Bedrock, RAG, MCP, or orchestration, and then optimize context size, model routing, concurrency, or unnecessary LLM calls.”**
+
+## Easy memory trick
+
+**Measure → Percentile → Trace → Find → Optimize**
+
+> **“Measure the latency, trace the bottleneck, then optimize.”**
 `,code:``},{id:`026-how-do-you-implement-model-fallback`,category:`Amazon Bedrock`,title:`How do you implement model fallback?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement model fallback?
 
 ## Short answer
-Implement fallback as an ordered chain from best quality to safest availability.
+
+I implement **model fallback in the Model Router**.
+
+If the primary Bedrock model fails because of a **transient error, throttling, timeout, or availability issue**, the router can send the request to an **approved fallback model**.
+
+\`\`\`text
+Worker
+   ↓
+Model Router
+   ↓
+Primary Model
+   ↓
+Failure?
+   ├── No → Response
+   │
+   └── Yes
+        ↓
+   Retry / Backoff
+        ↓
+   Fallback Model
+        ↓
+     Response
+\`\`\`
 
 ## Key points
-- Primary model → cross-region inference profile or other region → smaller or alternate provider model → cached or degraded response.
-- The Converse API keeps calls uniform; a circuit breaker stops repeated failures.
-- Evaluate fallback models so their quality is known; log every fallback.
 
-## CWD context
-Prompts must work across the models in the chain.
+### 1. Define primary and fallback models
+
+Example:
+
+\`\`\`text
+Customer Briefing
+        ↓
+Primary: Claude Sonnet-class
+        ↓
+Fallback: Amazon Nova Pro-class
+\`\`\`
+
+For a simple classification task:
+
+\`\`\`text
+Primary: Nova Micro
+Fallback: Nova Lite
+\`\`\`
+
+The exact model choices depend on **current Bedrock availability, region, quality requirements, and evaluation results**.
+
+---
+
+### 2. Don't fallback for every error
+
+I classify the error first.
+
+**Fallback candidates:**
+
+* Throttling / 429
+* Temporary service unavailable
+* Timeout
+* Transient infrastructure/network failure
+
+**Usually don't fallback:**
+
+* Invalid request
+* Invalid parameters
+* Authentication/authorization failure
+* Bad prompt/request format
+* Application validation error
+
+For example:
+
+\`\`\`text
+429
+ ↓
+Retry with backoff
+ ↓
+Still failing?
+ ↓
+Fallback model
+\`\`\`
+
+---
+
+### 3. Use retry before fallback
+
+I don't immediately switch models after one failure.
+
+\`\`\`text
+Primary model
+     ↓
+Transient failure
+     ↓
+Retry + exponential backoff + jitter
+     ↓
+Still failing?
+     ↓
+Fallback model
+\`\`\`
+
+Example:
+
+\`\`\`text
+Attempt 1 → Primary → 429
+Attempt 2 → Primary → 429
+Attempt 3 → Primary → Timeout
+                         ↓
+                   Fallback model
+\`\`\`
+
+I keep the retry count and total retry duration bounded.
+
+---
+
+## 4. Model Router controls fallback
+
+The architecture can look like:
+
+\`\`\`text
+                    Worker
+                       ↓
+                 Model Router
+                       ↓
+              ┌────────────────┐
+              │ Primary Model  │
+              └───────┬────────┘
+                      ↓
+                Success?
+               /         \\
+             Yes          No
+              ↓            ↓
+          Response    Error Classifier
+                           ↓
+                    Retry / Backoff
+                           ↓
+                      Still failing?
+                       /        \\
+                     No          Yes
+                     ↓            ↓
+                 Response    Fallback Model
+                                  ↓
+                               Response
+\`\`\`
+
+The **Worker should not randomly choose another model**. The routing policy should be centralized.
+
+---
+
+## 5. Preserve the same task requirements
+
+This is important.
+
+Suppose the Worker requires:
+
+\`\`\`text
+Tool calling
+Structured JSON
+8K context
+Good reasoning
+\`\`\`
+
+The fallback model must support those requirements.
+
+So I don't simply say:
+
+> "Any available model is okay."
+
+I maintain a **model capability registry**.
+
+\`\`\`text
+Model
+ ├── Context size
+ ├── Tool calling
+ ├── Structured output
+ ├── Multimodal capability
+ ├── Latency
+ ├── Cost
+ └── Quality evaluation
+\`\`\`
+
+The fallback must satisfy the minimum capability requirements.
+
+---
+
+## 6. Use circuit breaker for repeated failures
+
+If the primary model repeatedly fails:
+
+\`\`\`text
+Primary failures ↑
+       ↓
+Circuit breaker OPEN
+       ↓
+Stop sending traffic temporarily
+       ↓
+Use fallback
+       ↓
+Periodic health check
+       ↓
+Primary healthy?
+       ↓
+Restore traffic
+\`\`\`
+
+This prevents repeatedly sending requests to a failing primary model.
+
+---
+
+## 7. Monitor fallback usage
+
+I track:
+
+\`\`\`text
+Primary success rate
+Fallback rate
+Fallback success rate
+Fallback latency
+Fallback cost
+Reason for fallback
+Quality difference
+\`\`\`
+
+Example:
+
+\`\`\`text
+Primary calls       10,000
+Primary failures       80
+Fallback calls         80
+Fallback success       77
+Fallback failure        3
+\`\`\`
+
+If fallback usage suddenly increases from 1% to 20%, that is an operational signal that needs investigation.
+
+---
+
+# CWD example
+
+Suppose the **Customer Briefing Worker** needs to generate a final summary.
+
+\`\`\`text
+Coordinator
+    ↓
+Sales Delegator
+    ↓
+Customer Briefing Worker
+    ↓
+Model Router
+    ↓
+Claude Sonnet-class model
+\`\`\`
+
+The primary model times out.
+
+\`\`\`text
+Primary timeout
+      ↓
+Retry + backoff
+      ↓
+Still timeout
+      ↓
+Fallback model
+      ↓
+Generate summary
+      ↓
+Sales Delegator
+      ↓
+Coordinator
+      ↓
+User
+\`\`\`
+
+If the fallback cannot meet the required quality or tool/structured-output contract, I would **fail safely or return a partial response rather than silently producing a lower-quality answer**.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement model fallback centrally in the Model Router. Each task has a primary model and one or more approved fallback models based on capability, quality, latency and cost. When a transient failure such as throttling, timeout or temporary service unavailability occurs, I first use bounded retries with exponential backoff and jitter. If the primary still fails, the router switches to a compatible fallback model. I also use a circuit breaker for repeated primary failures and monitor fallback rate, latency, success rate and quality. The fallback must satisfy the same minimum capabilities, such as context size, tool calling and structured output.”**
+
+## Easy memory trick
+
+**Detect → Retry → Fallback → Monitor**
+
+\`\`\`text
+Failure
+  ↓
+Retry
+  ↓
+Still failing?
+  ↓
+Fallback
+  ↓
+Monitor
+\`\`\`
+
+### Key distinction
+
+**Model routing** decides **which model to use**.
+
+**Model fallback** decides **what to use when the selected model fails**.
+
+**Circuit breaker** decides **when to temporarily stop calling a failing model**.
 `,code:``},{id:`027-how-would-you-switch-from-one-bedrock-model-to-another`,category:`Amazon Bedrock`,title:`How would you switch from one Bedrock model to another?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you switch from one Bedrock model to another?
 
 ## Short answer
-Switch models through configuration, evaluation and a gradual rollout.
+
+I would **not hard-code the Bedrock model inside each Worker**.
+
+I would put model selection behind a **Model Router / Model Gateway**. The Worker sends a task to the router, and the router selects the appropriate Bedrock model based on **task type, capability, latency, cost, quality, or failure conditions**.
+
+\`\`\`text
+Worker
+   ↓
+Model Router
+   ↓
+Select Model
+   ↓
+Amazon Bedrock
+   ↓
+Model A / Model B / Model C
+\`\`\`
 
 ## Key points
-- Model IDs in AppConfig or Parameter Store; Converse API for a uniform interface.
-- Evaluate on the golden set and adjust prompts, since providers behave differently.
-- Canary by percentage or tenant; keep rollback ready.
-- Check quota and regional availability before cutover; watch model lifecycle and end-of-life dates.
 
-## CWD context
-Never change the model for all traffic at once.
+### 1. Keep model configuration outside the Worker
+
+Instead of:
+
+\`\`\`python
+model = "model-A"
+\`\`\`
+
+inside the Worker, use configuration:
+
+\`\`\`text
+Model Router
+   ├── Simple task → Model A
+   ├── Complex reasoning → Model B
+   └── Fallback → Model C
+\`\`\`
+
+This means changing models doesn't require changing the Worker business logic.
+
+---
+
+### 2. Maintain a model configuration
+
+For example:
+
+\`\`\`text
+Model Registry
+
+Task: intent_classification
+Primary: Nova Micro
+Fallback: Nova Lite
+
+Task: customer_briefing
+Primary: Claude Sonnet-class
+Fallback: Nova Pro-class
+\`\`\`
+
+I would also store:
+
+\`\`\`text
+model_id
+region
+capabilities
+context_limit
+tool_calling_support
+quality_score
+latency_target
+cost
+status
+\`\`\`
+
+---
+
+### 3. Switch the model through configuration
+
+Suppose initially:
+
+\`\`\`text
+Customer Briefing
+        ↓
+Claude Sonnet-class
+\`\`\`
+
+If evaluation shows another approved model is better for that workload:
+
+\`\`\`text
+Customer Briefing
+        ↓
+Model Router
+        ↓
+Nova Pro-class
+\`\`\`
+
+The **Worker code doesn't change**.
+
+Only the model configuration/routing policy changes.
+
+---
+
+## 4. Use model routing
+
+For example:
+
+\`\`\`text
+                    Request
+                       ↓
+                 Model Router
+                       ↓
+             ┌─────────┴─────────┐
+             ↓                   ↓
+        Simple task          Complex task
+             ↓                   ↓
+        Small model        Higher-capability
+             ↓                   ↓
+                  Amazon Bedrock
+\`\`\`
+
+The router can consider:
+
+* Task complexity
+* Context size
+* Tool-calling requirement
+* Structured-output requirement
+* Latency
+* Cost
+* Quality/evaluation results
+
+---
+
+## 5. For production, don't change everything at once
+
+I would use **canary or percentage-based rollout**.
+
+Initially:
+
+\`\`\`text
+100% → Model A
+\`\`\`
+
+Then:
+
+\`\`\`text
+90% → Model A
+10% → Model B
+\`\`\`
+
+Monitor:
+
+\`\`\`text
+Quality
+Latency
+Cost
+Errors
+Tool-call success
+Groundedness
+\`\`\`
+
+If Model B performs as expected:
+
+\`\`\`text
+50% → Model A
+50% → Model B
+\`\`\`
+
+Then:
+
+\`\`\`text
+0% → Model A
+100% → Model B
+\`\`\`
+
+If there is a problem, route traffic back to Model A.
+
+---
+
+## 6. Test before switching
+
+Before production, I evaluate both models against the same **golden dataset**.
+
+\`\`\`text
+                 Golden Dataset
+                       ↓
+             ┌─────────┴─────────┐
+             ↓                   ↓
+          Model A             Model B
+             ↓                   ↓
+       Evaluation             Evaluation
+             ↓                   ↓
+       Quality/Cost/Latency comparison
+\`\`\`
+
+Metrics can include:
+
+* Answer quality
+* Groundedness
+* Retrieval/use-of-context quality
+* Tool-call correctness
+* Structured-output validity
+* P95 latency
+* Token usage
+* Cost
+
+I would switch only if the new model satisfies the required quality and SLA.
+
+---
+
+# CWD example
+
+Suppose the **Customer Briefing Worker** currently uses Model A.
+
+\`\`\`text
+Coordinator
+    ↓
+Sales Delegator
+    ↓
+Customer Briefing Worker
+    ↓
+Model Router
+    ↓
+Model A
+\`\`\`
+
+We want to move to Model B.
+
+### Step 1 — Evaluate
+
+\`\`\`text
+Golden test set
+      ↓
+Model A vs Model B
+\`\`\`
+
+### Step 2 — Register Model B
+
+\`\`\`text
+Model Registry
+
+Customer Briefing
+Primary → Model A
+Candidate → Model B
+\`\`\`
+
+### Step 3 — Canary
+
+\`\`\`text
+90% → Model A
+10% → Model B
+\`\`\`
+
+### Step 4 — Monitor
+
+\`\`\`text
+Quality
+P95 latency
+Cost
+Errors
+Tool calling
+Groundedness
+\`\`\`
+
+### Step 5 — Promote
+
+\`\`\`text
+10% → 50% → 100%
+\`\`\`
+
+### Step 6 — Rollback if necessary
+
+\`\`\`text
+Model B problem
+      ↓
+Router
+      ↓
+Model A
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I would abstract Bedrock model selection behind a Model Router rather than hard-code a model inside each Worker. I maintain a model registry with model IDs, capabilities, context limits, latency, cost and evaluation results. When I want to switch models, I first evaluate the new model against the same golden dataset, then use a canary rollout such as 90/10 traffic. I monitor quality, groundedness, tool-call success, P95 latency, errors and cost. If the new model meets the required SLA and quality, I gradually move traffic to it; otherwise I roll back through the router without changing the Worker code.”**
+
+## Easy memory trick
+
+**Evaluate → Configure → Canary → Monitor → Promote/Rollback**
+
+### Key distinction
+
+**Model Router** = decides which model receives the request.
+
+**Model Registry** = stores model configuration/capabilities.
+
+**Canary deployment** = safely introduces the new model.
+
+**Rollback** = routes traffic back to the previous model.
 `,code:``},{id:`028-how-do-you-version-model-configurations`,category:`Amazon Bedrock`,title:`How do you version model configurations?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you version model configurations?
 
 ## Short answer
-Version the whole model configuration as one immutable unit.
+
+I treat **model configuration as code/configuration**, store it in **Git**, assign a version, and promote it through **dev → QA → staging → production**.
+
+This lets me know exactly **which model, prompt, parameters, and routing policy** produced a response and allows quick rollback.
+
+---
 
 ## Key points
-- Model or inference-profile ARN, temperature, max tokens, system-prompt version, guardrail ID and version.
-- Store in AppConfig, Parameter Store or Git; Bedrock Prompt Management versions prompts; guardrail versions are immutable.
-- Stamp the config version on every trace.
 
-## CWD context
-This lets you reproduce exactly what produced a given answer.
+### 1. What do I version?
+
+For each model configuration, I version:
+
+\`\`\`text
+Model ID
+Model provider
+Region
+Model parameters
+Temperature
+Max output tokens
+System prompt version
+Routing rules
+Fallback model
+Token limits
+Timeout
+Retry policy
+Safety configuration
+\`\`\`
+
+Example:
+
+\`\`\`yaml
+version: "customer-briefing-v3"
+
+primary_model: "model-A"
+fallback_model: "model-B"
+
+temperature: 0.2
+max_output_tokens: 1500
+
+timeout_seconds: 30
+max_retries: 2
+
+prompt_version: "customer-briefing-p12"
+\`\`\`
+
+---
+
+## 2. Store it in Git
+
+For example:
+
+\`\`\`text
+config/
+ ├── models/
+ │    ├── customer-briefing-v1.yaml
+ │    ├── customer-briefing-v2.yaml
+ │    └── customer-briefing-v3.yaml
+ │
+ ├── routing/
+ │    └── model-routing-v4.yaml
+ │
+ └── prompts/
+      ├── customer-briefing-p11.yaml
+      └── customer-briefing-p12.yaml
+\`\`\`
+
+Git gives me:
+
+* Change history
+* Code review
+* Approval
+* Auditability
+* Rollback
+
+---
+
+## 3. Use immutable versions
+
+I don't overwrite:
+
+\`\`\`text
+customer-briefing-v2
+\`\`\`
+
+with new values.
+
+Instead:
+
+\`\`\`text
+v2 → old configuration
+v3 → new configuration
+\`\`\`
+
+This is important because I can reproduce what happened with an older production request.
+
+---
+
+## 4. Version more than the model ID
+
+A common mistake is thinking:
+
+> "Model version = model ID."
+
+For GenAI applications, the actual behavior depends on several things:
+
+\`\`\`text
+Model
++
+Prompt
++
+Parameters
++
+RAG configuration
++
+Tool configuration
++
+Routing policy
+\`\`\`
+
+So I track these versions together.
+
+Example:
+
+\`\`\`text
+Run R123
+
+Model:        model-A-v3
+Prompt:       prompt-v12
+RAG config:   rag-v5
+Router:       router-v4
+\`\`\`
+
+Now the response is reproducible/auditable at the configuration level.
+
+---
+
+# 5. Promote through environments
+
+I use:
+
+\`\`\`text
+Git
+ ↓
+Dev
+ ↓
+QA
+ ↓
+Staging
+ ↓
+Production
+\`\`\`
+
+Example:
+
+\`\`\`text
+model-v4
+   ↓
+Automated evaluation
+   ↓
+QA
+   ↓
+Staging
+   ↓
+Canary
+   ↓
+Production
+\`\`\`
+
+---
+
+# 6. Combine versioning with evaluation
+
+Before promoting a new model configuration, I run a golden test set.
+
+\`\`\`text
+Model Config v3
+       ↓
+Golden Dataset
+       ↓
+Quality Evaluation
+       ↓
+Latency
+       ↓
+Cost
+       ↓
+Tool-call accuracy
+       ↓
+Groundedness
+       ↓
+Approval
+       ↓
+Production
+\`\`\`
+
+This prevents a configuration change from reaching production just because it passed a basic deployment test.
+
+---
+
+# 7. Rollback becomes easy
+
+Suppose:
+
+\`\`\`text
+Production → Config v5
+\`\`\`
+
+After deployment:
+
+\`\`\`text
+P95 latency ↑
+Groundedness ↓
+Cost ↑
+\`\`\`
+
+I can simply route back:
+
+\`\`\`text
+v5
+ ↓
+Rollback
+ ↓
+v4
+\`\`\`
+
+No code change in the Worker is required.
+
+---
+
+# CWD example
+
+For the **Customer Briefing Worker**:
+
+\`\`\`text
+Customer Briefing Config v7
+
+Model:
+    Claude Sonnet-class
+
+Prompt:
+    customer-briefing-p15
+
+Temperature:
+    0.2
+
+Max tokens:
+    1500
+
+Fallback:
+    Nova Pro-class
+
+RAG:
+    rag-config-v6
+\`\`\`
+
+The execution metadata can record:
+
+\`\`\`text
+Run ID: R12345
+Model Config: v7
+Prompt: p15
+RAG Config: v6
+Router Config: v4
+\`\`\`
+
+So later, if someone asks:
+
+> "Why did this customer briefing produce this response?"
+
+we can identify the configuration used for that run.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I version model configuration as code. I store model IDs, parameters, prompts, routing rules, fallback models, token limits and timeout policies in Git with immutable versions. Changes go through code review, automated evaluation and environment promotion from dev to QA to staging and production. For GenAI, I version the model together with the prompt, routing and RAG configuration because they collectively affect application behavior. I also record the configuration version with every CWD run, which gives us auditability, reproducibility and fast rollback if a new configuration causes quality, latency or cost problems.”**
+
+## Easy memory trick
+
+**Git → Version → Evaluate → Promote → Track → Rollback**
+
+> **“Version the configuration, not just the model.”**
+
+### Key distinction
+
+**Model version** = which foundation model/version was used.
+
+**Model configuration version** = model + parameters + prompt + routing + fallback + related settings.
+
+For a production GenAI system, I care about the **complete configuration version** because changing the prompt or routing policy can change behavior even when the underlying model stays the same.
 `,code:``},{id:`029-how-do-you-handle-model-specific-context-limits`,category:`Amazon Bedrock`,title:`How do you handle model-specific context limits?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle model-specific context limits?
 
 ## Short answer
-Treat context limits as per-model configuration and enforce them before the call.
+
+I handle context limits in the **Model Router and Context Manager**.
+
+Before calling Bedrock, I calculate the required context and compare it with the selected model's **maximum context window**. If the request is too large, I **reduce, summarize, retrieve fewer documents, or route to a model with a larger context capacity**.
+
+\`\`\`text
+Request
+   ↓
+Context Manager
+   ↓
+Estimate tokens
+   ↓
+Model Router
+   ↓
+Does context fit?
+   ├── Yes → Bedrock
+   └── No
+        ↓
+   Compress / Retrieve less
+        ↓
+   Still too large?
+        ↓
+   Route to compatible model
+\`\`\`
+
+---
 
 ## Key points
-- Store context window and maximum output per model.
-- Count tokens; summarise or truncate by priority; map-reduce for very long documents.
-- Choose a long-context model for large inputs; catch validation errors and fall back.
 
-## CWD context
-Switching models can silently change limits, so test them.
+### 1. Maintain context limits in the Model Registry
+
+I keep model-specific information such as:
+
+\`\`\`text
+Model
+Context limit
+Max output tokens
+Tool-calling support
+Multimodal support
+Cost
+Latency
+\`\`\`
+
+For example:
+
+\`\`\`text
+Model A → Context limit: X
+Model B → Context limit: Y
+\`\`\`
+
+The actual limits depend on the specific Bedrock model/version available in the target region, so I don't hard-code assumptions.
+
+---
+
+### 2. Calculate the required context
+
+Before calling the model:
+
+\`\`\`text
+Total tokens =
+System prompt
++ conversation history
++ RAG context
++ tool results
++ user query
++ reserved output tokens
+\`\`\`
+
+I need to leave room for the model's response.
+
+For example:
+
+\`\`\`text
+Context budget
+    ↓
+System prompt       1K
+History             3K
+RAG                 5K
+Tool results        2K
+User query          1K
+Reserved output     2K
+                    ───
+Total              14K
+\`\`\`
+
+Then I check whether the selected model can support that request.
+
+---
+
+## 3. Don't simply truncate randomly
+
+If the context is too large, I don't blindly remove the first 10,000 tokens.
+
+I use controlled reduction.
+
+### Strategy 1 — Summarize history
+
+\`\`\`text
+Old conversation
+       ↓
+Summary
+       ↓
+Recent messages
+       ↓
+LLM
+\`\`\`
+
+Keep the important information while reducing token usage.
+
+---
+
+### Strategy 2 — Reduce RAG Top-K
+
+Suppose retrieval returns:
+
+\`\`\`text
+Top 50 documents
+\`\`\`
+
+Instead of sending all 50:
+
+\`\`\`text
+50 candidates
+     ↓
+Reranking
+     ↓
+Top 5–10 relevant chunks
+     ↓
+LLM
+\`\`\`
+
+This both reduces context and can improve relevance.
+
+---
+
+### Strategy 3 — Compress tool results
+
+Suppose Salesforce returns a large JSON response.
+
+Instead of:
+
+\`\`\`json
+{
+  "customer": "...",
+  "transactions": "...",
+  "hundreds of fields..."
+}
+\`\`\`
+
+the Worker extracts only what the task needs:
+
+\`\`\`text
+Customer
+Revenue
+Industry
+Open opportunities
+Recent interactions
+\`\`\`
+
+Then sends the compact structured result to the model.
+
+---
+
+### Strategy 4 — Summarize intermediate Worker results
+
+In CWD, multiple Workers may return information:
+
+\`\`\`text
+Sales Worker       → large result
+ServiceNow Worker  → large result
+Knowledge Worker   → large result
+\`\`\`
+
+The Delegator can normalize/deduplicate the results before sending them to the final synthesis model.
+
+\`\`\`text
+Workers
+   ↓
+Normalize
+   ↓
+Deduplicate
+   ↓
+Summarize
+   ↓
+Final LLM
+\`\`\`
+
+---
+
+## 4. Route to a larger-context model
+
+Sometimes compression would remove important information.
+
+Then the Model Router can select a model with sufficient context capacity.
+
+\`\`\`text
+Context = very large
+        ↓
+Model Router
+        ↓
+Large-context approved model
+        ↓
+Bedrock
+\`\`\`
+
+But I don't automatically choose the largest model because **cost and latency also matter**.
+
+---
+
+# CWD example
+
+Suppose a Customer Briefing request contains:
+
+\`\`\`text
+Salesforce data
++
+ServiceNow incidents
++
+SharePoint documents
++
+Conversation history
+\`\`\`
+
+The raw context is too large.
+
+I would do:
+
+\`\`\`text
+Customer Briefing
+       ↓
+Context Manager
+       ↓
+Token estimation
+       ↓
+Too large?
+       ↓
+┌─────────────────────────┐
+│ Summarize history       │
+│ Reduce RAG Top-K        │
+│ Deduplicate results     │
+│ Compress tool output    │
+└────────────┬────────────┘
+             ↓
+        Recalculate
+             ↓
+        Still too large?
+          /          \\
+        No            Yes
+        ↓              ↓
+     Bedrock      Larger-context
+                    model
+\`\`\`
+
+---
+
+# 5. Reserve output tokens
+
+This is an important interview point.
+
+Don't use the entire context window for input.
+
+For example:
+
+\`\`\`text
+Model context capacity
+        ↓
+Input context
+        +
+Reserved output tokens
+        ↓
+Must fit within model limits
+\`\`\`
+
+If I need a 2,000-token response, I reserve that space before building the prompt.
+
+---
+
+# 6. Monitor context utilization
+
+I track:
+
+\`\`\`text
+Input tokens
+Output tokens
+Context utilization %
+Truncation events
+Summarization events
+RAG Top-K
+Model selected
+Context-limit errors
+\`\`\`
+
+Example:
+
+\`\`\`text
+Context utilization = 85%
+\`\`\`
+
+If this starts happening frequently, I investigate the context-building strategy rather than waiting for failures.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I handle model-specific context limits through a Context Manager and Model Router. I maintain each model's context and capability information in the model registry. Before invocation, I estimate tokens for the system prompt, conversation history, RAG results, tool outputs and reserved response tokens. If the context is too large, I first reduce it through history summarization, RAG reranking and Top-K reduction, tool-result compression and deduplication. If the task still requires more context, the Model Router selects an approved model with sufficient context capacity. I also monitor context utilization and truncation events so we can proactively optimize the application.”**
+
+## Easy memory trick
+
+**Measure → Compress → Retrieve less → Route → Monitor**
+
+### Key distinction
+
+**Context limit** = how much information the model can process in one request.
+
+**Token limit** = limits applied to input/output generation.
+
+**Model routing** = choosing a model whose capabilities and context capacity fit the task.
+
+> **“Don't just truncate the prompt—control the context intelligently.”**
 `,code:``},{id:`030-how-would-you-evaluate-a-new-bedrock-model-before-production`,category:`Amazon Bedrock`,title:`How would you evaluate a new Bedrock model before production?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you evaluate a new Bedrock model before production?
 
 ## Short answer
-Evaluate a new model on your data, with quality, safety, latency, cost and quota all measured.
+
+I would **not replace the production model directly**. I would evaluate the new Bedrock model against the **same golden dataset and production-like test scenarios**, comparing **quality, groundedness, tool calling, latency, cost, safety, and reliability**.
+
+\`\`\`text
+New Model
+   ↓
+Offline Evaluation
+   ↓
+Quality + Safety + Cost + Latency
+   ↓
+Shadow / Canary Testing
+   ↓
+Production
+\`\`\`
 
 ## Key points
-- Bedrock model evaluation (automatic, LLM-as-judge or human) or your own harness on the golden dataset.
-- RAG evaluation for groundedness and relevance; guardrail and red-team tests.
-- Shadow traffic, then canary; CI/CD gate; add the model to the approved allow-list only after passing.
 
-## CWD context
-The evaluation report is an artifact attached to the release approval.
+### 1. Create a representative golden dataset
+
+For CWD, I would include real business scenarios such as:
+
+\`\`\`text
+Customer Briefing
+Incident lookup
+Customer + ServiceNow combination
+RAG questions
+Multi-step reasoning
+Tool calling
+"No information available" cases
+\`\`\`
+
+Each test case has an expected outcome or evaluation criteria.
+
+---
+
+### 2. Compare the new model with the current model
+
+Run the **same inputs** through both models:
+
+\`\`\`text
+                  Golden Dataset
+                       ↓
+              ┌────────┴────────┐
+              ↓                 ↓
+        Current Model       New Model
+              ↓                 ↓
+        Evaluation          Evaluation
+              ↓                 ↓
+              └────────┬────────┘
+                       ↓
+                  Comparison
+\`\`\`
+
+This is important because I'm measuring the **change caused by the new model**, not just whether the new model looks good by itself.
+
+---
+
+## 3. Evaluate answer quality
+
+For CWD, I check:
+
+* Answer correctness
+* Relevance
+* Completeness
+* Instruction following
+* Structured-output validity
+
+For RAG:
+
+* Groundedness / faithfulness
+* Context relevance
+* Retrieval quality
+* Unsupported claims
+
+For example:
+
+\`\`\`text
+Current model → 92% task accuracy
+New model     → 94% task accuracy
+\`\`\`
+
+I would consider that improvement together with latency, cost and other requirements rather than looking at accuracy alone.
+
+---
+
+## 4. Test tool calling
+
+This is especially important for CWD.
+
+\`\`\`text
+Worker
+  ↓
+Model
+  ↓
+Tool selection
+  ↓
+MCP
+  ↓
+Salesforce / ServiceNow
+\`\`\`
+
+I test:
+
+* Correct tool selection
+* Correct arguments
+* Missing parameters
+* Invalid parameters
+* Multiple tool calls
+* Tool-call ordering
+* Structured response
+
+A model that produces good text but calls the wrong enterprise tool is not suitable for that Worker.
+
+---
+
+## 5. Test latency
+
+Measure:
+
+\`\`\`text
+P50
+P95
+P99
+\`\`\`
+
+Example:
+
+\`\`\`text
+                Current     New
+P50              1.8s       1.5s
+P95              4.2s       3.7s
+P99              7.0s       6.2s
+\`\`\`
+
+I also test under realistic concurrency.
+
+---
+
+## 6. Evaluate cost
+
+Track:
+
+\`\`\`text
+Input tokens
+Output tokens
+Total tokens
+Cost/request
+Cost/workflow
+\`\`\`
+
+For example, a model might have better quality but consume substantially more tokens.
+
+So I compare:
+
+\`\`\`text
+Quality
+   +
+Latency
+   +
+Cost
+\`\`\`
+
+rather than choosing based on one metric.
+
+---
+
+## 7. Test reliability
+
+I test:
+
+* Timeouts
+* Throttling
+* Retries
+* Malformed responses
+* Invalid structured output
+* Tool failures
+* High concurrency
+* Long-context requests
+
+For example:
+
+\`\`\`text
+1000 test requests
+        ↓
+Success rate
+Timeout rate
+429 rate
+Retry rate
+Malformed output rate
+\`\`\`
+
+---
+
+## 8. Test safety and security
+
+For an enterprise CWD system, I also test:
+
+* Prompt injection
+* Indirect injection
+* Sensitive-data leakage
+* Unauthorized information requests
+* Unsafe tool execution
+* Jailbreak-style inputs
+* Incorrect handling of confidential data
+
+The model should not be responsible for authorization; CWD should enforce authorization separately.
+
+---
+
+# 9. Run shadow testing
+
+Before exposing users to the new model:
+
+\`\`\`text
+Production Request
+       ↓
+Current Model → Real response to user
+       ↓
+New Model → Shadow evaluation
+\`\`\`
+
+The new model receives representative traffic, but its response isn't used for the user-facing result.
+
+This gives production-like performance data without immediately changing user behavior.
+
+---
+
+# 10. Canary deployment
+
+After offline and shadow testing:
+
+\`\`\`text
+100% → Current Model
+\`\`\`
+
+Then:
+
+\`\`\`text
+90% → Current
+10% → New
+\`\`\`
+
+Monitor:
+
+\`\`\`text
+Quality
+P95/P99 latency
+Cost
+Errors
+Tool-call success
+Groundedness
+Throttling
+\`\`\`
+
+If the new model meets the required thresholds, gradually increase traffic.
+
+---
+
+# 11. Define quality gates
+
+Before production, I define explicit gates.
+
+Example:
+
+\`\`\`text
+Quality              ≥ required threshold
+Groundedness         ≥ required threshold
+Tool-call accuracy   ≥ required threshold
+P95 latency          ≤ SLA
+Error rate           ≤ threshold
+Cost/workflow        ≤ budget
+Safety tests         = pass
+\`\`\`
+
+The exact thresholds should come from the application's requirements rather than arbitrary numbers.
+
+---
+
+# CWD evaluation flow
+
+\`\`\`text
+              New Bedrock Model
+                       ↓
+                Golden Dataset
+                       ↓
+          ┌────────────┴────────────┐
+          ↓                         ↓
+      Quality                    Safety
+          ↓                         ↓
+      Tool Calls                Security
+          ↓                         ↓
+      Latency                    Cost
+          └────────────┬────────────┘
+                       ↓
+                Quality Gates
+                       ↓
+                Shadow Testing
+                       ↓
+                 Canary 10%
+                       ↓
+                  Monitoring
+                       ↓
+              Promote / Rollback
+\`\`\`
+
+# 🎯 Strong interview answer
+
+> **“Before production, I evaluate a new Bedrock model using the same golden dataset and production-like scenarios that we use for the current model. I compare task accuracy, groundedness, relevance, tool-call correctness, structured-output validity, P95/P99 latency, token usage, cost, reliability and safety. For CWD, I specifically test MCP tool selection and argument correctness because a model can generate good text but still select the wrong enterprise tool. After offline evaluation, I use shadow testing and then a controlled canary rollout. I define quality gates for quality, latency, cost, reliability and safety, and promote the model only when those gates are satisfied. Otherwise, I roll back to the existing model.”**
+
+## Easy memory trick
+
+**G → Q → T → L → C → S → Shadow → Canary**
+
+* **G** = Golden dataset
+* **Q** = Quality
+* **T** = Tool calling
+* **L** = Latency
+* **C** = Cost
+* **S** = Safety
+
+> **“Evaluate offline → test in shadow → canary → monitor → promote or rollback.”**
 `,code:``}];function vm(){return(0,M.jsx)($,{data:_m,title:`Amazon Bedrock Cookbook`,subtitle:`Model selection, throttling, retries, cost and evaluation`,icon:`🧠`,patternLabel:`Questions`})}var ym=[{id:`031-why-use-api-gateway-for-cwd`,category:`API Gateway`,title:`Why use API Gateway for CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use API Gateway for CWD?
 
 ## Short answer
-API Gateway centralises security and traffic control so the CWD backend stays simple.
+
+I use **Amazon API Gateway as the secure API entry point for CWD**.
+
+It sits between the client and the CWD backend and handles common API concerns such as **authentication, authorization, throttling, request validation, logging, and monitoring**, so the Coordinator doesn't need to implement all of these concerns.
 
 ## Key points
-- Authentication, throttling, validation, WAF, logging and metrics in one managed layer.
-- Private integration to ECS; custom domains and stages.
-- Removes cross-cutting code from the application.
 
-## CWD context
-Clients never see backend addresses.
-`,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:`# REST API vs HTTP API—which would you choose?
+### 1. Secure entry point
+
+Instead of exposing the CWD service directly:
+
+\`\`\`text
+User → CWD Backend
+\`\`\`
+
+I use:
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+CWD API
+ ↓
+Coordinator
+\`\`\`
+
+API Gateway can integrate with authentication/authorization mechanisms such as IAM or JWT-based authorizers.
+
+---
+
+### 2. Protect CWD from traffic spikes
+
+CWD can have many users and multiple agent workflows.
+
+API Gateway can apply **throttling and quotas** at the API boundary.
+
+\`\`\`text
+1000 requests
+      ↓
+API Gateway
+      ↓
+Controlled traffic
+      ↓
+CWD
+\`\`\`
+
+This prevents uncontrolled traffic from reaching the Coordinator and downstream Workers.
+
+---
+
+### 3. Request validation
+
+I can validate things such as:
+
+\`\`\`text
+customer_id
+request format
+required fields
+payload structure
+\`\`\`
+
+before the request reaches CWD.
+
+For example:
+
+\`\`\`json
+{
+  "intent": "customer_briefing",
+  "customer_id": "C12345"
+}
+\`\`\`
+
+Invalid requests can be rejected early.
+
+---
+
+### 4. Monitoring and logging
+
+API Gateway provides API-level metrics and logs that help monitor:
+
+* Request count
+* Errors
+* Latency
+* 4xx/5xx responses
+* Throttling
+
+I can then correlate the API request with the CWD \`correlation_id\`.
+
+---
+
+# CWD flow
+
+\`\`\`text
+                    User / Application
+                           ↓
+                    Amazon API Gateway
+                           ↓
+                 Authentication/AuthZ
+                           ↓
+                  Request Validation
+                           ↓
+                    CWD FastAPI API
+                           ↓
+                      Coordinator
+                           ↓
+                      Delegator
+                           ↓
+                       Workers
+                     ↙    ↓     ↘
+                  MCP    RAG    Bedrock
+\`\`\`
+
+---
+
+## Why not put these responsibilities in the Coordinator?
+
+The **Coordinator's job is agent orchestration**, not API infrastructure.
+
+\`\`\`text
+API Gateway
+   ↓
+API security + throttling + validation
+\`\`\`
+
+while:
+
+\`\`\`text
+Coordinator
+   ↓
+Intent + planning + orchestration
+\`\`\`
+
+This separation keeps the architecture cleaner.
+
+---
+
+# Example
+
+A user sends:
+
+\`\`\`text
+"Give me a customer briefing for C12345"
+\`\`\`
+
+The request goes:
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+Authenticate user
+ ↓
+Validate request
+ ↓
+CWD FastAPI
+ ↓
+Coordinator
+ ↓
+Sales Delegator
+ ↓
+Customer Worker
+ ↓
+MCP → Salesforce
+\`\`\`
+
+The response travels back:
+
+\`\`\`text
+Salesforce
+ ↓
+Worker
+ ↓
+Delegator
+ ↓
+Coordinator
+ ↓
+CWD API
+ ↓
+API Gateway
+ ↓
+User
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I use API Gateway as the secure API boundary for CWD. It provides authentication and authorization integration, throttling, request validation, logging and API-level monitoring before traffic reaches the CWD backend. This protects the Coordinator and downstream Workers from uncontrolled traffic and keeps API infrastructure concerns separate from agent orchestration. The Coordinator focuses on intent, planning and multi-agent execution, while API Gateway manages the external API boundary.”**
+
+## Easy memory trick
+
+**API Gateway = Secure → Control → Validate → Monitor**
+
+### Key distinction
+
+**API Gateway** → API boundary
+
+**Coordinator** → Agent orchestration
+
+**Delegator** → Domain/workload orchestration
+
+**Worker** → Specific capability
+
+**Bedrock** → Model inference
+
+**MCP** → Enterprise tool connectivity
+`,code:``},{id:`032-rest-api-vs-http-api-which-would-you-choose`,category:`API Gateway`,title:`REST API vs HTTP API—which would you choose?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authenticate API Gateway requests?
 
 ## Short answer
-HTTP APIs are cheaper and simpler; REST APIs are richer.
+
+For CWD, I would use **JWT/OIDC-based authentication**, typically with **Amazon Cognito or an enterprise identity provider such as Microsoft Entra ID**, depending on the organization's identity architecture.
+
+API Gateway validates the token **before the request reaches the CWD application**.
+
+\`\`\`text id="3a8h7x"
+User
+  ↓
+Identity Provider
+  ↓
+Access Token / JWT
+  ↓
+API Gateway
+  ↓
+Validate Token
+  ↓
+CWD FastAPI
+  ↓
+Coordinator
+\`\`\`
 
 ## Key points
-- HTTP API: lower cost and latency, JWT authorisers, simple proxying; no direct WAF association.
-- REST API: usage plans and API keys, request validation models, WAF, caching, resource policies, private APIs.
-- Choose REST for external CWD needing WAF, usage plans and validation; HTTP for simple internal JWT proxying.
 
-## CWD context
-If using HTTP APIs externally, put CloudFront with WAF in front.
-`,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authenticate API Gateway requests?
+### 1. User authenticates with Identity Provider
+
+For example:
+
+\`\`\`text id="5y5w9g"
+User
+ ↓
+Microsoft Entra ID / Cognito
+ ↓
+JWT access token
+\`\`\`
+
+The token contains claims such as:
+
+\`\`\`text id="j1l1x4"
+sub
+issuer
+audience
+expiration
+scopes / roles
+\`\`\`
+
+---
+
+### 2. Client sends the token to API Gateway
+
+\`\`\`http id="f4t9cj"
+Authorization: Bearer <JWT>
+\`\`\`
+
+API Gateway validates the token.
+
+It checks things such as:
+
+\`\`\`text id="o5lyq3"
+✓ Signature
+✓ Issuer
+✓ Audience
+✓ Expiration
+✓ Required scopes
+\`\`\`
+
+If the token is invalid or expired:
+
+\`\`\`text id="o6b7f8"
+API Gateway
+    ↓
+401 Unauthorized
+    ↓
+CWD is NOT called
+\`\`\`
+
+---
+
+## 3. Authentication vs authorization
+
+This is an important interview distinction.
+
+### Authentication
+
+> **Who are you?**
+
+Example:
+
+\`\`\`text id="k0o1q2"
+User = Pooja
+\`\`\`
+
+### Authorization
+
+> **What are you allowed to do?**
+
+Example:
+
+\`\`\`text id="q5h6j7"
+User
+ ↓
+Sales role
+ ↓
+Allowed → Customer CRM data
+Not allowed → HR data
+\`\`\`
+
+API Gateway can perform the initial authentication and scope/claim checks, but **CWD must still enforce fine-grained authorization** for enterprise data and tools.
+
+---
+
+# 4. CWD authorization flow
+
+For your CWD architecture:
+
+\`\`\`text id="8f7m1k"
+User
+ ↓
+Entra ID
+ ↓
+JWT
+ ↓
+API Gateway
+ ↓
+JWT validation
+ ↓
+CWD FastAPI
+ ↓
+Authorization / entitlement check
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Enterprise System
+\`\`\`
+
+For example, a Customer Briefing request:
+
+\`\`\`text id="s7k8m9"
+User asks for Customer C12345
+        ↓
+API Gateway authenticates user
+        ↓
+CWD identifies user + roles
+        ↓
+Authorization check
+        ↓
+Sales Worker
+        ↓
+MCP
+        ↓
+Salesforce
+\`\`\`
+
+The **LLM should never decide whether the user is authorized**.
+
+---
+
+# 5. Service-to-service authentication
+
+For internal CWD services, I would use **IAM roles/credentials, workload identity, or another service-to-service identity mechanism**, rather than passing user passwords between services.
+
+Example:
+
+\`\`\`text id="l4m5n6"
+CWD Service
+    ↓
+IAM role
+    ↓
+AWS service
+\`\`\`
+
+For MCP/enterprise integrations, the MCP server can independently validate the calling identity and enforce its own authorization policy.
+
+---
+
+# 6. What about API keys?
+
+API keys can identify an application/client and support usage controls, but **they are not a replacement for user authentication**.
+
+For an enterprise CWD application:
+
+\`\`\`text id="w7x8y9"
+JWT/OIDC
+→ User identity
+
+API key
+→ Application/client identification
+\`\`\`
+
+If CWD requires strong user identity and enterprise authorization, I would use an identity provider and JWT/OIDC.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“For CWD, I would use JWT/OIDC authentication through an enterprise identity provider such as Microsoft Entra ID or Amazon Cognito, depending on the organization's identity architecture. The client sends a bearer token to API Gateway, and the gateway validates the token's signature, issuer, audience, expiration and required scopes before forwarding the request to CWD. Inside CWD, I perform fine-grained authorization based on the user's identity, roles and data entitlements before allowing Workers or MCP tools to access enterprise systems. So API Gateway handles the API authentication boundary, while CWD and downstream systems enforce authorization.”**
+
+## Easy memory trick
+
+**Identity → Token → Validate → Authorize → Execute**
+
+### Key distinction
+
+\`\`\`text id="q1w2e3"
+Identity Provider
+→ Issues identity/token
+
+API Gateway
+→ Validates API request
+
+CWD
+→ Enforces business/data authorization
+
+MCP / Enterprise system
+→ Enforces downstream authorization
+\`\`\`
+
+> **“Authenticate at the API boundary, authorize before accessing enterprise data.”**
+`,code:``},{id:`033-how-do-you-authenticate-api-gateway-requests`,category:`API Gateway`,title:`How do you authenticate API Gateway requests?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authorize users?
 
 ## Short answer
-Authenticate with a JWT or Cognito authoriser against your identity provider.
+
+For CWD, I use **RBAC + fine-grained entitlement/ACL checks**.
+
+Authentication tells me **who the user is**. Authorization determines **what that user is allowed to access or perform**.
+
+\`\`\`text id="0n5xw2"
+User
+ ↓
+Entra ID / Cognito
+ ↓
+JWT claims
+ ↓
+API Gateway
+ ↓
+CWD Authorization Layer
+ ↓
+Role + Group + Resource Entitlement
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP / Enterprise System
+\`\`\`
 
 ## Key points
-- HTTP API JWT authoriser or REST Cognito authoriser validate signature, issuer, audience and expiry.
-- Lambda authoriser for custom logic; IAM (SigV4) for service-to-service; mutual TLS on custom domains.
-- API keys identify clients for usage plans but are not authentication.
 
-## CWD context
-Federate enterprise identity (for example Entra ID or Okta) through OIDC.
+### 1. Get the user's identity
+
+The identity provider provides claims such as:
+
+\`\`\`text id="1q5j6z"
+User ID
+Groups
+Roles
+Scopes
+Tenant
+\`\`\`
+
+Example:
+
+\`\`\`text id="w3r7p8"
+User: pooja
+Roles: Sales_User
+Groups: Customer_Briefing
+\`\`\`
+
+---
+
+### 2. Check RBAC
+
+I define roles and permissions.
+
+Example:
+
+\`\`\`text id="4m8k2d"
+Sales_User
+    → Customer CRM data
+    → Customer briefing
+
+Service_User
+    → ServiceNow incidents
+
+Admin
+    → Agent/configuration management
+\`\`\`
+
+So when the user requests:
+
+\`\`\`text id="a7c9v2"
+Customer Briefing
+\`\`\`
+
+CWD checks whether the user has the required permission.
+
+---
+
+### 3. Use resource-level authorization
+
+Role-based access alone may not be enough.
+
+For example:
+
+\`\`\`text id="r2t6y8"
+User can access Sales data
+\`\`\`
+
+doesn't necessarily mean:
+
+\`\`\`text id="e1k4p7"
+User can access EVERY customer
+\`\`\`
+
+So I can apply:
+
+\`\`\`text id="c5d9h2"
+User
+ ↓
+Role
+ ↓
+Customer entitlement
+ ↓
+Customer ID
+ ↓
+Allowed / Denied
+\`\`\`
+
+For example:
+
+\`\`\`text id="m6q8s1"
+User → Sales role
+Customer → C12345
+        ↓
+Entitled?
+   ├── Yes → Continue
+   └── No  → 403 Forbidden
+\`\`\`
+
+---
+
+# 4. Authorization happens before tool execution
+
+This is very important for CWD.
+
+I don't let the LLM decide:
+
+> "The user probably has access."
+
+Instead:
+
+\`\`\`text id="b7v3n5"
+User
+ ↓
+Authorization Policy
+ ↓
+Allowed?
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Salesforce / ServiceNow
+\`\`\`
+
+The authorization decision is made by deterministic policy code/services.
+
+---
+
+# 5. MCP also enforces authorization
+
+Even if CWD authorizes the request, the **MCP server should enforce its own authorization**.
+
+\`\`\`text id="z8x2c4"
+CWD Authorization
+       ↓
+Worker
+       ↓
+MCP Server
+       ↓
+MCP Authorization
+       ↓
+Salesforce / ServiceNow
+\`\`\`
+
+This provides **defense in depth**.
+
+---
+
+# 6. RAG authorization
+
+For documents, I apply ACL filtering **before the LLM receives the content**.
+
+Example:
+
+\`\`\`text id="h3j5k7"
+User identity
+    ↓
+Groups / Entitlements
+    ↓
+Azure AI Search / OpenSearch
+    ↓
+ACL filter
+    ↓
+Only authorized documents
+    ↓
+RAG
+    ↓
+LLM
+\`\`\`
+
+The LLM should never receive confidential documents and then be asked:
+
+> "Please don't mention them."
+
+The unauthorized data should be excluded **before retrieval/context construction**.
+
+---
+
+# 7. Example in CWD
+
+Suppose the user asks:
+
+> "Give me a briefing for customer C12345."
+
+Flow:
+
+\`\`\`text id="p9r1t3"
+User
+ ↓
+API Gateway
+ ↓
+JWT validation
+ ↓
+CWD Authorization
+ ↓
+Check Sales role
+ ↓
+Check C12345 entitlement
+ ↓
+Sales Delegator
+ ↓
+Customer Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+If authorization fails:
+
+\`\`\`text id="v4n6b8"
+Authorization failed
+       ↓
+403 Forbidden
+       ↓
+No Worker execution
+       ↓
+No Salesforce call
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement authorization using RBAC combined with fine-grained resource entitlements. After API Gateway authenticates the user, CWD extracts the user's roles, groups and identity from the token and checks whether the user is allowed to perform the requested operation and access the specific resource. For CWD, authorization is enforced before Worker and MCP execution, and downstream MCP servers also enforce their own policies. For RAG, I apply ACL and entitlement filters before retrieval so unauthorized documents never reach the LLM. The LLM never makes the authorization decision.”**
+
+## Easy memory trick
+
+**Who → Role → Resource → Permission → Execute**
+
+### Key distinction
+
+**Authentication:**
+
+> Who are you?
+
+**Authorization:**
+
+> What are you allowed to access?
+
+**ACL:**
+
+> Which specific resources can you access?
+
+**RBAC:**
+
+> What can your role do?
+
+**MCP authorization:**
+
+> Is this specific tool operation allowed?
+
+> **“Authenticate the user, authorize the action, filter the data, then execute.”**
 `,code:``},{id:`034-how-do-you-authorize-users`,category:`API Gateway`,title:`How do you authorize users?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you authorize users?
 
 ## Short answer
-Authorise coarsely at the gateway and finely in CWD.
+
+For CWD, I use **RBAC + fine-grained entitlement/ACL checks**.
+
+Authentication tells me **who the user is**. Authorization determines **what that user is allowed to access or perform**.
+
+\`\`\`text id="0n5xw2"
+User
+ ↓
+Entra ID / Cognito
+ ↓
+JWT claims
+ ↓
+API Gateway
+ ↓
+CWD Authorization Layer
+ ↓
+Role + Group + Resource Entitlement
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP / Enterprise System
+\`\`\`
 
 ## Key points
-- Scopes and claims in the JWT; Lambda authoriser returns a cached policy and context.
-- Customer-level and document-level entitlements are enforced in the backend and in OpenSearch filters.
-- Amazon Verified Permissions (Cedar) is an option for central policy.
 
-## CWD context
-Forward the validated identity to the backend as request context.
+### 1. Get the user's identity
+
+The identity provider provides claims such as:
+
+\`\`\`text id="1q5j6z"
+User ID
+Groups
+Roles
+Scopes
+Tenant
+\`\`\`
+
+Example:
+
+\`\`\`text id="w3r7p8"
+User: pooja
+Roles: Sales_User
+Groups: Customer_Briefing
+\`\`\`
+
+---
+
+### 2. Check RBAC
+
+I define roles and permissions.
+
+Example:
+
+\`\`\`text id="4m8k2d"
+Sales_User
+    → Customer CRM data
+    → Customer briefing
+
+Service_User
+    → ServiceNow incidents
+
+Admin
+    → Agent/configuration management
+\`\`\`
+
+So when the user requests:
+
+\`\`\`text id="a7c9v2"
+Customer Briefing
+\`\`\`
+
+CWD checks whether the user has the required permission.
+
+---
+
+### 3. Use resource-level authorization
+
+Role-based access alone may not be enough.
+
+For example:
+
+\`\`\`text id="r2t6y8"
+User can access Sales data
+\`\`\`
+
+doesn't necessarily mean:
+
+\`\`\`text id="e1k4p7"
+User can access EVERY customer
+\`\`\`
+
+So I can apply:
+
+\`\`\`text id="c5d9h2"
+User
+ ↓
+Role
+ ↓
+Customer entitlement
+ ↓
+Customer ID
+ ↓
+Allowed / Denied
+\`\`\`
+
+For example:
+
+\`\`\`text id="m6q8s1"
+User → Sales role
+Customer → C12345
+        ↓
+Entitled?
+   ├── Yes → Continue
+   └── No  → 403 Forbidden
+\`\`\`
+
+---
+
+# 4. Authorization happens before tool execution
+
+This is very important for CWD.
+
+I don't let the LLM decide:
+
+> "The user probably has access."
+
+Instead:
+
+\`\`\`text id="b7v3n5"
+User
+ ↓
+Authorization Policy
+ ↓
+Allowed?
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Salesforce / ServiceNow
+\`\`\`
+
+The authorization decision is made by deterministic policy code/services.
+
+---
+
+# 5. MCP also enforces authorization
+
+Even if CWD authorizes the request, the **MCP server should enforce its own authorization**.
+
+\`\`\`text id="z8x2c4"
+CWD Authorization
+       ↓
+Worker
+       ↓
+MCP Server
+       ↓
+MCP Authorization
+       ↓
+Salesforce / ServiceNow
+\`\`\`
+
+This provides **defense in depth**.
+
+---
+
+# 6. RAG authorization
+
+For documents, I apply ACL filtering **before the LLM receives the content**.
+
+Example:
+
+\`\`\`text id="h3j5k7"
+User identity
+    ↓
+Groups / Entitlements
+    ↓
+Azure AI Search / OpenSearch
+    ↓
+ACL filter
+    ↓
+Only authorized documents
+    ↓
+RAG
+    ↓
+LLM
+\`\`\`
+
+The LLM should never receive confidential documents and then be asked:
+
+> "Please don't mention them."
+
+The unauthorized data should be excluded **before retrieval/context construction**.
+
+---
+
+# 7. Example in CWD
+
+Suppose the user asks:
+
+> "Give me a briefing for customer C12345."
+
+Flow:
+
+\`\`\`text id="p9r1t3"
+User
+ ↓
+API Gateway
+ ↓
+JWT validation
+ ↓
+CWD Authorization
+ ↓
+Check Sales role
+ ↓
+Check C12345 entitlement
+ ↓
+Sales Delegator
+ ↓
+Customer Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+If authorization fails:
+
+\`\`\`text id="v4n6b8"
+Authorization failed
+       ↓
+403 Forbidden
+       ↓
+No Worker execution
+       ↓
+No Salesforce call
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I implement authorization using RBAC combined with fine-grained resource entitlements. After API Gateway authenticates the user, CWD extracts the user's roles, groups and identity from the token and checks whether the user is allowed to perform the requested operation and access the specific resource. For CWD, authorization is enforced before Worker and MCP execution, and downstream MCP servers also enforce their own policies. For RAG, I apply ACL and entitlement filters before retrieval so unauthorized documents never reach the LLM. The LLM never makes the authorization decision.”**
+
+## Easy memory trick
+
+**Who → Role → Resource → Permission → Execute**
+
+### Key distinction
+
+**Authentication:**
+
+> Who are you?
+
+**Authorization:**
+
+> What are you allowed to access?
+
+**ACL:**
+
+> Which specific resources can you access?
+
+**RBAC:**
+
+> What can your role do?
+
+**MCP authorization:**
+
+> Is this specific tool operation allowed?
+
+> **“Authenticate the user, authorize the action, filter the data, then execute.”**
 `,code:``},{id:`035-how-do-you-implement-throttling`,category:`API Gateway`,title:`How do you implement throttling?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement throttling?
 
 ## Short answer
@@ -174833,260 +183134,5489 @@ Gateway throttling protects the backend; token quotas protect Bedrock.
 `,code:``},{id:`036-how-do-you-protect-apis-from-abuse`,category:`API Gateway`,title:`How do you protect APIs from abuse?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you protect APIs from abuse?
 
 ## Short answer
-Protect APIs with layered controls.
+
+I protect APIs using **authentication, authorization, throttling, validation, WAF protection, rate limits, monitoring, and abuse detection**.
+
+For CWD, I protect the API at multiple layers rather than relying on a single control.
 
 ## Key points
-- AWS WAF managed rule groups, bot control, rate-based rules and geo rules.
-- Throttling and usage plans; request validation and size limits; authorisers.
-- CloudFront and Shield; resource policy IP allow-lists; monitor 4XX spikes.
-- Cap prompt length to control cost and abuse.
 
-## CWD context
-Assume the public endpoint is constantly probed.
+1. **Authentication** – Verify who is calling the API.
+2. **Authorization** – Verify what they are allowed to do.
+3. **Rate limiting** – Limit requests per user/app/tenant.
+4. **Throttling** – Control sudden traffic spikes.
+5. **Request validation** – Reject malformed or dangerous requests.
+6. **WAF** – Block common web attacks and suspicious traffic.
+7. **Input limits** – Limit request size, file size, tokens, etc.
+8. **Timeouts** – Prevent long-running requests from consuming resources.
+9. **Monitoring** – Detect unusual traffic and repeated failures.
+10. **Audit logging** – Track who called what and when.
+
+### CWD flow
+
+\`\`\`text
+User / Application
+        ↓
+   API Gateway
+        ↓
+ Authentication
+        ↓
+ Authorization
+        ↓
+ WAF / Rate Limit / Throttling
+        ↓
+ Request Validation
+        ↓
+     CWD API
+        ↓
+   Coordinator
+        ↓
+   Delegator
+        ↓
+     Worker
+        ↓
+ MCP / Bedrock / RAG / Enterprise APIs
+\`\`\`
+
+## 1. Authentication
+
+Use **JWT/OIDC** with an enterprise identity provider such as Microsoft Entra ID or Amazon Cognito.
+
+\`\`\`text
+Client → Identity Provider → JWT Token → API Gateway
+\`\`\`
+
+API Gateway validates:
+
+* Signature
+* Issuer
+* Audience
+* Expiration
+* Required scopes
+
+Invalid token → **401 Unauthorized**.
+
+---
+
+## 2. Authorization
+
+Authentication tells me **who the user is**.
+
+Authorization tells me **what the user can access**.
+
+For example:
+
+\`\`\`text
+Sales User
+    ↓
+Customer Briefing
+    ↓
+Check customer entitlement
+    ↓
+Allowed → Salesforce Worker
+Not allowed → 403
+\`\`\`
+
+I use **RBAC + resource-level entitlements**.
+
+The LLM should **never decide authorization**.
+
+---
+
+## 3. Rate limiting
+
+Suppose one user sends:
+
+\`\`\`text
+10,000 requests/minute
+\`\`\`
+
+I can enforce:
+
+\`\`\`text
+User       → 100 requests/min
+Application → 1,000 requests/min
+Tenant      → 5,000 requests/min
+\`\`\`
+
+Requests exceeding the limit receive **429 Too Many Requests**.
+
+---
+
+## 4. WAF protection
+
+For internet-facing APIs, I can place **AWS WAF** in front of the API layer.
+
+It can help protect against common web attacks such as:
+
+* SQL injection
+* XSS
+* Malicious patterns
+* Bot traffic
+* IP-based abuse
+
+---
+
+## 5. Request validation
+
+Don't allow arbitrary payloads.
+
+For example:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+Validate:
+
+* Required fields
+* Data types
+* String length
+* Allowed values
+* Request size
+* Schema
+
+Malformed request → reject before it reaches the Coordinator.
+
+---
+
+## 6. Protect expensive LLM APIs
+
+This is especially important for CWD.
+
+One user request can become:
+
+\`\`\`text
+1 User Request
+      ↓
+Coordinator
+      ↓
+2 Delegators
+      ↓
+10 Workers
+      ↓
+10 Bedrock calls
+\`\`\`
+
+So I also control **internal concurrency and LLM usage**.
+
+\`\`\`text
+API Gateway
+      ↓
+CWD
+      ↓
+Concurrency Limit
+      ↓
+Queue if necessary
+      ↓
+Bedrock
+\`\`\`
+
+This prevents API abuse from becoming an expensive LLM-cost problem.
+
+---
+
+## 7. Monitor abnormal behavior
+
+I monitor:
+
+* Requests/minute
+* 401/403/429 rates
+* P50/P95/P99 latency
+* Request size
+* Error rate
+* Bedrock token usage
+* Cost/request
+* User/tenant activity
+* IP patterns
+
+For example:
+
+\`\`\`text
+Normal:
+100 requests/hour
+
+Suddenly:
+20,000 requests/hour
+        ↓
+Abuse detection
+        ↓
+Throttle / Block / Alert
+\`\`\`
+
+---
+
+## 8. Audit everything important
+
+I maintain a correlation ID:
+
+\`\`\`text
+request_id
+   ↓
+session_id
+   ↓
+run_id
+   ↓
+worker_id
+   ↓
+tool_call
+\`\`\`
+
+This lets me investigate:
+
+> Who called the API → what they requested → which Worker ran → which MCP tool was called → how much it cost.
+
+## Example
+
+Suppose an attacker repeatedly calls:
+
+\`\`\`text
+POST /customer-briefing
+\`\`\`
+
+thousands of times.
+
+Protection:
+
+\`\`\`text
+Attacker
+   ↓
+API Gateway
+   ↓
+Rate limit exceeded
+   ↓
+429
+\`\`\`
+
+If they try different IPs:
+
+\`\`\`text
+WAF / Bot detection
+        ↓
+API Gateway
+        ↓
+Per-user / tenant limits
+        ↓
+CWD concurrency control
+        ↓
+Bedrock protection
+\`\`\`
+
+So the abuse doesn't directly reach expensive downstream services.
+
+## 🎯 Strong interview answer
+
+> **“I protect APIs using defense in depth. At the API Gateway layer, I use authentication, authorization, rate limiting, throttling and request validation, and I can use WAF for common web attacks. Inside CWD, I control concurrency and downstream limits so one API request cannot create uncontrolled Worker, MCP or Bedrock calls. I also use timeouts, retries with backoff, monitoring and audit logs. This protects both the API and the expensive downstream AI and enterprise systems.”**
+
+## Easy memory trick
+
+**A → A → R → W → V → C → M**
+
+* **A**uthentication
+* **A**uthorization
+* **R**ate limiting
+* **W**AF
+* **V**alidation
+* **C**oncurrency control
+* **M**onitoring
+
+### Key distinction
+
+**API protection = prevent unauthorized or excessive traffic.**
+
+**Throttling = control how much traffic is allowed.**
+
+**Authorization = control what the caller is allowed to access.**
+
+**WAF = protect against common web-layer attacks.**
+
+**Concurrency control = prevent one request from exploding into too many downstream/LLM calls.**
 `,code:``},{id:`037-how-do-you-handle-api-gateway-timeout`,category:`API Gateway`,title:`How do you handle API Gateway timeout?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle API Gateway timeout?
 
 ## Short answer
-API Gateway integrations time out at roughly 29 seconds for REST APIs (limits can sometimes be raised) and about 30 seconds for HTTP APIs.
 
-## Key points
-- Design long agent runs asynchronously: return 202 with a job ID.
-- Process through SQS or Step Functions; client polls a status endpoint or receives a push.
-- Streaming options exist for token streaming; check current support.
+I **don't let API Gateway wait indefinitely** for the CWD agent workflow. I set a timeout appropriate to the API, move long-running work to **asynchronous processing**, and use **timeouts + retries + status tracking** for downstream services.
 
-## CWD context
-Never let a long LLM workflow depend on a single synchronous API call.
+### CWD flow
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+CWD API
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Workers
+ ↓
+Bedrock / MCP / RAG
+\`\`\`
+
+If the complete workflow may take longer than the API Gateway timeout:
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+CWD API
+ ↓
+Start async job
+ ↓
+SQS / Step Functions
+ ↓
+Workers
+ ↓
+Result stored in DynamoDB/S3
+ ↓
+Client checks status
+\`\`\`
+
+## 1. Set timeouts at every layer
+
+Don't only configure an API Gateway timeout.
+
+For example:
+
+\`\`\`text
+API Gateway
+   ↓
+CWD API timeout
+   ↓
+Coordinator timeout
+   ↓
+Worker timeout
+   ↓
+MCP timeout
+   ↓
+Bedrock timeout
+\`\`\`
+
+Each layer should have a controlled timeout.
+
+---
+
+## 2. For short requests, fail fast
+
+For a normal Customer Briefing request:
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+CWD
+ ↓
+Coordinator
+ ↓
+Workers
+ ↓
+Response
+\`\`\`
+
+If Salesforce or Bedrock is taking too long:
+
+\`\`\`text
+Timeout
+   ↓
+Retry if transient
+   ↓
+Backoff + jitter
+   ↓
+If still failing → graceful failure/partial response
+\`\`\`
+
+I don't keep retrying until the API Gateway itself times out.
+
+---
+
+## 3. Use asynchronous processing for long-running jobs
+
+This is the most important solution.
+
+For example, suppose a large document-processing job takes several minutes.
+
+Instead of:
+
+\`\`\`text
+Client ──────────────── waits ────────────────→ Response
+\`\`\`
+
+I use:
+
+\`\`\`text
+Client
+  ↓
+API Gateway
+  ↓
+CWD
+  ↓
+Create Job ID
+  ↓
+SQS / Step Functions
+  ↓
+Workers process asynchronously
+  ↓
+DynamoDB = job status
+  ↓
+Client → GET /jobs/{job_id}
+\`\`\`
+
+Example:
+
+\`\`\`text
+POST /customer-briefing
+        ↓
+202 Accepted
+{
+   "job_id": "JOB123",
+   "status": "RUNNING"
+}
+\`\`\`
+
+Then:
+
+\`\`\`text
+GET /customer-briefing/JOB123
+        ↓
+COMPLETED
+\`\`\`
+
+---
+
+## 4. Retry only transient failures
+
+For downstream timeout:
+
+\`\`\`text
+Timeout
+   ↓
+Retry
+   ↓
+Exponential backoff + jitter
+   ↓
+Retry limit reached?
+   ↓
+Fallback / partial response / failure
+\`\`\`
+
+I don't retry indefinitely because that can create a **retry storm** and make the timeout problem worse.
+
+---
+
+## 5. Use circuit breaker
+
+If ServiceNow is repeatedly timing out:
+
+\`\`\`text
+Worker → MCP → ServiceNow
+                 ↓
+             Timeout
+                 ↓
+             Retry
+                 ↓
+             Timeout
+                 ↓
+        Circuit Breaker OPEN
+\`\`\`
+
+The Worker temporarily stops calling ServiceNow.
+
+After a recovery period, it allows limited test requests again.
+
+---
+
+## 6. Handle partial results
+
+Suppose CWD has:
+
+\`\`\`text
+Sales Delegator
+ ├── Salesforce Worker      ✓
+ └── CRM Worker             ✓
+
+IT Delegator
+ └── ServiceNow Worker      ✗ Timeout
+\`\`\`
+
+If ServiceNow data is optional, the Delegator can return:
+
+\`\`\`text
+Customer information: available
+Incident information: temporarily unavailable
+\`\`\`
+
+The Coordinator should **not invent the missing information**.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I handle API Gateway timeouts by setting timeouts at every layer and designing the CWD workflow so the API doesn't wait indefinitely. For short requests, I use bounded retries with exponential backoff and jitter, and circuit breakers for repeatedly failing dependencies. For long-running workloads, I make the API asynchronous using SQS or Step Functions, return a job ID with 202 Accepted, and track the job status in DynamoDB. If one optional Worker times out, the Delegator can return a partial response rather than failing the entire request.”**
+
+## Easy memory trick
+
+**T → R → B → C → A**
+
+* **T**imeout controls
+* **R**etry transient failures
+* **B**ackoff
+* **C**ircuit breaker
+* **A**sync for long jobs
+
+### Key distinction
+
+**Short request → synchronous + bounded timeout**
+
+**Long-running workflow → asynchronous + job ID**
+
+**Repeated dependency failure → circuit breaker**
+
+**Optional Worker failure → partial response**
+
+**Never → wait indefinitely or retry forever**
 `,code:``},{id:`038-how-do-you-configure-request-validation`,category:`API Gateway`,title:`How do you configure request validation?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you configure request validation?
 
 ## Short answer
-Validate requests at the gateway before the backend runs.
+
+I validate the request **at the API boundary before it reaches the CWD Coordinator**.
+
+I validate the **schema, required fields, data types, allowed values, request size, and security-related constraints**. Invalid requests are rejected early with **400 Bad Request**, so they don't consume CWD, Bedrock, MCP, or downstream resources.
 
 ## Key points
-- REST API request validators and JSON Schema models for body, parameters and headers; 400 on failure.
-- Payload size limits; reject unknown fields.
-- Application-level schema validation (for example Pydantic) as a second layer.
 
-## CWD context
-Rejected requests cost almost nothing.
+1. **Schema validation**
+2. **Required fields**
+3. **Data types**
+4. **Allowed values**
+5. **String/array size limits**
+6. **Request body size**
+7. **Header/query parameter validation**
+8. **Security validation**
+9. **Reject before Coordinator**
+
+### CWD flow
+
+\`\`\`text
+Client
+   ↓
+API Gateway
+   ↓
+Authentication
+   ↓
+Authorization
+   ↓
+Request Validation
+   ↓
+Valid?
+ ┌─┴─────────┐
+No           Yes
+↓             ↓
+400          CWD API
+              ↓
+         Coordinator
+              ↓
+          Delegator
+              ↓
+           Worker
+\`\`\`
+
+---
+
+## 1. Define an API schema
+
+For example, CWD Customer Briefing API:
+
+\`\`\`json
+{
+  "customer_id": "C12345",
+  "request_type": "customer_briefing"
+}
+\`\`\`
+
+Define a schema such as:
+
+\`\`\`json
+{
+  "type": "object",
+  "required": ["customer_id", "request_type"],
+  "properties": {
+    "customer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50
+    },
+    "request_type": {
+      "type": "string",
+      "enum": ["customer_briefing"]
+    }
+  },
+  "additionalProperties": false
+}
+\`\`\`
+
+Now the API can reject unexpected or malformed input.
+
+---
+
+## 2. Validate required fields
+
+For example:
+
+\`\`\`json
+{
+  "request_type": "customer_briefing"
+}
+\`\`\`
+
+\`customer_id\` is missing.
+
+API Gateway rejects it:
+
+\`\`\`text
+400 Bad Request
+\`\`\`
+
+The request never reaches the Coordinator.
+
+---
+
+## 3. Validate data types
+
+Expected:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+But someone sends:
+
+\`\`\`json
+{
+  "customer_id": 12345
+}
+\`\`\`
+
+The schema can reject it because \`customer_id\` must be a string.
+
+---
+
+## 4. Validate allowed values
+
+Suppose:
+
+\`\`\`text
+request_type ∈
+{
+  customer_briefing,
+  incident_summary,
+  product_summary
+}
+\`\`\`
+
+If someone sends:
+
+\`\`\`json
+{
+  "request_type": "delete_customer"
+}
+\`\`\`
+
+the request is rejected if that value isn't part of the API contract.
+
+---
+
+## 5. Validate size limits
+
+I also protect the API from oversized requests.
+
+For example:
+
+\`\`\`text
+customer_id     → max 50 characters
+query           → max 2,000 characters
+array items     → max 20
+request body    → defined maximum
+\`\`\`
+
+This helps prevent resource exhaustion and accidental huge prompts.
+
+---
+
+## 6. Validate query parameters and headers
+
+Example:
+
+\`\`\`text
+GET /customer/C12345?include_incidents=true
+\`\`\`
+
+Validate:
+
+\`\`\`text
+customer_id       → correct format
+include_incidents → boolean
+Content-Type      → application/json
+\`\`\`
+
+---
+
+## 7. Security validation
+
+Request validation is **not a replacement for authentication or authorization**.
+
+The flow is:
+
+\`\`\`text
+Authentication
+      ↓
+Authorization
+      ↓
+Schema validation
+      ↓
+Business validation
+      ↓
+Coordinator
+\`\`\`
+
+For example, even if:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+is structurally valid, I still need to check:
+
+> Does this user have permission to access C12345?
+
+That is authorization, not schema validation.
+
+---
+
+## 8. Validate again inside CWD
+
+I use **defense in depth**.
+
+For example:
+
+\`\`\`text
+API Gateway
+   ↓
+Schema validation
+   ↓
+FastAPI / Pydantic
+   ↓
+Business validation
+   ↓
+Coordinator
+\`\`\`
+
+API Gateway provides the first boundary check.
+
+FastAPI/Pydantic provides application-level validation.
+
+Business rules are validated separately.
+
+---
+
+## Example
+
+User sends:
+
+\`\`\`json
+{
+  "customer_id": "",
+  "request_type": "customer_briefing"
+}
+\`\`\`
+
+Validation detects:
+
+\`\`\`text
+customer_id → minLength violation
+\`\`\`
+
+Response:
+
+\`\`\`text
+400 Bad Request
+\`\`\`
+
+No:
+
+\`\`\`text
+Coordinator
+   ↓
+Delegator
+   ↓
+Worker
+   ↓
+Bedrock
+\`\`\`
+
+So we avoid unnecessary processing and cost.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I configure request validation at the API Gateway boundary using an API schema. I validate required fields, data types, allowed values, request size, query parameters and headers. Invalid requests are rejected with a 400 before they reach the CWD Coordinator. I also validate again in the FastAPI application using Pydantic and perform business and authorization checks separately. This gives me defense in depth and prevents malformed requests from consuming LLM, MCP, and downstream resources.”**
+
+## Easy memory trick
+
+**S → R → T → V → S → B**
+
+* **S**chema
+* **R**equired fields
+* **T**ype
+* **V**alue
+* **S**ize
+* **B**usiness validation
+
+### Key distinction
+
+| Layer               | Responsibility                  |
+| ------------------- | ------------------------------- |
+| API Gateway         | Request/schema validation       |
+| Authentication      | Who are you?                    |
+| Authorization       | What can you access?            |
+| FastAPI/Pydantic    | Application validation          |
+| Business validation | Is the request logically valid? |
+| Coordinator         | Agent orchestration             |
+
+**Interview line to remember:**
+
+> **“Validate early at the API boundary, validate again in the application, and never rely on the LLM for validation or authorization.”**
 `,code:``},{id:`039-how-do-you-version-cwd-apis`,category:`API Gateway`,title:`How do you version CWD APIs?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you version CWD APIs?
 
 ## Short answer
-Use stages for environments and path or header versions for API versions.
+
+I use **URI-based major versioning** for CWD APIs, for example:
+
+\`\`\`text
+/api/v1/customer-briefing
+/api/v2/customer-briefing
+\`\`\`
+
+I create a new major version only for **breaking changes**. Backward-compatible changes stay within the same major version.
 
 ## Key points
-- Stages (dev, prod) are environments, not API versions.
-- Version in the path (/v1) or a header; custom-domain base-path mappings.
-- Canary releases per stage; announce deprecations; keep backward compatibility.
 
-## CWD context
-The contract is public; treat changes with care.
+1. **Major version for breaking changes**
+2. **Backward-compatible changes don't require a new major version**
+3. Keep old and new versions running during migration
+4. Use API Gateway stages/routes to manage versions
+5. Test each version independently
+6. Monitor usage of each version
+7. Deprecate old versions gradually
+8. Never suddenly break existing clients
+
+### CWD flow
+
+\`\`\`text
+Client
+   ↓
+API Gateway
+   ↓
+/api/v1/customer-briefing
+        OR
+/api/v2/customer-briefing
+   ↓
+CWD API
+   ↓
+Coordinator
+   ↓
+Delegator
+   ↓
+Workers
+\`\`\`
+
+---
+
+## 1. Version using the API URL
+
+For example, V1:
+
+\`\`\`text
+POST /api/v1/customer-briefing
+\`\`\`
+
+Later, suppose we introduce a breaking request structure:
+
+\`\`\`text
+POST /api/v2/customer-briefing
+\`\`\`
+
+Both can temporarily coexist:
+
+\`\`\`text
+             API Gateway
+                 ↓
+       ┌─────────┴─────────┐
+       ↓                   ↓
+     V1 API              V2 API
+       ↓                   ↓
+ CWD V1 Contract      CWD V2 Contract
+\`\`\`
+
+---
+
+## 2. What is a breaking change?
+
+For example, V1 accepts:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+Suppose V2 changes it to:
+
+\`\`\`json
+{
+  "customer": {
+    "id": "C12345"
+  }
+}
+\`\`\`
+
+Existing clients using V1 would break.
+
+That's a reason for:
+
+\`\`\`text
+v1 → v2
+\`\`\`
+
+---
+
+## 3. What doesn't require a new major version?
+
+Suppose V1 already accepts:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+You add an optional field:
+
+\`\`\`json
+{
+  "customer_id": "C12345",
+  "include_incidents": true
+}
+\`\`\`
+
+If existing clients continue working, this can remain:
+
+\`\`\`text
+/api/v1/customer-briefing
+\`\`\`
+
+The important rule is:
+
+> **Don't create a new API version for every small change.**
+
+---
+
+## 4. Keep versions backward compatible
+
+Suppose:
+
+\`\`\`text
+V1 → 60% of traffic
+V2 → 40% of traffic
+\`\`\`
+
+I can monitor:
+
+* Request volume
+* Error rate
+* 4xx/5xx
+* P95/P99 latency
+* Worker failures
+* MCP failures
+* Bedrock errors
+* Cost
+
+Then gradually migrate clients from V1 to V2.
+
+---
+
+## 5. Deprecate old versions
+
+I wouldn't immediately remove V1.
+
+Instead:
+
+\`\`\`text
+V1
+ ↓
+Announce deprecation
+ ↓
+Monitor remaining clients
+ ↓
+Migrate clients
+ ↓
+Reduce traffic
+ ↓
+Disable V1
+\`\`\`
+
+For example:
+
+\`\`\`text
+V1 → Deprecated
+V2 → Current
+\`\`\`
+
+API Gateway can help route and manage the different API versions, while application code maintains the corresponding contracts.
+
+---
+
+## 6. Version more than the API
+
+For CWD, API versioning is only one part.
+
+I would separately version:
+
+\`\`\`text
+API contract
+Prompt
+Model configuration
+Agent configuration
+Tool/MCP schema
+RAG configuration
+\`\`\`
+
+For example:
+
+\`\`\`text
+CWD Run R123
+ ├── API: v2
+ ├── Prompt: p15
+ ├── Model Config: v4
+ ├── Agent Config: v7
+ └── RAG Config: v5
+\`\`\`
+
+This is very useful when troubleshooting production issues.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I version CWD APIs using major URI versions such as \`/api/v1\` and \`/api/v2\`. I create a new major version only for breaking contract changes; backward-compatible changes remain in the existing version. During migration, I run both versions, route traffic appropriately through API Gateway, monitor usage, errors and latency, and gradually migrate clients. I also separately version prompts, model configuration, agent configuration and MCP contracts so every CWD run is reproducible.”**
+
+## Easy memory trick
+
+**V → B → R → M → D**
+
+* **V**ersion
+* **B**reaking change → new major version
+* **R**un old + new
+* **M**igrate
+* **D**eprecate
+
+### Key distinction
+
+**API version ≠ model version ≠ prompt version ≠ MCP/tool version**
+
+For CWD:
+
+\`\`\`text
+API v2
+   +
+Prompt v15
+   +
+Model Config v4
+   +
+MCP Contract v3
+\`\`\`
+
+Together, these give you **traceability and safe evolution** of the AI platform.
 `,code:``},{id:`040-how-do-you-implement-api-gateway-logging`,category:`API Gateway`,title:`How do you implement API Gateway logging?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement API Gateway logging?
 
 ## Short answer
-Enable structured access logging and be careful with execution logs.
+
+I enable **API Gateway access logs and execution logs**, send them to **Amazon CloudWatch Logs**, and use **correlation IDs** so I can trace a request across the entire CWD workflow.
+
+\`\`\`text
+Client
+   ↓
+API Gateway
+   ↓
+CloudWatch Logs
+   ↓
+CWD API
+   ↓
+Coordinator → Delegator → Worker
+   ↓
+MCP / Bedrock / RAG
+\`\`\`
 
 ## Key points
-- Access logs in JSON to CloudWatch Logs: request ID, status, latency, integration latency, identity.
-- Execution logs at ERROR level in production, since data logging can leak sensitive content.
-- X-Ray tracing; log retention; Logs Insights queries.
 
-## CWD context
-Return the request ID to clients so support can find the trace.
+1. **Enable access logging**
+2. **Enable execution logging where appropriate**
+3. Send logs to **CloudWatch Logs**
+4. Add **request/correlation IDs**
+5. Log HTTP method, route, status, latency, request ID
+6. Don't log passwords, tokens, secrets, or sensitive customer data
+7. Create CloudWatch metrics/alarms
+8. Correlate API Gateway logs with CWD application logs
+
+---
+
+## 1. Enable API Gateway access logs
+
+I configure an API Gateway **stage** with a CloudWatch Logs destination and structured JSON log format.
+
+For example:
+
+\`\`\`json
+{
+  "requestId": "$context.requestId",
+  "route": "$context.routeKey",
+  "status": "$context.status",
+  "latency": "$context.responseLatency",
+  "integrationLatency": "$context.integrationLatency",
+  "sourceIp": "$context.identity.sourceIp"
+}
+\`\`\`
+
+This gives me a searchable request record.
+
+---
+
+## 2. Track correlation ID
+
+For CWD, this is extremely important.
+
+\`\`\`text
+API Gateway
+    ↓
+request_id / correlation_id
+    ↓
+CWD API
+    ↓
+Coordinator
+    ↓
+Delegator
+    ↓
+Worker
+    ↓
+MCP / Bedrock
+\`\`\`
+
+Example:
+
+\`\`\`text
+correlation_id = abc-123
+\`\`\`
+
+I use the same correlation ID throughout the workflow.
+
+Then I can search CloudWatch and answer:
+
+> What happened to request \`abc-123\`?
+
+---
+
+## 3. Don't log sensitive information
+
+I **do not log**:
+
+\`\`\`text
+Authorization headers
+JWT tokens
+API keys
+Passwords
+Secrets
+Full sensitive customer data
+\`\`\`
+
+For example, instead of:
+
+\`\`\`text
+Authorization: Bearer eyJhbGci...
+\`\`\`
+
+I log:
+
+\`\`\`text
+auth_result: SUCCESS
+user_id: masked/approved identifier
+\`\`\`
+
+Sensitive request/response fields should be masked or excluded.
+
+---
+
+## 4. Monitor important metrics
+
+From the logs and API Gateway metrics, I monitor:
+
+| Metric              | Why                     |
+| ------------------- | ----------------------- |
+| Request count       | Traffic                 |
+| 4xx                 | Client/request problems |
+| 5xx                 | Server problems         |
+| Latency             | Performance             |
+| Integration latency | Backend performance     |
+| 429                 | Throttling              |
+| Error rate          | Reliability             |
+
+I particularly monitor **P50/P95/P99 latency** for CWD APIs.
+
+---
+
+## 5. Create CloudWatch alarms
+
+For example:
+
+\`\`\`text
+429 rate ↑
+     ↓
+CloudWatch Alarm
+     ↓
+Investigate throttling
+\`\`\`
+
+Or:
+
+\`\`\`text
+5xx > threshold
+     ↓
+CloudWatch Alarm
+     ↓
+Check CWD / ECS / downstream services
+\`\`\`
+
+---
+
+## 6. Connect API Gateway logs with CWD logs
+
+Example:
+
+\`\`\`text
+API Gateway
+correlation_id = ABC123
+       ↓
+FastAPI
+correlation_id = ABC123
+       ↓
+Coordinator
+run_id = R456
+       ↓
+Sales Delegator
+       ↓
+Salesforce Worker
+       ↓
+MCP call
+\`\`\`
+
+Now I have end-to-end traceability:
+
+\`\`\`text
+API request
+ → CWD workflow
+ → Worker
+ → MCP
+ → Enterprise system
+\`\`\`
+
+For deeper tracing, I can use **AWS X-Ray or OpenTelemetry** alongside CloudWatch.
+
+---
+
+## Example
+
+Suppose the user calls:
+
+\`\`\`text
+POST /api/v1/customer-briefing
+\`\`\`
+
+API Gateway logs:
+
+\`\`\`json
+{
+  "requestId": "req-123",
+  "route": "POST /api/v1/customer-briefing",
+  "status": 200,
+  "latency": 4200
+}
+\`\`\`
+
+CWD logs:
+
+\`\`\`text
+correlation_id=req-123
+run_id=R789
+coordinator=SUCCESS
+sales_worker=SUCCESS
+service_worker=SUCCESS
+bedrock_latency=1800ms
+\`\`\`
+
+Now I can identify where the 4.2-second request time was spent.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I implement API Gateway logging by enabling access logs at the API stage and sending structured logs to CloudWatch Logs. I capture request ID, route, status code, latency, integration latency and source information, while making sure not to log tokens, secrets or sensitive customer data. I propagate a correlation ID from API Gateway through the CWD Coordinator, Delegators, Workers, MCP calls and Bedrock calls. I then use CloudWatch metrics, dashboards and alarms, with X-Ray or OpenTelemetry for distributed tracing, to troubleshoot latency, 4xx, 5xx and throttling issues.”**
+
+## Easy memory trick
+
+**L → C → M → A**
+
+* **L**og → CloudWatch
+* **C**orrelate → request/correlation ID
+* **M**onitor → latency/errors/429
+* **A**lert → CloudWatch alarms
+
+### Key distinction
+
+**API Gateway logs** → API boundary
+
+**CloudWatch Logs** → centralized log storage/search
+
+**CloudWatch Metrics** → monitoring and alarms
+
+**X-Ray/OpenTelemetry** → distributed tracing
+
+**Application logs** → Coordinator/Delegator/Worker details
+
+**Interview line:**
+
+> **“I don't just log API requests; I correlate them end-to-end so I can trace one CWD request from API Gateway to the final Worker and downstream tool call.”**
 `,code:``},{id:`041-how-do-you-monitor-api-gateway`,category:`API Gateway`,title:`How do you monitor API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor API Gateway?
 
 ## Short answer
-Monitor API Gateway with its CloudWatch metrics and alarms.
+
+I monitor API Gateway using **CloudWatch metrics, access logs, dashboards, alarms, and distributed tracing**.
+
+For CWD, I focus on **traffic, errors, throttling, latency, and integration health**, and correlate API Gateway requests with the downstream CWD workflow.
 
 ## Key points
-- Count, 4XX, 5XX, Latency and IntegrationLatency (the gap shows gateway overhead).
-- Cache hit metrics; detailed per-method metrics.
-- Alarms on 5XX rate, p95 latency and throttling.
 
-## CWD context
-Compare Latency with IntegrationLatency to locate delay.
+1. **Traffic** – How many requests are coming in?
+2. **Errors** – 4xx and 5xx rates
+3. **Throttling** – 429 responses
+4. **Latency** – P50/P95/P99
+5. **Integration latency** – How long CWD backend takes
+6. **Logs** – CloudWatch access/execution logs
+7. **Alarms** – Alert when thresholds are exceeded
+8. **Tracing** – Follow request into CWD
+
+### CWD monitoring flow
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+CloudWatch Metrics
+ ↓
+CloudWatch Logs
+ ↓
+CWD API
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP / Bedrock / RAG
+\`\`\`
+
+---
+
+## 1. Monitor request volume
+
+I monitor the number of API requests.
+
+\`\`\`text
+Requests
+   ↓
+CloudWatch
+   ↓
+Normal traffic?
+   ↓
+Sudden spike?
+\`\`\`
+
+For example, if normal traffic is 100 requests/minute and suddenly becomes 10,000 requests/minute, I investigate possible abuse or an upstream application problem.
+
+---
+
+## 2. Monitor 4xx errors
+
+4xx generally indicates a client-side/request problem.
+
+Examples:
+
+\`\`\`text
+400 → Bad request
+401 → Authentication failure
+403 → Authorization failure
+429 → Too many requests
+\`\`\`
+
+For CWD, a sudden increase in 401/403 could indicate authentication or authorization problems.
+
+A spike in 429 indicates throttling.
+
+---
+
+## 3. Monitor 5xx errors
+
+5xx indicates a server-side/integration problem.
+
+For example:
+
+\`\`\`text
+API Gateway
+    ↓
+CWD ECS service
+    ↓
+Service unavailable
+    ↓
+5xx
+\`\`\`
+
+I investigate:
+
+* ECS/Fargate health
+* CWD application errors
+* Network problems
+* Downstream failures
+* Configuration issues
+
+---
+
+## 4. Monitor throttling
+
+I monitor **429 responses** and API Gateway throttling metrics.
+
+\`\`\`text
+Traffic spike
+     ↓
+API Gateway rate limit
+     ↓
+429
+     ↓
+CloudWatch alarm
+\`\`\`
+
+This helps prevent excessive traffic from reaching CWD and ultimately Bedrock/MCP.
+
+---
+
+## 5. Monitor latency
+
+I monitor:
+
+\`\`\`text
+P50
+P95
+P99
+\`\`\`
+
+For example:
+
+\`\`\`text
+P50 = 500 ms
+P95 = 2 sec
+P99 = 5 sec
+\`\`\`
+
+If P99 suddenly increases, I investigate whether the bottleneck is:
+
+\`\`\`text
+API Gateway
+      ↓
+CWD API
+      ↓
+Coordinator
+      ↓
+Worker
+      ↓
+MCP / Bedrock
+\`\`\`
+
+---
+
+## 6. Monitor integration latency
+
+This is especially useful for CWD.
+
+I separate:
+
+\`\`\`text
+API Gateway latency
+        +
+Backend integration latency
+\`\`\`
+
+For example:
+
+\`\`\`text
+Total API latency       = 4 sec
+Integration latency     = 3.7 sec
+\`\`\`
+
+This tells me that most of the delay is probably in the CWD backend rather than the API Gateway layer.
+
+---
+
+## 7. Use CloudWatch dashboards
+
+I create a dashboard containing:
+
+\`\`\`text
+Request count
+4xx
+5xx
+429
+P50/P95/P99 latency
+Integration latency
+Error rate
+\`\`\`
+
+For CWD I can correlate this with:
+
+\`\`\`text
+Bedrock latency
+MCP latency
+Worker failures
+LLM token usage
+CWD workflow latency
+\`\`\`
+
+---
+
+## 8. Configure alarms
+
+Examples:
+
+\`\`\`text
+5xx > threshold
+        ↓
+CloudWatch Alarm
+\`\`\`
+
+\`\`\`text
+429 > threshold
+        ↓
+CloudWatch Alarm
+\`\`\`
+
+\`\`\`text
+P95 latency > SLA
+        ↓
+CloudWatch Alarm
+\`\`\`
+
+\`\`\`text
+Request volume abnormal
+        ↓
+CloudWatch Alarm
+\`\`\`
+
+This allows the team to investigate problems before they become widespread.
+
+---
+
+## 9. Distributed tracing
+
+For deeper troubleshooting, I use **AWS X-Ray or OpenTelemetry**.
+
+Example:
+
+\`\`\`text
+API Gateway
+   ↓ 200ms
+CWD API
+   ↓ 300ms
+Coordinator
+   ↓
+Sales Worker
+   ↓ 800ms
+MCP
+   ↓ 1.2s
+Salesforce
+\`\`\`
+
+Now I can identify which component is contributing most to latency.
+
+---
+
+## Example
+
+Suppose users report:
+
+> "Customer Briefing is slow."
+
+I check:
+
+\`\`\`text
+API Gateway
+   ↓
+P95 = 5 sec
+\`\`\`
+
+Then tracing shows:
+
+\`\`\`text
+API Gateway       = 100 ms
+CWD API           = 200 ms
+Coordinator       = 100 ms
+Salesforce MCP    = 3 sec
+Bedrock           = 1.5 sec
+\`\`\`
+
+Now I know the problem isn't simply "API Gateway is slow." The major latency is downstream.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I monitor API Gateway primarily through CloudWatch metrics, structured access logs, dashboards and alarms. I track request volume, 4xx and 5xx errors, 429 throttling, P50/P95/P99 latency and integration latency. For CWD, I propagate correlation IDs and use X-Ray or OpenTelemetry to trace the request from API Gateway through the Coordinator, Delegators, Workers, MCP and Bedrock. If latency or errors increase, this helps me determine whether the issue is at the API boundary or in a downstream dependency.”**
+
+## Easy memory trick
+
+**T → E → T → L → T → A**
+
+* **T**raffic
+* **E**rrors
+* **T**hrottling
+* **L**atency
+* **T**racing
+* **A**lerts
+
+### Key distinction
+
+| What I monitor          | Tool                       |
+| ----------------------- | -------------------------- |
+| Request count           | CloudWatch Metrics         |
+| 4xx / 5xx / 429         | CloudWatch Metrics         |
+| Request details         | CloudWatch Logs            |
+| P50/P95/P99             | CloudWatch Metrics         |
+| Alerts                  | CloudWatch Alarms          |
+| End-to-end request path | X-Ray / OpenTelemetry      |
+| CWD Worker/LLM details  | Application logs + tracing |
+
+**Interview line:**
+
+> **“CloudWatch tells me that there is a problem; distributed tracing helps me identify where the problem is.”**
 `,code:``},{id:`042-how-do-you-handle-high-request-volume`,category:`API Gateway`,title:`How do you handle high request volume?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle high request volume?
 
 ## Short answer
-Handle high volume with automatic gateway scaling plus protection of the backend.
+
+I handle high request volume using **horizontal scaling, throttling, queues, caching, concurrency control, and load balancing**.
+
+For CWD, I also control the fan-out to **Workers, MCP services, and Bedrock**, because one user request can generate multiple downstream calls.
 
 ## Key points
-- Raise account quotas in advance; cache idempotent GET responses; CloudFront in front.
-- Throttle to protect backends; buffer with SQS for async work.
-- Scale ECS behind it; load test.
 
-## CWD context
-The gateway scales; the bottlenecks are usually Bedrock quota and backend capacity.
+1. **API Gateway throttling** – protect the entry point.
+2. **Horizontal scaling** – add more CWD instances.
+3. **Load balancing** – distribute requests across instances.
+4. **SQS** – buffer asynchronous workloads.
+5. **Concurrency limits** – control simultaneous Worker/LLM calls.
+6. **Redis caching** – avoid repeated expensive operations.
+7. **Connection pooling** – efficiently reuse downstream connections.
+8. **Auto scaling** – scale ECS/Fargate based on demand.
+9. **Rate limits per tenant/user** – prevent one client from consuming capacity.
+10. **Monitor P95/P99, queue depth, errors, 429s, CPU/memory.**
+
+### CWD flow
+
+\`\`\`text
+                         High Traffic
+                              ↓
+                         API Gateway
+                              ↓
+                     Rate Limit / WAF
+                              ↓
+                    Load Balancer
+                              ↓
+                ┌─────────────┼─────────────┐
+                ↓             ↓             ↓
+             CWD-1         CWD-2         CWD-3
+                ↓             ↓             ↓
+             Coordinator / LangGraph
+                         ↓
+              Coordinator → Delegators
+                         ↓
+                       Workers
+                    ↙    ↓     ↘
+                  MCP   Redis   Bedrock
+                   ↓
+             Enterprise Systems
+\`\`\`
+
+---
+
+## 1. Scale the CWD API horizontally
+
+If one ECS/Fargate instance handles 100 requests/sec and traffic increases:
+
+\`\`\`text
+100 req/sec
+     ↓
+1 CWD instance
+\`\`\`
+
+Scale to:
+
+\`\`\`text
+500 req/sec
+     ↓
+5 CWD instances
+\`\`\`
+
+The load balancer distributes requests.
+
+This is **horizontal scaling**.
+
+---
+
+## 2. Use auto scaling
+
+I don't manually add containers every time traffic increases.
+
+I configure ECS Service Auto Scaling based on metrics such as:
+
+\`\`\`text
+CPU
+Memory
+Request count
+Target tracking
+Custom application metrics
+\`\`\`
+
+Example:
+
+\`\`\`text
+Traffic ↑
+   ↓
+Request count ↑
+   ↓
+ECS Auto Scaling
+   ↓
+More CWD containers
+\`\`\`
+
+---
+
+## 3. Throttle incoming requests
+
+Suppose CWD can safely process:
+
+\`\`\`text
+1,000 requests/sec
+\`\`\`
+
+but suddenly receives:
+
+\`\`\`text
+5,000 requests/sec
+\`\`\`
+
+I don't allow all 5,000 to overload the system.
+
+\`\`\`text
+API Gateway
+     ↓
+Rate limiting
+     ↓
+Allowed traffic → CWD
+Excess traffic  → 429 / controlled handling
+\`\`\`
+
+I can also apply limits by:
+
+* User
+* Application
+* Tenant
+* API
+* Endpoint
+
+---
+
+## 4. Use SQS for asynchronous workloads
+
+Some CWD workloads don't need an immediate response.
+
+For example:
+
+\`\`\`text
+Document processing
+Evaluation jobs
+Batch customer processing
+Report generation
+\`\`\`
+
+Instead of processing everything synchronously:
+
+\`\`\`text
+API → CWD → Worker
+\`\`\`
+
+use:
+
+\`\`\`text
+API
+ ↓
+SQS
+ ↓
+Workers
+ ↓
+Process at controlled concurrency
+\`\`\`
+
+SQS absorbs traffic spikes.
+
+### Important distinction
+
+**API Gateway throttling controls incoming traffic.**
+
+**SQS buffers work.**
+
+---
+
+## 5. Control agent fan-out
+
+This is particularly important for CWD.
+
+Suppose:
+
+\`\`\`text
+1 user request
+    ↓
+2 Delegators
+    ↓
+10 Workers
+    ↓
+10 Bedrock/MCP calls
+\`\`\`
+
+Now:
+
+\`\`\`text
+1,000 user requests
+    ↓
+10,000 downstream calls
+\`\`\`
+
+That can overwhelm Bedrock or Salesforce even if the CWD API itself is scaled.
+
+So I implement:
+
+\`\`\`text
+Coordinator
+    ↓
+Concurrency Controller
+    ↓
+Maximum concurrent Workers
+    ↓
+Queue excess work
+\`\`\`
+
+---
+
+## 6. Use Redis caching
+
+If thousands of users ask for the same relatively stable information:
+
+\`\`\`text
+Request
+   ↓
+Redis
+   ↓
+Cache hit → return quickly
+\`\`\`
+
+Instead of:
+
+\`\`\`text
+Request
+   ↓
+RAG
+   ↓
+Bedrock
+   ↓
+Response
+\`\`\`
+
+every time.
+
+This reduces:
+
+* Latency
+* LLM calls
+* Token consumption
+* Cost
+* Downstream load
+
+For dynamic Salesforce/ServiceNow data, I use appropriate TTL/freshness rules or bypass the cache.
+
+---
+
+## 7. Protect downstream systems
+
+Scaling CWD doesn't mean I can unlimitedly call:
+
+\`\`\`text
+Salesforce
+ServiceNow
+Bedrock
+MCP servers
+\`\`\`
+
+Each may have its own limits.
+
+So I use:
+
+\`\`\`text
+CWD
+ ↓
+Per-dependency concurrency/rate limit
+ ↓
+MCP
+ ↓
+Enterprise system
+\`\`\`
+
+For transient failures:
+
+\`\`\`text
+429 / timeout
+     ↓
+Exponential backoff + jitter
+     ↓
+Bounded retry
+     ↓
+Circuit breaker if persistent
+\`\`\`
+
+---
+
+## 8. Monitor the system
+
+During high traffic, I monitor:
+
+\`\`\`text
+Request rate
+CPU / Memory
+ECS task count
+Queue depth
+429 rate
+5xx rate
+P95/P99 latency
+Bedrock throttling
+MCP latency
+Worker failures
+Cache hit ratio
+\`\`\`
+
+For example:
+
+\`\`\`text
+Traffic ↑
+   ↓
+P95 latency ↑
+   ↓
+Queue depth ↑
+   ↓
+Worker concurrency limit reached
+\`\`\`
+
+That tells me where the bottleneck is.
+
+---
+
+## Example
+
+Suppose normal traffic is:
+
+\`\`\`text
+100 requests/sec
+\`\`\`
+
+Suddenly:
+
+\`\`\`text
+1,000 requests/sec
+\`\`\`
+
+My architecture handles it like this:
+
+\`\`\`text
+1,000 req/sec
+      ↓
+API Gateway
+      ↓
+Rate limiting
+      ↓
+ALB
+      ↓
+ECS Auto Scaling
+      ↓
+Multiple CWD instances
+      ↓
+Coordinator
+      ↓
+Delegators
+      ↓
+Worker concurrency limits
+      ↓
+ ┌──────────┬──────────┐
+ ↓          ↓          ↓
+Redis     SQS       Bedrock
+cache     async      controlled
+          work       concurrency
+\`\`\`
+
+This prevents the traffic spike from propagating uncontrollably to downstream systems.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For high request volume, I use multiple layers of scaling and protection. API Gateway handles throttling and rate limits, while ECS/Fargate scales the CWD API horizontally behind a load balancer. For asynchronous workloads, I use SQS to absorb traffic spikes. Inside CWD, I control Coordinator and Worker concurrency because one request can fan out into multiple MCP and Bedrock calls. I also use Redis caching where the data is cacheable, and apply per-dependency limits for Salesforce, ServiceNow and Bedrock. Finally, I monitor request rate, queue depth, 429s, 5xxs and P95/P99 latency to automatically scale and detect bottlenecks.”**
+
+## Easy memory trick
+
+**T → S → Q → C → C → M**
+
+* **T**hrottle
+* **S**cale
+* **Q**ueue
+* **C**ontrol concurrency
+* **C**ache
+* **M**onitor
+
+### Key distinction
+
+| Problem                          | Solution                               |
+| -------------------------------- | -------------------------------------- |
+| Too many incoming requests       | API Gateway throttling                 |
+| CWD instances overloaded         | Horizontal/auto scaling                |
+| Traffic spike                    | SQS                                    |
+| Too many simultaneous Workers    | Concurrency control                    |
+| Repeated requests                | Redis cache                            |
+| Salesforce/ServiceNow overloaded | Per-system rate/concurrency limits     |
+| Bedrock overloaded               | Token/request concurrency + throttling |
+| Persistent dependency failure    | Circuit breaker                        |
+
+**Interview line:**
+
+> **“I don't just scale the API; I control the entire request fan-out so high traffic doesn't overload downstream AI and enterprise systems.”**
 `,code:``},{id:`043-how-would-you-integrate-api-gateway-with-lambda`,category:`API Gateway`,title:`How would you integrate API Gateway with Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate API Gateway with Lambda?
 
 ## Short answer
-Integrate with Lambda through proxy integration and resource permissions.
+
+I would use **API Gateway as the API front door** and **Lambda as the serverless backend**.
+
+\`\`\`text id="c8s5kd"
+Client
+   ↓
+API Gateway
+   ↓
+Authentication / Authorization
+   ↓
+Request Validation
+   ↓
+Lambda
+   ↓
+CWD logic / lightweight Worker
+   ↓
+Response
+\`\`\`
+
+For CWD, I would use Lambda mainly for **short, event-driven operations**, not as the primary runtime for a long-running Coordinator workflow.
 
 ## Key points
-- Lambda proxy passes the request event and returns the response.
-- Grant invoke permission to API Gateway; use aliases for traffic shifting.
-- Synchronous payload limit and the 29-second timeout apply.
 
-## CWD context
-Use it for light endpoints such as auth hooks and status checks.
+1. API Gateway exposes the REST/HTTP endpoint.
+2. API Gateway authenticates and authorizes requests.
+3. API Gateway validates the request.
+4. API Gateway invokes Lambda.
+5. Lambda executes the business logic.
+6. Lambda returns the response.
+7. CloudWatch monitors API Gateway and Lambda.
+8. For long-running CWD workflows, use asynchronous processing or ECS/Fargate instead.
+
+---
+
+## 1. Create the API endpoint
+
+For example:
+
+\`\`\`text id="vsyh8e"
+POST /api/v1/customer-briefing
+\`\`\`
+
+Client sends:
+
+\`\`\`json id="2ov8fc"
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+API Gateway receives the request.
+
+---
+
+## 2. API Gateway validates and authenticates
+
+\`\`\`text id="7n7t1x"
+Client
+  ↓
+API Gateway
+  ├── JWT validation
+  ├── Authorization
+  ├── Throttling
+  └── Request validation
+          ↓
+       Lambda
+\`\`\`
+
+If authentication fails:
+
+\`\`\`text
+401 Unauthorized
+\`\`\`
+
+If authorization fails:
+
+\`\`\`text
+403 Forbidden
+\`\`\`
+
+If the request is malformed:
+
+\`\`\`text
+400 Bad Request
+\`\`\`
+
+Lambda isn't invoked in these cases.
+
+---
+
+## 3. API Gateway invokes Lambda
+
+API Gateway passes the request to Lambda.
+
+Conceptually:
+
+\`\`\`python
+def lambda_handler(event, context):
+    body = event["body"]
+
+    customer_id = body["customer_id"]
+
+    # Process request
+    result = process_customer_briefing(customer_id)
+
+    return {
+        "statusCode": 200,
+        "body": result
+    }
+\`\`\`
+
+The exact event structure depends on whether you're using an HTTP API or REST API integration.
+
+---
+
+## 4. Lambda can call CWD components
+
+For a lightweight CWD operation:
+
+\`\`\`text id="d0i3ts"
+API Gateway
+      ↓
+Lambda
+      ↓
+Worker
+      ↓
+MCP
+      ↓
+Salesforce
+\`\`\`
+
+Or:
+
+\`\`\`text id="21i7t9"
+API Gateway
+      ↓
+Lambda
+      ↓
+Bedrock
+      ↓
+Response
+\`\`\`
+
+For example, a small classification or preprocessing task could run in Lambda.
+
+---
+
+## 5. Asynchronous Lambda processing
+
+For longer processing:
+
+\`\`\`text id="1j70ri"
+Client
+  ↓
+API Gateway
+  ↓
+Lambda
+  ↓
+SQS
+  ↓
+Worker Lambda
+  ↓
+Bedrock / MCP / RAG
+\`\`\`
+
+The first Lambda can immediately return:
+
+\`\`\`json id="08y7xq"
+{
+  "job_id": "JOB123",
+  "status": "QUEUED"
+}
+\`\`\`
+
+This avoids keeping the API request open.
+
+---
+
+## 6. Monitor the integration
+
+I monitor both sides:
+
+\`\`\`text id="q4rr0c"
+API Gateway
+ ├── Request count
+ ├── 4xx
+ ├── 5xx
+ ├── 429
+ └── Latency
+
+Lambda
+ ├── Invocations
+ ├── Errors
+ ├── Duration
+ ├── Throttles
+ └── Concurrent executions
+\`\`\`
+
+Logs go to **CloudWatch Logs**.
+
+I also propagate a **correlation ID**:
+
+\`\`\`text id="0k9m1m"
+API Gateway
+ correlation_id=ABC123
+       ↓
+Lambda
+ correlation_id=ABC123
+       ↓
+Worker
+ correlation_id=ABC123
+\`\`\`
+
+---
+
+## 7. Important CWD design decision
+
+I would **not automatically put the entire CWD Coordinator/LangGraph workflow inside Lambda**.
+
+If CWD requires:
+
+* Long-running workflows
+* Complex multi-agent orchestration
+* Large dependencies
+* Persistent service processes
+* Advanced concurrency control
+* Long-lived connections
+
+then I would prefer:
+
+\`\`\`text id="xxcx75"
+API Gateway
+      ↓
+ECS/Fargate
+      ↓
+CWD API
+      ↓
+Coordinator
+      ↓
+Delegators
+      ↓
+Workers
+\`\`\`
+
+Lambda is better suited for **short, stateless, event-driven operations**.
+
+---
+
+## Example
+
+Suppose I need a lightweight endpoint:
+
+\`\`\`text id="k3gqj8"
+POST /api/v1/classify-intent
+\`\`\`
+
+Architecture:
+
+\`\`\`text id="c5drb8"
+User
+ ↓
+API Gateway
+ ↓
+JWT validation
+ ↓
+Request validation
+ ↓
+Lambda
+ ↓
+Bedrock
+ ↓
+Intent = Customer Briefing
+ ↓
+Response
+\`\`\`
+
+But for the full CWD workflow:
+
+\`\`\`text id="x8c1sy"
+User
+ ↓
+API Gateway
+ ↓
+ECS/Fargate
+ ↓
+Coordinator
+ ↓
+Sales Delegator ──→ Sales Workers
+ ↓
+IT Delegator ─────→ Service Workers
+ ↓
+MCP / RAG / Bedrock
+ ↓
+Final Response
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I integrate API Gateway with Lambda by using API Gateway as the secure API boundary and Lambda as the serverless compute layer. API Gateway handles authentication, authorization, throttling and request validation, then invokes Lambda with the request. Lambda performs a short-lived business operation and returns the response. For longer-running workloads, I use Lambda to place the job onto SQS and process it asynchronously. In CWD, I would use Lambda for lightweight event-driven functions, while the main long-running Coordinator and multi-agent workflow would typically run on ECS/Fargate.”**
+
+## Easy memory trick
+
+**A → V → L → P → R → M**
+
+* **A**PI Gateway
+* **V**alidate
+* **L**ambda
+* **P**rocess
+* **R**esponse
+* **M**onitor
+
+### Key distinction
+
+**API Gateway = API boundary**
+
+**Lambda = serverless compute**
+
+**ECS/Fargate = long-running CWD service**
+
+**SQS = asynchronous buffering**
+
+**Bedrock = foundation models**
+
+**LangGraph = agent workflow orchestration**
 `,code:``},{id:`044-how-would-you-integrate-api-gateway-with-ecs`,category:`API Gateway`,title:`How would you integrate API Gateway with ECS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you integrate API Gateway with ECS?
 
 ## Short answer
-Integrate with ECS privately through a VPC Link to an internal load balancer.
+
+I would use **API Gateway as the secure API entry point** and route requests to an **ECS/Fargate service** running the CWD FastAPI application.
+
+\`\`\`text
+Client
+   ↓
+API Gateway
+   ↓
+Authentication / Authorization
+   ↓
+Throttling / Validation
+   ↓
+Load Balancer
+   ↓
+ECS / Fargate
+   ↓
+CWD FastAPI
+   ↓
+Coordinator
+   ↓
+Delegator
+   ↓
+Workers
+\`\`\`
 
 ## Key points
-- VPC Link connects API Gateway to a private ALB or NLB (or Cloud Map for HTTP APIs).
-- ECS tasks stay in private subnets with security groups allowing only the load balancer.
-- Health checks and TLS between layers.
 
-## CWD context
-The backend has no public IP.
+1. **API Gateway** → public API boundary
+2. **ALB** → distributes traffic
+3. **ECS/Fargate** → runs CWD containers
+4. **Auto Scaling** → handles traffic growth
+5. **Security Groups** → control network access
+6. **CloudWatch** → monitoring and logs
+7. **Private ECS tasks** → keep backend services away from direct internet access
+
+---
+
+## 1. Client calls API Gateway
+
+For example:
+
+\`\`\`text
+POST /api/v1/customer-briefing
+\`\`\`
+
+Request:
+
+\`\`\`json
+{
+  "customer_id": "C12345"
+}
+\`\`\`
+
+API Gateway handles:
+
+* Authentication
+* Authorization
+* Request validation
+* Throttling
+* WAF integration where applicable
+* Logging
+
+---
+
+## 2. API Gateway routes to the backend
+
+A common architecture is:
+
+\`\`\`text
+Client
+  ↓
+API Gateway
+  ↓
+VPC Link
+  ↓
+Private Load Balancer
+  ↓
+ECS/Fargate
+\`\`\`
+
+For an API Gateway integration with an ALB/NLB in a VPC, **VPC Link** provides the private connectivity.
+
+---
+
+## 3. ALB distributes requests
+
+Suppose we have:
+
+\`\`\`text
+ECS/Fargate
+ ├── Task 1
+ ├── Task 2
+ └── Task 3
+\`\`\`
+
+The load balancer distributes requests:
+
+\`\`\`text
+             ALB
+          ↙   ↓   ↘
+       Task1 Task2 Task3
+\`\`\`
+
+If Task 1 becomes unhealthy, the load balancer stops sending traffic to it.
+
+---
+
+## 4. ECS runs the CWD application
+
+Each ECS task can run a container containing:
+
+\`\`\`text
+FastAPI
+LangGraph
+CWD Coordinator
+Delegators
+Workers
+\`\`\`
+
+For example:
+
+\`\`\`text
+ECS Task
+ └── CWD Container
+      ├── FastAPI
+      ├── Coordinator
+      ├── Delegators
+      └── Workers
+\`\`\`
+
+The application then calls:
+
+\`\`\`text
+Bedrock
+MCP Servers
+OpenSearch
+DynamoDB
+Redis
+S3
+Salesforce
+ServiceNow
+\`\`\`
+
+as required.
+
+---
+
+## 5. Keep ECS tasks private
+
+I generally don't expose the ECS task directly to the internet.
+
+Instead:
+
+\`\`\`text
+Internet
+   ↓
+API Gateway
+   ↓
+VPC Link
+   ↓
+Private ALB
+   ↓
+Private ECS Tasks
+\`\`\`
+
+Security groups can restrict traffic so that only the expected load-balancer path can reach the ECS service.
+
+---
+
+## 6. Auto scaling
+
+Suppose traffic increases:
+
+\`\`\`text
+100 req/sec
+     ↓
+ECS: 2 tasks
+\`\`\`
+
+Traffic increases:
+
+\`\`\`text
+500 req/sec
+     ↓
+ECS Auto Scaling
+     ↓
+5 tasks
+\`\`\`
+
+Scaling can use metrics such as:
+
+* CPU
+* Memory
+* Request count
+* Custom application metrics
+
+---
+
+## 7. Monitor end-to-end
+
+I monitor:
+
+\`\`\`text
+API Gateway
+ ├── Request count
+ ├── 4xx / 5xx
+ ├── 429
+ └── P95/P99 latency
+
+ALB
+ ├── Target health
+ ├── Request count
+ └── Target response time
+
+ECS
+ ├── CPU
+ ├── Memory
+ ├── Task count
+ └── Container errors
+\`\`\`
+
+And inside CWD:
+
+\`\`\`text
+Coordinator
+Delegator
+Worker
+MCP
+Bedrock
+\`\`\`
+
+I propagate a **correlation ID** across these layers for troubleshooting.
+
+---
+
+## Example
+
+A Customer Briefing request:
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+JWT validation
+ ↓
+Request validation
+ ↓
+VPC Link
+ ↓
+Private ALB
+ ↓
+ECS/Fargate
+ ↓
+FastAPI
+ ↓
+Coordinator
+ ↓
+ ┌───────────────┐
+ ↓               ↓
+Sales           IT
+Delegator       Delegator
+ ↓               ↓
+Workers         Workers
+ ↓               ↓
+Salesforce      ServiceNow
+ ↓
+Bedrock / RAG
+ ↓
+Final Response
+ ↓
+API Gateway
+ ↓
+User
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“For CWD, I would use API Gateway as the secure API boundary and ECS/Fargate as the containerized application layer. API Gateway handles authentication, authorization, throttling and request validation. I can use VPC Link to privately connect API Gateway to a load balancer, which distributes requests across healthy ECS tasks. The ECS tasks run the FastAPI and CWD Coordinator, Delegators and Workers. ECS Auto Scaling handles increased traffic, while CloudWatch monitors API Gateway, ALB and ECS metrics. I also propagate correlation IDs so I can trace a request end-to-end.”**
+
+## Easy memory trick
+
+**A → V → L → E → C**
+
+* **A**PI Gateway
+* **V**PC Link
+* **L**oad Balancer
+* **E**CS/Fargate
+* **C**WD
+
+### Key distinction
+
+| Component    | Responsibility                       |
+| ------------ | ------------------------------------ |
+| API Gateway  | API security, throttling, validation |
+| VPC Link     | Private connectivity                 |
+| ALB          | Load balancing                       |
+| ECS/Fargate  | Run CWD containers                   |
+| Auto Scaling | Add/remove ECS tasks                 |
+| FastAPI      | Application API                      |
+| Coordinator  | Agent orchestration                  |
+| Delegator    | Domain-level orchestration           |
+| Worker       | Specific capability                  |
+
+**Interview line:**
+
+> **“API Gateway protects and exposes the API; ALB distributes the traffic; ECS runs the CWD application.”**
 `,code:``},{id:`045-how-do-you-implement-waf-with-api-gateway`,category:`API Gateway`,title:`How do you implement WAF with API Gateway?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you implement WAF with API Gateway?
 
 ## Short answer
-Attach AWS WAF to REST API stages, or place WAF on CloudFront or an ALB in front of HTTP APIs.
+
+I use **AWS WAF** in front of the API Gateway to inspect incoming HTTP requests and block common web attacks before they reach the CWD application.
+
+\`\`\`text
+Client
+   ↓
+AWS WAF
+   ↓
+API Gateway
+   ↓
+Authentication / Authorization
+   ↓
+CWD API
+   ↓
+Coordinator
+   ↓
+Delegator
+   ↓
+Workers
+\`\`\`
+
+For an AWS architecture, I would use **AWS WAF Web ACL rules** attached to the supported API Gateway resource, then monitor WAF actions through **CloudWatch** and WAF logging.
 
 ## Key points
-- Managed rule groups, known-bad-input and IP-reputation rules, rate-based rules, bot control.
-- WAF logs to S3, CloudWatch or Firehose.
-- Start in count mode, tune, then block.
 
-## CWD context
-Tune rules against real traffic to avoid blocking legitimate long prompts.
+1. **Create a WAF Web ACL**
+2. **Associate it with API Gateway**
+3. Use **AWS Managed Rules**
+4. Add custom rules for CWD
+5. Apply **rate-based rules**
+6. Use IP/geo rules when appropriate
+7. Monitor blocked/allowed requests
+8. Tune rules to avoid false positives
+
+---
+
+## 1. Create a WAF Web ACL
+
+A Web ACL contains the rules that decide:
+
+\`\`\`text
+ALLOW
+BLOCK
+COUNT
+\`\`\`
+
+Example:
+
+\`\`\`text
+AWS WAF Web ACL
+       ↓
+ ┌─────┼───────────┐
+ ↓     ↓           ↓
+SQLi  XSS      Rate Limit
+ ↓     ↓           ↓
+BLOCK BLOCK       BLOCK
+\`\`\`
+
+---
+
+## 2. Associate WAF with API Gateway
+
+Conceptually:
+
+\`\`\`text id="j6a1uo"
+Internet
+   ↓
+AWS WAF
+   ↓
+API Gateway
+   ↓
+CWD
+\`\`\`
+
+The WAF evaluates the HTTP request before it reaches the API integration.
+
+---
+
+## 3. Use AWS Managed Rules
+
+I would start with AWS-managed rule groups rather than building every security rule myself.
+
+They can help detect common patterns such as:
+
+* SQL injection
+* Cross-site scripting
+* Malicious HTTP requests
+* Known bad inputs
+* Common web exploits
+
+This gives a baseline protection layer.
+
+---
+
+## 4. Add rate-based rules
+
+This is particularly useful for API abuse.
+
+For example:
+
+\`\`\`text id="q18y9u"
+Same source/IP
+      ↓
+Too many requests
+      ↓
+AWS WAF rate-based rule
+      ↓
+BLOCK
+\`\`\`
+
+But I wouldn't rely only on IP because legitimate users can share IPs through NAT, proxies, or corporate networks.
+
+For CWD, I would combine WAF controls with **API Gateway/user/tenant-level throttling**.
+
+---
+
+## 5. Add custom CWD rules
+
+Suppose CWD exposes:
+
+\`\`\`text
+/api/v1/customer-briefing
+/api/v1/search
+/api/v1/documents
+\`\`\`
+
+I can create rules based on:
+
+* URI path
+* HTTP method
+* IP reputation
+* Request characteristics
+* Rate
+* Header patterns
+* Request size
+
+For example:
+
+\`\`\`text
+POST /api/v1/customer-briefing
+        ↓
+WAF inspection
+        ↓
+Allowed → API Gateway
+Blocked → Request rejected
+\`\`\`
+
+---
+
+## 6. Don't use WAF as authorization
+
+This is an important interview distinction.
+
+WAF answers:
+
+> **“Does this HTTP request look malicious or abusive?”**
+
+Authorization answers:
+
+> **“Is this user allowed to access customer C12345?”**
+
+So:
+
+\`\`\`text id="n0f7pq"
+WAF
+ ↓
+API Gateway authentication
+ ↓
+CWD authorization
+ ↓
+Worker
+ ↓
+MCP authorization
+ ↓
+Salesforce / ServiceNow
+\`\`\`
+
+WAF does **not** replace IAM, JWT authorization, RBAC, or enterprise entitlements.
+
+---
+
+## 7. Monitor WAF
+
+I monitor:
+
+\`\`\`text id="v8d7v3"
+Allowed requests
+Blocked requests
+Counted requests
+Rate-limit matches
+Rule matches
+Top source IPs
+\`\`\`
+
+I can send WAF logs to logging/analytics destinations and create CloudWatch alarms for unusual spikes.
+
+For example:
+
+\`\`\`text id="u2v5n1"
+Normal:
+100 blocked requests/hour
+
+Suddenly:
+50,000 blocked requests/hour
+          ↓
+CloudWatch alarm
+          ↓
+Security investigation
+\`\`\`
+
+---
+
+## 8. Start with COUNT before BLOCK
+
+For a new custom rule, I may initially use:
+
+\`\`\`text id="50kwr9"
+COUNT
+  ↓
+Observe matches
+  ↓
+Check false positives
+  ↓
+Tune rule
+  ↓
+BLOCK
+\`\`\`
+
+This is useful because an overly aggressive rule could block legitimate enterprise users.
+
+---
+
+## Example
+
+Suppose an attacker sends a large number of suspicious requests:
+
+\`\`\`text id="fl48i9"
+Attacker
+   ↓
+AWS WAF
+   ↓
+Rate-based rule
+   ↓
+BLOCK
+   X
+API Gateway
+\`\`\`
+
+Normal request:
+
+\`\`\`text id="c9xj2m"
+Employee
+   ↓
+AWS WAF
+   ↓
+ALLOW
+   ↓
+API Gateway
+   ↓
+JWT validation
+   ↓
+Authorization
+   ↓
+CWD
+\`\`\`
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I implement AWS WAF by creating a Web ACL and associating it with the API Gateway API. I start with AWS Managed Rules for common web attacks and add custom rules and rate-based rules for CWD-specific abuse patterns. WAF blocks malicious or excessive HTTP traffic before it reaches API Gateway and the CWD backend. I monitor allowed and blocked requests through WAF and CloudWatch, and I tune rules to avoid false positives. WAF is an additional security layer; it doesn't replace authentication, authorization, API Gateway throttling, or downstream entitlement checks.”**
+
+## Easy memory trick
+
+**A → R → C → M**
+
+* **A**ssociate WAF
+* **R**ules
+* **C**ontrol abuse
+* **M**onitor
+
+### Key distinction
+
+| Layer                     | Purpose                            |
+| ------------------------- | ---------------------------------- |
+| **AWS WAF**               | Detect/block malicious web traffic |
+| **API Gateway**           | API boundary + throttling          |
+| **Authentication**        | Identify caller                    |
+| **Authorization**         | Determine permissions              |
+| **CWD**                   | Agent orchestration                |
+| **MCP/Enterprise system** | Downstream tool/data authorization |
+
+**Interview line:**
+
+> **“WAF protects the HTTP boundary; API Gateway controls API access; CWD authorization controls business and data access.”**
 `,code:``}];function bm(){return(0,M.jsx)($,{data:ym,title:`API Gateway Cookbook`,subtitle:`Authentication, throttling, validation, WAF and monitoring`,icon:`🚪`,patternLabel:`Questions`})}var xm=[{id:`046-why-use-lambda-in-cwd`,category:`Lambda`,title:`Why use Lambda in CWD?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Why use Lambda in CWD?
 
 ## Short answer
-Lambda gives CWD serverless, event-driven compute for short, stateless tasks.
+
+I use **AWS Lambda for short-running, event-driven, and lightweight CWD tasks** where I don't need a continuously running server.
+
+I would **not use Lambda as the main runtime for the entire CWD multi-agent workflow** if the Coordinator/LangGraph execution is long-running or requires more control.
+
+### CWD flow
+
+\`\`\`text
+API Gateway
+     ↓
+CWD API
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Worker
+     ↓
+Lambda
+     ↓
+MCP / Enterprise API
+\`\`\`
+
+Or for asynchronous processing:
+
+\`\`\`text
+S3 / EventBridge
+       ↓
+     Lambda
+       ↓
+SQS
+       ↓
+CWD Worker
+\`\`\`
 
 ## Key points
-- Scales automatically from zero and charges per use.
-- Good for authorisers, S3 and SQS event handlers, schedules and small adapters.
-- Minimal operations; native integration with EventBridge, SQS, S3 and Step Functions.
 
-## CWD context
-Use it as glue around the agent runtime, not as the runtime.
+### 1. Short-running tasks
+
+Lambda is useful for lightweight operations such as:
+
+* Request preprocessing
+* Data transformation
+* Document preprocessing
+* Simple classification
+* Validation
+* Triggering workflows
+* Small MCP/enterprise API adapters
+
+Example:
+
+\`\`\`text
+S3 document uploaded
+       ↓
+Lambda
+       ↓
+Extract metadata
+       ↓
+SQS
+       ↓
+RAG ingestion Worker
+\`\`\`
+
+---
+
+### 2. Event-driven processing
+
+Lambda works well when something happens and I need to trigger processing.
+
+For example:
+
+\`\`\`text
+Salesforce Event
+      ↓
+EventBridge
+      ↓
+Lambda
+      ↓
+Update CWD cache/state
+\`\`\`
+
+Or:
+
+\`\`\`text
+S3 Upload
+   ↓
+Lambda
+   ↓
+Start document ingestion
+\`\`\`
+
+---
+
+### 3. No server management
+
+With Lambda, I don't need to maintain EC2 servers or continuously running containers for these small functions.
+
+AWS handles:
+
+* Provisioning
+* Scaling
+* Infrastructure management
+
+I pay based on execution rather than maintaining a permanently running server.
+
+---
+
+### 4. Automatic scaling
+
+If an event suddenly generates many requests:
+
+\`\`\`text
+100 events
+   ↓
+Lambda executions
+\`\`\`
+
+Lambda can create concurrent executions automatically, subject to account/function concurrency limits.
+
+For CWD, I still configure **reserved/concurrency controls** when downstream systems such as Salesforce, ServiceNow, or Bedrock cannot handle unlimited parallel calls.
+
+---
+
+### 5. Useful with SQS
+
+Lambda can consume messages from SQS:
+
+\`\`\`text
+CWD
+ ↓
+SQS
+ ↓
+Lambda
+ ↓
+Process message
+\`\`\`
+
+This gives me:
+
+* Buffering
+* Retry
+* Dead-letter handling
+* Controlled asynchronous processing
+
+---
+
+## Example in CWD
+
+Suppose a customer uploads a document.
+
+\`\`\`text
+User
+ ↓
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+Lambda
+ ↓
+Extract / preprocess
+ ↓
+OpenSearch
+ ↓
+RAG
+\`\`\`
+
+Lambda performs the small preprocessing task, while the heavier RAG/agent workflow can run in ECS/Fargate.
+
+---
+
+## When I would NOT use Lambda
+
+I wouldn't force Lambda to run the entire CWD architecture when I need:
+
+* Long-running agent workflows
+* Complex LangGraph execution
+* Large dependencies
+* High CPU/memory requirements
+* Persistent processes
+* More control over runtime/networking
+* Long-lived connections
+
+For those cases:
+
+\`\`\`text
+API Gateway
+     ↓
+ECS/Fargate
+     ↓
+CWD FastAPI
+     ↓
+Coordinator
+     ↓
+Delegators
+     ↓
+Workers
+\`\`\`
+
+is more appropriate.
+
+---
+
+## Lambda vs ECS/Fargate in CWD
+
+| Lambda                         | ECS/Fargate                   |
+| ------------------------------ | ----------------------------- |
+| Short-lived functions          | Long-running services         |
+| Event-driven                   | Service/API oriented          |
+| Serverless                     | Containerized                 |
+| Automatic execution scaling    | Service/task scaling          |
+| Good for lightweight tasks     | Good for CWD API              |
+| Good with SQS/EventBridge      | Good for LangGraph/FastAPI    |
+| Limited runtime/resource model | More runtime/resource control |
+
+### Easy memory trick
+
+**Lambda = Event + Short + Serverless**
+
+**Fargate = Container + Long-running + Control**
+
+## 🎯 Strong interview answer
+
+> **“In CWD, I use Lambda for lightweight, short-running and event-driven tasks rather than running the entire multi-agent platform on Lambda. For example, Lambda can preprocess documents, respond to S3 or EventBridge events, process SQS messages, or perform lightweight enterprise integration tasks. The main CWD FastAPI and LangGraph Coordinator would typically run on ECS/Fargate because they need a continuously running service and more runtime control. So Lambda complements CWD rather than replacing the main CWD runtime.”**
+
+### Key distinction
+
+> **“Lambda handles short, event-driven compute; ECS/Fargate runs the main long-running CWD service.”**
 `,code:``},{id:`047-which-cwd-components-would-you-deploy-as-lambda`,category:`Lambda`,title:`Which CWD components would you deploy as Lambda?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# Which CWD components would you deploy as Lambda?
 
 ## Short answer
-Deploy short, event-triggered components as Lambda functions.
 
-## Key points
-- API Gateway authoriser and small status or health endpoints.
-- S3-triggered ingestion steps and EventBridge-scheduled maintenance such as reconciliation and cache warm-up.
-- SQS consumers for short Workers, webhook receivers, DLQ redrive and replay tools.
-- Task steps inside Step Functions workflows.
+I would **not deploy the entire CWD Coordinator → Delegator → Worker architecture as Lambda**.
 
-## CWD context
-The Coordinator's agent loop does not run on Lambda.
-`,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Lambda vs ECS/Fargate?
+I would use Lambda for **small, stateless, event-driven Workers or supporting functions**.
+
+\`\`\`text
+                    CWD
+                     │
+          ┌──────────┴──────────┐
+          ↓                     ↓
+   Main CWD Service        Supporting Functions
+   ECS/Fargate                  Lambda
+          │                     │
+    Coordinator             Preprocessing
+          │                 Validation
+     Delegators             Event handlers
+          │                 SQS consumers
+       Workers              Lightweight adapters
+\`\`\`
+
+## Components I would deploy as Lambda
+
+### 1. Document preprocessing Worker
+
+For example:
+
+\`\`\`text
+S3
+ ↓
+Lambda
+ ↓
+Extract metadata / preprocess
+ ↓
+SQS
+ ↓
+RAG ingestion
+\`\`\`
+
+Good Lambda use case because the task is relatively short and event-driven.
+
+---
+
+### 2. Event-driven Workers
+
+For example, when Salesforce or another system produces an event:
+
+\`\`\`text
+Salesforce Event
+      ↓
+EventBridge
+      ↓
+Lambda
+      ↓
+Update CWD state/cache
+\`\`\`
+
+Lambda is useful because the function only runs when an event occurs.
+
+---
+
+### 3. Lightweight MCP adapters
+
+If an MCP-related operation is simple and short-running:
+
+\`\`\`text
+Worker
+   ↓
+MCP Server
+   ↓
+Lambda
+   ↓
+Enterprise API
+\`\`\`
+
+For example, a lightweight read-only API adapter.
+
+I would **not** use Lambda for an MCP operation that requires long-running processing or persistent connections.
+
+---
+
+### 4. SQS message processors
+
+For asynchronous CWD work:
+
+\`\`\`text
+CWD
+ ↓
+SQS
+ ↓
+Lambda
+ ↓
+Process message
+\`\`\`
+
+Examples:
+
+* Document processing
+* Notifications
+* Metadata updates
+* Small background jobs
+* Audit/event processing
+
+---
+
+### 5. Lightweight validation/transformation
+
+For example:
+
+\`\`\`text
+API/Event
+   ↓
+Lambda
+   ↓
+Validate / transform
+   ↓
+Downstream service
+\`\`\`
+
+Useful when the processing is small and stateless.
+
+---
+
+### 6. Scheduled jobs
+
+Lambda can also handle scheduled CWD tasks:
+
+\`\`\`text
+EventBridge Scheduler
+       ↓
+Lambda
+       ↓
+Run evaluation/reconciliation
+\`\`\`
+
+For example:
+
+* Periodic cache cleanup
+* Metadata reconciliation
+* Lightweight health checks
+* Scheduled evaluation jobs
+
+---
+
+# What I would NOT deploy as Lambda
+
+### ❌ Coordinator
+
+I would normally keep:
+
+\`\`\`text
+Coordinator
+\`\`\`
+
+inside the main CWD service on **ECS/Fargate**.
+
+Reason:
+
+* Complex LangGraph workflow
+* Multiple steps
+* State/checkpointing
+* Long-running execution
+* More runtime control
+
+---
+
+### ❌ Delegator
+
+I would also normally keep:
+
+\`\`\`text
+Delegator
+\`\`\`
+
+with the main CWD application.
+
+The Delegator performs orchestration such as:
+
+\`\`\`text
+Discover Workers
+      ↓
+Select Workers
+      ↓
+Parallel execution
+      ↓
+Aggregate results
+\`\`\`
+
+That is better suited to the continuously running CWD service.
+
+---
+
+### ❌ Complex Workers
+
+A Worker that performs:
+
+\`\`\`text
+Worker
+ ↓
+MCP
+ ↓
+Salesforce
+ ↓
+RAG
+ ↓
+Bedrock
+ ↓
+Multiple retries
+ ↓
+Aggregation
+\`\`\`
+
+may be better deployed as a containerized service if it is long-running or resource-intensive.
+
+---
+
+### ❌ Entire LangGraph runtime
+
+I would not say:
+
+> "I deployed LangGraph completely in Lambda."
+
+unless the actual workflow fits Lambda's execution/runtime constraints.
+
+For an enterprise CWD platform, I'd typically use:
+
+\`\`\`text
+API Gateway
+      ↓
+ECS/Fargate
+      ↓
+FastAPI
+      ↓
+Coordinator
+      ↓
+Delegators
+      ↓
+Workers
+\`\`\`
+
+and use Lambda around it for supporting event-driven tasks.
+
+---
+
+# Example CWD architecture
+
+\`\`\`text
+                         API Gateway
+                              │
+                              ↓
+                        ECS / Fargate
+                              │
+                         CWD FastAPI
+                              │
+                        Coordinator
+                              │
+                    ┌─────────┴─────────┐
+                    ↓                   ↓
+              Sales Delegator      IT Delegator
+                    ↓                   ↓
+                Workers             Workers
+                    │                   │
+                    └─────────┬─────────┘
+                              ↓
+                         MCP / RAG
+                              ↓
+                    Bedrock / Enterprise APIs
+
+
+Supporting Lambda functions
+────────────────────────────────────────
+
+S3 ──→ Lambda ──→ SQS ──→ RAG ingestion
+
+EventBridge ──→ Lambda ──→ CWD state/cache
+
+SQS ──→ Lambda ──→ Lightweight background processing
+
+Scheduler ──→ Lambda ──→ Reconciliation/evaluation
+\`\`\`
+
+## 🎯 Strong interview answer
+
+> **“I would use Lambda selectively in CWD for short, stateless and event-driven workloads. Examples include document preprocessing triggered by S3, EventBridge handlers, SQS-based background processing, lightweight MCP or enterprise API adapters, validation and scheduled reconciliation jobs. I would keep the main Coordinator, Delegators and complex multi-step Workers on ECS/Fargate because CWD uses LangGraph and can require long-running workflows, state management and more runtime control. So Lambda complements the CWD platform rather than replacing the main agent runtime.”**
+
+## Easy memory trick
+
+**Lambda = Small + Short + Event-driven**
+
+**Fargate = Main CWD + Long-running + Complex**
+
+### Most important interview point
+
+Don't say **"every Worker is Lambda."**
+
+Say:
+
+> **“I choose Lambda based on the Worker characteristics. Short, stateless, event-driven Workers can use Lambda; complex or long-running Workers use ECS/Fargate.”**
+`,code:``},{id:`048-lambda-vs-ecs-fargate`,category:`Lambda`,title:`Lambda vs ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Lambda vs ECS/Fargate
 
 ## Short answer
-Lambda is best for short, bursty, event-driven work; ECS Fargate is best for long-running or steady services.
+
+**Lambda = short-running, event-driven functions.**
+**ECS/Fargate = long-running containerized applications.**
+
+For CWD, I would typically run the **main FastAPI + LangGraph Coordinator/Delegators** on ECS/Fargate and use Lambda for lightweight supporting tasks.
 
 ## Key points
-- Lambda: 15-minute limit, scale to zero, cold starts, pay per invocation.
-- Fargate: no duration limit, persistent connections, no cold start on running tasks, pay per running task.
-- Cost crossover: Lambda is cheaper when idle or spiky; Fargate is often cheaper at sustained load.
 
-## CWD context
-Choose per component, and it is normal to use both.
-`,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Lambda cold start?
+|                       | **Lambda**                  | **ECS/Fargate**                      |
+| --------------------- | --------------------------- | ------------------------------------ |
+| Compute model         | Function                    | Container                            |
+| Runtime               | Short-lived                 | Long-running                         |
+| Infrastructure        | Fully serverless            | Managed containers                   |
+| Scaling               | Automatic per invocation    | Task/service scaling                 |
+| Best for              | Events, small jobs          | APIs, services, complex apps         |
+| Runtime control       | Limited                     | More control                         |
+| Dependencies          | Better for smaller packages | Better for large/custom environments |
+| Persistent process    | ❌ No                        | ✅ Yes                                |
+| Long-running workload | ❌ Not ideal                 | ✅                                    |
+| CWD main application  | Usually ❌                   | Usually ✅                            |
+| Cost model            | Per invocation/runtime      | Per running task/resources           |
+
+## CWD flow
+
+### ECS/Fargate
+
+\`\`\`text
+API Gateway
+     ↓
+ECS/Fargate
+     ↓
+FastAPI
+     ↓
+Coordinator
+     ↓
+Delegator
+     ↓
+Workers
+     ↓
+MCP / RAG / Bedrock
+\`\`\`
+
+### Lambda
+
+\`\`\`text
+S3 / EventBridge / SQS
+          ↓
+       Lambda
+          ↓
+   Small processing
+          ↓
+ OpenSearch / DynamoDB / SQS
+\`\`\`
+
+## 1. Why ECS/Fargate for the main CWD?
+
+CWD has:
+
+* FastAPI
+* LangGraph
+* Coordinator
+* Delegators
+* Multiple Workers
+* State/checkpoint handling
+* MCP communication
+* RAG
+* Long-running or multi-step workflows
+
+So I want a **continuously running containerized service**.
+
+\`\`\`text
+ECS/Fargate
+    ↓
+CWD API
+    ↓
+Coordinator
+    ↓
+Delegators
+    ↓
+Workers
+\`\`\`
+
+Fargate also gives me more control over:
+
+* CPU/memory
+* Container dependencies
+* Networking
+* Environment
+* Scaling
+* Runtime configuration
+
+---
+
+## 2. Why Lambda for supporting CWD tasks?
+
+For example:
+
+\`\`\`text
+S3
+ ↓
+Lambda
+ ↓
+Preprocess document
+ ↓
+SQS
+\`\`\`
+
+Or:
+
+\`\`\`text
+EventBridge
+ ↓
+Lambda
+ ↓
+Update DynamoDB
+\`\`\`
+
+These are short, stateless, event-driven operations.
+
+---
+
+## 3. Scaling difference
+
+### Lambda
+
+If 1,000 events arrive:
+
+\`\`\`text
+1000 events
+    ↓
+Lambda executions
+    ↓
+Automatic concurrency
+\`\`\`
+
+But I must control concurrency when downstream systems such as Salesforce, ServiceNow, or Bedrock have limits.
+
+### ECS/Fargate
+
+\`\`\`text
+Traffic increases
+      ↓
+ECS Service
+      ↓
+Task 1
+Task 2
+Task 3
+Task 4
+\`\`\`
+
+ECS can increase/decrease the number of running containers using autoscaling.
+
+---
+
+## 4. Simple CWD example
+
+Suppose users upload customer documents.
+
+### Lambda
+
+\`\`\`text
+User
+ ↓
+S3
+ ↓
+Lambda
+ ↓
+Validate / preprocess
+ ↓
+SQS
+\`\`\`
+
+### ECS/Fargate
+
+\`\`\`text
+User
+ ↓
+API Gateway
+ ↓
+ECS/Fargate
+ ↓
+CWD Coordinator
+ ↓
+Sales Delegator
+ ↓
+Customer Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“Lambda and ECS/Fargate serve different purposes. I use Lambda for short-running, stateless and event-driven tasks such as S3 processing, EventBridge handlers, SQS consumers and lightweight integrations. I use ECS/Fargate for the main CWD application because the FastAPI and LangGraph Coordinator/Delegator workflow is containerized, potentially long-running and requires more runtime, networking and resource control. So in CWD, Fargate runs the core platform, while Lambda handles lightweight supporting workloads.”**
+
+## Easy memory trick
+
+**Lambda → Function → Event → Short**
+
+**Fargate → Container → Service → Long**
+
+### Key distinction
+
+> **Lambda is function-oriented. ECS/Fargate is application/service-oriented.**
+`,code:``},{id:`049-what-is-lambda-cold-start`,category:`Lambda`,title:`What is Lambda cold start?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What is Lambda Cold Start?
 
 ## Short answer
-A cold start is the extra latency when Lambda creates a new execution environment.
 
-## Key points
-- Lambda downloads the code, starts the runtime and runs your initialisation before the handler.
-- Happens on the first invocation and when scaling out; warm environments are reused.
-- Impact grows with large packages, heavy imports and VPC setup.
+A **Lambda cold start** happens when AWS needs to create a **new execution environment** for a Lambda function before running your code.
 
-## CWD context
-Cold starts matter on user-facing paths and hardly at all in background jobs.
+That initialization adds **extra latency to the first request**.
+
+### Simple flow
+
+\`\`\`text
+Request
+   ↓
+Is Lambda environment already warm?
+   │
+   ├── YES → Execute immediately
+   │
+   └── NO
+        ↓
+   Create environment
+        ↓
+   Initialize runtime
+        ↓
+   Load dependencies
+        ↓
+   Run Lambda
+\`\`\`
+
+## Warm vs Cold Start
+
+### 🥶 Cold start
+
+\`\`\`text
+Request
+  ↓
+Create container/environment
+  ↓
+Load Python/Java/etc.
+  ↓
+Load libraries
+  ↓
+Initialize application
+  ↓
+Execute function
+\`\`\`
+
+This causes additional latency.
+
+### 🔥 Warm start
+
+\`\`\`text
+Request
+  ↓
+Existing environment
+  ↓
+Execute function
+\`\`\`
+
+Much less initialization overhead.
+
+## When does it happen?
+
+A cold start can occur when:
+
+* Lambda is invoked after being idle and no suitable environment exists.
+* Traffic increases and AWS creates additional execution environments.
+* A new version/deployment needs new environments.
+* Existing environments have been retired.
+
+You **cannot assume** a Lambda environment will remain warm.
+
+## Example in CWD
+
+Suppose CWD uses Lambda for a lightweight document-processing Worker:
+
+\`\`\`text
+S3
+ ↓
+Lambda
+ ↓
+Process document
+\`\`\`
+
+First invocation:
+
+\`\`\`text
+Cold start → initialization → processing
+\`\`\`
+
+Later invocation:
+
+\`\`\`text
+Warm environment → processing
+\`\`\`
+
+If traffic suddenly increases:
+
+\`\`\`text
+100 requests
+     ↓
+Multiple Lambda environments
+     ↓
+Some may require initialization
+\`\`\`
+
+## How do you reduce cold-start impact?
+
+### 1. Keep the deployment package small
+
+Don't load unnecessary libraries.
+
+### 2. Initialize reusable resources outside the handler
+
+For example, create reusable clients outside the Lambda handler when appropriate.
+
+\`\`\`python
+client = create_client()
+
+def handler(event, context):
+    return client.process(event)
+\`\`\`
+
+This allows the initialized resource to potentially be reused by subsequent invocations in the same environment.
+
+### 3. Provisioned Concurrency
+
+AWS can keep a configured number of execution environments initialized and ready.
+
+\`\`\`text
+Provisioned Concurrency
+        ↓
+Pre-initialized environments
+        ↓
+Request
+        ↓
+Lower initialization latency
+\`\`\`
+
+This is useful when predictable low latency matters.
+
+### 4. Choose the runtime and dependencies carefully
+
+Large dependencies and initialization work can increase startup time.
+
+### 5. Monitor initialization duration
+
+Use CloudWatch/Lambda metrics and logs to identify initialization overhead and latency.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“A Lambda cold start occurs when AWS has to create and initialize a new execution environment before executing the function. This adds initialization latency to the invocation. Warm invocations can reuse an existing environment and are generally faster. In CWD, for latency-sensitive Lambda functions, I would minimize dependencies and initialization work and use Provisioned Concurrency when predictable startup latency is required.”**
+
+## Easy memory trick
+
+**Cold = Create + Initialize + Execute**
+
+**Warm = Reuse + Execute**
+
+### Key distinction
+
+> **Cold start is not the Lambda function failing or restarting. It is the additional initialization time when a new execution environment is needed.**
 `,code:``},{id:`050-how-would-you-reduce-lambda-cold-start-latency`,category:`Lambda`,title:`How would you reduce Lambda cold-start latency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you reduce Lambda cold-start latency?
 
 ## Short answer
-Reduce cold starts by keeping environments warm and initialisation light.
+
+I would reduce cold-start latency by **keeping the Lambda package small, minimizing initialization work, choosing an appropriate runtime, and using Provisioned Concurrency for latency-sensitive functions.**
 
 ## Key points
-- Provisioned concurrency for critical functions; SnapStart where supported.
-- Small packages and layers; lazy or module-level initialisation of heavy clients.
-- ARM/Graviton runtimes; avoid heavy imports.
-- Keep cold-start-sensitive calls off the user path.
 
-## CWD context
-Warm capacity costs money, so apply it only where latency justifies it.
+### 1. Keep deployment package small
+
+Remove unnecessary:
+
+* Libraries
+* Dependencies
+* Files
+* Frameworks
+
+Smaller package → less initialization work.
+
+---
+
+### 2. Minimize code outside the handler
+
+Avoid expensive initialization during startup.
+
+Instead of loading everything:
+
+\`\`\`python
+# Expensive initialization
+large_model = load_model()
+large_library = initialize_library()
+
+def handler(event, context):
+    ...
+\`\`\`
+
+Only initialize what is actually needed.
+
+---
+
+### 3. Reuse connections
+
+Create reusable clients outside the handler when appropriate:
+
+\`\`\`python
+client = create_client()
+
+def handler(event, context):
+    return client.process(event)
+\`\`\`
+
+A warm Lambda environment may reuse that client.
+
+This is especially useful for:
+
+* DynamoDB
+* S3
+* HTTP clients
+* Database connections
+
+---
+
+### 4. Use Provisioned Concurrency
+
+For latency-sensitive CWD Lambda functions:
+
+\`\`\`text
+Provisioned Concurrency
+        ↓
+Pre-initialized Lambda environments
+        ↓
+Request
+        ↓
+Lower cold-start impact
+\`\`\`
+
+This is useful when you have predictable traffic or strict latency requirements.
+
+---
+
+### 5. Choose the runtime carefully
+
+Runtime and dependency choices affect startup time.
+
+For a lightweight CWD function, I would avoid unnecessarily heavy frameworks and libraries.
+
+---
+
+### 6. Don't load large AI models into Lambda unnecessarily
+
+For CWD, I would **not load a large LLM or embedding model into Lambda** just to perform a small task.
+
+Instead:
+
+\`\`\`text
+Lambda
+   ↓
+Bedrock / external model service
+\`\`\`
+
+or use a dedicated container when the model itself needs to run locally.
+
+---
+
+### 7. Use Lambda only where it fits
+
+If a function becomes:
+
+* Large
+* Long-running
+* CPU/memory intensive
+* Dependency-heavy
+* Latency-sensitive with persistent processing
+
+I would consider **ECS/Fargate** instead.
+
+\`\`\`text
+Small + Event-driven → Lambda
+
+Complex + Long-running → ECS/Fargate
+\`\`\`
+
+---
+
+## CWD example
+
+Suppose I have:
+
+\`\`\`text
+S3
+ ↓
+Lambda
+ ↓
+Document preprocessing
+\`\`\`
+
+I would:
+
+\`\`\`text
+1. Keep dependencies small
+2. Minimize startup code
+3. Reuse AWS/HTTP clients
+4. Avoid loading unnecessary ML models
+5. Use Provisioned Concurrency if latency SLA requires it
+6. Monitor initialization and invocation latency
+\`\`\`
+
+## 🎯 Strong interview answer
+
+> **“I reduce Lambda cold-start latency by keeping the deployment package and dependencies small, minimizing initialization code, reusing connections and clients across warm invocations, and choosing lightweight runtimes and frameworks. For latency-sensitive CWD functions, I can use Provisioned Concurrency to keep execution environments initialized. I also avoid putting large model-loading workloads into Lambda; those are better suited to services such as Bedrock or containerized workloads on ECS/Fargate.”**
+
+## Easy memory trick
+
+**Small → Initialize less → Reuse → Provision → Monitor**
+
+### Key distinction
+
+> **Provisioned Concurrency reduces cold-start impact; it does not eliminate the need to design the Lambda function efficiently.**
 `,code:``},{id:`051-how-does-lambda-concurrency-work`,category:`Lambda`,title:`How does Lambda concurrency work?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How does Lambda concurrency work?
 
 ## Short answer
-Lambda concurrency is the number of invocations running at the same time.
+
+**Lambda concurrency = number of Lambda executions running at the same time.**
+
+If 100 requests arrive at the same time and 100 executions are allowed, Lambda can run roughly **100 concurrent executions**.
+
+\`\`\`text
+100 requests
+     ↓
+Lambda
+     ↓
+┌────┬────┬────┬────┬─────┐
+│ E1 │ E2 │ E3 │... │ E100│
+└────┴────┴────┴────┴─────┘
+        Concurrent executions
+\`\`\`
 
 ## Key points
-- Concurrency ≈ requests per second × average duration.
-- Each concurrent request uses its own execution environment.
-- The account has a regional concurrency quota (default about 1,000, raisable) and a scaling-rate limit.
 
-## CWD context
-Estimate concurrency for peak load before launch.
-`,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Reserved vs provisioned concurrency?
+### 1. Each concurrent request needs an execution environment
+
+For example:
+
+\`\`\`text
+Request 1 → Lambda Environment 1
+Request 2 → Lambda Environment 2
+Request 3 → Lambda Environment 3
+\`\`\`
+
+A single Lambda execution environment handles one invocation at a time for standard synchronous invocation.
+
+---
+
+### 2. Concurrency increases automatically
+
+Suppose traffic changes:
+
+\`\`\`text
+10 requests
+   ↓
+~10 concurrent executions
+\`\`\`
+
+Then:
+
+\`\`\`text
+500 requests
+   ↓
+Potentially hundreds of concurrent executions
+\`\`\`
+
+AWS can create additional execution environments to handle the concurrency, subject to account/function limits.
+
+---
+
+### 3. Reserved Concurrency
+
+You can reserve a maximum concurrency for a function.
+
+Example:
+
+\`\`\`text
+CWD Worker Lambda
+Reserved concurrency = 20
+\`\`\`
+
+That function can have at most about **20 concurrent executions**.
+
+This is useful for protecting downstream systems.
+
+\`\`\`text
+Lambda
+  ↓
+Max 20 concurrent
+  ↓
+Salesforce
+\`\`\`
+
+You don't want 1,000 Lambda executions simultaneously overwhelming Salesforce.
+
+---
+
+### 4. Provisioned Concurrency is different
+
+This is an important interview distinction.
+
+**Reserved Concurrency**
+
+> Controls the concurrency limit.
+
+**Provisioned Concurrency**
+
+> Keeps a configured number of execution environments initialized and ready.
+
+Example:
+
+\`\`\`text
+Reserved concurrency = 100
+Provisioned concurrency = 20
+\`\`\`
+
+You can have up to 100 concurrent executions, while 20 environments are kept pre-initialized.
+
+---
+
+### 5. What happens when concurrency is exhausted?
+
+For synchronous invocations, additional requests can be **throttled** rather than creating unlimited executions.
+
+For asynchronous workloads, a queueing mechanism can absorb the traffic.
+
+For CWD, I would often use:
+
+\`\`\`text
+High traffic
+    ↓
+SQS
+    ↓
+Lambda
+    ↓
+Controlled concurrency
+    ↓
+Enterprise system
+\`\`\`
+
+This protects downstream systems.
+
+---
+
+# CWD example
+
+Suppose CWD has a Lambda Worker that processes documents.
+
+\`\`\`text
+S3
+ ↓
+EventBridge
+ ↓
+SQS
+ ↓
+Lambda Worker
+\`\`\`
+
+Suppose I configure:
+
+\`\`\`text
+Lambda concurrency = 20
+\`\`\`
+
+Then I effectively allow up to about **20 executions at once** for that function.
+
+If 500 documents arrive:
+
+\`\`\`text
+500 documents
+      ↓
+     SQS
+      ↓
+20 Lambda executions at a time
+      ↓
+Process gradually
+\`\`\`
+
+This prevents a sudden traffic spike from overwhelming:
+
+* OpenSearch
+* Bedrock
+* Salesforce
+* ServiceNow
+* Other downstream APIs
+
+---
+
+# Why concurrency matters in CWD
+
+CWD has **fan-out**:
+
+\`\`\`text
+Coordinator
+    ↓
+Delegator
+    ↓
+10 Workers
+    ↓
+10 downstream calls
+\`\`\`
+
+If 100 users make requests simultaneously:
+
+\`\`\`text
+100 users
+   ×
+10 Workers
+   =
+Potentially 1,000 downstream operations
+\`\`\`
+
+So simply allowing unlimited Lambda concurrency can create a **downstream overload problem**.
+
+I would control concurrency at multiple levels:
+
+\`\`\`text
+API Gateway
+     ↓
+Request throttling
+     ↓
+ECS/Fargate scaling
+     ↓
+Worker concurrency
+     ↓
+SQS buffering
+     ↓
+Downstream limits
+     ↓
+Bedrock / Salesforce / ServiceNow
+\`\`\`
+
+## 🎯 Strong interview answer
+
+> **“Lambda concurrency is the number of function invocations running simultaneously. Lambda can automatically scale execution environments as concurrent requests increase, but concurrency is subject to limits. In CWD, I would control concurrency using reserved concurrency where I need to protect downstream systems, and use SQS to buffer spikes for asynchronous workloads. I would use Provisioned Concurrency separately when I need to reduce cold-start latency. This is important because CWD can fan out one request into multiple Workers, so uncontrolled concurrency could overload Bedrock, Salesforce, or ServiceNow.”**
+
+## Easy memory trick
+
+**Concurrency = How many are running now**
+
+**Reserved = Maximum allowed**
+
+**Provisioned = Ready in advance**
+
+**SQS = Wait in queue**
+`,code:``},{id:`052-reserved-vs-provisioned-concurrency`,category:`Lambda`,title:`Reserved vs provisioned concurrency?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Reserved vs Provisioned Concurrency
 
 ## Short answer
-Reserved concurrency guarantees and caps a function's share; provisioned concurrency keeps environments pre-initialised.
 
-## Key points
-- Reserved: no extra charge; protects critical functions and caps noisy ones and downstream systems.
-- Provisioned: extra cost; removes cold starts.
-- They can be combined.
+The easiest way to remember:
 
-## CWD context
-Use reserved concurrency to protect Bedrock and MCP servers from Lambda fan-out.
+> **Reserved Concurrency = controls how many can run.**
+> **Provisioned Concurrency = controls how many are ready to run.**
+
+They solve **different problems**.
+
+## Key comparison
+
+|                             | **Reserved Concurrency**      | **Provisioned Concurrency**            |
+| --------------------------- | ----------------------------- | -------------------------------------- |
+| Main purpose                | Limit/control concurrency     | Reduce cold starts                     |
+| Controls                    | Maximum concurrent executions | Pre-initialized execution environments |
+| Protects downstream systems | ✅ Yes                         | Not its primary purpose                |
+| Reduces cold starts         | ❌ Not directly                | ✅ Yes                                  |
+| Keeps environments warm     | ❌                             | ✅                                      |
+| Useful for                  | Throttling/isolation          | Low-latency applications               |
+| Cost impact                 | Mainly a concurrency control  | You pay for provisioned capacity       |
+
+## 1. Reserved Concurrency
+
+Suppose:
+
+\`\`\`text
+CWD Worker Lambda
+Reserved Concurrency = 20
+\`\`\`
+
+That means:
+
+\`\`\`text
+                    Lambda
+                      │
+          ┌───────────┴───────────┐
+          ↓                       ↓
+      Execution 1             Execution 20
+          ...                    ...
+              MAX = 20
+\`\`\`
+
+If more requests arrive while all 20 are executing, additional invocations can be throttled/queued depending on the invocation pattern.
+
+### Why use it in CWD?
+
+Suppose the Worker calls Salesforce:
+
+\`\`\`text
+Lambda Worker
+     ↓
+Salesforce
+\`\`\`
+
+Salesforce may only tolerate a certain request rate.
+
+So:
+
+\`\`\`text
+Reserved concurrency = 20
+\`\`\`
+
+helps prevent Lambda from creating an uncontrolled number of simultaneous calls.
+
+---
+
+# 2. Provisioned Concurrency
+
+Suppose:
+
+\`\`\`text
+Provisioned Concurrency = 10
+\`\`\`
+
+AWS keeps approximately **10 execution environments initialized and ready**.
+
+\`\`\`text
+        Provisioned Lambda
+       ┌──────────────────┐
+       │ Ready │ Ready    │
+       │ Ready │ Ready    │
+       │ Ready │ Ready    │
+       │ Ready │ Ready    │
+       │ Ready │ Ready    │
+       └──────────────────┘
+                ↓
+             Request
+                ↓
+          Execute quickly
+\`\`\`
+
+This reduces the initialization delay associated with cold starts.
+
+### Why use it in CWD?
+
+Suppose you have a latency-sensitive API:
+
+\`\`\`text
+API Gateway
+     ↓
+Lambda
+     ↓
+Response
+\`\`\`
+
+You might use Provisioned Concurrency so the Lambda environment is already initialized.
+
+---
+
+# 3. They can be used together
+
+This is an important interview point.
+
+For example:
+
+\`\`\`text
+Reserved Concurrency = 100
+Provisioned Concurrency = 20
+\`\`\`
+
+Meaning conceptually:
+
+\`\`\`text
+Maximum allowed executions = 100
+
+         100
+    ┌───────────────┐
+    │               │
+    │ 20 pre-warmed  │
+    │ environments  │
+    │               │
+    └───────────────┘
+\`\`\`
+
+The **20** are kept initialized to reduce cold-start latency, while the function's configured concurrency ceiling is **100**.
+
+---
+
+# CWD example
+
+Imagine:
+
+\`\`\`text
+Customer Request
+       ↓
+API Gateway
+       ↓
+Lambda Worker
+       ↓
+Bedrock
+\`\`\`
+
+If the Worker is latency-sensitive:
+
+\`\`\`text
+Provisioned Concurrency
+        ↓
+Reduce cold-start latency
+\`\`\`
+
+If the Worker calls a downstream system that cannot handle unlimited parallel requests:
+
+\`\`\`text
+Reserved Concurrency
+        ↓
+Limit simultaneous executions
+        ↓
+Protect downstream system
+\`\`\`
+
+For bursty asynchronous workloads:
+
+\`\`\`text
+SQS
+ ↓
+Lambda
+ ↓
+Reserved Concurrency
+ ↓
+Controlled processing
+\`\`\`
+
+---
+
+# 🎯 Strong interview answer
+
+> **“Reserved and Provisioned Concurrency solve different problems. Reserved Concurrency sets a concurrency limit for a Lambda function and helps isolate the function and protect downstream systems. Provisioned Concurrency keeps a specified number of execution environments initialized and ready, which reduces cold-start latency. In CWD, I could use Reserved Concurrency for Workers calling systems like Salesforce or Bedrock, and Provisioned Concurrency for latency-sensitive Lambda APIs. They can also be used together.”**
+
+## Easy memory trick
+
+**Reserved = Restrict**
+
+**Provisioned = Pre-warm**
+
+Or simply:
+
+> **Reserved asks: ‘How many can run?’**
+> **Provisioned asks: ‘How many are ready?’**
 `,code:``},{id:`053-how-would-you-prevent-lambda-concurrency-exhaustion`,category:`Lambda`,title:`How would you prevent Lambda concurrency exhaustion?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you prevent Lambda concurrency exhaustion?
 
 ## Short answer
-Prevent concurrency exhaustion with caps, queues and monitoring.
+
+I would use **concurrency limits + queues + backpressure + downstream protection + monitoring**.
+
+The goal is to prevent a sudden CWD traffic spike from creating too many simultaneous Lambda executions.
 
 ## Key points
-- Reserved concurrency on critical functions; maximum concurrency on SQS event source mappings.
-- Buffer bursts in SQS; request quota increases early.
-- Alarms on ConcurrentExecutions and Throttles.
 
-## CWD context
-One runaway function should never starve the authoriser.
+### 1. Use Reserved Concurrency
+
+Set a maximum concurrency for important functions.
+
+\`\`\`text id="1f8g2p"
+CWD Lambda Worker
+Reserved Concurrency = 20
+\`\`\`
+
+This prevents that function from consuming unlimited account concurrency.
+
+---
+
+### 2. Use SQS for bursty workloads
+
+Instead of:
+
+\`\`\`text id="b8t9yw"
+1000 requests
+     ↓
+1000 Lambda executions
+\`\`\`
+
+use:
+
+\`\`\`text id="u2v5xq"
+1000 requests
+     ↓
+     SQS
+     ↓
+Controlled Lambda concurrency
+     ↓
+Process gradually
+\`\`\`
+
+SQS provides **buffering/backpressure**.
+
+---
+
+### 3. Control Lambda concurrency
+
+For example:
+
+\`\`\`text id="j8l3v4"
+SQS
+ ↓
+Lambda
+ ↓
+Reserved concurrency = 20
+\`\`\`
+
+Only a controlled number of messages are processed simultaneously.
+
+This is especially important when Lambda calls:
+
+* Salesforce
+* ServiceNow
+* Bedrock
+* Databases
+* External APIs
+
+---
+
+### 4. Control CWD fan-out
+
+This is especially important for your architecture.
+
+One request can become:
+
+\`\`\`text id="n4c5x8"
+1 User Request
+      ↓
+Coordinator
+      ↓
+Delegator
+      ↓
+10 Workers
+      ↓
+10 Lambda calls
+\`\`\`
+
+If 100 users arrive:
+
+\`\`\`text id="j9k2m1"
+100 × 10 Workers
+      =
+1000 potential executions
+\`\`\`
+
+So I would limit **Worker concurrency** rather than allowing unlimited fan-out.
+
+---
+
+### 5. Use downstream rate limits
+
+Even if Lambda can process 1,000 requests, Salesforce may not want 1,000 simultaneous calls.
+
+\`\`\`text id="7x2p4c"
+Lambda
+   ↓
+Concurrency limit
+   ↓
+Salesforce
+\`\`\`
+
+Apply separate limits for important dependencies.
+
+---
+
+### 6. Use retries carefully
+
+Don't allow every throttled Lambda invocation to immediately retry.
+
+Bad:
+
+\`\`\`text id="2c8w6a"
+Throttled
+   ↓
+Retry immediately
+   ↓
+Throttled
+   ↓
+Retry
+   ↓
+Throttled
+\`\`\`
+
+Better:
+
+\`\`\`text id="r4q7m2"
+Failure
+  ↓
+Exponential backoff + jitter
+  ↓
+Retry
+  ↓
+Max attempts
+  ↓
+DLQ / failure handling
+\`\`\`
+
+---
+
+### 7. Use Dead-Letter Queues
+
+For asynchronous Lambda processing:
+
+\`\`\`text id="x6v9k3"
+SQS
+ ↓
+Lambda
+ ↓
+Failed repeatedly
+ ↓
+DLQ
+\`\`\`
+
+This prevents continuously failing messages from consuming processing capacity.
+
+---
+
+### 8. Monitor concurrency
+
+I would monitor:
+
+* Concurrent executions
+* Throttles
+* Reserved concurrency
+* Account concurrency
+* Invocation count
+* Duration
+* Error rate
+* SQS queue depth
+* Lambda iterator age where applicable
+* Downstream API latency/errors
+
+Create CloudWatch alarms when concurrency or throttling approaches a defined threshold.
+
+---
+
+## CWD example
+
+Suppose the Customer Briefing workflow generates several background tasks:
+
+\`\`\`text id="8n4k1d"
+Customer Request
+       ↓
+Coordinator
+       ↓
+Delegator
+       ↓
+Workers
+       ↓
+SQS
+       ↓
+Lambda
+       ↓
+Salesforce / ServiceNow
+\`\`\`
+
+I could configure:
+
+\`\`\`text id="3g5r8m"
+Reserved concurrency = 20
+\`\`\`
+
+Then use SQS to buffer excess work.
+
+If Salesforce starts returning throttling responses:
+
+\`\`\`text id="5k9v2s"
+Salesforce throttling
+        ↓
+Backoff
+        ↓
+SQS retains messages
+        ↓
+Lambda processes later
+\`\`\`
+
+This protects both **Lambda and the downstream system**.
+
+## 🎯 Strong interview answer
+
+> **“I prevent Lambda concurrency exhaustion by controlling concurrency at multiple levels. I use Reserved Concurrency for critical functions, SQS to buffer bursty asynchronous workloads, and limit CWD Worker fan-out so one request cannot create unlimited parallel executions. I also apply downstream rate limits, exponential backoff with jitter, retries and DLQs, and monitor concurrent executions, throttles, queue depth and downstream errors through CloudWatch. The key is to apply backpressure instead of allowing traffic to propagate uncontrolled through the system.”**
+
+## Easy memory trick
+
+**Limit → Queue → Control fan-out → Backoff → DLQ → Monitor**
+
+### Key distinction
+
+> **Concurrency exhaustion is not solved simply by increasing Lambda concurrency.**
+> In CWD, you must also control **fan-out and downstream capacity**.
 `,code:``},{id:`054-how-do-you-handle-lambda-failures`,category:`Lambda`,title:`How do you handle Lambda failures?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you handle Lambda failures?
 
 ## Short answer
-Failure handling depends on how the function is invoked.
+
+I use **Detect → Retry → Backoff → DLQ → Idempotency → Monitor → Alert**.
+
+The exact strategy depends on whether the Lambda failure is **transient** or **permanent**.
 
 ## Key points
-- Synchronous: the error returns to the caller.
-- Asynchronous: automatic retries, then an on-failure destination or DLQ.
-- SQS trigger: the message reappears after the visibility timeout and moves to a DLQ after maxReceiveCount; use partial batch responses.
-- Step Functions adds Retry and Catch.
 
-## CWD context
-Alarm on Errors, Throttles and DLQ depth.
+### 1. Detect the failure
+
+Monitor:
+
+* Lambda errors
+* Timeouts
+* Throttles
+* Duration
+* Invocation failures
+* Downstream API errors
+
+Use **CloudWatch** for metrics, logs, and alarms.
+
+---
+
+### 2. Retry transient failures
+
+For temporary failures:
+
+\`\`\`text id="7c2q4m"
+Lambda
+  ↓
+Temporary failure
+  ↓
+Retry
+  ↓
+Success
+\`\`\`
+
+Examples:
+
+* Temporary network issue
+* Service unavailable
+* Throttling
+* Transient downstream failure
+
+Use **bounded retries** with exponential backoff and jitter.
+
+\`\`\`text id="9p5k2r"
+Retry 1 → wait
+Retry 2 → wait longer
+Retry 3 → wait longer
+       ↓
+Max attempts
+\`\`\`
+
+Don't retry forever.
+
+---
+
+### 3. Use DLQ for failed asynchronous processing
+
+For SQS-based Lambda:
+
+\`\`\`text id="4x7m1p"
+SQS
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Failure
+ ↓
+DLQ
+\`\`\`
+
+The DLQ lets us investigate or replay failed messages without blocking normal processing.
+
+---
+
+### 4. Make Lambda idempotent
+
+This is very important.
+
+Suppose Lambda processes:
+
+\`\`\`text id="6n8v2c"
+Update customer record
+\`\`\`
+
+The Lambda succeeds, but the response is lost.
+
+The system may retry the same message.
+
+Without idempotency:
+
+\`\`\`text id="p2r5k7"
+Retry
+ ↓
+Duplicate operation ❌
+\`\`\`
+
+With idempotency:
+
+\`\`\`text id="m8q3v1"
+Request ID = ABC123
+      ↓
+Already processed?
+      ↓
+YES → Don't execute again
+\`\`\`
+
+For CWD, I could store an idempotency key in **DynamoDB**.
+
+---
+
+### 5. Handle timeouts
+
+Configure appropriate Lambda timeout.
+
+\`\`\`text id="y3w6n9"
+Lambda
+  ↓
+Downstream API
+  ↓
+Timeout
+\`\`\`
+
+Don't allow a function to wait indefinitely.
+
+Use:
+
+* Timeout
+* Bounded retry
+* Backoff
+* Circuit breaker where appropriate
+
+---
+
+### 6. Handle downstream failures
+
+Suppose a Lambda Worker calls Salesforce:
+
+\`\`\`text id="c8v2m5"
+Lambda Worker
+      ↓
+Salesforce
+      ↓
+Unavailable
+\`\`\`
+
+I wouldn't continuously retry.
+
+Instead:
+
+\`\`\`text id="r7k4p1"
+Failure
+ ↓
+Retry + backoff
+ ↓
+Maximum attempts
+ ↓
+Queue/DLQ
+ ↓
+Alert
+\`\`\`
+
+For an optional CWD Worker, the Delegator can continue with other Workers and return a **partial response**.
+
+For a mandatory Worker, the workflow may need to fail or pause for recovery.
+
+---
+
+## CWD example
+
+Suppose:
+
+\`\`\`text id="q5m8s2"
+Customer Briefing
+      ↓
+Sales Delegator
+      ↓
+Customer Worker
+      ↓
+Lambda
+      ↓
+Salesforce
+\`\`\`
+
+Salesforce temporarily fails.
+
+I would handle it like:
+
+\`\`\`text id="n6p2r8"
+Salesforce failure
+       ↓
+Detect
+       ↓
+Retry with exponential backoff + jitter
+       ↓
+Success? ── YES → Continue
+       │
+       NO
+       ↓
+Maximum retries
+       ↓
+DLQ / failure state
+       ↓
+Delegator decides
+       ↓
+Partial response or workflow failure
+\`\`\`
+
+And I would record the failure using the CWD **correlation ID / run ID** so the failure can be traced across the workflow.
+
+## Important: Don't retry everything
+
+| Failure                         | Retry?                          |
+| ------------------------------- | ------------------------------- |
+| Temporary network error         | ✅                               |
+| Service temporarily unavailable | ✅                               |
+| Throttling / 429                | ✅ with backoff                  |
+| Lambda timeout                  | Sometimes, after checking cause |
+| Invalid request                 | ❌                               |
+| Authentication failure          | Usually ❌                       |
+| Authorization failure           | ❌                               |
+| Invalid parameters              | ❌                               |
+| Business-rule failure           | ❌                               |
+
+## 🎯 Strong interview answer
+
+> **“I handle Lambda failures using different strategies for transient and permanent failures. For transient failures, I use bounded retries with exponential backoff and jitter. For asynchronous processing, I use SQS with a DLQ after the retry limit. I make the Lambda idempotent so retries don't create duplicate operations, especially for enterprise systems like Salesforce or ServiceNow. I also configure timeouts, monitor errors, throttles and duration through CloudWatch, and propagate correlation IDs into the CWD workflow. At the Delegator level, I distinguish mandatory and optional Workers so an optional Lambda failure can result in a partial response rather than failing the entire workflow.”**
+
+## Easy memory trick
+
+**Detect → Retry → Backoff → Idempotent → DLQ → Monitor**
+
+### Key distinction
+
+> **Retry handles temporary failure. DLQ handles repeatedly failed asynchronous work. Idempotency prevents retries from creating duplicate business operations.**
 `,code:``},{id:`055-how-do-you-retry-lambda-execution`,category:`Lambda`,title:`How do you retry Lambda execution?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you retry Lambda execution?
 
 ## Short answer
-Configure retries deliberately for each invocation type.
 
-## Key points
-- Asynchronous: set maximum retry attempts and maximum event age.
-- SQS: retries come from the visibility timeout and redrive policy.
-- Step Functions: Retry with backoff and Catch.
-- Retry only transient errors; keep handlers idempotent.
+Lambda retry depends on **how the function is invoked**.
 
-## CWD context
-Do not stack retries at several layers.
-`,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you make Lambda execution idempotent?
+There are 3 common approaches:
+
+1. **Asynchronous invocation** → Lambda can automatically retry.
+2. **SQS/Event source** → SQS redelivers the message.
+3. **Synchronous invocation** → Your application must implement the retry.
+
+---
+
+## 1. Asynchronous Lambda invocation
+
+Example:
+
+\`\`\`text
+EventBridge
+     ↓
+Lambda
+     ↓
+Failure
+     ↓
+Lambda retry
+     ↓
+Failure
+     ↓
+DLQ / destination
+\`\`\`
+
+AWS can automatically retry asynchronous Lambda invocations.
+
+For example:
+
+\`\`\`text
+EventBridge → Lambda
+                  ↓
+               Failure
+                  ↓
+               Retry
+\`\`\`
+
+You can configure retry behavior and failure destinations/DLQ.
+
+---
+
+## 2. SQS + Lambda
+
+This is very useful for CWD.
+
+\`\`\`text
+SQS
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Message becomes available again
+ ↓
+Lambda retries
+\`\`\`
+
+The important point is:
+
+> **SQS owns the message and controls redelivery; Lambda processes the message.**
+
+You can configure:
+
+* Visibility timeout
+* Maximum receives
+* Dead-letter queue
+
+Example:
+
+\`\`\`text
+SQS
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Maximum receives
+ ↓
+DLQ
+\`\`\`
+
+---
+
+## 3. Synchronous invocation
+
+Example:
+
+\`\`\`text
+API Gateway
+     ↓
+Lambda
+     ↓
+Failure
+\`\`\`
+
+For synchronous calls, I would normally implement the retry policy in the **calling application/service**, rather than blindly retrying inside Lambda.
+
+For example:
+
+\`\`\`text
+CWD
+ ↓
+Lambda
+ ↓
+Timeout
+ ↓
+Retry with backoff + jitter
+ ↓
+Lambda
+\`\`\`
+
+Use a **bounded number of retries**.
+
+---
+
+# 4. Exponential backoff + jitter
+
+Don't do:
+
+\`\`\`text
+Retry immediately
+Retry immediately
+Retry immediately
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Attempt 1
+   ↓
+wait 100 ms
+   ↓
+Attempt 2
+   ↓
+wait 200 ms
+   ↓
+Attempt 3
+   ↓
+wait 400 ms
+\`\`\`
+
+Add **jitter** so many requests don't retry at exactly the same time.
+
+---
+
+# 5. Don't retry permanent errors
+
+For example:
+
+\`\`\`text
+Invalid customer_id
+\`\`\`
+
+Retrying won't fix it.
+
+Similarly:
+
+* Invalid request
+* Authentication failure
+* Authorization failure
+* Invalid parameters
+* Business validation failure
+
+should generally **not** be retried automatically.
+
+---
+
+# CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Briefing
+      ↓
+IT Delegator
+      ↓
+Incident Worker
+      ↓
+Lambda
+      ↓
+ServiceNow
+\`\`\`
+
+ServiceNow temporarily returns \`503\`.
+
+I would do:
+
+\`\`\`text
+503
+ ↓
+Retry #1
+ ↓
+Backoff + jitter
+ ↓
+Retry #2
+ ↓
+Backoff + jitter
+ ↓
+Retry #3
+ ↓
+Still failing?
+ ↓
+DLQ / failure state
+ ↓
+Delegator
+\`\`\`
+
+If the Incident Worker is **optional**, the Delegator could continue with the Sales Worker and return a partial response.
+
+If it's **mandatory**, the workflow could fail or pause for recovery.
+
+---
+
+## 🎯 Strong interview answer
+
+> **“I choose the retry mechanism based on the invocation type. For asynchronous Lambda invocations, AWS can automatically retry and I configure failure handling such as DLQs or destinations. For SQS-triggered Lambda, SQS provides redelivery and I configure visibility timeout, maximum receives and a DLQ. For synchronous Lambda calls, the calling service implements bounded retries with exponential backoff and jitter. I only retry transient failures such as throttling or temporary service unavailability; I don't retry permanent errors such as invalid requests or authorization failures. In CWD, after retries are exhausted, the Delegator decides whether the Worker failure is mandatory or optional.”**
+
+## Easy memory trick
+
+**Async → AWS retry**
+
+**SQS → Message redelivery**
+
+**Sync → Caller retry**
+
+**Always → Backoff + Jitter + Max retries + DLQ where applicable**
+`,code:``},{id:`056-how-do-you-make-lambda-execution-idempotent`,category:`Lambda`,title:`How do you make Lambda execution idempotent?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you retry Lambda execution?
 
 ## Short answer
-Make Lambda idempotent with a stored idempotency key and a conditional write.
 
-## Key points
-- DynamoDB conditional put (attribute_not_exists) keyed by request or message ID, with TTL.
-- Powertools for AWS Lambda provides an idempotency utility.
-- Pass idempotency tokens or use upserts downstream.
+It depends on **how Lambda is invoked**:
 
-## CWD context
-Assume every event can be delivered more than once.
+\`\`\`text
+Asynchronous → AWS retries
+SQS trigger  → SQS redelivers
+Synchronous → Caller retries
+\`\`\`
+
+## 1. Asynchronous invocation
+
+Example:
+
+\`\`\`text
+EventBridge
+    ↓
+Lambda
+    ↓
+Failure
+    ↓
+AWS retry
+    ↓
+Failure
+    ↓
+DLQ / Destination
+\`\`\`
+
+For asynchronous Lambda invocation, AWS automatically retries certain failures. I configure the retry behavior and failure destination/DLQ.
+
+---
+
+## 2. SQS → Lambda
+
+This is very useful for CWD.
+
+\`\`\`text
+SQS
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Message becomes visible again
+ ↓
+Lambda processes again
+\`\`\`
+
+I configure:
+
+* **Visibility timeout**
+* **Maximum receive attempts**
+* **Dead-letter queue**
+
+Example:
+
+\`\`\`text
+SQS
+ ↓
+Lambda
+ ↓
+Fail
+ ↓
+Retry
+ ↓
+Fail
+ ↓
+Retry
+ ↓
+Max attempts reached
+ ↓
+DLQ
+\`\`\`
+
+The important point is:
+
+> **SQS handles message redelivery; Lambda processes the message.**
+
+---
+
+## 3. Synchronous invocation
+
+For example:
+
+\`\`\`text
+CWD
+ ↓
+Lambda
+ ↓
+Timeout / transient error
+\`\`\`
+
+The **calling application** handles the retry:
+
+\`\`\`text
+CWD
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Backoff + jitter
+ ↓
+Retry
+ ↓
+Success
+\`\`\`
+
+I use a bounded retry policy, for example:
+
+\`\`\`text
+Maximum attempts = 3
+\`\`\`
+
+rather than retrying forever.
+
+---
+
+## 4. Exponential backoff + jitter
+
+I don't retry immediately:
+
+\`\`\`text
+❌ Retry → Retry → Retry
+\`\`\`
+
+Instead:
+
+\`\`\`text
+Attempt 1
+   ↓
+100 ms
+   ↓
+Attempt 2
+   ↓
+200 ms
+   ↓
+Attempt 3
+   ↓
+400 ms
+\`\`\`
+
+And add **jitter** so multiple requests don't retry simultaneously.
+
+---
+
+## 5. Retry only transient failures
+
+### Retry
+
+* 429 / throttling
+* Temporary network error
+* 5xx service error
+* Temporary service unavailable
+
+### Don't automatically retry
+
+* Invalid input
+* Invalid parameters
+* Authentication failure
+* Authorization failure
+* Business validation failure
+
+---
+
+# CWD example
+
+Suppose:
+
+\`\`\`text
+Customer Briefing
+      ↓
+IT Delegator
+      ↓
+Incident Worker
+      ↓
+Lambda
+      ↓
+ServiceNow
+\`\`\`
+
+ServiceNow returns \`503\`:
+
+\`\`\`text
+503
+ ↓
+Retry #1
+ ↓
+Backoff + jitter
+ ↓
+Retry #2
+ ↓
+Backoff + jitter
+ ↓
+Retry #3
+ ↓
+Still failing?
+ ↓
+DLQ / failure state
+ ↓
+Delegator
+\`\`\`
+
+The **Delegator** then decides what to do.
+
+If the Worker is optional:
+
+\`\`\`text
+Sales Worker ✅
+Incident Worker ❌
+      ↓
+Partial response
+\`\`\`
+
+If the Worker is mandatory, the workflow can fail or pause for recovery.
+
+## 🎯 Strong interview answer
+
+> **“I retry Lambda based on the invocation model. For asynchronous invocations, AWS provides automatic retries with configurable failure handling. For SQS-triggered Lambda, SQS redelivers failed messages and I use a DLQ after the maximum receive attempts. For synchronous Lambda calls, the calling service implements bounded retries with exponential backoff and jitter. I retry only transient failures such as throttling or temporary 5xx errors. After retries are exhausted, I use DLQ or failure handling, and in CWD the Delegator determines whether the failed Worker is mandatory or optional.”**
+
+## Easy memory trick
+
+**Async → AWS retry**
+**SQS → Redeliver**
+**Sync → Caller retry**
+**All → Backoff + Jitter + Max retries**
 `,code:``},{id:`057-how-do-you-monitor-lambda`,category:`Lambda`,title:`How do you monitor Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Lambda?
 
 ## Short answer
@@ -175099,79 +188629,1829 @@ Monitor Lambda with CloudWatch metrics, structured logs and tracing.
 
 ## CWD context
 Track p95 duration against the function timeout.
-`,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you manage Lambda environment variables?
+
+
+
+# How do you make Lambda execution idempotent?
 
 ## Short answer
-Use environment variables for non-secret configuration, managed per environment through IaC.
+
+**Idempotency means: if the same Lambda request executes multiple times, the business operation should happen only once.**
+
+This is important because Lambda can be retried.
+
+\`\`\`text
+Request
+  ↓
+Lambda
+  ↓
+Business operation
+  ↓
+Timeout / retry
+  ↓
+Same request again
+\`\`\`
+
+Without idempotency:
+
+\`\`\`text
+Update Salesforce
+Update Salesforce again ❌
+\`\`\`
+
+With idempotency:
+
+\`\`\`text
+Request ID = ABC123
+      ↓
+Already processed?
+      ↓
+YES → Return previous result
+\`\`\`
+
+---
+
+# 1. Generate an idempotency key
+
+Use a unique key for the business operation.
+
+For example:
+
+\`\`\`text
+customer_id = C123
+operation = create_case
+request_id = ABC123
+\`\`\`
+
+Create:
+
+\`\`\`text
+idempotency_key = ABC123
+\`\`\`
+
+The key should represent the **same logical operation**, not simply every Lambda invocation.
+
+---
+
+# 2. Store the key
+
+For CWD, I could use **DynamoDB**:
+
+\`\`\`text
+DynamoDB
+
+idempotency_key | status     | result
+------------------------------------------------
+ABC123          | COMPLETED  | CASE456
+\`\`\`
+
+---
+
+# 3. Check before processing
+
+Lambda:
+
+\`\`\`text id="x2m6r9"
+Lambda
+  ↓
+Check DynamoDB
+  ↓
+Key exists?
+  ├── YES → Return previous result
+  │
+  └── NO
+       ↓
+   Process operation
+\`\`\`
+
+---
+
+# 4. Use conditional writes
+
+This is very important when multiple Lambda executions arrive at the same time.
+
+Suppose:
+
+\`\`\`text
+Lambda A ──┐
+           ├──→ DynamoDB
+Lambda B ──┘
+\`\`\`
+
+Both receive:
+
+\`\`\`text
+request_id = ABC123
+\`\`\`
+
+You don't want both to process it.
+
+Use an **atomic conditional write**:
+
+\`\`\`text
+Put ABC123
+ONLY IF ABC123 does not already exist
+\`\`\`
+
+One Lambda succeeds:
+
+\`\`\`text
+Lambda A → Lock/record created → Process
+\`\`\`
+
+The other sees the existing key:
+
+\`\`\`text
+Lambda B → Key exists → Don't process
+\`\`\`
+
+---
+
+# 5. Store processing status
+
+I normally use states such as:
+
+\`\`\`text
+IN_PROGRESS
+COMPLETED
+FAILED
+\`\`\`
+
+Example:
+
+\`\`\`text id="a6y8z2"
+ABC123
+   ↓
+IN_PROGRESS
+   ↓
+Business operation
+   ↓
+COMPLETED
+\`\`\`
+
+Store the result when appropriate:
+
+\`\`\`text
+ABC123 → COMPLETED → Salesforce Case = INC456
+\`\`\`
+
+If a duplicate request arrives:
+
+\`\`\`text
+ABC123 already COMPLETED
+        ↓
+Return INC456
+\`\`\`
+
+---
+
+# 6. Handle the tricky case: Lambda crashes
+
+Suppose:
+
+\`\`\`text id="v4n9c1"
+Lambda
+ ↓
+Create Salesforce Case
+ ↓
+Salesforce succeeds
+ ↓
+Lambda crashes before marking DynamoDB COMPLETED
+\`\`\`
+
+Now Lambda is retried.
+
+This is why **idempotency must also exist at the business-operation/API level when possible**.
+
+For example:
+
+\`\`\`text
+CWD request_id = ABC123
+       ↓
+Salesforce
+       ↓
+External idempotency key = ABC123
+\`\`\`
+
+Then Salesforce or your adapter can recognize the duplicate operation.
+
+If the downstream system doesn't support idempotency natively, use a durable idempotency record plus carefully designed state transitions/reconciliation.
+
+---
+
+# CWD example
+
+Suppose a Worker creates a ServiceNow ticket:
+
+\`\`\`text id="n8w5k2"
+Coordinator
+    ↓
+IT Delegator
+    ↓
+Ticket Worker
+    ↓
+Lambda
+    ↓
+ServiceNow
+\`\`\`
+
+Request:
+
+\`\`\`text
+request_id = RUN123-STEP05
+\`\`\`
+
+Lambda checks:
+
+\`\`\`text
+DynamoDB
+    ↓
+RUN123-STEP05 exists?
+\`\`\`
+
+### First execution
+
+\`\`\`text
+Doesn't exist
+    ↓
+Create IN_PROGRESS
+    ↓
+Create ServiceNow ticket
+    ↓
+Store ticket ID
+    ↓
+COMPLETED
+\`\`\`
+
+### Retry
+
+\`\`\`text
+RUN123-STEP05 exists
+       ↓
+COMPLETED
+       ↓
+Return existing ticket ID
+\`\`\`
+
+So we don't create a duplicate ticket.
+
+---
+
+# Important: Idempotency ≠ retry
+
+They work together:
+
+\`\`\`text
+Retry
+  ↓
+Same request executes again
+  ↓
+Idempotency check
+  ↓
+Prevent duplicate business operation
+\`\`\`
+
+**Retry = try again**
+
+**Idempotency = safely handle trying again**
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I make Lambda idempotent by assigning a unique idempotency key to each logical business operation and storing its processing state in a durable store such as DynamoDB. Before processing, Lambda performs an atomic conditional write to prevent concurrent duplicates. I track states such as IN_PROGRESS and COMPLETED and store the result when appropriate. If the same request is retried, Lambda detects the existing key and returns the previous result instead of executing the business operation again. For critical operations such as Salesforce or ServiceNow updates, I also propagate the idempotency key to the downstream adapter or API when supported.”**
+
+## Easy memory trick
+
+**Key → Check → Lock → Process → Store result**
+
+### Key distinction
+
+> **A Lambda invocation can be retried, so I don't make the invocation itself unique—I make the underlying business operation idempotent.**
+`,code:``},{id:`058-how-do-you-manage-lambda-environment-variables`,category:`Lambda`,title:`How do you manage Lambda environment variables?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you monitor Lambda?
+
+## Short answer
+
+I would use **CloudWatch Metrics + CloudWatch Logs + X-Ray/OpenTelemetry + alarms** to monitor Lambda.
+
+For CWD, I would monitor not only Lambda itself, but also its **downstream dependencies and business impact**.
 
 ## Key points
-- Encrypted at rest with KMS; size-limited.
-- Dynamic or feature-flag configuration belongs in AppConfig or Parameter Store.
-- Do not put secrets in plain environment variables.
 
-## CWD context
-Aliases and separate accounts keep environments apart.
+### 1. CloudWatch Metrics
+
+Monitor the main Lambda metrics:
+
+| Metric                                | What it tells me                      |
+| ------------------------------------- | ------------------------------------- |
+| **Invocations**                       | How many times Lambda runs            |
+| **Errors**                            | How many executions failed            |
+| **Duration**                          | How long execution takes              |
+| **Throttles**                         | Lambda couldn't accept execution      |
+| **ConcurrentExecutions**              | Current concurrency                   |
+| **ProvisionedConcurrencyUtilization** | Usage of provisioned capacity         |
+| **IteratorAge**                       | Useful for stream-based event sources |
+
+For CWD, I would especially watch:
+
+**Errors + Duration + Throttles + Concurrency**
+
+---
+
+## 2. Monitor P50/P95/P99 latency
+
+Don't look only at average latency.
+
+For example:
+
+\`\`\`text id="v9g4k2"
+Lambda Duration
+
+P50  = 150 ms
+P95  = 500 ms
+P99  = 2 sec
+\`\`\`
+
+If P99 suddenly increases, a small percentage of requests are experiencing significant delays.
+
+---
+
+## 3. CloudWatch Logs
+
+Lambda automatically integrates with CloudWatch Logs.
+
+I would log structured information such as:
+
+\`\`\`text id="8y2k4m"
+correlation_id
+request_id
+run_id
+worker_id
+status
+duration
+downstream_service
+error_type
+retry_count
+\`\`\`
+
+Example:
+
+\`\`\`json id="j1p5x7"
+{
+  "run_id": "RUN123",
+  "worker": "CustomerWorker",
+  "status": "FAILED",
+  "downstream": "Salesforce",
+  "retry_count": 2
+}
+\`\`\`
+
+But I would **not log secrets, tokens, passwords, or unnecessary sensitive customer data**.
+
+---
+
+## 4. Distributed tracing
+
+For CWD, I want to trace:
+
+\`\`\`text id="2a8k7p"
+API Gateway
+    ↓
+ECS/Fargate
+    ↓
+Coordinator
+    ↓
+Delegator
+    ↓
+Lambda Worker
+    ↓
+MCP
+    ↓
+Salesforce
+\`\`\`
+
+I can use **AWS X-Ray** and/or **OpenTelemetry** to understand where latency or failures occur.
+
+Example:
+
+\`\`\`text id="g6h2v9"
+API Gateway       100 ms
+Coordinator       150 ms
+Delegator          50 ms
+Lambda             80 ms
+MCP                90 ms
+Salesforce       2,500 ms  ← bottleneck
+\`\`\`
+
+Now I know the Lambda itself isn't necessarily the problem.
+
+---
+
+## 5. Set CloudWatch alarms
+
+I would create alarms for things such as:
+
+\`\`\`text id="w7f3q1"
+Errors ↑
+Throttles ↑
+P95/P99 latency ↑
+Concurrency ↑
+SQS queue depth ↑
+DLQ messages ↑
+\`\`\`
+
+Example:
+
+\`\`\`text id="c5n8m2"
+Lambda Throttles > threshold
+        ↓
+CloudWatch Alarm
+        ↓
+SNS / notification
+        ↓
+Engineering team
+\`\`\`
+
+---
+
+## 6. Monitor Lambda concurrency
+
+Because CWD can fan out:
+
+\`\`\`text id="p3x6v8"
+1 User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+10 Workers
+ ↓
+10 Lambda executions
+\`\`\`
+
+I monitor:
+
+* Concurrent executions
+* Reserved concurrency
+* Throttles
+* Account concurrency
+* Provisioned concurrency utilization
+
+This helps detect concurrency exhaustion before it becomes a larger outage.
+
+---
+
+## 7. Monitor retries and DLQ
+
+For asynchronous Lambda processing:
+
+\`\`\`text id="f9r2k5"
+SQS
+ ↓
+Lambda
+ ↓
+Failure
+ ↓
+Retry
+ ↓
+Retry
+ ↓
+DLQ
+\`\`\`
+
+I monitor:
+
+* Retry count
+* SQS queue depth
+* Message age
+* DLQ message count
+
+A sudden increase in DLQ messages is an important reliability signal.
+
+---
+
+## 8. Monitor downstream dependencies
+
+Lambda might be healthy while Salesforce is failing.
+
+So I also monitor:
+
+\`\`\`text id="x8k3m6"
+Lambda
+  ↓
+MCP
+  ↓
+Salesforce
+\`\`\`
+
+Metrics:
+
+* Downstream latency
+* 4xx/5xx
+* 429/throttling
+* Timeout rate
+* Connection failures
+
+This is particularly important for CWD Workers.
+
+---
+
+# CWD monitoring flow
+
+\`\`\`text id="q2m7v4"
+                    CWD
+                     │
+                Coordinator
+                     │
+                  Worker
+                     │
+                  Lambda
+                     │
+             ┌───────┴───────┐
+             ↓               ↓
+        CloudWatch         X-Ray/Otel
+        Metrics/Logs       Distributed Trace
+             │               │
+             └───────┬───────┘
+                     ↓
+                  Alarms
+                     ↓
+               Engineering Team
+\`\`\`
+
+## 🎯 Strong interview answer
+
+> **“I monitor Lambda using CloudWatch metrics and logs, distributed tracing with X-Ray or OpenTelemetry, and CloudWatch alarms. I track invocations, errors, duration, P50/P95/P99 latency, throttles, concurrency and provisioned-concurrency utilization. For asynchronous CWD Workers, I also monitor SQS queue depth, retries and DLQ messages. I propagate correlation IDs such as session, run and Worker IDs so I can trace a request from API Gateway through the Coordinator, Delegator, Lambda, MCP and downstream systems. I also monitor downstream latency and errors because a Lambda can be healthy while the dependency it calls is failing.”**
+
+## Easy memory trick
+
+**M → L → T → A → D**
+
+* **M** = Metrics
+* **L** = Logs
+* **T** = Tracing
+* **A** = Alarms
+* **D** = Dependencies
+
+> **CloudWatch tells me that Lambda has a problem; tracing helps me find where the problem is.**
+# How do you manage Lambda environment variables?
+
+## Short answer
+
+I use **environment variables for non-sensitive configuration** and **AWS Secrets Manager / Systems Manager Parameter Store for sensitive values**.
+
+I also manage them separately by environment:
+
+\`\`\`text
+Development → Dev configuration
+QA          → QA configuration
+Production  → Prod configuration
+\`\`\`
+
+## Key points
+
+### 1. Non-sensitive configuration → Environment variables
+
+Examples:
+
+\`\`\`text
+ENVIRONMENT=prod
+AWS_REGION=us-east-1
+LOG_LEVEL=INFO
+OPENSEARCH_INDEX=customer-docs
+MODEL_ID=approved-model
+TIMEOUT_SECONDS=30
+\`\`\`
+
+Lambda reads them at runtime:
+
+\`\`\`python
+import os
+
+environment = os.environ["ENVIRONMENT"]
+model_id = os.environ["MODEL_ID"]
+\`\`\`
+
+This avoids hardcoding configuration in the code.
+
+---
+
+### 2. Secrets → Secrets Manager
+
+I would **not** put passwords, API keys, tokens, or database credentials directly into Lambda environment variables.
+
+Instead:
+
+\`\`\`text
+Lambda
+   ↓
+Secrets Manager
+   ↓
+Secret
+\`\`\`
+
+Example:
+
+\`\`\`text
+Lambda
+  ↓
+Get secret
+  ↓
+Salesforce API credential
+\`\`\`
+
+Use IAM permissions so the Lambda role can access only the required secret.
+
+---
+
+### 3. Parameter Store for configuration
+
+For centralized configuration, I can use **SSM Parameter Store**.
+
+\`\`\`text
+Lambda
+   ↓
+Parameter Store
+   ↓
+/cwd/prod/model-id
+/cwd/prod/timeout
+/cwd/prod/opensearch-index
+\`\`\`
+
+This is useful when configuration needs to be centrally managed.
+
+---
+
+## 4. Separate configuration by environment
+
+I don't hardcode:
+
+\`\`\`text
+PROD_INDEX
+PROD_MODEL
+\`\`\`
+
+inside the application.
+
+Instead:
+
+\`\`\`text
+Dev
+ ↓
+/cwd/dev/...
+
+QA
+ ↓
+/cwd/qa/...
+
+Prod
+ ↓
+/cwd/prod/...
+\`\`\`
+
+The deployment pipeline injects the appropriate configuration.
+
+---
+
+## 5. Don't put configuration in source code
+
+Bad:
+
+\`\`\`python
+MODEL_ID = "some-production-model"
+TIMEOUT = 30
+\`\`\`
+
+Better:
+
+\`\`\`python
+MODEL_ID = os.environ["MODEL_ID"]
+TIMEOUT = int(os.environ["TIMEOUT"])
+\`\`\`
+
+This allows the same Lambda artifact to be promoted across environments with different configuration.
+
+---
+
+## 6. Use IAM for access control
+
+For example:
+
+\`\`\`text
+Lambda Execution Role
+       ↓
+   IAM Policy
+       ↓
+Secrets Manager
+       ↓
+Only required secret
+\`\`\`
+
+I follow **least privilege**.
+
+A Customer Worker shouldn't automatically have permission to access every CWD secret.
+
+---
+
+# CWD example
+
+Suppose a Lambda Worker calls an MCP server:
+
+\`\`\`text
+CWD Worker
+    ↓
+Lambda
+    ↓
+MCP Server
+    ↓
+Salesforce
+\`\`\`
+
+Configuration might be:
+
+\`\`\`text
+MCP_ENDPOINT
+MCP_TIMEOUT
+ENVIRONMENT
+LOG_LEVEL
+\`\`\`
+
+Sensitive credentials would be:
+
+\`\`\`text
+Secrets Manager
+    ↓
+MCP authentication secret
+\`\`\`
+
+The Lambda gets permission to read only that secret.
+
+---
+
+# Deployment flow
+
+\`\`\`text
+Git
+ ↓
+CI/CD
+ ↓
+Build Lambda
+ ↓
+Deploy Dev
+ ↓
+Dev configuration
+ ↓
+Test
+ ↓
+Deploy QA
+ ↓
+QA configuration
+ ↓
+Test
+ ↓
+Deploy Production
+ ↓
+Prod configuration
+\`\`\`
+
+The **code artifact stays the same**, while environment-specific configuration changes.
+
+## 🎯 Strong interview answer
+
+> **“I separate application code from configuration. For non-sensitive values such as environment, model configuration, timeouts and index names, I use Lambda environment variables or centralized Parameter Store configuration. I never hardcode secrets in the code or source repository; credentials and API keys are stored in Secrets Manager and accessed through the Lambda execution role using least-privilege IAM. I maintain separate configuration for dev, QA and production through the CI/CD pipeline, so the same code artifact can move across environments safely.”**
+
+## Easy memory trick
+
+**Config → Environment variables / Parameter Store**
+
+**Secrets → Secrets Manager**
+
+**Access → IAM**
+
+**Deployment → CI/CD**
+
+### Key distinction
+
+> **Environment variables are for configuration, not a replacement for a secrets-management system.**
 `,code:``},{id:`059-how-do-you-securely-access-secrets-from-lambda`,category:`Lambda`,title:`How do you securely access secrets from Lambda?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How do you securely access secrets from Lambda?
 
 ## Short answer
-Fetch secrets from Secrets Manager at runtime, with a scoped role and caching.
+
+I would use **AWS Secrets Manager + IAM execution roles**, rather than hardcoding secrets or storing them directly in Lambda code.
+
+\`\`\`text id="r9x4k2"
+Lambda
+   ↓
+IAM Execution Role
+   ↓
+Secrets Manager
+   ↓
+Secret
+\`\`\`
 
 ## Key points
-- Execution role allows GetSecretValue on the specific secret and kms:Decrypt.
-- Use the SDK with caching or the Parameters and Secrets Lambda Extension.
-- Reach Secrets Manager through a VPC endpoint when the function is in a VPC.
-- Never log secret values.
 
-## CWD context
-Cache at initialisation to reduce latency and cost.
+### 1. Store secrets in Secrets Manager
+
+Examples:
+
+* Salesforce credentials
+* ServiceNow credentials
+* API keys
+* OAuth client secrets
+* Database credentials
+
+\`\`\`text id="v6n2q8"
+Secrets Manager
+ ├── /cwd/prod/salesforce
+ ├── /cwd/prod/servicenow
+ └── /cwd/prod/database
+\`\`\`
+
+---
+
+### 2. Give Lambda an IAM execution role
+
+Lambda gets an **execution role**.
+
+For example:
+
+\`\`\`text id="j3k7p1"
+Lambda: CustomerWorker
+       ↓
+IAM Role: CWD-CustomerWorker-Role
+       ↓
+secretsmanager:GetSecretValue
+       ↓
+Only required Salesforce secret
+\`\`\`
+
+Use **least privilege**.
+
+Don't give:
+
+\`\`\`text
+❌ secretsmanager:*
+\`\`\`
+
+to every Lambda.
+
+Instead, allow access to only the required secret ARN.
+
+---
+
+### 3. Retrieve the secret at runtime
+
+Conceptually:
+
+\`\`\`python id="u2q8m4"
+secret = secrets_manager.get_secret_value(
+    SecretId="cwd/prod/salesforce"
+)
+\`\`\`
+
+Then use the credential to call the required service.
+
+\`\`\`text id="h8k3v5"
+Lambda
+ ↓
+Get secret
+ ↓
+Salesforce API
+\`\`\`
+
+---
+
+### 4. Don't log the secret
+
+Never do:
+
+\`\`\`python id="b3r7x1"
+print(secret)
+\`\`\`
+
+Also avoid logging:
+
+* API keys
+* Passwords
+* Access tokens
+* Authorization headers
+* Full secret responses
+
+---
+
+### 5. Encrypt secrets
+
+Secrets Manager encrypts secrets using **AWS KMS**.
+
+For higher security requirements:
+
+\`\`\`text id="n5c8q2"
+Lambda
+ ↓
+IAM
+ ↓
+Secrets Manager
+ ↓
+KMS encryption
+\`\`\`
+
+The Lambda role must have the appropriate permissions to retrieve/decrypt the secret.
+
+---
+
+### 6. Use VPC/private connectivity where required
+
+If CWD Lambda accesses private enterprise resources, I can place Lambda in the appropriate VPC and use private connectivity.
+
+For Secrets Manager access from a VPC, an **interface VPC endpoint** can keep traffic on the AWS network rather than requiring public internet access.
+
+\`\`\`text id="a7m2v9"
+Lambda in VPC
+     ↓
+VPC Endpoint
+     ↓
+Secrets Manager
+\`\`\`
+
+---
+
+### 7. Rotate secrets
+
+Secrets should not live forever.
+
+\`\`\`text id="c9f4w6"
+Secret
+ ↓
+Rotation
+ ↓
+New credential
+ ↓
+Lambda retrieves current secret
+\`\`\`
+
+Secrets Manager supports rotation workflows for supported credential patterns.
+
+---
+
+# CWD example
+
+Suppose the Customer Worker needs Salesforce access:
+
+\`\`\`text id="x6q1m8"
+Customer Worker
+      ↓
+Lambda
+      ↓
+IAM Execution Role
+      ↓
+Secrets Manager
+      ↓
+Salesforce Credential
+      ↓
+MCP / Salesforce
+\`\`\`
+
+The Worker does **not** contain:
+
+\`\`\`text id="p4s7n2"
+❌ username = "..."
+❌ password = "..."
+❌ API_KEY = "..."
+\`\`\`
+
+Instead, it retrieves the required secret at runtime.
+
+---
+
+# 🎯 Strong interview answer
+
+> **“I securely access Lambda secrets using AWS Secrets Manager and the Lambda execution role. The secret is encrypted with KMS, and the Lambda IAM role has least-privilege permission to retrieve only the required secret. The Lambda retrieves it at runtime, uses it for the downstream operation, and never logs or hardcodes the credential. For private workloads, I can use VPC connectivity such as a Secrets Manager interface endpoint, and I enable rotation where appropriate. In CWD, this could protect Salesforce, ServiceNow or MCP authentication credentials.”**
+
+## Easy memory trick
+
+**Store → Secrets Manager**
+**Access → IAM Role**
+**Encrypt → KMS**
+**Network → Private endpoint when required**
+**Rotate → Secrets Manager**
+**Never log → Secret**
+
+### Key distinction
+
+> **IAM controls who can retrieve the secret; Secrets Manager stores and manages the secret; KMS protects the secret cryptographically.**
 `,code:``},{id:`060-what-are-lambdas-limitations-for-agentic-workloads`,category:`Lambda`,title:`What are Lambda's limitations for agentic workloads?`,difficulty:`Intermediate`,time:`~10 min`,concept:`# What are Lambda's limitations for agentic workloads?
 
 ## Short answer
-Lambda's limits make it a poor host for long-running agent loops.
 
-## Key points
-- 15-minute maximum duration; synchronous API Gateway calls end at about 29 seconds.
-- Stateless: state must live in DynamoDB or Redis.
-- Payload limits (about 6 MB synchronous), no GPU, cold starts and concurrency limits.
-- Cost is higher at sustained high load.
+Lambda is excellent for **short, stateless, event-driven tasks**, but it is not always ideal for the **main agentic runtime**.
 
-## CWD context
-Use Fargate for the agent runtime and Step Functions for long workflows.
+Agentic workloads often involve:
+
+* Long-running reasoning
+* Multiple agent/Worker calls
+* State and checkpoints
+* Parallel tool calls
+* Streaming
+* Large dependencies
+* Persistent connections
+
+So for CWD, I would typically use **ECS/Fargate for the main Coordinator/Delegator runtime** and Lambda selectively for lightweight Workers.
+
+## Key limitations
+
+### 1. Execution duration
+
+Lambda has a **maximum execution timeout of 15 minutes**.
+
+An agentic workflow can potentially run much longer:
+
+\`\`\`text
+User
+ ↓
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker 1
+ ↓
+MCP
+ ↓
+Worker 2
+ ↓
+RAG
+ ↓
+Worker 3
+ ↓
+LLM
+ ↓
+Human approval
+ ↓
+Resume
+\`\`\`
+
+That's not a natural fit for one Lambda invocation.
+
+---
+
+### 2. State management
+
+Lambda execution environments are **not a durable place to store workflow state**.
+
+Agentic systems need:
+
+\`\`\`text
+Session
+ ↓
+Task
+ ↓
+Run
+ ↓
+Turn
+ ↓
+Step
+ ↓
+Checkpoint
+\`\`\`
+
+So I would store state externally:
+
+\`\`\`text
+Lambda
+ ↓
+DynamoDB / Redis / other durable state
+\`\`\`
+
+For CWD, LangGraph checkpoint/state should be persisted outside the Lambda execution environment.
+
+---
+
+### 3. Cold starts
+
+Agentic applications can have significant dependencies:
+
+\`\`\`text
+LangGraph
+LangChain
+MCP SDK
+RAG libraries
+AWS SDK
+custom libraries
+\`\`\`
+
+Large packages can increase initialization time.
+
+For latency-sensitive agent interactions:
+
+\`\`\`text
+Cold start
+   ↓
+Extra latency
+\`\`\`
+
+Provisioned Concurrency can help, but it adds cost.
+
+---
+
+### 4. Fan-out can create concurrency problems
+
+This is especially important for CWD.
+
+One request could become:
+
+\`\`\`text
+Coordinator
+    ↓
+Delegator
+    ↓
+10 Workers
+    ↓
+10 Lambda executions
+\`\`\`
+
+100 users could potentially create:
+
+\`\`\`text
+100 × 10 = 1,000
+\`\`\`
+
+concurrent Worker executions.
+
+That can cause:
+
+* Lambda throttling
+* Bedrock throttling
+* Salesforce overload
+* ServiceNow overload
+* Higher cost
+
+You need concurrency limits, queues and backpressure.
+
+---
+
+### 5. Long-running connections
+
+Some agentic systems may need:
+
+* Persistent connections
+* Streaming
+* Long-running MCP interactions
+* WebSocket connections
+* Connection pooling
+
+Lambda is not designed to be a general-purpose persistent application server.
+
+For those workloads, a containerized service can be a better fit.
+
+---
+
+### 6. Large dependencies / custom runtimes
+
+Agentic applications can become dependency-heavy.
+
+For example:
+
+\`\`\`text
+CWD
+ ├── LangGraph
+ ├── MCP
+ ├── RAG
+ ├── Document processing
+ ├── ML libraries
+ └── Custom enterprise SDKs
+\`\`\`
+
+Lambda supports layers and container images, but a large application can still become harder to manage efficiently.
+
+ECS/Fargate gives more control over the container environment.
+
+---
+
+### 7. Complex workflow orchestration
+
+Lambda itself doesn't provide agent reasoning/orchestration.
+
+For example:
+
+\`\`\`text
+Coordinator
+ ↓
+Choose Delegator
+ ↓
+Parallel Workers
+ ↓
+Evaluate result
+ ↓
+Retry
+ ↓
+Human approval
+ ↓
+Resume
+\`\`\`
+
+You still need something like:
+
+* LangGraph
+* Step Functions
+* Another workflow engine
+
+Lambda is **compute**, not the agent orchestration framework.
+
+---
+
+### 8. Retry complexity
+
+Agentic workflows can have many layers:
+
+\`\`\`text
+Coordinator
+ ↓
+Delegator
+ ↓
+Worker
+ ↓
+MCP
+ ↓
+Salesforce
+\`\`\`
+
+If each layer independently retries, you can accidentally create:
+
+\`\`\`text
+3 Coordinator retries
+×
+3 Worker retries
+×
+3 MCP retries
+=
+27 downstream attempts
+\`\`\`
+
+So retry policies need to be centrally designed and bounded.
+
+---
+
+## CWD architecture I would use
+
+\`\`\`text
+                       API Gateway
+                            ↓
+                       ECS/Fargate
+                            ↓
+                       Coordinator
+                            ↓
+                     ┌──────┴──────┐
+                     ↓             ↓
+                Delegator       Delegator
+                     ↓             ↓
+                  Workers        Workers
+                     ↓             ↓
+                  MCP/RAG      MCP/RAG
+                     ↓             ↓
+                  Systems      Bedrock
+
+
+Supporting workloads
+────────────────────────────
+S3/EventBridge/SQS
+        ↓
+      Lambda
+        ↓
+ Short/event-driven processing
+\`\`\`
+
+## When Lambda is still a good choice
+
+I would use Lambda for:
+
+* S3 document preprocessing
+* EventBridge handlers
+* SQS consumers
+* Lightweight MCP adapters
+* Simple validation/transformation
+* Scheduled jobs
+* Notifications
+* Small background Workers
+
+## 🎯 Strong interview answer
+
+> **“Lambda has several limitations for agentic workloads. Agent workflows can be long-running, stateful and highly parallel, while Lambda has a maximum invocation duration, ephemeral execution environments and concurrency limits. Cold starts and large dependency packages can also affect latency. Agentic systems may require persistent connections, checkpointing and complex orchestration, which Lambda doesn't provide by itself. Therefore, in CWD I would typically run the main FastAPI and LangGraph Coordinator/Delegator runtime on ECS/Fargate, while using Lambda for short, stateless and event-driven supporting workloads. State would be externalized to services such as DynamoDB or Redis, and queues would control bursty Worker execution.”**
+
+## Easy memory trick
+
+**Agentic workload = L-S-C-P**
+
+* **L** → Long-running
+* **S** → Stateful
+* **C** → Concurrent/fan-out
+* **P** → Persistent connections
+
+> **Lambda = short/event-driven. Fargate = long/complex agent runtime.**
 `,code:``}];function Sm(){return(0,M.jsx)($,{data:xm,title:`AWS Lambda Cookbook`,subtitle:`Cold starts, concurrency, idempotency and agentic limits`,icon:`λ`,patternLabel:`Questions`})}var Cm=[{id:`061-why-would-you-deploy-cwd-on-ecs-fargate`,category:`ECS / Fargate / EKS`,title:`Why would you deploy CWD on ECS/Fargate?`,difficulty:`Advanced`,time:`~15 min`,concept:`# Why would you deploy CWD on ECS/Fargate?
 
 ## Short answer
-ECS Fargate runs containers without managing servers, with per-task IAM and networking.
+
+I would deploy the **main CWD application on ECS/Fargate** because CWD is a **long-running, containerized, multi-agent application** with FastAPI, LangGraph, Coordinator, Delegators, and Workers.
+
+Fargate lets me run these containers without managing EC2 servers, while giving me control over **CPU, memory, networking, scaling, and deployment**.
 
 ## Key points
-- Task roles, awsvpc networking with security groups per task.
-- ALB integration, Service Auto Scaling, CodeDeploy blue-green.
-- Secrets injected from Secrets Manager; logs to CloudWatch.
 
-## CWD context
-A natural fit for FastAPI, LangGraph and MCP servers.
+1. **Long-running application** – CWD is not just a short function.
+2. **Containerized** – Package FastAPI, LangGraph, MCP clients, and dependencies in Docker.
+3. **No server management** – Fargate manages the underlying infrastructure.
+4. **Horizontal scaling** – Run multiple CWD tasks.
+5. **CPU/memory control** – More flexibility than Lambda.
+6. **Private networking** – Run CWD inside a VPC/private subnets.
+7. **Works well with ALB/API Gateway**.
+8. **Better for complex dependencies** – LangGraph, MCP, RAG libraries, custom Python packages.
+9. **Rolling deployments** – Deploy new versions without taking the service down.
+
+## CWD flow
+
+\`\`\`text
+User
+  ↓
+API Gateway
+  ↓
+ALB / VPC Link
+  ↓
+ECS/Fargate
+ ┌─────────────────────────────┐
+ │ CWD FastAPI                 │
+ │      ↓                      │
+ │ Coordinator                │
+ │      ↓                      │
+ │ Delegators                 │
+ │      ↓                      │
+ │ Workers                    │
+ └─────────────────────────────┘
+       ↓          ↓
+     MCP        RAG
+       ↓          ↓
+Salesforce/     OpenSearch
+ServiceNow       ↓
+              Bedrock
+\`\`\`
+
+## Why Fargate specifically?
+
+### 1. CWD is long-running
+
+The Coordinator and agent workflow can involve:
+
+\`\`\`text
+Coordinator
+   ↓
+Sales Delegator
+   ↓
+Worker 1
+Worker 2
+   ↓
+MCP
+   ↓
+Salesforce
+\`\`\`
+
+This can involve multiple downstream calls and retries.
+
+Fargate is better suited to running this as a persistent application service.
+
+### 2. Container support
+
+I can package the entire CWD runtime:
+
+\`\`\`dockerfile
+FastAPI
+LangGraph
+MCP Client
+A2A
+LangChain
+RAG libraries
+AWS SDK
+Custom business logic
+\`\`\`
+
+into a Docker image.
+
+Then ECS runs that image as a Fargate task.
+
+### 3. Scaling
+
+Suppose one CWD task handles the traffic initially:
+
+\`\`\`text
+ECS Service
+
+CWD Task 1
+\`\`\`
+
+When traffic increases:
+
+\`\`\`text
+CWD Task 1
+CWD Task 2
+CWD Task 3
+CWD Task 4
+\`\`\`
+
+ECS Service Auto Scaling can increase or decrease the number of tasks.
+
+### 4. Network security
+
+For enterprise CWD, I can keep the application private:
+
+\`\`\`text
+Internet
+   ↓
+API Gateway
+   ↓
+VPC
+   ↓
+Private Subnet
+   ↓
+ECS/Fargate
+   ↓
+MCP / RAG / Bedrock / Databases
+\`\`\`
+
+Security groups, IAM roles, VPC endpoints and private connectivity can be used.
+
+### 5. Better control than Lambda
+
+For the main CWD runtime, I may need:
+
+* More CPU/memory
+* Large dependencies
+* Long-running processes
+* Custom Docker images
+* Persistent application services
+* More networking control
+
+Fargate provides more control than Lambda.
+
+## Example
+
+For CWD:
+
+\`\`\`text
+API Gateway
+      ↓
+ECS/Fargate
+      ↓
+FastAPI
+      ↓
+Coordinator
+      ↓
+Sales Delegator
+      ↓
+Customer Worker
+      ↓
+MCP Client
+      ↓
+MCP Server
+      ↓
+Salesforce
+\`\`\`
+
+Another Worker might use:
+
+\`\`\`text
+Knowledge Worker
+      ↓
+OpenSearch
+      ↓
+RAG Context
+      ↓
+Bedrock
+\`\`\`
+
+All of this can run as part of the containerized CWD platform.
+
+## 🎯 Strong interview answer
+
+> **“I chose ECS with Fargate for the main CWD runtime because CWD is a long-running, containerized multi-agent application with FastAPI, LangGraph, Coordinator, Delegators, Workers and MCP integrations. Fargate removes the need to manage EC2 servers while giving us control over CPU, memory, networking and horizontal scaling. I would keep the main agent runtime on Fargate and use Lambda separately for short-lived, event-driven supporting workloads.”**
+
+## Easy memory trick
+
+**Fargate = Container + Long-running + Scale + Control**
+
+### Key distinction
+
+| Service            | Best fit in CWD                                 |
+| ------------------ | ----------------------------------------------- |
+| **Lambda**         | Short, stateless, event-driven tasks            |
+| **ECS/Fargate**    | Main CWD application / long-running containers  |
+| **EKS**            | Kubernetes-heavy, complex platform requirements |
+| **Step Functions** | Durable predefined workflows                    |
+| **LangGraph**      | Agent reasoning/orchestration                   |
+| **Bedrock**        | Foundation models                               |
+
+**Interview one-liner:**
+
+> **“Lambda is for supporting functions; Fargate is where I would run the core CWD service.”**
 `,code:``},{id:`062-ecs-vs-lambda-for-workers`,category:`ECS / Fargate / EKS`,title:`ECS vs Lambda for Workers?`,difficulty:`Advanced`,time:`~15 min`,concept:`# ECS vs Lambda for Workers?
 
 ## Short answer
-Use ECS for Workers that are long, variable, dependency-heavy or steady; use Lambda for short, simple, spiky tasks.
+
+For CWD Workers, I would choose **Lambda for short, stateless, event-driven Workers** and **ECS/Fargate for long-running, complex, or dependency-heavy Workers**.
+
+The decision is based on the **Worker's workload**, not simply because it is an agent.
 
 ## Key points
-- ECS: no 15-minute limit, persistent connections, larger images.
-- Lambda: fast to build, scale to zero, but limited duration and concurrency control.
-- Scale ECS Workers on queue backlog per task.
 
-## CWD context
-Decide per Worker type, not for all Workers.
+| Factor                 | Lambda                             | ECS/Fargate                           |
+| ---------------------- | ---------------------------------- | ------------------------------------- |
+| Execution              | Short-lived                        | Long-running                          |
+| Deployment             | Function                           | Container                             |
+| Infrastructure         | Fully serverless                   | Managed containers                    |
+| Startup                | Can have cold start                | Usually persistent tasks              |
+| Dependencies           | Better for lightweight code        | Better for large/complex dependencies |
+| CPU/Memory control     | More limited                       | More control                          |
+| Persistent connections | Not ideal                          | Better                                |
+| Scaling                | Per invocation                     | Task/service scaling                  |
+| Best for               | Simple Workers                     | Complex Workers                       |
+| CWD example            | Event processor, validation Worker | RAG/MCP/complex agent Worker          |
+
+## CWD example
+
+\`\`\`text
+                 Coordinator
+                      ↓
+                  Delegator
+                      ↓
+              ┌───────┴────────┐
+              ↓                ↓
+        Simple Worker      Complex Worker
+              ↓                ↓
+           Lambda           ECS/Fargate
+              ↓                ↓
+        S3/EventBridge     MCP/RAG/LLM
+\`\`\`
+
+### Lambda Worker example
+
+Suppose we have a document-processing Worker:
+
+\`\`\`text
+S3 upload
+   ↓
+EventBridge
+   ↓
+SQS
+   ↓
+Lambda Worker
+   ↓
+Extract metadata
+   ↓
+Store result
+\`\`\`
+
+This is a good Lambda workload because it is **short, stateless and event-driven**.
+
+### ECS Worker example
+
+Suppose we have a complex Customer Briefing Worker:
+
+\`\`\`text
+Sales Delegator
+      ↓
+Customer Briefing Worker
+      ↓
+MCP Client
+      ↓
+Salesforce
+      ↓
+RAG
+      ↓
+OpenSearch
+      ↓
+Bedrock
+      ↓
+Response
+\`\`\`
+
+If this Worker has significant dependencies, complex processing, persistent service behavior, or needs more runtime/resource control, I would deploy it as an **ECS/Fargate service**.
+
+## Important point
+
+I would **not automatically put every Worker on ECS**.
+
+I would classify Workers:
+
+\`\`\`text
+Worker
+  ↓
+Is it short + stateless + event-driven?
+       ↓ Yes                    ↓ No
+    Lambda                 ECS/Fargate
+\`\`\`
+
+For example:
+
+* **Validation Worker** → Lambda
+* **S3 preprocessing Worker** → Lambda
+* **Event handler Worker** → Lambda
+* **Complex RAG Worker** → ECS/Fargate
+* **Long-running MCP Worker** → ECS/Fargate
+* **Heavy AI processing Worker** → ECS/Fargate
+* **Complex agentic Worker** → ECS/Fargate
+
+## 🎯 Strong interview answer
+
+> **“I don't choose Lambda or ECS based simply on the fact that it's a Worker. I classify the workload. Short-lived, stateless and event-driven Workers are good candidates for Lambda because of its serverless scaling and pay-per-invocation model. Complex, long-running, dependency-heavy or resource-intensive Workers are better suited for ECS/Fargate because I get more control over CPU, memory, networking and the container runtime. In CWD, I would typically use a combination of both.”**
+
+## Easy memory trick
+
+**Lambda = Short + Simple + Stateless**
+
+**Fargate = Long + Complex + Container**
+
+### Key distinction
+
+> **Lambda scales executions; ECS/Fargate scales containerized services.**
 `,code:``},{id:`063-ecs-vs-eks`,category:`ECS / Fargate / EKS`,title:`ECS vs EKS?`,difficulty:`Advanced`,time:`~15 min`,concept:`# ECS vs EKS?
 
 ## Short answer
-ECS is simpler and AWS-native; EKS gives the full Kubernetes ecosystem.
+
+**ECS** is AWS's managed container orchestration service and is simpler to operate.
+**EKS** is managed Kubernetes and gives much more Kubernetes-level flexibility and control.
+
+For **CWD**, I would use **ECS/Fargate** when I want a simpler AWS-native container platform. I would choose **EKS** when CWD has complex Kubernetes requirements or needs to run as part of an existing Kubernetes platform.
 
 ## Key points
-- ECS: less operational overhead, tight AWS integration.
-- EKS: Kubernetes APIs, Helm and operators, portability; control-plane cost and upgrade work.
 
-## CWD context
-Default to ECS; choose EKS for a specific requirement.
+| Factor               | ECS/Fargate              | EKS                             |
+| -------------------- | ------------------------ | ------------------------------- |
+| Orchestrator         | AWS ECS                  | Kubernetes                      |
+| Complexity           | Lower                    | Higher                          |
+| AWS integration      | Very strong              | Strong                          |
+| Kubernetes expertise | Not required             | Required                        |
+| Operations           | Simpler                  | More operational responsibility |
+| Scaling              | ECS Service Auto Scaling | Kubernetes HPA/Karpenter, etc.  |
+| Networking           | AWS-native               | Kubernetes + AWS networking     |
+| Deployment           | ECS task/service         | Kubernetes Deployment/Pod       |
+| Service mesh         | Optional                 | Strong Kubernetes ecosystem     |
+| Portability          | More AWS-specific        | More portable across Kubernetes |
+| Best for             | Standard AWS containers  | Complex Kubernetes platforms    |
+
+## CWD architecture with ECS
+
+\`\`\`text
+API Gateway
+     ↓
+ALB
+     ↓
+ECS/Fargate
+     ↓
+CWD FastAPI
+     ↓
+Coordinator
+     ↓
+Delegators
+     ↓
+Workers
+     ↓
+MCP / RAG / Bedrock
+\`\`\`
+
+This is relatively simple to operate.
+
+## CWD architecture with EKS
+
+\`\`\`text
+API Gateway
+     ↓
+ALB / Ingress
+     ↓
+EKS Cluster
+     ↓
+ ┌─────────────────────┐
+ │ Coordinator Pod     │
+ │ Delegator Pods      │
+ │ Worker Pods         │
+ │ MCP Services        │
+ └─────────────────────┘
+          ↓
+   RAG / Bedrock /
+   Enterprise Systems
+\`\`\`
+
+Here Kubernetes manages the Pods, Services, Deployments, scaling, scheduling, etc.
+
+## When would I choose ECS?
+
+For CWD, ECS/Fargate makes sense when:
+
+* We are primarily AWS-based.
+* We want simpler operations.
+* CWD is mainly a set of containerized services.
+* We don't need Kubernetes-specific capabilities.
+* The team has stronger AWS/ECS experience than Kubernetes expertise.
+* We want to minimize platform-management overhead.
+
+### Example
+
+\`\`\`text
+CWD API → ECS/Fargate
+Coordinator → ECS/Fargate
+Delegators → ECS/Fargate
+Complex Workers → ECS/Fargate
+\`\`\`
+
+## When would I choose EKS?
+
+I would consider EKS when CWD needs:
+
+### 1. Kubernetes-native orchestration
+
+For example:
+
+\`\`\`text
+Coordinator Pod
+     ↓
+Delegator Pods
+     ↓
+Worker Pods
+\`\`\`
+
+with Kubernetes-native scheduling and autoscaling.
+
+### 2. Large microservice platform
+
+If CWD grows into many services:
+
+\`\`\`text
+Coordinator
+Sales Delegator
+IT Delegator
+RAG Worker
+CRM Worker
+Incident Worker
+MCP Services
+Evaluation Services
+Observability Services
+\`\`\`
+
+EKS can provide a common Kubernetes platform for them.
+
+### 3. Advanced scaling
+
+For example:
+
+\`\`\`text
+HPA
+ ↓
+Pod scaling
+
+Karpenter
+ ↓
+Node provisioning
+\`\`\`
+
+### 4. Existing Kubernetes organization
+
+If the company already has a standardized Kubernetes platform, deploying CWD on EKS can avoid introducing another container platform.
+
+### 5. Kubernetes ecosystem
+
+If we need Kubernetes-native capabilities such as:
+
+* Helm
+* Operators
+* Service mesh
+* Kubernetes CRDs
+* Advanced scheduling
+* Kubernetes-native networking
+* GPU scheduling
+
+EKS becomes more relevant.
+
+## 🎯 Strong interview answer
+
+> **“ECS and EKS both run containers, but the main difference is the orchestration platform. ECS is AWS-native and simpler to operate, while EKS provides managed Kubernetes and much greater Kubernetes-level flexibility. For CWD, I would choose ECS/Fargate if we want a simpler AWS-native architecture for the Coordinator, Delegators and Workers. I would choose EKS if CWD requires advanced Kubernetes capabilities, complex scheduling, service mesh, GPU workloads, or needs to align with an existing enterprise Kubernetes platform.”**
+
+## Easy memory trick
+
+**ECS = Easy AWS Containers**
+
+**EKS = Kubernetes + Control + Flexibility**
+
+### Key distinction
+
+> **ECS/Fargate → simpler AWS container platform**
+> **EKS → Kubernetes platform for complex requirements**
+
+And remember:
+
+\`\`\`text
+Lambda → Function
+ECS/Fargate → Container
+EKS → Kubernetes
+\`\`\`
+
+For an interview, don't say **“EKS is better than ECS.”** Say **“I choose based on operational complexity and Kubernetes requirements.”**
 `,code:``},{id:`064-how-would-you-containerize-the-coordinator`,category:`ECS / Fargate / EKS`,title:`How would you containerize the Coordinator?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you containerize the Coordinator?
 
 ## Short answer
@@ -182993,4 +198273,4 @@ Bicep is Azure-native infrastructure as code; Terraform is multi-cloud with a la
 
 ## CWD context
 Consistency across the team matters more than the tool.
-`,code:``}];function Ph(){return(0,M.jsx)($,{data:Nh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Fh=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function Ih(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let l=e=>{t(t=>t===e?null:e)},u=()=>{t(null)},d=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>l(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:u,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:Fh,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(d,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(d,{name:`AgenticAI`,topics:a}),(0,M.jsx)(d,{name:`CWD Project`,topics:o}),(0,M.jsx)(d,{name:`AWS`,topics:s}),(0,M.jsx)(d,{name:`Azure`,topics:c})]})]})}function Lh(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(Ih,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(cp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(kf,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(jf,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Nf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(op,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(up,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(fp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(Sp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ep,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Op,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(Mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Ip,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Rp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(em,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(nm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(im,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(om,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(um,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(fm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(mm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(gm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(vm,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(Sm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(wm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Em,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Om,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(Mm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Pm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Im,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Rm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(Bm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Wm,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Km,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(Jm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Xm,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)(eh,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(nh,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(ih,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(oh,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(ch,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(uh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(fh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(mh,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(gh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(vh,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(bh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(wh,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Eh,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Oh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(Mh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Ph,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(Lh,{})}));
+`,code:``}];function Ph(){return(0,M.jsx)($,{data:Nh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Fh=[{id:`001-what-is-an-array`,category:`Arrays / Lists`,title:`What is an array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`002-what-is-the-difference-between-an-array-and-a-python-list`,category:`Arrays / Lists`,title:`What is the difference between an array and a Python list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`003-how-are-arrays-stored-in-memory`,category:`Arrays / Lists`,title:`How are arrays stored in memory?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`004-what-is-random-access`,category:`Arrays / Lists`,title:`What is random access?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`005-what-is-the-time-complexity-of-accessing-arr-i`,category:`Arrays / Lists`,title:"What is the time complexity of accessing `arr[i]`?",difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`006-what-is-the-time-complexity-of-searching-an-unsorted-array`,category:`Arrays / Lists`,title:`What is the time complexity of searching an unsorted array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`007-what-is-the-time-complexity-of-inserting-at-the-beginning`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the beginning?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`008-what-is-the-time-complexity-of-inserting-at-the-end`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the end?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`009-what-is-the-difference-between-static-and-dynamic-arrays`,category:`Arrays / Lists`,title:`What is the difference between static and dynamic arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`010-what-are-the-advantages-and-disadvantages-of-arrays`,category:`Arrays / Lists`,title:`What are the advantages and disadvantages of arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ih(){return(0,M.jsx)($,{data:Fh,title:`Arrays / Lists Cookbook`,subtitle:`Fundamentals and theory questions on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var Lh=[{id:`011-find-the-maximum-element`,category:`Arrays / Lists`,title:`Find the maximum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`012-find-the-minimum-element`,category:`Arrays / Lists`,title:`Find the minimum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`013-find-the-second-largest-element`,category:`Arrays / Lists`,title:`Find the second-largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`014-reverse-an-array`,category:`Arrays / Lists`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`015-remove-duplicates-from-an-array`,category:`Arrays / Lists`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`016-find-duplicate-elements`,category:`Arrays / Lists`,title:`Find duplicate elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`017-find-the-missing-number`,category:`Arrays / Lists`,title:`Find the missing number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`018-find-the-frequency-of-elements`,category:`Arrays / Lists`,title:`Find the frequency of elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`019-move-all-zeros-to-the-end`,category:`Arrays / Lists`,title:`Move all zeros to the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`020-check-whether-an-array-is-sorted`,category:`Arrays / Lists`,title:`Check whether an array is sorted.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`021-rotate-an-array-by-k-positions`,category:`Arrays / Lists`,title:`Rotate an array by K positions.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`022-find-the-intersection-of-two-arrays`,category:`Arrays / Lists`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`023-find-the-union-of-two-arrays`,category:`Arrays / Lists`,title:`Find the union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`024-find-the-first-repeating-element`,category:`Arrays / Lists`,title:`Find the first repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`025-find-the-first-non-repeating-element`,category:`Arrays / Lists`,title:`Find the first non-repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`026-find-all-pairs-whose-sum-equals-k`,category:`Arrays / Lists`,title:`Find all pairs whose sum equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`027-find-the-majority-element`,category:`Arrays / Lists`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`028-find-the-maximum-subarray-sum`,category:`Arrays / Lists`,title:`Find the maximum subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`029-find-the-maximum-product-subarray`,category:`Arrays / Lists`,title:`Find the maximum product subarray.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`030-find-the-longest-consecutive-sequence`,category:`Arrays / Lists`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rh(){return(0,M.jsx)($,{data:Lh,title:`Arrays / Lists Cookbook`,subtitle:`Coding practice problems on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var zh=[{id:`031-what-is-a-string`,category:`Strings`,title:`What is a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`032-are-python-strings-mutable-or-immutable`,category:`Strings`,title:`Are Python strings mutable or immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`033-why-are-strings-immutable`,category:`Strings`,title:`Why are strings immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`034-what-is-the-time-complexity-of-string-concatenation`,category:`Strings`,title:`What is the time complexity of string concatenation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`035-difference-between-string-list-and-tuple`,category:`Strings`,title:`Difference between string, list, and tuple?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`036-how-do-you-reverse-a-string`,category:`Strings`,title:`How do you reverse a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`037-how-do-you-iterate-through-a-string`,category:`Strings`,title:`How do you iterate through a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bh(){return(0,M.jsx)($,{data:zh,title:`Strings Cookbook`,subtitle:`Fundamentals and theory questions on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Vh=[{id:`038-reverse-a-string`,category:`Strings`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`039-check-whether-a-string-is-a-palindrome`,category:`Strings`,title:`Check whether a string is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`040-check-whether-two-strings-are-anagrams`,category:`Strings`,title:`Check whether two strings are anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`041-count-character-frequencies`,category:`Strings`,title:`Count character frequencies.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`042-find-the-first-non-repeating-character`,category:`Strings`,title:`Find the first non-repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`043-find-the-first-repeating-character`,category:`Strings`,title:`Find the first repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`044-remove-duplicate-characters`,category:`Strings`,title:`Remove duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`045-find-duplicate-characters`,category:`Strings`,title:`Find duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`046-reverse-words-in-a-sentence`,category:`Strings`,title:`Reverse words in a sentence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`047-find-the-longest-word`,category:`Strings`,title:`Find the longest word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`048-count-vowels-and-consonants`,category:`Strings`,title:`Count vowels and consonants.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`049-check-whether-one-string-is-a-rotation-of-another`,category:`Strings`,title:`Check whether one string is a rotation of another.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`050-find-all-occurrences-of-a-substring`,category:`Strings`,title:`Find all occurrences of a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`051-implement-string-compression`,category:`Strings`,title:`Implement string compression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`052-find-the-longest-common-prefix`,category:`Strings`,title:`Find the longest common prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`053-find-the-longest-substring-without-repeating-characters`,category:`Strings`,title:`Find the longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`054-find-the-longest-palindromic-substring`,category:`Strings`,title:`Find the longest palindromic substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`055-group-anagrams`,category:`Strings`,title:`Group anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`056-minimum-window-substring`,category:`Strings`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hh(){return(0,M.jsx)($,{data:Vh,title:`Strings Cookbook`,subtitle:`Coding practice problems on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Uh=[{id:`057-what-is-a-hash-table`,category:`Hash Table / Dictionary`,title:`What is a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`058-how-does-a-hash-table-work`,category:`Hash Table / Dictionary`,title:`How does a hash table work?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`059-what-is-hashing`,category:`Hash Table / Dictionary`,title:`What is hashing?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`060-what-is-a-hash-function`,category:`Hash Table / Dictionary`,title:`What is a hash function?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`061-what-is-a-hash-collision`,category:`Hash Table / Dictionary`,title:`What is a hash collision?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`062-how-are-collisions-handled`,category:`Hash Table / Dictionary`,title:`How are collisions handled?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`063-what-is-the-average-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`064-what-is-the-worst-case-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the worst-case lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`065-why-is-a-dictionary-generally-o-1-for-lookup`,category:`Hash Table / Dictionary`,title:`Why is a dictionary generally O(1) for lookup?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`066-difference-between-dictionary-and-list`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`067-difference-between-dictionary-and-set`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`068-what-makes-an-object-hashable-in-python`,category:`Hash Table / Dictionary`,title:`What makes an object hashable in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wh(){return(0,M.jsx)($,{data:Uh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Fundamentals and theory questions on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var Gh=[{id:`069-count-frequencies-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Count frequencies using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`070-find-duplicates-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Find duplicates using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`071-two-sum`,category:`Hash Table / Dictionary`,title:`Two Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`072-group-anagrams`,category:`Hash Table / Dictionary`,title:`Group Anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`073-first-unique-character`,category:`Hash Table / Dictionary`,title:`First Unique Character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`074-find-common-elements-between-arrays`,category:`Hash Table / Dictionary`,title:`Find common elements between arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`075-find-the-intersection-of-two-arrays`,category:`Hash Table / Dictionary`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`076-find-elements-occurring-more-than-once`,category:`Hash Table / Dictionary`,title:`Find elements occurring more than once.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`077-find-the-majority-element`,category:`Hash Table / Dictionary`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`078-find-the-longest-consecutive-sequence`,category:`Hash Table / Dictionary`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`079-find-subarray-with-sum-k`,category:`Hash Table / Dictionary`,title:`Find subarray with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`080-count-subarrays-with-sum-k`,category:`Hash Table / Dictionary`,title:`Count subarrays with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`081-find-pairs-with-a-given-difference`,category:`Hash Table / Dictionary`,title:`Find pairs with a given difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`082-find-the-longest-substring-with-k-distinct-characters`,category:`Hash Table / Dictionary`,title:`Find the longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`083-implement-a-simple-hash-table`,category:`Hash Table / Dictionary`,title:`Implement a simple hash table.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`084-design-an-lru-cache`,category:`Hash Table / Dictionary`,title:`Design an LRU cache.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kh(){return(0,M.jsx)($,{data:Gh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Coding practice problems on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var qh=[{id:`085-what-is-a-set`,category:`Set`,title:`What is a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`086-why-does-a-set-not-contain-duplicates`,category:`Set`,title:`Why does a set not contain duplicates?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`087-how-is-a-set-implemented-internally`,category:`Set`,title:`How is a set implemented internally?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`088-set-vs-list`,category:`Set`,title:`Set vs list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`089-set-vs-dictionary`,category:`Set`,title:`Set vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`090-what-is-the-average-lookup-complexity`,category:`Set`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`091-when-should-you-use-a-set`,category:`Set`,title:`When should you use a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jh(){return(0,M.jsx)($,{data:qh,title:`Set Cookbook`,subtitle:`Fundamentals and theory questions on Set`,icon:`🎯`,patternLabel:`Questions`})}var Yh=[{id:`092-remove-duplicates-from-an-array`,category:`Set`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`093-find-intersection-of-two-arrays`,category:`Set`,title:`Find intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`094-find-union-of-two-arrays`,category:`Set`,title:`Find union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`095-find-difference-between-two-arrays`,category:`Set`,title:`Find difference between two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`096-find-elements-appearing-in-both-arrays`,category:`Set`,title:`Find elements appearing in both arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`097-find-missing-elements`,category:`Set`,title:`Find missing elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`098-find-duplicate-values`,category:`Set`,title:`Find duplicate values.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`099-determine-whether-two-arrays-contain-the-same-elements`,category:`Set`,title:`Determine whether two arrays contain the same elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`100-find-common-characters-between-strings`,category:`Set`,title:`Find common characters between strings.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xh(){return(0,M.jsx)($,{data:Yh,title:`Set Cookbook`,subtitle:`Coding practice problems on Set`,icon:`🎯`,patternLabel:`Questions`})}var Zh=[{id:`101-what-is-a-linked-list`,category:`Linked List`,title:`What is a linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`102-array-vs-linked-list`,category:`Linked List`,title:`Array vs linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`103-singly-vs-doubly-linked-list`,category:`Linked List`,title:`Singly vs doubly linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`104-what-is-a-node`,category:`Linked List`,title:`What is a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`105-what-is-the-head`,category:`Linked List`,title:`What is the head?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`106-what-is-the-tail`,category:`Linked List`,title:`What is the tail?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`107-why-does-a-linked-list-require-extra-memory`,category:`Linked List`,title:`Why does a linked list require extra memory?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`108-what-is-the-complexity-of-accessing-an-element`,category:`Linked List`,title:`What is the complexity of accessing an element?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`109-what-is-the-complexity-of-insertion`,category:`Linked List`,title:`What is the complexity of insertion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`110-what-is-the-complexity-of-deletion`,category:`Linked List`,title:`What is the complexity of deletion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`111-when-would-you-choose-a-linked-list-over-an-array`,category:`Linked List`,title:`When would you choose a linked list over an array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qh(){return(0,M.jsx)($,{data:Zh,title:`Linked List Cookbook`,subtitle:`Fundamentals and theory questions on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var $h=[{id:`112-create-a-singly-linked-list`,category:`Linked List`,title:`Create a singly linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`113-insert-at-the-beginning`,category:`Linked List`,title:`Insert at the beginning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`114-insert-at-the-end`,category:`Linked List`,title:`Insert at the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`115-insert-at-a-specific-position`,category:`Linked List`,title:`Insert at a specific position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`116-delete-a-node`,category:`Linked List`,title:`Delete a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`117-search-for-a-node`,category:`Linked List`,title:`Search for a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`118-reverse-a-linked-list`,category:`Linked List`,title:`Reverse a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`119-find-the-length`,category:`Linked List`,title:`Find the length.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`120-find-the-middle-node`,category:`Linked List`,title:`Find the middle node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`121-detect-a-cycle`,category:`Linked List`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`122-find-the-start-of-a-cycle`,category:`Linked List`,title:`Find the start of a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`123-remove-a-cycle`,category:`Linked List`,title:`Remove a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`124-merge-two-sorted-linked-lists`,category:`Linked List`,title:`Merge two sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`125-remove-duplicates`,category:`Linked List`,title:`Remove duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`126-remove-the-nth-node-from-the-end`,category:`Linked List`,title:`Remove the Nth node from the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`127-find-the-intersection-of-two-linked-lists`,category:`Linked List`,title:`Find the intersection of two linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`128-check-whether-a-linked-list-is-a-palindrome`,category:`Linked List`,title:`Check whether a linked list is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`129-reverse-nodes-in-groups-of-k`,category:`Linked List`,title:`Reverse nodes in groups of K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`130-sort-a-linked-list`,category:`Linked List`,title:`Sort a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`131-copy-a-linked-list-with-random-pointers`,category:`Linked List`,title:`Copy a linked list with random pointers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function eg(){return(0,M.jsx)($,{data:$h,title:`Linked List Cookbook`,subtitle:`Coding practice problems on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var tg=[{id:`132-what-is-a-stack`,category:`Stack`,title:`What is a stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`133-what-is-lifo`,category:`Stack`,title:`What is LIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`134-stack-vs-queue`,category:`Stack`,title:`Stack vs queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`135-what-are-stack-operations`,category:`Stack`,title:`What are stack operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`136-what-is-push`,category:`Stack`,title:`What is push?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`137-what-is-pop`,category:`Stack`,title:`What is pop?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`138-what-is-peek`,category:`Stack`,title:`What is peek?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`139-what-is-stack-overflow`,category:`Stack`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`140-what-is-stack-underflow`,category:`Stack`,title:`What is stack underflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`141-how-can-you-implement-a-stack-in-python`,category:`Stack`,title:`How can you implement a stack in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ng(){return(0,M.jsx)($,{data:tg,title:`Stack Cookbook`,subtitle:`Fundamentals and theory questions on Stack`,icon:`📚`,patternLabel:`Questions`})}var rg=[{id:`142-implement-stack-using-a-list`,category:`Stack`,title:`Implement stack using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`143-implement-stack-using-a-linked-list`,category:`Stack`,title:`Implement stack using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`144-implement-two-stacks-in-one-array`,category:`Stack`,title:`Implement two stacks in one array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`145-reverse-a-string-using-a-stack`,category:`Stack`,title:`Reverse a string using a stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`146-check-balanced-parentheses`,category:`Stack`,title:`Check balanced parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`147-valid-parentheses`,category:`Stack`,title:`Valid Parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`148-evaluate-postfix-expression`,category:`Stack`,title:`Evaluate postfix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`149-evaluate-prefix-expression`,category:`Stack`,title:`Evaluate prefix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`150-convert-infix-to-postfix`,category:`Stack`,title:`Convert infix to postfix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`151-min-stack`,category:`Stack`,title:`Min Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`152-max-stack`,category:`Stack`,title:`Max Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`153-next-greater-element`,category:`Stack`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`154-next-smaller-element`,category:`Stack`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`155-daily-temperatures`,category:`Stack`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`156-largest-rectangle-in-histogram`,category:`Stack`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`157-remove-adjacent-duplicates`,category:`Stack`,title:`Remove adjacent duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`158-decode-a-string`,category:`Stack`,title:`Decode a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function ig(){return(0,M.jsx)($,{data:rg,title:`Stack Cookbook`,subtitle:`Coding practice problems on Stack`,icon:`📚`,patternLabel:`Questions`})}var ag=[{id:`159-what-is-a-queue`,category:`Queue`,title:`What is a queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`160-what-is-fifo`,category:`Queue`,title:`What is FIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`161-queue-vs-stack`,category:`Queue`,title:`Queue vs stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`162-what-are-enqueue-and-dequeue`,category:`Queue`,title:`What are enqueue and dequeue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`163-what-is-a-circular-queue`,category:`Queue`,title:`What is a circular queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`164-what-is-a-deque`,category:`Queue`,title:`What is a deque?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`165-why-is-collections-deque-preferred-for-queues-in-python`,category:`Queue`,title:`Why is collections.deque preferred for queues in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`166-what-is-a-priority-queue`,category:`Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function og(){return(0,M.jsx)($,{data:ag,title:`Queue Cookbook`,subtitle:`Fundamentals and theory questions on Queue`,icon:`🚶`,patternLabel:`Questions`})}var sg=[{id:`167-implement-a-queue-using-a-list`,category:`Queue`,title:`Implement a queue using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`168-implement-a-queue-using-deque`,category:`Queue`,title:`Implement a queue using deque.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`169-implement-a-queue-using-a-linked-list`,category:`Queue`,title:`Implement a queue using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`170-implement-a-queue-using-two-stacks`,category:`Queue`,title:`Implement a queue using two stacks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`171-implement-a-stack-using-two-queues`,category:`Queue`,title:`Implement a stack using two queues.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`172-implement-a-circular-queue`,category:`Queue`,title:`Implement a circular queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`173-generate-binary-numbers-using-a-queue`,category:`Queue`,title:`Generate binary numbers using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`174-first-non-repeating-character-in-a-stream`,category:`Queue`,title:`First non-repeating character in a stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`175-sliding-window-maximum`,category:`Queue`,title:`Sliding window maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`176-bfs-using-a-queue`,category:`Queue`,title:`BFS using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`177-task-scheduling-using-a-queue`,category:`Queue`,title:`Task scheduling using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function cg(){return(0,M.jsx)($,{data:sg,title:`Queue Cookbook`,subtitle:`Coding practice problems on Queue`,icon:`🚶`,patternLabel:`Questions`})}var lg=[{id:`178-what-is-a-heap`,category:`Heap / Priority Queue`,title:`What is a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`179-what-is-a-min-heap`,category:`Heap / Priority Queue`,title:`What is a min heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`180-what-is-a-max-heap`,category:`Heap / Priority Queue`,title:`What is a max heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`181-what-is-the-heap-property`,category:`Heap / Priority Queue`,title:`What is the heap property?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`182-heap-vs-bst`,category:`Heap / Priority Queue`,title:`Heap vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`183-what-is-a-priority-queue`,category:`Heap / Priority Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`184-what-is-the-complexity-of-inserting-into-a-heap`,category:`Heap / Priority Queue`,title:`What is the complexity of inserting into a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`185-what-is-the-complexity-of-removing-the-minimum-maximum`,category:`Heap / Priority Queue`,title:`What is the complexity of removing the minimum/maximum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`186-what-is-heapify`,category:`Heap / Priority Queue`,title:`What is heapify?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`187-what-is-heap-sort`,category:`Heap / Priority Queue`,title:`What is heap sort?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ug(){return(0,M.jsx)($,{data:lg,title:`Heap / Priority Queue Cookbook`,subtitle:`Fundamentals and theory questions on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var dg=[{id:`188-implement-a-min-heap`,category:`Heap / Priority Queue`,title:`Implement a min heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`189-implement-a-max-heap`,category:`Heap / Priority Queue`,title:`Implement a max heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`190-find-the-kth-largest-element`,category:`Heap / Priority Queue`,title:`Find the Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`191-find-the-kth-smallest-element`,category:`Heap / Priority Queue`,title:`Find the Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`192-find-top-k-frequent-elements`,category:`Heap / Priority Queue`,title:`Find top K frequent elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`193-find-k-closest-points`,category:`Heap / Priority Queue`,title:`Find K closest points.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`194-merge-k-sorted-arrays`,category:`Heap / Priority Queue`,title:`Merge K sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`195-merge-k-sorted-linked-lists`,category:`Heap / Priority Queue`,title:`Merge K sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`196-find-median-from-a-data-stream`,category:`Heap / Priority Queue`,title:`Find median from a data stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`197-find-the-top-k-largest-elements`,category:`Heap / Priority Queue`,title:`Find the top K largest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`198-find-the-top-k-smallest-elements`,category:`Heap / Priority Queue`,title:`Find the top K smallest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`199-task-scheduler`,category:`Heap / Priority Queue`,title:`Task scheduler.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`200-meeting-room-scheduling-using-a-heap`,category:`Heap / Priority Queue`,title:`Meeting room scheduling using a heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function fg(){return(0,M.jsx)($,{data:dg,title:`Heap / Priority Queue Cookbook`,subtitle:`Coding practice problems on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var pg=[{id:`201-what-is-a-tree`,category:`Trees`,title:`What is a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`202-what-is-a-binary-tree`,category:`Trees`,title:`What is a binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`203-what-is-a-root`,category:`Trees`,title:`What is a root?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`204-what-is-a-leaf`,category:`Trees`,title:`What is a leaf?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`205-what-is-the-height-of-a-tree`,category:`Trees`,title:`What is the height of a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`206-what-is-the-depth-of-a-node`,category:`Trees`,title:`What is the depth of a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`207-what-is-a-balanced-tree`,category:`Trees`,title:`What is a balanced tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`208-what-is-a-full-binary-tree`,category:`Trees`,title:`What is a full binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`209-what-is-a-complete-binary-tree`,category:`Trees`,title:`What is a complete binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`210-what-is-a-perfect-binary-tree`,category:`Trees`,title:`What is a perfect binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`211-binary-tree-vs-binary-search-tree`,category:`Trees`,title:`Binary tree vs binary search tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`212-what-is-preorder-traversal`,category:`Trees`,title:`What is preorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`213-what-is-inorder-traversal`,category:`Trees`,title:`What is inorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`214-what-is-postorder-traversal`,category:`Trees`,title:`What is postorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`215-what-is-level-order-traversal`,category:`Trees`,title:`What is level-order traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`216-recursive-vs-iterative-traversal`,category:`Trees`,title:`Recursive vs iterative traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function mg(){return(0,M.jsx)($,{data:pg,title:`Trees Cookbook`,subtitle:`Fundamentals and theory questions on Trees`,icon:`🌳`,patternLabel:`Questions`})}var hg=[{id:`217-implement-preorder-traversal`,category:`Trees`,title:`Implement preorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`218-implement-inorder-traversal`,category:`Trees`,title:`Implement inorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`219-implement-postorder-traversal`,category:`Trees`,title:`Implement postorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`220-implement-level-order-traversal`,category:`Trees`,title:`Implement level-order traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`221-find-tree-height`,category:`Trees`,title:`Find tree height.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`222-find-maximum-depth`,category:`Trees`,title:`Find maximum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`223-find-minimum-depth`,category:`Trees`,title:`Find minimum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`224-count-nodes`,category:`Trees`,title:`Count nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`225-count-leaf-nodes`,category:`Trees`,title:`Count leaf nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`226-find-maximum-value`,category:`Trees`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`227-check-whether-two-trees-are-identical`,category:`Trees`,title:`Check whether two trees are identical.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`228-check-whether-a-tree-is-symmetric`,category:`Trees`,title:`Check whether a tree is symmetric.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`229-invert-a-binary-tree`,category:`Trees`,title:`Invert a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`230-find-diameter-of-a-binary-tree`,category:`Trees`,title:`Find diameter of a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`231-find-maximum-path-sum`,category:`Trees`,title:`Find maximum path sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`232-find-lowest-common-ancestor`,category:`Trees`,title:`Find lowest common ancestor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`233-check-whether-a-tree-is-balanced`,category:`Trees`,title:`Check whether a tree is balanced.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`234-serialize-and-deserialize-a-binary-tree`,category:`Trees`,title:`Serialize and deserialize a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function gg(){return(0,M.jsx)($,{data:hg,title:`Trees Cookbook`,subtitle:`Coding practice problems on Trees`,icon:`🌳`,patternLabel:`Questions`})}var _g=[{id:`235-what-is-a-bst`,category:`Binary Search Tree (BST)`,title:`What is a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`236-what-property-makes-a-tree-a-bst`,category:`Binary Search Tree (BST)`,title:`What property makes a tree a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`237-bst-vs-binary-tree`,category:`Binary Search Tree (BST)`,title:`BST vs binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`238-average-search-complexity`,category:`Binary Search Tree (BST)`,title:`Average search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`239-worst-case-search-complexity`,category:`Binary Search Tree (BST)`,title:`Worst-case search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`240-how-do-you-insert-into-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you insert into a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`241-how-do-you-delete-from-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you delete from a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`242-what-are-the-three-cases-when-deleting-a-node`,category:`Binary Search Tree (BST)`,title:`What are the three cases when deleting a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`243-what-is-an-inorder-successor`,category:`Binary Search Tree (BST)`,title:`What is an inorder successor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`244-what-is-an-inorder-predecessor`,category:`Binary Search Tree (BST)`,title:`What is an inorder predecessor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function vg(){return(0,M.jsx)($,{data:_g,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Fundamentals and theory questions on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var yg=[{id:`245-search-in-bst`,category:`Binary Search Tree (BST)`,title:`Search in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`246-insert-into-bst`,category:`Binary Search Tree (BST)`,title:`Insert into BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`247-delete-from-bst`,category:`Binary Search Tree (BST)`,title:`Delete from BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`248-validate-a-bst`,category:`Binary Search Tree (BST)`,title:`Validate a BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`249-find-minimum-value`,category:`Binary Search Tree (BST)`,title:`Find minimum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`250-find-maximum-value`,category:`Binary Search Tree (BST)`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`251-find-kth-smallest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`252-find-kth-largest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`253-find-lca-in-bst`,category:`Binary Search Tree (BST)`,title:`Find LCA in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`254-find-inorder-successor`,category:`Binary Search Tree (BST)`,title:`Find inorder successor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`255-convert-sorted-array-to-bst`,category:`Binary Search Tree (BST)`,title:`Convert sorted array to BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`256-convert-bst-to-sorted-array`,category:`Binary Search Tree (BST)`,title:`Convert BST to sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`257-find-range-sum-in-bst`,category:`Binary Search Tree (BST)`,title:`Find range sum in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function bg(){return(0,M.jsx)($,{data:yg,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Coding practice problems on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var xg=[{id:`258-what-is-a-trie`,category:`Trie`,title:`What is a Trie?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`259-why-use-a-trie-instead-of-a-hash-table`,category:`Trie`,title:`Why use a Trie instead of a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`260-what-is-prefix-searching`,category:`Trie`,title:`What is prefix searching?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`261-what-is-autocomplete`,category:`Trie`,title:`What is autocomplete?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`262-how-is-a-trie-structured`,category:`Trie`,title:`How is a Trie structured?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`263-what-is-the-complexity-of-trie-search`,category:`Trie`,title:`What is the complexity of Trie search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`264-trie-vs-bst`,category:`Trie`,title:`Trie vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`265-trie-vs-dictionary`,category:`Trie`,title:`Trie vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Sg(){return(0,M.jsx)($,{data:xg,title:`Trie Cookbook`,subtitle:`Fundamentals and theory questions on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Cg=[{id:`266-implement-a-trie`,category:`Trie`,title:`Implement a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`267-insert-a-word`,category:`Trie`,title:`Insert a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`268-search-for-a-word`,category:`Trie`,title:`Search for a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`269-delete-a-word`,category:`Trie`,title:`Delete a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`270-check-whether-a-prefix-exists`,category:`Trie`,title:`Check whether a prefix exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`271-implement-autocomplete`,category:`Trie`,title:`Implement autocomplete.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`272-find-words-with-a-given-prefix`,category:`Trie`,title:`Find words with a given prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`273-word-search`,category:`Trie`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`274-word-search-ii`,category:`Trie`,title:`Word Search II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`275-replace-words-using-a-trie`,category:`Trie`,title:`Replace words using a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`276-implement-a-dictionary-using-trie`,category:`Trie`,title:`Implement a dictionary using Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function wg(){return(0,M.jsx)($,{data:Cg,title:`Trie Cookbook`,subtitle:`Coding practice problems on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Tg=[{id:`277-what-is-a-graph`,category:`Graphs`,title:`What is a graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`278-what-is-a-vertex`,category:`Graphs`,title:`What is a vertex?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`279-what-is-an-edge`,category:`Graphs`,title:`What is an edge?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`280-directed-vs-undirected-graph`,category:`Graphs`,title:`Directed vs undirected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`281-weighted-vs-unweighted-graph`,category:`Graphs`,title:`Weighted vs unweighted graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`282-what-is-a-connected-graph`,category:`Graphs`,title:`What is a connected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`283-what-is-a-disconnected-graph`,category:`Graphs`,title:`What is a disconnected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`284-what-is-a-cycle`,category:`Graphs`,title:`What is a cycle?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`285-what-is-a-dag`,category:`Graphs`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`286-adjacency-list-vs-adjacency-matrix`,category:`Graphs`,title:`Adjacency list vs adjacency matrix?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`287-when-would-you-use-each-representation`,category:`Graphs`,title:`When would you use each representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Eg(){return(0,M.jsx)($,{data:Tg,title:`Graphs Cookbook`,subtitle:`Fundamentals and theory questions on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var Dg=[{id:`288-implement-adjacency-list`,category:`Graphs`,title:`Implement adjacency list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`289-implement-adjacency-matrix`,category:`Graphs`,title:`Implement adjacency matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`290-bfs-traversal`,category:`Graphs`,title:`BFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`291-dfs-traversal`,category:`Graphs`,title:`DFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`292-count-connected-components`,category:`Graphs`,title:`Count connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`293-find-whether-a-path-exists`,category:`Graphs`,title:`Find whether a path exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`294-detect-a-cycle`,category:`Graphs`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`295-find-all-connected-components`,category:`Graphs`,title:`Find all connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`296-find-shortest-path-in-an-unweighted-graph`,category:`Graphs`,title:`Find shortest path in an unweighted graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`297-clone-a-graph`,category:`Graphs`,title:`Clone a graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`298-number-of-islands`,category:`Graphs`,title:`Number of islands.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`299-flood-fill`,category:`Graphs`,title:`Flood fill.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`300-pacific-atlantic-water-flow`,category:`Graphs`,title:`Pacific Atlantic Water Flow.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Og(){return(0,M.jsx)($,{data:Dg,title:`Graphs Cookbook`,subtitle:`Coding practice problems on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var kg=[{id:`301-what-is-shortest-path`,category:`Graph Algorithms`,title:`What is shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`302-bfs-vs-dfs-for-shortest-path`,category:`Graph Algorithms`,title:`BFS vs DFS for shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`303-what-is-dijkstras-algorithm`,category:`Graph Algorithms`,title:`What is Dijkstra's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`304-when-can-dijkstra-be-used`,category:`Graph Algorithms`,title:`When can Dijkstra be used?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`305-why-doesnt-dijkstra-work-with-negative-edges`,category:`Graph Algorithms`,title:`Why doesn't Dijkstra work with negative edges?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`306-what-is-bellman-ford`,category:`Graph Algorithms`,title:`What is Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`307-dijkstra-vs-bellman-ford`,category:`Graph Algorithms`,title:`Dijkstra vs Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`308-what-is-floyd-warshall`,category:`Graph Algorithms`,title:`What is Floyd-Warshall?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`309-what-is-topological-sorting`,category:`Graph Algorithms`,title:`What is topological sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`310-what-is-a-dag`,category:`Graph Algorithms`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`311-when-is-topological-sorting-useful`,category:`Graph Algorithms`,title:`When is topological sorting useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`312-implement-topological-sort-using-dfs`,category:`Graph Algorithms`,title:`Implement topological sort using DFS.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`313-implement-topological-sort-using-bfs-kahns-algorithm`,category:`Graph Algorithms`,title:`Implement topological sort using BFS/Kahn's algorithm.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`314-course-schedule`,category:`Graph Algorithms`,title:`Course Schedule.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`315-course-schedule-ii`,category:`Graph Algorithms`,title:`Course Schedule II.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`316-detect-cycle-in-directed-graph`,category:`Graph Algorithms`,title:`Detect cycle in directed graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`317-detect-cycle-in-undirected-graph`,category:`Graph Algorithms`,title:`Detect cycle in undirected graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`318-find-shortest-path`,category:`Graph Algorithms`,title:`Find shortest path.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`319-find-minimum-spanning-tree`,category:`Graph Algorithms`,title:`Find minimum spanning tree.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`320-what-is-kruskals-algorithm`,category:`Graph Algorithms`,title:`What is Kruskal's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`321-what-is-prims-algorithm`,category:`Graph Algorithms`,title:`What is Prim's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`322-prim-vs-kruskal`,category:`Graph Algorithms`,title:`Prim vs Kruskal.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ag(){return(0,M.jsx)($,{data:kg,title:`Graph Algorithms Cookbook`,subtitle:`Fundamentals and theory questions on Graph Algorithms`,icon:`🧭`,patternLabel:`Questions`})}var jg=[{id:`323-what-is-union-find`,category:`Union-Find / Disjoint Set`,title:`What is Union-Find?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`324-what-problem-does-union-find-solve`,category:`Union-Find / Disjoint Set`,title:`What problem does Union-Find solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`325-what-are-find-and-union`,category:`Union-Find / Disjoint Set`,title:`What are find() and union()?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`326-what-is-path-compression`,category:`Union-Find / Disjoint Set`,title:`What is path compression?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`327-what-is-union-by-rank`,category:`Union-Find / Disjoint Set`,title:`What is union by rank?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`328-what-is-union-by-size`,category:`Union-Find / Disjoint Set`,title:`What is union by size?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`329-what-is-the-complexity-with-optimizations`,category:`Union-Find / Disjoint Set`,title:`What is the complexity with optimizations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Mg(){return(0,M.jsx)($,{data:jg,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Fundamentals and theory questions on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Ng=[{id:`330-implement-union-find`,category:`Union-Find / Disjoint Set`,title:`Implement Union-Find.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`331-number-of-connected-components`,category:`Union-Find / Disjoint Set`,title:`Number of connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`332-detect-cycle-in-an-undirected-graph`,category:`Union-Find / Disjoint Set`,title:`Detect cycle in an undirected graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`333-number-of-provinces`,category:`Union-Find / Disjoint Set`,title:`Number of provinces.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`334-redundant-connection`,category:`Union-Find / Disjoint Set`,title:`Redundant connection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`335-accounts-merge`,category:`Union-Find / Disjoint Set`,title:`Accounts merge.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`336-network-connectivity`,category:`Union-Find / Disjoint Set`,title:`Network connectivity.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`337-kruskals-minimum-spanning-tree`,category:`Union-Find / Disjoint Set`,title:`Kruskal's minimum spanning tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Pg(){return(0,M.jsx)($,{data:Ng,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Coding practice problems on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Fg=[{id:`338-what-is-recursion`,category:`Recursion`,title:`What is recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`339-what-is-a-base-case`,category:`Recursion`,title:`What is a base case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`340-what-is-a-recursive-case`,category:`Recursion`,title:`What is a recursive case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`341-what-happens-in-the-call-stack`,category:`Recursion`,title:`What happens in the call stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`342-recursion-vs-iteration`,category:`Recursion`,title:`Recursion vs iteration?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`343-what-causes-infinite-recursion`,category:`Recursion`,title:`What causes infinite recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`344-what-is-stack-overflow`,category:`Recursion`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`345-when-should-recursion-be-avoided`,category:`Recursion`,title:`When should recursion be avoided?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ig(){return(0,M.jsx)($,{data:Fg,title:`Recursion Cookbook`,subtitle:`Fundamentals and theory questions on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var Lg=[{id:`346-factorial`,category:`Recursion`,title:`Factorial.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`347-fibonacci`,category:`Recursion`,title:`Fibonacci.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`348-sum-of-numbers`,category:`Recursion`,title:`Sum of numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`349-reverse-a-string-recursively`,category:`Recursion`,title:`Reverse a string recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`350-reverse-an-array-recursively`,category:`Recursion`,title:`Reverse an array recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`351-calculate-power-recursively`,category:`Recursion`,title:`Calculate power recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`352-binary-search-recursively`,category:`Recursion`,title:`Binary search recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`353-tree-traversal-recursively`,category:`Recursion`,title:`Tree traversal recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`354-generate-subsets-recursively`,category:`Recursion`,title:`Generate subsets recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`355-generate-permutations-recursively`,category:`Recursion`,title:`Generate permutations recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`356-solve-tower-of-hanoi`,category:`Recursion`,title:`Solve Tower of Hanoi.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rg(){return(0,M.jsx)($,{data:Lg,title:`Recursion Cookbook`,subtitle:`Coding practice problems on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var zg=[{id:`357-what-is-backtracking`,category:`Backtracking`,title:`What is backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`358-backtracking-vs-recursion`,category:`Backtracking`,title:`Backtracking vs recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`359-what-is-the-decision-tree`,category:`Backtracking`,title:`What is the decision tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`360-when-should-you-use-backtracking`,category:`Backtracking`,title:`When should you use backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`361-what-is-pruning`,category:`Backtracking`,title:`What is pruning?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`362-how-do-you-identify-a-backtracking-problem`,category:`Backtracking`,title:`How do you identify a backtracking problem?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bg(){return(0,M.jsx)($,{data:zg,title:`Backtracking Cookbook`,subtitle:`Fundamentals and theory questions on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Vg=[{id:`363-generate-subsets`,category:`Backtracking`,title:`Generate subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`364-generate-permutations`,category:`Backtracking`,title:`Generate permutations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`365-generate-combinations`,category:`Backtracking`,title:`Generate combinations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`366-combination-sum`,category:`Backtracking`,title:`Combination Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`367-letter-combinations-of-phone-number`,category:`Backtracking`,title:`Letter combinations of phone number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`368-generate-parentheses`,category:`Backtracking`,title:`Generate parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`369-n-queens`,category:`Backtracking`,title:`N-Queens.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`370-sudoku-solver`,category:`Backtracking`,title:`Sudoku Solver.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`371-word-search`,category:`Backtracking`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`372-palindrome-partitioning`,category:`Backtracking`,title:`Palindrome partitioning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`373-rat-in-a-maze`,category:`Backtracking`,title:`Rat in a maze.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`374-partition-into-equal-subsets`,category:`Backtracking`,title:`Partition into equal subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hg(){return(0,M.jsx)($,{data:Vg,title:`Backtracking Cookbook`,subtitle:`Coding practice problems on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Ug=[{id:`375-what-is-sorting`,category:`Sorting`,title:`What is sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`376-why-do-we-sort-data`,category:`Sorting`,title:`Why do we sort data?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`377-stable-vs-unstable-sorting`,category:`Sorting`,title:`Stable vs unstable sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`378-in-place-vs-out-of-place-sorting`,category:`Sorting`,title:`In-place vs out-of-place sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`379-comparison-vs-non-comparison-sorting`,category:`Sorting`,title:`Comparison vs non-comparison sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`380-explain-bubble-sort`,category:`Sorting`,title:`Explain Bubble Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`381-explain-selection-sort`,category:`Sorting`,title:`Explain Selection Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`382-explain-insertion-sort`,category:`Sorting`,title:`Explain Insertion Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`383-explain-merge-sort`,category:`Sorting`,title:`Explain Merge Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`384-explain-quick-sort`,category:`Sorting`,title:`Explain Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`385-explain-heap-sort`,category:`Sorting`,title:`Explain Heap Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`386-explain-counting-sort`,category:`Sorting`,title:`Explain Counting Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`387-explain-radix-sort`,category:`Sorting`,title:`Explain Radix Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`388-explain-bucket-sort`,category:`Sorting`,title:`Explain Bucket Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`389-merge-sort-vs-quick-sort`,category:`Sorting`,title:`Merge Sort vs Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`390-quick-sort-worst-case`,category:`Sorting`,title:`Quick Sort worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`391-why-is-merge-sort-useful-for-linked-lists`,category:`Sorting`,title:`Why is Merge Sort useful for linked lists?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`392-which-sorting-algorithm-is-stable`,category:`Sorting`,title:`Which sorting algorithm is stable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`393-which-algorithms-are-in-place`,category:`Sorting`,title:`Which algorithms are in-place?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`394-what-is-the-best-possible-comparison-based-sorting-complexit`,category:`Sorting`,title:`What is the best possible comparison-based sorting complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`395-pythons-sorting-algorithm-what-does-python-use`,category:`Sorting`,title:`Python's sorting algorithm what does Python use?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wg(){return(0,M.jsx)($,{data:Ug,title:`Sorting Cookbook`,subtitle:`Fundamentals and theory questions on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var Gg=[{id:`396-sort-an-array-of-0s-1s-and-2s`,category:`Sorting`,title:`Sort an array of 0s, 1s, and 2s.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`397-sort-an-almost-sorted-array`,category:`Sorting`,title:`Sort an almost sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`398-merge-overlapping-intervals`,category:`Sorting`,title:`Merge overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`Sorting Cookbook`,subtitle:`Coding practice problems on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var qg=[{id:`399-what-is-linear-search`,category:`Searching`,title:`What is linear search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`400-what-is-binary-search`,category:`Searching`,title:`What is binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`401-what-condition-is-required-for-binary-search`,category:`Searching`,title:`What condition is required for binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`402-binary-search-complexity`,category:`Searching`,title:`Binary search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`403-recursive-vs-iterative-binary-search`,category:`Searching`,title:`Recursive vs iterative binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`404-what-is-search-space`,category:`Searching`,title:`What is search space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Searching Cookbook`,subtitle:`Fundamentals and theory questions on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Yg=[{id:`405-implement-linear-search`,category:`Searching`,title:`Implement linear search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`406-implement-binary-search`,category:`Searching`,title:`Implement binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`407-find-first-occurrence`,category:`Searching`,title:`Find first occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`408-find-last-occurrence`,category:`Searching`,title:`Find last occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`409-find-first-and-last-position`,category:`Searching`,title:`Find first and last position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`410-find-insertion-position`,category:`Searching`,title:`Find insertion position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`411-search-in-rotated-sorted-array`,category:`Searching`,title:`Search in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`412-find-minimum-in-rotated-sorted-array`,category:`Searching`,title:`Find minimum in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`413-find-peak-element`,category:`Searching`,title:`Find peak element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`414-find-square-root-using-binary-search`,category:`Searching`,title:`Find square root using binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`415-find-k-closest-elements`,category:`Searching`,title:`Find K closest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`416-search-a-2d-matrix`,category:`Searching`,title:`Search a 2D matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`417-find-the-smallest-value-satisfying-a-condition`,category:`Searching`,title:`Find the smallest value satisfying a condition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`418-capacity-to-ship-packages`,category:`Searching`,title:`Capacity to Ship Packages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`419-allocate-minimum-pages`,category:`Searching`,title:`Allocate minimum pages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`420-split-array-largest-sum`,category:`Searching`,title:`Split Array Largest Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Searching Cookbook`,subtitle:`Coding practice problems on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Zg=[{id:`421-what-is-prefix-sum`,category:`Prefix Sum`,title:`What is prefix sum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`422-why-use-prefix-sums`,category:`Prefix Sum`,title:`Why use prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`423-what-is-the-complexity-of-building-prefix-sums`,category:`Prefix Sum`,title:`What is the complexity of building prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`424-how-does-prefix-sum-improve-range-queries`,category:`Prefix Sum`,title:`How does prefix sum improve range queries?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`425-prefix-sum-vs-sliding-window`,category:`Prefix Sum`,title:`Prefix sum vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Prefix Sum Cookbook`,subtitle:`Fundamentals and theory questions on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var $g=[{id:`426-build-a-prefix-sum-array`,category:`Prefix Sum`,title:`Build a prefix sum array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`427-range-sum-query`,category:`Prefix Sum`,title:`Range sum query.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`428-find-subarray-sum`,category:`Prefix Sum`,title:`Find subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`429-subarray-sum-equals-k`,category:`Prefix Sum`,title:`Subarray Sum Equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`430-count-subarrays-with-a-given-sum`,category:`Prefix Sum`,title:`Count subarrays with a given sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`431-find-equilibrium-index`,category:`Prefix Sum`,title:`Find equilibrium index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`432-find-pivot-index`,category:`Prefix Sum`,title:`Find pivot index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`433-product-prefix-suffix`,category:`Prefix Sum`,title:`Product prefix/suffix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`434-range-addition`,category:`Prefix Sum`,title:`Range addition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`435-2d-prefix-sum`,category:`Prefix Sum`,title:`2D prefix sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`436-matrix-region-sum`,category:`Prefix Sum`,title:`Matrix region sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`Prefix Sum Cookbook`,subtitle:`Coding practice problems on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var t_=[{id:`437-what-is-sliding-window`,category:`Sliding Window`,title:`What is sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`438-fixed-vs-variable-size-window`,category:`Sliding Window`,title:`Fixed vs variable-size window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`439-when-should-you-use-sliding-window`,category:`Sliding Window`,title:`When should you use sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`440-sliding-window-vs-two-pointers`,category:`Sliding Window`,title:`Sliding window vs two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`Sliding Window Cookbook`,subtitle:`Fundamentals and theory questions on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var r_=[{id:`441-maximum-sum-subarray-of-size-k`,category:`Sliding Window`,title:`Maximum sum subarray of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`442-average-of-subarrays-of-size-k`,category:`Sliding Window`,title:`Average of subarrays of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`443-longest-substring-without-repeating-characters`,category:`Sliding Window`,title:`Longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`444-longest-substring-with-k-distinct-characters`,category:`Sliding Window`,title:`Longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`445-minimum-window-substring`,category:`Sliding Window`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`446-longest-repeating-character-replacement`,category:`Sliding Window`,title:`Longest repeating character replacement.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`447-permutation-in-string`,category:`Sliding Window`,title:`Permutation in string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`448-find-all-anagrams-in-a-string`,category:`Sliding Window`,title:`Find all anagrams in a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`449-minimum-size-subarray-sum`,category:`Sliding Window`,title:`Minimum size subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`450-maximum-number-of-vowels-in-a-substring`,category:`Sliding Window`,title:`Maximum number of vowels in a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`451-sliding-window-maximum`,category:`Sliding Window`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`Sliding Window Cookbook`,subtitle:`Coding practice problems on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var a_=[{id:`452-what-is-the-two-pointer-technique`,category:`Two Pointers`,title:`What is the two-pointer technique?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`453-when-should-you-use-two-pointers`,category:`Two Pointers`,title:`When should you use two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`454-two-pointers-vs-sliding-window`,category:`Two Pointers`,title:`Two pointers vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`455-why-is-sorting-often-useful-with-two-pointers`,category:`Two Pointers`,title:`Why is sorting often useful with two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`Two Pointers Cookbook`,subtitle:`Fundamentals and theory questions on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var s_=[{id:`456-two-sum-in-sorted-array`,category:`Two Pointers`,title:`Two Sum in sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`457-three-sum`,category:`Two Pointers`,title:`Three Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`458-four-sum`,category:`Two Pointers`,title:`Four Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`459-remove-duplicates-from-sorted-array`,category:`Two Pointers`,title:`Remove duplicates from sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`460-move-zeros`,category:`Two Pointers`,title:`Move zeros.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`461-reverse-an-array`,category:`Two Pointers`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`462-reverse-a-string`,category:`Two Pointers`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`463-container-with-most-water`,category:`Two Pointers`,title:`Container With Most Water.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`464-valid-palindrome`,category:`Two Pointers`,title:`Valid palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`465-merge-two-sorted-arrays`,category:`Two Pointers`,title:`Merge two sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`466-partition-array`,category:`Two Pointers`,title:`Partition array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`467-sort-colors`,category:`Two Pointers`,title:`Sort colors.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`468-find-pair-with-target-difference`,category:`Two Pointers`,title:`Find pair with target difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Two Pointers Cookbook`,subtitle:`Coding practice problems on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var l_=[{id:`469-what-is-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`What is a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`470-increasing-vs-decreasing-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Increasing vs decreasing monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`471-why-use-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Why use a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`472-what-problems-can-it-solve`,category:`Monotonic Stack / Queue`,title:`What problems can it solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`473-how-does-it-achieve-o-n`,category:`Monotonic Stack / Queue`,title:`How does it achieve O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Fundamentals and theory questions on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var d_=[{id:`474-next-greater-element`,category:`Monotonic Stack / Queue`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`475-next-smaller-element`,category:`Monotonic Stack / Queue`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`476-previous-greater-element`,category:`Monotonic Stack / Queue`,title:`Previous Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`477-previous-smaller-element`,category:`Monotonic Stack / Queue`,title:`Previous Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`478-daily-temperatures`,category:`Monotonic Stack / Queue`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`479-stock-span`,category:`Monotonic Stack / Queue`,title:`Stock Span.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`480-largest-rectangle-in-histogram`,category:`Monotonic Stack / Queue`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`481-maximal-rectangle`,category:`Monotonic Stack / Queue`,title:`Maximal Rectangle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`482-sliding-window-maximum`,category:`Monotonic Stack / Queue`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`483-remove-k-digits`,category:`Monotonic Stack / Queue`,title:`Remove K digits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`484-sum-of-subarray-minimums`,category:`Monotonic Stack / Queue`,title:`Sum of Subarray Minimums.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Coding practice problems on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var p_=[{id:`485-what-is-an-interval`,category:`Intervals`,title:`What is an interval?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`486-how-do-you-represent-intervals`,category:`Intervals`,title:`How do you represent intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`487-how-do-you-detect-overlapping-intervals`,category:`Intervals`,title:`How do you detect overlapping intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`488-why-do-we-usually-sort-intervals-first`,category:`Intervals`,title:`Why do we usually sort intervals first?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`489-what-is-interval-merging`,category:`Intervals`,title:`What is interval merging?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Intervals Cookbook`,subtitle:`Fundamentals and theory questions on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var h_=[{id:`490-merge-intervals`,category:`Intervals`,title:`Merge intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`491-insert-interval`,category:`Intervals`,title:`Insert interval.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`492-check-overlapping-intervals`,category:`Intervals`,title:`Check overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`493-meeting-rooms`,category:`Intervals`,title:`Meeting Rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`494-meeting-rooms-ii`,category:`Intervals`,title:`Meeting Rooms II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`495-minimum-number-of-meeting-rooms`,category:`Intervals`,title:`Minimum number of meeting rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`496-non-overlapping-intervals`,category:`Intervals`,title:`Non-overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`497-interval-intersection`,category:`Intervals`,title:`Interval intersection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`498-employee-free-time`,category:`Intervals`,title:`Employee free time.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`499-minimum-arrows-to-burst-balloons`,category:`Intervals`,title:`Minimum arrows to burst balloons.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`500-merge-calendar-schedules`,category:`Intervals`,title:`Merge calendar schedules.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Intervals Cookbook`,subtitle:`Coding practice problems on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var __=[{id:`501-what-is-a-bit`,category:`Bit Manipulation`,title:`What is a bit?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`502-what-is-binary-representation`,category:`Bit Manipulation`,title:`What is binary representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`503-what-is-bitwise-and`,category:`Bit Manipulation`,title:`What is bitwise AND?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`504-what-is-bitwise-or`,category:`Bit Manipulation`,title:`What is bitwise OR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`505-what-is-xor`,category:`Bit Manipulation`,title:`What is XOR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`506-what-is-not`,category:`Bit Manipulation`,title:`What is NOT?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`507-what-are-left-and-right-shifts`,category:`Bit Manipulation`,title:`What are left and right shifts?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`508-difference-between-logical-and-arithmetic-shift`,category:`Bit Manipulation`,title:`Difference between logical and arithmetic shift?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`509-what-is-a-bit-mask`,category:`Bit Manipulation`,title:`What is a bit mask?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`510-why-is-xor-useful`,category:`Bit Manipulation`,title:`Why is XOR useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Bit Manipulation Cookbook`,subtitle:`Fundamentals and theory questions on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var y_=[{id:`511-check-whether-a-number-is-even`,category:`Bit Manipulation`,title:`Check whether a number is even.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`512-check-whether-a-number-is-a-power-of-two`,category:`Bit Manipulation`,title:`Check whether a number is a power of two.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`513-count-set-bits`,category:`Bit Manipulation`,title:`Count set bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`514-find-the-single-number`,category:`Bit Manipulation`,title:`Find the single number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`515-find-two-unique-numbers`,category:`Bit Manipulation`,title:`Find two unique numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`516-find-missing-number-using-xor`,category:`Bit Manipulation`,title:`Find missing number using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`517-reverse-bits`,category:`Bit Manipulation`,title:`Reverse bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`518-swap-two-numbers-using-xor`,category:`Bit Manipulation`,title:`Swap two numbers using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`519-find-whether-a-particular-bit-is-set`,category:`Bit Manipulation`,title:`Find whether a particular bit is set.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`520-set-a-bit`,category:`Bit Manipulation`,title:`Set a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`521-clear-a-bit`,category:`Bit Manipulation`,title:`Clear a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`522-toggle-a-bit`,category:`Bit Manipulation`,title:`Toggle a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`523-find-the-lowest-set-bit`,category:`Bit Manipulation`,title:`Find the lowest set bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`524-generate-subsets-using-bit-masks`,category:`Bit Manipulation`,title:`Generate subsets using bit masks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Bit Manipulation Cookbook`,subtitle:`Coding practice problems on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var x_=[{id:`525-what-is-big-o-notation`,category:`Complexity & Analysis`,title:`What is Big-O notation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`526-what-is-time-complexity`,category:`Complexity & Analysis`,title:`What is time complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`527-what-is-space-complexity`,category:`Complexity & Analysis`,title:`What is space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`528-what-is-o-1`,category:`Complexity & Analysis`,title:`What is O(1)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`529-what-is-o-log-n`,category:`Complexity & Analysis`,title:`What is O(log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`530-what-is-o-n`,category:`Complexity & Analysis`,title:`What is O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`531-what-is-o-n-log-n`,category:`Complexity & Analysis`,title:`What is O(n log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`532-what-is-o-n-squared`,category:`Complexity & Analysis`,title:`What is O(n squared)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`533-what-is-o-2-to-the-n`,category:`Complexity & Analysis`,title:`What is O(2 to the n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`534-what-is-o-n-factorial`,category:`Complexity & Analysis`,title:`What is O(n factorial)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`535-big-o-vs-big-theta-vs-big-omega`,category:`Complexity & Analysis`,title:`Big-O vs Big-Theta vs Big-Omega?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`536-best-case-vs-average-case-vs-worst-case`,category:`Complexity & Analysis`,title:`Best case vs average case vs worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`537-how-do-you-calculate-complexity-of-nested-loops`,category:`Complexity & Analysis`,title:`How do you calculate complexity of nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`538-how-do-you-calculate-complexity-of-recursive-algorithms`,category:`Complexity & Analysis`,title:`How do you calculate complexity of recursive algorithms?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`539-what-is-amortized-complexity`,category:`Complexity & Analysis`,title:`What is amortized complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`540-what-is-the-complexity-of-python-list-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python list operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`541-what-is-the-complexity-of-python-dictionary-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python dictionary operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`542-what-is-the-complexity-of-python-set-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python set operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`543-what-is-the-complexity-of-deque-operations`,category:`Complexity & Analysis`,title:`What is the complexity of deque operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`544-what-is-the-tradeoff-between-time-and-space`,category:`Complexity & Analysis`,title:`What is the tradeoff between time and space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`545-how-would-you-optimize-an-o-n-squared-solution`,category:`Complexity & Analysis`,title:`How would you optimize an O(n squared) solution?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`546-how-do-you-identify-unnecessary-nested-loops`,category:`Complexity & Analysis`,title:`How do you identify unnecessary nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`547-how-do-you-reduce-space-complexity`,category:`Complexity & Analysis`,title:`How do you reduce space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`548-how-do-you-analyze-a-solution-during-an-interview`,category:`Complexity & Analysis`,title:`How do you analyze a solution during an interview?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Complexity & Analysis Cookbook`,subtitle:`Fundamentals and theory questions on Complexity & Analysis`,icon:`📐`,patternLabel:`Questions`})}var C_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function w_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}],l=[{name:`01. Arrays / Lists — Concept`,path:`/ds-arrays-lists-concept`},{name:`01. Arrays / Lists — Code`,path:`/ds-arrays-lists-code`},{name:`02. Strings — Concept`,path:`/ds-strings-concept`},{name:`02. Strings — Code`,path:`/ds-strings-code`},{name:`03. Hash Table / Dictionary — Concept`,path:`/ds-hash-table-dictionary-concept`},{name:`03. Hash Table / Dictionary — Code`,path:`/ds-hash-table-dictionary-code`},{name:`04. Set — Concept`,path:`/ds-set-concept`},{name:`04. Set — Code`,path:`/ds-set-code`},{name:`05. Linked List — Concept`,path:`/ds-linked-list-concept`},{name:`05. Linked List — Code`,path:`/ds-linked-list-code`},{name:`06. Stack — Concept`,path:`/ds-stack-concept`},{name:`06. Stack — Code`,path:`/ds-stack-code`},{name:`07. Queue — Concept`,path:`/ds-queue-concept`},{name:`07. Queue — Code`,path:`/ds-queue-code`},{name:`08. Heap / Priority Queue — Concept`,path:`/ds-heap-priority-queue-concept`},{name:`08. Heap / Priority Queue — Code`,path:`/ds-heap-priority-queue-code`},{name:`09. Trees — Concept`,path:`/ds-trees-concept`},{name:`09. Trees — Code`,path:`/ds-trees-code`},{name:`10. Binary Search Tree (BST) — Concept`,path:`/ds-binary-search-tree-bst-concept`},{name:`10. Binary Search Tree (BST) — Code`,path:`/ds-binary-search-tree-bst-code`},{name:`11. Trie — Concept`,path:`/ds-trie-concept`},{name:`11. Trie — Code`,path:`/ds-trie-code`},{name:`12. Graphs — Concept`,path:`/ds-graphs-concept`},{name:`12. Graphs — Code`,path:`/ds-graphs-code`},{name:`13. Graph Algorithms — Concept`,path:`/ds-graph-algorithms-concept`},{name:`14. Union-Find / Disjoint Set — Concept`,path:`/ds-union-find-disjoint-set-concept`},{name:`14. Union-Find / Disjoint Set — Code`,path:`/ds-union-find-disjoint-set-code`},{name:`15. Recursion — Concept`,path:`/ds-recursion-concept`},{name:`15. Recursion — Code`,path:`/ds-recursion-code`},{name:`16. Backtracking — Concept`,path:`/ds-backtracking-concept`},{name:`16. Backtracking — Code`,path:`/ds-backtracking-code`},{name:`17. Sorting — Concept`,path:`/ds-sorting-concept`},{name:`17. Sorting — Code`,path:`/ds-sorting-code`},{name:`18. Searching — Concept`,path:`/ds-searching-concept`},{name:`18. Searching — Code`,path:`/ds-searching-code`},{name:`19. Prefix Sum — Concept`,path:`/ds-prefix-sum-concept`},{name:`19. Prefix Sum — Code`,path:`/ds-prefix-sum-code`},{name:`20. Sliding Window — Concept`,path:`/ds-sliding-window-concept`},{name:`20. Sliding Window — Code`,path:`/ds-sliding-window-code`},{name:`21. Two Pointers — Concept`,path:`/ds-two-pointers-concept`},{name:`21. Two Pointers — Code`,path:`/ds-two-pointers-code`},{name:`22. Monotonic Stack / Queue — Concept`,path:`/ds-monotonic-stack-queue-concept`},{name:`22. Monotonic Stack / Queue — Code`,path:`/ds-monotonic-stack-queue-code`},{name:`23. Intervals — Concept`,path:`/ds-intervals-concept`},{name:`23. Intervals — Code`,path:`/ds-intervals-code`},{name:`24. Bit Manipulation — Concept`,path:`/ds-bit-manipulation-concept`},{name:`24. Bit Manipulation — Code`,path:`/ds-bit-manipulation-code`},{name:`25. Complexity & Analysis — Concept`,path:`/ds-complexity-analysis-concept`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let u=e=>{t(t=>t===e?null:e)},d=()=>{t(null)},f=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>u(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:d,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:C_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(f,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(f,{name:`AgenticAI`,topics:a}),(0,M.jsx)(f,{name:`CWD Project`,topics:o}),(0,M.jsx)(f,{name:`AWS`,topics:s}),(0,M.jsx)(f,{name:`Azure`,topics:c}),(0,M.jsx)(f,{name:`Data Structures`,topics:l})]})]})}function T_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(w_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(cp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(kf,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(jf,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Nf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(op,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(up,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(fp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(Sp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ep,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Op,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(Mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Ip,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Rp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(em,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(nm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(im,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(om,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(um,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(fm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(mm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(gm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(vm,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(Sm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(wm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Em,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Om,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(Mm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Pm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Im,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Rm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(Bm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Wm,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Km,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(Jm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Xm,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)(eh,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(nh,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(ih,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(oh,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(ch,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(uh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(fh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(mh,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(gh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(vh,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(bh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(wh,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Eh,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Oh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(Mh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Ph,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-concept`,element:(0,M.jsx)(Ih,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-code`,element:(0,M.jsx)(Rh,{})}),(0,M.jsx)(j,{path:`/ds-strings-concept`,element:(0,M.jsx)(Bh,{})}),(0,M.jsx)(j,{path:`/ds-strings-code`,element:(0,M.jsx)(Hh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-concept`,element:(0,M.jsx)(Wh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-code`,element:(0,M.jsx)(Kh,{})}),(0,M.jsx)(j,{path:`/ds-set-concept`,element:(0,M.jsx)(Jh,{})}),(0,M.jsx)(j,{path:`/ds-set-code`,element:(0,M.jsx)(Xh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-concept`,element:(0,M.jsx)(Qh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-code`,element:(0,M.jsx)(eg,{})}),(0,M.jsx)(j,{path:`/ds-stack-concept`,element:(0,M.jsx)(ng,{})}),(0,M.jsx)(j,{path:`/ds-stack-code`,element:(0,M.jsx)(ig,{})}),(0,M.jsx)(j,{path:`/ds-queue-concept`,element:(0,M.jsx)(og,{})}),(0,M.jsx)(j,{path:`/ds-queue-code`,element:(0,M.jsx)(cg,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-concept`,element:(0,M.jsx)(ug,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-code`,element:(0,M.jsx)(fg,{})}),(0,M.jsx)(j,{path:`/ds-trees-concept`,element:(0,M.jsx)(mg,{})}),(0,M.jsx)(j,{path:`/ds-trees-code`,element:(0,M.jsx)(gg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-concept`,element:(0,M.jsx)(vg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-code`,element:(0,M.jsx)(bg,{})}),(0,M.jsx)(j,{path:`/ds-trie-concept`,element:(0,M.jsx)(Sg,{})}),(0,M.jsx)(j,{path:`/ds-trie-code`,element:(0,M.jsx)(wg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-concept`,element:(0,M.jsx)(Eg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-code`,element:(0,M.jsx)(Og,{})}),(0,M.jsx)(j,{path:`/ds-graph-algorithms-concept`,element:(0,M.jsx)(Ag,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-concept`,element:(0,M.jsx)(Mg,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-code`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/ds-recursion-concept`,element:(0,M.jsx)(Ig,{})}),(0,M.jsx)(j,{path:`/ds-recursion-code`,element:(0,M.jsx)(Rg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-concept`,element:(0,M.jsx)(Bg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-code`,element:(0,M.jsx)(Hg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-concept`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-code`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/ds-searching-concept`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/ds-searching-code`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-concept`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-code`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-concept`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-code`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-concept`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-code`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-concept`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-code`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-concept`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-code`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-concept`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-code`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/ds-complexity-analysis-concept`,element:(0,M.jsx)(S_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(T_,{})}));
