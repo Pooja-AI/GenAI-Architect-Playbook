@@ -1,12 +1,56 @@
-# How would you implement model validation?
+## How would you implement model validation?
 
-## Short answer
-Validate data before training and the model before registration.
+I would validate the model **before allowing it into production**.
 
-## Key points
-- Data: schema, ranges and data-quality rules.
-- Model: metric sanity checks, holdout inference test, container smoke test, latency test.
-- Bias and explainability checks with Clarify.
+```text id="7bqv4h"
+Trained Model
+     ↓
+Validation Dataset
+     ↓
+Metrics
+     ↓
+Quality Threshold?
+   ↙          ↘
+ PASS         FAIL
+  ↓             ↓
+Registry      Stop + Alert
+  ↓
+Deploy
+```
 
-## CWD context
-Fail early on bad data.
+### What I validate
+
+* **Accuracy / Precision / Recall / F1** for classification
+* **False positives / false negatives**
+* **Data quality**
+* **Regression against previous model**
+* **Inference latency**
+* **Model size/resource usage**
+* **Bias/fairness**, when applicable
+
+### CWD example
+
+For an intent classifier:
+
+```text
+New Model
+   ↓
+Test Dataset
+   ↓
+F1 = 0.94
+Previous F1 = 0.91
+Required F1 ≥ 0.90
+   ↓
+PASS
+   ↓
+Model Registry → Deploy
+```
+
+If F1 is below the threshold, **the pipeline stops**.
+
+### Interview answer
+
+> “I would implement model validation as a quality gate in the SageMaker pipeline. The new model would be evaluated against a fixed validation or test dataset, and I would check task-specific metrics, regression against the current model, data quality, latency, and other required controls. Only if the model meets predefined thresholds would I register and deploy it.”
+
+**Memory:**
+**Test → Metrics → Compare → Threshold → Approve/Reject**

@@ -1,12 +1,56 @@
-# How would you handle schema changes?
+## How would you handle schema changes?
 
-## Short answer
-Handle schema changes by landing raw data untouched and evolving curated schemas deliberately.
+I would use **schema versioning + validation + backward-compatible changes**.
 
-## Key points
-- Crawler schema-change policy; Iceberg, Hudi or Delta tables for additive column evolution.
-- ResolveChoice for ambiguous types; Schema Registry for streaming.
-- Alerts and review for breaking changes.
+```text
+Source Schema Change
+        ↓
+   Glue Crawler
+        ↓
+Detect New Schema
+        ↓
+Validate / Compare
+        ↓
+Update Data Catalog
+        ↓
+ETL Transformation
+        ↓
+S3 / OpenSearch
+```
 
-## CWD context
-Additive changes flow through; breaking changes need a human decision.
+### Example
+
+Suppose Salesforce adds:
+
+```text
+customer_id
+name
+region
+industry   ← new column
+```
+
+I would:
+
+1. Detect the new column.
+2. Compare with the existing schema.
+3. Update the Glue Catalog.
+4. Update ETL mappings if required.
+5. Test downstream RAG/OpenSearch pipelines.
+6. Version the schema.
+
+### For breaking changes
+
+If Salesforce **renames or removes** a column:
+
+```text
+Schema v1 → Schema v2
+```
+
+I would **not immediately overwrite production**. I would validate the change, update the ETL pipeline, test it in lower environments, and then promote it.
+
+### Interview answer
+
+> “I handle schema changes through schema detection, validation, versioning, and backward-compatible transformations. Glue Crawler can detect changes, but I would validate the change before updating production pipelines. For breaking changes, I would version the schema and update downstream ETL and RAG pipelines through CI/CD.”
+
+**Memory:**
+**Detect → Compare → Validate → Version → Test → Deploy**

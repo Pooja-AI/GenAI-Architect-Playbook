@@ -1,12 +1,44 @@
-# How would a Worker call a SageMaker endpoint?
+## How would a Worker call a SageMaker endpoint?
 
-## Short answer
-A Worker calls the endpoint through a private runtime endpoint, or through an MCP tool that wraps it.
+The Worker uses the **AWS SageMaker Runtime API** to invoke the deployed model endpoint.
 
-## Key points
-- Task role with InvokeEndpoint on the specific endpoint; interface VPC endpoint.
-- Typed schema, backoff retries, circuit breaker and correlation ID via custom attributes.
-- Validate the response before using it.
+```text
+CWD Worker
+    ↓
+AWS SDK / Boto3
+    ↓
+SageMaker Runtime
+    ↓
+SageMaker Endpoint
+    ↓
+ML Model
+    ↓
+Prediction
+    ↓
+Worker
+```
 
-## CWD context
-An MCP wrapper gives a uniform, governed interface across tools.
+### Practical flow
+
+1. Worker receives the request from the **Delegator**.
+2. Worker prepares the model input.
+3. Worker calls `InvokeEndpoint`.
+4. SageMaker runs the model.
+5. Prediction is returned to the Worker.
+6. Worker validates the result and sends it back to the Delegator.
+
+### Security
+
+The Worker runs with an **IAM task role** containing only the required permission:
+
+```text
+sagemaker:InvokeEndpoint
+```
+
+No AWS access keys are stored in the application.
+
+### Interview answer
+
+> “The Worker calls the SageMaker Runtime API using the AWS SDK and invokes the specific SageMaker endpoint. The Worker’s IAM task role has least-privilege permission to invoke that endpoint. SageMaker performs the prediction and returns the result, which the Worker validates before passing it back to the Delegator.”
+
+**Memory:** `Worker → Boto3 → InvokeEndpoint → SageMaker → Prediction → Worker`

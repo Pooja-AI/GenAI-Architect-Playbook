@@ -1,12 +1,23 @@
-# How would Glue ingest data from Salesforce?
+For an interview, keep it simple:
 
-## Short answer
-Ingest Salesforce through a Glue Salesforce connection or Amazon AppFlow into S3.
+> **“I would use AWS Glue with the Salesforce connector. Glue connects to Salesforce through the API, extracts objects such as Accounts, Contacts, or Cases, and writes the data into Amazon S3. I can run the Glue job incrementally using a timestamp or Salesforce change tracking, then catalog the data with Glue Data Catalog for downstream processing.”**
 
-## Key points
-- OAuth credentials in Secrets Manager; query objects with filters.
-- Incremental on LastModifiedDate or SystemModstamp; respect API limits.
-- Write Parquet to S3; capture deletions through IsDeleted or reconciliation.
+### Simple flow
 
-## CWD context
-Keep raw and curated layers separate.
+```text
+Salesforce
+    ↓
+Salesforce API
+    ↓
+AWS Glue Connector
+    ↓
+Glue ETL Job
+    ↓
+Amazon S3
+    ↓
+Glue Data Catalog
+    ↓
+Athena / Redshift / ML
+```
+
+**Security:** Store Salesforce credentials/API secrets in **AWS Secrets Manager**, not in the Glue script.

@@ -1,12 +1,30 @@
-# What models would you deploy using SageMaker?
+## What models would you deploy using SageMaker?
 
-## Short answer
-Deploy narrow, task-specific models on SageMaker.
+In CWD, I would deploy **specialized custom ML models** where a foundation model from Bedrock is not the best fit.
 
-## Key points
-- Intent or routing classifier; document and sensitivity classifier.
-- Reranker, domain-tuned embeddings, anomaly detection on telemetry.
-- Forecasting, propensity scoring, ticket triage, small fine-tuned language models.
+### Examples
 
-## CWD context
-Add each only when evaluation shows a clear win over a prompt.
+```text
+SageMaker
+   ├── Intent Classification
+   ├── Custom Ranking
+   ├── Anomaly Detection
+   ├── Forecasting
+   ├── Recommendation
+   └── Custom/Fine-tuned NLP Models
+```
+
+### CWD examples
+
+* **Intent classifier** → Customer Briefing vs IT Support vs other intents
+* **Custom ranking model** → rank retrieved enterprise documents
+* **Anomaly detection** → detect unusual manufacturing/operational patterns
+* **Forecasting model** → predict business/operational metrics
+* **Custom NLP model** → specialized enterprise classification/extraction
+
+### Interview answer
+
+> “In CWD, I would use SageMaker for specialized models such as a custom intent classifier, ranking model, anomaly detection model, or forecasting model. These models would be trained on enterprise-specific data and exposed through SageMaker endpoints for real-time inference. Bedrock would remain the primary service for foundation-model-based GenAI tasks.”
+
+**Memory:**
+**SageMaker → Specialized Custom ML | Bedrock → Foundation-model GenAI**

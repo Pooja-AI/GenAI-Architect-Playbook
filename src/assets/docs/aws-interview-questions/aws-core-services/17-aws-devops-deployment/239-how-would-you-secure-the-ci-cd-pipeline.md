@@ -1,13 +1,25 @@
-# How would you secure the CI/CD pipeline?
+For an interview, keep it simple:
 
-## Short answer
-Secure the pipeline like production, because it can deploy anything.
+> **“I secure the CI/CD pipeline using least-privilege IAM roles, Secrets Manager or Parameter Store for secrets, encryption with KMS, and protected Git branches. I also enable code scanning, dependency and container-image scanning, and require approval before production deployment. CloudTrail and pipeline logs provide auditability.”**
 
-## Key points
-- Separate least-privilege roles for build and deploy; cross-account deploy roles with conditions.
-- No long-lived keys: OIDC federation for external CI; KMS-encrypted artifacts.
-- Image scanning and signing; dependency and secret scanning; branch protection and required reviews; approval for production.
-- Isolated build networks; audit through CloudTrail.
+### Simple flow
 
-## CWD context
-A compromised pipeline is a compromised production.
+```text
+Developer
+   ↓
+Git Repository
+   ↓
+Code Scan / Security Scan
+   ↓
+Build + Test
+   ↓
+Container/Image Scan
+   ↓
+Approval Gate
+   ↓
+Deploy to AWS
+   ↓
+CloudTrail + CloudWatch
+```
+
+**Key point:** No hardcoded credentials + least privilege + security scanning + production approval + audit logging.

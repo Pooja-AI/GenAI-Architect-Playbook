@@ -1,13 +1,35 @@
-# How would you optimize Glue ETL performance?
+## How would you optimize Glue ETL performance?
 
-## Short answer
-Optimise Glue by reducing data read, shuffles and small files, and by sizing workers well.
+I would optimize **data volume, partitioning, Spark processing, and infrastructure**.
 
-## Key points
-- Worker type (G.1X, G.2X and larger) and auto scaling.
-- Push-down predicates, partition pruning, file grouping, compacted output.
-- Avoid unnecessary shuffles and UDFs; broadcast small joins; use Parquet and bookmarks.
-- Check the Spark UI and job metrics.
+```text
+Source
+  ↓
+Filter early
+  ↓
+Partitioned Parquet
+  ↓
+Parallel Glue Workers
+  ↓
+S3 / OpenSearch
+```
 
-## CWD context
-Measure first; most gains come from a few stages.
+### Key techniques
+
+1. **Incremental ingestion** → process only new/changed records.
+2. **Filter early** → don't load unnecessary data.
+3. **Use Parquet** → columnar + compressed.
+4. **Partition data** → enable partition pruning.
+5. **Avoid small files** → compact files where appropriate.
+6. **Optimize joins** → broadcast small lookup datasets when appropriate.
+7. **Right-size Glue workers** → don't over-provision.
+8. **Parallelize independent transformations** where possible.
+9. **Use Glue job bookmarks** for supported incremental workloads.
+10. **Monitor Spark stages** to identify slow transformations or data skew.
+
+### Interview answer
+
+> “I would optimize Glue ETL by using incremental ingestion, filtering early, partitioning the data, and using compressed Parquet instead of CSV. I would optimize joins, avoid small files, right-size Glue workers, and monitor Spark stages for data skew or expensive transformations.”
+
+**Memory:**
+**Less Data → Partition → Parquet → Optimize Spark → Right-size → Monitor**

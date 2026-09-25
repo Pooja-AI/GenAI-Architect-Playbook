@@ -1,12 +1,33 @@
-# How would you optimize inference latency?
+## How would you optimize inference latency?
 
-## Short answer
-Optimise inference latency by optimising the model, the hardware and the path.
+I would first identify **where the latency is coming from**, then optimize that layer.
 
-## Key points
-- Quantisation, compilation, distillation; GPU or purpose-built inference hardware where it pays off.
-- Batching, warm containers, small payloads, fast feature lookup or caching.
-- Same-region private endpoints and keep-alive connections; asynchronous handling for slow parts.
+```text id="8m48q4"
+Worker
+  ↓
+Network
+  ↓
+SageMaker Endpoint
+  ↓
+Model Inference
+  ↓
+Response
+```
 
-## CWD context
-Measure model latency versus overhead before optimising.
+### Practical techniques
+
+* Measure **P50/P95/P99 latency**.
+* Use the right **instance type** and GPU when beneficial.
+* **Optimize the model** — smaller model, quantization, optimized inference.
+* Keep Worker and SageMaker endpoint in the **same AWS Region/VPC**.
+* Use **warm/provisioned capacity** to reduce cold starts where applicable.
+* Enable **autoscaling** for traffic spikes.
+* Use **connection reuse/keep-alive** from the Worker.
+* Avoid unnecessary preprocessing/postprocessing.
+* Set appropriate **timeouts**.
+
+### Interview answer
+
+> “I first break down P50, P95, and P99 latency into network, preprocessing, model inference, and postprocessing. Then I optimize the bottleneck by right-sizing the instance, using GPU or model optimization where appropriate, keeping services close to each other, maintaining warm capacity, and using autoscaling. I continuously monitor P95 and P99 to verify the improvement.”
+
+**Memory:** `Measure → Find Bottleneck → Optimize Model → Right-size → Warm → Scale → Monitor`

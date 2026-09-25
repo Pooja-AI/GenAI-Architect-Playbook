@@ -1,12 +1,66 @@
-# Where would metadata extraction happen?
+## Where would metadata extraction happen?
 
-## Short answer
-Extract metadata in the same job that prepares the chunks.
+It depends on the type of metadata, but in CWD I would mainly handle it during the **document ingestion/preprocessing pipeline**.
 
-## Key points
-- Source system, document ID, title, author, dates, type, department, language.
-- Sensitivity, ACL principals, path or URL, version, ingest run ID, content hash.
-- From source APIs, document properties and classification.
+```text id="8bpm5a"
+Document
+   ↓
+S3
+   ↓
+Document Extraction
+   ↓
+Glue ETL
+   ├── Content metadata
+   ├── Business metadata
+   └── ACL metadata
+   ↓
+OpenSearch
+```
 
-## CWD context
-Good metadata powers both filtering and citations.
+### Examples
+
+**Document metadata**
+
+* filename
+* document ID
+* page number
+* created/modified date
+* document type
+
+**Business metadata**
+
+* customer ID
+* department
+* product
+* region
+
+**Security metadata**
+
+* owner
+* allowed groups
+* ACL/entitlements
+
+### Important distinction
+
+```text
+PDF / Image
+   ↓
+Textract / document parser
+   ↓
+Extract text + structural information
+   ↓
+Glue ETL
+   ↓
+Normalize + enrich metadata
+   ↓
+OpenSearch
+```
+
+So, **document content/structure extraction** can happen with a document parser/Textract, while **metadata normalization, enrichment, and mapping** can happen in Glue.
+
+### Interview answer
+
+> “I would extract document-level and structural metadata during document ingestion, using a parser or Textract for complex documents, and then use Glue to normalize and enrich the metadata. The final metadata, including business and ACL attributes, would be stored with each chunk in OpenSearch.”
+
+**Memory:**
+**Extract → Normalize → Enrich → Attach to Chunk → Index**

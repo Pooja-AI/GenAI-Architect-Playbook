@@ -1,11 +1,52 @@
-# How would Glue trigger downstream processing?
+## How would Glue trigger downstream processing?
 
-## Short answer
-Trigger downstream steps from Glue job state-change events.
+After Glue successfully completes the ETL job, I would use **EventBridge** or a Glue workflow to trigger the next step.
 
-## Key points
-- EventBridge events for succeeded and failed job runs → Step Functions, Lambda or SNS.
-- Step Functions can start and wait for a Glue job directly; Glue triggers and workflows for simple chains.
+```text
+S3
+ ↓
+Glue ETL
+ ↓
+Job Succeeded
+ ↓
+EventBridge
+ ↓
+Lambda / Step Functions
+ ↓
+Embedding
+ ↓
+OpenSearch
+```
 
-## CWD context
-Completion starts indexing, evaluation or notification.
+### Example in CWD
+
+```text
+Glue ETL
+   ↓
+Clean + Chunk documents
+   ↓
+Write to S3
+   ↓
+EventBridge
+   ↓
+Embedding Worker
+   ↓
+OpenSearch
+```
+
+### Why EventBridge?
+
+Glue can emit job state events such as **SUCCEEDED** or **FAILED**. EventBridge can react to the successful completion and start downstream processing.
+
+For more complex workflows:
+
+```text
+Glue → Step Functions → Embedding → OpenSearch → Validation
+```
+
+### Interview answer
+
+> “After Glue completes successfully, I would trigger downstream processing using EventBridge for event-driven processing or Step Functions for a multi-step workflow. For CWD, a successful Glue job could trigger the embedding process, followed by OpenSearch indexing. If Glue fails, downstream processing would not start.”
+
+**Memory:**
+**Glue Success → EventBridge/Step Functions → Embedding → OpenSearch**

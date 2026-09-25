@@ -1,12 +1,33 @@
-# Why use Bedrock for LLM inference but SageMaker for another ML model?
+## Why use Bedrock for LLM inference but SageMaker for another ML model?
 
-## Short answer
-Use Bedrock for general language work and SageMaker for custom models with different lifecycles and economics.
+Because they solve **different ML needs**.
 
-## Key points
-- Bedrock: prompts, evaluation, per-token cost, no training.
-- SageMaker: data, training, registry, endpoints, instance cost.
-- A narrow prediction task with labelled data is usually cheaper and more predictable on SageMaker.
+|                | Bedrock                    | SageMaker              |
+| -------------- | -------------------------- | ---------------------- |
+| Main purpose   | Foundation/LLM inference   | Custom ML models       |
+| Example        | GPT/Claude/Llama           | Intent classifier      |
+| Training       | Usually not needed         | Train/customize models |
+| Infrastructure | Managed by AWS             | More control           |
+| CWD example    | Generate Customer Briefing | Classify user intent   |
 
-## CWD context
-Two lifecycles, two governance paths, one Worker interface.
+### CWD example
+
+```text
+User Request
+     ↓
+Coordinator
+     ↓
+Intent Classifier ──→ SageMaker
+     ↓
+Customer Briefing
+     ↓
+LLM ──→ Bedrock
+     ↓
+Final Response
+```
+
+### Interview answer
+
+> “I use Bedrock when I need managed foundation-model capabilities for tasks like generation, summarization, or embeddings. I use SageMaker when I have a specialized ML model that we need to train, customize, evaluate, and manage through the ML lifecycle. For example, in CWD, SageMaker could host an intent-classification model, while Bedrock handles the LLM-based customer briefing generation.”
+
+**Memory:** **Bedrock = Foundation Models | SageMaker = Custom ML**

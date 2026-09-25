@@ -1,12 +1,19 @@
-# How would you manage AWS configuration across environments?
+For an interview, keep it simple:
 
-## Short answer
-Manage configuration per environment through IaC parameters, AppConfig and Parameter Store.
+> **“I manage AWS configuration separately for each environment—Dev, QA, and Prod—using Infrastructure as Code such as Terraform or CloudFormation. Environment-specific values are stored in AWS Systems Manager Parameter Store or Secrets Manager, while sensitive values are never hardcoded. CI/CD pipelines deploy the same infrastructure code with different environment parameters. I also use IAM roles, tagging, and CloudTrail to control and audit changes.”**
 
-## Key points
-- AppConfig for runtime configuration and feature flags with validators, gradual rollout and rollback, including prompt and model versions.
-- Parameter Store paths such as /cwd/{env}/...; Secrets Manager per environment.
-- Schema validation; no environment-specific code branches.
+### Simple flow
 
-## CWD context
-Runtime config changes need the same discipline as code changes.
+```text
+Terraform / CloudFormation
+          ↓
+   Environment Config
+   ┌──────┼──────┐
+  DEV     QA    PROD
+   ↓       ↓      ↓
+Parameter Store / Secrets Manager
+          ↓
+      AWS Services
+```
+
+**Key point:** Same infrastructure code, different environment-specific configuration.

@@ -1,12 +1,50 @@
-# What data sources would CWD ingest using Glue?
+## What data sources would CWD ingest using Glue?
 
-## Short answer
-CWD ingests enterprise knowledge and operational data from several systems.
+In CWD, I would use Glue mainly for **batch-oriented enterprise data**, not real-time transactional requests.
 
-## Key points
-- Salesforce and ServiceNow records; Oracle and Snowflake tables.
-- SharePoint and other file content exported to S3; documents already in S3.
-- Logs, telemetry and evaluation datasets.
+```text
+Enterprise Sources
+      ↓
+     Glue
+      ↓
+Clean / Transform
+      ↓
+      S3
+      ↓
+RAG / OpenSearch / Analytics
+```
 
-## CWD context
-Live lookups go through MCP; ingestion is for searchable knowledge and analytics.
+### Typical sources
+
+* **S3** → documents, CSV, JSON, historical files
+* **Relational databases** → Oracle, PostgreSQL, SQL Server
+* **Data warehouses** → Snowflake or other analytical stores
+* **Enterprise data lakes**
+* **CRM/IT exports** → Salesforce or ServiceNow historical/batch data
+* **ERP/manufacturing data** → batch extracts
+* **Application logs / historical datasets**
+
+### Important distinction
+
+For **current transactional information**, I would use **MCP/API integration**:
+
+```text
+Current customer ticket
+       ↓
+Worker → MCP → ServiceNow
+```
+
+For **large historical/batch datasets**:
+
+```text
+Historical ServiceNow data
+       ↓
+Glue → S3 → OpenSearch
+```
+
+### Interview answer
+
+> “I would use Glue for batch-oriented enterprise sources such as S3 files, relational databases, historical CRM and ServiceNow exports, data warehouses, and manufacturing datasets. Glue would clean, transform, and catalog this data before storing it in S3 and preparing it for RAG or analytics. For real-time customer or ticket information, I would use MCP or APIs instead of Glue.”
+
+**Memory:**
+**Glue = Batch/Historical | MCP = Real-time**

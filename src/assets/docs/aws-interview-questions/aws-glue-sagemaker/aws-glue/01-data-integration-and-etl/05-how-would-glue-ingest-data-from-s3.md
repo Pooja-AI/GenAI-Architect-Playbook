@@ -1,12 +1,17 @@
-# How would Glue ingest data from S3?
+For an interview, keep it simple:
 
-## Short answer
-Read S3 data in Glue through the catalog or direct paths, processing only what is new.
+> **“For Oracle, I would use the AWS Glue JDBC connection to connect to Oracle, extract the required tables, transform the data, and write it to S3. For Snowflake, I would use the Glue Snowflake connector to read or write data. Credentials would be stored in AWS Secrets Manager.”**
 
-## Key points
-- DynamicFrames or Spark DataFrames; job bookmarks to skip processed files.
-- Push-down predicates and partition pruning; IAM role for access.
-- Triggered by schedule or S3 events.
+### Simple flow
 
-## CWD context
-Keep the same layout for raw, curated and consumption zones.
+```text
+Oracle ──JDBC──→ Glue ──→ S3
+                         ↓
+Snowflake ──Connector──→ Glue
+                         ↓
+                    Transform
+                         ↓
+                    S3 / Target
+```
+
+**Key point:** Oracle → **JDBC**, Snowflake → **Snowflake connector**, credentials → **Secrets Manager**.

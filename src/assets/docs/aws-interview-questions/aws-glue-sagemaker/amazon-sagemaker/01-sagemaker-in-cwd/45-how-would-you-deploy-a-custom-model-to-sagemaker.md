@@ -1,12 +1,33 @@
-# How would you deploy a custom model to SageMaker?
+## How would you deploy a custom model to SageMaker?
 
-## Short answer
-Deploy a custom model by packaging the artifact and container, then creating a model, endpoint configuration and endpoint.
+The simple flow is:
 
-## Key points
-- Model artifact in S3 and an inference container (prebuilt or custom in ECR).
-- Configure instance type, count and variants; deploy from the Model Registry through a pipeline.
-- VPC configuration, KMS, autoscaling and testing.
+```text
+Train Model
+    ↓
+Save Model Artifact
+    ↓
+S3
+    ↓
+SageMaker Model
+    ↓
+Endpoint Configuration
+    ↓
+SageMaker Endpoint
+    ↓
+CWD Coordinator / Worker
+```
 
-## CWD context
-Deploy a specific registered version, never "latest".
+### Practical steps
+
+1. **Train** the model using SageMaker training or your own environment.
+2. **Package the model artifact** and store it in **S3**.
+3. Create a **SageMaker Model** with the model artifact + inference container.
+4. Create an **endpoint configuration** with instance type/count.
+5. Deploy a **SageMaker real-time endpoint**.
+6. CWD calls the endpoint using the **SageMaker Runtime API**.
+7. Monitor latency, errors, throughput, and model quality.
+
+### Interview answer
+
+> “I would package the trained model and store the artifact in S3, create a SageMaker model with the appropriate inference container, configure the endpoint, and deploy it as a real-time endpoint. The CWD Coordinator or Worker can then invoke the endpoint for predictions. I would also enable monitoring and use versioned models so we can roll back safely.”

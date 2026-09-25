@@ -1,12 +1,64 @@
-# How would you implement canary deployment?
+## Canary deployment for CWD
 
-## Short answer
-Canary exposes a small share of traffic to the new version and expands as evidence accumulates.
+**Canary = send a small percentage of traffic to the new version first, validate it, then gradually increase traffic.**
 
-## Key points
-- CodeDeploy canary configurations, ALB weighted target groups, Lambda alias weights, API Gateway canary stages.
-- AppConfig gradual rollout for prompts, model IDs and configuration, with automatic rollback.
-- Watch quality metrics as well as errors.
+```text
+Users
+  ↓
+ALB
+  ↓
+90% ──→ CWD v1  (Stable)
+10% ──→ CWD v2  (Canary)
+             ↓
+          Monitor
+             ↓
+      Healthy? → Increase
+             ↓
+      25% → 50% → 100%
+```
 
-## CWD context
-Start with internal or low-risk tenants.
+### Steps
+
+1. Deploy **v2** alongside the current v1.
+2. Route a small percentage, e.g. **5–10%**, to v2.
+3. Monitor:
+
+   * 5xx/error rate
+   * P95/P99 latency
+   * CPU/memory
+   * Bedrock throttling
+   * MCP/tool failures
+   * LLM quality/groundedness
+4. If healthy → increase traffic gradually.
+5. If unhealthy → route 100% back to v1.
+6. After validation → v2 becomes the production version.
+
+### AWS implementation
+
+For CWD:
+
+```text
+CodePipeline
+     ↓
+CodeDeploy
+     ↓
+ECS/Fargate
+     ↓
+ALB
+ ↓          ↓
+v1         v2
+90%        10%
+            ↓
+       Monitor
+            ↓
+     25% → 50% → 100%
+```
+
+I would use **ECS/Fargate + ALB + CodeDeploy** for controlled traffic shifting.
+
+### Interview answer
+
+> “I implement canary deployment by running the new CWD version alongside the current version and initially sending a small percentage of traffic to it. I monitor infrastructure, latency, errors, Bedrock throttling, tool failures, and AI-quality metrics. If the metrics remain healthy, I gradually increase traffic until the new version reaches 100%. If there is degradation, I immediately route traffic back to the stable version.”
+
+**Memory:**
+**Small Traffic → Monitor → Increase → 100% | Problem → Rollback**

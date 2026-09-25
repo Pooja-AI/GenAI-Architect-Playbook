@@ -1,12 +1,55 @@
-# How would Workers consume a SageMaker endpoint?
+## How would Glue trigger downstream processing?
 
-## Short answer
-Workers invoke the endpoint through the SageMaker runtime over a private endpoint with their task role.
+I would trigger downstream processing **only after the Glue job succeeds**.
 
-## Key points
-- sagemaker:InvokeEndpoint scoped to that endpoint's ARN; interface VPC endpoint for the runtime.
-- Typed payload, timeout, backoff retries and a circuit breaker; validate the response.
-- Optionally wrap it in an MCP tool.
+```text
+Glue ETL Job
+     ↓
+  SUCCESS
+     ↓
+EventBridge
+     ↓
+Step Functions / Lambda
+     ↓
+Embedding
+     ↓
+OpenSearch
+```
 
-## CWD context
-Pass the correlation ID so calls appear in traces.
+### Two common approaches
+
+**1. EventBridge**
+
+* Glue job completes successfully.
+* EventBridge detects the Glue `SUCCEEDED` event.
+* Triggers Lambda or another workflow.
+
+**2. Step Functions**
+
+* Better when multiple steps are required.
+* Example:
+  `Glue → Embedding → OpenSearch → Validation`
+
+### CWD example
+
+```text
+S3
+ ↓
+Glue ETL
+ ↓
+SUCCESS
+ ↓
+Step Functions
+ ↓
+Chunk/Embed
+ ↓
+OpenSearch
+ ↓
+RAG Worker
+```
+
+If Glue **fails**, downstream processing should **not start**.
+
+### Interview answer
+
+> “After a successful Glue ETL job, I would use EventBridge for event-driven triggering or Step Functions for a multi-step workflow. For CWD, a typical flow would be Glue → Step Functions → embedding → OpenSearch. If Glue fails, I would stop the downstream workflow and alert through CloudWatch.”

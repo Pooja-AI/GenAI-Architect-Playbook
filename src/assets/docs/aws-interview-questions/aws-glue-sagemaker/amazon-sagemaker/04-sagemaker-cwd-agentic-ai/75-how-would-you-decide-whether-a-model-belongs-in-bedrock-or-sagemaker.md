@@ -1,12 +1,34 @@
-# How would you decide whether a model belongs in Bedrock or SageMaker?
+## How would you decide: Bedrock or SageMaker?
 
-## Short answer
-Decide by task type, data, cost and control needs, and confirm with a comparison.
+I look at the **model requirement and level of control**.
 
-## Key points
-- General language or generative task an existing model handles well → Bedrock.
-- Narrow prediction with labelled data, strict latency or cost, model ownership, or a model not on Bedrock → SageMaker.
-- Compare cost at expected volume and evaluate both on the golden dataset.
+```text
+              Model Requirement
+                     ↓
+        ┌────────────┴────────────┐
+   Foundation LLM            Custom ML Model
+        ↓                          ↓
+     Bedrock                  SageMaker
+```
 
-## CWD context
-Revisit the decision when volume or model options change.
+### Choose **Bedrock** when:
+
+* Need a **foundation model/LLM**
+* Generation, summarization, RAG, chat
+* Want managed inference
+* Don't want to manage model infrastructure
+
+### Choose **SageMaker** when:
+
+* Need a **custom/specialized ML model**
+* Need custom training or deeper control
+* Need custom ML algorithms/frameworks
+* Need a dedicated model endpoint and ML lifecycle management
+
+### Interview answer
+
+> “I decide based on the model and the level of control required. If I need a managed foundation model for GenAI tasks, I use Bedrock. If I need to train, customize, or deploy a specialized ML model with more control over the lifecycle and infrastructure, I use SageMaker.”
+
+**Memory:**
+**Bedrock → Use Foundation Models**
+**SageMaker → Build/Train/Control Custom Models**

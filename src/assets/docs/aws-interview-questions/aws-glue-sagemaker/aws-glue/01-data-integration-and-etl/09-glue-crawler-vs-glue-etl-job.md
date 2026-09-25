@@ -1,12 +1,74 @@
-# Glue Crawler vs Glue ETL job?
+## Glue Crawler vs Glue ETL Job
 
-## Short answer
-A crawler discovers schemas and updates the catalogue; an ETL job transforms and moves data.
+Simple difference:
 
-## Key points
-- Crawler: samples data, infers schema and partitions; metadata only.
-- ETL job: produces new datasets.
-- Crawlers can be slow and drift-prone on huge paths; define known tables in IaC and use partition projection.
+```text
+Crawler = DISCOVER
+ETL Job  = PROCESS
+```
 
-## CWD context
-Do not put crawlers on the critical path of ingestion.
+### Glue Crawler
+
+A **Crawler discovers the structure of data** and creates/updates tables in the Glue Data Catalog.
+
+```text
+S3 / Salesforce / DB
+        ↓
+   Glue Crawler
+        ↓
+ Glue Data Catalog
+   (schema/metadata)
+```
+
+It identifies:
+
+* Tables
+* Columns
+* Data types
+* Partitions
+* S3 locations
+
+### Glue ETL Job
+
+An **ETL job actually processes the data**.
+
+```text
+Source
+  ↓
+Glue ETL Job
+  ↓
+Clean → Transform → Join → Filter
+  ↓
+S3 / OpenSearch
+```
+
+It performs:
+
+* Data extraction
+* Transformation
+* Cleansing
+* Deduplication
+* Format conversion
+* Loading
+
+### CWD example
+
+```text
+Salesforce
+    ↓
+Crawler → discovers schema
+    ↓
+Data Catalog
+    ↓
+ETL Job → clean/transform
+    ↓
+S3
+    ↓
+OpenSearch / RAG
+```
+
+### Interview answer
+
+> “A Glue Crawler is mainly for discovering data structure and populating the Glue Data Catalog, whereas a Glue ETL job performs the actual data processing and transformation. In CWD, I could use the crawler to discover Salesforce or S3 data schemas, then use an ETL job to clean and transform that data before storing it in S3 or preparing it for RAG.”
+
+**Memory:** **Crawler = Discover | ETL = Transform**

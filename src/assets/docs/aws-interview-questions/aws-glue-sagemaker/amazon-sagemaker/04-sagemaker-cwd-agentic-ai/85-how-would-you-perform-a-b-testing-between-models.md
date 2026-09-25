@@ -1,12 +1,50 @@
-# How would you perform A/B testing between models?
+## How would you perform A/B testing between models?
 
-## Short answer
-A/B test with production variants that split traffic by weight.
+I would send **different user/request traffic to two model versions** and compare their results using the same evaluation metrics.
 
-## Key points
-- Variants under one endpoint, for example 90/10; optionally target a variant explicitly.
-- Compare invocation metrics and model quality per variant; use statistics.
-- Adjust weights with UpdateEndpointWeightsAndCapacities and promote the winner.
+```text
+                    Requests
+                       ↓
+                 Model Router
+                  ↙       ↘
+             Model A      Model B
+               50%          50%
+                  ↘       ↙
+                 Metrics
+                    ↓
+              Compare Results
+```
 
-## CWD context
-Define success metrics before starting.
+### Practical approach
+
+1. Deploy **Model A** and **Model B** separately.
+2. Route traffic, for example **50% → A, 50% → B**.
+3. Keep the same input population and evaluation period.
+4. Collect:
+
+   * Accuracy / F1
+   * Error rate
+   * P95/P99 latency
+   * Cost
+   * Business-specific quality metrics
+5. Compare the results.
+6. If B meets the required quality and operational thresholds, gradually increase its traffic.
+
+### CWD example
+
+```text
+Customer requests
+      ↓
+   Router
+   ↙    ↘
+ v1      v2
+50%     50%
+```
+
+For an intent-classification model, compare **F1, false positives, latency, and cost**.
+
+### Interview answer
+
+> “I would deploy both model versions and use a routing layer to split traffic between them. I would keep the experiment population and evaluation period consistent, then compare model quality, latency, error rate, and cost. If the new model meets the predefined acceptance criteria, I would gradually increase its traffic and eventually promote it.”
+
+**Memory:** `Deploy A/B → Split Traffic → Measure → Compare → Gradually Promote`

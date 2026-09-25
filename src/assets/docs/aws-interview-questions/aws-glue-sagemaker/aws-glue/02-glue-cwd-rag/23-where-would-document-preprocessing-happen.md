@@ -1,12 +1,35 @@
-# Where would document preprocessing happen?
+## Where would document preprocessing happen?
 
-## Short answer
-Preprocess in Glue for bulk corpora and in Lambda for small, per-document events.
+For CWD, I would do **batch document preprocessing in the Glue ETL pipeline**.
 
-## Key points
-- Glue: large batches and heavy transformations.
-- Lambda: near-real-time single-document processing.
-- Share code as a library so both paths behave the same.
+```text
+Documents
+   ↓
+S3
+   ↓
+Glue ETL
+   ├── Extract
+   ├── Clean
+   ├── Chunk
+   ├── Metadata / ACL
+   └── Deduplicate
+   ↓
+Embedding
+   ↓
+OpenSearch
+```
 
-## CWD context
-Divergent code paths produce inconsistent chunks.
+### Important distinction
+
+* **S3** → stores original documents.
+* **Glue** → batch preprocessing and transformation.
+* **Embedding service/model** → converts chunks into vectors.
+* **OpenSearch** → stores chunks + vectors + metadata.
+* **RAG Worker** → performs runtime retrieval.
+
+### Interview answer
+
+> “I would perform batch document preprocessing in AWS Glue. Glue would extract, clean, chunk, deduplicate, and enrich documents with metadata and ACL information. After preprocessing, I would generate embeddings and index the chunks into OpenSearch. The original documents remain in S3.”
+
+**Memory:**
+**S3 = Store → Glue = Preprocess → Embedding = Vectorize → OpenSearch = Index**

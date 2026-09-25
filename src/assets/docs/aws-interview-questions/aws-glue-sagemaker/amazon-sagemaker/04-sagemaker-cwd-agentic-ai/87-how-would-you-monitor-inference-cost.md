@@ -1,12 +1,45 @@
-# How would you monitor inference cost?
+## How would you monitor inference cost?
 
-## Short answer
-Monitor inference cost by usage type, utilisation and cost per prediction.
+I would track **cost per model, endpoint, request, and environment** and correlate cost with traffic.
 
-## Key points
-- Cost Explorer by SageMaker usage type and tags; endpoint hours usually dominate.
-- Idle endpoints show as low invocations or utilisation; cost per prediction = endpoint cost ÷ invocations.
-- Savings Plans, budgets and anomaly alerts.
+```text
+Requests
+   ↓
+SageMaker Endpoint
+   ↓
+Usage Metrics ──→ CloudWatch
+   ↓
+Cost Data ──────→ AWS Cost Explorer
+   ↓
+Cost / Request
+Cost / Model
+Cost / Environment
+```
 
-## CWD context
-Delete or scale down unused endpoints quickly.
+### What I monitor
+
+* Total SageMaker endpoint cost
+* Instance hours
+* Number of inference requests
+* Cost per 1,000 requests
+* CPU/GPU utilization
+* Idle capacity
+* Cost by model/version/environment
+
+### Optimization
+
+If cost is high:
+
+* Right-size instances
+* Enable autoscaling
+* Scale down during low traffic
+* Use Serverless for suitable low-volume workloads
+* Use asynchronous inference for suitable workloads
+* Optimize the model
+* Remove unused endpoints
+
+### Interview answer
+
+> “I monitor SageMaker inference cost using AWS Cost Explorer and CloudWatch usage metrics. I correlate instance hours and request volume to calculate cost per request and identify idle or underutilized endpoints. If costs increase, I right-size instances, configure autoscaling, use serverless or asynchronous inference where appropriate, and optimize the model.”
+
+**Memory:** `Usage → Cost → Cost/Request → Find Waste → Optimize`

@@ -1,13 +1,36 @@
-# How would you reduce Bedrock costs?
+## How would you reduce Bedrock costs?
 
-## Short answer
-Reduce Bedrock cost by sending fewer, smaller and cheaper calls.
+I would focus on **reducing unnecessary tokens and unnecessary LLM calls**.
 
-## Key points
-- Model tiering and routing; prompt caching; response and semantic caching.
-- Batch inference for offline work; Provisioned Throughput only for steady heavy load.
-- Shorter prompts, fewer and better chunks, capped output tokens; distillation for narrow tasks.
-- Application inference profiles for cost attribution.
+```text
+User Request
+     ↓
+Cache / Rules
+     ↓
+Task Classifier
+   ↙       ↘
+Simple    Complex
+   ↓         ↓
+Small      Large
+Model      Model
+   ↓         ↓
+     Response
+```
 
-## CWD context
-Model routing is usually the biggest single lever.
+### Practical techniques
+
+1. **Model routing** → small/cheaper model for simple tasks.
+2. **Semantic caching** → reuse answers for similar questions.
+3. **Reduce prompt size** → send only required context.
+4. **Reduce RAG top-K** → don't send unnecessary documents to Bedrock.
+5. **Summarize conversation history** → avoid sending full history.
+6. **Set max output tokens** → prevent unnecessarily long responses.
+7. **Remove redundant LLM calls** → use rules/code for deterministic tasks.
+8. **Track token usage** → identify expensive Workers/workflows.
+
+### Interview answer
+
+> “I reduce Bedrock cost mainly by reducing LLM calls and token consumption. I use model routing, semantic caching, smaller RAG context, conversation summarization, output-token limits, and deterministic logic where possible. I also monitor token usage and cost per workflow and Worker to identify optimization opportunities.”
+
+**Memory:**
+**Fewer Calls → Smaller Context → Smaller Model → Fewer Tokens → Lower Cost**

@@ -1,10 +1,17 @@
-# Would you use SageMaker for foundation models or traditional ML?
+## Would you use SageMaker for foundation models or traditional ML?
 
-## Short answer
-SageMaker is mainly for traditional and task-specific ML plus small fine-tuned models; foundation models mostly come from Bedrock.
+**Both**, but the use cases differ.
 
-## Key points
-- JumpStart can host open foundation models where control or steady high-volume cost justifies it.
+* **Traditional ML:** classification, regression, forecasting, anomaly detection, recommendation.
+* **Foundation models:** SageMaker can also train, fine-tune, deploy, and customize foundation models when you need more control over the model lifecycle.
 
-## CWD context
-Default to Bedrock for foundation models.
+For **CWD**, I would typically use:
+
+```text
+Traditional / Custom ML → SageMaker
+Foundation-model GenAI → Bedrock
+```
+
+### Interview answer
+
+> “SageMaker supports both traditional ML and foundation-model workflows. In CWD, I would primarily use SageMaker for custom or specialized ML models where I need training and lifecycle control, while using Bedrock for managed foundation-model capabilities such as LLM generation and embeddings.”

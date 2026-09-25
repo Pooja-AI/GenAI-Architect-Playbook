@@ -1,12 +1,69 @@
-# How would you roll back a failed deployment?
+## How would you roll back a failed deployment?
 
-## Short answer
-Roll back by returning traffic or configuration to the last known good version.
+Main idea: **quickly route traffic back to the last known-good version.**
 
-## Key points
-- CodeDeploy automatic rollback on alarms or failed hooks.
-- Manual: previous ECS task set or task definition, Lambda alias to the prior version, AppConfig rollback, IaC revert.
-- Expand-and-contract database changes keep old versions working.
+```text id="k6m4pz"
+New Version
+     ↓
+Deployment
+     ↓
+Monitor
+     ↓
+Failure
+     ↓
+Rollback
+     ↓
+Previous Version
+```
 
-## CWD context
-Rehearse rollback so it is quick and calm.
+### For CWD on ECS/Fargate
+
+If we use **blue-green**:
+
+```text id="3q8r1x"
+ALB
+ ↓
+Green v2 ❌
+ ↓
+Rollback
+ ↓
+Blue v1 ✅
+```
+
+* Stop routing traffic to the failed version.
+* Shift traffic back to the previous ECS task set.
+* Keep the previous Docker image in **ECR**.
+* Check CloudWatch/X-Ray/Langfuse to identify the failure.
+* Fix the issue and redeploy.
+
+### For Lambda
+
+If using **versions + aliases**:
+
+```text
+prod → v12 ❌
+        ↓
+prod → v11 ✅
+```
+
+Simply move the `prod` alias back to the previous version.
+
+### Automatic rollback
+
+Configure deployment alarms for:
+
+* 5xx/error rate
+* P95/P99 latency
+* ECS task health
+* Bedrock errors/throttling
+* MCP/tool failures
+* Important CWD/LLM quality metrics
+
+If an alarm breaches the threshold, **automatically stop the deployment and restore the previous version**.
+
+### Interview answer
+
+> “I implement rollback using immutable versions and keep the previous known-good version available. For ECS blue-green deployment, I shift ALB traffic back to the previous task set. For Lambda, I move the production alias back to the previous version. I also configure CloudWatch deployment alarms so failed deployments can automatically trigger rollback.”
+
+**Memory:**
+**Detect → Stop → Route Back → Verify → Fix → Redeploy**

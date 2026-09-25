@@ -1,12 +1,66 @@
-# How would you attach ACL metadata to documents?
+## How would you attach ACL metadata to documents?
 
-## Short answer
-Capture source permissions and store them as normalised principals on every chunk.
+I would extract the document's **access-control information from the source system** and attach it to every chunk during ingestion.
 
-## Key points
-- Read permissions from SharePoint, Salesforce sharing and ServiceNow roles; map to identity-provider user and group IDs.
-- Store as allowed principals on each chunk; refresh on a schedule and on events, since permissions change independently of content.
-- Fail closed: no valid ACL means no indexing.
+```text id="f0qk3m"
+SharePoint / Salesforce / ServiceNow
+            ↓
+      Extract ACLs
+            ↓
+        Glue ETL
+            ↓
+   Document → Chunks
+            ↓
+      ACL Metadata
+            ↓
+       OpenSearch
+```
 
-## CWD context
-Query-time filtering then trusts this metadata.
+### Example
+
+```text id="l6d7px"
+document_id = DOC-123
+chunk_id    = DOC-123-C05
+
+allowed_groups:
+  - Sales
+  - Account-Managers
+
+allowed_users:
+  - user123
+```
+
+For enterprise systems, I might also store:
+
+```text
+tenant_id
+department
+security_level
+source_system
+acl_group_ids
+```
+
+### At query time
+
+The user's identity/entitlements are checked **before returning chunks**:
+
+```text id="3f9v3j"
+User Identity
+     ↓
+User Entitlements
+     ↓
+OpenSearch ACL Filter
+     ↓
+Authorized Chunks Only
+     ↓
+LLM
+```
+
+**Important:** The LLM should **not decide whether a user is authorized**. Authorization must happen in the retrieval/application layer.
+
+### Interview answer
+
+> “During ingestion, I would extract ACL information from the source system and attach it as metadata to every document chunk. At query time, I would obtain the user's entitlements and apply ACL filters during retrieval, so only authorized chunks reach the LLM.”
+
+**Memory:**
+**Source ACL → Chunk Metadata → User Entitlement → Filter → LLM**
