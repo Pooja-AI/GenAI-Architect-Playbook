@@ -58417,9 +58417,7 @@ The biggest architectural challenge was balancing the intelligence of the agents
 The main value of CWD was that it provided a modular enterprise AI architecture. New business capabilities and Workers could be added without redesigning the entire system, while the Coordinator and Delegator layers provided controlled orchestration.\r
 \r
 So overall, CWD was an end-to-end enterprise Agentic AI platform, and my involvement covered **business analysis, solution architecture, hands-on development, integration, testing, deployment, and production readiness**.\r
-`,code:``},{id:`what-is-cwd`,category:`Project Overview`,title:`Explain the Coordinator → Delegator → Worker architecture.?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:`Here are **short, natural interview answers** you can explain without sounding memorized.\r
-\r
-### 1. Explain the Coordinator → Delegator → Worker architecture.\r
+`,code:``},{id:`what-is-cwd`,category:`Project Overview`,title:`Explain the Coordinator → Delegator → Worker architecture.?`,difficulty:`Intermediate`,time:`~10 min`,description:`Understand what CWD is, the purpose of the enterprise AI platform, the problems it addresses, and how it enables users to interact with enterprise knowledge, applications, tools, and specialized AI agents through a unified experience.`,concept:`### 1. Explain the Coordinator → Delegator → Worker architecture.\r
 \r
 > In our Onsemi CWD project, the **Coordinator manages the overall request**, Delegators manage specific **business domains**, and Workers perform **specific tasks**. For example, the Coordinator may receive a customer briefing request and route Sales-related work to the Sales Delegator. The Sales Delegator then invokes Workers such as Customer Profile or Opportunity Workers.\r
 \r
@@ -171977,7 +171975,163 @@ Sales Worker\r
 **Interview answer:**\r
 \r
 > “I define agent boundaries through a combination of responsibility, data access, tool permissions, and risk policies. Each agent gets only the capabilities and tools required for its role. Actions outside its domain are blocked or delegated, and high-risk operations require human approval. This gives us clear separation of responsibility and prevents agents from operating beyond their intended scope.”\r
-`,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function cm(){return(0,M.jsx)($,{data:sm,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var lm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`For your **CWD architecture**, answer this in 6 areas:\r
+`,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you prevent agent-to-agent loops?\r
+\r
+Use **workflow controls and execution limits**.\r
+\r
+* **Max hop/depth limit** → e.g., Coordinator → Delegator → Worker; don't allow unlimited delegation.\r
+* **Visited-agent tracking** → maintain a \`visited_agents\` set in workflow state.\r
+* **Cycle detection** → reject \`A → B → A\` patterns.\r
+* **Clear agent boundaries** → each agent has defined responsibilities.\r
+* **Allowed-agent matrix** → define which agents can call which other agents.\r
+* **Task/TTL limit** → expire workflows that run too long.\r
+* **Max tool/agent calls** → stop excessive recursive execution.\r
+* **Correlation ID + tracing** → detect repeated calls in the same task.\r
+\r
+\`\`\`text\r
+Agent A\r
+   ↓\r
+Agent B\r
+   ↓\r
+Agent A  ← detected\r
+   ↓\r
+STOP / ESCALATE\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We prevent agent-to-agent loops using a combination of maximum delegation depth, visited-agent tracking, cycle detection, and an allowed-agent communication matrix. We also enforce task timeouts and maximum agent-call limits. If a cycle such as A → B → A is detected, we stop the workflow and either return an error or escalate for review.”\r
+`,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you prevent uncontrolled tool execution?\r
+\r
+Use **tool governance + runtime policy enforcement**.\r
+\r
+* **Tool allowlist** → agent can invoke only approved MCP tools.\r
+* **Least privilege** → tools are limited by agent/user permissions.\r
+* **Risk classification** → read, write, destructive, privileged.\r
+* **Policy checks** → validate whether the action is allowed before execution.\r
+* **Input/schema validation** → Pydantic/JSON Schema.\r
+* **Approval** → high-risk tools require HITL.\r
+* **Rate/concurrency limits** → prevent excessive tool calls.\r
+* **Max tool-call budget** → stop runaway agent loops.\r
+* **Audit + tracing** → record every tool invocation and result.\r
+* **Timeout/circuit breaker** → prevent stuck or repeatedly failing calls.\r
+\r
+\`\`\`text id="h7c3kx"\r
+Agent\r
+  ↓\r
+Tool Request\r
+  ↓\r
+Allowlist + Auth\r
+  ↓\r
+Policy / Risk Check\r
+  ↓\r
+Schema Validation\r
+  ↓\r
+HITL if high-risk\r
+  ↓\r
+MCP Tool\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We prevent uncontrolled tool execution by enforcing an allowlist, least-privilege authorization, risk-based policies, and schema validation before every tool call. We also apply rate limits, concurrency limits, and maximum tool-call budgets to prevent runaway execution. High-risk tools require human approval, and every invocation is traced and audited.”\r
+`,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you control agent planning?\r
+\r
+Use **bounded planning** rather than allowing the agent to create unlimited steps.\r
+\r
+* **Define allowed capabilities** → agent can plan only within its responsibility.\r
+* **Plan schema** → require structured steps, not free-form execution.\r
+* **Policy validation** → validate the plan before execution.\r
+* **Tool allowlist** → plan can reference only approved tools.\r
+* **Maximum steps/depth** → prevent infinite or overly complex plans.\r
+* **Risk checks** → high-risk steps require approval.\r
+* **Budget limits** → control tokens, time, and tool calls.\r
+* **Checkpointing** → persist state and validate progress between steps.\r
+* **Re-planning rules** → allow replanning only when a defined condition occurs.\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Coordinator\r
+     ↓\r
+Generate Plan\r
+     ↓\r
+Validate Plan\r
+ ┌───┴────────┐\r
+Valid        Invalid\r
+ ↓              ↓\r
+Execute       Reject / Replan\r
+ ↓\r
+Checkpoint\r
+ ↓\r
+Next Step\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We control agent planning by constraining what the agent is allowed to plan and execute. The Coordinator generates a structured plan, which is validated against agent capabilities, tool permissions, security policies, and execution limits before running. We also enforce maximum steps, tool-call budgets, timeouts, and checkpoints. For high-risk actions, the plan pauses for human approval before execution.”\r
+`,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you evaluate agent trajectories?\r
+\r
+An **agent trajectory** is the complete sequence of decisions and actions:\r
+\r
+\`\`\`text\r
+User Request\r
+ → Plan\r
+ → Agent selection\r
+ → Tool calls\r
+ → Observations\r
+ → Next decisions\r
+ → Final answer\r
+\`\`\`\r
+\r
+I evaluate both **the final outcome and the path taken**.\r
+\r
+* **Task success** → Did the agent achieve the goal?\r
+* **Tool selection accuracy** → Did it choose the correct tools?\r
+* **Routing accuracy** → Correct Delegator/Worker?\r
+* **Step efficiency** → Unnecessary steps or tool calls?\r
+* **Correctness** → Were decisions supported by trusted data?\r
+* **Safety** → Any unauthorized or risky actions?\r
+* **Policy compliance** → Did it stay within boundaries?\r
+* **Latency & cost** → Tokens, LLM calls, execution time.\r
+* **Failure recovery** → Did it retry/recover correctly?\r
+\r
+For production, I would capture each step with **trace IDs** using tools such as Langfuse/App Insights and evaluate trajectories against expected workflows or an evaluation dataset.\r
+\r
+**Interview answer:**\r
+\r
+> “I evaluate agent trajectories by capturing the complete execution trace and measuring both outcome and behavior. I look at task success, routing and tool-selection accuracy, unnecessary steps, policy compliance, safety, latency, token cost, and failure recovery. For important workflows, we compare the trajectory against expected or golden trajectories and use the results for regression testing before deploying new agent, prompt, or model versions.”\r
+`,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you determine whether an agent actually completed the task?\r
+\r
+Don't rely only on the **LLM's final response**. Use **objective completion criteria**.\r
+\r
+* **Define success criteria** before execution.\r
+* **Validate required outputs** against a schema.\r
+* **Verify tool execution** — did the MCP call actually succeed?\r
+* **Check downstream state** — was the record actually created/updated?\r
+* **Validate business rules** — does the result satisfy the requirement?\r
+* **Use deterministic checks** where possible.\r
+* **Mark task status**: \`SUCCESS\`, \`PARTIAL\`, \`FAILED\`, or \`NEEDS_HUMAN\`.\r
+* **Record evidence** in the execution trace.\r
+\r
+\`\`\`text\r
+Agent says "Completed"\r
+        ↓\r
+Tool Result\r
+        ↓\r
+Schema Validation\r
+        ↓\r
+Business Validation\r
+        ↓\r
+Downstream Verification\r
+        ↓\r
+SUCCESS / PARTIAL / FAILED\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I don't consider an agent's statement that it completed a task as proof of completion. We define objective success criteria and verify the tool response, output schema, business rules, and downstream state where possible. Only after these checks pass do we mark the task as successful. Otherwise, we mark it partial, failed, or escalate it for human review.”\r
+`,code:``}];function cm(){return(0,M.jsx)($,{data:sm,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var lm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`For your **CWD architecture**, answer this in 6 areas:\r
 \r
 ### How do you govern agents?\r
 \r
