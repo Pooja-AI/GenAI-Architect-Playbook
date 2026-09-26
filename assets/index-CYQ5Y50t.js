@@ -170959,7 +170959,2168 @@ The Agent receives the minimum trusted context it needs.\r
 ### Strong interview line\r
 \r
 > **“I build once and configure per environment; I don't maintain separate application codebases for DEV, QA and PROD.”**\r
-`,code:``}];function nm(){return(0,M.jsx)($,{data:tm,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var rm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function im(){return(0,M.jsx)($,{data:rm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var am=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:``,code:``}];function om(){return(0,M.jsx)($,{data:am,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var sm=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function cm(){return(0,M.jsx)($,{data:sm,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var lm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:``,code:``}];function um(){return(0,M.jsx)($,{data:lm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var dm=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``}];function fm(){return(0,M.jsx)($,{data:dm,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var pm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`For an interview, I’d answer this as **“I would evolve CWD rather than completely replace it.”** The current Coordinator → Delegator → Worker model is useful, but I would make it more **event-driven, policy-driven, observable, and evaluation-driven**.\r
+`,code:``}];function nm(){return(0,M.jsx)($,{data:tm,title:`CWD Production Deployment / DevOps Cookbook`,subtitle:`CI/CD, deployments, rollbacks, quality gates and configuration`,icon:`🚀`,patternLabel:`Questions`})}var rm=[{id:`497-how-do-you-unit-test-workers`,category:`Testing`,title:`How do you unit test Workers?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`498-how-do-you-unit-test-delegators`,category:`Testing`,title:`How do you unit test Delegators?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`499-how-do-you-test-coordinator-routing`,category:`Testing`,title:`How do you test Coordinator routing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`500-how-do-you-test-mcp-tools`,category:`Testing`,title:`How do you test MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`501-how-do-you-test-a2a-communication`,category:`Testing`,title:`How do you test A2A communication?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`502-how-do-you-test-rag`,category:`Testing`,title:`How do you test RAG?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`503-how-do-you-test-prompts`,category:`Testing`,title:`How do you test prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`504-how-do-you-test-llm-responses`,category:`Testing`,title:`How do you test LLM responses?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`505-how-do-you-test-hallucination`,category:`Testing`,title:`How do you test hallucination?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`506-how-do-you-perform-integration-testing`,category:`Testing`,title:`How do you perform integration testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`507-how-do-you-perform-end-to-end-testing`,category:`Testing`,title:`How do you perform end-to-end testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`508-how-do-you-perform-load-testing`,category:`Testing`,title:`How do you perform load testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`509-how-do-you-perform-chaos-testing`,category:`Testing`,title:`How do you perform chaos testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`510-how-do-you-perform-security-testing`,category:`Testing`,title:`How do you perform security testing?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``},{id:`511-how-do-you-test-failure-scenarios`,category:`Testing`,title:`How do you test failure scenarios?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: unit, integration, end-to-end, load, chaos and security testing.`,concept:``,code:``}];function im(){return(0,M.jsx)($,{data:rm,title:`CWD Testing Cookbook`,subtitle:`Unit, integration, end-to-end, load, chaos and security testing`,icon:`🧪`,patternLabel:`Questions`})}var am=[{id:`512-scenario-01-user-request-takes-30-seconds-instead-of-5-seconds-how-do-you-troubleshoot`,category:`Troubleshooting Scenarios`,title:`Scenario 1: User request takes 30 seconds instead of 5 seconds. How do you troubleshoot?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`For an interview, keep it **systematic and short**:\r
+\r
+### Scenario: Request takes 30s instead of 5s\r
+\r
+I would troubleshoot it **layer by layer**:\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+API\r
+ ↓\r
+Coordinator\r
+ ↓\r
+Delegator\r
+ ↓\r
+Workers / MCP\r
+ ↓\r
+LLM / RAG / Enterprise APIs\r
+\`\`\`\r
+\r
+1. **Check end-to-end trace**\r
+\r
+   * Use **Application Insights + Langfuse**.\r
+   * Find which component consumed the extra 25 seconds.\r
+\r
+2. **Check LLM latency**\r
+\r
+   * Token count\r
+   * Model response time\r
+   * Number of LLM calls\r
+   * Sequential vs parallel calls\r
+\r
+3. **Check RAG**\r
+\r
+   * Embedding latency\r
+   * Azure AI Search latency\r
+   * Number of retrieved documents\r
+   * Reranking latency\r
+\r
+4. **Check downstream APIs**\r
+\r
+   * Salesforce / ServiceNow / SharePoint response time\r
+   * MCP tool latency\r
+   * Network/connectivity issues\r
+\r
+5. **Check infrastructure**\r
+\r
+   * CPU/memory\r
+   * Pod/container scaling\r
+   * Cold starts\r
+   * Queue delays\r
+   * Database/Redis latency\r
+\r
+6. **Fix based on the bottleneck**\r
+\r
+   * Parallelize independent workers\r
+   * Reduce unnecessary LLM calls\r
+   * Use caching\r
+   * Optimize prompts/tokens\r
+   * Increase replicas/autoscaling\r
+   * Add connection pooling\r
+   * Use timeout + retry carefully\r
+\r
+### Strong interview sentence\r
+\r
+> **"I would first use distributed tracing to break the 30 seconds into component-level latency. I would identify whether the bottleneck is LLM, RAG, MCP/downstream APIs, orchestration, or infrastructure, then optimize that specific bottleneck rather than making changes blindly."**\r
+`,code:``},{id:`513-scenario-02-salesforce-worker-takes-10-seconds-what-do-you-investigate`,category:`Troubleshooting Scenarios`,title:`Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 2: Salesforce Worker takes 10 seconds. What do you investigate?\r
+\r
+I would check the latency **inside the Salesforce Worker step-by-step**:\r
+\r
+1. **MCP latency**\r
+\r
+   * How long does MCP Client → MCP Server take?\r
+   * Is there connection/setup overhead?\r
+\r
+2. **Salesforce API latency**\r
+\r
+   * Salesforce API response time\r
+   * Slow SOQL query?\r
+   * Too many records returned?\r
+\r
+3. **Network**\r
+\r
+   * DNS/TLS/connection latency\r
+   * Private network/VPN/API gateway overhead\r
+\r
+4. **Authentication**\r
+\r
+   * Is the worker requesting a new OAuth token for every call?\r
+   * Use **token reuse/caching** where appropriate.\r
+\r
+5. **Sequential calls**\r
+\r
+   * Is the worker making multiple Salesforce calls sequentially?\r
+   * Independent calls can be executed **in parallel**.\r
+\r
+6. **Retries**\r
+\r
+   * Did Salesforce return 429/5xx?\r
+   * Check retry count and backoff time.\r
+\r
+7. **Payload size**\r
+\r
+   * Is the worker retrieving unnecessary fields or too many records?\r
+\r
+### Interview answer\r
+\r
+> **"I would use distributed tracing to break the 10 seconds into MCP, network, authentication, Salesforce API, and response-processing latency. Then I would check slow SOQL queries, token acquisition, retries, payload size, and whether multiple independent Salesforce calls are sequential. Based on the bottleneck, I would optimize the query, reuse connections and tokens, parallelize calls, or tune timeout and retry policies."**\r
+`,code:``},{id:`514-scenario-03-llm-latency-suddenly-increases`,category:`Troubleshooting Scenarios`,title:`Scenario 3: LLM latency suddenly increases.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 3: LLM latency suddenly increases\r
+\r
+I would investigate in this order:\r
+\r
+1. **Check LLM provider metrics**\r
+\r
+   * Azure OpenAI/Bedrock latency\r
+   * Any service degradation or throttling\r
+\r
+2. **Check token size**\r
+\r
+   * Input/output tokens suddenly increased?\r
+   * Large prompts or too much conversation history?\r
+\r
+3. **Check model**\r
+\r
+   * Did traffic switch to a larger/slower model?\r
+   * Was model routing changed?\r
+\r
+4. **Check 429/throttling**\r
+\r
+   * Requests exceeding TPM/RPM limits?\r
+   * Retry/backoff adding extra latency?\r
+\r
+5. **Check concurrent traffic**\r
+\r
+   * Sudden traffic spike?\r
+   * Queueing requests before they reach the model?\r
+\r
+6. **Check number of LLM calls**\r
+\r
+   * Did one request start making multiple sequential LLM calls?\r
+\r
+### Interview answer\r
+\r
+> **"I would first check the LLM provider latency and throttling metrics, then compare token usage, model selection, concurrency, and number of LLM calls against the normal baseline. I would use tracing to identify whether the delay is provider latency, throttling, queueing, or our application logic. Then I would optimize the specific bottleneck—for example, reduce tokens, use model routing, parallelize calls, or increase capacity."**\r
+`,code:``},{id:`515-scenario-04-token-consumption-doubled-after-a-release`,category:`Troubleshooting Scenarios`,title:`Scenario 4: Token consumption doubled after a release.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 4: Token consumption doubled after a release\r
+\r
+I would compare the **new release vs previous version**:\r
+\r
+1. **Prompt size**\r
+\r
+   * Did the system prompt become larger?\r
+   * Are we sending unnecessary context?\r
+\r
+2. **Conversation history**\r
+\r
+   * Are we sending the entire chat history instead of only relevant history?\r
+\r
+3. **RAG context**\r
+\r
+   * Did retrieved documents increase from, say, 5 → 15?\r
+   * Are chunks too large?\r
+\r
+4. **Number of LLM calls**\r
+\r
+   * Did one request start making multiple LLM calls?\r
+   * Are calls happening unnecessarily in loops?\r
+\r
+5. **Model routing**\r
+\r
+   * Did traffic move from a smaller model to a larger model?\r
+\r
+6. **Check metrics**\r
+\r
+   * Compare **input tokens, output tokens, tokens/request, and LLM calls/request** before and after release using Langfuse/Application Insights.\r
+\r
+### Interview answer\r
+\r
+> **"I would compare token metrics before and after the release and identify whether the increase comes from prompt size, RAG context, conversation history, output tokens, or an increase in LLM calls. Then I would reduce unnecessary context, optimize chunking, limit history, and verify model routing. I would also add token-per-request monitoring so future releases can detect this regression automatically."**\r
+`,code:``},{id:`516-scenario-05-rag-returns-irrelevant-documents`,category:`Troubleshooting Scenarios`,title:`Scenario 5: RAG returns irrelevant documents.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 5: RAG returns irrelevant documents\r
+\r
+I would troubleshoot the **retrieval pipeline layer by layer**:\r
+\r
+1. **Check the query**\r
+\r
+   * Is the user query clear?\r
+   * Is query rewriting needed?\r
+\r
+2. **Check chunking**\r
+\r
+   * Are chunks too large or too small?\r
+   * Do chunks contain enough context?\r
+\r
+3. **Check embeddings**\r
+\r
+   * Are we using the correct embedding model?\r
+   * Are query and documents embedded consistently?\r
+\r
+4. **Check retrieval**\r
+\r
+   * Is \`Top-K\` too high?\r
+   * Compare **vector search vs BM25 keyword search**.\r
+\r
+5. **Use hybrid search + reranking**\r
+\r
+   * Combine semantic/vector + keyword search.\r
+   * Use a reranker to move the most relevant documents to the top.\r
+\r
+6. **Check metadata/ACL filters**\r
+\r
+   * Customer ID, document type, department, access permissions, etc.\r
+   * Make sure irrelevant documents are filtered before retrieval.\r
+\r
+7. **Evaluate**\r
+\r
+   * Use **Recall@K, Precision@K, MRR**, and RAGAS metrics.\r
+\r
+### Interview answer\r
+\r
+> **"I would first inspect the retrieved documents and determine whether the problem is query understanding, chunking, embeddings, retrieval, or filtering. I would use hybrid search with metadata and ACL filters, followed by reranking. Then I would measure retrieval quality using Precision@K, Recall@K, MRR, and RAGAS to verify the improvement."**\r
+`,code:``},{id:`517-scenario-06-correct-documents-are-retrieved-but-the-llm-gives-an-incorrect-answer`,category:`Troubleshooting Scenarios`,title:`Scenario 6: Correct documents are retrieved but the LLM gives an incorrect answer.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 6: Correct documents are retrieved but LLM gives an incorrect answer\r
+\r
+I would focus on the **generation layer**:\r
+\r
+1. **Check the prompt**\r
+\r
+   * Is the retrieved context clearly provided to the LLM?\r
+   * Are instructions telling it to answer **only from the context**?\r
+\r
+2. **Check context**\r
+\r
+   * Are relevant documents actually included in the final prompt?\r
+   * Is important information being truncated because of token limits?\r
+\r
+3. **Check grounding**\r
+\r
+   * Require the answer to include **citations/source references**.\r
+   * If evidence is missing, return **"I don't have enough information."**\r
+\r
+4. **Check model behavior**\r
+\r
+   * Temperature too high?\r
+   * Wrong model?\r
+   * Model ignoring instructions?\r
+\r
+5. **Check output validation**\r
+\r
+   * Use structured output/Pydantic validation where applicable.\r
+   * Add factual/groundedness evaluation.\r
+\r
+6. **Evaluate**\r
+\r
+   * Use **faithfulness/groundedness, answer relevance, and RAGAS** metrics.\r
+\r
+### Interview answer\r
+\r
+> **"If retrieval is correct but the answer is wrong, I would investigate the generation layer. I would verify that the retrieved context is correctly passed to the LLM, prevent context truncation, strengthen grounding instructions, require citations, and use a fallback when sufficient evidence is unavailable. Then I would measure groundedness and answer relevance to confirm the fix."**\r
+`,code:``},{id:`518-scenario-07-coordinator-selects-the-wrong-delegator`,category:`Troubleshooting Scenarios`,title:`Scenario 7: Coordinator selects the wrong Delegator.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 7: Coordinator selects the wrong Delegator\r
+\r
+I would troubleshoot the **routing/intent-classification layer**:\r
+\r
+1. **Check user intent**\r
+\r
+   * Was the request classified correctly?\r
+   * Example: *customer issue* → Sales vs IT/Service.\r
+\r
+2. **Check entity extraction**\r
+\r
+   * Was \`customer_id\`, intent, or other key information extracted correctly?\r
+\r
+3. **Check Agent Registry**\r
+\r
+   * Is the correct Delegator registered?\r
+   * Are its **capabilities, descriptions, and routing rules** accurate?\r
+\r
+4. **Check routing logic**\r
+\r
+   * Is routing based on rules, LLM classification, or both?\r
+   * Are there ambiguous intents?\r
+\r
+5. **Check confidence**\r
+\r
+   * If confidence is low, don't blindly route.\r
+   * Ask for clarification or use a fallback path.\r
+\r
+6. **Check evaluation**\r
+\r
+   * Maintain test cases for different intents and measure **routing accuracy/confusion matrix**.\r
+\r
+### Interview answer\r
+\r
+> **"I would first verify intent and entity extraction, then check the Agent Registry and Delegator capability metadata. I would inspect the routing decision and confidence score. For ambiguous requests, I would use a clarification or fallback path rather than blindly selecting a Delegator. Finally, I would add routing test cases and monitor routing accuracy to prevent regression."**\r
+`,code:``},{id:`519-scenario-08-delegator-selects-the-wrong-worker`,category:`Troubleshooting Scenarios`,title:`Scenario 8: Delegator selects the wrong Worker.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 8: Delegator selects the wrong Worker\r
+\r
+I would troubleshoot the **Worker discovery and selection layer**:\r
+\r
+1. **Check task understanding**\r
+\r
+   * Did the Delegator correctly understand the task?\r
+\r
+2. **Check Worker Registry**\r
+\r
+   * Is each Worker registered with the correct **capabilities, tools, and descriptions**?\r
+   * Example: Salesforce Worker vs ServiceNow Worker.\r
+\r
+3. **Check routing logic**\r
+\r
+   * Is the Delegator using rules, LLM-based selection, or both?\r
+   * Are capability matches ambiguous?\r
+\r
+4. **Check input/entity**\r
+\r
+   * Is \`customer_id\`, ticket ID, or other entity correctly extracted?\r
+\r
+5. **Check confidence**\r
+\r
+   * If confidence is low, use **fallback or clarification** instead of selecting blindly.\r
+\r
+6. **Check evaluation**\r
+\r
+   * Create test cases for each Worker and measure **Worker-selection accuracy**.\r
+\r
+### Interview answer\r
+\r
+> **"I would first verify the task and entities, then check the Worker Registry to make sure capabilities and metadata are accurate. I would inspect the Delegator's routing decision and confidence. For ambiguous cases, I would use a fallback or clarification path. Finally, I would monitor Worker-selection accuracy with a set of routing test cases."**\r
+`,code:``},{id:`520-scenario-09-worker-calls-the-wrong-mcp-tool`,category:`Troubleshooting Scenarios`,title:`Scenario 9: Worker calls the wrong MCP tool.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 9: Worker calls the wrong MCP tool\r
+\r
+I would troubleshoot the **tool-selection and MCP layer**:\r
+\r
+1. **Check Worker task**\r
+\r
+   * Did the Worker understand the required operation correctly?\r
+\r
+2. **Check MCP tool definitions**\r
+\r
+   * Are tool names, descriptions, parameters, and schemas accurate?\r
+   * Example: \`get_customer\` vs \`create_customer\`.\r
+\r
+3. **Check tool-selection logic**\r
+\r
+   * Is the LLM choosing the tool?\r
+   * Are there clear rules restricting which tools the Worker can call?\r
+\r
+4. **Validate parameters**\r
+\r
+   * Use **Pydantic/JSON Schema** to validate tool arguments before execution.\r
+\r
+5. **Use allowlisting**\r
+\r
+   * Worker should only have access to the MCP tools required for its role.\r
+\r
+6. **Audit and trace**\r
+\r
+   * Log: \`Worker → selected tool → arguments → result\`.\r
+   * Use **Langfuse/App Insights** to identify incorrect tool selection.\r
+\r
+### Interview answer\r
+\r
+> **"I would verify the Worker task and then inspect the MCP tool definitions and selection logic. I would use strict schemas for tool arguments, role-based tool allowlists so a Worker can only access authorized tools, and validate the tool call before execution. I would also trace and audit every tool selection to identify and prevent incorrect calls."**\r
+`,code:``},{id:`521-scenario-10-mcp-tool-succeeds-but-worker-reports-failure`,category:`Troubleshooting Scenarios`,title:`Scenario 10: MCP tool succeeds but Worker reports failure.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 10: MCP tool succeeds but Worker reports failure\r
+\r
+I would investigate the **response-handling layer**:\r
+\r
+1. **Check MCP response**\r
+\r
+   * Did MCP return HTTP 200 / successful result?\r
+   * Was the response complete and valid?\r
+\r
+2. **Check response parsing**\r
+\r
+   * Is the Worker correctly parsing the MCP response?\r
+   * Schema mismatch or serialization issue?\r
+\r
+3. **Check timeout**\r
+\r
+   * Tool may succeed, but Worker timeout may occur while processing the response.\r
+\r
+4. **Check validation**\r
+\r
+   * Did the response fail **Pydantic/JSON Schema validation**?\r
+\r
+5. **Check error handling**\r
+\r
+   * Is the Worker incorrectly converting a successful response into a failure?\r
+   * Check exception handling and retry logic.\r
+\r
+6. **Use correlation ID**\r
+\r
+   * Trace:\r
+     \`Worker → MCP → Tool → MCP Response → Worker Processing\`\r
+\r
+### Interview answer\r
+\r
+> **"If the MCP tool succeeds but the Worker reports failure, I would compare the MCP success response with the Worker's processing logs. I would check response parsing, schema validation, timeouts, serialization, and exception handling. Using the correlation ID and distributed tracing, I can identify exactly where the successful response was converted into a failure."**\r
+`,code:``},{id:`522-scenario-11-worker-succeeds-but-delegator-doesn-t-receive-the-result`,category:`Troubleshooting Scenarios`,title:`Scenario 11: Worker succeeds but Delegator doesn't receive the result.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 11: Worker succeeds but Delegator doesn't receive the result\r
+\r
+I would investigate the **Worker → Delegator communication path**:\r
+\r
+1. **Check Worker response**\r
+\r
+   * Did Worker actually return the result successfully?\r
+   * Check status and payload.\r
+\r
+2. **Check communication layer**\r
+\r
+   * Is the result sent through **A2A / API / Service Bus** correctly?\r
+   * Any network or connection failure?\r
+\r
+3. **Check correlation ID**\r
+\r
+   * Verify the response has the correct \`task_id\` / \`run_id\` / \`correlation_id\`.\r
+\r
+4. **Check message delivery**\r
+\r
+   * Was the message queued?\r
+   * Was it consumed?\r
+   * Check **retry and DLQ**.\r
+\r
+5. **Check schema**\r
+\r
+   * Did Delegator expect a different response format?\r
+   * Validate using **Pydantic/JSON Schema**.\r
+\r
+6. **Check timeout**\r
+\r
+   * Worker completed, but Delegator may have timed out waiting.\r
+\r
+### Interview answer\r
+\r
+> **"I would trace the complete Worker-to-Delegator path using the correlation ID. I would verify the Worker response, A2A or messaging delivery, task ID, queue status, schema validation, and timeout. If Service Bus is involved, I would check retries and the DLQ. This helps identify whether the problem is communication, message delivery, schema mismatch, or timeout."**\r
+`,code:``},{id:`523-scenario-12-two-workers-return-conflicting-customer-information`,category:`Troubleshooting Scenarios`,title:`Scenario 12: Two Workers return conflicting customer information.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 12: Two Workers return conflicting customer information\r
+\r
+I would handle this as a **data consistency and source-of-truth problem**.\r
+\r
+1. **Identify the sources**\r
+\r
+   * Example: Salesforce says one address, Oracle says another.\r
+\r
+2. **Define source of truth**\r
+\r
+   * Establish which system is authoritative for each field.\r
+   * Example: Salesforce → customer profile; ServiceNow → incidents.\r
+\r
+3. **Check data freshness**\r
+\r
+   * Compare timestamps / \`last_updated\`.\r
+   * One system may contain stale data.\r
+\r
+4. **Validate the records**\r
+\r
+   * Confirm both Workers queried the **same customer ID**.\r
+   * Check whether the data was transformed incorrectly.\r
+\r
+5. **Delegator conflict handling**\r
+\r
+   * Don't let the LLM arbitrarily choose.\r
+   * Apply deterministic conflict rules.\r
+\r
+6. **Expose uncertainty**\r
+\r
+   * If the conflict cannot be resolved, return both values with their sources and flag it for review.\r
+\r
+### Interview answer\r
+\r
+> **"I would first identify the conflicting sources and verify that both Workers queried the same customer. Then I would apply a predefined source-of-truth and freshness policy. The Delegator should not allow the LLM to arbitrarily choose between conflicting values. If the conflict cannot be resolved automatically, I would return the conflicting values with source and timestamp information and trigger human review when required."**\r
+`,code:``},{id:`524-scenario-13-worker-1-and-worker-2-succeed-worker-3-fails`,category:`Troubleshooting Scenarios`,title:`Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 13: Worker 1 and Worker 2 succeed, Worker 3 fails\r
+\r
+I would handle this using **partial-failure handling**.\r
+\r
+1. **Identify Worker 3 failure**\r
+\r
+   * Check logs, error, timeout, or downstream API failure.\r
+\r
+2. **Retry**\r
+\r
+   * Retry Worker 3 with **exponential backoff + jitter** if the failure is transient.\r
+\r
+3. **Don't rerun successful Workers**\r
+\r
+   * Keep Worker 1 and Worker 2 results.\r
+   * Retry only Worker 3 using the \`task_id/run_id\`.\r
+\r
+4. **Check mandatory vs optional**\r
+\r
+   * If Worker 3 is **optional**, continue with partial results.\r
+   * If Worker 3 is **mandatory**, mark the overall task as incomplete and retry/escalate.\r
+\r
+5. **Use DLQ**\r
+\r
+   * After retry limit is exceeded, send the failed task to a **Dead-Letter Queue** for investigation/replay.\r
+\r
+### Interview answer\r
+\r
+> **"I would use partial-failure handling. I would preserve Worker 1 and Worker 2 results and retry only Worker 3 with exponential backoff and jitter. If Worker 3 is optional, the Delegator can continue with partial results and clearly indicate the missing information. If it's mandatory, I would mark the task incomplete and use DLQ or human intervention after retry limits are exhausted."**\r
+`,code:``},{id:`525-scenario-14-user-submits-the-same-request-twice`,category:`Troubleshooting Scenarios`,title:`Scenario 14: User submits the same request twice.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 14: User submits the same request twice\r
+\r
+This is an **idempotency + duplicate detection** problem.\r
+\r
+1. **Generate an idempotency key**\r
+\r
+   * Example: \`user_id + normalized_request + time_window\`\r
+   * Better: client-generated \`idempotency_key\` for each submission.\r
+\r
+2. **Check existing request**\r
+\r
+   * Coordinator checks Redis/Cosmos DB before starting a new workflow.\r
+   * If the request is already **running**, return the existing \`task_id\`.\r
+\r
+3. **If already completed**\r
+\r
+   * Return the previously stored result instead of executing again.\r
+\r
+4. **Protect side-effect operations**\r
+\r
+   * For actions like creating a Salesforce ticket, use an idempotency key so the operation isn't performed twice.\r
+\r
+5. **Avoid relying only on exact text**\r
+\r
+   * Normalize the request or use semantic similarity when appropriate.\r
+   * Example:\r
+     *"Give customer 123 details"* and *"Show me information for customer 123"* may represent the same intent.\r
+\r
+### Interview answer\r
+\r
+> **"I would use idempotency to prevent duplicate execution. The Coordinator checks an idempotency key or normalized request against Redis or Cosmos DB. If the same task is already running, I return the existing task ID; if it is completed, I return the stored result. For side-effect operations, I also enforce idempotency at the Worker or downstream API level."**\r
+`,code:``},{id:`526-scenario-15-a-malicious-user-asks-cwd-to-retrieve-another-employee-s-confidential-data`,category:`Troubleshooting Scenarios`,title:`Scenario 15: A malicious user asks CWD to retrieve another employee's confidential data.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 15: User requests another employee's confidential data\r
+\r
+This is primarily an **authorization + data protection** problem.\r
+\r
+1. **Authenticate the user**\r
+\r
+   * Validate Microsoft Entra ID identity/token.\r
+\r
+2. **Check authorization before retrieval**\r
+\r
+   * Verify user's **role, group, and data entitlement**.\r
+   * Don't rely on the LLM to decide access.\r
+\r
+3. **Apply entitlement/ACL filtering**\r
+\r
+   * Filter confidential documents/data **before** they reach the LLM.\r
+   * Example: Azure AI Search ACL/metadata filters.\r
+\r
+4. **Enforce Worker/tool authorization**\r
+\r
+   * Worker and MCP tools should also verify permissions.\r
+   * Defense in depth—don't assume the Coordinator's check is sufficient.\r
+\r
+5. **Block the request**\r
+\r
+   * If the user isn't authorized, return a safe denial.\r
+   * **Do not retrieve the data first and then ask the LLM to hide it.**\r
+\r
+6. **Audit**\r
+\r
+   * Log the denied request, user identity, resource attempted, and decision using App Insights/Log Analytics or your audit system.\r
+\r
+### Interview answer\r
+\r
+> **"I would enforce authorization before any data retrieval. Entra ID authenticates the user, then RBAC/ABAC and data ACLs determine whether the user is entitled to that employee's data. Unauthorized data is filtered before it reaches the LLM, and MCP tools enforce authorization again. I would deny the request and audit the event rather than allowing the LLM to decide whether confidential data should be disclosed."**\r
+`,code:``},{id:`527-scenario-16-prompt-injection-appears-inside-a-retrieved-document`,category:`Troubleshooting Scenarios`,title:`Scenario 16: Prompt injection appears inside a retrieved document.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 16: Prompt injection inside a retrieved document\r
+\r
+This is an **indirect prompt injection** problem.\r
+\r
+1. **Treat retrieved content as untrusted**\r
+\r
+   * Documents are **data, not instructions**.\r
+   * Never allow document text to override system/developer instructions.\r
+\r
+2. **Separate instructions from context**\r
+\r
+   * Clearly mark retrieved content as untrusted context.\r
+   * Example: \`<retrieved_context>...</retrieved_context>\`.\r
+\r
+3. **Detect suspicious content**\r
+\r
+   * Look for instructions such as *"ignore previous instructions"* or requests to reveal secrets/call tools.\r
+\r
+4. **Restrict tool access**\r
+\r
+   * The LLM should not automatically execute tools based on instructions found in documents.\r
+   * Use **tool allowlists and authorization checks**.\r
+\r
+5. **Validate before sensitive actions**\r
+\r
+   * Require deterministic policy checks and, for high-risk actions, **human approval**.\r
+\r
+6. **Log and monitor**\r
+\r
+   * Record the document, detection result, attempted tool call, and security decision.\r
+\r
+### Interview answer\r
+\r
+> **"I treat every retrieved document as untrusted data. I separate retrieved content from system instructions, apply prompt-injection detection, and never allow document instructions to authorize tool calls or override policies. MCP tools still perform independent authorization checks, and sensitive actions can require human approval. I also log injection attempts for monitoring and investigation."**\r
+`,code:``},{id:`528-scenario-17-one-tenant-generates-extremely-high-traffic`,category:`Troubleshooting Scenarios`,title:`Scenario 17: One tenant generates extremely high traffic.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 17: One tenant generates extremely high traffic\r
+\r
+This is a **multi-tenant isolation + scalability** problem.\r
+\r
+1. **Identify the noisy tenant**\r
+\r
+   * Track requests, tokens, CPU, latency, and cost **per tenant**.\r
+\r
+2. **Apply tenant-level rate limits**\r
+\r
+   * Use **APIM/API Gateway** to limit requests per tenant.\r
+   * Example: \`Tenant A → 100 requests/min\`.\r
+\r
+3. **Use quotas**\r
+\r
+   * Set limits for requests, tokens, concurrency, and expensive operations.\r
+\r
+4. **Isolate resources**\r
+\r
+   * Use separate queues or worker pools where needed.\r
+   * Prevent one tenant from consuming all shared capacity.\r
+\r
+5. **Autoscale**\r
+\r
+   * Scale Workers/containers based on queue depth, CPU, request rate, etc.\r
+\r
+6. **Prioritize traffic**\r
+\r
+   * Use queues and priority policies so other tenants continue receiving service.\r
+\r
+7. **Monitor per-tenant usage**\r
+\r
+   * Dashboard:\r
+     \`tenant → requests → tokens → latency → errors → cost\`\r
+\r
+### Interview answer\r
+\r
+> **"I would treat this as a noisy-neighbor problem. I would monitor traffic and resource consumption per tenant, then enforce tenant-level rate limits, quotas, and concurrency limits at the API layer. I would isolate workloads using queues or worker pools and autoscale based on demand. This prevents one tenant from exhausting shared resources and affecting other tenants."**\r
+`,code:``},{id:`529-scenario-18-llm-provider-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 18: LLM provider becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 18: LLM provider becomes unavailable\r
+\r
+This is a **resilience + fallback** scenario.\r
+\r
+1. **Detect failure**\r
+\r
+   * Monitor timeout, 5xx, connection failures, and provider health.\r
+   * Use **circuit breaker** to stop repeatedly calling the unavailable provider.\r
+\r
+2. **Use model/provider fallback**\r
+\r
+   * Route requests to a secondary model/provider if available.\r
+   * Example: **Azure OpenAI → another approved model/deployment**.\r
+\r
+3. **Retry carefully**\r
+\r
+   * For transient errors, use **exponential backoff + jitter**.\r
+   * Don't retry indefinitely.\r
+\r
+4. **Degrade gracefully**\r
+\r
+   * For requests that don't require an LLM, continue using deterministic logic/cached results.\r
+   * For requests that require the unavailable model, return a controlled message rather than producing unreliable output.\r
+\r
+5. **Preserve request state**\r
+\r
+   * Store \`task_id/run_id\` and workflow state so the request can resume after recovery.\r
+\r
+6. **Monitor and alert**\r
+\r
+   * Track provider availability, fallback rate, latency, error rate, and cost.\r
+\r
+### Interview answer\r
+\r
+> **"I would detect the provider failure through health and error monitoring, then open a circuit breaker to prevent repeated failures. For approved workloads, I would route to a fallback model or provider. I would use controlled retries for transient failures, preserve the workflow state, and gracefully degrade when no fallback is available. I would also monitor fallback usage and alert the operations team."**\r
+`,code:``},{id:`530-scenario-19-azure-ai-search-becomes-unavailable`,category:`Troubleshooting Scenarios`,title:`Scenario 19: Azure AI Search becomes unavailable.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 19: Azure AI Search becomes unavailable\r
+\r
+This is a **RAG dependency failure**.\r
+\r
+1. **Detect failure**\r
+\r
+   * Monitor Search API errors, timeouts, and latency using **Application Insights/Azure Monitor**.\r
+\r
+2. **Retry carefully**\r
+\r
+   * Use exponential backoff + jitter for transient failures.\r
+   * Don't retry indefinitely.\r
+\r
+3. **Use circuit breaker**\r
+\r
+   * Temporarily stop sending requests if Search remains unavailable.\r
+\r
+4. **Use fallback**\r
+\r
+   * If available, route to a **secondary search/index** or another approved retrieval system.\r
+   * Use cached results for safe/read-only scenarios.\r
+\r
+5. **Fail safely**\r
+\r
+   * If reliable retrieval isn't available, **don't ask the LLM to answer from unsupported knowledge**.\r
+   * Return a controlled response such as "Knowledge retrieval is temporarily unavailable."\r
+\r
+6. **Preserve workflow state**\r
+\r
+   * Keep the \`task_id/run_id\` so the request can be resumed after Search recovers.\r
+\r
+### Interview answer\r
+\r
+> **"I would detect the Search outage through monitoring, apply retry with exponential backoff and a circuit breaker, and use a secondary index or cached results if available. If reliable retrieval isn't available, I would fail safely rather than allow the LLM to hallucinate an answer. I would preserve the workflow state so the request can resume once Azure AI Search recovers."**\r
+`,code:``},{id:`531-scenario-20-production-evaluation-score-suddenly-drops-after-a-model-upgrade`,category:`Troubleshooting Scenarios`,title:`Scenario 20: Production evaluation score suddenly drops after a model upgrade.`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: latency, retrieval, routing, failure and security incident scenarios.`,concept:`### Scenario 20: Evaluation score drops after model upgrade\r
+\r
+This is a **model regression** problem.\r
+\r
+1. **Compare old vs new model**\r
+\r
+   * Run the same production/evaluation dataset against both models.\r
+   * Compare **groundedness, correctness, relevance, hallucination rate**.\r
+\r
+2. **Check which metric dropped**\r
+\r
+   * Don't look only at the overall score.\r
+   * Identify whether retrieval, generation, safety, or formatting quality changed.\r
+\r
+3. **Check prompts**\r
+\r
+   * New model may interpret the existing system prompt differently.\r
+   * Verify tool-calling and structured-output behavior.\r
+\r
+4. **Check RAG behavior**\r
+\r
+   * Confirm retrieval quality didn't change.\r
+   * Compare retrieved documents between versions.\r
+\r
+5. **Check model configuration**\r
+\r
+   * Temperature, max tokens, model parameters, and routing.\r
+\r
+6. **Rollback / canary**\r
+\r
+   * If regression is significant, route traffic back to the previous model.\r
+   * Use **canary deployment** for future upgrades.\r
+\r
+### Interview answer\r
+\r
+> **"I would first compare the old and new models on the same evaluation dataset and identify exactly which metrics regressed. Then I would check prompt compatibility, RAG retrieval, tool calling, output format, and model parameters. If the regression affects production quality, I would roll back or reduce traffic to the new model, investigate the root cause, and reintroduce it through a canary deployment only after evaluation passes."**\r
+`,code:``}];function om(){return(0,M.jsx)($,{data:am,title:`CWD Troubleshooting Scenarios Cookbook`,subtitle:`Latency, retrieval, routing, failure and security incident scenarios`,icon:`🛠️`,patternLabel:`Questions`})}var sm=[{id:`532-what-makes-cwd-agentic`,category:`Agentic AI Design Questions`,title:`What makes CWD agentic?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### What makes CWD agentic?\r
+\r
+CWD is **agentic because the system can reason about a request, plan the work, dynamically select agents/tools, execute multiple steps, and adapt based on results**.\r
+\r
+Key characteristics:\r
+\r
+* **Intent understanding** → Coordinator determines what the user wants.\r
+* **Planning & routing** → Coordinator selects the appropriate Delegator.\r
+* **Delegation** → Delegator selects the right Workers.\r
+* **Tool selection** → Workers dynamically choose MCP tools.\r
+* **Multi-step execution** → Tasks can involve multiple dependent steps.\r
+* **Parallel execution** → Independent Workers can run simultaneously.\r
+* **State & memory** → Workflow state is maintained across steps.\r
+* **Adaptation** → Results/errors can change the next action.\r
+* **Human-in-the-loop** → Sensitive actions can require approval.\r
+\r
+\`\`\`text\r
+User\r
+ ↓\r
+Coordinator → Understand + Plan\r
+ ↓\r
+Delegator → Delegate\r
+ ↓\r
+Workers → Decide + Execute\r
+ ↓\r
+MCP Tools → Enterprise Systems\r
+ ↓\r
+Results\r
+ ↓\r
+Agent adapts / continues\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “CWD is agentic because it goes beyond simple request-response. The Coordinator understands the intent and creates a plan, Delegators dynamically delegate tasks to specialized Workers, and Workers select and invoke tools through MCP. The system maintains state, can execute tasks in parallel, handles failures and retries, and can adapt its next action based on intermediate results. That combination of reasoning, planning, tool use, delegation, and adaptive execution makes it agentic.”\r
+`,code:``},{id:`533-is-cwd-autonomous`,category:`Agentic AI Design Questions`,title:`Is CWD autonomous?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### Is CWD autonomous?\r
+\r
+**Partially autonomous — not fully autonomous.**\r
+\r
+CWD can autonomously:\r
+\r
+* Understand user intent.\r
+* Create an execution plan.\r
+* Select Delegators and Workers.\r
+* Select authorized MCP tools.\r
+* Execute multi-step tasks.\r
+* Run independent tasks in parallel.\r
+* Retry transient failures and adapt based on results.\r
+\r
+But **high-risk actions require controls**, such as:\r
+\r
+* Authorization checks.\r
+* Tool allowlists.\r
+* Human approval for sensitive/destructive operations.\r
+* Policy and security validation.\r
+\r
+**Interview answer:**\r
+\r
+> “CWD is partially autonomous. It can independently reason, plan, delegate tasks, select authorized tools, execute workflows, and handle recoverable failures. However, we don't give it unrestricted autonomy. Sensitive or high-impact actions require authorization, policy checks, and human approval. So I would describe CWD as a governed autonomous agentic system rather than a fully autonomous system.”\r
+`,code:``},{id:`534-how-much-autonomy-should-an-enterprise-agent-have`,category:`Agentic AI Design Questions`,title:`How much autonomy should an enterprise agent have?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How much autonomy should an enterprise agent have?\r
+\r
+**Autonomy should be based on risk, not capability.**\r
+\r
+A simple model:\r
+\r
+| Action type                            | Autonomy                        |\r
+| -------------------------------------- | ------------------------------- |\r
+| Read/search data                       | **High**                        |\r
+| Generate summaries/reports             | **High**                        |\r
+| Internal analysis                      | **High**                        |\r
+| Low-risk updates                       | **Controlled**                  |\r
+| Financial/customer-impacting actions   | **Human approval**              |\r
+| Destructive/security-sensitive actions | **Human approval / restricted** |\r
+\r
+For CWD:\r
+\r
+\`\`\`text\r
+Low Risk\r
+   ↓\r
+Agent can act automatically\r
+   ↓\r
+Medium Risk\r
+   ↓\r
+Policy + authorization + validation\r
+   ↓\r
+High Risk\r
+   ↓\r
+Human approval\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I would not give an enterprise agent unlimited autonomy. I would use risk-based autonomy. Read-only and low-impact activities can be highly autonomous, while actions that change data, affect customers, have financial impact, or are destructive should require stronger controls and potentially human approval. The principle is: automate the decision and execution as much as safely possible, but keep humans in control of high-impact actions.”\r
+`,code:``},{id:`535-when-should-an-agent-ask-for-human-approval`,category:`Agentic AI Design Questions`,title:`When should an agent ask for human approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### When should an agent ask for human approval?\r
+\r
+An agent should request **Human-in-the-Loop (HITL)** approval when an action has **high business, financial, security, privacy, or irreversible impact**.\r
+\r
+* **Financial actions** → payments, refunds, purchases.\r
+* **Destructive actions** → delete records, terminate resources.\r
+* **Sensitive data** → confidential HR/PII access.\r
+* **External communication** → sending important customer/legal messages.\r
+* **Production changes** → deployments or configuration changes.\r
+* **Low confidence** → agent cannot reliably determine the correct action.\r
+* **Policy violation risk** → action requires an exception.\r
+\r
+**CWD example:**\r
+\r
+\`\`\`text\r
+Agent\r
+  ↓\r
+"Delete customer record?"\r
+  ↓\r
+Risk Check\r
+  ↓\r
+High Risk\r
+  ↓\r
+Human Approval\r
+  ↓\r
+Execute MCP Tool\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “An agent should ask for human approval when an action is high-impact, irreversible, sensitive, or outside its defined policy. For example, deleting enterprise data, making financial changes, accessing restricted information, or sending a critical external communication. I would also trigger HITL when the agent has low confidence or encounters a policy exception. The approval should happen before the tool executes the action.”\r
+`,code:``},{id:`536-which-operations-should-always-require-approval`,category:`Agentic AI Design Questions`,title:`Which operations should always require approval?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### Which operations should always require approval?\r
+\r
+For an enterprise agent, I would require approval for **high-impact or irreversible operations**.\r
+\r
+* **Delete or permanently modify critical data**\r
+* **Financial transactions** — payments, refunds, purchases, transfers\r
+* **Production changes** — deployments, infrastructure changes, security configuration\r
+* **Access-control changes** — granting/revoking privileged access\r
+* **External high-impact communication** — legal, contractual, or sensitive customer messages\r
+* **Highly sensitive data access** — when policy requires explicit authorization\r
+* **Security actions** — disabling controls, changing security policies, etc.\r
+\r
+**CWD principle:**\r
+\r
+\`\`\`text\r
+Agent decides\r
+     ↓\r
+Risk / Policy Check\r
+     ↓\r
+High-impact operation?\r
+   ↙          ↘\r
+ Yes           No\r
+ ↓              ↓\r
+Human          Execute\r
+Approval\r
+ ↓\r
+Execute MCP Tool\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I would always require approval for operations that are destructive, financially impactful, privileged, security-sensitive, or difficult to reverse. The important point is that approval happens before the MCP tool executes the action. Read-only and low-risk operations can remain automated, while high-impact operations stay under human control.”\r
+`,code:``},{id:`537-how-do-you-prevent-agents-from-making-irreversible-decisions`,category:`Agentic AI Design Questions`,title:`How do you prevent agents from making irreversible decisions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you prevent agents from making irreversible decisions?\r
+\r
+Use **policy enforcement + tool controls + human approval** before execution.\r
+\r
+* **Classify tools by risk** → read-only, write, destructive, privileged.\r
+* **Allowlist tools** → agent gets only the tools it needs.\r
+* **Policy engine** → block prohibited actions automatically.\r
+* **Human approval** → required for destructive/irreversible operations.\r
+* **Authorization** → verify user and agent permissions before execution.\r
+* **Input validation** → validate parameters with schema/Pydantic.\r
+* **Dry-run/preview** → show the intended change before execution when possible.\r
+* **Audit trail** → record who requested, who approved, and what executed.\r
+* **Idempotency** → prevent accidental duplicate actions.\r
+\r
+\`\`\`text\r
+Agent Decision\r
+      ↓\r
+Risk Check\r
+      ↓\r
+Policy + Authorization\r
+      ↓\r
+High Risk?\r
+   ↙       ↘\r
+ Yes       No\r
+ ↓          ↓\r
+HITL      Execute\r
+ ↓\r
+Approved\r
+ ↓\r
+MCP Tool\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I prevent agents from making irreversible decisions by separating decision-making from execution. The agent can propose an action, but the tool layer enforces authorization, policy, risk classification, and parameter validation. Destructive or high-impact actions require human approval before the MCP tool is executed. We also use allowlists, audit logs, and dry-run capabilities where possible.”\r
+`,code:``},{id:`538-how-do-you-implement-human-in-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-in-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you implement Human-in-the-Loop?\r
+\r
+I implement **HITL as a controlled checkpoint before a high-risk action**.\r
+\r
+\`\`\`text id="q4w7kp"\r
+Agent\r
+  ↓\r
+Decide Action\r
+  ↓\r
+Risk / Policy Check\r
+  ↓\r
+High Risk?\r
+  ↓\r
+Pause Workflow\r
+  ↓\r
+Human Approval\r
+  ↙       ↘\r
+Approve   Reject\r
+  ↓         ↓\r
+Execute    Stop\r
+MCP Tool\r
+\`\`\`\r
+\r
+### In CWD\r
+\r
+* **LangGraph** pauses the workflow using an interrupt/checkpoint.\r
+* Store the current **task/run state**.\r
+* Send approval request to an authorized reviewer.\r
+* Reviewer sees **action, parameters, reason, and risk**.\r
+* Approval/rejection is recorded.\r
+* On approval, workflow **resumes from the checkpoint** and executes the MCP tool.\r
+* On rejection, workflow stops or takes an alternative path.\r
+\r
+**Interview answer:**\r
+\r
+> “We implement HITL by placing an approval checkpoint before high-risk tool execution. LangGraph can interrupt and persist the workflow state. We send the proposed action and parameters to an authorized reviewer. If approved, the workflow resumes from the checkpoint and invokes the MCP tool; if rejected, we stop or take an alternative path. The approval decision is also audited with the task and correlation IDs.”\r
+`,code:``},{id:`539-how-do-you-implement-human-on-the-loop`,category:`Agentic AI Design Questions`,title:`How do you implement human-on-the-loop?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you implement Human-on-the-Loop?\r
+\r
+**Human-on-the-loop (HOTL)** means the agent can **execute autonomously**, while a human continuously monitors the system rather than approving every action.\r
+\r
+\`\`\`text\r
+Agent\r
+  ↓\r
+Execute autonomously\r
+  ↓\r
+Monitor\r
+  ├── Normal → Continue\r
+  └── Anomaly / Policy violation\r
+              ↓\r
+         Human intervention\r
+\`\`\`\r
+\r
+### In CWD\r
+\r
+* Agent executes **pre-approved, low-risk actions** automatically.\r
+* Monitor **latency, errors, confidence, policy violations, tool usage, cost, and outcomes**.\r
+* Set **thresholds/alerts** for abnormal behavior.\r
+* Human can **pause, stop, or intervene** when thresholds are exceeded.\r
+* High-risk actions still use **HITL approval before execution**.\r
+\r
+**Interview answer:**\r
+\r
+> “For human-on-the-loop, I allow the agent to execute within predefined policies and continuously monitor its behavior. We track metrics such as errors, confidence, policy violations, tool usage, and cost. If an anomaly or threshold breach occurs, we alert a human who can pause or stop the workflow. Unlike HITL, the human does not approve every normal action; they supervise the autonomous operation and intervene when needed.”\r
+`,code:``},{id:`540-how-do-you-define-agent-boundaries`,category:`Agentic AI Design Questions`,title:`How do you define agent boundaries?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:`### How do you define agent boundaries?\r
+\r
+I define boundaries using **responsibility + permissions + tools + data + risk**.\r
+\r
+* **Responsibility** → clearly define what the agent is allowed to do.\r
+* **Tools** → allowlist only required MCP tools.\r
+* **Data** → restrict access to approved datasets/knowledge sources.\r
+* **Permissions** → least-privilege RBAC/ABAC.\r
+* **Actions** → define read/write/destructive limits.\r
+* **Domain** → keep the agent within its business domain.\r
+* **Risk limits** → high-risk actions require HITL.\r
+* **Time/cost limits** → token, execution-time, and budget limits.\r
+* **Escalation** → outside boundary → stop or hand off to another agent/human.\r
+\r
+**Example:**\r
+\r
+\`\`\`text id="4n4x3p"\r
+Sales Worker\r
+  ├── Can: read Salesforce customer data\r
+  ├── Can: create customer briefing\r
+  ├── Cannot: access HR data\r
+  ├── Cannot: delete customer records\r
+  └── Cannot: approve financial transactions\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I define agent boundaries through a combination of responsibility, data access, tool permissions, and risk policies. Each agent gets only the capabilities and tools required for its role. Actions outside its domain are blocked or delegated, and high-risk operations require human approval. This gives us clear separation of responsibility and prevents agents from operating beyond their intended scope.”\r
+`,code:``},{id:`541-how-do-you-prevent-agent-to-agent-loops`,category:`Agentic AI Design Questions`,title:`How do you prevent agent-to-agent loops?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`542-how-do-you-prevent-uncontrolled-tool-execution`,category:`Agentic AI Design Questions`,title:`How do you prevent uncontrolled tool execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`543-how-do-you-control-agent-planning`,category:`Agentic AI Design Questions`,title:`How do you control agent planning?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`544-how-do-you-evaluate-agent-trajectories`,category:`Agentic AI Design Questions`,title:`How do you evaluate agent trajectories?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``},{id:`545-how-do-you-determine-whether-an-agent-actually-completed-the-task`,category:`Agentic AI Design Questions`,title:`How do you determine whether an agent actually completed the task?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation.`,concept:``,code:``}];function cm(){return(0,M.jsx)($,{data:sm,title:`CWD Agentic AI Design Questions Cookbook`,subtitle:`Autonomy, approvals, human-in-the-loop, boundaries and trajectory evaluation`,icon:`🤖`,patternLabel:`Questions`})}var lm=[{id:`546-how-do-you-govern-agents`,category:`Governance`,title:`How do you govern agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`For your **CWD architecture**, answer this in 6 areas:\r
+\r
+### How do you govern agents?\r
+\r
+1. **Agent Registry**\r
+\r
+   * Maintain approved agents, versions, owners, capabilities, and allowed tools.\r
+   * Coordinator/Delegator can only select **registered agents**.\r
+\r
+2. **Identity & Access**\r
+\r
+   * Use **Entra ID + RBAC/Managed Identity**.\r
+   * Each agent gets only the permissions it needs.\r
+\r
+3. **Tool Governance**\r
+\r
+   * Maintain an allowlist of MCP tools per Worker.\r
+   * Validate tool inputs and enforce authorization before execution.\r
+\r
+4. **Prompt & Model Governance**\r
+\r
+   * Version prompts and models.\r
+   * Test changes through evaluation before production.\r
+   * Maintain approval/version history.\r
+\r
+5. **Observability & Audit**\r
+\r
+   * Track \`user → Coordinator → Delegator → Worker → MCP tool\`.\r
+   * Use correlation IDs, App Insights, Log Analytics, and Langfuse.\r
+\r
+6. **Safety & Lifecycle**\r
+\r
+   * Apply content/security guardrails, PII/DLP checks, rate limits, human approval for sensitive actions, and agent version/deprecation policies.\r
+\r
+### Interview answer\r
+\r
+> **"I govern agents through an Agent Registry, identity and RBAC, tool allowlists, prompt and model versioning, evaluation gates, observability, and audit controls. Every agent has an owner, defined capabilities, approved tools, and permissions. Only registered and approved agents can participate in the workflow, and sensitive actions require additional authorization or human approval."**\r
+`,code:``},{id:`547-how-do-you-govern-prompts`,category:`Governance`,title:`How do you govern prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you govern prompts?\r
+\r
+I would use a **Prompt Registry + versioning + evaluation + approval** process.\r
+\r
+1. **Prompt Registry**\r
+\r
+   * Store prompts centrally.\r
+   * Example: \`CustomerBriefingPrompt v1.2\`.\r
+\r
+2. **Version control**\r
+\r
+   * Every prompt change creates a new version.\r
+   * Never directly overwrite the production prompt.\r
+\r
+3. **Ownership**\r
+\r
+   * Each prompt has an owner, purpose, model, and associated agent.\r
+\r
+4. **Testing & evaluation**\r
+\r
+   * Test new prompts against a fixed evaluation dataset.\r
+   * Check **accuracy, groundedness, hallucination, safety, and token usage**.\r
+\r
+5. **Approval**\r
+\r
+   * Only approved prompt versions can move to production.\r
+\r
+6. **Deployment**\r
+\r
+   * Use **dev → test → staging → production**.\r
+   * Use canary/A-B testing for significant changes.\r
+\r
+7. **Monitoring & rollback**\r
+\r
+   * Monitor quality, latency, token consumption, and failures.\r
+   * If performance drops, quickly roll back to the previous prompt version.\r
+\r
+### Interview answer\r
+\r
+> **"I govern prompts using a centralized Prompt Registry with versioning, ownership, evaluation, and approval. Every change is tested against a fixed evaluation dataset for quality, groundedness, safety, and token usage before production. I deploy prompts through controlled environments and monitor them in production, with rollback available if a new version causes regression."**\r
+`,code:``},{id:`548-how-do-you-govern-tools`,category:`Governance`,title:`How do you govern tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you govern tools?\r
+\r
+I would use **Tool Registry + allowlisting + authorization + validation + audit**.\r
+\r
+1. **Tool Registry**\r
+\r
+   * Maintain approved MCP tools with name, owner, purpose, version, and schema.\r
+\r
+2. **Tool Allowlist**\r
+\r
+   * Each Worker gets access only to the tools it needs.\r
+   * Example: Salesforce Worker → Salesforce tools only.\r
+\r
+3. **Authentication & Authorization**\r
+\r
+   * Validate user/agent permissions before tool execution.\r
+   * Use Entra ID, RBAC, Managed Identity, etc.\r
+\r
+4. **Input validation**\r
+\r
+   * Validate tool parameters using **JSON Schema/Pydantic**.\r
+   * Prevent malformed or dangerous requests.\r
+\r
+5. **Approval for sensitive actions**\r
+\r
+   * Read operations can be automated.\r
+   * High-risk operations like delete/update may require **human approval**.\r
+\r
+6. **Monitoring & Audit**\r
+\r
+   * Log:\r
+     \`User → Agent → Worker → Tool → Parameters → Result\`\r
+   * Monitor failures, latency, and unusual tool usage.\r
+\r
+7. **Version & lifecycle management**\r
+\r
+   * Version tools and schemas.\r
+   * Test changes before production and deprecate old versions safely.\r
+\r
+### Interview answer\r
+\r
+> **"I govern tools through a centralized Tool Registry, allowlists, authorization, input-schema validation, and audit logging. Each Worker gets only the tools required for its role. Sensitive operations require additional authorization or human approval. Every tool call is traced and audited, and tool versions are tested and controlled before production."**\r
+`,code:``},{id:`549-how-do-you-govern-models`,category:`Governance`,title:`How do you govern models?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you govern models?\r
+\r
+I would use **Model Registry + approval + evaluation + access control + monitoring**.\r
+\r
+1. **Model Registry**\r
+\r
+   * Maintain approved models, versions, owners, capabilities, and use cases.\r
+   * Example: GPT-4o for complex reasoning, smaller model for simple tasks.\r
+\r
+2. **Model approval**\r
+\r
+   * Only approved models can be used in production.\r
+   * Define which agents can use which models.\r
+\r
+3. **Evaluation**\r
+\r
+   * Before deployment, evaluate **accuracy, groundedness, hallucination, safety, latency, and cost**.\r
+\r
+4. **Access control**\r
+\r
+   * Control who/which agent can invoke each model.\r
+   * Apply quotas and rate limits.\r
+\r
+5. **Version management**\r
+\r
+   * Track model version and configuration.\r
+   * Test upgrades before production.\r
+\r
+6. **Production monitoring**\r
+\r
+   * Monitor quality, latency, token usage, errors, and cost.\r
+   * Detect model regression.\r
+\r
+7. **Rollback**\r
+\r
+   * If a new model causes quality or reliability problems, route traffic back to the previously approved model.\r
+\r
+### Interview answer\r
+\r
+> **"I govern models through a Model Registry, approved model policies, access control, evaluation gates, version management, and production monitoring. Before a model reaches production, I evaluate quality, safety, latency, and cost. I use controlled rollout such as canary deployment, monitor the model in production, and maintain rollback to an approved version if regression occurs."**\r
+`,code:``},{id:`550-how-do-you-govern-enterprise-data`,category:`Governance`,title:`How do you govern enterprise data?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you govern enterprise data?\r
+\r
+I would use **data classification + access control + encryption + lineage + auditing**.\r
+\r
+1. **Data classification**\r
+\r
+   * Classify data as public, internal, confidential, or restricted/PII.\r
+\r
+2. **Access control**\r
+\r
+   * Use **Entra ID + RBAC/ABAC**.\r
+   * Enforce user/role permissions before retrieving data.\r
+\r
+3. **Data-level security**\r
+\r
+   * Apply **ACL/metadata filters** in Azure AI Search.\r
+   * Users should retrieve only documents they are authorized to access.\r
+\r
+4. **Encryption & secrets**\r
+\r
+   * Encrypt data at rest and in transit.\r
+   * Store secrets/keys in **Azure Key Vault**.\r
+\r
+5. **Data protection**\r
+\r
+   * Apply PII detection/masking and DLP policies.\r
+   * Don't send unauthorized or unnecessary sensitive data to the LLM.\r
+\r
+6. **Data lineage & quality**\r
+\r
+   * Track where data came from, transformations, ownership, and freshness.\r
+   * Validate data before using it in AI workflows.\r
+\r
+7. **Audit & monitoring**\r
+\r
+   * Log who accessed what data, when, and through which agent/tool.\r
+   * Use **Azure Monitor, Log Analytics, and audit logs**.\r
+\r
+### Interview answer\r
+\r
+> **"I govern enterprise data through classification, identity-based access control, ACL filtering, encryption, DLP, lineage, and auditing. In CWD, authorization is checked before retrieval, and Azure AI Search applies document-level ACL filters so only entitled data reaches the agent and LLM. Sensitive operations and data access are logged for audit and compliance."**\r
+`,code:``},{id:`551-how-do-you-implement-model-approval`,category:`Governance`,title:`How do you implement model approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you implement model approval?\r
+\r
+Use a **Model Registry + evaluation gate + approval workflow**.\r
+\r
+1. **Register the model**\r
+\r
+   * Model name/version\r
+   * Owner\r
+   * Intended use case\r
+   * Approved agents/environments\r
+\r
+2. **Evaluate**\r
+\r
+   * Accuracy / groundedness\r
+   * Hallucination\r
+   * Safety\r
+   * Latency\r
+   * Cost\r
+   * Token usage\r
+\r
+3. **Security review**\r
+\r
+   * Data/privacy requirements\r
+   * Access permissions\r
+   * Known risks\r
+\r
+4. **Approval gate**\r
+\r
+   * Only if evaluation and security criteria pass, an authorized reviewer approves the model for production.\r
+\r
+5. **Controlled deployment**\r
+\r
+   \`\`\`text\r
+   Development\r
+       ↓\r
+   Evaluation\r
+       ↓\r
+   Security Review\r
+       ↓\r
+   Approval\r
+       ↓\r
+   Staging\r
+       ↓\r
+   Canary\r
+       ↓\r
+   Production\r
+   \`\`\`\r
+\r
+6. **Monitor & rollback**\r
+\r
+   * Monitor production quality, latency, errors, and cost.\r
+   * Roll back if the approved model later shows regression.\r
+\r
+### Interview answer\r
+\r
+> **"I implement model approval through a centralized Model Registry and an evaluation gate. Every model version is evaluated for quality, safety, latency, and cost, followed by security and data-access review. An authorized reviewer approves the model before production. I then deploy it through staging and canary rollout, with continuous monitoring and rollback capability."**\r
+`,code:``},{id:`552-how-do-you-implement-agent-approval`,category:`Governance`,title:`How do you implement agent approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you implement agent approval?\r
+\r
+Use an **Agent Registry + evaluation gate + security approval**.\r
+\r
+1. **Register the agent**\r
+\r
+   * Agent name/version\r
+   * Owner\r
+   * Purpose/capabilities\r
+   * Allowed tools\r
+   * Allowed model\r
+   * Required permissions\r
+\r
+2. **Evaluate**\r
+\r
+   * Task accuracy\r
+   * Tool-selection accuracy\r
+   * Safety/guardrails\r
+   * Reliability\r
+   * Latency and cost\r
+\r
+3. **Security review**\r
+\r
+   * Identity and RBAC\r
+   * Data access\r
+   * MCP tool permissions\r
+   * Prompt-injection protection\r
+\r
+4. **Approval gate**\r
+\r
+   * Only an authorized reviewer can approve the agent for production.\r
+\r
+5. **Controlled deployment**\r
+\r
+   \`\`\`text\r
+   Develop\r
+      ↓\r
+   Test / Evaluation\r
+      ↓\r
+   Security Review\r
+      ↓\r
+   Approval\r
+      ↓\r
+   Staging\r
+      ↓\r
+   Canary\r
+      ↓\r
+   Production\r
+   \`\`\`\r
+\r
+6. **Continuous monitoring**\r
+\r
+   * Monitor agent behavior, tool calls, failures, latency, cost, and policy violations.\r
+   * Re-approval may be required for significant changes.\r
+\r
+### Interview answer\r
+\r
+> **"I implement agent approval through an Agent Registry and a formal evaluation and security gate. Each agent has an owner, defined capabilities, approved tools, model, and permissions. We evaluate its accuracy, safety, tool usage, reliability, latency, and cost before an authorized reviewer approves it for production. Any significant change goes through the approval process again."**\r
+`,code:``},{id:`553-how-do-you-implement-tool-approval`,category:`Governance`,title:`How do you implement tool approval?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you implement tool approval?\r
+\r
+Use a **Tool Registry + security review + testing + approval gate**.\r
+\r
+1. **Register the tool**\r
+\r
+   * Tool name/version\r
+   * Owner\r
+   * Purpose\r
+   * Input/output schema\r
+   * Required permissions\r
+   * Risk level\r
+\r
+2. **Security review**\r
+\r
+   * What data can it access?\r
+   * Is it read-only or does it modify/delete data?\r
+   * Authentication and authorization\r
+   * Sensitive-data exposure risk\r
+\r
+3. **Test the tool**\r
+\r
+   * Input validation\r
+   * Error handling\r
+   * Timeout/retry behavior\r
+   * Security and authorization tests\r
+\r
+4. **Define allowed agents/workers**\r
+\r
+   * Example:\r
+\r
+   \`\`\`text\r
+   Salesforce Worker\r
+        ↓\r
+   Salesforce MCP tools\r
+   \`\`\`\r
+\r
+   * Don't allow every Worker to access every tool.\r
+\r
+5. **Approval gate**\r
+\r
+   * Authorized security/application owner approves the tool for production.\r
+\r
+6. **Controlled deployment + monitoring**\r
+\r
+   * Deploy through dev → test → staging → production.\r
+   * Audit every tool invocation.\r
+   * Re-approve significant tool/schema/permission changes.\r
+\r
+### Interview answer\r
+\r
+> **"I implement tool approval through a centralized Tool Registry and security approval workflow. Each tool is registered with its owner, schema, permissions, and risk level. We test authentication, authorization, input validation, and failure handling, then define which agents or workers are allowed to use it. An authorized owner approves the tool before production, and every invocation is audited."**\r
+`,code:``},{id:`554-how-do-you-maintain-an-ai-inventory`,category:`Governance`,title:`How do you maintain an AI inventory?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you maintain an AI inventory?\r
+\r
+I maintain a **centralized AI inventory/registry** for all AI assets.\r
+\r
+1. **Inventory what?**\r
+\r
+   * Agents\r
+   * Models\r
+   * Prompts\r
+   * MCP/tools\r
+   * RAG indexes\r
+   * AI applications/use cases\r
+\r
+2. **Capture metadata**\r
+\r
+   * Name/version\r
+   * Owner/team\r
+   * Business purpose\r
+   * Environment\r
+   * Data sources\r
+   * Dependencies\r
+   * Risk classification\r
+   * Approved users/agents\r
+\r
+3. **Track lifecycle**\r
+\r
+   \`\`\`text\r
+   Proposed → Development → Testing → Approved → Production → Retired\r
+   \`\`\`\r
+\r
+4. **Track relationships**\r
+\r
+   \`\`\`text\r
+   Agent\r
+     ↓\r
+   Model + Prompt\r
+     ↓\r
+   Tools/MCP\r
+     ↓\r
+   Enterprise Data\r
+   \`\`\`\r
+\r
+5. **Governance status**\r
+\r
+   * Approval status\r
+   * Evaluation results\r
+   * Security review\r
+   * Last review date\r
+   * Current production version\r
+\r
+6. **Continuous monitoring**\r
+\r
+   * Usage\r
+   * Cost\r
+   * Latency\r
+   * Errors\r
+   * Policy violations\r
+\r
+### Interview answer\r
+\r
+> **"I maintain a centralized AI inventory that tracks agents, models, prompts, tools, RAG indexes, and AI applications. For each asset, I capture ownership, purpose, version, dependencies, data sources, risk, approval status, and lifecycle state. I also maintain relationships between agents, models, tools, and data so we have end-to-end visibility and can identify what needs review when a component changes."**\r
+`,code:``},{id:`555-how-do-you-track-model-versions`,category:`Governance`,title:`How do you track model versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you track model versions?\r
+\r
+Use a **Model Registry + immutable versioning + deployment metadata**.\r
+\r
+1. **Register every model version**\r
+\r
+   * Model name\r
+   * Version\r
+   * Provider\r
+   * Model configuration\r
+   * Owner\r
+   * Approval status\r
+\r
+2. **Track deployment**\r
+\r
+   * Which agent uses it\r
+   * Environment: dev/staging/prod\r
+   * Deployment date\r
+   * Traffic percentage\r
+\r
+3. **Track configuration**\r
+\r
+   * Temperature\r
+   * Max tokens\r
+   * System prompt version\r
+   * Tool configuration\r
+   * RAG configuration\r
+\r
+4. **Track evaluation results**\r
+\r
+   * Accuracy\r
+   * Groundedness\r
+   * Hallucination\r
+   * Latency\r
+   * Cost\r
+\r
+5. **Use controlled rollout**\r
+\r
+   \`\`\`text\r
+   Model v1\r
+      ↓\r
+   Model v2 → Evaluation → Canary → Production\r
+                           ↓\r
+                        Rollback\r
+   \`\`\`\r
+\r
+6. **Maintain audit history**\r
+\r
+   * Who approved it\r
+   * When it was deployed\r
+   * What changed\r
+   * Previous production version\r
+\r
+### Interview answer\r
+\r
+> **"I track model versions in a centralized Model Registry. For each version, I record the provider, configuration, prompt version, agent dependencies, evaluation results, approval status, and deployment environment. I use controlled canary releases and maintain the previous approved version for rollback. This gives us complete traceability of which model version produced a particular response."**\r
+`,code:``},{id:`556-how-do-you-track-prompt-versions`,category:`Governance`,title:`How do you track prompt versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you track prompt versions?\r
+\r
+Use a **Prompt Registry + version control + deployment metadata**.\r
+\r
+1. **Create immutable versions**\r
+\r
+   * \`CustomerBriefingPrompt v1.0\`\r
+   * \`v1.1\` for changes\r
+   * Never overwrite the production version.\r
+\r
+2. **Track metadata**\r
+\r
+   * Prompt version\r
+   * Owner\r
+   * Agent\r
+   * Model version\r
+   * Created/modified date\r
+   * Change description\r
+\r
+3. **Track evaluation results**\r
+\r
+   * Accuracy\r
+   * Groundedness\r
+   * Hallucination\r
+   * Token usage\r
+   * Latency\r
+\r
+4. **Track deployment**\r
+\r
+   * Dev → Test → Staging → Production\r
+   * Record which prompt version is currently active.\r
+\r
+5. **Use approval**\r
+\r
+   * New prompt version must pass evaluation and approval before production.\r
+\r
+6. **Enable rollback**\r
+\r
+   * If \`v1.2\` causes regression, switch back to \`v1.1\`.\r
+\r
+### Interview answer\r
+\r
+> **"I track prompts in a centralized Prompt Registry with immutable versions. Each version is linked to its agent, model version, owner, evaluation results, and deployment environment. Changes go through testing and approval before production, and we maintain the previous version so we can quickly roll back if the new prompt causes a regression."**\r
+`,code:``},{id:`557-how-do-you-track-agent-versions`,category:`Governance`,title:`How do you track agent versions?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you track agent versions?\r
+\r
+Use an **Agent Registry + Git/version control + deployment metadata**.\r
+\r
+1. **Create immutable versions**\r
+\r
+   * \`Sales Delegator v1.0\`\r
+   * \`v1.1\` when capabilities or workflow logic changes.\r
+\r
+2. **Track agent metadata**\r
+\r
+   * Agent version\r
+   * Owner\r
+   * Purpose/capabilities\r
+   * Model version\r
+   * Prompt version\r
+   * Allowed MCP tools\r
+   * Dependencies\r
+\r
+3. **Track code/configuration**\r
+\r
+   * Store agent code and configuration in **Git**.\r
+   * Tag each production release with a commit/release ID.\r
+\r
+4. **Track evaluation**\r
+\r
+   * Tool-selection accuracy\r
+   * Task success rate\r
+   * Safety\r
+   * Latency\r
+   * Cost\r
+\r
+5. **Track deployment**\r
+\r
+   \`\`\`text\r
+   Agent v1.0\r
+       ↓\r
+   Test → Staging → Canary → Production\r
+   \`\`\`\r
+\r
+   Record which version is running in each environment.\r
+\r
+6. **Rollback**\r
+\r
+   * If the new version causes problems, deploy the previous approved version.\r
+\r
+### Interview answer\r
+\r
+> **"I track agent versions through an Agent Registry and Git. Each agent version is linked to its code version, prompt version, model version, allowed tools, configuration, evaluation results, and deployment environment. Production releases are tagged and deployed through controlled environments, with the previous approved version maintained for rollback."**\r
+`,code:``},{id:`558-how-do-you-perform-ai-risk-assessment`,category:`Governance`,title:`How do you perform AI risk assessment?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you perform AI risk assessment?\r
+\r
+I use a **risk-based assessment** before an AI agent/model goes to production.\r
+\r
+1. **Identify the use case**\r
+\r
+   * What does the AI do?\r
+   * What decisions/actions can it take?\r
+   * Who uses it?\r
+\r
+2. **Classify the data**\r
+\r
+   * Public, internal, confidential, PII, financial, HR, etc.\r
+\r
+3. **Assess key risks**\r
+\r
+   * **Security:** prompt injection, unauthorized access\r
+   * **Privacy:** PII/data leakage\r
+   * **Accuracy:** hallucination, incorrect answers\r
+   * **Reliability:** failures, downtime\r
+   * **Safety:** harmful or unintended actions\r
+   * **Compliance:** regulatory/policy requirements\r
+   * **Cost:** unexpected token/API consumption\r
+\r
+4. **Assess impact and likelihood**\r
+\r
+   \`\`\`text\r
+   Risk = Likelihood × Impact\r
+   \`\`\`\r
+\r
+   Prioritize high-impact risks first.\r
+\r
+5. **Define controls**\r
+\r
+   * RBAC/ABAC\r
+   * Data/ACL filtering\r
+   * Guardrails\r
+   * Tool allowlists\r
+   * Human approval\r
+   * Encryption\r
+   * Monitoring and audit\r
+   * Rate limits\r
+\r
+6. **Test the controls**\r
+\r
+   * Red-team / adversarial testing\r
+   * Prompt-injection tests\r
+   * Data leakage tests\r
+   * Model evaluation\r
+   * Failure/chaos testing\r
+\r
+7. **Approve and continuously monitor**\r
+\r
+   * Document residual risk.\r
+   * Get appropriate approval before production.\r
+   * Reassess when the model, prompt, agent, tool, or data changes.\r
+\r
+### Interview answer\r
+\r
+> **"I perform AI risk assessment by first understanding the use case, data, users, and actions the AI can perform. Then I assess security, privacy, accuracy, reliability, safety, compliance, and cost risks based on likelihood and impact. I define controls such as RBAC, ACL filtering, guardrails, tool allowlists, human approval, and monitoring, validate them through testing, document residual risk, and continuously reassess after significant changes."**\r
+`,code:``},{id:`559-how-do-you-implement-responsible-ai`,category:`Governance`,title:`How do you implement responsible AI?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you implement Responsible AI?\r
+\r
+I implement it across the **AI lifecycle**, not as a single check.\r
+\r
+1. **Fairness**\r
+\r
+   * Test outputs for unwanted bias across relevant user/data groups.\r
+   * Monitor for drift after deployment.\r
+\r
+2. **Transparency**\r
+\r
+   * Track model, prompt, and agent versions.\r
+   * Provide citations/explanations where appropriate.\r
+\r
+3. **Privacy**\r
+\r
+   * Minimize PII.\r
+   * Apply RBAC/ABAC, ACL filtering, encryption, and DLP.\r
+\r
+4. **Safety**\r
+\r
+   * Content safety/guardrails.\r
+   * Prompt-injection and jailbreak testing.\r
+   * Restrict sensitive tool actions.\r
+\r
+5. **Accuracy & Grounding**\r
+\r
+   * Evaluate hallucination, groundedness, and answer relevance.\r
+   * Require citations for enterprise RAG responses.\r
+   * Use fallback when evidence is insufficient.\r
+\r
+6. **Human oversight**\r
+\r
+   * Require human approval for high-impact or destructive actions.\r
+\r
+7. **Monitoring & audit**\r
+\r
+   * Track quality, safety violations, data access, tool calls, latency, and cost.\r
+   * Maintain audit trails.\r
+\r
+8. **Governance**\r
+\r
+   * Maintain approval processes for models, agents, prompts, tools, and data.\r
+   * Reassess risk whenever significant changes are made.\r
+\r
+### Interview answer\r
+\r
+> **"I implement Responsible AI across the full lifecycle by addressing fairness, transparency, privacy, safety, accuracy, and human oversight. In CWD, I use access controls and DLP for privacy, guardrails and tool restrictions for safety, RAG evaluation and citations for groundedness, human approval for sensitive actions, and continuous monitoring and auditing. Every major model, agent, prompt, or tool change goes through evaluation and governance before production."**\r
+`,code:``},{id:`560-how-do-you-handle-audit-requirements`,category:`Governance`,title:`How do you handle audit requirements?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: governance of agents, prompts, tools, models, data and audits.`,concept:`### How do you handle audit requirements?\r
+\r
+I implement **end-to-end audit logging and traceability**.\r
+\r
+1. **Log every AI interaction**\r
+\r
+   * User/request ID\r
+   * Timestamp\r
+   * Agent and model version\r
+   * Prompt version\r
+   * Tools/MCP calls\r
+   * Retrieved data sources\r
+   * Final response\r
+   * Approval/denial decisions\r
+\r
+2. **Use correlation IDs**\r
+\r
+   \`\`\`text\r
+   User\r
+    ↓\r
+   Coordinator\r
+    ↓\r
+   Delegator\r
+    ↓\r
+   Worker\r
+    ↓\r
+   MCP Tool\r
+    ↓\r
+   Enterprise System\r
+   \`\`\`\r
+\r
+   One \`correlation_id\` lets us trace the complete request.\r
+\r
+3. **Security audit**\r
+\r
+   * Track authentication, authorization, data access, and failed access attempts.\r
+   * Use **Entra ID audit logs + Azure Monitor/Log Analytics**.\r
+\r
+4. **Immutable/controlled logs**\r
+\r
+   * Restrict who can modify or delete audit records.\r
+   * Apply appropriate retention policies.\r
+\r
+5. **Compliance reporting**\r
+\r
+   * Generate reports for who accessed what, when, why, and what action was performed.\r
+\r
+6. **Monitor and alert**\r
+\r
+   * Detect unusual access, excessive tool calls, policy violations, and security events.\r
+\r
+### Interview answer\r
+\r
+> **"I handle audit requirements through end-to-end traceability. Every request gets a correlation ID, and we capture the user, agent, model and prompt versions, tool calls, data access, authorization decisions, and final outcome. We use centralized audit logs with controlled access and retention policies, and integrate them with monitoring and alerting so security and compliance teams can investigate any activity."**\r
+`,code:``}];function um(){return(0,M.jsx)($,{data:lm,title:`CWD Governance Cookbook`,subtitle:`Governance of agents, prompts, tools, models, data and audits`,icon:`⚖️`,patternLabel:`Questions`})}var dm=[{id:`561-why-langgraph-instead-of-temporal`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Temporal?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`For your **CWD architecture**, the key distinction is:\r
+\r
+> **LangGraph = AI/agent orchestration**\r
+> **Temporal = durable workflow orchestration**\r
+\r
+### Why LangGraph instead of Temporal?\r
+\r
+I chose **LangGraph** because CWD's primary problem is **LLM-driven agent orchestration**:\r
+\r
+1. **Agent state**\r
+\r
+   * Maintains conversation/task state between Coordinator → Delegator → Worker.\r
+\r
+2. **Conditional routing**\r
+\r
+   * Coordinator can dynamically decide which Delegator to invoke.\r
+   * Delegator can dynamically select Workers.\r
+\r
+3. **LLM-native**\r
+\r
+   * Easy integration with LLM calls, tool calling, MCP, RAG, and agent reasoning.\r
+\r
+4. **Human-in-the-loop**\r
+\r
+   * Supports interrupt/resume patterns for approval of sensitive actions.\r
+\r
+5. **Parallel agent execution**\r
+\r
+   * Multiple Workers can execute in parallel and results can be aggregated.\r
+\r
+6. **Checkpointing**\r
+\r
+   * Persist workflow state so execution can resume after interruption/failure.\r
+\r
+### Where Temporal would be stronger\r
+\r
+Temporal is particularly strong when the requirement is **long-running, highly durable business workflows** with reliable execution across failures.\r
+\r
+For example:\r
+\r
+\`\`\`text\r
+Order → Payment → Approval → Fulfillment → Notification\r
+\`\`\`\r
+\r
+That is more traditional workflow orchestration.\r
+\r
+### Interview answer\r
+\r
+> **"I chose LangGraph because CWD is primarily an LLM-driven multi-agent orchestration problem. We needed dynamic routing between Coordinator, Delegators, and Workers, agent state, tool calling, parallel execution, human-in-the-loop, and checkpointing. Temporal is excellent for durable long-running business workflows, but LangGraph was a better fit for the AI reasoning and agent orchestration layer. In a mature architecture, I could also use both—LangGraph for agent reasoning and Temporal for long-running business workflow durability."**\r
+`,code:``},{id:`562-why-langgraph-instead-of-airflow`,category:`Architecture Trade-Off Questions`,title:`Why LangGraph instead of Airflow?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why LangGraph instead of Airflow?\r
+\r
+* **LangGraph** is designed for **LLM/agent orchestration and stateful agent workflows**.\r
+* **Airflow** is primarily designed for **data pipelines and scheduled batch workflows**.\r
+\r
+For CWD, we needed:\r
+\r
+* Dynamic **Coordinator → Delegator → Worker** routing\r
+* Agent state and checkpointing\r
+* LLM-based decisions\r
+* Tool/MCP calling\r
+* Parallel agent execution\r
+* Human-in-the-loop\r
+* Retry and resume at the agent level\r
+\r
+**Interview answer:**\r
+\r
+> “I chose LangGraph because CWD is primarily an LLM-driven multi-agent orchestration problem. We needed dynamic routing between the Coordinator, Delegators, and Workers, along with agent state, tool calling, parallel execution, checkpointing, and human-in-the-loop. Airflow is better suited for scheduled data and ETL pipelines. So LangGraph was a better fit for the agent orchestration layer.”\r
+`,code:``},{id:`563-why-mcp-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why MCP instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why MCP instead of REST?\r
+\r
+* **REST** is a general API communication approach.\r
+* **MCP** is designed specifically for **AI agents to discover and use tools/context**.\r
+* MCP provides standardized **tool definitions, schemas, discovery, and tool invocation**.\r
+* It reduces custom integration logic between every Worker and enterprise system.\r
+* We can apply **authorization, validation, auditing, and tool-level governance** consistently.\r
+\r
+**In CWD:**\r
+\r
+\`\`\`text\r
+Worker\r
+   ↓\r
+MCP Client\r
+   ↓\r
+MCP Server\r
+   ↓\r
+Salesforce / ServiceNow / SharePoint / Oracle\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used MCP because CWD is an agentic AI platform where Workers need to dynamically discover and invoke enterprise tools. REST can expose the APIs, but MCP provides a standardized tool interface with schemas, discovery, and AI-friendly tool invocation. It also makes tool governance, authorization, validation, and auditing easier across multiple Workers. We could still use REST behind the MCP Server to communicate with systems like Salesforce or ServiceNow.”\r
+`,code:``},{id:`564-why-a2a-instead-of-rest`,category:`Architecture Trade-Off Questions`,title:`Why A2A instead of REST?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why A2A instead of REST?\r
+\r
+* **REST** is a general-purpose API communication mechanism.\r
+* **A2A (Agent-to-Agent)** is designed specifically for **communication between AI agents**.\r
+* A2A provides concepts for **agent identity, capabilities, task delegation, status, and agent-to-agent interactions**.\r
+* It avoids creating custom REST contracts for every agent-to-agent interaction.\r
+* REST can still be used **underneath A2A** as the transport/API mechanism.\r
+\r
+**In CWD:**\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓ A2A\r
+Delegator\r
+    ↓ A2A\r
+Worker\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used A2A because CWD has multiple autonomous agents communicating with each other. A2A gives us an agent-oriented communication model with agent identity, capabilities, task delegation, and status handling. REST is useful for general APIs, but A2A is better suited for agent-to-agent collaboration. REST can still be used underneath the A2A implementation where required.”\r
+`,code:``},{id:`565-why-multi-agent-instead-of-single-agent`,category:`Architecture Trade-Off Questions`,title:`Why multi-agent instead of single-agent?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why multi-agent instead of single-agent?\r
+\r
+For CWD, we used **multi-agent** because the platform handles different enterprise domains and responsibilities.\r
+\r
+* **Coordinator** → understands intent and creates the plan.\r
+* **Delegator** → manages a specific domain, such as Sales or IT.\r
+* **Workers** → perform specialized tasks using specific tools.\r
+* Agents can execute tasks **in parallel**.\r
+* Each agent has **limited tools and permissions**, improving security and governance.\r
+* Individual agents can be **developed, tested, scaled, and monitored independently**.\r
+\r
+**Interview answer:**\r
+\r
+> “We chose multi-agent because CWD has multiple enterprise domains and specialized capabilities. Instead of one agent having access to every tool and responsibility, we separated responsibilities into Coordinator, Delegators, and specialized Workers. This gives us better modularity, parallel execution, security, governance, and independent scalability.”\r
+`,code:``},{id:`566-why-azure-ai-search-instead-of-pinecone`,category:`Architecture Trade-Off Questions`,title:`Why Azure AI Search instead of Pinecone?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why Azure AI Search instead of Pinecone?\r
+\r
+For CWD, the main reason was **enterprise integration and security**.\r
+\r
+* **Azure AI Search** supports **hybrid search** — keyword/BM25 + vector + semantic ranking.\r
+* Strong integration with the **Azure ecosystem** and enterprise data sources.\r
+* Supports **metadata/ACL filtering**, which is important for authorization-aware RAG.\r
+* Easier integration with **Azure OpenAI, Entra ID, Azure networking and monitoring**.\r
+* We could keep the RAG layer within our **Azure enterprise environment**.\r
+\r
+**Pinecone** is also a strong vector database, but it would mainly solve the vector-search requirement rather than providing the same Azure-native enterprise search integration.\r
+\r
+**Interview answer:**\r
+\r
+> “We chose Azure AI Search because CWD was deployed primarily on Azure and we needed enterprise-grade hybrid search, semantic ranking, metadata and ACL filtering. It also integrated well with Azure OpenAI, Entra ID, networking and monitoring. Pinecone is a strong option for vector search, but Azure AI Search was a better fit for our Azure-native enterprise RAG architecture.”\r
+`,code:``},{id:`567-why-hybrid-search-instead-of-vector-only`,category:`Architecture Trade-Off Questions`,title:`Why hybrid search instead of vector-only?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why hybrid search instead of vector-only?\r
+\r
+Because enterprise queries often contain **exact terms** as well as **semantic meaning**.\r
+\r
+* **Vector search** → finds semantically similar content.\r
+* **BM25/keyword search** → handles exact terms, IDs, error codes, product names, ticket numbers, etc.\r
+* **Hybrid search** → combines both and improves retrieval quality.\r
+* We can then use **semantic reranking** to select the most relevant documents.\r
+\r
+**Example:**\r
+\r
+\`\`\`text\r
+Query: "ServiceNow INC0012345 for customer C123"\r
+\r
+Vector → understands the meaning\r
+BM25    → matches exact INC0012345 and C123\r
+Hybrid  → combines both\r
+Reranker → selects the best results\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used hybrid search because enterprise queries contain both semantic questions and exact identifiers. Vector-only search can miss exact IDs, ticket numbers, product names, or error codes, while keyword-only search can miss semantic meaning. So we combined BM25 and vector search, followed by semantic reranking, to improve retrieval accuracy.”\r
+`,code:``},{id:`568-why-fastapi-instead-of-flask`,category:`Architecture Trade-Off Questions`,title:`Why FastAPI instead of Flask?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why FastAPI instead of Flask?\r
+\r
+* **FastAPI** provides strong **async support**, useful for LLM, MCP, and downstream API calls.\r
+* Built-in **Pydantic validation** for request/response schemas.\r
+* Automatic **OpenAPI/Swagger documentation**.\r
+* Better fit for **high-concurrency AI APIs**.\r
+* Type hints make APIs easier to maintain.\r
+\r
+**Interview answer:**\r
+\r
+> “We chose FastAPI because CWD is an AI API platform with many asynchronous operations such as LLM calls, MCP calls, and downstream enterprise APIs. FastAPI gives us async support, Pydantic-based validation, automatic API documentation, and good performance for concurrent workloads. Flask could also work, but FastAPI was a better fit for our AI service architecture.”\r
+`,code:``},{id:`569-why-redis`,category:`Architecture Trade-Off Questions`,title:`Why Redis?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why Redis?\r
+\r
+In CWD, Redis was mainly used for **fast, temporary state and caching**.\r
+\r
+* **Low-latency** → faster than querying a persistent database for every request.\r
+* **Session/state management** → store active conversation or workflow state.\r
+* **Caching** → cache repeated LLM/RAG/tool results where appropriate.\r
+* **Idempotency** → store request/idempotency keys to detect duplicate requests.\r
+* **Distributed locking** → prevent multiple workers from processing the same task.\r
+* **TTL support** → automatically expire temporary data.\r
+\r
+**Interview answer:**\r
+\r
+> “We used Redis for low-latency, temporary state and caching. It helped us manage active sessions, workflow state, idempotency keys, and cached results. We used a persistent store such as Cosmos DB for durable state, while Redis handled fast-access data with TTL and high-throughput requirements.”\r
+`,code:``},{id:`570-why-service-bus-sqs`,category:`Architecture Trade-Off Questions`,title:`Why Service Bus/SQS?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why Service Bus / SQS?\r
+\r
+We use **Service Bus on Azure** or **SQS on AWS** when we need **asynchronous, reliable communication** between agents/services.\r
+\r
+* **Decouples** Coordinator, Delegators, and Workers.\r
+* Supports **retries** for transient failures.\r
+* **DLQ** captures messages that repeatedly fail.\r
+* Provides **buffering** during traffic spikes.\r
+* Supports **asynchronous/long-running tasks**.\r
+* Helps with **scalability** because consumers can scale independently.\r
+\r
+**In CWD:**\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Service Bus / SQS\r
+    ↓\r
+Delegator\r
+    ↓\r
+Workers\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used Service Bus on Azure or SQS on AWS to decouple our agents and services and support reliable asynchronous processing. It provides buffering, retries, dead-letter queues, and independent scaling. This is especially useful when a Worker or downstream system is slow or temporarily unavailable.”\r
+`,code:``},{id:`571-why-asynchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why asynchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why asynchronous execution?\r
+\r
+Because some CWD tasks are **long-running or independent**, so we don't want the user request to wait for every operation sequentially.\r
+\r
+* **Lower response latency** → independent Workers can run in parallel.\r
+* **Better scalability** → services process tasks independently.\r
+* **Handles long-running tasks** without blocking the API.\r
+* **Improves reliability** → failed tasks can be retried independently.\r
+* **Better resource utilization** during high traffic.\r
+\r
+**Example:**\r
+\r
+\`\`\`text\r
+Customer Briefing\r
+      ↓\r
+   Delegator\r
+   ↙      ↘\r
+Sales     IT\r
+Worker   Worker\r
+  ↓        ↓\r
+Salesforce ServiceNow\r
+\`\`\`\r
+\r
+Sales and IT Workers can execute **in parallel**, then the Delegator aggregates the results.\r
+\r
+**Interview answer:**\r
+\r
+> “We used asynchronous execution because CWD has independent and potentially long-running Worker tasks. Instead of executing everything sequentially, we can run independent Workers in parallel, reducing overall latency and improving scalability. For long-running tasks, we use asynchronous messaging and track the task status until completion.”\r
+`,code:``},{id:`572-why-synchronous-execution`,category:`Architecture Trade-Off Questions`,title:`Why synchronous execution?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why synchronous execution?\r
+\r
+Use **synchronous execution** when the next step needs the current result immediately or the user expects an immediate response.\r
+\r
+* Simple, short-running operations.\r
+* Sequential dependencies between tasks.\r
+* Immediate validation or decision-making.\r
+* User-facing requests where latency is acceptable.\r
+\r
+**Example in CWD:**\r
+\r
+\`\`\`text\r
+Coordinator\r
+    ↓\r
+Delegator\r
+    ↓\r
+Worker → Salesforce\r
+    ↓\r
+Result\r
+    ↓\r
+Delegator continues\r
+\`\`\`\r
+\r
+If the Delegator needs the Salesforce result before deciding what to do next, synchronous execution makes sense.\r
+\r
+**Interview answer:**\r
+\r
+> “We use synchronous execution when the next step depends immediately on the previous result or when the operation is short-running. For example, if a Delegator needs a Salesforce result before selecting the next Worker, we execute that call synchronously. For independent or long-running tasks, we use asynchronous execution.”\r
+`,code:``},{id:`573-why-use-multiple-llms`,category:`Architecture Trade-Off Questions`,title:`Why use multiple LLMs?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why use multiple LLMs?\r
+\r
+We use multiple LLMs mainly for **model routing** based on task complexity.\r
+\r
+* **Simple tasks** → smaller/faster/cheaper model.\r
+* **Complex reasoning** → larger/more capable model.\r
+* **Vision tasks** → multimodal/vision model.\r
+* **Fallback** → another approved model if the primary model is unavailable.\r
+* **Cost optimization** → avoid using an expensive model for every request.\r
+* **Latency optimization** → use faster models for simple requests.\r
+\r
+**Example:**\r
+\r
+\`\`\`text\r
+User Request\r
+     ↓\r
+Task Classifier\r
+   ↙       ↘\r
+Simple    Complex\r
+  ↓          ↓\r
+Small LLM  Large LLM\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used multiple LLMs because different tasks have different complexity, latency, and cost requirements. A routing layer selects a smaller model for simple tasks and a more capable model for complex reasoning or multimodal tasks. We can also use an approved fallback model for availability and reliability.”\r
+`,code:``},{id:`574-why-use-an-agent-registry`,category:`Architecture Trade-Off Questions`,title:`Why use an Agent Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why use an Agent Registry?\r
+\r
+An **Agent Registry** is a centralized place to **register, discover, govern, and manage agents**.\r
+\r
+* Stores agent **name, purpose, capabilities, version, owner**.\r
+* Defines which **tools/MCP servers** the agent can use.\r
+* Helps the **Coordinator/Delegator discover the correct agent** dynamically.\r
+* Supports **authorization and governance**.\r
+* Tracks **versions, status, and lifecycle**.\r
+* Prevents unregistered or unauthorized agents from participating.\r
+\r
+**In CWD:**\r
+\r
+\`\`\`text\r
+Coordinator\r
+     ↓\r
+Agent Registry\r
+     ↓\r
+Find suitable Delegator\r
+     ↓\r
+Delegator\r
+     ↓\r
+Worker Registry\r
+     ↓\r
+Select Worker\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used an Agent Registry as a centralized control plane for agent discovery and governance. It stores each agent’s capabilities, owner, version, tools, permissions, and status. The Coordinator and Delegators use the registry to dynamically discover the right agent instead of hardcoding agent relationships. It also helps with authorization, versioning, auditing, and lifecycle management.”\r
+`,code:``},{id:`575-why-use-a-prompt-registry`,category:`Architecture Trade-Off Questions`,title:`Why use a Prompt Registry?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why use a Prompt Registry?\r
+\r
+A **Prompt Registry** centrally manages and governs prompts used by agents and LLMs.\r
+\r
+* **Version control** → track prompt v1, v2, v3.\r
+* **Consistency** → agents use approved prompts.\r
+* **Testing/evaluation** → compare prompts using the same evaluation dataset.\r
+* **Rollback** → quickly return to a previous version if quality drops.\r
+* **Governance** → track owner, purpose, approval, and usage.\r
+* **Auditability** → know exactly which prompt version generated a response.\r
+\r
+**In CWD:**\r
+\r
+\`\`\`text\r
+Agent\r
+  ↓\r
+Prompt Registry\r
+  ↓\r
+Approved Prompt v3\r
+  ↓\r
+LLM\r
+  ↓\r
+Response\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We used a Prompt Registry to centrally manage prompt versions and governance. Each prompt has an owner, version, approval status, and evaluation results. At runtime, the agent retrieves the approved prompt version, and we can monitor its performance and quickly roll back if a new version causes quality or safety issues.”\r
+`,code:``},{id:`576-why-use-distributed-tracing`,category:`Architecture Trade-Off Questions`,title:`Why use distributed tracing?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:``,code:``},{id:`577-why-use-a-circuit-breaker`,category:`Architecture Trade-Off Questions`,title:`Why use a circuit breaker?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why use a circuit breaker?\r
+\r
+A **circuit breaker prevents repeated calls to a failing dependency** and protects the rest of the system.\r
+\r
+Example: Salesforce is down.\r
+\r
+\`\`\`text\r
+Worker → Salesforce\r
+          ↓\r
+       failures\r
+          ↓\r
+   Circuit OPEN\r
+          ↓\r
+Stop calling Salesforce temporarily\r
+\`\`\`\r
+\r
+* Prevents **cascading failures**.\r
+* Reduces unnecessary **timeouts and latency**.\r
+* Protects downstream systems from additional load.\r
+* Allows the system to **recover gracefully**.\r
+* After a cooldown, it moves to **half-open** and tests the dependency again.\r
+\r
+**Interview answer:**\r
+\r
+> “We use a circuit breaker to prevent repeated calls to an unhealthy dependency such as Salesforce or an LLM provider. After consecutive failures, the circuit opens and temporarily stops requests. After a cooldown period, it enters half-open state and tests the dependency. This prevents cascading failures and improves overall system reliability.”\r
+`,code:``},{id:`578-why-use-a-dlq`,category:`Architecture Trade-Off Questions`,title:`Why use a DLQ?`,difficulty:`Intermediate`,time:`~10 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: technology choices, alternatives evaluated and trade-offs accepted.`,concept:`### Why use a DLQ?\r
+\r
+A **Dead Letter Queue (DLQ)** stores messages that **failed repeatedly** after the configured retry limit.\r
+\r
+\`\`\`text id="7r1qfc"\r
+Worker\r
+  ↓\r
+Failure\r
+  ↓\r
+Retry → Retry → Retry\r
+  ↓\r
+Still failing\r
+  ↓\r
+DLQ\r
+  ↓\r
+Investigate / Fix / Replay\r
+\`\`\`\r
+\r
+* Prevents endlessly retrying the same failed message.\r
+* Keeps the main queue healthy.\r
+* Helps isolate **poison messages**.\r
+* Provides a place for **investigation and replay**.\r
+* Improves reliability and operational monitoring.\r
+\r
+**Interview answer:**\r
+\r
+> “We use a DLQ for messages that continue to fail after the configured retries. Instead of blocking the main queue with a poison message, we move it to the DLQ for investigation, correction, and controlled replay. This improves reliability and prevents infinite retry loops.”\r
+`,code:``}];function fm(){return(0,M.jsx)($,{data:dm,title:`CWD Architecture Trade-Off Questions Cookbook`,subtitle:`Technology choices, alternatives evaluated and trade-offs accepted`,icon:`🔀`,patternLabel:`Questions`})}var pm=[{id:`579-if-you-were-redesigning-cwd-today-what-would-you-change`,category:`Senior/Principal Architect Questions`,title:`If you were redesigning CWD today, what would you change?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`For an interview, I’d answer this as **“I would evolve CWD rather than completely replace it.”** The current Coordinator → Delegator → Worker model is useful, but I would make it more **event-driven, policy-driven, observable, and evaluation-driven**.\r
 \r
 ### Interview answer\r
 \r
@@ -172878,7 +175039,271 @@ This is a good distinction to make in an interview:\r
 ### One sentence to memorize\r
 \r
 > **“10× requires scaling the architecture; 100× requires changing the architecture—through cells, partitioning, asynchronous execution, backpressure, caching, workload isolation, and multi-region distribution.”**\r
-`,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``}];function mm(){return(0,M.jsx)($,{data:pm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var hm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`For your **CWD (Coordinator → Delegators → Workers)** project, I would explain the AWS architecture in an interview as an **enterprise, production-grade multi-agent architecture**, not just as a collection of AWS services.
+`,code:``},{id:`590-how-would-you-support-thousands-of-agents`,category:`Senior/Principal Architect Questions`,title:`How would you support thousands of agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you support thousands of agents?\r
+\r
+I would build a **shared, scalable Agent Platform** instead of running each agent as a completely independent application.\r
+\r
+* **Agent Registry** → centralized discovery, metadata, ownership, versions.\r
+* **Stateless agent runtime** → horizontally scale agents using containers/AKS/Container Apps.\r
+* **Shared platform services** → model gateway, MCP gateway, RAG, auth, observability.\r
+* **Dynamic routing** → Coordinator/Agent Gateway routes requests to the right agents.\r
+* **Queue-based execution** → Service Bus/SQS for asynchronous workloads and traffic spikes.\r
+* **Per-agent/tenant quotas** → prevent noisy-neighbor problems.\r
+* **Caching** → Redis for frequently accessed state/results.\r
+* **Centralized governance** → permissions, approvals, evaluations, lifecycle.\r
+* **Monitoring** → agent-level latency, errors, token usage, cost, and utilization.\r
+* **Auto-scaling** → scale agent workers based on queue depth and traffic.\r
+\r
+**Interview answer:**\r
+\r
+> “To support thousands of agents, I would build a shared agent platform with centralized registry, discovery, governance, and a horizontally scalable stateless runtime. Common capabilities like model access, MCP, RAG, authentication, and observability would be platform services rather than duplicated inside every agent. Queues, autoscaling, quotas, caching, and per-agent monitoring would allow us to scale while controlling cost and preventing noisy neighbors.”\r
+`,code:``},{id:`591-how-would-you-govern-thousands-of-mcp-tools`,category:`Senior/Principal Architect Questions`,title:`How would you govern thousands of MCP tools?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you govern thousands of MCP tools?\r
+\r
+I would treat MCP tools as **enterprise-managed APIs** with centralized registration, authorization, and lifecycle governance.\r
+\r
+* **MCP Tool Registry** → unique tool ID, owner, description, schema, version, risk level.\r
+* **Tool categorization** → read-only, write, destructive, sensitive.\r
+* **Allowlisting** → each Worker/Agent gets only the tools it needs.\r
+* **Authentication & authorization** → Entra/IAM + least privilege.\r
+* **Input validation** → JSON Schema/Pydantic before execution.\r
+* **Approval** → sensitive/destructive tools require additional approval or HITL.\r
+* **Versioning** → don't silently change a production tool contract.\r
+* **Observability** → usage, latency, failures, cost, and audit logs.\r
+* **Lifecycle** → review, deprecate, and remove unused tools.\r
+* **Discovery** → agents discover only tools they are authorized to use.\r
+\r
+**Interview answer:**\r
+\r
+> “For thousands of MCP tools, I would create a centralized Tool Registry and governance layer. Every tool would have an owner, schema, version, risk classification, and permissions. Agents would receive only an allowlisted subset of tools based on least privilege. Sensitive tools would require additional approval, and all executions would be validated, traced, audited, and monitored. This gives us scalable tool discovery without losing security or governance.”\r
+`,code:``},{id:`592-how-would-you-prevent-agent-sprawl`,category:`Senior/Principal Architect Questions`,title:`How would you prevent agent sprawl?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you prevent agent sprawl?\r
+\r
+**Agent sprawl** means having too many agents doing overlapping or unnecessary work.\r
+\r
+I would control it through **centralized governance and reuse**.\r
+\r
+* **Agent Registry** → every agent must be registered.\r
+* **Avoid duplicates** → check whether an existing agent already provides the capability.\r
+* **Clear ownership** → every agent has an owner and business purpose.\r
+* **Standard capabilities** → define what each agent is responsible for.\r
+* **Approval process** → require architecture/governance approval for new agents.\r
+* **Lifecycle management** → monitor usage and retire unused agents.\r
+* **Reuse shared Workers/tools** instead of creating new agents unnecessarily.\r
+* **Usage monitoring** → track calls, cost, errors, and business value.\r
+\r
+**Interview answer:**\r
+\r
+> “I would prevent agent sprawl by making the Agent Registry the central control point. Before creating a new agent, teams must check whether an existing agent can provide the capability. Each agent needs a clear purpose, owner, permissions, and approval. We also monitor usage and periodically retire duplicate or unused agents. The goal is to reuse existing agents, Workers, and tools rather than continuously creating new ones.”\r
+`,code:``},{id:`593-how-would-you-manage-hundreds-of-prompts`,category:`Senior/Principal Architect Questions`,title:`How would you manage hundreds of prompts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:``,code:``},{id:`594-how-would-you-prevent-prompt-version-conflicts`,category:`Senior/Principal Architect Questions`,title:`How would you prevent prompt/version conflicts?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you prevent prompt/version conflicts?\r
+\r
+Use **centralized versioning + immutable releases + dependency tracking**.\r
+\r
+* **Prompt Registry** → every prompt has a unique version.\r
+* **Immutable versions** → once released, don't modify \`v3\`; create \`v4\`.\r
+* **Agent → Prompt mapping** → each agent references an exact approved prompt version.\r
+* **Model compatibility** → track which model version was tested with the prompt.\r
+* **Environment promotion** → Dev → Test → Staging → Prod.\r
+* **Evaluation gate** → validate new prompt versions before production.\r
+* **Canary deployment** → test new version with limited traffic.\r
+* **Rollback** → switch the agent back to the previous approved version.\r
+* **Dependency tracking** → track Agent → Prompt → Model → Tools.\r
+\r
+**Example:**\r
+\r
+\`\`\`text\r
+CustomerBriefing Agent\r
+        ↓\r
+Prompt v3\r
+        ↓\r
+GPT-4.x\r
+        ↓\r
+Approved Production Release\r
+\r
+New change\r
+        ↓\r
+Prompt v4 → Evaluate → Canary → Production\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “We prevent prompt and version conflicts by using a centralized Prompt Registry with immutable versions. Each agent references an exact approved prompt and model version rather than using a floating ‘latest’ version. Changes go through evaluation, approval, and controlled promotion, with dependency tracking and rollback available if the new version causes issues.”\r
+`,code:``},{id:`595-how-would-you-create-an-enterprise-ai-platform-from-cwd`,category:`Senior/Principal Architect Questions`,title:`How would you create an enterprise AI platform from CWD?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you create an enterprise AI platform from CWD?\r
+\r
+I would evolve CWD from a **single application into a reusable platform** by separating **common capabilities** from **business-specific agents**.\r
+\r
+\`\`\`text\r
+                Enterprise AI Platform\r
+                       ↓\r
+        ┌──────────────────────────────┐\r
+        │ API + Identity + AI Gateway  │\r
+        ├──────────────────────────────┤\r
+        │ Coordinator / Agent Runtime  │\r
+        ├──────────────────────────────┤\r
+        │ Agent / Model / Prompt       │\r
+        │ Tool Registries              │\r
+        ├──────────────────────────────┤\r
+        │ MCP + A2A                    │\r
+        ├──────────────────────────────┤\r
+        │ RAG / Knowledge Platform     │\r
+        ├──────────────────────────────┤\r
+        │ Guardrails + Evaluation      │\r
+        ├──────────────────────────────┤\r
+        │ Observability + Governance   │\r
+        └──────────────────────────────┘\r
+                       ↓\r
+        ┌──────────────┼──────────────┐\r
+        ↓              ↓              ↓\r
+     Sales AI       IT AI          HR AI\r
+\`\`\`\r
+\r
+### Key steps\r
+\r
+1. **Extract reusable components** from CWD — authentication, orchestration, MCP, RAG, observability, evaluation.\r
+2. **Create platform registries** — Agent, Model, Prompt, Tool.\r
+3. **Build common AI services** — model routing, RAG, guardrails, evaluation, tracing.\r
+4. **Standardize interfaces** — A2A for agents and MCP for tools.\r
+5. **Create golden paths** — templates for new agents, APIs, deployments, monitoring, and CI/CD.\r
+6. **Add governance** — security, RBAC, approvals, audit, data policies.\r
+7. **Keep business logic application-specific** — Sales, IT, HR, Manufacturing, etc.\r
+8. **Provide self-service onboarding** so teams can build and deploy new agents using the platform.\r
+\r
+**Interview answer:**\r
+\r
+> “I would evolve CWD into an enterprise AI platform by extracting its reusable capabilities—agent orchestration, MCP, RAG, model and prompt management, security, observability, and evaluation—and making them shared platform services. I would standardize A2A and MCP interfaces, provide golden-path templates and centralized governance, while keeping business-specific agents and workflows separate. This allows different teams to build Sales, IT, HR, or manufacturing AI solutions on the same governed platform instead of rebuilding the infrastructure each time.”\r
+`,code:``},{id:`596-what-capabilities-should-become-reusable-platform-services`,category:`Senior/Principal Architect Questions`,title:`What capabilities should become reusable platform services?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### What capabilities should become reusable platform services?\r
+\r
+Anything that is **common across multiple AI applications** should become a platform service.\r
+\r
+* **Identity & access** → Entra ID, RBAC/ABAC, authorization.\r
+* **Agent Registry** → agent discovery, metadata, lifecycle.\r
+* **Model Registry / AI Gateway** → approved models, routing, fallback.\r
+* **Prompt Registry** → versioning, approval, rollback.\r
+* **Tool/MCP Gateway** → tool discovery, authorization, auditing.\r
+* **RAG service** → ingestion, indexing, retrieval, reranking.\r
+* **Guardrails** → prompt-injection, PII, content and policy checks.\r
+* **Observability** → logs, metrics, traces, cost/token monitoring.\r
+* **Evaluation service** → quality, groundedness, safety, regression testing.\r
+* **Workflow/reliability services** → queues, retries, DLQ, circuit breakers.\r
+* **Secrets/configuration** → Key Vault/Secrets Manager and centralized configuration.\r
+* **CI/CD & deployment templates** → standardized build, security scanning, canary, rollback.\r
+\r
+**Interview answer:**\r
+\r
+> “I would turn cross-cutting capabilities into reusable platform services—identity, agent/model/prompt/tool registries, MCP and RAG services, guardrails, evaluation, observability, reliability, secrets, and CI/CD. Applications would consume these services through standard interfaces instead of implementing them independently. This improves consistency, security, and development speed across the enterprise.”\r
+`,code:``},{id:`597-what-should-remain-application-specific`,category:`Senior/Principal Architect Questions`,title:`What should remain application-specific?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### What should remain application-specific?\r
+\r
+The **business logic and use-case-specific behavior** should remain application-specific. The platform should provide the common capabilities.\r
+\r
+Keep these application-specific:\r
+\r
+* **Business rules** and domain logic.\r
+* **Agent responsibilities** and workflow.\r
+* **Prompts** specific to the use case.\r
+* **RAG knowledge sources** and retrieval strategy.\r
+* **Tool selection** required by that application.\r
+* **LLM/model choice** when the use case has unique requirements.\r
+* **Output format** and business-specific validation.\r
+* **Human approval rules** for sensitive business actions.\r
+\r
+**Example:**\r
+\r
+\`\`\`text\r
+Platform standards\r
+    ↓\r
+Identity / Security / MCP / A2A\r
+Observability / CI-CD / Evaluation\r
+    ↓\r
+Application-specific\r
+    ↓\r
+Sales Agent → Salesforce\r
+IT Agent    → ServiceNow\r
+HR Agent    → HR systems\r
+\`\`\`\r
+\r
+**Interview answer:**\r
+\r
+> “I would keep the common engineering capabilities centralized in the platform, while keeping business-specific behavior within the application. Things like business rules, agent responsibilities, prompts, knowledge sources, tool selection, output schemas, and approval workflows should remain application-specific. This gives us standardization without making the platform too rigid.”\r
+`,code:``},{id:`598-how-would-you-establish-platform-engineering-standards`,category:`Senior/Principal Architect Questions`,title:`How would you establish platform engineering standards?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you establish platform engineering standards?\r
+\r
+I would create **golden paths** so every AI application follows the same proven engineering practices.\r
+\r
+* **Architecture standards** → standard service, agent, RAG, and integration patterns.\r
+* **Security standards** → Entra/IAM, RBAC, secrets management, encryption, network isolation.\r
+* **Development standards** → Python/FastAPI, API contracts, coding standards, testing.\r
+* **CI/CD standards** → automated build, security scan, testing, deployment, approval, rollback.\r
+* **Observability standards** → logs, metrics, traces, correlation IDs, dashboards, alerts.\r
+* **Reliability standards** → timeout, retry, circuit breaker, DLQ, health checks.\r
+* **AI standards** → model/prompt registry, evaluation, guardrails, token/cost monitoring.\r
+* **Infrastructure standards** → IaC, environment separation, autoscaling, resource tagging.\r
+* **Governance** → architecture reviews, documentation, ownership, versioning, compliance.\r
+\r
+**Interview answer:**\r
+\r
+> “I would establish platform engineering standards through reusable golden paths, reference architectures, automated CI/CD templates, security policies, observability standards, and governance checklists. The goal is to make the secure and production-ready approach the default, so development teams can move faster without sacrificing reliability, security, or governance.”\r
+`,code:``},{id:`599-how-would-you-define-architecture-standards-for-new-agents`,category:`Senior/Principal Architect Questions`,title:`How would you define architecture standards for new agents?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### How would you define architecture standards for new agents?\r
+\r
+I would create a **standard Agent Architecture Template + checklist** that every new agent must follow.\r
+\r
+* **Interface:** standard A2A/API contract.\r
+* **Identity & security:** Entra ID, RBAC/ABAC, least-privilege permissions.\r
+* **Tools:** MCP-based integration with tool allowlists.\r
+* **LLM:** approved models through the Model Registry.\r
+* **Prompts:** versioned prompts through the Prompt Registry.\r
+* **Data/RAG:** approved data sources with ACL filtering.\r
+* **Reliability:** timeout, retry, circuit breaker, DLQ where applicable.\r
+* **Observability:** correlation ID, traces, logs, metrics, token/cost tracking.\r
+* **Evaluation:** accuracy, groundedness, safety, latency, and cost.\r
+* **Deployment:** CI/CD, testing, approval, canary, rollback.\r
+\r
+**Interview answer:**\r
+\r
+> “I would define a standard architecture template and governance checklist for every new agent. It would cover identity, A2A communication, MCP tools, approved models and prompts, data access, reliability, observability, evaluation, security, and deployment. A new agent would need to pass these standards and approval gates before moving to production.”\r
+`,code:``},{id:`600-what-would-your-target-architecture-look-like-in-2-3-years`,category:`Senior/Principal Architect Questions`,title:`What would your target architecture look like in 2–3 years?`,difficulty:`Advanced`,time:`~15 min`,description:`Prepare a structured interview answer covering the rationale, design, trade-offs and CWD-specific implementation. Section focus: redesign, scaling, platformization, standards and target architecture.`,concept:`### What would your target architecture look like in 2–3 years?\r
+\r
+I would evolve CWD from a project-specific platform into a **governed enterprise AI platform**.\r
+\r
+\`\`\`text\r
+Users / Applications\r
+        ↓\r
+API Gateway + Identity\r
+        ↓\r
+AI Gateway / Model Router\r
+        ↓\r
+Coordinator\r
+        ↓\r
+Delegators\r
+        ↓\r
+Specialized Workers\r
+        ↓\r
+MCP / A2A\r
+        ↓\r
+Enterprise Systems\r
+\r
+ ┌──────────────────────────────────────┐\r
+ │ Agent / Model / Prompt / Tool        │\r
+ │ Registries + Governance              │\r
+ ├──────────────────────────────────────┤\r
+ │ RAG + Knowledge + Data Governance    │\r
+ ├──────────────────────────────────────┤\r
+ │ Evaluation + Observability + Security│\r
+ └──────────────────────────────────────┘\r
+\`\`\`\r
+\r
+Key evolution:\r
+\r
+* **Model routing** → choose models based on complexity, cost, latency, and capability.\r
+* **Agent platform** → reusable agents instead of project-specific agents.\r
+* **MCP + A2A standardization** → easier integration and agent collaboration.\r
+* **Enterprise RAG platform** → governed knowledge with ACL-aware retrieval.\r
+* **Strong evaluation** → continuous evaluation before and after deployments.\r
+* **Observability** → end-to-end traces, quality, latency, cost, and safety metrics.\r
+* **Security/governance** → centralized identity, authorization, tool permissions, audit, and policy enforcement.\r
+* **Resilience** → multi-model fallback, queues, circuit breakers, retries, and durable workflows.\r
+* **Self-service platform** → teams can register and deploy approved agents/tools without rebuilding the platform.\r
+\r
+**Interview answer:**\r
+\r
+> “In 2–3 years, I would evolve CWD into a governed enterprise AI platform rather than a single application. I would keep the Coordinator–Delegator–Worker architecture, but add centralized agent, model, prompt, and tool governance, intelligent model routing, standardized MCP and A2A communication, enterprise RAG, continuous evaluation, and end-to-end observability. The goal would be a reusable platform where new agents and enterprise use cases can be onboarded quickly while maintaining security, reliability, scalability, and governance.”\r
+`,code:``}];function mm(){return(0,M.jsx)($,{data:pm,title:`CWD Senior/Principal Architect Questions Cookbook`,subtitle:`Redesign, scaling, platformization, standards and target architecture`,icon:`🏛️`,patternLabel:`Questions`})}var hm=[{id:`001-explain-the-complete-aws-architecture-for-cwd`,category:`AWS Architecture`,title:`Explain the complete AWS architecture for CWD.`,difficulty:`Advanced`,time:`~20 min`,concept:`For your **CWD (Coordinator → Delegators → Workers)** project, I would explain the AWS architecture in an interview as an **enterprise, production-grade multi-agent architecture**, not just as a collection of AWS services.
 
 ## 1. High-level AWS architecture
 
@@ -213477,18 +215902,60 @@ So, **document content/structure extraction** can happen with a document parser/
 
 **Memory:**
 **Extract → Normalize → Enrich → Attach to Chunk → Index**
-`,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:`# How would you maintain document lineage?
+`,code:``},{id:`26-how-would-you-maintain-document-lineage`,category:`Glue + CWD RAG`,title:`How would you maintain document lineage?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you maintain document lineage?
 
-## Short answer
-Maintain lineage with catalogue metadata, chunk-level fields and run identifiers.
+I would maintain a **unique document ID and ingestion metadata** from the original document in S3 all the way to the RAG chunk in OpenSearch.
 
-## Key points
-- Source ID, ingest run ID and hash on every chunk; Glue job run IDs.
-- Catalogue table properties; Lake Formation or DataZone lineage where available.
-- A manifest table linking documents to chunks.
+\`\`\`text
+S3 Document
+   ↓
+document_id
+   ↓
+Glue ETL
+   ↓
+chunk_id + metadata
+   ↓
+Embedding
+   ↓
+OpenSearch
+   ↓
+RAG Response / Citation
+\`\`\`
 
-## CWD context
-A citation should trace chunk → document → source system.
+### Metadata I would maintain
+
+\`\`\`text
+document_id
+source_system
+source_path
+file_name
+version
+ingestion_timestamp
+last_modified_timestamp
+chunk_id
+page_number
+schema_version
+processing_job_id
+\`\`\`
+
+For example:
+
+\`\`\`text
+document_id = DOC-123
+version     = 3
+chunk_id    = DOC-123-C07
+source      = SharePoint
+page        = 12
+\`\`\`
+
+So if the LLM returns information from that chunk, we can trace it back to the **exact source document and version**.
+
+### Interview answer
+
+> “I would maintain end-to-end lineage using a unique document ID, version, source location, ingestion timestamp, processing job ID, and chunk ID. These identifiers would travel from S3 through Glue preprocessing and OpenSearch indexing. This allows us to trace any RAG result back to the exact source document and version.”
+
+**Memory:**
+**Document ID → Version → Chunk ID → Source → RAG Citation**
 `,code:``},{id:`27-how-would-you-identify-the-source-system-for-each-document`,category:`Glue + CWD RAG`,title:`How would you identify the source system for each document?`,difficulty:`Advanced`,time:`~15 min`,concept:`## How would you identify the source system for each document?
 
 I would assign a **source_system metadata field during ingestion** based on the ingestion connection/path.
@@ -221137,4 +223604,705 @@ Bicep is Azure-native infrastructure as code; Terraform is multi-cloud with a la
 
 ## CWD context
 Consistency across the team matters more than the tool.
-`,code:``}];function Ph(){return(0,M.jsx)($,{data:Nh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Fh=[{id:`001-what-is-an-array`,category:`Arrays / Lists`,title:`What is an array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`002-what-is-the-difference-between-an-array-and-a-python-list`,category:`Arrays / Lists`,title:`What is the difference between an array and a Python list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`003-how-are-arrays-stored-in-memory`,category:`Arrays / Lists`,title:`How are arrays stored in memory?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`004-what-is-random-access`,category:`Arrays / Lists`,title:`What is random access?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`005-what-is-the-time-complexity-of-accessing-arr-i`,category:`Arrays / Lists`,title:"What is the time complexity of accessing `arr[i]`?",difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`006-what-is-the-time-complexity-of-searching-an-unsorted-array`,category:`Arrays / Lists`,title:`What is the time complexity of searching an unsorted array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`007-what-is-the-time-complexity-of-inserting-at-the-beginning`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the beginning?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`008-what-is-the-time-complexity-of-inserting-at-the-end`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the end?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`009-what-is-the-difference-between-static-and-dynamic-arrays`,category:`Arrays / Lists`,title:`What is the difference between static and dynamic arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`010-what-are-the-advantages-and-disadvantages-of-arrays`,category:`Arrays / Lists`,title:`What are the advantages and disadvantages of arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ih(){return(0,M.jsx)($,{data:Fh,title:`Arrays / Lists Cookbook`,subtitle:`Fundamentals and theory questions on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var Lh=[{id:`011-find-the-maximum-element`,category:`Arrays / Lists`,title:`Find the maximum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`012-find-the-minimum-element`,category:`Arrays / Lists`,title:`Find the minimum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`013-find-the-second-largest-element`,category:`Arrays / Lists`,title:`Find the second-largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`014-reverse-an-array`,category:`Arrays / Lists`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`015-remove-duplicates-from-an-array`,category:`Arrays / Lists`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`016-find-duplicate-elements`,category:`Arrays / Lists`,title:`Find duplicate elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`017-find-the-missing-number`,category:`Arrays / Lists`,title:`Find the missing number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`018-find-the-frequency-of-elements`,category:`Arrays / Lists`,title:`Find the frequency of elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`019-move-all-zeros-to-the-end`,category:`Arrays / Lists`,title:`Move all zeros to the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`020-check-whether-an-array-is-sorted`,category:`Arrays / Lists`,title:`Check whether an array is sorted.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`021-rotate-an-array-by-k-positions`,category:`Arrays / Lists`,title:`Rotate an array by K positions.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`022-find-the-intersection-of-two-arrays`,category:`Arrays / Lists`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`023-find-the-union-of-two-arrays`,category:`Arrays / Lists`,title:`Find the union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`024-find-the-first-repeating-element`,category:`Arrays / Lists`,title:`Find the first repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`025-find-the-first-non-repeating-element`,category:`Arrays / Lists`,title:`Find the first non-repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`026-find-all-pairs-whose-sum-equals-k`,category:`Arrays / Lists`,title:`Find all pairs whose sum equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`027-find-the-majority-element`,category:`Arrays / Lists`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`028-find-the-maximum-subarray-sum`,category:`Arrays / Lists`,title:`Find the maximum subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`029-find-the-maximum-product-subarray`,category:`Arrays / Lists`,title:`Find the maximum product subarray.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`030-find-the-longest-consecutive-sequence`,category:`Arrays / Lists`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rh(){return(0,M.jsx)($,{data:Lh,title:`Arrays / Lists Cookbook`,subtitle:`Coding practice problems on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var zh=[{id:`031-what-is-a-string`,category:`Strings`,title:`What is a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`032-are-python-strings-mutable-or-immutable`,category:`Strings`,title:`Are Python strings mutable or immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`033-why-are-strings-immutable`,category:`Strings`,title:`Why are strings immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`034-what-is-the-time-complexity-of-string-concatenation`,category:`Strings`,title:`What is the time complexity of string concatenation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`035-difference-between-string-list-and-tuple`,category:`Strings`,title:`Difference between string, list, and tuple?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`036-how-do-you-reverse-a-string`,category:`Strings`,title:`How do you reverse a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`037-how-do-you-iterate-through-a-string`,category:`Strings`,title:`How do you iterate through a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bh(){return(0,M.jsx)($,{data:zh,title:`Strings Cookbook`,subtitle:`Fundamentals and theory questions on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Vh=[{id:`038-reverse-a-string`,category:`Strings`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`039-check-whether-a-string-is-a-palindrome`,category:`Strings`,title:`Check whether a string is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`040-check-whether-two-strings-are-anagrams`,category:`Strings`,title:`Check whether two strings are anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`041-count-character-frequencies`,category:`Strings`,title:`Count character frequencies.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`042-find-the-first-non-repeating-character`,category:`Strings`,title:`Find the first non-repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`043-find-the-first-repeating-character`,category:`Strings`,title:`Find the first repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`044-remove-duplicate-characters`,category:`Strings`,title:`Remove duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`045-find-duplicate-characters`,category:`Strings`,title:`Find duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`046-reverse-words-in-a-sentence`,category:`Strings`,title:`Reverse words in a sentence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`047-find-the-longest-word`,category:`Strings`,title:`Find the longest word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`048-count-vowels-and-consonants`,category:`Strings`,title:`Count vowels and consonants.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`049-check-whether-one-string-is-a-rotation-of-another`,category:`Strings`,title:`Check whether one string is a rotation of another.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`050-find-all-occurrences-of-a-substring`,category:`Strings`,title:`Find all occurrences of a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`051-implement-string-compression`,category:`Strings`,title:`Implement string compression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`052-find-the-longest-common-prefix`,category:`Strings`,title:`Find the longest common prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`053-find-the-longest-substring-without-repeating-characters`,category:`Strings`,title:`Find the longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`054-find-the-longest-palindromic-substring`,category:`Strings`,title:`Find the longest palindromic substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`055-group-anagrams`,category:`Strings`,title:`Group anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`056-minimum-window-substring`,category:`Strings`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hh(){return(0,M.jsx)($,{data:Vh,title:`Strings Cookbook`,subtitle:`Coding practice problems on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Uh=[{id:`057-what-is-a-hash-table`,category:`Hash Table / Dictionary`,title:`What is a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`058-how-does-a-hash-table-work`,category:`Hash Table / Dictionary`,title:`How does a hash table work?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`059-what-is-hashing`,category:`Hash Table / Dictionary`,title:`What is hashing?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`060-what-is-a-hash-function`,category:`Hash Table / Dictionary`,title:`What is a hash function?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`061-what-is-a-hash-collision`,category:`Hash Table / Dictionary`,title:`What is a hash collision?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`062-how-are-collisions-handled`,category:`Hash Table / Dictionary`,title:`How are collisions handled?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`063-what-is-the-average-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`064-what-is-the-worst-case-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the worst-case lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`065-why-is-a-dictionary-generally-o-1-for-lookup`,category:`Hash Table / Dictionary`,title:`Why is a dictionary generally O(1) for lookup?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`066-difference-between-dictionary-and-list`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`067-difference-between-dictionary-and-set`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`068-what-makes-an-object-hashable-in-python`,category:`Hash Table / Dictionary`,title:`What makes an object hashable in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wh(){return(0,M.jsx)($,{data:Uh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Fundamentals and theory questions on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var Gh=[{id:`069-count-frequencies-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Count frequencies using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`070-find-duplicates-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Find duplicates using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`071-two-sum`,category:`Hash Table / Dictionary`,title:`Two Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`072-group-anagrams`,category:`Hash Table / Dictionary`,title:`Group Anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`073-first-unique-character`,category:`Hash Table / Dictionary`,title:`First Unique Character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`074-find-common-elements-between-arrays`,category:`Hash Table / Dictionary`,title:`Find common elements between arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`075-find-the-intersection-of-two-arrays`,category:`Hash Table / Dictionary`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`076-find-elements-occurring-more-than-once`,category:`Hash Table / Dictionary`,title:`Find elements occurring more than once.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`077-find-the-majority-element`,category:`Hash Table / Dictionary`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`078-find-the-longest-consecutive-sequence`,category:`Hash Table / Dictionary`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`079-find-subarray-with-sum-k`,category:`Hash Table / Dictionary`,title:`Find subarray with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`080-count-subarrays-with-sum-k`,category:`Hash Table / Dictionary`,title:`Count subarrays with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`081-find-pairs-with-a-given-difference`,category:`Hash Table / Dictionary`,title:`Find pairs with a given difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`082-find-the-longest-substring-with-k-distinct-characters`,category:`Hash Table / Dictionary`,title:`Find the longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`083-implement-a-simple-hash-table`,category:`Hash Table / Dictionary`,title:`Implement a simple hash table.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`084-design-an-lru-cache`,category:`Hash Table / Dictionary`,title:`Design an LRU cache.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kh(){return(0,M.jsx)($,{data:Gh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Coding practice problems on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var qh=[{id:`085-what-is-a-set`,category:`Set`,title:`What is a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`086-why-does-a-set-not-contain-duplicates`,category:`Set`,title:`Why does a set not contain duplicates?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`087-how-is-a-set-implemented-internally`,category:`Set`,title:`How is a set implemented internally?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`088-set-vs-list`,category:`Set`,title:`Set vs list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`089-set-vs-dictionary`,category:`Set`,title:`Set vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`090-what-is-the-average-lookup-complexity`,category:`Set`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`091-when-should-you-use-a-set`,category:`Set`,title:`When should you use a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jh(){return(0,M.jsx)($,{data:qh,title:`Set Cookbook`,subtitle:`Fundamentals and theory questions on Set`,icon:`🎯`,patternLabel:`Questions`})}var Yh=[{id:`092-remove-duplicates-from-an-array`,category:`Set`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`093-find-intersection-of-two-arrays`,category:`Set`,title:`Find intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`094-find-union-of-two-arrays`,category:`Set`,title:`Find union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`095-find-difference-between-two-arrays`,category:`Set`,title:`Find difference between two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`096-find-elements-appearing-in-both-arrays`,category:`Set`,title:`Find elements appearing in both arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`097-find-missing-elements`,category:`Set`,title:`Find missing elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`098-find-duplicate-values`,category:`Set`,title:`Find duplicate values.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`099-determine-whether-two-arrays-contain-the-same-elements`,category:`Set`,title:`Determine whether two arrays contain the same elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`100-find-common-characters-between-strings`,category:`Set`,title:`Find common characters between strings.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xh(){return(0,M.jsx)($,{data:Yh,title:`Set Cookbook`,subtitle:`Coding practice problems on Set`,icon:`🎯`,patternLabel:`Questions`})}var Zh=[{id:`101-what-is-a-linked-list`,category:`Linked List`,title:`What is a linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`102-array-vs-linked-list`,category:`Linked List`,title:`Array vs linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`103-singly-vs-doubly-linked-list`,category:`Linked List`,title:`Singly vs doubly linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`104-what-is-a-node`,category:`Linked List`,title:`What is a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`105-what-is-the-head`,category:`Linked List`,title:`What is the head?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`106-what-is-the-tail`,category:`Linked List`,title:`What is the tail?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`107-why-does-a-linked-list-require-extra-memory`,category:`Linked List`,title:`Why does a linked list require extra memory?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`108-what-is-the-complexity-of-accessing-an-element`,category:`Linked List`,title:`What is the complexity of accessing an element?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`109-what-is-the-complexity-of-insertion`,category:`Linked List`,title:`What is the complexity of insertion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`110-what-is-the-complexity-of-deletion`,category:`Linked List`,title:`What is the complexity of deletion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`111-when-would-you-choose-a-linked-list-over-an-array`,category:`Linked List`,title:`When would you choose a linked list over an array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qh(){return(0,M.jsx)($,{data:Zh,title:`Linked List Cookbook`,subtitle:`Fundamentals and theory questions on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var $h=[{id:`112-create-a-singly-linked-list`,category:`Linked List`,title:`Create a singly linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`113-insert-at-the-beginning`,category:`Linked List`,title:`Insert at the beginning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`114-insert-at-the-end`,category:`Linked List`,title:`Insert at the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`115-insert-at-a-specific-position`,category:`Linked List`,title:`Insert at a specific position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`116-delete-a-node`,category:`Linked List`,title:`Delete a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`117-search-for-a-node`,category:`Linked List`,title:`Search for a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`118-reverse-a-linked-list`,category:`Linked List`,title:`Reverse a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`119-find-the-length`,category:`Linked List`,title:`Find the length.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`120-find-the-middle-node`,category:`Linked List`,title:`Find the middle node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`121-detect-a-cycle`,category:`Linked List`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`122-find-the-start-of-a-cycle`,category:`Linked List`,title:`Find the start of a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`123-remove-a-cycle`,category:`Linked List`,title:`Remove a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`124-merge-two-sorted-linked-lists`,category:`Linked List`,title:`Merge two sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`125-remove-duplicates`,category:`Linked List`,title:`Remove duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`126-remove-the-nth-node-from-the-end`,category:`Linked List`,title:`Remove the Nth node from the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`127-find-the-intersection-of-two-linked-lists`,category:`Linked List`,title:`Find the intersection of two linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`128-check-whether-a-linked-list-is-a-palindrome`,category:`Linked List`,title:`Check whether a linked list is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`129-reverse-nodes-in-groups-of-k`,category:`Linked List`,title:`Reverse nodes in groups of K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`130-sort-a-linked-list`,category:`Linked List`,title:`Sort a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`131-copy-a-linked-list-with-random-pointers`,category:`Linked List`,title:`Copy a linked list with random pointers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function eg(){return(0,M.jsx)($,{data:$h,title:`Linked List Cookbook`,subtitle:`Coding practice problems on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var tg=[{id:`132-what-is-a-stack`,category:`Stack`,title:`What is a stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`133-what-is-lifo`,category:`Stack`,title:`What is LIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`134-stack-vs-queue`,category:`Stack`,title:`Stack vs queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`135-what-are-stack-operations`,category:`Stack`,title:`What are stack operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`136-what-is-push`,category:`Stack`,title:`What is push?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`137-what-is-pop`,category:`Stack`,title:`What is pop?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`138-what-is-peek`,category:`Stack`,title:`What is peek?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`139-what-is-stack-overflow`,category:`Stack`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`140-what-is-stack-underflow`,category:`Stack`,title:`What is stack underflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`141-how-can-you-implement-a-stack-in-python`,category:`Stack`,title:`How can you implement a stack in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ng(){return(0,M.jsx)($,{data:tg,title:`Stack Cookbook`,subtitle:`Fundamentals and theory questions on Stack`,icon:`📚`,patternLabel:`Questions`})}var rg=[{id:`142-implement-stack-using-a-list`,category:`Stack`,title:`Implement stack using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`143-implement-stack-using-a-linked-list`,category:`Stack`,title:`Implement stack using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`144-implement-two-stacks-in-one-array`,category:`Stack`,title:`Implement two stacks in one array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`145-reverse-a-string-using-a-stack`,category:`Stack`,title:`Reverse a string using a stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`146-check-balanced-parentheses`,category:`Stack`,title:`Check balanced parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`147-valid-parentheses`,category:`Stack`,title:`Valid Parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`148-evaluate-postfix-expression`,category:`Stack`,title:`Evaluate postfix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`149-evaluate-prefix-expression`,category:`Stack`,title:`Evaluate prefix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`150-convert-infix-to-postfix`,category:`Stack`,title:`Convert infix to postfix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`151-min-stack`,category:`Stack`,title:`Min Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`152-max-stack`,category:`Stack`,title:`Max Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`153-next-greater-element`,category:`Stack`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`154-next-smaller-element`,category:`Stack`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`155-daily-temperatures`,category:`Stack`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`156-largest-rectangle-in-histogram`,category:`Stack`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`157-remove-adjacent-duplicates`,category:`Stack`,title:`Remove adjacent duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`158-decode-a-string`,category:`Stack`,title:`Decode a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function ig(){return(0,M.jsx)($,{data:rg,title:`Stack Cookbook`,subtitle:`Coding practice problems on Stack`,icon:`📚`,patternLabel:`Questions`})}var ag=[{id:`159-what-is-a-queue`,category:`Queue`,title:`What is a queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`160-what-is-fifo`,category:`Queue`,title:`What is FIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`161-queue-vs-stack`,category:`Queue`,title:`Queue vs stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`162-what-are-enqueue-and-dequeue`,category:`Queue`,title:`What are enqueue and dequeue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`163-what-is-a-circular-queue`,category:`Queue`,title:`What is a circular queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`164-what-is-a-deque`,category:`Queue`,title:`What is a deque?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`165-why-is-collections-deque-preferred-for-queues-in-python`,category:`Queue`,title:`Why is collections.deque preferred for queues in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`166-what-is-a-priority-queue`,category:`Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function og(){return(0,M.jsx)($,{data:ag,title:`Queue Cookbook`,subtitle:`Fundamentals and theory questions on Queue`,icon:`🚶`,patternLabel:`Questions`})}var sg=[{id:`167-implement-a-queue-using-a-list`,category:`Queue`,title:`Implement a queue using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`168-implement-a-queue-using-deque`,category:`Queue`,title:`Implement a queue using deque.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`169-implement-a-queue-using-a-linked-list`,category:`Queue`,title:`Implement a queue using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`170-implement-a-queue-using-two-stacks`,category:`Queue`,title:`Implement a queue using two stacks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`171-implement-a-stack-using-two-queues`,category:`Queue`,title:`Implement a stack using two queues.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`172-implement-a-circular-queue`,category:`Queue`,title:`Implement a circular queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`173-generate-binary-numbers-using-a-queue`,category:`Queue`,title:`Generate binary numbers using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`174-first-non-repeating-character-in-a-stream`,category:`Queue`,title:`First non-repeating character in a stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`175-sliding-window-maximum`,category:`Queue`,title:`Sliding window maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`176-bfs-using-a-queue`,category:`Queue`,title:`BFS using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`177-task-scheduling-using-a-queue`,category:`Queue`,title:`Task scheduling using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function cg(){return(0,M.jsx)($,{data:sg,title:`Queue Cookbook`,subtitle:`Coding practice problems on Queue`,icon:`🚶`,patternLabel:`Questions`})}var lg=[{id:`178-what-is-a-heap`,category:`Heap / Priority Queue`,title:`What is a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`179-what-is-a-min-heap`,category:`Heap / Priority Queue`,title:`What is a min heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`180-what-is-a-max-heap`,category:`Heap / Priority Queue`,title:`What is a max heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`181-what-is-the-heap-property`,category:`Heap / Priority Queue`,title:`What is the heap property?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`182-heap-vs-bst`,category:`Heap / Priority Queue`,title:`Heap vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`183-what-is-a-priority-queue`,category:`Heap / Priority Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`184-what-is-the-complexity-of-inserting-into-a-heap`,category:`Heap / Priority Queue`,title:`What is the complexity of inserting into a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`185-what-is-the-complexity-of-removing-the-minimum-maximum`,category:`Heap / Priority Queue`,title:`What is the complexity of removing the minimum/maximum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`186-what-is-heapify`,category:`Heap / Priority Queue`,title:`What is heapify?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`187-what-is-heap-sort`,category:`Heap / Priority Queue`,title:`What is heap sort?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ug(){return(0,M.jsx)($,{data:lg,title:`Heap / Priority Queue Cookbook`,subtitle:`Fundamentals and theory questions on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var dg=[{id:`188-implement-a-min-heap`,category:`Heap / Priority Queue`,title:`Implement a min heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`189-implement-a-max-heap`,category:`Heap / Priority Queue`,title:`Implement a max heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`190-find-the-kth-largest-element`,category:`Heap / Priority Queue`,title:`Find the Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`191-find-the-kth-smallest-element`,category:`Heap / Priority Queue`,title:`Find the Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`192-find-top-k-frequent-elements`,category:`Heap / Priority Queue`,title:`Find top K frequent elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`193-find-k-closest-points`,category:`Heap / Priority Queue`,title:`Find K closest points.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`194-merge-k-sorted-arrays`,category:`Heap / Priority Queue`,title:`Merge K sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`195-merge-k-sorted-linked-lists`,category:`Heap / Priority Queue`,title:`Merge K sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`196-find-median-from-a-data-stream`,category:`Heap / Priority Queue`,title:`Find median from a data stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`197-find-the-top-k-largest-elements`,category:`Heap / Priority Queue`,title:`Find the top K largest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`198-find-the-top-k-smallest-elements`,category:`Heap / Priority Queue`,title:`Find the top K smallest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`199-task-scheduler`,category:`Heap / Priority Queue`,title:`Task scheduler.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`200-meeting-room-scheduling-using-a-heap`,category:`Heap / Priority Queue`,title:`Meeting room scheduling using a heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function fg(){return(0,M.jsx)($,{data:dg,title:`Heap / Priority Queue Cookbook`,subtitle:`Coding practice problems on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var pg=[{id:`201-what-is-a-tree`,category:`Trees`,title:`What is a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`202-what-is-a-binary-tree`,category:`Trees`,title:`What is a binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`203-what-is-a-root`,category:`Trees`,title:`What is a root?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`204-what-is-a-leaf`,category:`Trees`,title:`What is a leaf?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`205-what-is-the-height-of-a-tree`,category:`Trees`,title:`What is the height of a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`206-what-is-the-depth-of-a-node`,category:`Trees`,title:`What is the depth of a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`207-what-is-a-balanced-tree`,category:`Trees`,title:`What is a balanced tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`208-what-is-a-full-binary-tree`,category:`Trees`,title:`What is a full binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`209-what-is-a-complete-binary-tree`,category:`Trees`,title:`What is a complete binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`210-what-is-a-perfect-binary-tree`,category:`Trees`,title:`What is a perfect binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`211-binary-tree-vs-binary-search-tree`,category:`Trees`,title:`Binary tree vs binary search tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`212-what-is-preorder-traversal`,category:`Trees`,title:`What is preorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`213-what-is-inorder-traversal`,category:`Trees`,title:`What is inorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`214-what-is-postorder-traversal`,category:`Trees`,title:`What is postorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`215-what-is-level-order-traversal`,category:`Trees`,title:`What is level-order traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`216-recursive-vs-iterative-traversal`,category:`Trees`,title:`Recursive vs iterative traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function mg(){return(0,M.jsx)($,{data:pg,title:`Trees Cookbook`,subtitle:`Fundamentals and theory questions on Trees`,icon:`🌳`,patternLabel:`Questions`})}var hg=[{id:`217-implement-preorder-traversal`,category:`Trees`,title:`Implement preorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`218-implement-inorder-traversal`,category:`Trees`,title:`Implement inorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`219-implement-postorder-traversal`,category:`Trees`,title:`Implement postorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`220-implement-level-order-traversal`,category:`Trees`,title:`Implement level-order traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`221-find-tree-height`,category:`Trees`,title:`Find tree height.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`222-find-maximum-depth`,category:`Trees`,title:`Find maximum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`223-find-minimum-depth`,category:`Trees`,title:`Find minimum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`224-count-nodes`,category:`Trees`,title:`Count nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`225-count-leaf-nodes`,category:`Trees`,title:`Count leaf nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`226-find-maximum-value`,category:`Trees`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`227-check-whether-two-trees-are-identical`,category:`Trees`,title:`Check whether two trees are identical.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`228-check-whether-a-tree-is-symmetric`,category:`Trees`,title:`Check whether a tree is symmetric.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`229-invert-a-binary-tree`,category:`Trees`,title:`Invert a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`230-find-diameter-of-a-binary-tree`,category:`Trees`,title:`Find diameter of a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`231-find-maximum-path-sum`,category:`Trees`,title:`Find maximum path sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`232-find-lowest-common-ancestor`,category:`Trees`,title:`Find lowest common ancestor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`233-check-whether-a-tree-is-balanced`,category:`Trees`,title:`Check whether a tree is balanced.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`234-serialize-and-deserialize-a-binary-tree`,category:`Trees`,title:`Serialize and deserialize a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function gg(){return(0,M.jsx)($,{data:hg,title:`Trees Cookbook`,subtitle:`Coding practice problems on Trees`,icon:`🌳`,patternLabel:`Questions`})}var _g=[{id:`235-what-is-a-bst`,category:`Binary Search Tree (BST)`,title:`What is a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`236-what-property-makes-a-tree-a-bst`,category:`Binary Search Tree (BST)`,title:`What property makes a tree a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`237-bst-vs-binary-tree`,category:`Binary Search Tree (BST)`,title:`BST vs binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`238-average-search-complexity`,category:`Binary Search Tree (BST)`,title:`Average search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`239-worst-case-search-complexity`,category:`Binary Search Tree (BST)`,title:`Worst-case search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`240-how-do-you-insert-into-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you insert into a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`241-how-do-you-delete-from-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you delete from a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`242-what-are-the-three-cases-when-deleting-a-node`,category:`Binary Search Tree (BST)`,title:`What are the three cases when deleting a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`243-what-is-an-inorder-successor`,category:`Binary Search Tree (BST)`,title:`What is an inorder successor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`244-what-is-an-inorder-predecessor`,category:`Binary Search Tree (BST)`,title:`What is an inorder predecessor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function vg(){return(0,M.jsx)($,{data:_g,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Fundamentals and theory questions on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var yg=[{id:`245-search-in-bst`,category:`Binary Search Tree (BST)`,title:`Search in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`246-insert-into-bst`,category:`Binary Search Tree (BST)`,title:`Insert into BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`247-delete-from-bst`,category:`Binary Search Tree (BST)`,title:`Delete from BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`248-validate-a-bst`,category:`Binary Search Tree (BST)`,title:`Validate a BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`249-find-minimum-value`,category:`Binary Search Tree (BST)`,title:`Find minimum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`250-find-maximum-value`,category:`Binary Search Tree (BST)`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`251-find-kth-smallest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`252-find-kth-largest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`253-find-lca-in-bst`,category:`Binary Search Tree (BST)`,title:`Find LCA in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`254-find-inorder-successor`,category:`Binary Search Tree (BST)`,title:`Find inorder successor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`255-convert-sorted-array-to-bst`,category:`Binary Search Tree (BST)`,title:`Convert sorted array to BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`256-convert-bst-to-sorted-array`,category:`Binary Search Tree (BST)`,title:`Convert BST to sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`257-find-range-sum-in-bst`,category:`Binary Search Tree (BST)`,title:`Find range sum in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function bg(){return(0,M.jsx)($,{data:yg,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Coding practice problems on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var xg=[{id:`258-what-is-a-trie`,category:`Trie`,title:`What is a Trie?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`259-why-use-a-trie-instead-of-a-hash-table`,category:`Trie`,title:`Why use a Trie instead of a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`260-what-is-prefix-searching`,category:`Trie`,title:`What is prefix searching?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`261-what-is-autocomplete`,category:`Trie`,title:`What is autocomplete?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`262-how-is-a-trie-structured`,category:`Trie`,title:`How is a Trie structured?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`263-what-is-the-complexity-of-trie-search`,category:`Trie`,title:`What is the complexity of Trie search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`264-trie-vs-bst`,category:`Trie`,title:`Trie vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`265-trie-vs-dictionary`,category:`Trie`,title:`Trie vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Sg(){return(0,M.jsx)($,{data:xg,title:`Trie Cookbook`,subtitle:`Fundamentals and theory questions on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Cg=[{id:`266-implement-a-trie`,category:`Trie`,title:`Implement a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`267-insert-a-word`,category:`Trie`,title:`Insert a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`268-search-for-a-word`,category:`Trie`,title:`Search for a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`269-delete-a-word`,category:`Trie`,title:`Delete a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`270-check-whether-a-prefix-exists`,category:`Trie`,title:`Check whether a prefix exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`271-implement-autocomplete`,category:`Trie`,title:`Implement autocomplete.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`272-find-words-with-a-given-prefix`,category:`Trie`,title:`Find words with a given prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`273-word-search`,category:`Trie`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`274-word-search-ii`,category:`Trie`,title:`Word Search II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`275-replace-words-using-a-trie`,category:`Trie`,title:`Replace words using a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`276-implement-a-dictionary-using-trie`,category:`Trie`,title:`Implement a dictionary using Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function wg(){return(0,M.jsx)($,{data:Cg,title:`Trie Cookbook`,subtitle:`Coding practice problems on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Tg=[{id:`277-what-is-a-graph`,category:`Graphs`,title:`What is a graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`278-what-is-a-vertex`,category:`Graphs`,title:`What is a vertex?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`279-what-is-an-edge`,category:`Graphs`,title:`What is an edge?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`280-directed-vs-undirected-graph`,category:`Graphs`,title:`Directed vs undirected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`281-weighted-vs-unweighted-graph`,category:`Graphs`,title:`Weighted vs unweighted graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`282-what-is-a-connected-graph`,category:`Graphs`,title:`What is a connected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`283-what-is-a-disconnected-graph`,category:`Graphs`,title:`What is a disconnected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`284-what-is-a-cycle`,category:`Graphs`,title:`What is a cycle?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`285-what-is-a-dag`,category:`Graphs`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`286-adjacency-list-vs-adjacency-matrix`,category:`Graphs`,title:`Adjacency list vs adjacency matrix?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`287-when-would-you-use-each-representation`,category:`Graphs`,title:`When would you use each representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Eg(){return(0,M.jsx)($,{data:Tg,title:`Graphs Cookbook`,subtitle:`Fundamentals and theory questions on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var Dg=[{id:`288-implement-adjacency-list`,category:`Graphs`,title:`Implement adjacency list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`289-implement-adjacency-matrix`,category:`Graphs`,title:`Implement adjacency matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`290-bfs-traversal`,category:`Graphs`,title:`BFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`291-dfs-traversal`,category:`Graphs`,title:`DFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`292-count-connected-components`,category:`Graphs`,title:`Count connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`293-find-whether-a-path-exists`,category:`Graphs`,title:`Find whether a path exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`294-detect-a-cycle`,category:`Graphs`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`295-find-all-connected-components`,category:`Graphs`,title:`Find all connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`296-find-shortest-path-in-an-unweighted-graph`,category:`Graphs`,title:`Find shortest path in an unweighted graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`297-clone-a-graph`,category:`Graphs`,title:`Clone a graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`298-number-of-islands`,category:`Graphs`,title:`Number of islands.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`299-flood-fill`,category:`Graphs`,title:`Flood fill.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`300-pacific-atlantic-water-flow`,category:`Graphs`,title:`Pacific Atlantic Water Flow.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Og(){return(0,M.jsx)($,{data:Dg,title:`Graphs Cookbook`,subtitle:`Coding practice problems on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var kg=[{id:`301-what-is-shortest-path`,category:`Graph Algorithms`,title:`What is shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`302-bfs-vs-dfs-for-shortest-path`,category:`Graph Algorithms`,title:`BFS vs DFS for shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`303-what-is-dijkstras-algorithm`,category:`Graph Algorithms`,title:`What is Dijkstra's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`304-when-can-dijkstra-be-used`,category:`Graph Algorithms`,title:`When can Dijkstra be used?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`305-why-doesnt-dijkstra-work-with-negative-edges`,category:`Graph Algorithms`,title:`Why doesn't Dijkstra work with negative edges?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`306-what-is-bellman-ford`,category:`Graph Algorithms`,title:`What is Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`307-dijkstra-vs-bellman-ford`,category:`Graph Algorithms`,title:`Dijkstra vs Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`308-what-is-floyd-warshall`,category:`Graph Algorithms`,title:`What is Floyd-Warshall?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`309-what-is-topological-sorting`,category:`Graph Algorithms`,title:`What is topological sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`310-what-is-a-dag`,category:`Graph Algorithms`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`311-when-is-topological-sorting-useful`,category:`Graph Algorithms`,title:`When is topological sorting useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`312-implement-topological-sort-using-dfs`,category:`Graph Algorithms`,title:`Implement topological sort using DFS.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`313-implement-topological-sort-using-bfs-kahns-algorithm`,category:`Graph Algorithms`,title:`Implement topological sort using BFS/Kahn's algorithm.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`314-course-schedule`,category:`Graph Algorithms`,title:`Course Schedule.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`315-course-schedule-ii`,category:`Graph Algorithms`,title:`Course Schedule II.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`316-detect-cycle-in-directed-graph`,category:`Graph Algorithms`,title:`Detect cycle in directed graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`317-detect-cycle-in-undirected-graph`,category:`Graph Algorithms`,title:`Detect cycle in undirected graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`318-find-shortest-path`,category:`Graph Algorithms`,title:`Find shortest path.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`319-find-minimum-spanning-tree`,category:`Graph Algorithms`,title:`Find minimum spanning tree.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`320-what-is-kruskals-algorithm`,category:`Graph Algorithms`,title:`What is Kruskal's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`321-what-is-prims-algorithm`,category:`Graph Algorithms`,title:`What is Prim's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`322-prim-vs-kruskal`,category:`Graph Algorithms`,title:`Prim vs Kruskal.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ag(){return(0,M.jsx)($,{data:kg,title:`Graph Algorithms Cookbook`,subtitle:`Fundamentals and theory questions on Graph Algorithms`,icon:`🧭`,patternLabel:`Questions`})}var jg=[{id:`323-what-is-union-find`,category:`Union-Find / Disjoint Set`,title:`What is Union-Find?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`324-what-problem-does-union-find-solve`,category:`Union-Find / Disjoint Set`,title:`What problem does Union-Find solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`325-what-are-find-and-union`,category:`Union-Find / Disjoint Set`,title:`What are find() and union()?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`326-what-is-path-compression`,category:`Union-Find / Disjoint Set`,title:`What is path compression?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`327-what-is-union-by-rank`,category:`Union-Find / Disjoint Set`,title:`What is union by rank?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`328-what-is-union-by-size`,category:`Union-Find / Disjoint Set`,title:`What is union by size?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`329-what-is-the-complexity-with-optimizations`,category:`Union-Find / Disjoint Set`,title:`What is the complexity with optimizations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Mg(){return(0,M.jsx)($,{data:jg,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Fundamentals and theory questions on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Ng=[{id:`330-implement-union-find`,category:`Union-Find / Disjoint Set`,title:`Implement Union-Find.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`331-number-of-connected-components`,category:`Union-Find / Disjoint Set`,title:`Number of connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`332-detect-cycle-in-an-undirected-graph`,category:`Union-Find / Disjoint Set`,title:`Detect cycle in an undirected graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`333-number-of-provinces`,category:`Union-Find / Disjoint Set`,title:`Number of provinces.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`334-redundant-connection`,category:`Union-Find / Disjoint Set`,title:`Redundant connection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`335-accounts-merge`,category:`Union-Find / Disjoint Set`,title:`Accounts merge.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`336-network-connectivity`,category:`Union-Find / Disjoint Set`,title:`Network connectivity.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`337-kruskals-minimum-spanning-tree`,category:`Union-Find / Disjoint Set`,title:`Kruskal's minimum spanning tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Pg(){return(0,M.jsx)($,{data:Ng,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Coding practice problems on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Fg=[{id:`338-what-is-recursion`,category:`Recursion`,title:`What is recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`339-what-is-a-base-case`,category:`Recursion`,title:`What is a base case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`340-what-is-a-recursive-case`,category:`Recursion`,title:`What is a recursive case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`341-what-happens-in-the-call-stack`,category:`Recursion`,title:`What happens in the call stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`342-recursion-vs-iteration`,category:`Recursion`,title:`Recursion vs iteration?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`343-what-causes-infinite-recursion`,category:`Recursion`,title:`What causes infinite recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`344-what-is-stack-overflow`,category:`Recursion`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`345-when-should-recursion-be-avoided`,category:`Recursion`,title:`When should recursion be avoided?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ig(){return(0,M.jsx)($,{data:Fg,title:`Recursion Cookbook`,subtitle:`Fundamentals and theory questions on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var Lg=[{id:`346-factorial`,category:`Recursion`,title:`Factorial.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`347-fibonacci`,category:`Recursion`,title:`Fibonacci.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`348-sum-of-numbers`,category:`Recursion`,title:`Sum of numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`349-reverse-a-string-recursively`,category:`Recursion`,title:`Reverse a string recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`350-reverse-an-array-recursively`,category:`Recursion`,title:`Reverse an array recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`351-calculate-power-recursively`,category:`Recursion`,title:`Calculate power recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`352-binary-search-recursively`,category:`Recursion`,title:`Binary search recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`353-tree-traversal-recursively`,category:`Recursion`,title:`Tree traversal recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`354-generate-subsets-recursively`,category:`Recursion`,title:`Generate subsets recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`355-generate-permutations-recursively`,category:`Recursion`,title:`Generate permutations recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`356-solve-tower-of-hanoi`,category:`Recursion`,title:`Solve Tower of Hanoi.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rg(){return(0,M.jsx)($,{data:Lg,title:`Recursion Cookbook`,subtitle:`Coding practice problems on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var zg=[{id:`357-what-is-backtracking`,category:`Backtracking`,title:`What is backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`358-backtracking-vs-recursion`,category:`Backtracking`,title:`Backtracking vs recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`359-what-is-the-decision-tree`,category:`Backtracking`,title:`What is the decision tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`360-when-should-you-use-backtracking`,category:`Backtracking`,title:`When should you use backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`361-what-is-pruning`,category:`Backtracking`,title:`What is pruning?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`362-how-do-you-identify-a-backtracking-problem`,category:`Backtracking`,title:`How do you identify a backtracking problem?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bg(){return(0,M.jsx)($,{data:zg,title:`Backtracking Cookbook`,subtitle:`Fundamentals and theory questions on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Vg=[{id:`363-generate-subsets`,category:`Backtracking`,title:`Generate subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`364-generate-permutations`,category:`Backtracking`,title:`Generate permutations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`365-generate-combinations`,category:`Backtracking`,title:`Generate combinations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`366-combination-sum`,category:`Backtracking`,title:`Combination Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`367-letter-combinations-of-phone-number`,category:`Backtracking`,title:`Letter combinations of phone number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`368-generate-parentheses`,category:`Backtracking`,title:`Generate parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`369-n-queens`,category:`Backtracking`,title:`N-Queens.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`370-sudoku-solver`,category:`Backtracking`,title:`Sudoku Solver.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`371-word-search`,category:`Backtracking`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`372-palindrome-partitioning`,category:`Backtracking`,title:`Palindrome partitioning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`373-rat-in-a-maze`,category:`Backtracking`,title:`Rat in a maze.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`374-partition-into-equal-subsets`,category:`Backtracking`,title:`Partition into equal subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hg(){return(0,M.jsx)($,{data:Vg,title:`Backtracking Cookbook`,subtitle:`Coding practice problems on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Ug=[{id:`375-what-is-sorting`,category:`Sorting`,title:`What is sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`376-why-do-we-sort-data`,category:`Sorting`,title:`Why do we sort data?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`377-stable-vs-unstable-sorting`,category:`Sorting`,title:`Stable vs unstable sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`378-in-place-vs-out-of-place-sorting`,category:`Sorting`,title:`In-place vs out-of-place sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`379-comparison-vs-non-comparison-sorting`,category:`Sorting`,title:`Comparison vs non-comparison sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`380-explain-bubble-sort`,category:`Sorting`,title:`Explain Bubble Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`381-explain-selection-sort`,category:`Sorting`,title:`Explain Selection Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`382-explain-insertion-sort`,category:`Sorting`,title:`Explain Insertion Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`383-explain-merge-sort`,category:`Sorting`,title:`Explain Merge Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`384-explain-quick-sort`,category:`Sorting`,title:`Explain Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`385-explain-heap-sort`,category:`Sorting`,title:`Explain Heap Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`386-explain-counting-sort`,category:`Sorting`,title:`Explain Counting Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`387-explain-radix-sort`,category:`Sorting`,title:`Explain Radix Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`388-explain-bucket-sort`,category:`Sorting`,title:`Explain Bucket Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`389-merge-sort-vs-quick-sort`,category:`Sorting`,title:`Merge Sort vs Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`390-quick-sort-worst-case`,category:`Sorting`,title:`Quick Sort worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`391-why-is-merge-sort-useful-for-linked-lists`,category:`Sorting`,title:`Why is Merge Sort useful for linked lists?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`392-which-sorting-algorithm-is-stable`,category:`Sorting`,title:`Which sorting algorithm is stable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`393-which-algorithms-are-in-place`,category:`Sorting`,title:`Which algorithms are in-place?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`394-what-is-the-best-possible-comparison-based-sorting-complexit`,category:`Sorting`,title:`What is the best possible comparison-based sorting complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`395-pythons-sorting-algorithm-what-does-python-use`,category:`Sorting`,title:`Python's sorting algorithm what does Python use?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wg(){return(0,M.jsx)($,{data:Ug,title:`Sorting Cookbook`,subtitle:`Fundamentals and theory questions on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var Gg=[{id:`396-sort-an-array-of-0s-1s-and-2s`,category:`Sorting`,title:`Sort an array of 0s, 1s, and 2s.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`397-sort-an-almost-sorted-array`,category:`Sorting`,title:`Sort an almost sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`398-merge-overlapping-intervals`,category:`Sorting`,title:`Merge overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`Sorting Cookbook`,subtitle:`Coding practice problems on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var qg=[{id:`399-what-is-linear-search`,category:`Searching`,title:`What is linear search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`400-what-is-binary-search`,category:`Searching`,title:`What is binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`401-what-condition-is-required-for-binary-search`,category:`Searching`,title:`What condition is required for binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`402-binary-search-complexity`,category:`Searching`,title:`Binary search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`403-recursive-vs-iterative-binary-search`,category:`Searching`,title:`Recursive vs iterative binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`404-what-is-search-space`,category:`Searching`,title:`What is search space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Searching Cookbook`,subtitle:`Fundamentals and theory questions on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Yg=[{id:`405-implement-linear-search`,category:`Searching`,title:`Implement linear search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`406-implement-binary-search`,category:`Searching`,title:`Implement binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`407-find-first-occurrence`,category:`Searching`,title:`Find first occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`408-find-last-occurrence`,category:`Searching`,title:`Find last occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`409-find-first-and-last-position`,category:`Searching`,title:`Find first and last position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`410-find-insertion-position`,category:`Searching`,title:`Find insertion position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`411-search-in-rotated-sorted-array`,category:`Searching`,title:`Search in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`412-find-minimum-in-rotated-sorted-array`,category:`Searching`,title:`Find minimum in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`413-find-peak-element`,category:`Searching`,title:`Find peak element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`414-find-square-root-using-binary-search`,category:`Searching`,title:`Find square root using binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`415-find-k-closest-elements`,category:`Searching`,title:`Find K closest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`416-search-a-2d-matrix`,category:`Searching`,title:`Search a 2D matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`417-find-the-smallest-value-satisfying-a-condition`,category:`Searching`,title:`Find the smallest value satisfying a condition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`418-capacity-to-ship-packages`,category:`Searching`,title:`Capacity to Ship Packages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`419-allocate-minimum-pages`,category:`Searching`,title:`Allocate minimum pages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`420-split-array-largest-sum`,category:`Searching`,title:`Split Array Largest Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Searching Cookbook`,subtitle:`Coding practice problems on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Zg=[{id:`421-what-is-prefix-sum`,category:`Prefix Sum`,title:`What is prefix sum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`422-why-use-prefix-sums`,category:`Prefix Sum`,title:`Why use prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`423-what-is-the-complexity-of-building-prefix-sums`,category:`Prefix Sum`,title:`What is the complexity of building prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`424-how-does-prefix-sum-improve-range-queries`,category:`Prefix Sum`,title:`How does prefix sum improve range queries?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`425-prefix-sum-vs-sliding-window`,category:`Prefix Sum`,title:`Prefix sum vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Prefix Sum Cookbook`,subtitle:`Fundamentals and theory questions on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var $g=[{id:`426-build-a-prefix-sum-array`,category:`Prefix Sum`,title:`Build a prefix sum array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`427-range-sum-query`,category:`Prefix Sum`,title:`Range sum query.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`428-find-subarray-sum`,category:`Prefix Sum`,title:`Find subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`429-subarray-sum-equals-k`,category:`Prefix Sum`,title:`Subarray Sum Equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`430-count-subarrays-with-a-given-sum`,category:`Prefix Sum`,title:`Count subarrays with a given sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`431-find-equilibrium-index`,category:`Prefix Sum`,title:`Find equilibrium index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`432-find-pivot-index`,category:`Prefix Sum`,title:`Find pivot index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`433-product-prefix-suffix`,category:`Prefix Sum`,title:`Product prefix/suffix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`434-range-addition`,category:`Prefix Sum`,title:`Range addition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`435-2d-prefix-sum`,category:`Prefix Sum`,title:`2D prefix sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`436-matrix-region-sum`,category:`Prefix Sum`,title:`Matrix region sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`Prefix Sum Cookbook`,subtitle:`Coding practice problems on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var t_=[{id:`437-what-is-sliding-window`,category:`Sliding Window`,title:`What is sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`438-fixed-vs-variable-size-window`,category:`Sliding Window`,title:`Fixed vs variable-size window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`439-when-should-you-use-sliding-window`,category:`Sliding Window`,title:`When should you use sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`440-sliding-window-vs-two-pointers`,category:`Sliding Window`,title:`Sliding window vs two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`Sliding Window Cookbook`,subtitle:`Fundamentals and theory questions on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var r_=[{id:`441-maximum-sum-subarray-of-size-k`,category:`Sliding Window`,title:`Maximum sum subarray of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`442-average-of-subarrays-of-size-k`,category:`Sliding Window`,title:`Average of subarrays of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`443-longest-substring-without-repeating-characters`,category:`Sliding Window`,title:`Longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`444-longest-substring-with-k-distinct-characters`,category:`Sliding Window`,title:`Longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`445-minimum-window-substring`,category:`Sliding Window`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`446-longest-repeating-character-replacement`,category:`Sliding Window`,title:`Longest repeating character replacement.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`447-permutation-in-string`,category:`Sliding Window`,title:`Permutation in string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`448-find-all-anagrams-in-a-string`,category:`Sliding Window`,title:`Find all anagrams in a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`449-minimum-size-subarray-sum`,category:`Sliding Window`,title:`Minimum size subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`450-maximum-number-of-vowels-in-a-substring`,category:`Sliding Window`,title:`Maximum number of vowels in a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`451-sliding-window-maximum`,category:`Sliding Window`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`Sliding Window Cookbook`,subtitle:`Coding practice problems on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var a_=[{id:`452-what-is-the-two-pointer-technique`,category:`Two Pointers`,title:`What is the two-pointer technique?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`453-when-should-you-use-two-pointers`,category:`Two Pointers`,title:`When should you use two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`454-two-pointers-vs-sliding-window`,category:`Two Pointers`,title:`Two pointers vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`455-why-is-sorting-often-useful-with-two-pointers`,category:`Two Pointers`,title:`Why is sorting often useful with two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`Two Pointers Cookbook`,subtitle:`Fundamentals and theory questions on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var s_=[{id:`456-two-sum-in-sorted-array`,category:`Two Pointers`,title:`Two Sum in sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`457-three-sum`,category:`Two Pointers`,title:`Three Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`458-four-sum`,category:`Two Pointers`,title:`Four Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`459-remove-duplicates-from-sorted-array`,category:`Two Pointers`,title:`Remove duplicates from sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`460-move-zeros`,category:`Two Pointers`,title:`Move zeros.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`461-reverse-an-array`,category:`Two Pointers`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`462-reverse-a-string`,category:`Two Pointers`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`463-container-with-most-water`,category:`Two Pointers`,title:`Container With Most Water.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`464-valid-palindrome`,category:`Two Pointers`,title:`Valid palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`465-merge-two-sorted-arrays`,category:`Two Pointers`,title:`Merge two sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`466-partition-array`,category:`Two Pointers`,title:`Partition array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`467-sort-colors`,category:`Two Pointers`,title:`Sort colors.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`468-find-pair-with-target-difference`,category:`Two Pointers`,title:`Find pair with target difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Two Pointers Cookbook`,subtitle:`Coding practice problems on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var l_=[{id:`469-what-is-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`What is a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`470-increasing-vs-decreasing-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Increasing vs decreasing monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`471-why-use-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Why use a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`472-what-problems-can-it-solve`,category:`Monotonic Stack / Queue`,title:`What problems can it solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`473-how-does-it-achieve-o-n`,category:`Monotonic Stack / Queue`,title:`How does it achieve O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Fundamentals and theory questions on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var d_=[{id:`474-next-greater-element`,category:`Monotonic Stack / Queue`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`475-next-smaller-element`,category:`Monotonic Stack / Queue`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`476-previous-greater-element`,category:`Monotonic Stack / Queue`,title:`Previous Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`477-previous-smaller-element`,category:`Monotonic Stack / Queue`,title:`Previous Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`478-daily-temperatures`,category:`Monotonic Stack / Queue`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`479-stock-span`,category:`Monotonic Stack / Queue`,title:`Stock Span.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`480-largest-rectangle-in-histogram`,category:`Monotonic Stack / Queue`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`481-maximal-rectangle`,category:`Monotonic Stack / Queue`,title:`Maximal Rectangle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`482-sliding-window-maximum`,category:`Monotonic Stack / Queue`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`483-remove-k-digits`,category:`Monotonic Stack / Queue`,title:`Remove K digits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`484-sum-of-subarray-minimums`,category:`Monotonic Stack / Queue`,title:`Sum of Subarray Minimums.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Coding practice problems on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var p_=[{id:`485-what-is-an-interval`,category:`Intervals`,title:`What is an interval?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`486-how-do-you-represent-intervals`,category:`Intervals`,title:`How do you represent intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`487-how-do-you-detect-overlapping-intervals`,category:`Intervals`,title:`How do you detect overlapping intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`488-why-do-we-usually-sort-intervals-first`,category:`Intervals`,title:`Why do we usually sort intervals first?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`489-what-is-interval-merging`,category:`Intervals`,title:`What is interval merging?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Intervals Cookbook`,subtitle:`Fundamentals and theory questions on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var h_=[{id:`490-merge-intervals`,category:`Intervals`,title:`Merge intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`491-insert-interval`,category:`Intervals`,title:`Insert interval.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`492-check-overlapping-intervals`,category:`Intervals`,title:`Check overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`493-meeting-rooms`,category:`Intervals`,title:`Meeting Rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`494-meeting-rooms-ii`,category:`Intervals`,title:`Meeting Rooms II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`495-minimum-number-of-meeting-rooms`,category:`Intervals`,title:`Minimum number of meeting rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`496-non-overlapping-intervals`,category:`Intervals`,title:`Non-overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`497-interval-intersection`,category:`Intervals`,title:`Interval intersection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`498-employee-free-time`,category:`Intervals`,title:`Employee free time.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`499-minimum-arrows-to-burst-balloons`,category:`Intervals`,title:`Minimum arrows to burst balloons.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`500-merge-calendar-schedules`,category:`Intervals`,title:`Merge calendar schedules.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Intervals Cookbook`,subtitle:`Coding practice problems on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var __=[{id:`501-what-is-a-bit`,category:`Bit Manipulation`,title:`What is a bit?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`502-what-is-binary-representation`,category:`Bit Manipulation`,title:`What is binary representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`503-what-is-bitwise-and`,category:`Bit Manipulation`,title:`What is bitwise AND?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`504-what-is-bitwise-or`,category:`Bit Manipulation`,title:`What is bitwise OR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`505-what-is-xor`,category:`Bit Manipulation`,title:`What is XOR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`506-what-is-not`,category:`Bit Manipulation`,title:`What is NOT?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`507-what-are-left-and-right-shifts`,category:`Bit Manipulation`,title:`What are left and right shifts?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`508-difference-between-logical-and-arithmetic-shift`,category:`Bit Manipulation`,title:`Difference between logical and arithmetic shift?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`509-what-is-a-bit-mask`,category:`Bit Manipulation`,title:`What is a bit mask?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`510-why-is-xor-useful`,category:`Bit Manipulation`,title:`Why is XOR useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Bit Manipulation Cookbook`,subtitle:`Fundamentals and theory questions on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var y_=[{id:`511-check-whether-a-number-is-even`,category:`Bit Manipulation`,title:`Check whether a number is even.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`512-check-whether-a-number-is-a-power-of-two`,category:`Bit Manipulation`,title:`Check whether a number is a power of two.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`513-count-set-bits`,category:`Bit Manipulation`,title:`Count set bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`514-find-the-single-number`,category:`Bit Manipulation`,title:`Find the single number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`515-find-two-unique-numbers`,category:`Bit Manipulation`,title:`Find two unique numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`516-find-missing-number-using-xor`,category:`Bit Manipulation`,title:`Find missing number using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`517-reverse-bits`,category:`Bit Manipulation`,title:`Reverse bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`518-swap-two-numbers-using-xor`,category:`Bit Manipulation`,title:`Swap two numbers using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`519-find-whether-a-particular-bit-is-set`,category:`Bit Manipulation`,title:`Find whether a particular bit is set.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`520-set-a-bit`,category:`Bit Manipulation`,title:`Set a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`521-clear-a-bit`,category:`Bit Manipulation`,title:`Clear a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`522-toggle-a-bit`,category:`Bit Manipulation`,title:`Toggle a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`523-find-the-lowest-set-bit`,category:`Bit Manipulation`,title:`Find the lowest set bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`524-generate-subsets-using-bit-masks`,category:`Bit Manipulation`,title:`Generate subsets using bit masks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Bit Manipulation Cookbook`,subtitle:`Coding practice problems on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var x_=[{id:`525-what-is-big-o-notation`,category:`Complexity & Analysis`,title:`What is Big-O notation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`526-what-is-time-complexity`,category:`Complexity & Analysis`,title:`What is time complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`527-what-is-space-complexity`,category:`Complexity & Analysis`,title:`What is space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`528-what-is-o-1`,category:`Complexity & Analysis`,title:`What is O(1)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`529-what-is-o-log-n`,category:`Complexity & Analysis`,title:`What is O(log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`530-what-is-o-n`,category:`Complexity & Analysis`,title:`What is O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`531-what-is-o-n-log-n`,category:`Complexity & Analysis`,title:`What is O(n log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`532-what-is-o-n-squared`,category:`Complexity & Analysis`,title:`What is O(n squared)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`533-what-is-o-2-to-the-n`,category:`Complexity & Analysis`,title:`What is O(2 to the n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`534-what-is-o-n-factorial`,category:`Complexity & Analysis`,title:`What is O(n factorial)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`535-big-o-vs-big-theta-vs-big-omega`,category:`Complexity & Analysis`,title:`Big-O vs Big-Theta vs Big-Omega?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`536-best-case-vs-average-case-vs-worst-case`,category:`Complexity & Analysis`,title:`Best case vs average case vs worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`537-how-do-you-calculate-complexity-of-nested-loops`,category:`Complexity & Analysis`,title:`How do you calculate complexity of nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`538-how-do-you-calculate-complexity-of-recursive-algorithms`,category:`Complexity & Analysis`,title:`How do you calculate complexity of recursive algorithms?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`539-what-is-amortized-complexity`,category:`Complexity & Analysis`,title:`What is amortized complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`540-what-is-the-complexity-of-python-list-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python list operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`541-what-is-the-complexity-of-python-dictionary-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python dictionary operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`542-what-is-the-complexity-of-python-set-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python set operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`543-what-is-the-complexity-of-deque-operations`,category:`Complexity & Analysis`,title:`What is the complexity of deque operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`544-what-is-the-tradeoff-between-time-and-space`,category:`Complexity & Analysis`,title:`What is the tradeoff between time and space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`545-how-would-you-optimize-an-o-n-squared-solution`,category:`Complexity & Analysis`,title:`How would you optimize an O(n squared) solution?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`546-how-do-you-identify-unnecessary-nested-loops`,category:`Complexity & Analysis`,title:`How do you identify unnecessary nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`547-how-do-you-reduce-space-complexity`,category:`Complexity & Analysis`,title:`How do you reduce space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`548-how-do-you-analyze-a-solution-during-an-interview`,category:`Complexity & Analysis`,title:`How do you analyze a solution during an interview?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Complexity & Analysis Cookbook`,subtitle:`Fundamentals and theory questions on Complexity & Analysis`,icon:`📐`,patternLabel:`Questions`})}var C_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function w_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}],l=[{name:`01. Arrays / Lists — Concept`,path:`/ds-arrays-lists-concept`},{name:`01. Arrays / Lists — Code`,path:`/ds-arrays-lists-code`},{name:`02. Strings — Concept`,path:`/ds-strings-concept`},{name:`02. Strings — Code`,path:`/ds-strings-code`},{name:`03. Hash Table / Dictionary — Concept`,path:`/ds-hash-table-dictionary-concept`},{name:`03. Hash Table / Dictionary — Code`,path:`/ds-hash-table-dictionary-code`},{name:`04. Set — Concept`,path:`/ds-set-concept`},{name:`04. Set — Code`,path:`/ds-set-code`},{name:`05. Linked List — Concept`,path:`/ds-linked-list-concept`},{name:`05. Linked List — Code`,path:`/ds-linked-list-code`},{name:`06. Stack — Concept`,path:`/ds-stack-concept`},{name:`06. Stack — Code`,path:`/ds-stack-code`},{name:`07. Queue — Concept`,path:`/ds-queue-concept`},{name:`07. Queue — Code`,path:`/ds-queue-code`},{name:`08. Heap / Priority Queue — Concept`,path:`/ds-heap-priority-queue-concept`},{name:`08. Heap / Priority Queue — Code`,path:`/ds-heap-priority-queue-code`},{name:`09. Trees — Concept`,path:`/ds-trees-concept`},{name:`09. Trees — Code`,path:`/ds-trees-code`},{name:`10. Binary Search Tree (BST) — Concept`,path:`/ds-binary-search-tree-bst-concept`},{name:`10. Binary Search Tree (BST) — Code`,path:`/ds-binary-search-tree-bst-code`},{name:`11. Trie — Concept`,path:`/ds-trie-concept`},{name:`11. Trie — Code`,path:`/ds-trie-code`},{name:`12. Graphs — Concept`,path:`/ds-graphs-concept`},{name:`12. Graphs — Code`,path:`/ds-graphs-code`},{name:`13. Graph Algorithms — Concept`,path:`/ds-graph-algorithms-concept`},{name:`14. Union-Find / Disjoint Set — Concept`,path:`/ds-union-find-disjoint-set-concept`},{name:`14. Union-Find / Disjoint Set — Code`,path:`/ds-union-find-disjoint-set-code`},{name:`15. Recursion — Concept`,path:`/ds-recursion-concept`},{name:`15. Recursion — Code`,path:`/ds-recursion-code`},{name:`16. Backtracking — Concept`,path:`/ds-backtracking-concept`},{name:`16. Backtracking — Code`,path:`/ds-backtracking-code`},{name:`17. Sorting — Concept`,path:`/ds-sorting-concept`},{name:`17. Sorting — Code`,path:`/ds-sorting-code`},{name:`18. Searching — Concept`,path:`/ds-searching-concept`},{name:`18. Searching — Code`,path:`/ds-searching-code`},{name:`19. Prefix Sum — Concept`,path:`/ds-prefix-sum-concept`},{name:`19. Prefix Sum — Code`,path:`/ds-prefix-sum-code`},{name:`20. Sliding Window — Concept`,path:`/ds-sliding-window-concept`},{name:`20. Sliding Window — Code`,path:`/ds-sliding-window-code`},{name:`21. Two Pointers — Concept`,path:`/ds-two-pointers-concept`},{name:`21. Two Pointers — Code`,path:`/ds-two-pointers-code`},{name:`22. Monotonic Stack / Queue — Concept`,path:`/ds-monotonic-stack-queue-concept`},{name:`22. Monotonic Stack / Queue — Code`,path:`/ds-monotonic-stack-queue-code`},{name:`23. Intervals — Concept`,path:`/ds-intervals-concept`},{name:`23. Intervals — Code`,path:`/ds-intervals-code`},{name:`24. Bit Manipulation — Concept`,path:`/ds-bit-manipulation-concept`},{name:`24. Bit Manipulation — Code`,path:`/ds-bit-manipulation-code`},{name:`25. Complexity & Analysis — Concept`,path:`/ds-complexity-analysis-concept`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let u=e=>{t(t=>t===e?null:e)},d=()=>{t(null)},f=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>u(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:d,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:C_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(f,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(f,{name:`AgenticAI`,topics:a}),(0,M.jsx)(f,{name:`CWD Project`,topics:o}),(0,M.jsx)(f,{name:`AWS`,topics:s}),(0,M.jsx)(f,{name:`Azure`,topics:c}),(0,M.jsx)(f,{name:`Data Structures`,topics:l})]})]})}function T_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(w_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(cp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(kf,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(jf,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Nf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(op,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(up,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(fp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(Sp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ep,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Op,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(Mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Ip,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Rp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(em,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(nm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(im,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(om,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(um,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(fm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(mm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(gm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(vm,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(Sm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(wm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Em,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Om,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(Mm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Pm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Im,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Rm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(Bm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Wm,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Km,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(Jm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Xm,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)(eh,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(nh,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(ih,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(oh,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(ch,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(uh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(fh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(mh,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(gh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(vh,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(bh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(wh,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Eh,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Oh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(Mh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Ph,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-concept`,element:(0,M.jsx)(Ih,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-code`,element:(0,M.jsx)(Rh,{})}),(0,M.jsx)(j,{path:`/ds-strings-concept`,element:(0,M.jsx)(Bh,{})}),(0,M.jsx)(j,{path:`/ds-strings-code`,element:(0,M.jsx)(Hh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-concept`,element:(0,M.jsx)(Wh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-code`,element:(0,M.jsx)(Kh,{})}),(0,M.jsx)(j,{path:`/ds-set-concept`,element:(0,M.jsx)(Jh,{})}),(0,M.jsx)(j,{path:`/ds-set-code`,element:(0,M.jsx)(Xh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-concept`,element:(0,M.jsx)(Qh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-code`,element:(0,M.jsx)(eg,{})}),(0,M.jsx)(j,{path:`/ds-stack-concept`,element:(0,M.jsx)(ng,{})}),(0,M.jsx)(j,{path:`/ds-stack-code`,element:(0,M.jsx)(ig,{})}),(0,M.jsx)(j,{path:`/ds-queue-concept`,element:(0,M.jsx)(og,{})}),(0,M.jsx)(j,{path:`/ds-queue-code`,element:(0,M.jsx)(cg,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-concept`,element:(0,M.jsx)(ug,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-code`,element:(0,M.jsx)(fg,{})}),(0,M.jsx)(j,{path:`/ds-trees-concept`,element:(0,M.jsx)(mg,{})}),(0,M.jsx)(j,{path:`/ds-trees-code`,element:(0,M.jsx)(gg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-concept`,element:(0,M.jsx)(vg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-code`,element:(0,M.jsx)(bg,{})}),(0,M.jsx)(j,{path:`/ds-trie-concept`,element:(0,M.jsx)(Sg,{})}),(0,M.jsx)(j,{path:`/ds-trie-code`,element:(0,M.jsx)(wg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-concept`,element:(0,M.jsx)(Eg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-code`,element:(0,M.jsx)(Og,{})}),(0,M.jsx)(j,{path:`/ds-graph-algorithms-concept`,element:(0,M.jsx)(Ag,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-concept`,element:(0,M.jsx)(Mg,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-code`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/ds-recursion-concept`,element:(0,M.jsx)(Ig,{})}),(0,M.jsx)(j,{path:`/ds-recursion-code`,element:(0,M.jsx)(Rg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-concept`,element:(0,M.jsx)(Bg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-code`,element:(0,M.jsx)(Hg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-concept`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-code`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/ds-searching-concept`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/ds-searching-code`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-concept`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-code`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-concept`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-code`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-concept`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-code`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-concept`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-code`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-concept`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-code`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-concept`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-code`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/ds-complexity-analysis-concept`,element:(0,M.jsx)(S_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(T_,{})}));
+`,code:``}];function Ph(){return(0,M.jsx)($,{data:Nh,title:`Azure DevOps / CI/CD Cookbook`,subtitle:`CI/CD, prompt and model versioning, deployments, rollbacks and IaC`,icon:`🛠️`,patternLabel:`Questions`})}var Fh=[{id:`001-what-is-an-array`,category:`Arrays / Lists`,title:`What is an array?`,difficulty:`Beginner`,time:`~5 min`,concept:`An **array** is a data structure used to **store multiple values in a single variable**, usually in an ordered sequence.\r
+\r
+### Simple example\r
+\r
+\`\`\`python\r
+numbers = [10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+Here:\r
+\r
+* \`numbers\` → array/list\r
+* \`10, 20, 30, 40, 50\` → elements\r
+* Each element has an **index**\r
+* Index usually starts from **0**\r
+\r
+\`\`\`text\r
+Value:    10    20    30    40    50\r
+Index:     0     1     2     3     4\r
+\`\`\`\r
+\r
+So:\r
+\r
+\`\`\`python\r
+numbers[0]   # 10\r
+numbers[2]   # 30\r
+numbers[4]   # 50\r
+\`\`\`\r
+\r
+### Why do we use arrays?\r
+\r
+Instead of creating separate variables:\r
+\r
+\`\`\`python\r
+num1 = 10\r
+num2 = 20\r
+num3 = 30\r
+num4 = 40\r
+\`\`\`\r
+\r
+we can use:\r
+\r
+\`\`\`python\r
+numbers = [10, 20, 30, 40]\r
+\`\`\`\r
+\r
+This makes it much easier to **store, access, search, and process collections of data**.\r
+\r
+### Common array operations\r
+\r
+| Operation | Example          | Purpose               |\r
+| --------- | ---------------- | --------------------- |\r
+| Access    | \`arr[2]\`         | Get an element        |\r
+| Update    | \`arr[2] = 100\`   | Change an element     |\r
+| Traverse  | \`for x in arr\`   | Visit every element   |\r
+| Search    | \`x in arr\`       | Check if value exists |\r
+| Insert    | \`arr.append(60)\` | Add an element        |\r
+| Delete    | \`arr.remove(30)\` | Remove an element     |\r
+| Length    | \`len(arr)\`       | Number of elements    |\r
+\r
+### Interview definition\r
+\r
+> **An array is a linear data structure that stores elements in an ordered sequence and allows elements to be accessed using an index.**\r
+\r
+One important distinction for interviews: **Python's \`list\` is not exactly the same as a traditional fixed-size array in languages like C/Java**. Python lists are dynamic arrays.\r
+`,code:``},{id:`002-what-is-the-difference-between-an-array-and-a-python-list`,category:`Arrays / Lists`,title:`What is the difference between an array and a Python list?`,difficulty:`Beginner`,time:`~5 min`,concept:`The key point is:\r
+\r
+> **A Python \`list\` is a dynamic, flexible data structure implemented using a dynamic array internally.**\r
+\r
+### Array vs Python List\r
+\r
+| Feature                  | Traditional Array         | Python List                     |\r
+| ------------------------ | ------------------------- | ------------------------------- |\r
+| **Size**                 | Usually fixed             | **Dynamic**                     |\r
+| **Data types**           | Usually same type         | Can contain different types     |\r
+| **Memory**               | Typically contiguous      | Internally uses a dynamic array |\r
+| **Resize**               | Usually difficult/fixed   | Automatically grows/shrinks     |\r
+| **Access by index**      | \`O(1)\`                    | \`O(1)\`                          |\r
+| **Insert at end**        | Depends on implementation | Usually \`O(1)\` amortized        |\r
+| **Insert/delete middle** | \`O(n)\`                    | \`O(n)\`                          |\r
+| **Ease of use**          | More low-level            | Very easy                       |\r
+| **Python example**       | \`array\` module / NumPy    | \`list\`                          |\r
+\r
+### Example\r
+\r
+A traditional typed array might look conceptually like:\r
+\r
+\`\`\`text\r
+int array[5] = {10, 20, 30, 40, 50}\r
+\`\`\`\r
+\r
+It has space for **5 integers**.\r
+\r
+A Python list:\r
+\r
+\`\`\`python\r
+numbers = [10, 20, 30]\r
+numbers.append(40)\r
+numbers.append(50)\r
+\`\`\`\r
+\r
+can grow automatically.\r
+\r
+Python lists can also contain different types:\r
+\r
+\`\`\`python\r
+data = [10, "hello", 3.14, True]\r
+\`\`\`\r
+\r
+### Why is Python list called a dynamic array?\r
+\r
+When you do:\r
+\r
+\`\`\`python\r
+numbers.append(60)\r
+\`\`\`\r
+\r
+Python doesn't require you to manually allocate a larger array. The list implementation manages its storage and may allocate additional capacity when needed.\r
+\r
+So for interviews, remember:\r
+\r
+**Array**\r
+→ ordered collection\r
+→ commonly fixed-size\r
+→ generally same data type\r
+→ direct index access\r
+\r
+**Python List**\r
+→ dynamic array\r
+→ resizable\r
+→ can contain mixed types\r
+→ supports many built-in operations\r
+\r
+### Interview answer\r
+\r
+If the interviewer asks **"What is the difference between an array and a Python list?"**, you can say:\r
+\r
+> "A traditional array generally has a fixed size and stores elements of the same data type. A Python list is a dynamic array that can grow or shrink automatically and can contain elements of different types. Both provide constant-time average indexed access, but Python lists provide much more flexibility and built-in functionality."\r
+`,code:``},{id:`003-how-are-arrays-stored-in-memory`,category:`Arrays / Lists`,title:`How are arrays stored in memory?`,difficulty:`Beginner`,time:`~5 min`,concept:`Arrays are typically stored in **contiguous memory locations**. This is one of the most important concepts for understanding why array index access is **O(1)**.\r
+\r
+### 1. Contiguous memory\r
+\r
+Suppose we have:\r
+\r
+\`\`\`python\r
+arr = [10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+Conceptually, a traditional integer array could be stored like this:\r
+\r
+\`\`\`text\r
+Memory Address\r
+\r
+1000 → 10\r
+1004 → 20\r
+1008 → 30\r
+1012 → 40\r
+1016 → 50\r
+\`\`\`\r
+\r
+If each integer takes **4 bytes**, each element is placed immediately after the previous one.\r
+\r
+\`\`\`text\r
+       4 bytes    4 bytes    4 bytes    4 bytes    4 bytes\r
+      ┌────────┬────────┬────────┬────────┬────────┐\r
+      │   10   │   20   │   30   │   40   │   50   │\r
+      └────────┴────────┴────────┴────────┴────────┘\r
+       1000     1004     1008     1012     1016\r
+\`\`\`\r
+\r
+### 2. How does \`arr[3]\` find 40?\r
+\r
+The computer doesn't need to search through the array.\r
+\r
+It calculates the address:\r
+\r
+\`\`\`text\r
+Address = Base Address + (Index × Element Size)\r
+\`\`\`\r
+\r
+For \`arr[3]\`:\r
+\r
+\`\`\`text\r
+1000 + (3 × 4)\r
+= 1012\r
+\`\`\`\r
+\r
+So it directly goes to address \`1012\` and gets \`40\`.\r
+\r
+That's why:\r
+\r
+\`\`\`python\r
+arr[3]\r
+\`\`\`\r
+\r
+is **O(1)** — constant time.\r
+\r
+---\r
+\r
+### 3. Why is this important?\r
+\r
+Because arrays are contiguous, these operations are typically:\r
+\r
+| Operation             |     Time |\r
+| --------------------- | -------: |\r
+| Access \`arr[i]\`       | **O(1)** |\r
+| Update \`arr[i]\`       | **O(1)** |\r
+| Search unsorted array | **O(n)** |\r
+| Insert at beginning   | **O(n)** |\r
+| Delete from beginning | **O(n)** |\r
+\r
+For example, inserting \`5\` at the beginning:\r
+\r
+\`\`\`text\r
+Before:\r
+[10, 20, 30, 40]\r
+\r
+Insert 5:\r
+\r
+[5, 10, 20, 30, 40]\r
+\`\`\`\r
+\r
+The existing elements may need to be shifted, which takes **O(n)**.\r
+\r
+### Important Python detail\r
+\r
+For **Python lists**, the picture is slightly different.\r
+\r
+A Python list is a **dynamic array of references/pointers**, not necessarily a block containing the actual objects themselves:\r
+\r
+\`\`\`text\r
+Python list\r
+\r
+┌──────┬──────┬──────┬──────┐\r
+│  ────┼──→10 │  ────┼──→20 │ ...\r
+└──────┴──────┴──────┴──────┘\r
+\`\`\`\r
+\r
+The list's internal array stores references to Python objects.\r
+\r
+So when learning for interviews, remember:\r
+\r
+> **Traditional arrays store elements in contiguous memory. Python lists use a contiguous dynamic array internally, containing references to objects.**\r
+\r
+This contiguous-memory concept leads directly to the next important interview topic: **why array insertion/deletion is O(n), while accessing an element is O(1).**\r
+`,code:``},{id:`004-what-is-random-access`,category:`Arrays / Lists`,title:`What is random access?`,difficulty:`Beginner`,time:`~5 min`,concept:`### What is Random Access?\r
+\r
+**Random access** means you can **directly access any element in a data structure using its index**, without having to go through the elements before it.\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+arr = [10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+If you want the 4th element:\r
+\r
+\`\`\`python\r
+arr[3]\r
+\`\`\`\r
+\r
+You get:\r
+\r
+\`\`\`text\r
+40\r
+\`\`\`\r
+\r
+The computer can calculate where element \`3\` is located using:\r
+\r
+\`\`\`text\r
+Address = Base Address + (Index × Element Size)\r
+\`\`\`\r
+\r
+So it doesn't need to read:\r
+\r
+\`\`\`text\r
+10 → 20 → 30 → 40\r
+\`\`\`\r
+\r
+Instead, it can **jump directly to 40**.\r
+\r
+### Why is random access O(1)?\r
+\r
+Because accessing an element by index takes approximately the same amount of time regardless of where the element is.\r
+\r
+\`\`\`text\r
+arr[0]  → direct access\r
+arr[3]  → direct access\r
+arr[100] → direct access\r
+arr[1,000,000] → direct access\r
+\`\`\`\r
+\r
+Therefore:\r
+\r
+> **Random access = O(1) indexed access.**\r
+\r
+### Random access vs sequential access\r
+\r
+| Random Access               | Sequential Access                      |\r
+| --------------------------- | -------------------------------------- |\r
+| Jump directly to an element | Go through elements one by one         |\r
+| Uses an index/address       | Starts from beginning/current position |\r
+| Usually **O(1)** for arrays | Can be **O(n)**                        |\r
+| Example: \`arr[500]\`         | Read element 0 → 1 → 2 → ... → 500     |\r
+\r
+### Interview answer\r
+\r
+> **Random access is the ability to directly access any element using its index without traversing the elements before it. Arrays support random access in O(1) time because their elements are stored in contiguous memory.**\r
+`,code:``},{id:`005-what-is-the-time-complexity-of-accessing-arr-i`,category:`Arrays / Lists`,title:"What is the time complexity of accessing `arr[i]`?",difficulty:`Beginner`,time:`~5 min`,concept:`The time complexity of accessing \`arr[i]\` is:\r
+\r
+# **O(1) — Constant Time**\r
+\r
+### Why?\r
+\r
+Arrays support **random access**. The computer can calculate the memory address of element \`i\` directly:\r
+\r
+\`\`\`text\r
+Address = Base Address + (i × Element Size)\r
+\`\`\`\r
+\r
+For example:\r
+\r
+\`\`\`python\r
+arr = [10, 20, 30, 40, 50]\r
+\r
+arr[3]   # 40\r
+\`\`\`\r
+\r
+The computer doesn't need to check \`10 → 20 → 30\` first. It jumps directly to the location of \`40\`.\r
+\r
+### Interview answer\r
+\r
+> **Accessing \`arr[i]\` takes O(1) time because arrays provide random access. The address of an element can be calculated directly from its index.**\r
+\r
+| Operation             | Complexity |\r
+| --------------------- | ---------: |\r
+| \`arr[i]\` access       |   **O(1)** |\r
+| Update \`arr[i]\`       |   **O(1)** |\r
+| Search                |   **O(n)** |\r
+| Insert at beginning   |   **O(n)** |\r
+| Delete from beginning |   **O(n)** |\r
+\r
+**Key thing to remember:**\r
+**Index access → O(1)** because of **random access + contiguous memory**.\r
+`,code:``},{id:`006-what-is-the-time-complexity-of-searching-an-unsorted-array`,category:`Arrays / Lists`,title:`What is the time complexity of searching an unsorted array?`,difficulty:`Beginner`,time:`~5 min`,concept:`The time complexity of searching an **unsorted array** is:\r
+\r
+# **O(n) — Linear Time**\r
+\r
+### Why?\r
+\r
+Because the elements are not sorted, you may have to check **every element** to find the target.\r
+\r
+Example:\r
+\r
+\`\`\`python\r
+arr = [10, 25, 7, 40, 15]\r
+target = 40\r
+\`\`\`\r
+\r
+You may need to check:\r
+\r
+\`\`\`text\r
+10 → 25 → 7 → 40\r
+\`\`\`\r
+\r
+If the target is the **last element**:\r
+\r
+\`\`\`text\r
+10 → 25 → 7 → 40 → 15\r
+\`\`\`\r
+\r
+you check all \`n\` elements.\r
+\r
+### Example code\r
+\r
+\`\`\`python\r
+def search(arr, target):\r
+    for i in range(len(arr)):\r
+        if arr[i] == target:\r
+            return i\r
+    return -1\r
+\`\`\`\r
+\r
+### Complexity\r
+\r
+| Case                                        | Time Complexity |\r
+| ------------------------------------------- | --------------: |\r
+| **Best case** — target is first             |        **O(1)** |\r
+| **Average case**                            |        **O(n)** |\r
+| **Worst case** — target is last/not present |        **O(n)** |\r
+| Space                                       |        **O(1)** |\r
+\r
+### Interview answer\r
+\r
+> **Searching an unsorted array takes O(n) time in the worst and average cases because we may need to examine every element. The best case is O(1) if the target is the first element.**\r
+\r
+**Remember:**\r
+**Unsorted array → Linear Search → O(n)**.\r
+`,code:``},{id:`007-what-is-the-time-complexity-of-inserting-at-the-beginning`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the beginning?`,difficulty:`Beginner`,time:`~5 min`,concept:`The time complexity of **inserting an element at the beginning of an array** is:\r
+\r
+# **O(n) — Linear Time**\r
+\r
+### Why?\r
+\r
+Because when you insert at index \`0\`, all existing elements generally need to be **shifted one position to the right**.\r
+\r
+Example:\r
+\r
+\`\`\`text\r
+Before:\r
+[10, 20, 30, 40]\r
+\r
+Insert 5 at beginning:\r
+\r
+[5, 10, 20, 30, 40]\r
+\`\`\`\r
+\r
+The elements move:\r
+\r
+\`\`\`text\r
+40 → right\r
+30 → right\r
+20 → right\r
+10 → right\r
+\`\`\`\r
+\r
+For \`n\` elements, potentially **n elements must be moved**.\r
+\r
+### Complexity\r
+\r
+| Operation           |               Time |\r
+| ------------------- | -----------------: |\r
+| Insert at beginning |           **O(n)** |\r
+| Insert at middle    |           **O(n)** |\r
+| Insert at end*      | **O(1)** amortized |\r
+| Access \`arr[i]\`     |           **O(1)** |\r
+\r
+*For a dynamic array such as a Python list, appending is **O(1) amortized**, though an occasional resize can take O(n).\r
+\r
+### Interview answer\r
+\r
+> **Inserting at the beginning of an array is O(n) because the existing elements must be shifted one position to make room for the new element.**\r
+\r
+**Easy memory trick:**\r
+\r
+> **Beginning → shift elements → O(n)**.\r
+`,code:``},{id:`008-what-is-the-time-complexity-of-inserting-at-the-end`,category:`Arrays / Lists`,title:`What is the time complexity of inserting at the end?`,difficulty:`Beginner`,time:`~5 min`,concept:`The time complexity of **inserting at the end of a dynamic array** is:\r
+\r
+# **O(1) — Amortized Constant Time**\r
+\r
+### Why?\r
+\r
+If there is already space available, the new element is simply placed at the next available position.\r
+\r
+\`\`\`text\r
+Before:\r
+[10, 20, 30, 40]\r
+\r
+Insert 50:\r
+\r
+[10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+No existing elements need to be shifted.\r
+\r
+### But why "amortized"?\r
+\r
+Sometimes the array has no extra capacity:\r
+\r
+\`\`\`text\r
+[10, 20, 30, 40]  ← full\r
+\`\`\`\r
+\r
+The system must:\r
+\r
+1. Allocate a larger memory area\r
+2. Copy the existing elements\r
+3. Add the new element\r
+\r
+That particular insertion can take **O(n)**.\r
+\r
+However, resizing doesn't happen every time. Spread across many insertions, the average cost is **O(1)**.\r
+\r
+### Complexity\r
+\r
+| Case                    | Complexity |\r
+| ----------------------- | ---------: |\r
+| Normal insertion at end |   **O(1)** |\r
+| Resize required         |   **O(n)** |\r
+| **Amortized**           |   **O(1)** |\r
+\r
+### Python example\r
+\r
+\`\`\`python\r
+arr = [10, 20, 30]\r
+arr.append(40)\r
+\`\`\`\r
+\r
+\`append()\` is **O(1) amortized**.\r
+\r
+### Interview answer\r
+\r
+> **Inserting at the end of a dynamic array is O(1) amortized because normally we just place the element in the next available position. Occasionally resizing takes O(n), but over many insertions the average cost is O(1).**\r
+\r
+**Remember:**\r
+\r
+> **End → usually no shifting → O(1) amortized**.\r
+`,code:``},{id:`009-what-is-the-difference-between-static-and-dynamic-arrays`,category:`Arrays / Lists`,title:`What is the difference between static and dynamic arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:`The main difference is **whether the size can change after the array is created**.\r
+\r
+## Static vs Dynamic Arrays\r
+\r
+| Feature               | Static Array        | Dynamic Array                       |\r
+| --------------------- | ------------------- | ----------------------------------- |\r
+| **Size**              | Fixed               | Can grow/shrink                     |\r
+| **Resizing**          | Not automatic       | Automatic                           |\r
+| **Memory**            | Allocated once      | May allocate new memory when needed |\r
+| **Insertion at end**  | Limited by capacity | Usually **O(1) amortized**          |\r
+| **Memory efficiency** | Predictable         | May have extra unused capacity      |\r
+| **Flexibility**       | Less flexible       | More flexible                       |\r
+| **Example**           | C \`int arr[5]\`      | Python \`list\`                       |\r
+\r
+### 1. Static array\r
+\r
+When you create:\r
+\r
+\`\`\`c\r
+int arr[5];\r
+\`\`\`\r
+\r
+you have space for exactly **5 elements**.\r
+\r
+\`\`\`text\r
+[10][20][30][40][50]\r
+\`\`\`\r
+\r
+You cannot simply add a 6th element.\r
+\r
+If you need more space, you generally need to create a new larger array.\r
+\r
+---\r
+\r
+### 2. Dynamic array\r
+\r
+A dynamic array can grow when it runs out of capacity.\r
+\r
+Python's list behaves this way:\r
+\r
+\`\`\`python\r
+arr = [10, 20, 30]\r
+\r
+arr.append(40)\r
+arr.append(50)\r
+arr.append(60)\r
+\`\`\`\r
+\r
+The list automatically manages additional storage.\r
+\r
+Conceptually:\r
+\r
+\`\`\`text\r
+Initial capacity:\r
+[10][20][30][ ][ ]\r
+\r
+After adding:\r
+[10][20][30][40][50]\r
+\`\`\`\r
+\r
+When capacity is exhausted, the implementation allocates a larger memory area and copies/moves the references.\r
+\r
+### Why does resizing matter?\r
+\r
+Suppose:\r
+\r
+\`\`\`text\r
+Capacity = 4\r
+Size     = 4\r
+\r
+[10][20][30][40]\r
+\`\`\`\r
+\r
+You add \`50\`.\r
+\r
+The array may need to:\r
+\r
+\`\`\`text\r
+1. Allocate larger memory\r
+2. Copy existing elements\r
+3. Add 50\r
+\`\`\`\r
+\r
+That particular resize can take **O(n)**.\r
+\r
+But resizing happens only occasionally, so appending to a dynamic array is generally:\r
+\r
+> **O(1) amortized**\r
+\r
+### Interview answer\r
+\r
+> **A static array has a fixed size determined when it is created, while a dynamic array can automatically resize as elements are added or removed. Dynamic arrays provide more flexibility but may occasionally require O(n) resizing.**\r
+\r
+### Easy way to remember\r
+\r
+**Static → fixed size**\r
+\r
+**Dynamic → grows/shrinks automatically**\r
+\r
+And importantly, **Python \`list\` is a dynamic array**, which is why \`list.append()\` is typically **O(1) amortized**.\r
+`,code:``},{id:`010-what-are-the-advantages-and-disadvantages-of-arrays`,category:`Arrays / Lists`,title:`What are the advantages and disadvantages of arrays?`,difficulty:`Beginner`,time:`~5 min`,concept:`## Advantages and Disadvantages of Arrays\r
+\r
+### ✅ Advantages\r
+\r
+| Advantage                      | Explanation                                                    |\r
+| ------------------------------ | -------------------------------------------------------------- |\r
+| **Fast access**                | \`arr[i]\` provides **O(1)** random access.                      |\r
+| **Memory efficient**           | Elements can be stored close together in contiguous memory.    |\r
+| **Cache friendly**             | Nearby elements are often loaded efficiently by the CPU cache. |\r
+| **Simple to use**              | Arrays are straightforward to create, access, and traverse.    |\r
+| **Easy traversal**             | You can process elements sequentially using a loop.            |\r
+| **Good for searching/sorting** | Many algorithms are designed specifically for arrays.          |\r
+| **Predictable performance**    | Index access and updates are typically **O(1)**.               |\r
+\r
+### ❌ Disadvantages\r
+\r
+| Disadvantage                      | Explanation                                                                   |\r
+| --------------------------------- | ----------------------------------------------------------------------------- |\r
+| **Insertion can be expensive**    | Inserting at the beginning or middle requires shifting elements → **O(n)**.   |\r
+| **Deletion can be expensive**     | Removing from the beginning or middle may require shifting → **O(n)**.        |\r
+| **Fixed size for static arrays**  | A static array cannot easily grow after creation.                             |\r
+| **Resizing overhead**             | Dynamic arrays occasionally need to allocate larger memory and copy elements. |\r
+| **Unused capacity**               | Dynamic arrays may reserve extra memory for future elements.                  |\r
+| **Searching unsorted data**       | Finding an element can require checking every element → **O(n)**.             |\r
+| **Contiguous memory requirement** | Traditional arrays need a contiguous block of memory.                         |\r
+\r
+### Example\r
+\r
+Consider:\r
+\r
+\`\`\`text\r
+[10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+Accessing \`30\`:\r
+\r
+\`\`\`python\r
+arr[2]\r
+\`\`\`\r
+\r
+→ **O(1)** ✅\r
+\r
+But inserting \`5\` at the beginning:\r
+\r
+\`\`\`text\r
+Before:\r
+[10, 20, 30, 40, 50]\r
+\r
+After:\r
+[5, 10, 20, 30, 40, 50]\r
+\`\`\`\r
+\r
+Many elements must move.\r
+\r
+→ **O(n)** ❌\r
+\r
+### 🎯 Interview answer\r
+\r
+> **Arrays provide fast O(1) random access, good memory locality, and efficient traversal. However, insertion and deletion in the middle or beginning are O(n) because elements must be shifted. Static arrays also have fixed size, while dynamic arrays may incur resizing overhead.**\r
+\r
+### Easy way to remember\r
+\r
+**Arrays are great for:**\r
+\r
+> **Access → O(1)**\r
+\r
+**Arrays are less efficient for:**\r
+\r
+> **Insert/Delete → O(n)**\r
+`,code:``}];function Ih(){return(0,M.jsx)($,{data:Fh,title:`Arrays / Lists Cookbook`,subtitle:`Fundamentals and theory questions on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var Lh=[{id:`011-find-the-maximum-element`,category:`Arrays / Lists`,title:`Find the maximum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:`## Find the Maximum Element in an Array\r
+\r
+Given an array of integers, **find and return the maximum element in the array**.\r
+\r
+### Example\r
+\r
+**Input:**\r
+\r
+\`\`\`text\r
+[10, 25, 7, 42, 18, 31]\r
+\`\`\`\r
+\r
+**Output:**\r
+\r
+\`\`\`text\r
+42\r
+\`\`\`\r
+\r
+### Requirements\r
+\r
+* The array may contain positive and negative integers.\r
+* Do not use Python's built-in \`max()\` function.\r
+* Return the maximum value.\r
+* Consider the time and space complexity of your solution.\r
+\r
+**Question:** How would you solve this problem in Python?\r
+`},{id:`012-find-the-minimum-element`,category:`Arrays / Lists`,title:`Find the minimum element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`013-find-the-second-largest-element`,category:`Arrays / Lists`,title:`Find the second-largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`014-reverse-an-array`,category:`Arrays / Lists`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`015-remove-duplicates-from-an-array`,category:`Arrays / Lists`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`016-find-duplicate-elements`,category:`Arrays / Lists`,title:`Find duplicate elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`017-find-the-missing-number`,category:`Arrays / Lists`,title:`Find the missing number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`018-find-the-frequency-of-elements`,category:`Arrays / Lists`,title:`Find the frequency of elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`019-move-all-zeros-to-the-end`,category:`Arrays / Lists`,title:`Move all zeros to the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`020-check-whether-an-array-is-sorted`,category:`Arrays / Lists`,title:`Check whether an array is sorted.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`021-rotate-an-array-by-k-positions`,category:`Arrays / Lists`,title:`Rotate an array by K positions.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`022-find-the-intersection-of-two-arrays`,category:`Arrays / Lists`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`023-find-the-union-of-two-arrays`,category:`Arrays / Lists`,title:`Find the union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`024-find-the-first-repeating-element`,category:`Arrays / Lists`,title:`Find the first repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`025-find-the-first-non-repeating-element`,category:`Arrays / Lists`,title:`Find the first non-repeating element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`026-find-all-pairs-whose-sum-equals-k`,category:`Arrays / Lists`,title:`Find all pairs whose sum equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`027-find-the-majority-element`,category:`Arrays / Lists`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`028-find-the-maximum-subarray-sum`,category:`Arrays / Lists`,title:`Find the maximum subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`029-find-the-maximum-product-subarray`,category:`Arrays / Lists`,title:`Find the maximum product subarray.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`030-find-the-longest-consecutive-sequence`,category:`Arrays / Lists`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rh(){return(0,M.jsx)($,{data:Lh,title:`Arrays / Lists Cookbook`,subtitle:`Coding practice problems on Arrays / Lists`,icon:`📊`,patternLabel:`Questions`})}var zh=[{id:`031-what-is-a-string`,category:`Strings`,title:`What is a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`032-are-python-strings-mutable-or-immutable`,category:`Strings`,title:`Are Python strings mutable or immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`033-why-are-strings-immutable`,category:`Strings`,title:`Why are strings immutable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`034-what-is-the-time-complexity-of-string-concatenation`,category:`Strings`,title:`What is the time complexity of string concatenation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`035-difference-between-string-list-and-tuple`,category:`Strings`,title:`Difference between string, list, and tuple?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`036-how-do-you-reverse-a-string`,category:`Strings`,title:`How do you reverse a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`037-how-do-you-iterate-through-a-string`,category:`Strings`,title:`How do you iterate through a string?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bh(){return(0,M.jsx)($,{data:zh,title:`Strings Cookbook`,subtitle:`Fundamentals and theory questions on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Vh=[{id:`038-reverse-a-string`,category:`Strings`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`039-check-whether-a-string-is-a-palindrome`,category:`Strings`,title:`Check whether a string is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`040-check-whether-two-strings-are-anagrams`,category:`Strings`,title:`Check whether two strings are anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`041-count-character-frequencies`,category:`Strings`,title:`Count character frequencies.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`042-find-the-first-non-repeating-character`,category:`Strings`,title:`Find the first non-repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`043-find-the-first-repeating-character`,category:`Strings`,title:`Find the first repeating character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`044-remove-duplicate-characters`,category:`Strings`,title:`Remove duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`045-find-duplicate-characters`,category:`Strings`,title:`Find duplicate characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`046-reverse-words-in-a-sentence`,category:`Strings`,title:`Reverse words in a sentence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`047-find-the-longest-word`,category:`Strings`,title:`Find the longest word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`048-count-vowels-and-consonants`,category:`Strings`,title:`Count vowels and consonants.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`049-check-whether-one-string-is-a-rotation-of-another`,category:`Strings`,title:`Check whether one string is a rotation of another.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`050-find-all-occurrences-of-a-substring`,category:`Strings`,title:`Find all occurrences of a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`051-implement-string-compression`,category:`Strings`,title:`Implement string compression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`052-find-the-longest-common-prefix`,category:`Strings`,title:`Find the longest common prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`053-find-the-longest-substring-without-repeating-characters`,category:`Strings`,title:`Find the longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`054-find-the-longest-palindromic-substring`,category:`Strings`,title:`Find the longest palindromic substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`055-group-anagrams`,category:`Strings`,title:`Group anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`056-minimum-window-substring`,category:`Strings`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hh(){return(0,M.jsx)($,{data:Vh,title:`Strings Cookbook`,subtitle:`Coding practice problems on Strings`,icon:`🔤`,patternLabel:`Questions`})}var Uh=[{id:`057-what-is-a-hash-table`,category:`Hash Table / Dictionary`,title:`What is a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`058-how-does-a-hash-table-work`,category:`Hash Table / Dictionary`,title:`How does a hash table work?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`059-what-is-hashing`,category:`Hash Table / Dictionary`,title:`What is hashing?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`060-what-is-a-hash-function`,category:`Hash Table / Dictionary`,title:`What is a hash function?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`061-what-is-a-hash-collision`,category:`Hash Table / Dictionary`,title:`What is a hash collision?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`062-how-are-collisions-handled`,category:`Hash Table / Dictionary`,title:`How are collisions handled?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`063-what-is-the-average-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`064-what-is-the-worst-case-lookup-complexity`,category:`Hash Table / Dictionary`,title:`What is the worst-case lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`065-why-is-a-dictionary-generally-o-1-for-lookup`,category:`Hash Table / Dictionary`,title:`Why is a dictionary generally O(1) for lookup?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`066-difference-between-dictionary-and-list`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`067-difference-between-dictionary-and-set`,category:`Hash Table / Dictionary`,title:`Difference between dictionary and set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`068-what-makes-an-object-hashable-in-python`,category:`Hash Table / Dictionary`,title:`What makes an object hashable in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wh(){return(0,M.jsx)($,{data:Uh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Fundamentals and theory questions on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var Gh=[{id:`069-count-frequencies-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Count frequencies using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`070-find-duplicates-using-a-dictionary`,category:`Hash Table / Dictionary`,title:`Find duplicates using a dictionary.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`071-two-sum`,category:`Hash Table / Dictionary`,title:`Two Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`072-group-anagrams`,category:`Hash Table / Dictionary`,title:`Group Anagrams.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`073-first-unique-character`,category:`Hash Table / Dictionary`,title:`First Unique Character.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`074-find-common-elements-between-arrays`,category:`Hash Table / Dictionary`,title:`Find common elements between arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`075-find-the-intersection-of-two-arrays`,category:`Hash Table / Dictionary`,title:`Find the intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`076-find-elements-occurring-more-than-once`,category:`Hash Table / Dictionary`,title:`Find elements occurring more than once.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`077-find-the-majority-element`,category:`Hash Table / Dictionary`,title:`Find the majority element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`078-find-the-longest-consecutive-sequence`,category:`Hash Table / Dictionary`,title:`Find the longest consecutive sequence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`079-find-subarray-with-sum-k`,category:`Hash Table / Dictionary`,title:`Find subarray with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`080-count-subarrays-with-sum-k`,category:`Hash Table / Dictionary`,title:`Count subarrays with sum K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`081-find-pairs-with-a-given-difference`,category:`Hash Table / Dictionary`,title:`Find pairs with a given difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`082-find-the-longest-substring-with-k-distinct-characters`,category:`Hash Table / Dictionary`,title:`Find the longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`083-implement-a-simple-hash-table`,category:`Hash Table / Dictionary`,title:`Implement a simple hash table.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`084-design-an-lru-cache`,category:`Hash Table / Dictionary`,title:`Design an LRU cache.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kh(){return(0,M.jsx)($,{data:Gh,title:`Hash Table / Dictionary Cookbook`,subtitle:`Coding practice problems on Hash Table / Dictionary`,icon:`🗂️`,patternLabel:`Questions`})}var qh=[{id:`085-what-is-a-set`,category:`Set`,title:`What is a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`086-why-does-a-set-not-contain-duplicates`,category:`Set`,title:`Why does a set not contain duplicates?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`087-how-is-a-set-implemented-internally`,category:`Set`,title:`How is a set implemented internally?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`088-set-vs-list`,category:`Set`,title:`Set vs list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`089-set-vs-dictionary`,category:`Set`,title:`Set vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`090-what-is-the-average-lookup-complexity`,category:`Set`,title:`What is the average lookup complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`091-when-should-you-use-a-set`,category:`Set`,title:`When should you use a set?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jh(){return(0,M.jsx)($,{data:qh,title:`Set Cookbook`,subtitle:`Fundamentals and theory questions on Set`,icon:`🎯`,patternLabel:`Questions`})}var Yh=[{id:`092-remove-duplicates-from-an-array`,category:`Set`,title:`Remove duplicates from an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`093-find-intersection-of-two-arrays`,category:`Set`,title:`Find intersection of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`094-find-union-of-two-arrays`,category:`Set`,title:`Find union of two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`095-find-difference-between-two-arrays`,category:`Set`,title:`Find difference between two arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`096-find-elements-appearing-in-both-arrays`,category:`Set`,title:`Find elements appearing in both arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`097-find-missing-elements`,category:`Set`,title:`Find missing elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`098-find-duplicate-values`,category:`Set`,title:`Find duplicate values.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`099-determine-whether-two-arrays-contain-the-same-elements`,category:`Set`,title:`Determine whether two arrays contain the same elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`100-find-common-characters-between-strings`,category:`Set`,title:`Find common characters between strings.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xh(){return(0,M.jsx)($,{data:Yh,title:`Set Cookbook`,subtitle:`Coding practice problems on Set`,icon:`🎯`,patternLabel:`Questions`})}var Zh=[{id:`101-what-is-a-linked-list`,category:`Linked List`,title:`What is a linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`102-array-vs-linked-list`,category:`Linked List`,title:`Array vs linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`103-singly-vs-doubly-linked-list`,category:`Linked List`,title:`Singly vs doubly linked list?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`104-what-is-a-node`,category:`Linked List`,title:`What is a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`105-what-is-the-head`,category:`Linked List`,title:`What is the head?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`106-what-is-the-tail`,category:`Linked List`,title:`What is the tail?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`107-why-does-a-linked-list-require-extra-memory`,category:`Linked List`,title:`Why does a linked list require extra memory?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`108-what-is-the-complexity-of-accessing-an-element`,category:`Linked List`,title:`What is the complexity of accessing an element?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`109-what-is-the-complexity-of-insertion`,category:`Linked List`,title:`What is the complexity of insertion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`110-what-is-the-complexity-of-deletion`,category:`Linked List`,title:`What is the complexity of deletion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`111-when-would-you-choose-a-linked-list-over-an-array`,category:`Linked List`,title:`When would you choose a linked list over an array?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qh(){return(0,M.jsx)($,{data:Zh,title:`Linked List Cookbook`,subtitle:`Fundamentals and theory questions on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var $h=[{id:`112-create-a-singly-linked-list`,category:`Linked List`,title:`Create a singly linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`113-insert-at-the-beginning`,category:`Linked List`,title:`Insert at the beginning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`114-insert-at-the-end`,category:`Linked List`,title:`Insert at the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`115-insert-at-a-specific-position`,category:`Linked List`,title:`Insert at a specific position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`116-delete-a-node`,category:`Linked List`,title:`Delete a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`117-search-for-a-node`,category:`Linked List`,title:`Search for a node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`118-reverse-a-linked-list`,category:`Linked List`,title:`Reverse a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`119-find-the-length`,category:`Linked List`,title:`Find the length.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`120-find-the-middle-node`,category:`Linked List`,title:`Find the middle node.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`121-detect-a-cycle`,category:`Linked List`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`122-find-the-start-of-a-cycle`,category:`Linked List`,title:`Find the start of a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`123-remove-a-cycle`,category:`Linked List`,title:`Remove a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`124-merge-two-sorted-linked-lists`,category:`Linked List`,title:`Merge two sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`125-remove-duplicates`,category:`Linked List`,title:`Remove duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`126-remove-the-nth-node-from-the-end`,category:`Linked List`,title:`Remove the Nth node from the end.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`127-find-the-intersection-of-two-linked-lists`,category:`Linked List`,title:`Find the intersection of two linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`128-check-whether-a-linked-list-is-a-palindrome`,category:`Linked List`,title:`Check whether a linked list is a palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`129-reverse-nodes-in-groups-of-k`,category:`Linked List`,title:`Reverse nodes in groups of K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`130-sort-a-linked-list`,category:`Linked List`,title:`Sort a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`131-copy-a-linked-list-with-random-pointers`,category:`Linked List`,title:`Copy a linked list with random pointers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function eg(){return(0,M.jsx)($,{data:$h,title:`Linked List Cookbook`,subtitle:`Coding practice problems on Linked List`,icon:`🔗`,patternLabel:`Questions`})}var tg=[{id:`132-what-is-a-stack`,category:`Stack`,title:`What is a stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`133-what-is-lifo`,category:`Stack`,title:`What is LIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`134-stack-vs-queue`,category:`Stack`,title:`Stack vs queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`135-what-are-stack-operations`,category:`Stack`,title:`What are stack operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`136-what-is-push`,category:`Stack`,title:`What is push?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`137-what-is-pop`,category:`Stack`,title:`What is pop?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`138-what-is-peek`,category:`Stack`,title:`What is peek?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`139-what-is-stack-overflow`,category:`Stack`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`140-what-is-stack-underflow`,category:`Stack`,title:`What is stack underflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`141-how-can-you-implement-a-stack-in-python`,category:`Stack`,title:`How can you implement a stack in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ng(){return(0,M.jsx)($,{data:tg,title:`Stack Cookbook`,subtitle:`Fundamentals and theory questions on Stack`,icon:`📚`,patternLabel:`Questions`})}var rg=[{id:`142-implement-stack-using-a-list`,category:`Stack`,title:`Implement stack using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`143-implement-stack-using-a-linked-list`,category:`Stack`,title:`Implement stack using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`144-implement-two-stacks-in-one-array`,category:`Stack`,title:`Implement two stacks in one array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`145-reverse-a-string-using-a-stack`,category:`Stack`,title:`Reverse a string using a stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`146-check-balanced-parentheses`,category:`Stack`,title:`Check balanced parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`147-valid-parentheses`,category:`Stack`,title:`Valid Parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`148-evaluate-postfix-expression`,category:`Stack`,title:`Evaluate postfix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`149-evaluate-prefix-expression`,category:`Stack`,title:`Evaluate prefix expression.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`150-convert-infix-to-postfix`,category:`Stack`,title:`Convert infix to postfix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`151-min-stack`,category:`Stack`,title:`Min Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`152-max-stack`,category:`Stack`,title:`Max Stack.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`153-next-greater-element`,category:`Stack`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`154-next-smaller-element`,category:`Stack`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`155-daily-temperatures`,category:`Stack`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`156-largest-rectangle-in-histogram`,category:`Stack`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`157-remove-adjacent-duplicates`,category:`Stack`,title:`Remove adjacent duplicates.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`158-decode-a-string`,category:`Stack`,title:`Decode a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function ig(){return(0,M.jsx)($,{data:rg,title:`Stack Cookbook`,subtitle:`Coding practice problems on Stack`,icon:`📚`,patternLabel:`Questions`})}var ag=[{id:`159-what-is-a-queue`,category:`Queue`,title:`What is a queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`160-what-is-fifo`,category:`Queue`,title:`What is FIFO?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`161-queue-vs-stack`,category:`Queue`,title:`Queue vs stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`162-what-are-enqueue-and-dequeue`,category:`Queue`,title:`What are enqueue and dequeue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`163-what-is-a-circular-queue`,category:`Queue`,title:`What is a circular queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`164-what-is-a-deque`,category:`Queue`,title:`What is a deque?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`165-why-is-collections-deque-preferred-for-queues-in-python`,category:`Queue`,title:`Why is collections.deque preferred for queues in Python?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`166-what-is-a-priority-queue`,category:`Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function og(){return(0,M.jsx)($,{data:ag,title:`Queue Cookbook`,subtitle:`Fundamentals and theory questions on Queue`,icon:`🚶`,patternLabel:`Questions`})}var sg=[{id:`167-implement-a-queue-using-a-list`,category:`Queue`,title:`Implement a queue using a list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`168-implement-a-queue-using-deque`,category:`Queue`,title:`Implement a queue using deque.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`169-implement-a-queue-using-a-linked-list`,category:`Queue`,title:`Implement a queue using a linked list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`170-implement-a-queue-using-two-stacks`,category:`Queue`,title:`Implement a queue using two stacks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`171-implement-a-stack-using-two-queues`,category:`Queue`,title:`Implement a stack using two queues.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`172-implement-a-circular-queue`,category:`Queue`,title:`Implement a circular queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`173-generate-binary-numbers-using-a-queue`,category:`Queue`,title:`Generate binary numbers using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`174-first-non-repeating-character-in-a-stream`,category:`Queue`,title:`First non-repeating character in a stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`175-sliding-window-maximum`,category:`Queue`,title:`Sliding window maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`176-bfs-using-a-queue`,category:`Queue`,title:`BFS using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`177-task-scheduling-using-a-queue`,category:`Queue`,title:`Task scheduling using a queue.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function cg(){return(0,M.jsx)($,{data:sg,title:`Queue Cookbook`,subtitle:`Coding practice problems on Queue`,icon:`🚶`,patternLabel:`Questions`})}var lg=[{id:`178-what-is-a-heap`,category:`Heap / Priority Queue`,title:`What is a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`179-what-is-a-min-heap`,category:`Heap / Priority Queue`,title:`What is a min heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`180-what-is-a-max-heap`,category:`Heap / Priority Queue`,title:`What is a max heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`181-what-is-the-heap-property`,category:`Heap / Priority Queue`,title:`What is the heap property?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`182-heap-vs-bst`,category:`Heap / Priority Queue`,title:`Heap vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`183-what-is-a-priority-queue`,category:`Heap / Priority Queue`,title:`What is a priority queue?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`184-what-is-the-complexity-of-inserting-into-a-heap`,category:`Heap / Priority Queue`,title:`What is the complexity of inserting into a heap?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`185-what-is-the-complexity-of-removing-the-minimum-maximum`,category:`Heap / Priority Queue`,title:`What is the complexity of removing the minimum/maximum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`186-what-is-heapify`,category:`Heap / Priority Queue`,title:`What is heapify?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`187-what-is-heap-sort`,category:`Heap / Priority Queue`,title:`What is heap sort?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function ug(){return(0,M.jsx)($,{data:lg,title:`Heap / Priority Queue Cookbook`,subtitle:`Fundamentals and theory questions on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var dg=[{id:`188-implement-a-min-heap`,category:`Heap / Priority Queue`,title:`Implement a min heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`189-implement-a-max-heap`,category:`Heap / Priority Queue`,title:`Implement a max heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`190-find-the-kth-largest-element`,category:`Heap / Priority Queue`,title:`Find the Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`191-find-the-kth-smallest-element`,category:`Heap / Priority Queue`,title:`Find the Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`192-find-top-k-frequent-elements`,category:`Heap / Priority Queue`,title:`Find top K frequent elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`193-find-k-closest-points`,category:`Heap / Priority Queue`,title:`Find K closest points.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`194-merge-k-sorted-arrays`,category:`Heap / Priority Queue`,title:`Merge K sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`195-merge-k-sorted-linked-lists`,category:`Heap / Priority Queue`,title:`Merge K sorted linked lists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`196-find-median-from-a-data-stream`,category:`Heap / Priority Queue`,title:`Find median from a data stream.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`197-find-the-top-k-largest-elements`,category:`Heap / Priority Queue`,title:`Find the top K largest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`198-find-the-top-k-smallest-elements`,category:`Heap / Priority Queue`,title:`Find the top K smallest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`199-task-scheduler`,category:`Heap / Priority Queue`,title:`Task scheduler.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`200-meeting-room-scheduling-using-a-heap`,category:`Heap / Priority Queue`,title:`Meeting room scheduling using a heap.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function fg(){return(0,M.jsx)($,{data:dg,title:`Heap / Priority Queue Cookbook`,subtitle:`Coding practice problems on Heap / Priority Queue`,icon:`⛰️`,patternLabel:`Questions`})}var pg=[{id:`201-what-is-a-tree`,category:`Trees`,title:`What is a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`202-what-is-a-binary-tree`,category:`Trees`,title:`What is a binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`203-what-is-a-root`,category:`Trees`,title:`What is a root?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`204-what-is-a-leaf`,category:`Trees`,title:`What is a leaf?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`205-what-is-the-height-of-a-tree`,category:`Trees`,title:`What is the height of a tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`206-what-is-the-depth-of-a-node`,category:`Trees`,title:`What is the depth of a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`207-what-is-a-balanced-tree`,category:`Trees`,title:`What is a balanced tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`208-what-is-a-full-binary-tree`,category:`Trees`,title:`What is a full binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`209-what-is-a-complete-binary-tree`,category:`Trees`,title:`What is a complete binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`210-what-is-a-perfect-binary-tree`,category:`Trees`,title:`What is a perfect binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`211-binary-tree-vs-binary-search-tree`,category:`Trees`,title:`Binary tree vs binary search tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`212-what-is-preorder-traversal`,category:`Trees`,title:`What is preorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`213-what-is-inorder-traversal`,category:`Trees`,title:`What is inorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`214-what-is-postorder-traversal`,category:`Trees`,title:`What is postorder traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`215-what-is-level-order-traversal`,category:`Trees`,title:`What is level-order traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`216-recursive-vs-iterative-traversal`,category:`Trees`,title:`Recursive vs iterative traversal?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function mg(){return(0,M.jsx)($,{data:pg,title:`Trees Cookbook`,subtitle:`Fundamentals and theory questions on Trees`,icon:`🌳`,patternLabel:`Questions`})}var hg=[{id:`217-implement-preorder-traversal`,category:`Trees`,title:`Implement preorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`218-implement-inorder-traversal`,category:`Trees`,title:`Implement inorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`219-implement-postorder-traversal`,category:`Trees`,title:`Implement postorder traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`220-implement-level-order-traversal`,category:`Trees`,title:`Implement level-order traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`221-find-tree-height`,category:`Trees`,title:`Find tree height.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`222-find-maximum-depth`,category:`Trees`,title:`Find maximum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`223-find-minimum-depth`,category:`Trees`,title:`Find minimum depth.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`224-count-nodes`,category:`Trees`,title:`Count nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`225-count-leaf-nodes`,category:`Trees`,title:`Count leaf nodes.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`226-find-maximum-value`,category:`Trees`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`227-check-whether-two-trees-are-identical`,category:`Trees`,title:`Check whether two trees are identical.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`228-check-whether-a-tree-is-symmetric`,category:`Trees`,title:`Check whether a tree is symmetric.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`229-invert-a-binary-tree`,category:`Trees`,title:`Invert a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`230-find-diameter-of-a-binary-tree`,category:`Trees`,title:`Find diameter of a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`231-find-maximum-path-sum`,category:`Trees`,title:`Find maximum path sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`232-find-lowest-common-ancestor`,category:`Trees`,title:`Find lowest common ancestor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`233-check-whether-a-tree-is-balanced`,category:`Trees`,title:`Check whether a tree is balanced.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`234-serialize-and-deserialize-a-binary-tree`,category:`Trees`,title:`Serialize and deserialize a binary tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function gg(){return(0,M.jsx)($,{data:hg,title:`Trees Cookbook`,subtitle:`Coding practice problems on Trees`,icon:`🌳`,patternLabel:`Questions`})}var _g=[{id:`235-what-is-a-bst`,category:`Binary Search Tree (BST)`,title:`What is a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`236-what-property-makes-a-tree-a-bst`,category:`Binary Search Tree (BST)`,title:`What property makes a tree a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`237-bst-vs-binary-tree`,category:`Binary Search Tree (BST)`,title:`BST vs binary tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`238-average-search-complexity`,category:`Binary Search Tree (BST)`,title:`Average search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`239-worst-case-search-complexity`,category:`Binary Search Tree (BST)`,title:`Worst-case search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`240-how-do-you-insert-into-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you insert into a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`241-how-do-you-delete-from-a-bst`,category:`Binary Search Tree (BST)`,title:`How do you delete from a BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`242-what-are-the-three-cases-when-deleting-a-node`,category:`Binary Search Tree (BST)`,title:`What are the three cases when deleting a node?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`243-what-is-an-inorder-successor`,category:`Binary Search Tree (BST)`,title:`What is an inorder successor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`244-what-is-an-inorder-predecessor`,category:`Binary Search Tree (BST)`,title:`What is an inorder predecessor?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function vg(){return(0,M.jsx)($,{data:_g,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Fundamentals and theory questions on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var yg=[{id:`245-search-in-bst`,category:`Binary Search Tree (BST)`,title:`Search in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`246-insert-into-bst`,category:`Binary Search Tree (BST)`,title:`Insert into BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`247-delete-from-bst`,category:`Binary Search Tree (BST)`,title:`Delete from BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`248-validate-a-bst`,category:`Binary Search Tree (BST)`,title:`Validate a BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`249-find-minimum-value`,category:`Binary Search Tree (BST)`,title:`Find minimum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`250-find-maximum-value`,category:`Binary Search Tree (BST)`,title:`Find maximum value.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`251-find-kth-smallest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth smallest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`252-find-kth-largest-element`,category:`Binary Search Tree (BST)`,title:`Find Kth largest element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`253-find-lca-in-bst`,category:`Binary Search Tree (BST)`,title:`Find LCA in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`254-find-inorder-successor`,category:`Binary Search Tree (BST)`,title:`Find inorder successor.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`255-convert-sorted-array-to-bst`,category:`Binary Search Tree (BST)`,title:`Convert sorted array to BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`256-convert-bst-to-sorted-array`,category:`Binary Search Tree (BST)`,title:`Convert BST to sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`257-find-range-sum-in-bst`,category:`Binary Search Tree (BST)`,title:`Find range sum in BST.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function bg(){return(0,M.jsx)($,{data:yg,title:`Binary Search Tree (BST) Cookbook`,subtitle:`Coding practice problems on Binary Search Tree (BST)`,icon:`🌲`,patternLabel:`Questions`})}var xg=[{id:`258-what-is-a-trie`,category:`Trie`,title:`What is a Trie?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`259-why-use-a-trie-instead-of-a-hash-table`,category:`Trie`,title:`Why use a Trie instead of a hash table?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`260-what-is-prefix-searching`,category:`Trie`,title:`What is prefix searching?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`261-what-is-autocomplete`,category:`Trie`,title:`What is autocomplete?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`262-how-is-a-trie-structured`,category:`Trie`,title:`How is a Trie structured?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`263-what-is-the-complexity-of-trie-search`,category:`Trie`,title:`What is the complexity of Trie search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`264-trie-vs-bst`,category:`Trie`,title:`Trie vs BST?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`265-trie-vs-dictionary`,category:`Trie`,title:`Trie vs dictionary?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Sg(){return(0,M.jsx)($,{data:xg,title:`Trie Cookbook`,subtitle:`Fundamentals and theory questions on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Cg=[{id:`266-implement-a-trie`,category:`Trie`,title:`Implement a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`267-insert-a-word`,category:`Trie`,title:`Insert a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`268-search-for-a-word`,category:`Trie`,title:`Search for a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`269-delete-a-word`,category:`Trie`,title:`Delete a word.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`270-check-whether-a-prefix-exists`,category:`Trie`,title:`Check whether a prefix exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`271-implement-autocomplete`,category:`Trie`,title:`Implement autocomplete.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`272-find-words-with-a-given-prefix`,category:`Trie`,title:`Find words with a given prefix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`273-word-search`,category:`Trie`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`274-word-search-ii`,category:`Trie`,title:`Word Search II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`275-replace-words-using-a-trie`,category:`Trie`,title:`Replace words using a Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`276-implement-a-dictionary-using-trie`,category:`Trie`,title:`Implement a dictionary using Trie.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function wg(){return(0,M.jsx)($,{data:Cg,title:`Trie Cookbook`,subtitle:`Coding practice problems on Trie`,icon:`🔠`,patternLabel:`Questions`})}var Tg=[{id:`277-what-is-a-graph`,category:`Graphs`,title:`What is a graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`278-what-is-a-vertex`,category:`Graphs`,title:`What is a vertex?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`279-what-is-an-edge`,category:`Graphs`,title:`What is an edge?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`280-directed-vs-undirected-graph`,category:`Graphs`,title:`Directed vs undirected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`281-weighted-vs-unweighted-graph`,category:`Graphs`,title:`Weighted vs unweighted graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`282-what-is-a-connected-graph`,category:`Graphs`,title:`What is a connected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`283-what-is-a-disconnected-graph`,category:`Graphs`,title:`What is a disconnected graph?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`284-what-is-a-cycle`,category:`Graphs`,title:`What is a cycle?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`285-what-is-a-dag`,category:`Graphs`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`286-adjacency-list-vs-adjacency-matrix`,category:`Graphs`,title:`Adjacency list vs adjacency matrix?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`287-when-would-you-use-each-representation`,category:`Graphs`,title:`When would you use each representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Eg(){return(0,M.jsx)($,{data:Tg,title:`Graphs Cookbook`,subtitle:`Fundamentals and theory questions on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var Dg=[{id:`288-implement-adjacency-list`,category:`Graphs`,title:`Implement adjacency list.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`289-implement-adjacency-matrix`,category:`Graphs`,title:`Implement adjacency matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`290-bfs-traversal`,category:`Graphs`,title:`BFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`291-dfs-traversal`,category:`Graphs`,title:`DFS traversal.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`292-count-connected-components`,category:`Graphs`,title:`Count connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`293-find-whether-a-path-exists`,category:`Graphs`,title:`Find whether a path exists.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`294-detect-a-cycle`,category:`Graphs`,title:`Detect a cycle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`295-find-all-connected-components`,category:`Graphs`,title:`Find all connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`296-find-shortest-path-in-an-unweighted-graph`,category:`Graphs`,title:`Find shortest path in an unweighted graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`297-clone-a-graph`,category:`Graphs`,title:`Clone a graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`298-number-of-islands`,category:`Graphs`,title:`Number of islands.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`299-flood-fill`,category:`Graphs`,title:`Flood fill.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`300-pacific-atlantic-water-flow`,category:`Graphs`,title:`Pacific Atlantic Water Flow.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Og(){return(0,M.jsx)($,{data:Dg,title:`Graphs Cookbook`,subtitle:`Coding practice problems on Graphs`,icon:`🕸️`,patternLabel:`Questions`})}var kg=[{id:`301-what-is-shortest-path`,category:`Graph Algorithms`,title:`What is shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`302-bfs-vs-dfs-for-shortest-path`,category:`Graph Algorithms`,title:`BFS vs DFS for shortest path?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`303-what-is-dijkstras-algorithm`,category:`Graph Algorithms`,title:`What is Dijkstra's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`304-when-can-dijkstra-be-used`,category:`Graph Algorithms`,title:`When can Dijkstra be used?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`305-why-doesnt-dijkstra-work-with-negative-edges`,category:`Graph Algorithms`,title:`Why doesn't Dijkstra work with negative edges?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`306-what-is-bellman-ford`,category:`Graph Algorithms`,title:`What is Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`307-dijkstra-vs-bellman-ford`,category:`Graph Algorithms`,title:`Dijkstra vs Bellman-Ford?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`308-what-is-floyd-warshall`,category:`Graph Algorithms`,title:`What is Floyd-Warshall?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`309-what-is-topological-sorting`,category:`Graph Algorithms`,title:`What is topological sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`310-what-is-a-dag`,category:`Graph Algorithms`,title:`What is a DAG?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`311-when-is-topological-sorting-useful`,category:`Graph Algorithms`,title:`When is topological sorting useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`312-implement-topological-sort-using-dfs`,category:`Graph Algorithms`,title:`Implement topological sort using DFS.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`313-implement-topological-sort-using-bfs-kahns-algorithm`,category:`Graph Algorithms`,title:`Implement topological sort using BFS/Kahn's algorithm.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`314-course-schedule`,category:`Graph Algorithms`,title:`Course Schedule.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`315-course-schedule-ii`,category:`Graph Algorithms`,title:`Course Schedule II.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`316-detect-cycle-in-directed-graph`,category:`Graph Algorithms`,title:`Detect cycle in directed graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`317-detect-cycle-in-undirected-graph`,category:`Graph Algorithms`,title:`Detect cycle in undirected graph.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`318-find-shortest-path`,category:`Graph Algorithms`,title:`Find shortest path.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`319-find-minimum-spanning-tree`,category:`Graph Algorithms`,title:`Find minimum spanning tree.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`320-what-is-kruskals-algorithm`,category:`Graph Algorithms`,title:`What is Kruskal's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`321-what-is-prims-algorithm`,category:`Graph Algorithms`,title:`What is Prim's algorithm?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`322-prim-vs-kruskal`,category:`Graph Algorithms`,title:`Prim vs Kruskal.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ag(){return(0,M.jsx)($,{data:kg,title:`Graph Algorithms Cookbook`,subtitle:`Fundamentals and theory questions on Graph Algorithms`,icon:`🧭`,patternLabel:`Questions`})}var jg=[{id:`323-what-is-union-find`,category:`Union-Find / Disjoint Set`,title:`What is Union-Find?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`324-what-problem-does-union-find-solve`,category:`Union-Find / Disjoint Set`,title:`What problem does Union-Find solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`325-what-are-find-and-union`,category:`Union-Find / Disjoint Set`,title:`What are find() and union()?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`326-what-is-path-compression`,category:`Union-Find / Disjoint Set`,title:`What is path compression?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`327-what-is-union-by-rank`,category:`Union-Find / Disjoint Set`,title:`What is union by rank?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`328-what-is-union-by-size`,category:`Union-Find / Disjoint Set`,title:`What is union by size?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`329-what-is-the-complexity-with-optimizations`,category:`Union-Find / Disjoint Set`,title:`What is the complexity with optimizations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Mg(){return(0,M.jsx)($,{data:jg,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Fundamentals and theory questions on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Ng=[{id:`330-implement-union-find`,category:`Union-Find / Disjoint Set`,title:`Implement Union-Find.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`331-number-of-connected-components`,category:`Union-Find / Disjoint Set`,title:`Number of connected components.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`332-detect-cycle-in-an-undirected-graph`,category:`Union-Find / Disjoint Set`,title:`Detect cycle in an undirected graph.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`333-number-of-provinces`,category:`Union-Find / Disjoint Set`,title:`Number of provinces.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`334-redundant-connection`,category:`Union-Find / Disjoint Set`,title:`Redundant connection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`335-accounts-merge`,category:`Union-Find / Disjoint Set`,title:`Accounts merge.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`336-network-connectivity`,category:`Union-Find / Disjoint Set`,title:`Network connectivity.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`337-kruskals-minimum-spanning-tree`,category:`Union-Find / Disjoint Set`,title:`Kruskal's minimum spanning tree.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Pg(){return(0,M.jsx)($,{data:Ng,title:`Union-Find / Disjoint Set Cookbook`,subtitle:`Coding practice problems on Union-Find / Disjoint Set`,icon:`🧩`,patternLabel:`Questions`})}var Fg=[{id:`338-what-is-recursion`,category:`Recursion`,title:`What is recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`339-what-is-a-base-case`,category:`Recursion`,title:`What is a base case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`340-what-is-a-recursive-case`,category:`Recursion`,title:`What is a recursive case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`341-what-happens-in-the-call-stack`,category:`Recursion`,title:`What happens in the call stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`342-recursion-vs-iteration`,category:`Recursion`,title:`Recursion vs iteration?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`343-what-causes-infinite-recursion`,category:`Recursion`,title:`What causes infinite recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`344-what-is-stack-overflow`,category:`Recursion`,title:`What is stack overflow?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`345-when-should-recursion-be-avoided`,category:`Recursion`,title:`When should recursion be avoided?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Ig(){return(0,M.jsx)($,{data:Fg,title:`Recursion Cookbook`,subtitle:`Fundamentals and theory questions on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var Lg=[{id:`346-factorial`,category:`Recursion`,title:`Factorial.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`347-fibonacci`,category:`Recursion`,title:`Fibonacci.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`348-sum-of-numbers`,category:`Recursion`,title:`Sum of numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`349-reverse-a-string-recursively`,category:`Recursion`,title:`Reverse a string recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`350-reverse-an-array-recursively`,category:`Recursion`,title:`Reverse an array recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`351-calculate-power-recursively`,category:`Recursion`,title:`Calculate power recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`352-binary-search-recursively`,category:`Recursion`,title:`Binary search recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`353-tree-traversal-recursively`,category:`Recursion`,title:`Tree traversal recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`354-generate-subsets-recursively`,category:`Recursion`,title:`Generate subsets recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`355-generate-permutations-recursively`,category:`Recursion`,title:`Generate permutations recursively.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`356-solve-tower-of-hanoi`,category:`Recursion`,title:`Solve Tower of Hanoi.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Rg(){return(0,M.jsx)($,{data:Lg,title:`Recursion Cookbook`,subtitle:`Coding practice problems on Recursion`,icon:`🔁`,patternLabel:`Questions`})}var zg=[{id:`357-what-is-backtracking`,category:`Backtracking`,title:`What is backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`358-backtracking-vs-recursion`,category:`Backtracking`,title:`Backtracking vs recursion?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`359-what-is-the-decision-tree`,category:`Backtracking`,title:`What is the decision tree?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`360-when-should-you-use-backtracking`,category:`Backtracking`,title:`When should you use backtracking?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`361-what-is-pruning`,category:`Backtracking`,title:`What is pruning?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`362-how-do-you-identify-a-backtracking-problem`,category:`Backtracking`,title:`How do you identify a backtracking problem?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Bg(){return(0,M.jsx)($,{data:zg,title:`Backtracking Cookbook`,subtitle:`Fundamentals and theory questions on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Vg=[{id:`363-generate-subsets`,category:`Backtracking`,title:`Generate subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`364-generate-permutations`,category:`Backtracking`,title:`Generate permutations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`365-generate-combinations`,category:`Backtracking`,title:`Generate combinations.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`366-combination-sum`,category:`Backtracking`,title:`Combination Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`367-letter-combinations-of-phone-number`,category:`Backtracking`,title:`Letter combinations of phone number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`368-generate-parentheses`,category:`Backtracking`,title:`Generate parentheses.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`369-n-queens`,category:`Backtracking`,title:`N-Queens.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`370-sudoku-solver`,category:`Backtracking`,title:`Sudoku Solver.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`371-word-search`,category:`Backtracking`,title:`Word Search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`372-palindrome-partitioning`,category:`Backtracking`,title:`Palindrome partitioning.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`373-rat-in-a-maze`,category:`Backtracking`,title:`Rat in a maze.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`374-partition-into-equal-subsets`,category:`Backtracking`,title:`Partition into equal subsets.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Hg(){return(0,M.jsx)($,{data:Vg,title:`Backtracking Cookbook`,subtitle:`Coding practice problems on Backtracking`,icon:`↩️`,patternLabel:`Questions`})}var Ug=[{id:`375-what-is-sorting`,category:`Sorting`,title:`What is sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`376-why-do-we-sort-data`,category:`Sorting`,title:`Why do we sort data?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`377-stable-vs-unstable-sorting`,category:`Sorting`,title:`Stable vs unstable sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`378-in-place-vs-out-of-place-sorting`,category:`Sorting`,title:`In-place vs out-of-place sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`379-comparison-vs-non-comparison-sorting`,category:`Sorting`,title:`Comparison vs non-comparison sorting?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`380-explain-bubble-sort`,category:`Sorting`,title:`Explain Bubble Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`381-explain-selection-sort`,category:`Sorting`,title:`Explain Selection Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`382-explain-insertion-sort`,category:`Sorting`,title:`Explain Insertion Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`383-explain-merge-sort`,category:`Sorting`,title:`Explain Merge Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`384-explain-quick-sort`,category:`Sorting`,title:`Explain Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`385-explain-heap-sort`,category:`Sorting`,title:`Explain Heap Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`386-explain-counting-sort`,category:`Sorting`,title:`Explain Counting Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`387-explain-radix-sort`,category:`Sorting`,title:`Explain Radix Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`388-explain-bucket-sort`,category:`Sorting`,title:`Explain Bucket Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`389-merge-sort-vs-quick-sort`,category:`Sorting`,title:`Merge Sort vs Quick Sort.`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`390-quick-sort-worst-case`,category:`Sorting`,title:`Quick Sort worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`391-why-is-merge-sort-useful-for-linked-lists`,category:`Sorting`,title:`Why is Merge Sort useful for linked lists?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`392-which-sorting-algorithm-is-stable`,category:`Sorting`,title:`Which sorting algorithm is stable?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`393-which-algorithms-are-in-place`,category:`Sorting`,title:`Which algorithms are in-place?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`394-what-is-the-best-possible-comparison-based-sorting-complexit`,category:`Sorting`,title:`What is the best possible comparison-based sorting complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`395-pythons-sorting-algorithm-what-does-python-use`,category:`Sorting`,title:`Python's sorting algorithm what does Python use?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Wg(){return(0,M.jsx)($,{data:Ug,title:`Sorting Cookbook`,subtitle:`Fundamentals and theory questions on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var Gg=[{id:`396-sort-an-array-of-0s-1s-and-2s`,category:`Sorting`,title:`Sort an array of 0s, 1s, and 2s.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`397-sort-an-almost-sorted-array`,category:`Sorting`,title:`Sort an almost sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`398-merge-overlapping-intervals`,category:`Sorting`,title:`Merge overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Kg(){return(0,M.jsx)($,{data:Gg,title:`Sorting Cookbook`,subtitle:`Coding practice problems on Sorting`,icon:`🔃`,patternLabel:`Questions`})}var qg=[{id:`399-what-is-linear-search`,category:`Searching`,title:`What is linear search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`400-what-is-binary-search`,category:`Searching`,title:`What is binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`401-what-condition-is-required-for-binary-search`,category:`Searching`,title:`What condition is required for binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`402-binary-search-complexity`,category:`Searching`,title:`Binary search complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`403-recursive-vs-iterative-binary-search`,category:`Searching`,title:`Recursive vs iterative binary search?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`404-what-is-search-space`,category:`Searching`,title:`What is search space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Jg(){return(0,M.jsx)($,{data:qg,title:`Searching Cookbook`,subtitle:`Fundamentals and theory questions on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Yg=[{id:`405-implement-linear-search`,category:`Searching`,title:`Implement linear search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`406-implement-binary-search`,category:`Searching`,title:`Implement binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`407-find-first-occurrence`,category:`Searching`,title:`Find first occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`408-find-last-occurrence`,category:`Searching`,title:`Find last occurrence.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`409-find-first-and-last-position`,category:`Searching`,title:`Find first and last position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`410-find-insertion-position`,category:`Searching`,title:`Find insertion position.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`411-search-in-rotated-sorted-array`,category:`Searching`,title:`Search in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`412-find-minimum-in-rotated-sorted-array`,category:`Searching`,title:`Find minimum in rotated sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`413-find-peak-element`,category:`Searching`,title:`Find peak element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`414-find-square-root-using-binary-search`,category:`Searching`,title:`Find square root using binary search.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`415-find-k-closest-elements`,category:`Searching`,title:`Find K closest elements.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`416-search-a-2d-matrix`,category:`Searching`,title:`Search a 2D matrix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`417-find-the-smallest-value-satisfying-a-condition`,category:`Searching`,title:`Find the smallest value satisfying a condition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`418-capacity-to-ship-packages`,category:`Searching`,title:`Capacity to Ship Packages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`419-allocate-minimum-pages`,category:`Searching`,title:`Allocate minimum pages.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`420-split-array-largest-sum`,category:`Searching`,title:`Split Array Largest Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function Xg(){return(0,M.jsx)($,{data:Yg,title:`Searching Cookbook`,subtitle:`Coding practice problems on Searching`,icon:`🔍`,patternLabel:`Questions`})}var Zg=[{id:`421-what-is-prefix-sum`,category:`Prefix Sum`,title:`What is prefix sum?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`422-why-use-prefix-sums`,category:`Prefix Sum`,title:`Why use prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`423-what-is-the-complexity-of-building-prefix-sums`,category:`Prefix Sum`,title:`What is the complexity of building prefix sums?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`424-how-does-prefix-sum-improve-range-queries`,category:`Prefix Sum`,title:`How does prefix sum improve range queries?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`425-prefix-sum-vs-sliding-window`,category:`Prefix Sum`,title:`Prefix sum vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function Qg(){return(0,M.jsx)($,{data:Zg,title:`Prefix Sum Cookbook`,subtitle:`Fundamentals and theory questions on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var $g=[{id:`426-build-a-prefix-sum-array`,category:`Prefix Sum`,title:`Build a prefix sum array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`427-range-sum-query`,category:`Prefix Sum`,title:`Range sum query.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`428-find-subarray-sum`,category:`Prefix Sum`,title:`Find subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`429-subarray-sum-equals-k`,category:`Prefix Sum`,title:`Subarray Sum Equals K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`430-count-subarrays-with-a-given-sum`,category:`Prefix Sum`,title:`Count subarrays with a given sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`431-find-equilibrium-index`,category:`Prefix Sum`,title:`Find equilibrium index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`432-find-pivot-index`,category:`Prefix Sum`,title:`Find pivot index.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`433-product-prefix-suffix`,category:`Prefix Sum`,title:`Product prefix/suffix.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`434-range-addition`,category:`Prefix Sum`,title:`Range addition.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`435-2d-prefix-sum`,category:`Prefix Sum`,title:`2D prefix sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`436-matrix-region-sum`,category:`Prefix Sum`,title:`Matrix region sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function e_(){return(0,M.jsx)($,{data:$g,title:`Prefix Sum Cookbook`,subtitle:`Coding practice problems on Prefix Sum`,icon:`➕`,patternLabel:`Questions`})}var t_=[{id:`437-what-is-sliding-window`,category:`Sliding Window`,title:`What is sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`438-fixed-vs-variable-size-window`,category:`Sliding Window`,title:`Fixed vs variable-size window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`439-when-should-you-use-sliding-window`,category:`Sliding Window`,title:`When should you use sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`440-sliding-window-vs-two-pointers`,category:`Sliding Window`,title:`Sliding window vs two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function n_(){return(0,M.jsx)($,{data:t_,title:`Sliding Window Cookbook`,subtitle:`Fundamentals and theory questions on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var r_=[{id:`441-maximum-sum-subarray-of-size-k`,category:`Sliding Window`,title:`Maximum sum subarray of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`442-average-of-subarrays-of-size-k`,category:`Sliding Window`,title:`Average of subarrays of size K.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`443-longest-substring-without-repeating-characters`,category:`Sliding Window`,title:`Longest substring without repeating characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`444-longest-substring-with-k-distinct-characters`,category:`Sliding Window`,title:`Longest substring with K distinct characters.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`445-minimum-window-substring`,category:`Sliding Window`,title:`Minimum window substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`446-longest-repeating-character-replacement`,category:`Sliding Window`,title:`Longest repeating character replacement.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`447-permutation-in-string`,category:`Sliding Window`,title:`Permutation in string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`448-find-all-anagrams-in-a-string`,category:`Sliding Window`,title:`Find all anagrams in a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`449-minimum-size-subarray-sum`,category:`Sliding Window`,title:`Minimum size subarray sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`450-maximum-number-of-vowels-in-a-substring`,category:`Sliding Window`,title:`Maximum number of vowels in a substring.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`451-sliding-window-maximum`,category:`Sliding Window`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function i_(){return(0,M.jsx)($,{data:r_,title:`Sliding Window Cookbook`,subtitle:`Coding practice problems on Sliding Window`,icon:`🪟`,patternLabel:`Questions`})}var a_=[{id:`452-what-is-the-two-pointer-technique`,category:`Two Pointers`,title:`What is the two-pointer technique?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`453-when-should-you-use-two-pointers`,category:`Two Pointers`,title:`When should you use two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`454-two-pointers-vs-sliding-window`,category:`Two Pointers`,title:`Two pointers vs sliding window?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`455-why-is-sorting-often-useful-with-two-pointers`,category:`Two Pointers`,title:`Why is sorting often useful with two pointers?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function o_(){return(0,M.jsx)($,{data:a_,title:`Two Pointers Cookbook`,subtitle:`Fundamentals and theory questions on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var s_=[{id:`456-two-sum-in-sorted-array`,category:`Two Pointers`,title:`Two Sum in sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`457-three-sum`,category:`Two Pointers`,title:`Three Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`458-four-sum`,category:`Two Pointers`,title:`Four Sum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`459-remove-duplicates-from-sorted-array`,category:`Two Pointers`,title:`Remove duplicates from sorted array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`460-move-zeros`,category:`Two Pointers`,title:`Move zeros.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`461-reverse-an-array`,category:`Two Pointers`,title:`Reverse an array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`462-reverse-a-string`,category:`Two Pointers`,title:`Reverse a string.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`463-container-with-most-water`,category:`Two Pointers`,title:`Container With Most Water.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`464-valid-palindrome`,category:`Two Pointers`,title:`Valid palindrome.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`465-merge-two-sorted-arrays`,category:`Two Pointers`,title:`Merge two sorted arrays.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`466-partition-array`,category:`Two Pointers`,title:`Partition array.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`467-sort-colors`,category:`Two Pointers`,title:`Sort colors.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`468-find-pair-with-target-difference`,category:`Two Pointers`,title:`Find pair with target difference.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function c_(){return(0,M.jsx)($,{data:s_,title:`Two Pointers Cookbook`,subtitle:`Coding practice problems on Two Pointers`,icon:`👉`,patternLabel:`Questions`})}var l_=[{id:`469-what-is-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`What is a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`470-increasing-vs-decreasing-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Increasing vs decreasing monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`471-why-use-a-monotonic-stack`,category:`Monotonic Stack / Queue`,title:`Why use a monotonic stack?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`472-what-problems-can-it-solve`,category:`Monotonic Stack / Queue`,title:`What problems can it solve?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`473-how-does-it-achieve-o-n`,category:`Monotonic Stack / Queue`,title:`How does it achieve O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function u_(){return(0,M.jsx)($,{data:l_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Fundamentals and theory questions on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var d_=[{id:`474-next-greater-element`,category:`Monotonic Stack / Queue`,title:`Next Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`475-next-smaller-element`,category:`Monotonic Stack / Queue`,title:`Next Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`476-previous-greater-element`,category:`Monotonic Stack / Queue`,title:`Previous Greater Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`477-previous-smaller-element`,category:`Monotonic Stack / Queue`,title:`Previous Smaller Element.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`478-daily-temperatures`,category:`Monotonic Stack / Queue`,title:`Daily Temperatures.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`479-stock-span`,category:`Monotonic Stack / Queue`,title:`Stock Span.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`480-largest-rectangle-in-histogram`,category:`Monotonic Stack / Queue`,title:`Largest Rectangle in Histogram.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`481-maximal-rectangle`,category:`Monotonic Stack / Queue`,title:`Maximal Rectangle.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`482-sliding-window-maximum`,category:`Monotonic Stack / Queue`,title:`Sliding Window Maximum.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`483-remove-k-digits`,category:`Monotonic Stack / Queue`,title:`Remove K digits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`484-sum-of-subarray-minimums`,category:`Monotonic Stack / Queue`,title:`Sum of Subarray Minimums.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function f_(){return(0,M.jsx)($,{data:d_,title:`Monotonic Stack / Queue Cookbook`,subtitle:`Coding practice problems on Monotonic Stack / Queue`,icon:`📈`,patternLabel:`Questions`})}var p_=[{id:`485-what-is-an-interval`,category:`Intervals`,title:`What is an interval?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`486-how-do-you-represent-intervals`,category:`Intervals`,title:`How do you represent intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`487-how-do-you-detect-overlapping-intervals`,category:`Intervals`,title:`How do you detect overlapping intervals?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`488-why-do-we-usually-sort-intervals-first`,category:`Intervals`,title:`Why do we usually sort intervals first?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`489-what-is-interval-merging`,category:`Intervals`,title:`What is interval merging?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function m_(){return(0,M.jsx)($,{data:p_,title:`Intervals Cookbook`,subtitle:`Fundamentals and theory questions on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var h_=[{id:`490-merge-intervals`,category:`Intervals`,title:`Merge intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`491-insert-interval`,category:`Intervals`,title:`Insert interval.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`492-check-overlapping-intervals`,category:`Intervals`,title:`Check overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`493-meeting-rooms`,category:`Intervals`,title:`Meeting Rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`494-meeting-rooms-ii`,category:`Intervals`,title:`Meeting Rooms II.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`495-minimum-number-of-meeting-rooms`,category:`Intervals`,title:`Minimum number of meeting rooms.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`496-non-overlapping-intervals`,category:`Intervals`,title:`Non-overlapping intervals.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`497-interval-intersection`,category:`Intervals`,title:`Interval intersection.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`498-employee-free-time`,category:`Intervals`,title:`Employee free time.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`499-minimum-arrows-to-burst-balloons`,category:`Intervals`,title:`Minimum arrows to burst balloons.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`500-merge-calendar-schedules`,category:`Intervals`,title:`Merge calendar schedules.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function g_(){return(0,M.jsx)($,{data:h_,title:`Intervals Cookbook`,subtitle:`Coding practice problems on Intervals`,icon:`⏱️`,patternLabel:`Questions`})}var __=[{id:`501-what-is-a-bit`,category:`Bit Manipulation`,title:`What is a bit?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`502-what-is-binary-representation`,category:`Bit Manipulation`,title:`What is binary representation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`503-what-is-bitwise-and`,category:`Bit Manipulation`,title:`What is bitwise AND?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`504-what-is-bitwise-or`,category:`Bit Manipulation`,title:`What is bitwise OR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`505-what-is-xor`,category:`Bit Manipulation`,title:`What is XOR?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`506-what-is-not`,category:`Bit Manipulation`,title:`What is NOT?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`507-what-are-left-and-right-shifts`,category:`Bit Manipulation`,title:`What are left and right shifts?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`508-difference-between-logical-and-arithmetic-shift`,category:`Bit Manipulation`,title:`Difference between logical and arithmetic shift?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`509-what-is-a-bit-mask`,category:`Bit Manipulation`,title:`What is a bit mask?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`510-why-is-xor-useful`,category:`Bit Manipulation`,title:`Why is XOR useful?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function v_(){return(0,M.jsx)($,{data:__,title:`Bit Manipulation Cookbook`,subtitle:`Fundamentals and theory questions on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var y_=[{id:`511-check-whether-a-number-is-even`,category:`Bit Manipulation`,title:`Check whether a number is even.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`512-check-whether-a-number-is-a-power-of-two`,category:`Bit Manipulation`,title:`Check whether a number is a power of two.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`513-count-set-bits`,category:`Bit Manipulation`,title:`Count set bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`514-find-the-single-number`,category:`Bit Manipulation`,title:`Find the single number.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`515-find-two-unique-numbers`,category:`Bit Manipulation`,title:`Find two unique numbers.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`516-find-missing-number-using-xor`,category:`Bit Manipulation`,title:`Find missing number using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`517-reverse-bits`,category:`Bit Manipulation`,title:`Reverse bits.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`518-swap-two-numbers-using-xor`,category:`Bit Manipulation`,title:`Swap two numbers using XOR.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`519-find-whether-a-particular-bit-is-set`,category:`Bit Manipulation`,title:`Find whether a particular bit is set.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`520-set-a-bit`,category:`Bit Manipulation`,title:`Set a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`521-clear-a-bit`,category:`Bit Manipulation`,title:`Clear a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`522-toggle-a-bit`,category:`Bit Manipulation`,title:`Toggle a bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`523-find-the-lowest-set-bit`,category:`Bit Manipulation`,title:`Find the lowest set bit.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``},{id:`524-generate-subsets-using-bit-masks`,category:`Bit Manipulation`,title:`Generate subsets using bit masks.`,difficulty:`Intermediate`,time:`~15 min`,concept:``,code:``}];function b_(){return(0,M.jsx)($,{data:y_,title:`Bit Manipulation Cookbook`,subtitle:`Coding practice problems on Bit Manipulation`,icon:`💾`,patternLabel:`Questions`})}var x_=[{id:`525-what-is-big-o-notation`,category:`Complexity & Analysis`,title:`What is Big-O notation?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`526-what-is-time-complexity`,category:`Complexity & Analysis`,title:`What is time complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`527-what-is-space-complexity`,category:`Complexity & Analysis`,title:`What is space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`528-what-is-o-1`,category:`Complexity & Analysis`,title:`What is O(1)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`529-what-is-o-log-n`,category:`Complexity & Analysis`,title:`What is O(log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`530-what-is-o-n`,category:`Complexity & Analysis`,title:`What is O(n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`531-what-is-o-n-log-n`,category:`Complexity & Analysis`,title:`What is O(n log n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`532-what-is-o-n-squared`,category:`Complexity & Analysis`,title:`What is O(n squared)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`533-what-is-o-2-to-the-n`,category:`Complexity & Analysis`,title:`What is O(2 to the n)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`534-what-is-o-n-factorial`,category:`Complexity & Analysis`,title:`What is O(n factorial)?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`535-big-o-vs-big-theta-vs-big-omega`,category:`Complexity & Analysis`,title:`Big-O vs Big-Theta vs Big-Omega?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`536-best-case-vs-average-case-vs-worst-case`,category:`Complexity & Analysis`,title:`Best case vs average case vs worst case?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`537-how-do-you-calculate-complexity-of-nested-loops`,category:`Complexity & Analysis`,title:`How do you calculate complexity of nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`538-how-do-you-calculate-complexity-of-recursive-algorithms`,category:`Complexity & Analysis`,title:`How do you calculate complexity of recursive algorithms?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`539-what-is-amortized-complexity`,category:`Complexity & Analysis`,title:`What is amortized complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`540-what-is-the-complexity-of-python-list-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python list operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`541-what-is-the-complexity-of-python-dictionary-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python dictionary operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`542-what-is-the-complexity-of-python-set-operations`,category:`Complexity & Analysis`,title:`What is the complexity of Python set operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`543-what-is-the-complexity-of-deque-operations`,category:`Complexity & Analysis`,title:`What is the complexity of deque operations?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`544-what-is-the-tradeoff-between-time-and-space`,category:`Complexity & Analysis`,title:`What is the tradeoff between time and space?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`545-how-would-you-optimize-an-o-n-squared-solution`,category:`Complexity & Analysis`,title:`How would you optimize an O(n squared) solution?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`546-how-do-you-identify-unnecessary-nested-loops`,category:`Complexity & Analysis`,title:`How do you identify unnecessary nested loops?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`547-how-do-you-reduce-space-complexity`,category:`Complexity & Analysis`,title:`How do you reduce space complexity?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``},{id:`548-how-do-you-analyze-a-solution-during-an-interview`,category:`Complexity & Analysis`,title:`How do you analyze a solution during an interview?`,difficulty:`Beginner`,time:`~5 min`,concept:``,code:``}];function S_(){return(0,M.jsx)($,{data:x_,title:`Complexity & Analysis Cookbook`,subtitle:`Fundamentals and theory questions on Complexity & Analysis`,icon:`📐`,patternLabel:`Questions`})}var C_=`/GenAI-Architect-Playbook/assets/logo-DfeCIHVX.png`;function w_(){let[e,t]=(0,v.useState)(null),n=(0,v.useRef)(null),r=yt(),i=[{name:`About Me`,path:`/about`}],a=[{name:`Top Questions`,path:`/top-questions`},{name:`RAG`,path:`/rag`},{name:`MCP`,path:`/mcp`},{name:`A2A`,path:`/a2a`},{name:`Agentic Scenario Based`,path:`/agentic-scenario-based`}],o=[{name:`01. Project Overview`,path:`/cwd-project-overview`},{name:`Q02. Architecture`,path:`/cwd-q-architecture-questions`},{name:`Q03. Coordinator Agent`,path:`/cwd-q-coordinator-agent`},{name:`Q04. Delegator Architecture`,path:`/cwd-q-delegator-architecture`},{name:`Q05. Worker Architecture`,path:`/cwd-q-worker-architecture`},{name:`Q06. MCP Deep Interview`,path:`/cwd-q-mcp-deep-interview`},{name:`Q07. A2A — Agent Communication`,path:`/cwd-q-a2a-agent-communication`},{name:`Q08. LangGraph`,path:`/cwd-q-langgraph`},{name:`Q09. RAG Architecture`,path:`/cwd-q-rag-architecture`},{name:`Q10. LLM Architecture`,path:`/cwd-q-llm-architecture`},{name:`Q11. Hallucination & Grounding`,path:`/cwd-q-hallucination-and-grounding`},{name:`Q12. LLM Evaluation`,path:`/cwd-q-llm-evaluation`},{name:`Q13. Security Architecture`,path:`/cwd-q-security-architecture`},{name:`Q15. Observability`,path:`/cwd-q-observability`},{name:`Q16. Reliability & Failure Handling`,path:`/cwd-q-reliability-and-failure-handling`},{name:`Q17. Scalability`,path:`/cwd-q-scalability`},{name:`Q18. Performance & Optimization`,path:`/cwd-q-performance-and-optimization`},{name:`Q19. Cost Optimization`,path:`/cwd-q-cost-optimization`},{name:`Q20. Data Architecture`,path:`/cwd-q-data-architecture`},{name:`Q21. Enterprise Integration`,path:`/cwd-q-enterprise-integration`},{name:`Q22. API & Backend Architecture`,path:`/cwd-q-api-and-backend-architecture`},{name:`Q23. Production Deployment / DevOps`,path:`/cwd-q-production-deployment-devops`},{name:`Q24. Testing`,path:`/cwd-q-testing`},{name:`Q25. Troubleshooting Scenarios`,path:`/cwd-q-troubleshooting-scenarios`},{name:`Q26. Agentic AI Design Questions`,path:`/cwd-q-agentic-ai-design-questions`},{name:`Q27. Governance`,path:`/cwd-q-governance`},{name:`Q28. Architecture Trade-Off Questions`,path:`/cwd-q-architecture-trade-off-questions`},{name:`Q29. Senior/Principal Architect Questions`,path:`/cwd-q-senior-principal-architect-questions`}],s=[{name:`AWS Architecture`,path:`/aws-architecture`},{name:`Amazon Bedrock`,path:`/aws-bedrock`},{name:`API Gateway`,path:`/aws-api-gateway`},{name:`AWS Lambda`,path:`/aws-lambda`},{name:`ECS / Fargate / EKS`,path:`/aws-ecs-fargate-eks`},{name:`SQS & Asynchronous Processing`,path:`/aws-sqs`},{name:`Step Functions`,path:`/aws-step-functions`},{name:`DynamoDB`,path:`/aws-dynamodb`},{name:`Amazon S3`,path:`/aws-s3`},{name:`OpenSearch`,path:`/aws-opensearch`},{name:`IAM & Security`,path:`/aws-iam-security`},{name:`KMS & Secrets Manager`,path:`/aws-kms-secrets`},{name:`VPC & Networking`,path:`/aws-vpc-networking`},{name:`CloudWatch & Observability`,path:`/aws-cloudwatch`},{name:`Scalability & High Availability`,path:`/aws-scalability-ha`},{name:`AWS Cost Optimization`,path:`/aws-cost-optimization`},{name:`AWS DevOps / Deployment`,path:`/aws-devops`},{name:`AWS Glue`,path:`/aws-glue`},{name:`Amazon SageMaker`,path:`/aws-sagemaker`}],c=[{name:`Azure Architecture`,path:`/azure-architecture`},{name:`Azure OpenAI`,path:`/azure-openai`},{name:`Azure AI Foundry`,path:`/azure-ai-foundry`},{name:`Azure AI Search`,path:`/azure-ai-search`},{name:`Azure Data Factory / Data Integration`,path:`/azure-data-factory`},{name:`Azure Databricks`,path:`/azure-databricks`},{name:`Azure Machine Learning`,path:`/azure-machine-learning`},{name:`Azure Functions`,path:`/azure-functions`},{name:`Azure Container Apps / AKS`,path:`/azure-container-apps`},{name:`Azure API Management`,path:`/azure-api-management`},{name:`Azure Service Bus`,path:`/azure-service-bus`},{name:`Cosmos DB`,path:`/azure-cosmos-db`},{name:`Azure Cache for Redis`,path:`/azure-redis`},{name:`Microsoft Entra ID`,path:`/azure-entra-id`},{name:`Azure Key Vault`,path:`/azure-key-vault`},{name:`Azure Networking`,path:`/azure-networking`},{name:`Azure Monitor / Application Insights`,path:`/azure-monitor`},{name:`Azure DevOps / CI/CD`,path:`/azure-devops`}],l=[{name:`01. Arrays / Lists — Concept`,path:`/ds-arrays-lists-concept`},{name:`01. Arrays / Lists — Code`,path:`/ds-arrays-lists-code`},{name:`02. Strings — Concept`,path:`/ds-strings-concept`},{name:`02. Strings — Code`,path:`/ds-strings-code`},{name:`03. Hash Table / Dictionary — Concept`,path:`/ds-hash-table-dictionary-concept`},{name:`03. Hash Table / Dictionary — Code`,path:`/ds-hash-table-dictionary-code`},{name:`04. Set — Concept`,path:`/ds-set-concept`},{name:`04. Set — Code`,path:`/ds-set-code`},{name:`05. Linked List — Concept`,path:`/ds-linked-list-concept`},{name:`05. Linked List — Code`,path:`/ds-linked-list-code`},{name:`06. Stack — Concept`,path:`/ds-stack-concept`},{name:`06. Stack — Code`,path:`/ds-stack-code`},{name:`07. Queue — Concept`,path:`/ds-queue-concept`},{name:`07. Queue — Code`,path:`/ds-queue-code`},{name:`08. Heap / Priority Queue — Concept`,path:`/ds-heap-priority-queue-concept`},{name:`08. Heap / Priority Queue — Code`,path:`/ds-heap-priority-queue-code`},{name:`09. Trees — Concept`,path:`/ds-trees-concept`},{name:`09. Trees — Code`,path:`/ds-trees-code`},{name:`10. Binary Search Tree (BST) — Concept`,path:`/ds-binary-search-tree-bst-concept`},{name:`10. Binary Search Tree (BST) — Code`,path:`/ds-binary-search-tree-bst-code`},{name:`11. Trie — Concept`,path:`/ds-trie-concept`},{name:`11. Trie — Code`,path:`/ds-trie-code`},{name:`12. Graphs — Concept`,path:`/ds-graphs-concept`},{name:`12. Graphs — Code`,path:`/ds-graphs-code`},{name:`13. Graph Algorithms — Concept`,path:`/ds-graph-algorithms-concept`},{name:`14. Union-Find / Disjoint Set — Concept`,path:`/ds-union-find-disjoint-set-concept`},{name:`14. Union-Find / Disjoint Set — Code`,path:`/ds-union-find-disjoint-set-code`},{name:`15. Recursion — Concept`,path:`/ds-recursion-concept`},{name:`15. Recursion — Code`,path:`/ds-recursion-code`},{name:`16. Backtracking — Concept`,path:`/ds-backtracking-concept`},{name:`16. Backtracking — Code`,path:`/ds-backtracking-code`},{name:`17. Sorting — Concept`,path:`/ds-sorting-concept`},{name:`17. Sorting — Code`,path:`/ds-sorting-code`},{name:`18. Searching — Concept`,path:`/ds-searching-concept`},{name:`18. Searching — Code`,path:`/ds-searching-code`},{name:`19. Prefix Sum — Concept`,path:`/ds-prefix-sum-concept`},{name:`19. Prefix Sum — Code`,path:`/ds-prefix-sum-code`},{name:`20. Sliding Window — Concept`,path:`/ds-sliding-window-concept`},{name:`20. Sliding Window — Code`,path:`/ds-sliding-window-code`},{name:`21. Two Pointers — Concept`,path:`/ds-two-pointers-concept`},{name:`21. Two Pointers — Code`,path:`/ds-two-pointers-code`},{name:`22. Monotonic Stack / Queue — Concept`,path:`/ds-monotonic-stack-queue-concept`},{name:`22. Monotonic Stack / Queue — Code`,path:`/ds-monotonic-stack-queue-code`},{name:`23. Intervals — Concept`,path:`/ds-intervals-concept`},{name:`23. Intervals — Code`,path:`/ds-intervals-code`},{name:`24. Bit Manipulation — Concept`,path:`/ds-bit-manipulation-concept`},{name:`24. Bit Manipulation — Code`,path:`/ds-bit-manipulation-code`},{name:`25. Complexity & Analysis — Concept`,path:`/ds-complexity-analysis-concept`}];(0,v.useEffect)(()=>{let e=e=>{n.current&&!n.current.contains(e.target)&&t(null)};return document.addEventListener(`mousedown`,e),()=>{document.removeEventListener(`mousedown`,e)}},[]),(0,v.useEffect)(()=>{let e=e=>{e.key===`Escape`&&t(null)};return document.addEventListener(`keydown`,e),()=>{document.removeEventListener(`keydown`,e)}},[]),(0,v.useEffect)(()=>{t(null)},[r.pathname]);let u=e=>{t(t=>t===e?null:e)},d=()=>{t(null)},f=({name:t,topics:n})=>{let r=e===t;return(0,M.jsxs)(`div`,{className:`dropdown`,children:[(0,M.jsxs)(`button`,{type:`button`,className:`dropdown-btn ${r?`open`:``}`,onClick:()=>u(t),"aria-expanded":r,"aria-haspopup":`true`,children:[t,(0,M.jsx)(`span`,{className:`arrow`,children:r?`▲`:`▼`})]}),r&&(0,M.jsx)(`div`,{className:`dropdown-content`,children:n.map(e=>(0,M.jsx)(Mn,{to:e.path,onClick:d,children:e.name},e.path))})]})};return(0,M.jsxs)(`nav`,{className:`navbar`,children:[(0,M.jsx)(`div`,{className:`logo`,children:(0,M.jsxs)(Mn,{to:`/`,className:`logo-link`,children:[(0,M.jsx)(`img`,{src:C_,alt:`IntelliCatalyst AI Labs`,className:`logo-icon`}),(0,M.jsxs)(`div`,{className:`logo-text`,children:[(0,M.jsx)(`span`,{className:`logo-white`,children:`IntelliCatalyst`}),(0,M.jsx)(`span`,{className:`logo-blue`,children:`AI Labs`})]})]})}),(0,M.jsxs)(`div`,{className:`menu`,ref:n,children:[(0,M.jsx)(f,{name:`Pooja Sunkara`,topics:i}),(0,M.jsx)(f,{name:`AgenticAI`,topics:a}),(0,M.jsx)(f,{name:`CWD Project`,topics:o}),(0,M.jsx)(f,{name:`AWS`,topics:s}),(0,M.jsx)(f,{name:`Azure`,topics:c}),(0,M.jsx)(f,{name:`Data Structures`,topics:l})]})]})}function T_(){return(0,M.jsxs)(jn,{basename:`/GenAI-Architect-Playbook`,children:[(0,M.jsx)(w_,{}),(0,M.jsxs)(Kt,{children:[(0,M.jsx)(j,{path:`/`,element:(0,M.jsx)(Gn,{})}),(0,M.jsx)(j,{path:`/rag`,element:(0,M.jsx)(cp,{})}),(0,M.jsx)(j,{path:`/mcp`,element:(0,M.jsx)(kf,{})}),(0,M.jsx)(j,{path:`/a2a`,element:(0,M.jsx)(jf,{})}),(0,M.jsx)(j,{path:`/agentic-scenario-based`,element:(0,M.jsx)(Nf,{})}),(0,M.jsx)(j,{path:`/top-questions`,element:(0,M.jsx)(op,{})}),(0,M.jsx)(j,{path:`/cwd-project-overview`,element:(0,M.jsx)(up,{})}),(0,M.jsx)(j,{path:`/cwd-architecture`,element:(0,M.jsx)(fp,{})}),(0,M.jsx)(j,{path:`/about`,element:(0,M.jsx)(mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-questions`,element:(0,M.jsx)(gp,{})}),(0,M.jsx)(j,{path:`/cwd-q-coordinator-agent`,element:(0,M.jsx)(vp,{})}),(0,M.jsx)(j,{path:`/cwd-q-delegator-architecture`,element:(0,M.jsx)(bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-worker-architecture`,element:(0,M.jsx)(Sp,{})}),(0,M.jsx)(j,{path:`/cwd-q-mcp-deep-interview`,element:(0,M.jsx)(wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-a2a-agent-communication`,element:(0,M.jsx)(Ep,{})}),(0,M.jsx)(j,{path:`/cwd-q-langgraph`,element:(0,M.jsx)(Op,{})}),(0,M.jsx)(j,{path:`/cwd-q-rag-architecture`,element:(0,M.jsx)(Ap,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-architecture`,element:(0,M.jsx)(Mp,{})}),(0,M.jsx)(j,{path:`/cwd-q-hallucination-and-grounding`,element:(0,M.jsx)(Pp,{})}),(0,M.jsx)(j,{path:`/cwd-q-llm-evaluation`,element:(0,M.jsx)(Ip,{})}),(0,M.jsx)(j,{path:`/cwd-q-security-architecture`,element:(0,M.jsx)(Rp,{})}),(0,M.jsx)(j,{path:`/cwd-q-observability`,element:(0,M.jsx)(Bp,{})}),(0,M.jsx)(j,{path:`/cwd-q-reliability-and-failure-handling`,element:(0,M.jsx)(Hp,{})}),(0,M.jsx)(j,{path:`/cwd-q-scalability`,element:(0,M.jsx)(Wp,{})}),(0,M.jsx)(j,{path:`/cwd-q-performance-and-optimization`,element:(0,M.jsx)(Kp,{})}),(0,M.jsx)(j,{path:`/cwd-q-cost-optimization`,element:(0,M.jsx)(Jp,{})}),(0,M.jsx)(j,{path:`/cwd-q-data-architecture`,element:(0,M.jsx)(Xp,{})}),(0,M.jsx)(j,{path:`/cwd-q-enterprise-integration`,element:(0,M.jsx)(Qp,{})}),(0,M.jsx)(j,{path:`/cwd-q-api-and-backend-architecture`,element:(0,M.jsx)(em,{})}),(0,M.jsx)(j,{path:`/cwd-q-production-deployment-devops`,element:(0,M.jsx)(nm,{})}),(0,M.jsx)(j,{path:`/cwd-q-testing`,element:(0,M.jsx)(im,{})}),(0,M.jsx)(j,{path:`/cwd-q-troubleshooting-scenarios`,element:(0,M.jsx)(om,{})}),(0,M.jsx)(j,{path:`/cwd-q-agentic-ai-design-questions`,element:(0,M.jsx)(cm,{})}),(0,M.jsx)(j,{path:`/cwd-q-governance`,element:(0,M.jsx)(um,{})}),(0,M.jsx)(j,{path:`/cwd-q-architecture-trade-off-questions`,element:(0,M.jsx)(fm,{})}),(0,M.jsx)(j,{path:`/cwd-q-senior-principal-architect-questions`,element:(0,M.jsx)(mm,{})}),(0,M.jsx)(j,{path:`/aws-architecture`,element:(0,M.jsx)(gm,{})}),(0,M.jsx)(j,{path:`/aws-bedrock`,element:(0,M.jsx)(vm,{})}),(0,M.jsx)(j,{path:`/aws-api-gateway`,element:(0,M.jsx)(bm,{})}),(0,M.jsx)(j,{path:`/aws-lambda`,element:(0,M.jsx)(Sm,{})}),(0,M.jsx)(j,{path:`/aws-ecs-fargate-eks`,element:(0,M.jsx)(wm,{})}),(0,M.jsx)(j,{path:`/aws-sqs`,element:(0,M.jsx)(Em,{})}),(0,M.jsx)(j,{path:`/aws-step-functions`,element:(0,M.jsx)(Om,{})}),(0,M.jsx)(j,{path:`/aws-dynamodb`,element:(0,M.jsx)(Am,{})}),(0,M.jsx)(j,{path:`/aws-s3`,element:(0,M.jsx)(Mm,{})}),(0,M.jsx)(j,{path:`/aws-opensearch`,element:(0,M.jsx)(Pm,{})}),(0,M.jsx)(j,{path:`/aws-iam-security`,element:(0,M.jsx)(Im,{})}),(0,M.jsx)(j,{path:`/aws-kms-secrets`,element:(0,M.jsx)(Rm,{})}),(0,M.jsx)(j,{path:`/aws-vpc-networking`,element:(0,M.jsx)(Bm,{})}),(0,M.jsx)(j,{path:`/aws-cloudwatch`,element:(0,M.jsx)(Hm,{})}),(0,M.jsx)(j,{path:`/aws-scalability-ha`,element:(0,M.jsx)(Wm,{})}),(0,M.jsx)(j,{path:`/aws-cost-optimization`,element:(0,M.jsx)(Km,{})}),(0,M.jsx)(j,{path:`/aws-devops`,element:(0,M.jsx)(Jm,{})}),(0,M.jsx)(j,{path:`/aws-glue`,element:(0,M.jsx)(Xm,{})}),(0,M.jsx)(j,{path:`/aws-sagemaker`,element:(0,M.jsx)(Qm,{})}),(0,M.jsx)(j,{path:`/azure-architecture`,element:(0,M.jsx)(eh,{})}),(0,M.jsx)(j,{path:`/azure-openai`,element:(0,M.jsx)(nh,{})}),(0,M.jsx)(j,{path:`/azure-ai-foundry`,element:(0,M.jsx)(ih,{})}),(0,M.jsx)(j,{path:`/azure-ai-search`,element:(0,M.jsx)(oh,{})}),(0,M.jsx)(j,{path:`/azure-data-factory`,element:(0,M.jsx)(ch,{})}),(0,M.jsx)(j,{path:`/azure-databricks`,element:(0,M.jsx)(uh,{})}),(0,M.jsx)(j,{path:`/azure-machine-learning`,element:(0,M.jsx)(fh,{})}),(0,M.jsx)(j,{path:`/azure-functions`,element:(0,M.jsx)(mh,{})}),(0,M.jsx)(j,{path:`/azure-container-apps`,element:(0,M.jsx)(gh,{})}),(0,M.jsx)(j,{path:`/azure-api-management`,element:(0,M.jsx)(vh,{})}),(0,M.jsx)(j,{path:`/azure-service-bus`,element:(0,M.jsx)(bh,{})}),(0,M.jsx)(j,{path:`/azure-cosmos-db`,element:(0,M.jsx)(Sh,{})}),(0,M.jsx)(j,{path:`/azure-redis`,element:(0,M.jsx)(wh,{})}),(0,M.jsx)(j,{path:`/azure-entra-id`,element:(0,M.jsx)(Eh,{})}),(0,M.jsx)(j,{path:`/azure-key-vault`,element:(0,M.jsx)(Oh,{})}),(0,M.jsx)(j,{path:`/azure-networking`,element:(0,M.jsx)(Ah,{})}),(0,M.jsx)(j,{path:`/azure-monitor`,element:(0,M.jsx)(Mh,{})}),(0,M.jsx)(j,{path:`/azure-devops`,element:(0,M.jsx)(Ph,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-concept`,element:(0,M.jsx)(Ih,{})}),(0,M.jsx)(j,{path:`/ds-arrays-lists-code`,element:(0,M.jsx)(Rh,{})}),(0,M.jsx)(j,{path:`/ds-strings-concept`,element:(0,M.jsx)(Bh,{})}),(0,M.jsx)(j,{path:`/ds-strings-code`,element:(0,M.jsx)(Hh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-concept`,element:(0,M.jsx)(Wh,{})}),(0,M.jsx)(j,{path:`/ds-hash-table-dictionary-code`,element:(0,M.jsx)(Kh,{})}),(0,M.jsx)(j,{path:`/ds-set-concept`,element:(0,M.jsx)(Jh,{})}),(0,M.jsx)(j,{path:`/ds-set-code`,element:(0,M.jsx)(Xh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-concept`,element:(0,M.jsx)(Qh,{})}),(0,M.jsx)(j,{path:`/ds-linked-list-code`,element:(0,M.jsx)(eg,{})}),(0,M.jsx)(j,{path:`/ds-stack-concept`,element:(0,M.jsx)(ng,{})}),(0,M.jsx)(j,{path:`/ds-stack-code`,element:(0,M.jsx)(ig,{})}),(0,M.jsx)(j,{path:`/ds-queue-concept`,element:(0,M.jsx)(og,{})}),(0,M.jsx)(j,{path:`/ds-queue-code`,element:(0,M.jsx)(cg,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-concept`,element:(0,M.jsx)(ug,{})}),(0,M.jsx)(j,{path:`/ds-heap-priority-queue-code`,element:(0,M.jsx)(fg,{})}),(0,M.jsx)(j,{path:`/ds-trees-concept`,element:(0,M.jsx)(mg,{})}),(0,M.jsx)(j,{path:`/ds-trees-code`,element:(0,M.jsx)(gg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-concept`,element:(0,M.jsx)(vg,{})}),(0,M.jsx)(j,{path:`/ds-binary-search-tree-bst-code`,element:(0,M.jsx)(bg,{})}),(0,M.jsx)(j,{path:`/ds-trie-concept`,element:(0,M.jsx)(Sg,{})}),(0,M.jsx)(j,{path:`/ds-trie-code`,element:(0,M.jsx)(wg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-concept`,element:(0,M.jsx)(Eg,{})}),(0,M.jsx)(j,{path:`/ds-graphs-code`,element:(0,M.jsx)(Og,{})}),(0,M.jsx)(j,{path:`/ds-graph-algorithms-concept`,element:(0,M.jsx)(Ag,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-concept`,element:(0,M.jsx)(Mg,{})}),(0,M.jsx)(j,{path:`/ds-union-find-disjoint-set-code`,element:(0,M.jsx)(Pg,{})}),(0,M.jsx)(j,{path:`/ds-recursion-concept`,element:(0,M.jsx)(Ig,{})}),(0,M.jsx)(j,{path:`/ds-recursion-code`,element:(0,M.jsx)(Rg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-concept`,element:(0,M.jsx)(Bg,{})}),(0,M.jsx)(j,{path:`/ds-backtracking-code`,element:(0,M.jsx)(Hg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-concept`,element:(0,M.jsx)(Wg,{})}),(0,M.jsx)(j,{path:`/ds-sorting-code`,element:(0,M.jsx)(Kg,{})}),(0,M.jsx)(j,{path:`/ds-searching-concept`,element:(0,M.jsx)(Jg,{})}),(0,M.jsx)(j,{path:`/ds-searching-code`,element:(0,M.jsx)(Xg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-concept`,element:(0,M.jsx)(Qg,{})}),(0,M.jsx)(j,{path:`/ds-prefix-sum-code`,element:(0,M.jsx)(e_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-concept`,element:(0,M.jsx)(n_,{})}),(0,M.jsx)(j,{path:`/ds-sliding-window-code`,element:(0,M.jsx)(i_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-concept`,element:(0,M.jsx)(o_,{})}),(0,M.jsx)(j,{path:`/ds-two-pointers-code`,element:(0,M.jsx)(c_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-concept`,element:(0,M.jsx)(u_,{})}),(0,M.jsx)(j,{path:`/ds-monotonic-stack-queue-code`,element:(0,M.jsx)(f_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-concept`,element:(0,M.jsx)(m_,{})}),(0,M.jsx)(j,{path:`/ds-intervals-code`,element:(0,M.jsx)(g_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-concept`,element:(0,M.jsx)(v_,{})}),(0,M.jsx)(j,{path:`/ds-bit-manipulation-code`,element:(0,M.jsx)(b_,{})}),(0,M.jsx)(j,{path:`/ds-complexity-analysis-concept`,element:(0,M.jsx)(S_,{})})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,M.jsx)(v.StrictMode,{children:(0,M.jsx)(T_,{})}));
