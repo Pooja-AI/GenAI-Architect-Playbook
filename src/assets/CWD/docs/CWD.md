@@ -1,5 +1,3 @@
-Here are **short, natural interview answers** you can explain without sounding memorized.
-
 ### 1. Explain the Coordinator → Delegator → Worker architecture.
 
 > In our Onsemi CWD project, the **Coordinator manages the overall request**, Delegators manage specific **business domains**, and Workers perform **specific tasks**. For example, the Coordinator may receive a customer briefing request and route Sales-related work to the Sales Delegator. The Sales Delegator then invokes Workers such as Customer Profile or Opportunity Workers.
