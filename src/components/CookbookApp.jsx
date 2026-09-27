@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -35,9 +35,13 @@ const DIFFICULTY_BG = {
 // CONTENT VIEWER
 // ============================================================
 
-function ContentViewer({ content }) {
+const ContentViewer = forwardRef(function ContentViewer(
+  { content },
+  ref
+) {
   return (
     <div
+      ref={ref}
       className="prose"
       style={{
         width: "100%",
@@ -85,13 +89,13 @@ function ContentViewer({ content }) {
       </ReactMarkdown>
     </div>
   );
-}
+});
 
 // ============================================================
 // CODE BLOCK
 // ============================================================
 
-function CodeBlock({ code }) {
+const CodeBlock = forwardRef(function CodeBlock({ code }, ref) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -140,12 +144,15 @@ function CodeBlock({ code }) {
       </button>
 
       <pre
+        ref={ref}
         style={{
           margin: 0,
           padding: "14px 16px",
           borderRadius: 10,
           overflowX: "auto",
+          overflowY: "auto",
           maxWidth: "100%",
+          maxHeight: "75vh",
           boxSizing: "border-box",
           background:
             "var(--color-background-secondary)",
@@ -162,7 +169,7 @@ function CodeBlock({ code }) {
       </pre>
     </div>
   );
-}
+});
 
 // ============================================================
 // RECIPE CARD
@@ -317,6 +324,9 @@ function NavBar({ onPrev, onNext, hasPrev, hasNext, position }) {
 function RecipeDetail({ recipe, recipeList, onSelect }) {
   const [tab, setTab] = useState("concept");
 
+  const conceptRef = useRef(null);
+  const codeRef = useRef(null);
+
   const currentIndex = recipeList.findIndex(
     (r) => r.id === recipe.id
   );
@@ -338,6 +348,52 @@ function RecipeDetail({ recipe, recipeList, onSelect }) {
       onSelect(recipeList[currentIndex + 1]);
     }
   };
+
+  // ==========================================================
+  // KEYBOARD NAVIGATION (← / → arrow keys)
+  // ==========================================================
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't hijack arrow keys while the user is typing in
+      // the search box, a select, or any editable field.
+      const tag = document.activeElement?.tagName;
+      const isEditable =
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        document.activeElement?.isContentEditable;
+
+      if (isEditable) return;
+
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        // Scroll whichever pane (Concept / Code) is currently active
+        const pane =
+          tab === "concept" ? conceptRef.current : codeRef.current;
+
+        if (pane) {
+          e.preventDefault();
+
+          pane.scrollBy({
+            top: e.key === "ArrowDown" ? 80 : -80,
+            behavior: "smooth",
+          });
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasPrev, hasNext, currentIndex, tab]);
 
   return (
     <div
@@ -488,11 +544,11 @@ function RecipeDetail({ recipe, recipeList, onSelect }) {
 
       {/* CONTENT */}
       {tab === "concept" && (
-        <ContentViewer content={recipe.concept} />
+        <ContentViewer ref={conceptRef} content={recipe.concept} />
       )}
 
       {tab === "code" && (
-        <CodeBlock code={recipe.code} />
+        <CodeBlock ref={codeRef} code={recipe.code} />
       )}
 
       {/* BOTTOM NAV */}
