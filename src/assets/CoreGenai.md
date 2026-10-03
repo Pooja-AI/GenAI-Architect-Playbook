@@ -581,3 +581,4 @@ These are especially important because after you answer a basic question, the in
 240. **What changes if we change the temperature?**
 
 **This is the level I would use for your next preparation stage:** not just *“What is attention?”*, but *“Why do we divide QKᵀ by √d, what happens without scaling, and what is the computational complexity?”* That is where GenAI interviews usually become significantly more technical.
+
