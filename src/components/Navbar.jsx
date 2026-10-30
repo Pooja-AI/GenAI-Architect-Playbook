@@ -120,381 +120,53 @@ const cwdTopics = [
    
 ];
 
+const corrosionTopics = [
+  { name: "Corrosion Overview", path: "/corrosion-overview" },
+  { name: "Corrosion Detection", path: "/corrosion-detection" },
+  { name: "Corrosion Prevention", path: "/corrosion-prevention" },
+];
+
+const ifadaTopics = [
+  { name: "IFA Overview", path: "/ifa-overview" },
+  { name: "IFA Features", path: "/ifa-features" },
+  { name: "IFA Integration", path: "/ifa-integration" },
+];  
+
+const clinicalTopics = [
+  { name: "Clinical Overview", path: "/clinical-overview" },
+  { name: "Clinical Features", path: "/clinical-features" },
+  { name: "Clinical Integration", path: "/clinical-integration" },
+];
+
+const cadsTopics = [
+  { name: "CADS Overview", path: "/cads-overview" },
+  { name: "CADS Features", path: "/cads-features" },
+  { name: "CADS Integration", path: "/cads-integration" },
+];
 
 
-  // const CloudTopics = [
-  //   {
-  //     name: "Cloud Top Questions",
-  //     path: "/cloud-top-questions",
-  //   },
-  //   {
-  //     name: "Azure",
-  //     path: "/Azure",
-  //   },
-  //   {
-  //     name: "AWS",
-  //     path: "/AWS",
-  //   },
-  //   {
-  //     name: "GCP",
-  //     path: "/GCP",
-  //   },
-  // ];
 
-const AWSTopics = [
+
+
+const OpsMate = [
     {
-      name: "AWS Architecture",
-      path: "/aws-architecture",
+      name: "OpsMate Overview",
+      path: "/ops-mate-overview",
     },
     {
-      name: "Amazon Bedrock",
-      path: "/aws-bedrock",
+      name: "OpsMate Features",
+      path: "/ops-mate-features",
     },
     {
-      name: "API Gateway",
-      path: "/aws-api-gateway",
-    },
-    {
-      name: "AWS Lambda",
-      path: "/aws-lambda",
-    },
-    {
-      name: "ECS / Fargate / EKS",
-      path: "/aws-ecs-fargate-eks",
-    },
-    {
-      name: "SQS & Asynchronous Processing",
-      path: "/aws-sqs",
-    },
-    {
-      name: "Step Functions",
-      path: "/aws-step-functions",
-    },
-    {
-      name: "DynamoDB",
-      path: "/aws-dynamodb",
-    },
-    {
-      name: "Amazon S3",
-      path: "/aws-s3",
-    },
-    {
-      name: "OpenSearch",
-      path: "/aws-opensearch",
-    },
-    {
-      name: "IAM & Security",
-      path: "/aws-iam-security",
-    },
-    {
-      name: "KMS & Secrets Manager",
-      path: "/aws-kms-secrets",
-    },
-    {
-      name: "VPC & Networking",
-      path: "/aws-vpc-networking",
-    },
-    {
-      name: "CloudWatch & Observability",
-      path: "/aws-cloudwatch",
-    },
-    {
-      name: "Scalability & High Availability",
-      path: "/aws-scalability-ha",
-    },
-    {
-      name: "AWS Cost Optimization",
-      path: "/aws-cost-optimization",
-    },
-    {
-      name: "AWS DevOps / Deployment",
-      path: "/aws-devops",
-    },
-    {
-      name: "AWS Glue",
-      path: "/aws-glue",
-    },
-    {
-      name: "Amazon SageMaker",
-      path: "/aws-sagemaker",
+      name: "OpsMate Integration",
+      path: "/ops-mate-integration",
     },
   ];
 
 
-const AzureTopics = [
-    {
-      name: "Azure Architecture",
-      path: "/azure-architecture",
-    },
-    {
-      name: "Azure OpenAI",
-      path: "/azure-openai",
-    },
-    {
-      name: "Azure AI Foundry",
-      path: "/azure-ai-foundry",
-    },
-    {
-      name: "Azure AI Search",
-      path: "/azure-ai-search",
-    },
-    {
-      name: "Azure Data Factory / Data Integration",
-      path: "/azure-data-factory",
-    },
-    {
-      name: "Azure Databricks",
-      path: "/azure-databricks",
-    },
-    {
-      name: "Azure Machine Learning",
-      path: "/azure-machine-learning",
-    },
-    {
-      name: "Azure Functions",
-      path: "/azure-functions",
-    },
-    {
-      name: "Azure Container Apps / AKS",
-      path: "/azure-container-apps",
-    },
-    {
-      name: "Azure API Management",
-      path: "/azure-api-management",
-    },
-    {
-      name: "Azure Service Bus",
-      path: "/azure-service-bus",
-    },
-    {
-      name: "Cosmos DB",
-      path: "/azure-cosmos-db",
-    },
-    {
-      name: "Azure Cache for Redis",
-      path: "/azure-redis",
-    },
-    {
-      name: "Microsoft Entra ID",
-      path: "/azure-entra-id",
-    },
-    {
-      name: "Azure Key Vault",
-      path: "/azure-key-vault",
-    },
-    {
-      name: "Azure Networking",
-      path: "/azure-networking",
-    },
-    {
-      name: "Azure Monitor / Application Insights",
-      path: "/azure-monitor",
-    },
-    {
-      name: "Azure DevOps / CI/CD",
-      path: "/azure-devops",
-    },
-  ];
 
-  // =====================================================
-  // DATA STRUCTURES INTERVIEW QUESTION COOKBOOKS
-  // One "Concept" and one "Code" entry per topic
-  // =====================================================
 
-  const dsTopics = [
-    {
-      name: "01. Arrays / Lists — Concept",
-      path: "/ds-arrays-lists-concept",
-    },
-    {
-      name: "01. Arrays / Lists — Code",
-      path: "/ds-arrays-lists-code",
-    },
-    {
-      name: "02. Strings — Concept",
-      path: "/ds-strings-concept",
-    },
-    {
-      name: "02. Strings — Code",
-      path: "/ds-strings-code",
-    },
-    {
-      name: "03. Hash Table / Dictionary — Concept",
-      path: "/ds-hash-table-dictionary-concept",
-    },
-    {
-      name: "03. Hash Table / Dictionary — Code",
-      path: "/ds-hash-table-dictionary-code",
-    },
-    {
-      name: "04. Set — Concept",
-      path: "/ds-set-concept",
-    },
-    {
-      name: "04. Set — Code",
-      path: "/ds-set-code",
-    },
-    {
-      name: "05. Linked List — Concept",
-      path: "/ds-linked-list-concept",
-    },
-    {
-      name: "05. Linked List — Code",
-      path: "/ds-linked-list-code",
-    },
-    {
-      name: "06. Stack — Concept",
-      path: "/ds-stack-concept",
-    },
-    {
-      name: "06. Stack — Code",
-      path: "/ds-stack-code",
-    },
-    {
-      name: "07. Queue — Concept",
-      path: "/ds-queue-concept",
-    },
-    {
-      name: "07. Queue — Code",
-      path: "/ds-queue-code",
-    },
-    {
-      name: "08. Heap / Priority Queue — Concept",
-      path: "/ds-heap-priority-queue-concept",
-    },
-    {
-      name: "08. Heap / Priority Queue — Code",
-      path: "/ds-heap-priority-queue-code",
-    },
-    {
-      name: "09. Trees — Concept",
-      path: "/ds-trees-concept",
-    },
-    {
-      name: "09. Trees — Code",
-      path: "/ds-trees-code",
-    },
-    {
-      name: "10. Binary Search Tree (BST) — Concept",
-      path: "/ds-binary-search-tree-bst-concept",
-    },
-    {
-      name: "10. Binary Search Tree (BST) — Code",
-      path: "/ds-binary-search-tree-bst-code",
-    },
-    {
-      name: "11. Trie — Concept",
-      path: "/ds-trie-concept",
-    },
-    {
-      name: "11. Trie — Code",
-      path: "/ds-trie-code",
-    },
-    {
-      name: "12. Graphs — Concept",
-      path: "/ds-graphs-concept",
-    },
-    {
-      name: "12. Graphs — Code",
-      path: "/ds-graphs-code",
-    },
-    {
-      name: "13. Graph Algorithms — Concept",
-      path: "/ds-graph-algorithms-concept",
-    },
-    {
-      name: "14. Union-Find / Disjoint Set — Concept",
-      path: "/ds-union-find-disjoint-set-concept",
-    },
-    {
-      name: "14. Union-Find / Disjoint Set — Code",
-      path: "/ds-union-find-disjoint-set-code",
-    },
-    {
-      name: "15. Recursion — Concept",
-      path: "/ds-recursion-concept",
-    },
-    {
-      name: "15. Recursion — Code",
-      path: "/ds-recursion-code",
-    },
-    {
-      name: "16. Backtracking — Concept",
-      path: "/ds-backtracking-concept",
-    },
-    {
-      name: "16. Backtracking — Code",
-      path: "/ds-backtracking-code",
-    },
-    {
-      name: "17. Sorting — Concept",
-      path: "/ds-sorting-concept",
-    },
-    {
-      name: "17. Sorting — Code",
-      path: "/ds-sorting-code",
-    },
-    {
-      name: "18. Searching — Concept",
-      path: "/ds-searching-concept",
-    },
-    {
-      name: "18. Searching — Code",
-      path: "/ds-searching-code",
-    },
-    {
-      name: "19. Prefix Sum — Concept",
-      path: "/ds-prefix-sum-concept",
-    },
-    {
-      name: "19. Prefix Sum — Code",
-      path: "/ds-prefix-sum-code",
-    },
-    {
-      name: "20. Sliding Window — Concept",
-      path: "/ds-sliding-window-concept",
-    },
-    {
-      name: "20. Sliding Window — Code",
-      path: "/ds-sliding-window-code",
-    },
-    {
-      name: "21. Two Pointers — Concept",
-      path: "/ds-two-pointers-concept",
-    },
-    {
-      name: "21. Two Pointers — Code",
-      path: "/ds-two-pointers-code",
-    },
-    {
-      name: "22. Monotonic Stack / Queue — Concept",
-      path: "/ds-monotonic-stack-queue-concept",
-    },
-    {
-      name: "22. Monotonic Stack / Queue — Code",
-      path: "/ds-monotonic-stack-queue-code",
-    },
-    {
-      name: "23. Intervals — Concept",
-      path: "/ds-intervals-concept",
-    },
-    {
-      name: "23. Intervals — Code",
-      path: "/ds-intervals-code",
-    },
-    {
-      name: "24. Bit Manipulation — Concept",
-      path: "/ds-bit-manipulation-concept",
-    },
-    {
-      name: "24. Bit Manipulation — Code",
-      path: "/ds-bit-manipulation-code",
-    },
-    {
-      name: "25. Complexity & Analysis — Concept",
-      path: "/ds-complexity-analysis-concept",
-    },
-  ];
+  
 
   // =====================================================
   // CLOSE DROPDOWN WHEN CLICKING OUTSIDE
@@ -655,14 +327,46 @@ const AzureTopics = [
         ref={dropdownRef}
       >
 
+       
         {/* =================================================
-            POOJA SUNKARA
+            CWD PROJECT
         ================================================= */}
 
         <Dropdown
-          name="Pooja Sunkara"
-          topics={poojaTopics}
+          name="CWD"
+          topics={cwdTopics}
         />
+
+         {/* =================================================
+            OPSMATE
+        ================================================= */}
+
+      <Dropdown
+          name="OpsMate"
+          topics={OpsMate}
+        />  
+
+        <Dropdown
+          name="IFADA"
+          topics={ifadaTopics}
+        />
+
+         <Dropdown
+          name="CADS"
+          topics={cadsTopics}
+        />
+
+        <Dropdown
+          name="Clinical"
+          topics={clinicalTopics}
+        />
+
+        <Dropdown
+          name="Corrosion"
+          topics={corrosionTopics}
+        />
+
+      
 
         {/* =================================================
             AGENTIC AI
@@ -674,37 +378,19 @@ const AzureTopics = [
         />
 
         {/* =================================================
-            CWD PROJECT
+            POOJA SUNKARA
         ================================================= */}
 
         <Dropdown
-          name="CWD Project"
-          topics={cwdTopics}
+          name="About Me"
+          topics={poojaTopics}
         />
 
-     
-        {/* =================================================
-            Cloud AI
-        ================================================= */}
 
-      <Dropdown
-          name="AWS"
-          topics={AWSTopics}
-        />
-
-      <Dropdown
-          name="Azure"
-          topics={AzureTopics}
-        />
-
-        {/* =================================================
-            DATA STRUCTURES
-        ================================================= */}
-
-      <Dropdown
-          name="Data Structures"
-          topics={dsTopics}
-        />
+       
+       
+       
+        
 
       </div>
 
